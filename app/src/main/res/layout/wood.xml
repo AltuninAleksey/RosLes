@@ -1,0 +1,593 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="#CCCCCCCC"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="68dp"
+            android:orientation="horizontal"
+            android:layout_marginTop="50dp">
+
+            <Button
+                android:id="@+id/button8"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:insetLeft="10dp"
+                android:insetRight="10dp"
+                android:textColor="@color/color_button_navigation_text"
+                android:backgroundTint="@color/color_button_navigation"
+                android:text="Button" />
+
+            <Button
+                android:id="@+id/button7"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:insetLeft="10dp"
+                android:insetRight="10dp"
+                android:textColor="@color/color_button_navigation_text"
+                android:backgroundTint="@color/color_button_navigation"
+                android:text="Button" />
+
+            <Button
+                android:id="@+id/button6"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:insetLeft="10dp"
+                android:insetRight="10dp"
+                android:textColor="@color/color_button_navigation_text"
+                android:backgroundTint="@color/color_button_navigation"
+                android:text="Button" />
+
+            <Button
+                android:id="@+id/button5"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:insetLeft="10dp"
+                android:insetRight="10dp"
+                android:textColor="@color/color_button_navigation_text"
+                android:backgroundTint="@color/color_button_navigation"
+                android:text="Button" />
+
+            <Button
+                android:id="@+id/button4"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:insetLeft="10dp"
+                android:insetRight="10dp"
+                android:textColor="@color/color_button_navigation_text"
+                android:backgroundTint="@color/color_button_navigation"
+                android:text="Button" />
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_marginTop="50dp"
+            android:layout_height="100dp"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:itemCount="5"
+            tools:listitem="@layout/item_wood" />
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:layout_row="8"
+                android:layout_column="0">
+
+                <Button
+                    android:id="@+id/buttosan5sa2"
+                    android:layout_width="150dp"
+                    android:layout_height="70dp"
+
+                    android:layout_marginStart="10dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/color_button"
+                    android:text="Точка" />
+
+                <Button
+                    android:id="@+id/buttosan5s"
+                    android:layout_width="161dp"
+                    android:layout_height="70dp"
+
+                    android:layout_marginStart="10dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/color_button"
+                    android:text="Фототочка" />
+
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/iskusDo17"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_row="3"
+                android:layout_column="1"
+                android:layout_margin="10dp"
+                android:background="@drawable/rounded"
+                android:onClick="onClickIskusDo2"
+                android:text="0"
+                android:textAlignment="center"
+                android:textSize="35sp">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/iskusDo7"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_row="4"
+                android:layout_column="4"
+                android:layout_margin="10dp"
+                android:background="@drawable/rounded"
+                android:onClick="onClickCell"
+                android:text="0"
+                android:textAlignment="center"
+                android:textSize="35sp">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/iskusDo15"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_row="4"
+                android:layout_column="5"
+                android:layout_margin="10dp"
+                android:background="@drawable/rounded"
+                android:onClick="onClickCell"
+                android:text="0"
+                android:textAlignment="center"
+                android:textSize="35sp">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/iskusDo16"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_row="3"
+                android:layout_column="1"
+                android:layout_margin="10dp"
+                android:background="@drawable/rounded"
+                android:onClick="onClickCell"
+                android:text="0"
+                android:textAlignment="center"
+                android:textSize="35sp">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/iskusDo6"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_row="3"
+                android:layout_column="2"
+                android:layout_margin="10dp"
+                android:background="@drawable/rounded"
+                android:onClick="onClickCell"
+                android:text="0"
+                android:textAlignment="center"
+                android:textSize="35sp">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/iskusDo8"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_row="3"
+                android:layout_column="3"
+                android:layout_margin="10dp"
+                android:background="@drawable/rounded"
+                android:onClick="onClickCell"
+                android:text="0"
+                android:textAlignment="center"
+                android:textSize="35sp">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/iskusDo9"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_row="3"
+                android:layout_column="4"
+                android:layout_margin="10dp"
+                android:background="@drawable/rounded"
+                android:onClick="onClickCell"
+                android:text="0"
+                android:textAlignment="center"
+                android:textSize="35sp">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/iskusDo10"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_row="3"
+                android:layout_column="5"
+                android:layout_margin="10dp"
+                android:background="@drawable/rounded"
+                android:onClick="onClickCell"
+                android:text="0"
+                android:textAlignment="center"
+                android:textSize="35sp">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/iskusDo11"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_row="4"
+                android:layout_column="1"
+                android:layout_margin="10dp"
+                android:background="@drawable/rounded"
+                android:onClick="onClickCell"
+                android:text="0"
+                android:textAlignment="center"
+                android:textSize="35sp">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/iskusDo12"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_row="4"
+                android:layout_column="2"
+                android:layout_margin="10dp"
+                android:background="@drawable/rounded"
+                android:onClick="onClickCell"
+                android:text="0"
+                android:textAlignment="center"
+                android:textSize="35sp">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/iskusDo13"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_row="4"
+                android:layout_column="3"
+                android:layout_margin="10dp"
+                android:background="@drawable/rounded"
+                android:onClick="onClickCell"
+                android:text="0"
+                android:textAlignment="center"
+                android:textSize="35sp">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/iskusDo14"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_row="5"
+                android:layout_column="1"
+                android:layout_margin="10dp"
+                android:background="@drawable/rounded"
+                android:onClick="onClickCell"
+                android:text="0"
+                android:textAlignment="center"
+                android:textSize="35sp">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/iskusDo18"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_row="5"
+                android:layout_column="2"
+                android:layout_margin="10dp"
+                android:background="@drawable/rounded"
+                android:onClick="onClickCell"
+                android:text="0"
+                android:textAlignment="center"
+                android:textSize="35sp">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/iskusDo19"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_row="5"
+                android:layout_column="3"
+                android:layout_margin="10dp"
+                android:background="@drawable/rounded"
+                android:onClick="onClickCell"
+                android:text="0"
+                android:textAlignment="center"
+                android:textSize="35sp">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/iskusDo20"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_row="5"
+                android:layout_column="4"
+                android:layout_margin="10dp"
+                android:background="@drawable/rounded"
+                android:onClick="onClickCell"
+                android:text="0"
+                android:textAlignment="center"
+                android:textSize="35sp">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/iskusDo21"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_row="5"
+                android:layout_column="5"
+                android:layout_margin="10dp"
+                android:background="@drawable/rounded"
+                android:onClick="onClickCell"
+                android:text="0"
+                android:textAlignment="center"
+                android:textSize="35sp">
+
+            </TextView>
+
+            <TextView
+                android:layout_row="0"
+                android:textColor="@color/color_text"
+                android:layout_column="0"
+                android:layout_margin="10dp"
+                android:text="Унечское рассухое : "
+                android:layout_marginBottom="20dp"
+                android:textSize="30sp">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/iskusDo"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_row="2"
+                android:layout_column="1"
+                android:layout_margin="10dp"
+                android:background="@drawable/rounded"
+                android:onClick="onClickCell"
+                android:text="0"
+                android:textAlignment="center"
+                android:textSize="35sp">
+
+            </TextView>
+
+
+            <TextView
+                android:id="@+id/iskusDo2"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_row="2"
+                android:layout_column="2"
+                android:layout_margin="10dp"
+                android:background="@drawable/rounded"
+                android:onClick="onClickCell"
+                android:text="0"
+                android:textAlignment="center"
+                android:textSize="35sp">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/iskusDo3"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_row="2"
+                android:layout_column="5"
+                android:layout_margin="10dp"
+                android:background="@drawable/rounded"
+                android:onClick="onClickCell"
+                android:text="0"
+                android:textAlignment="center"
+                android:textSize="35sp">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/iskusDo4"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_row="2"
+                android:layout_column="3"
+                android:layout_margin="10dp"
+                android:background="@drawable/rounded"
+                android:onClick="onClickCell"
+                android:text="0"
+                android:textAlignment="center"
+                android:textSize="35sp">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/iskusDo5"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_row="2"
+                android:layout_column="4"
+                android:layout_margin="10dp"
+                android:background="@drawable/rounded"
+                android:onClick="onClickCell"
+                android:text="0"
+                android:textAlignment="center"
+                android:textSize="35sp">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="53dp"
+                android:layout_row="1"
+                android:layout_column="1"
+
+                android:layout_margin="10dp"
+
+                android:text="до 0,2"
+                android:textColor="@color/color_text"
+                android:textSize="30sp" />
+
+
+            <TextView
+                android:layout_margin="10dp"
+                android:text="0,2-0,5"
+                android:textColor="@color/color_text"
+                android:textSize="30sp" />
+
+
+            <TextView
+                android:layout_margin="10dp"
+                android:text="0,2-0,5"
+                android:textColor="@color/color_text"
+                android:textSize="30sp" />
+
+
+            <TextView
+                android:layout_margin="10dp"
+                android:text="1,1-1,5"
+                android:textColor="@color/color_text"
+                android:textSize="30sp">
+
+            </TextView>
+
+            <TextView
+
+                android:layout_margin="10dp"
+                android:text=">1,5"
+                android:textColor="@color/color_text"
+                android:textSize="30sp">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/button5sa3"
+                android:layout_width="240dp"
+                android:layout_height="70dp"
+                android:layout_row="3"
+                android:layout_column="0"
+                android:layout_marginStart="10dp"
+                android:layout_weight="1"
+                android:textColor="@color/color_text"
+                android:text="Естественное"
+                android:textSize="28sp" />
+
+            <TextView
+                android:id="@+id/button5sa2"
+                android:layout_width="240dp"
+                android:layout_height="62dp"
+                android:layout_row="2"
+                android:layout_column="0"
+                android:layout_marginStart="10dp"
+                android:layout_weight="1"
+                android:text="Искусственное"
+                android:textColor="@color/color_text"
+                android:textSize="28sp" />
+
+            <TextView
+                android:id="@+id/button5sa"
+                android:layout_width="240dp"
+                android:layout_height="70dp"
+                android:layout_row="1"
+                android:layout_column="0"
+                android:layout_marginStart="10dp"
+                android:layout_weight="1"
+                android:textColor="@color/color_text"
+                android:text="ПП1"
+                android:textSize="28sp" />
+
+            <TextView
+
+                android:id="@+id/buttosan5a"
+                android:layout_width="240dp"
+                android:layout_height="70dp"
+                android:layout_row="4"
+                android:layout_column="0"
+                android:layout_marginStart="10dp"
+                android:layout_weight="1"
+                android:textColor="@color/color_text"
+                android:text="Естественное"
+                android:textSize="28sp" />
+
+            <Button
+                android:id="@+id/buttosan5sa"
+                android:layout_width="240dp"
+                android:layout_height="70dp"
+                android:layout_row="8"
+                android:layout_column="6"
+                android:layout_marginStart="10dp"
+                android:layout_weight="1"
+                android:backgroundTint="@color/color_button"
+                android:text="Сохранить" />
+
+            <TextView
+                android:id="@+id/buttosan5sa3"
+                android:layout_width="240dp"
+                android:layout_height="70dp"
+                android:layout_row="5"
+                android:layout_column="0"
+                android:layout_marginStart="10dp"
+                android:layout_weight="1"
+                android:textColor="@color/color_text"
+                android:text="подлесок"
+                android:textSize="28sp" />
+
+            <Button
+                android:textColor="@color/color_text"
+                android:id="@+id/buttonPlus"
+
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_row="1"
+                android:layout_marginStart="35dp"
+                android:textAlignment="center"
+                android:layout_column="6"
+                android:backgroundTint="@color/white"
+                android:textSize="45sp"
+                android:text="+" />
+
+            <Button
+                android:id="@+id/buttonMinus"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_row="3"
+                android:layout_column="6"
+                android:layout_marginStart="35dp"
+                android:text="-"
+                android:textColor="@color/color_text"
+                android:backgroundTint="@color/white"
+                android:textAlignment="center"
+                android:textSize="45sp" />
+
+
+        </GridLayout>
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
