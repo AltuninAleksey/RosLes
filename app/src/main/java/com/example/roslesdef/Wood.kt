@@ -10,6 +10,8 @@ import com.example.roslesdef.databinding.WoodBinding
 
 class Wood : Activity() {
     private lateinit var binding: WoodBinding
+    private var bufview: View? =null
+    private var kostl:Any?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,10 +20,70 @@ class Wood : Activity() {
         val view = binding.root
         setContentView(view)
 
+
+        binding.save.setOnClickListener(){
+            WriteBD()
+        }
+        binding.buttosan5sa2.setOnClickListener(){
+            checkBD()
+        }
+    }
+    fun WriteBD(){
+        val db =DBCountWood(this,null)
+        with(binding){
+            db.addName("poroda","estes",estes02.text.toString(),estes05.text.toString(),
+                estes06.text.toString(),estes11.text.toString(),estes15.text.toString())
+        }
+    }
+    fun checkBD(){
+        val db = DBCountWood(this, null)
+        var datalist = db.read("value06")
+        Toast.makeText(this,datalist.toString(),Toast.LENGTH_SHORT).show()
     }
 
-   fun onClickCell(view: View){
-       Toast.makeText(this, "Зачем вы нажали?", Toast.LENGTH_SHORT).show();
-   }
+    fun onClickCell(view: View){
+        if (bufview==null){
+            bufview=view
+            bufview?.setBackgroundResource(R.drawable.rounded_active)
+            kostl=view.id
+        }
+        if (bufview!=null){
+            bufview?.setBackgroundResource(R.drawable.rounded)
+            bufview=view
+            bufview?.setBackgroundResource(R.drawable.rounded_active)
+            kostl=view.id
+        }
+        binding.buttonPlus.setOnClickListener(){
+
+            var buffertext:TextView=findViewById(view.id)
+            var value=buffertext.text.toString().toInt()
+            value=value+1
+            binding.spinner.onItemSelectedListener
+
+            //Toast.makeText(applicationContext,binding.spinner.onItemSelectedListener.toString() , Toast.LENGTH_SHORT).show()
+
+
+            buffertext.text=value.toString()
+
+        }
+        binding.buttonMinus.setOnClickListener(){
+
+            var buffertext:TextView=findViewById(view.id)
+            var value=buffertext.text.toString().toInt()
+            value=value-1
+            if(value<=0)
+                value=0
+            buffertext.text=value.toString()
+
+        }
+    }
+    fun onClickSumm(){
+
+    }
+
+
+//    fun onClickCell(view: View){
+//       Toast.makeText(this, "Зачем вы нажали?", Toast.LENGTH_SHORT).show();
+//   }
 
 }

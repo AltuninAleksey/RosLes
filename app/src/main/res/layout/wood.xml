@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="#CCCCCCCC"
+    android:background="#ECECEC"
     android:layout_height="match_parent">
 
     <LinearLayout
@@ -88,6 +88,7 @@
         <GridLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
             <LinearLayout
                 android:layout_row="8"
                 android:layout_column="0">
@@ -131,7 +132,7 @@
             </TextView>
 
             <TextView
-                android:id="@+id/iskusDo7"
+                android:id="@+id/estestvennoe11"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_row="4"
@@ -146,7 +147,7 @@
             </TextView>
 
             <TextView
-                android:id="@+id/iskusDo15"
+                android:id="@+id/estestvennoe15"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_row="4"
@@ -161,7 +162,7 @@
             </TextView>
 
             <TextView
-                android:id="@+id/iskusDo16"
+                android:id="@+id/estes02"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_row="3"
@@ -176,7 +177,7 @@
             </TextView>
 
             <TextView
-                android:id="@+id/iskusDo6"
+                android:id="@+id/estes05"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_row="3"
@@ -191,7 +192,7 @@
             </TextView>
 
             <TextView
-                android:id="@+id/iskusDo8"
+                android:id="@+id/estes06"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_row="3"
@@ -206,7 +207,7 @@
             </TextView>
 
             <TextView
-                android:id="@+id/iskusDo9"
+                android:id="@+id/estes11"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_row="3"
@@ -221,7 +222,7 @@
             </TextView>
 
             <TextView
-                android:id="@+id/iskusDo10"
+                android:id="@+id/estes15"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_row="3"
@@ -236,7 +237,7 @@
             </TextView>
 
             <TextView
-                android:id="@+id/iskusDo11"
+                android:id="@+id/estestvennoe02"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_row="4"
@@ -251,7 +252,7 @@
             </TextView>
 
             <TextView
-                android:id="@+id/iskusDo12"
+                android:id="@+id/estestvennoe05"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_row="4"
@@ -266,7 +267,7 @@
             </TextView>
 
             <TextView
-                android:id="@+id/iskusDo13"
+                android:id="@+id/estestvennoe06"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_row="4"
@@ -281,7 +282,7 @@
             </TextView>
 
             <TextView
-                android:id="@+id/iskusDo14"
+                android:id="@+id/podlesok02"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_row="5"
@@ -296,7 +297,7 @@
             </TextView>
 
             <TextView
-                android:id="@+id/iskusDo18"
+                android:id="@+id/podlesok05"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_row="5"
@@ -311,7 +312,7 @@
             </TextView>
 
             <TextView
-                android:id="@+id/iskusDo19"
+                android:id="@+id/podlesok06"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_row="5"
@@ -326,7 +327,7 @@
             </TextView>
 
             <TextView
-                android:id="@+id/iskusDo20"
+                android:id="@+id/podlesok11"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_row="5"
@@ -341,7 +342,7 @@
             </TextView>
 
             <TextView
-                android:id="@+id/iskusDo21"
+                android:id="@+id/podlesok15"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_row="5"
@@ -357,17 +358,18 @@
 
             <TextView
                 android:layout_row="0"
-                android:textColor="@color/color_text"
                 android:layout_column="0"
                 android:layout_margin="10dp"
-                android:text="Унечское рассухое : "
                 android:layout_marginBottom="20dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="Унечское рассухое : "
+                android:textColor="@color/color_text"
                 android:textSize="30sp">
 
             </TextView>
 
             <TextView
-                android:id="@+id/iskusDo"
+                android:id="@+id/iskus02"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_row="2"
@@ -383,7 +385,7 @@
 
 
             <TextView
-                android:id="@+id/iskusDo2"
+                android:id="@+id/iskus05"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_row="2"
@@ -398,7 +400,7 @@
             </TextView>
 
             <TextView
-                android:id="@+id/iskusDo3"
+                android:id="@+id/iskus15"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_row="2"
@@ -413,7 +415,7 @@
             </TextView>
 
             <TextView
-                android:id="@+id/iskusDo4"
+                android:id="@+id/iskus06"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_row="2"
@@ -428,7 +430,7 @@
             </TextView>
 
             <TextView
-                android:id="@+id/iskusDo5"
+                android:id="@+id/iskus11"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_row="2"
@@ -445,12 +447,12 @@
             <TextView
                 android:id="@+id/textView"
                 android:layout_width="wrap_content"
-                android:layout_height="53dp"
+
                 android:layout_row="1"
                 android:layout_column="1"
 
                 android:layout_margin="10dp"
-
+                android:layout_marginTop="0dp"
                 android:text="до 0,2"
                 android:textColor="@color/color_text"
                 android:textSize="30sp" />
@@ -458,6 +460,7 @@
 
             <TextView
                 android:layout_margin="10dp"
+                android:layout_marginTop="0dp"
                 android:text="0,2-0,5"
                 android:textColor="@color/color_text"
                 android:textSize="30sp" />
@@ -465,13 +468,15 @@
 
             <TextView
                 android:layout_margin="10dp"
-                android:text="0,2-0,5"
+                android:layout_marginTop="0dp"
+                android:text="0,6-1,0"
                 android:textColor="@color/color_text"
                 android:textSize="30sp" />
 
 
             <TextView
                 android:layout_margin="10dp"
+                android:layout_marginTop="0dp"
                 android:text="1,1-1,5"
                 android:textColor="@color/color_text"
                 android:textSize="30sp">
@@ -481,6 +486,7 @@
             <TextView
 
                 android:layout_margin="10dp"
+                android:layout_marginTop="0dp"
                 android:text=">1,5"
                 android:textColor="@color/color_text"
                 android:textSize="30sp">
@@ -493,10 +499,12 @@
                 android:layout_height="70dp"
                 android:layout_row="3"
                 android:layout_column="0"
-                android:layout_marginStart="10dp"
+                android:layout_marginStart="45dp"
                 android:layout_weight="1"
-                android:textColor="@color/color_text"
+                android:fontFamily="sans-serif-medium"
                 android:text="Естественное"
+                android:textAlignment="viewEnd"
+                android:textColor="@color/color_text"
                 android:textSize="28sp" />
 
             <TextView
@@ -505,23 +513,28 @@
                 android:layout_height="62dp"
                 android:layout_row="2"
                 android:layout_column="0"
-                android:layout_marginStart="10dp"
+                android:layout_marginStart="45dp"
+                android:layout_marginEnd="0dp"
                 android:layout_weight="1"
+                android:fontFamily="sans-serif-medium"
                 android:text="Искусственное"
+                android:textAlignment="viewEnd"
                 android:textColor="@color/color_text"
                 android:textSize="28sp" />
 
             <TextView
-                android:id="@+id/button5sa"
+                android:id="@+id/proba"
                 android:layout_width="240dp"
                 android:layout_height="70dp"
                 android:layout_row="1"
                 android:layout_column="0"
-                android:layout_marginStart="10dp"
+                android:layout_marginStart="45dp"
                 android:layout_weight="1"
-                android:textColor="@color/color_text"
+                android:fontFamily="sans-serif-medium"
                 android:text="ПП1"
-                android:textSize="28sp" />
+                android:textAlignment="viewEnd"
+                android:textColor="@color/color_text"
+                android:textSize="35sp" />
 
             <TextView
 
@@ -530,14 +543,16 @@
                 android:layout_height="70dp"
                 android:layout_row="4"
                 android:layout_column="0"
-                android:layout_marginStart="10dp"
+                android:layout_marginStart="45dp"
                 android:layout_weight="1"
+                android:fontFamily="sans-serif-medium"
+                android:text="Естественное пролес"
+                android:textAlignment="viewEnd"
                 android:textColor="@color/color_text"
-                android:text="Естественное"
                 android:textSize="28sp" />
 
             <Button
-                android:id="@+id/buttosan5sa"
+                android:id="@+id/save"
                 android:layout_width="240dp"
                 android:layout_height="70dp"
                 android:layout_row="8"
@@ -553,25 +568,28 @@
                 android:layout_height="70dp"
                 android:layout_row="5"
                 android:layout_column="0"
-                android:layout_marginStart="10dp"
+                android:layout_marginStart="45dp"
                 android:layout_weight="1"
+                android:fontFamily="sans-serif-medium"
+                android:text="Подлесок"
+                android:textAlignment="viewEnd"
                 android:textColor="@color/color_text"
-                android:text="подлесок"
                 android:textSize="28sp" />
 
             <Button
-                android:textColor="@color/color_text"
                 android:id="@+id/buttonPlus"
-
                 android:layout_width="80dp"
+
                 android:layout_height="80dp"
-                android:layout_row="1"
-                android:layout_marginStart="35dp"
-                android:textAlignment="center"
+                android:layout_row="2"
                 android:layout_column="6"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="20dp"
                 android:backgroundTint="@color/white"
-                android:textSize="45sp"
-                android:text="+" />
+                android:text="+"
+                android:textAlignment="center"
+                android:textColor="@color/color_text"
+                android:textSize="45sp" />
 
             <Button
                 android:id="@+id/buttonMinus"
@@ -579,12 +597,21 @@
                 android:layout_height="80dp"
                 android:layout_row="3"
                 android:layout_column="6"
-                android:layout_marginStart="35dp"
-                android:text="-"
-                android:textColor="@color/color_text"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="20dp"
                 android:backgroundTint="@color/white"
+                android:text="-"
                 android:textAlignment="center"
+                android:textColor="@color/color_text"
                 android:textSize="45sp" />
+
+            <Spinner
+                android:id="@+id/spinner"
+                android:layout_width="250dp"
+                android:layout_height="90dp"
+                android:layout_row="4"
+                android:layout_column="6"
+                android:entries="@array/values_step" />
 
 
         </GridLayout>

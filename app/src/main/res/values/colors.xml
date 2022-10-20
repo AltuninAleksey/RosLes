@@ -11,6 +11,8 @@
     <color name="color_button_navigation">#D1f74C</color>
     <color name="color_button_navigation_text">#000000</color>
     <color name="color_text">#000000</color>
+    <color name="color_button_main">#72c943</color>
+    <color name="color_button_main_border">#3d00f8</color>
 
 
 </resources>
