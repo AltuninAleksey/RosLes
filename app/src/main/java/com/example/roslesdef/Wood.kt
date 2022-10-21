@@ -31,14 +31,18 @@ class Wood : Activity() {
     fun WriteBD(){
         val db =DBCountWood(this,null)
         with(binding){
-            db.addName("poroda","estes",estes02.text.toString(),estes05.text.toString(),
+            db.addName("poroda","PP1","estes",estes02.text.toString(),estes05.text.toString(),
                 estes06.text.toString(),estes11.text.toString(),estes15.text.toString())
         }
     }
+
     fun checkBD(){
         val db = DBCountWood(this, null)
         var datalist = db.read("value06")
-        Toast.makeText(this,datalist.toString(),Toast.LENGTH_SHORT).show()
+        var wood:ClassWood=db.readByID("1")
+        Toast.makeText(this,wood.proba.toString(),Toast.LENGTH_SHORT).show()
+        Toast.makeText(this,wood.poroda.toString(),Toast.LENGTH_SHORT).show()
+        Toast.makeText(this,wood.view.toString(),Toast.LENGTH_SHORT).show()
     }
 
     fun onClickCell(view: View){

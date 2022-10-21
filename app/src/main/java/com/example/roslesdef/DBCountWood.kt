@@ -1,7 +1,9 @@
 package com.example.roslesdef
 
+import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
+import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
@@ -13,6 +15,7 @@ class DBCountWood (context: Context, factory: SQLiteDatabase.CursorFactory?) :
         val query = ("CREATE TABLE " + TABLE_NAME + " ("
                 + ID_COL + " INTEGER PRIMARY KEY, " +
                 PORODA + " TEXT," +
+                PROBA + " TEXT," +
                 VIEWWOOD + " TEXT," +
                 VALUE02 + " TEXT," +
                 VALUE05 + " TEXT," +
@@ -32,7 +35,7 @@ class DBCountWood (context: Context, factory: SQLiteDatabase.CursorFactory?) :
     }
 
     // This method is for adding data in our database
-    fun addName( poroda : String,
+    fun addName( poroda : String,proba:String,
                 viewwood : String, value02 : String,
                 value05 : String, value06 : String,
                 value11 : String, value15 : String){
@@ -44,6 +47,7 @@ class DBCountWood (context: Context, factory: SQLiteDatabase.CursorFactory?) :
         // in the form of key-value pair
 
         values.put(PORODA, poroda)
+        values.put(PROBA, proba)
         values.put(VIEWWOOD, viewwood)
         values.put(VALUE02, value02)
         values.put(VALUE05, value05)
@@ -78,6 +82,27 @@ class DBCountWood (context: Context, factory: SQLiteDatabase.CursorFactory?) :
         }
         return datalist
     }
+
+    @SuppressLint("Range")
+    fun readByID(id:String):ClassWood{
+        var database:SQLiteDatabase = this.writableDatabase
+        val cursor: Cursor =  database.rawQuery("SELECT * FROM " + TABLE_NAME.toString() + " WHERE " + ID_COL.toString() + "=" + id,
+            null)
+        cursor.moveToFirst()
+        val wood:ClassWood = ClassWood(
+            id,
+            cursor.getString(cursor.getColumnIndex(PORODA)),
+            cursor.getString(cursor.getColumnIndex(PROBA)),
+            cursor.getString(cursor.getColumnIndex(VIEWWOOD)),
+            cursor.getString(cursor.getColumnIndex(VALUE02)),
+            cursor.getString(cursor.getColumnIndex(VALUE05)),
+            cursor.getString(cursor.getColumnIndex(VALUE06)),
+            cursor.getString(cursor.getColumnIndex(VALUE11)),
+            cursor.getString(cursor.getColumnIndex(VALUE15))
+            )
+            return wood;
+
+    }
     companion object{
         // here we have defined variables for our database
         // below is variable for database name
@@ -92,6 +117,8 @@ class DBCountWood (context: Context, factory: SQLiteDatabase.CursorFactory?) :
 
         // below is the variable for age column
         val PORODA = "poroda"
+
+        val PROBA = "proba"
 
         val VIEWWOOD = "viewwood"
 
@@ -108,3 +135,5 @@ class DBCountWood (context: Context, factory: SQLiteDatabase.CursorFactory?) :
         val arr = arrayOf(PORODA,VIEWWOOD,VALUE02,VALUE05,VALUE06,VALUE11,VALUE15)
     }
 }
+
+
