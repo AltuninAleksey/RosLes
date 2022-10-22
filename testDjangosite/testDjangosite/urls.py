@@ -14,14 +14,42 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
-from testAPI.views import index
-from testAPI.views import testAPIView
-
+from django.urls import path, include
+from djangoForest.views import *
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', index),
-    path('api/v1/tablelist', testAPIView.as_view())
+    path('', include('djangoForest.urls')),
+    path('api/v1/gettable', TestAPIView.as_view()),
+    path('subjectRF', SubjectRFview.as_view()),
+    path('subjectRF/<int:pk>', SubjectRFview.as_view()),
+    path('profile', ProfileView.as_view()),
+    path('profile/<int:pk>', ProfileView.as_view()),
+    path('list', ListView.as_view()),
+    path('list/<int:pk>', ListView.as_view()),
+    path('gps', GpsView.as_view()),
+    path('gps/<int:pk>', GpsView.as_view()),
+    path('region', RegionView.as_view()),
+    path('region/<int:pk>', RegionView.as_view()),
+    path('listregion', ListRegionView.as_view()),
+    path('listregion/<int:pk>', ListRegionView.as_view()),
+    path('sample', SampleView.as_view()),
+    path('sample/<int:pk>', SampleView.as_view()),
+    path('post', PostView.as_view()),
+    path('post/<int:pk>', PostView.as_view()),
+    path('workingbreed', WorkingBreedView.as_view()),
+    path('workingbreed/<int:pk>', WorkingBreedView.as_view()),
+    path('role', RoleView.as_view()),
+    path('role>', RoleView.as_view()),
+    path('reproduction', ReproductionView.as_view()),
+    path('reproduction/<int:pk>', ReproductionView.as_view()),
+    path('forestly', ForestlyView.as_view()),
+    path('forestly/<int:pk>', ForestlyView.as_view()),
+    path('districtforestly', DistrictForestlyView.as_view()),
+    path('districtforestly/<int:pk>', ReproductionView.as_view()),
+    path('breed', BreedView.as_view()),
+    path('breed/<int:pk>', BreedView.as_view()),
+    path('branches', BranchesView.as_view()),
+    path('branches/<int:pk>', BranchesView.as_view())
 ]
