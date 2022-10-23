@@ -92,13 +92,18 @@
         <!-- Content -->
         <div id="content" class="{% block coltype %}colM{% endblock %}">
           {% block pretitle %}{% endblock %}
-          {% block content_title %}{% if request.user.get_username == 'root'%} <h1>Система администрирования</h1>
-            {% elif request.user.get_username == 'spravochnik' %}
-            <h1> Система управления справочниками</h1>
-            {% elif request.user.get_username == 'doc' %}
-            <h1>Система управления документами</h1>
-            {% endif %}{% endblock %}
-          {% block content_subtitle %}{% if request.user.get_username == 'root' %}<h2>Администрирование системы хранения данных</h2>{% endif %}{% endblock %}
+          {% block content_title %}
+            {% for group in request.user.groups.all %}
+                {% if group.name == 'Менеджер справочников' %}
+                    <h1> Система управления справочниками</h1>
+                {% elif group.name == 'Менеджер документов' %}
+                 <h1>Система управления документами</h1>
+                {% else %}
+                    <h1>Система администрирования</h1>
+                {% endif %}
+            {% endfor %}
+            {% endblock %}
+          {% block content_subtitle %}{% if subtitle %}<h2>{{ subtitle }}</h2>{% endif %}{% endblock %}
           {% block content %}
             {% block object-tools %}{% endblock %}
             {{ content }}
