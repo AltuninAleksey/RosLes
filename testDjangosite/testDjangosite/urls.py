@@ -41,7 +41,7 @@ urlpatterns = [
     path('workingbreed', WorkingBreedView.as_view()),
     path('workingbreed/<int:pk>', WorkingBreedView.as_view()),
     path('role', RoleView.as_view()),
-    path('role>', RoleView.as_view()),
+    path('role/<int:pk>', RoleView.as_view()),
     path('reproduction', ReproductionView.as_view()),
     path('reproduction/<int:pk>', ReproductionView.as_view()),
     path('forestly', ForestlyView.as_view()),
