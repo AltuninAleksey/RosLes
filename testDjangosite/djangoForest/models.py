@@ -13,7 +13,7 @@ class Table(models.Model):
 class Profile(models.Model):
     FIO = models.CharField(u'ФИО', max_length=255)
     phoneNumber = models.CharField(u'Номер телефона', max_length=30)
-    email = models.EmailField(u'e-mail адреыс')
+    email = models.EmailField(u'e-mail адрес')
     id_post = models.ForeignKey('Post', on_delete=models.CASCADE, verbose_name='Должность')
     id_working_breeds = models.ForeignKey('WorkingBreeds', on_delete=models.CASCADE, verbose_name='Рабочая порода')
     id_role = models.ForeignKey('Role', on_delete=models.CASCADE, verbose_name='Роль')
@@ -81,7 +81,7 @@ class ListRegion(models.Model):
 
 
 class Sample(models.Model):
-    id_list_region = models.ForeignKey('ListRegion', on_delete=models.CASCADE, verbose_name='Должность')
+    date = models.DateField(u'Дата', null=True)
     sample_area = models.IntegerField(u'Площадь пробы')
     id_profile = models.ForeignKey('Profile', on_delete=models.CASCADE, verbose_name='Профиль')
     id_subject_RF = models.ForeignKey('SubjectRF', on_delete=models.CASCADE, verbose_name='Субъект РФ')
