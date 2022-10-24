@@ -11,9 +11,11 @@
         <entry key="..\:/Users/101/AndroidStudioProjects/RosLesDef/app/src/main/res/drawable/rounded_active.xml" value="0.3385" />
         <entry key="..\:/Users/101/AndroidStudioProjects/RosLesDef/app/src/main/res/layout/activity_main.xml" value="0.358695652173913" />
         <entry key="..\:/Users/101/AndroidStudioProjects/RosLesDef/app/src/main/res/layout/activity_main2.xml" value="0.17491007194244604" />
-        <entry key="..\:/Users/101/AndroidStudioProjects/RosLesDef/app/src/main/res/layout/item_wood.xml" value="0.358695652173913" />
-        <entry key="..\:/Users/101/AndroidStudioProjects/RosLesDef/app/src/main/res/layout/main_screen.xml" value="0.25" />
-        <entry key="..\:/Users/101/AndroidStudioProjects/RosLesDef/app/src/main/res/layout/wood.xml" value="0.14" />
+        <entry key="..\:/Users/101/AndroidStudioProjects/RosLesDef/app/src/main/res/layout/item_udel.xml" value="0.20278776978417265" />
+        <entry key="..\:/Users/101/AndroidStudioProjects/RosLesDef/app/src/main/res/layout/item_wood.xml" value="0.25" />
+        <entry key="..\:/Users/101/AndroidStudioProjects/RosLesDef/app/src/main/res/layout/main_screen.xml" value="0.18" />
+        <entry key="..\:/Users/101/AndroidStudioProjects/RosLesDef/app/src/main/res/layout/wood.xml" value="0.25" />
+        <entry key="..\:/Users/101/AndroidStudioProjects/RosLesDef/app/src/main/res/xml/network_security_config.xml" value="0.14838709677419354" />
       </map>
     </option>
   </component>

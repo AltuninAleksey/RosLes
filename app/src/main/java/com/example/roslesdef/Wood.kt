@@ -1,17 +1,23 @@
 package com.example.roslesdef
 
-import android.app.Activity
 import android.os.Bundle
 import android.view.View
 import android.view.Window
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import com.example.roslesdef.Adapters.WoodAdapter
+import com.example.roslesdef.Models.ItemWood
 import com.example.roslesdef.databinding.WoodBinding
 
-class Wood : Activity() {
+class Wood : AppCompatActivity() {
+
+
     private lateinit var binding: WoodBinding
     private var bufview: View? =null
     private var kostl:Any?=null
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,6 +27,20 @@ class Wood : Activity() {
         setContentView(view)
 
 
+
+
+        val a = listOf(ItemWood("Береза"),
+            ItemWood("Сосна"),
+            ItemWood("ДуБаДуб")
+        )
+
+        var adapter = WoodAdapter(a)
+
+        binding.WoodRecycler.adapter=adapter
+
+
+
+
         binding.save.setOnClickListener(){
             WriteBD()
         }
@@ -28,6 +48,7 @@ class Wood : Activity() {
             checkBD()
         }
     }
+
     fun WriteBD(){
         val db =DBCountWood(this,null)
         with(binding){

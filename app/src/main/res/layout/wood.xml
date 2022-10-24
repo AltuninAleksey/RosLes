@@ -27,6 +27,7 @@
                 android:layout_weight="1"
                 android:insetLeft="10dp"
                 android:insetRight="10dp"
+                android:radius="30dip"
                 android:textColor="@color/color_button_navigation_text"
                 android:backgroundTint="@color/color_button_navigation"
                 android:text="Button" />
@@ -77,9 +78,10 @@
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/WoodRecycler"
             android:layout_width="match_parent"
             android:layout_marginTop="50dp"
-            android:layout_height="100dp"
+            android:layout_height="150dp"
             android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:itemCount="5"
