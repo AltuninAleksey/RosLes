@@ -88,7 +88,8 @@ class Sample(models.Model):
     id_forestly = models.ForeignKey('Forestly', on_delete=models.CASCADE, verbose_name='Лесничество')
     id_district_forestly = models.ForeignKey('DistrictForestly', on_delete=models.CASCADE,
                                              verbose_name='Участковое лесничество')
-    soil_lot = models.IntegerField(u'Выдел')
+    quarter = models.CharField(u'Квартал', max_length=250, null=True)
+    soil_lot = models.CharField(u'Выдел', max_length=250, null=True)
     id_list_region = models.ForeignKey('ListRegion', on_delete=models.CASCADE,
                                        verbose_name='Перечетная ведомость участка')
 
