@@ -44,7 +44,7 @@
             {% endblock %}
             {% block userlinks %}
                 {% if site_url %}
-                    <a href="{{ site_url }}">{% translate 'View site' %}</a> /
+                    <a href="https://rcfh.ru/">Открыть сайт</a> /
                 {% endif %}
                 {% if user.is_active and user.is_staff %}
                     {% url 'django-admindocs-docroot' as docsroot %}
@@ -106,7 +106,7 @@
           {% block content_subtitle %}{% if subtitle %}<h2>{{ subtitle }}</h2>{% endif %}{% endblock %}
           {% block content %}
             {% block object-tools %}{% endblock %}
-            {{ content }}
+            {{ content }}я
           {% endblock %}
           {% block sidebar %}{% endblock %}
           <br class="clear">
