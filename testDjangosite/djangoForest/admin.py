@@ -13,9 +13,6 @@ class ProfileAdmin(admin.ModelAdmin):
     list_display = ('id', 'FIO', 'phoneNumber', 'email', 'id_post', 'id_working_breeds', 'id_role', 'id_branches')
     list_display_links = ('id', 'FIO', 'phoneNumber', 'email', 'id_post', 'id_working_breeds', 'id_role', 'id_branches')
     search_fields = ('id', 'FIO', 'phoneNumber', 'email', 'id_post', 'id_working_breeds', 'id_role', 'id_branches')
-    # list_editable = ('FIO')
-    # list_filter = ('FIO', 'phoneNumber, 'email)
-
 
 class ListAdmin(admin.ModelAdmin):
     list_display = ('id', 'id_sample', 'id_breed', 'id_type_of_reproduction', 'to0_2', 'from0_21To0_5', 'from0_6To1_0', 'from1_1to1_5')

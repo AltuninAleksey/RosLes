@@ -9,13 +9,14 @@ from djangoForest.serializers import *
 
 class TestAPIView(generics.ListAPIView):
     def get(self, request):
-        lst = Profile.objects.all().values()
+        lst = Profile.objects.all()
         return Response({'': ProfileSerializer(lst, many=True).data})
 
 
 class ProfileView(generics.ListCreateAPIView):
     def get(self, request):
-        lst = Profile.objects.all().values()
+        # lst = Profile.objects.all().values("FIO", "phoneNumber", "email", "id_branches_id", "id_post", "id_role_id", "id_working_breeds_id")
+        lst = Profile.objects.all()
         return Response({'get': ProfileSerializer(lst, many=True).data})
 
     def post(self, request):
@@ -43,8 +44,13 @@ class ProfileView(generics.ListCreateAPIView):
 
 class ListView(generics.ListCreateAPIView):
     def get(self, request):
-        lst = Profile.objects.all().values()
-        return Response({'get': ListSerializer(lst, many=True).data})
+        lst = List.objects.all()
+        print("1")
+        print(Response({'post': ListSerializer(lst, many=True).data}))
+        return Response({'post': ListSerializer(lst, many=True).data})
+        # return render(request, 'listview/list.html', {
+        #     "post": lst
+        # })
 
     def post(self, request):
         serializer = ListSerializer(data=request.data)
@@ -71,7 +77,7 @@ class ListView(generics.ListCreateAPIView):
 
 class GpsView(generics.ListCreateAPIView):
     def get(self, request):
-        lst = GPS.objects.all().values()
+        lst = GPS.objects.all()
         return Response({'get': GPSSerializer(lst, many=True).data})
 
     def post(self, request):
@@ -99,7 +105,7 @@ class GpsView(generics.ListCreateAPIView):
 
 class RegionView(generics.ListCreateAPIView):
     def get(self, request):
-        lst = Region.objects.all().values()
+        lst = Region.objects.all()
         return Response({'get': RegionSerializer(lst, many=True).data})
 
     def post(self, request):
@@ -127,7 +133,7 @@ class RegionView(generics.ListCreateAPIView):
 
 class ListRegionView(generics.ListCreateAPIView):
     def get(self, request):
-        lst = ListRegion.objects.all().values()
+        lst = ListRegion.objects.all()
         return Response({'get': ListRegionSerializer(lst, many=True).data})
 
     def post(self, request):
@@ -155,7 +161,7 @@ class ListRegionView(generics.ListCreateAPIView):
 
 class SampleView(generics.ListCreateAPIView):
     def get(self, request):
-        lst = Sample.objects.all().values()
+        lst = Sample.objects.all()
         #         # return Response({'posts': list(lst) })
         return Response({'get': SampleSerializer(lst, many=True).data})
 
@@ -184,7 +190,7 @@ class SampleView(generics.ListCreateAPIView):
 
 class PostView(generics.ListCreateAPIView):
     def get(self, request):
-        lst = Post.objects.all().values()
+        lst = Post.objects.all()
         return Response({'get': PostSerializer(lst, many=True).data})
 
     def post(self, request):
@@ -212,7 +218,7 @@ class PostView(generics.ListCreateAPIView):
 
 class WorkingBreedView(generics.ListCreateAPIView):
     def get(self, request):
-        lst = WorkingBreeds.objects.all().values()
+        lst = WorkingBreeds.objects.all()
         return Response({'get': WorkingBreedsSerializer(lst, many=True).data})
 
     def post(self, request):
@@ -240,7 +246,7 @@ class WorkingBreedView(generics.ListCreateAPIView):
 
 class SubjectRFview(generics.ListCreateAPIView):
     def get(self, request):
-        lst = SubjectRF.objects.all().values()
+        lst = SubjectRF.objects.all()
         return Response({'get': SubjectRFSerializer(lst, many=True).data})
 
     def post(self, request):
@@ -268,7 +274,7 @@ class SubjectRFview(generics.ListCreateAPIView):
 
 class RoleView(generics.ListCreateAPIView):
     def get(self, request):
-        lst = Role.objects.all().values()
+        lst = Role.objects.all()
         return Response({'get': RoleSerializer(lst, many=True).data})
 
     def post(self, request):
@@ -296,7 +302,7 @@ class RoleView(generics.ListCreateAPIView):
 
 class ReproductionView(generics.ListCreateAPIView):
     def get(self, request):
-        lst = Reproduction.objects.all().values()
+        lst = Reproduction.objects.all()
         return Response({'get': ReproductionSerializer(lst, many=True).data})
 
     def post(self, request):
@@ -324,7 +330,7 @@ class ReproductionView(generics.ListCreateAPIView):
 
 class ForestlyView(generics.ListCreateAPIView):
     def get(self, request):
-        lst = Forestly.objects.all().values()
+        lst = Forestly.objects.all()
         return Response({'get': ForestlySerializer(lst, many=True).data})
 
     def post(self, request):
@@ -352,7 +358,7 @@ class ForestlyView(generics.ListCreateAPIView):
 
 class DistrictForestlyView(generics.ListCreateAPIView):
     def get(self, request):
-        lst = DistrictForestly.objects.all().values()
+        lst = DistrictForestly.objects.all()
         return Response({'get': DistrictForestlySerializer(lst, many=True).data})
 
     def post(self, request):
@@ -380,7 +386,7 @@ class DistrictForestlyView(generics.ListCreateAPIView):
 
 class BreedView(generics.ListCreateAPIView):
     def get(self, request):
-        lst = Breed.objects.all().values()
+        lst = Breed.objects.all()
         return Response({'get': BreedSerializer(lst, many=True).data})
 
     def post(self, request):
@@ -408,7 +414,7 @@ class BreedView(generics.ListCreateAPIView):
 
 class BranchesView(generics.ListCreateAPIView):
     def get(self, request):
-        lst = Branches.objects.all().values()
+        lst = Branches.objects.all()
         return Response({'get': BranchesSerializer(lst, many=True).data})
 
     def post(self, request):
