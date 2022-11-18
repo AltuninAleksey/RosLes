@@ -56,28 +56,25 @@ class GPS(models.Model):
         verbose_name_plural = 'GPS'
 
 
-class Region(models.Model):
-    id_subject_rf = models.ForeignKey('SubjectRF', on_delete=models.CASCADE, verbose_name='Субъект РФ', null = True)
-    id_forestly = models.ForeignKey('Forestly', on_delete=models.CASCADE, verbose_name='Лесничество', null = True)
-    id_district_forestly = models.ForeignKey('DistrictForestly', on_delete=models.CASCADE,
-                                             verbose_name='Участковое лесничество', null=True)
-    quarter = models.IntegerField(u'Квартал')
-    soil_lot = models.IntegerField(u'Выдел')
-    sample_region = models.IntegerField(u'Площадь участка')
-
-    class Meta:
-        verbose_name = 'Участок'
-        verbose_name_plural = 'Участок'
+# class Region(models.Model):
+#     id_subject_rf = models.ForeignKey('SubjectRF', on_delete=models.CASCADE, verbose_name='Субъект РФ', null = True)
+#     id_forestly = models.ForeignKey('Forestly', on_delete=models.CASCADE, verbose_name='Лесничество', null = True)
+#     id_district_forestly = models.ForeignKey('DistrictForestly', on_delete=models.CASCADE,
+#                                              verbose_name='Участковое лесничество', null=True)
+#     quarter = models.IntegerField(u'Квартал')
+#     soil_lot = models.IntegerField(u'Выдел')
+#     sample_region = models.IntegerField(u'Площадь участка')
+#
+#     class Meta:
+#         verbose_name = 'Участок'
+#         verbose_name_plural = 'Участок'
 
 
 class ListRegion(models.Model):
-    id_region = models.ForeignKey('Region', on_delete=models.CASCADE, verbose_name='Участок', null = True)
     date = models.DateField(u'Дата')
     sample_region = models.CharField(u'Плошадь участка', max_length=300)
-    id_subject_RF = models.ForeignKey('SubjectRF', on_delete=models.CASCADE, verbose_name='Субъект РФ', null = True)
-    id_forestly = models.ForeignKey('Forestly', on_delete=models.CASCADE, verbose_name='Лесничество', null = True)
-    id_district_forestly = models.ForeignKey('DistrictForestly', on_delete=models.CASCADE,
-                                             verbose_name='Участковое лесничество', null = True)
+    id_quarter = models.ForeignKey("Quarter", on_delete=models.CASCADE, verbose_name="Квартал", null=True)
+    soil_lot = models.CharField(u'Выдел', max_length=300)
 
     class Meta:
         verbose_name = 'Перечетная ведомость участка'
@@ -85,15 +82,9 @@ class ListRegion(models.Model):
 
 
 class Sample(models.Model):
-    date = models.DateField(u'Дата', null=True)
+    date = models.DateField(u'Дата пробы', null=True)
     sample_area = models.IntegerField(u'Площадь пробы')
-    id_profile = models.ForeignKey('Profile', on_delete=models.CASCADE, verbose_name='Профиль', null=True)
-    id_subject_RF = models.ForeignKey('SubjectRF', on_delete=models.CASCADE, verbose_name='Субъект РФ', null=True)
-    id_forestly = models.ForeignKey('Forestly', on_delete=models.CASCADE, verbose_name='Лесничество', null=True)
-    id_district_forestly = models.ForeignKey('DistrictForestly', on_delete=models.CASCADE,
-                                             verbose_name='Участковое лесничество', null=True)
-    quarter = models.CharField(u'Квартал', max_length=250, null=True)
-    soil_lot = models.CharField(u'Выдел', max_length=250, null=True)
+    id_profile = models.ForeignKey('Profile', on_delete=models.CASCADE, verbose_name='Сотрудник ', null=True)
     id_list_region = models.ForeignKey('ListRegion', on_delete=models.CASCADE,
                                        verbose_name='Перечетная ведомость участка', null=True)
 
@@ -159,6 +150,7 @@ class Reproduction(models.Model):
 
 class Forestly(models.Model):
     name_forestly = models.CharField(max_length=500, verbose_name='Название лесничества')
+    id_subject_rf = models.ForeignKey('SubjectRF', on_delete=models.CASCADE, verbose_name="Субъект РФ", null=True)
 
     def __str__(self):
         return self.name_forestly
@@ -170,6 +162,7 @@ class Forestly(models.Model):
 
 class DistrictForestly(models.Model):
     name_district_forestly = models.CharField(max_length=500, verbose_name='Наименование участкового лесничества')
+    id_forestly = models.ForeignKey('Forestly', on_delete=models.CASCADE, verbose_name='Лесничество', null=True)
 
     def __str__(self):
         return self.name_district_forestly
@@ -179,8 +172,18 @@ class DistrictForestly(models.Model):
         verbose_name_plural = 'Участковое лесничество'
 
 
+class Quarter(models.Model):
+    quarter_name = models.CharField(u'Наименование', max_length=50)
+    id_forestly = models.ForeignKey("Forestly", on_delete=models.CASCADE, verbose_name="Лесничество", null=True)
+
+    class Meta:
+        verbose_name = 'Квартал'
+        verbose_name_plural = 'Квартал'
+
+
 class Breed(models.Model):
     name_breed = models.CharField(max_length=350, verbose_name='Наименование породы')
+    id_forestly = models.ForeignKey('Forestly', on_delete=models.CASCADE, verbose_name="Лесничество", null=True)
 
     def __str__(self):
         return self.name_breed
@@ -192,7 +195,6 @@ class Breed(models.Model):
 
 class Branches(models.Model):
     name_branch = models.CharField(max_length=350, verbose_name='Наименование филиала')
-    id_subject_RF = models.ForeignKey('SubjectRF', on_delete=models.CASCADE, verbose_name='Субъект РФ', null = True)
 
     def __str__(self):
         return self.name_branch

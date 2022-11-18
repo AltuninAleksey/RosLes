@@ -14,6 +14,7 @@ class ProfileAdmin(admin.ModelAdmin):
     list_display_links = ('id', 'FIO', 'phoneNumber', 'email', 'id_post', 'id_working_breeds', 'id_role', 'id_branches')
     search_fields = ('id', 'FIO', 'phoneNumber', 'email', 'id_post', 'id_working_breeds', 'id_role', 'id_branches')
 
+
 class ListAdmin(admin.ModelAdmin):
     list_display = ('id', 'id_sample', 'id_breed', 'id_type_of_reproduction', 'to0_2', 'from0_21To0_5', 'from0_6To1_0', 'from1_1to1_5')
     list_display_links = ('id', 'id_sample', 'id_breed', 'id_type_of_reproduction', 'to0_2', 'from0_21To0_5', 'from0_6To1_0', 'from1_1to1_5')
@@ -26,22 +27,22 @@ class GPSAdmin(admin.ModelAdmin):
     search_fields = ('id', 'id_sample', 'latitude', 'longitude', 'flag_center')
 
 
-class RegionAdmin(admin.ModelAdmin):
-    list_display = ('id', 'id_subject_rf', 'id_forestly', 'id_district_forestly', 'quarter', 'soil_lot', 'sample_region')
-    list_display_links = ('id', 'id_subject_rf', 'id_forestly', 'id_district_forestly', 'quarter', 'soil_lot', 'sample_region')
-    search_fields = ('id', 'id_subject_rf', 'id_forestly', 'id_district_forestly', 'quarter', 'soil_lot', 'sample_region')
+# class RegionAdmin(admin.ModelAdmin):
+#     list_display = ('id', 'id_subject_rf', 'id_forestly', 'id_district_forestly', 'quarter', 'soil_lot', 'sample_region')
+#     list_display_links = ('id', 'id_subject_rf', 'id_forestly', 'id_district_forestly', 'quarter', 'soil_lot', 'sample_region')
+#     search_fields = ('id', 'id_subject_rf', 'id_forestly', 'id_district_forestly', 'quarter', 'soil_lot', 'sample_region')
 
 
 class ListRegionAdmin(admin.ModelAdmin):
-    list_display = ('id', 'id_region', 'date')
-    list_display_links = ('id', 'id_region', 'date')
-    search_fields = ('id', 'id_region', 'date')
+    list_display = ('id', 'sample_region', 'date', 'soil_lot', 'id_quarter')
+    list_display_links = ('id', 'sample_region', 'date', 'soil_lot', 'id_quarter')
+    search_fields = ('id', 'sample_region', 'date', 'soil_lot', 'id_quarter')
 
 
 class SampleAdmin(admin.ModelAdmin):
-    list_display = ('id', 'id_list_region', 'sample_area', 'id_profile')
-    list_display_links = ('id', 'id_list_region', 'sample_area', 'id_profile')
-    search_fields = ('id', 'id_list_region', 'sample_area', 'id_profile')
+    list_display = ('id', 'date', 'sample_area', 'id_profile', 'id_list_region')
+    list_display_links = ('id', 'date', 'sample_area', 'id_profile', 'id_list_region')
+    search_fields = ('id', 'date', 'sample_area', 'id_profile', 'id_list_region')
 
 
 class PostAdmin(admin.ModelAdmin):
@@ -75,9 +76,9 @@ class ReproductionAdmin(admin.ModelAdmin):
 
 
 class ForestlyAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name_forestly')
-    list_display_links = ('id', 'name_forestly')
-    search_fields = ('id', 'name_forestly')
+    list_display = ('id', 'name_forestly', 'id_subject_rf')
+    list_display_links = ('id', 'name_forestly', 'id_subject_rf')
+    search_fields = ('id', 'name_forestly', 'id_subject_rf')
 
 
 class DistrictForestlyAdmin(admin.ModelAdmin):
@@ -93,14 +94,14 @@ class BreedAdmin(admin.ModelAdmin):
 
 
 class BranchesAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name_branch', 'id_subject_RF')
-    list_display_links = ('id', 'name_branch', 'id_subject_RF')
-    search_fields = ('id', 'name_branch', 'id_subject_RF')
+    list_display = ('id', 'name_branch')
+    list_display_links = ('id', 'name_branch')
+    search_fields = ('id', 'name_branch')
 
 
 admin.site.register(Profile, ProfileAdmin)#Профиль
 admin.site.register(GPS, GPSAdmin)#GPS
-admin.site.register(Region, RegionAdmin)
+# admin.site.register(Region, RegionAdmin)
 admin.site.register(List, ListAdmin)
 admin.site.register(ListRegion, ListRegionAdmin)
 admin.site.register(Sample, SampleAdmin)#Проба

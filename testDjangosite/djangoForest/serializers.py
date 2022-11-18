@@ -70,24 +70,24 @@ class GPSSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
-
-class RegionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Region
-        fields = '__all__'
-
-    def create(self, validated_data):
-        return Region.objects.create(**validated_data)
-
-    def update(self, instance, validated_data):
-        instance.id_subject_rf = validated_data.get("id_subject_rf", instance.id_subject_rf)
-        instance.id_forestly = validated_data.get("id_forestly", instance.id_forestly)
-        instance.id_district_forestly = validated_data.get("id_district_forestly", instance.id_district_forestly)
-        instance.quarter = validated_data.get("quarter", instance.quarter)
-        instance.soil_lot = validated_data.get("soil_lot", instance.soil_lot)
-        instance.sample_region = validated_data.get("sample_region", instance.sample_region)
-        instance.save()
-        return instance
+#
+# class RegionSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Region
+#         fields = '__all__'
+#
+#     def create(self, validated_data):
+#         return Region.objects.create(**validated_data)
+#
+#     def update(self, instance, validated_data):
+#         instance.id_subject_rf = validated_data.get("id_subject_rf", instance.id_subject_rf)
+#         instance.id_forestly = validated_data.get("id_forestly", instance.id_forestly)
+#         instance.id_district_forestly = validated_data.get("id_district_forestly", instance.id_district_forestly)
+#         instance.quarter = validated_data.get("quarter", instance.quarter)
+#         instance.soil_lot = validated_data.get("soil_lot", instance.soil_lot)
+#         instance.sample_region = validated_data.get("sample_region", instance.sample_region)
+#         instance.save()
+#         return instance
 
 
 class ListRegionSerializer(serializers.ModelSerializer):
@@ -101,10 +101,8 @@ class ListRegionSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         instance.id_region = validated_data.get("id_region", instance.id_region)
         instance.date = validated_data.get("date", instance.date)
-        instance.sample_region = validated_data.get("sample_region", instance.sample_region)
-        instance.id_subject_RF = validated_data.get("id_subject_RF", instance.id_subject_RF)
-        instance.id_forestly = validated_data.get("id_forestly", instance.id_forestly)
-        instance.id_district_forestly = validated_data.get("id_district_forestly", instance.id_district_forestly)
+        instance.soil_lot = validated_data.get("soil_lot", instance.soil_lot)
+        instance.id_quarter = validated_data.get("id_quarter", instance.id_quarter)
         instance.save()
         return instance
 
@@ -210,6 +208,7 @@ class ForestlySerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         instance.name_forestly = validated_data.get("name_forestly", instance.name_forestly)
+        instance.id_subject_rf = validated_data.get("id_subjecr_rf", instance.id_subject_rf)
         instance.save()
         return instance
 
@@ -224,6 +223,7 @@ class DistrictForestlySerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         instance.name_district_forestly = validated_data.get("name_district_forestly", instance.name_district_forestly)
+        instance.id_forestly = validated_data.get("id_forestly", instance.id_forestly)
         instance.save()
         return instance
 
@@ -242,6 +242,19 @@ class BreedSerializer(serializers.ModelSerializer):
         return instance
 
 
+class QuarterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Quarter
+        fields = '__all__'
+
+    def create(self, validated_data):
+        return Quarter.objects.create(**validated_data)
+
+    def update(self, instance, validated_data):
+        instance.quarter_name = validated_data.get('quarter_name', instance.quarter_name)
+        instance.id_forestly = validated_data.get('id_forestly', instance.id_forestly)
+
+
 class BranchesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Branches
@@ -252,6 +265,5 @@ class BranchesSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         instance.name_branch = validated_data.get("name_branch", instance.name_branch)
-        instance.id_subject_RF = validated_data.get("id_subject_RF", instance.id_subject_RF)
         instance.save()
         return instance

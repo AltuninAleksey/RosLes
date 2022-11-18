@@ -103,32 +103,32 @@ class GpsView(generics.ListCreateAPIView):
         return Response({"put": serealizer.data})
 
 
-class RegionView(generics.ListCreateAPIView):
-    def get(self, request):
-        lst = Region.objects.all()
-        return Response({'get': RegionSerializer(lst, many=True).data})
-
-    def post(self, request):
-        serializer = RegionSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response({'post': serializer.data})
-
-    def put(self, request, *args, **kwargs):
-        pk = kwargs.get("pk")
-        print(pk)
-        if not pk:
-            return Response({"error": "Method PUT in Subjects RF not allowed"})
-
-        try:
-            instance = Region.objects.get(pk=pk)
-        except:
-            return Response({"error": "Объект с данным id не найден"})
-
-        serealizer = RegionSerializer(data=request.data, instance=instance)
-        serealizer.is_valid(raise_exception=True)
-        serealizer.save()
-        return Response({"put": serealizer.data})
+# class RegionView(generics.ListCreateAPIView):
+#     def get(self, request):
+#         lst = Region.objects.all()
+#         return Response({'get': RegionSerializer(lst, many=True).data})
+#
+#     def post(self, request):
+#         serializer = RegionSerializer(data=request.data)
+#         serializer.is_valid(raise_exception=True)
+#         serializer.save()
+#         return Response({'post': serializer.data})
+#
+#     def put(self, request, *args, **kwargs):
+#         pk = kwargs.get("pk")
+#         print(pk)
+#         if not pk:
+#             return Response({"error": "Method PUT in Subjects RF not allowed"})
+#
+#         try:
+#             instance = Region.objects.get(pk=pk)
+#         except:
+#             return Response({"error": "Объект с данным id не найден"})
+#
+#         serealizer = RegionSerializer(data=request.data, instance=instance)
+#         serealizer.is_valid(raise_exception=True)
+#         serealizer.save()
+#         return Response({"put": serealizer.data})
 
 
 class ListRegionView(generics.ListCreateAPIView):
@@ -379,6 +379,33 @@ class DistrictForestlyView(generics.ListCreateAPIView):
             return Response({"error": "Объект с данным id не найден"})
 
         serealizer = DistrictForestlySerializer(data=request.data, instance=instance)
+        serealizer.is_valid(raise_exception=True)
+        serealizer.save()
+        return Response({"put": serealizer.data})
+
+
+class QuarterViev(generics.ListCreateAPIView):
+    def get(self, request):
+        lst = Quarter.objects.all()
+        return Response({'get':QuarterSerializer(lst, many=True).data})
+
+    def post(self, request):
+        serializer = QuarterSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({'post': serializer.data})
+
+    def put(self, reqeust, *args, **kwargs):
+        pk = kwargs.get("pk")
+        if not pk:
+            return Response({"error": "Method put not allowed"})
+
+        try:
+            instance = Breed.objects.get(pk=pk)
+        except:
+            return Response({"error": "Объект с данным id не найден"})
+
+        serealizer = QuarterSerializer(data=reqeust.data, instance=instance)
         serealizer.is_valid(raise_exception=True)
         serealizer.save()
         return Response({"put": serealizer.data})

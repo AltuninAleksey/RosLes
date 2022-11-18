@@ -1,0 +1,49 @@
+{% extends 'erp/html/base.html' %}
+{% block body %}
+{% block container %}
+    <div class="container">
+        {% block header %}
+        <div class="header">
+            <ul class="nav">
+                <li><a href="/">Главная</a></li>
+                <li><a href="documents">Документы</a></li>
+                <li><a href="guide">Справочники</a></li>
+            </ul>
+        </div>
+        {% endblock header %}
+
+        {% block con %}
+        <div class="con">
+            {% block menu %}
+            <div class="menu">
+                <ul class="navigat">
+                    {% for m in menu %}
+                    <li id="li"><a id="a" href="{{ m.url_name}} ">{{m.title}}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endblock menu %}
+            {% block content %}
+            <div class="content">
+                {% block forma %}
+                <div class="forma">
+                <form action="" method="post">
+<!--                    <input id="name_subject_RF" type="text" name="name_subject_RF">-->
+                    {% csrf_token %}
+<!--                    {{ form.as_p }}-->
+                    {% for f in form %}
+                    <p><label class="form-label" for="{{ f.id_for_label }}">{{ f.label }}</label> {{ f }}</p>
+                    <div class="form-error"> {{ f.errors }} </div>
+                    {% endfor %}
+                    <input type="submit" value="OK">
+                </form>
+                </div>
+            </div>
+            {% endblock forma %}
+            {% endblock content %}
+        </div>
+        {% endblock con %}
+    </div>
+{% endblock %}
+    </div>
+{% endblock %}

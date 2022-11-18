@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+{% block title %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <title>{{title}}</title>
+{% endblock %}
+</head>
+<body>
+{% block container %}
+    <div class="container">
+        {% block header %}
+        <div class="header">
+            <ul class="nav">
+                <li><a href="/">Главная</a></li>
+                <li><a href="documents">Документы</a></li>
+                <li><a href="guide">Справочники</a></li>
+            </ul>
+        </div>
+        {% endblock header %}
+
+        {% block con %}
+        <div class="con">
+            {% block menu %}
+            <div class="menu">
+                <ul class="navigat">
+                    {% for m in menu %}
+                    <li id="li"><a id="a" href="{{ m.url_name}} ">{{m.title}}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endblock menu %}
+            {% block content %}
+            <div class="content">
+
+            </div>
+            {% endblock content %}
+        </div>
+        {% endblock con %}
+    </div>
+{% endblock %}
+</body>
+</html>
