@@ -27,7 +27,7 @@
             <div class="content">
                 {% block forma %}
                 <div class="forma">
-                <form action="" method="post">
+                <form action="{{ success_url }} " method="post">
 <!--                    <input id="name_subject_RF" type="text" name="name_subject_RF">-->
                     {% csrf_token %}
 <!--                    {{ form.as_p }}-->
@@ -37,9 +37,47 @@
                     {% endfor %}
                     <input type="submit" value="OK">
                 </form>
+                    {% endblock forma %}
+                    {% block update_form %}
+<!--                    <form action="" method="post">-->
+<!--                        {% csrf_token %}-->
+<!--                        {{ form.as_p }}-->
+<!--                        {{ form.name_subject_RF }}-->
+<!--                    </form>-->
+                    {% endblock update_form %}
                 </div>
+                {% block items-subject-rf %}
+                <div class="items-subject-rf">
+                    {% block table %}
+                    <table>
+                        <th>Номер</th>
+                        <th>Наименование субъекта РФ</th>
+                        {% for item in queryset %}
+                        <tr>
+                            <form action="subjectRF/update/{{item.pk}}" method="post">
+                                {% csrf_token %}
+                            <td>{{ item.pk }}</td>
+                            <td><input type="text" value="{{item}}"></td>
+                            <td><input type="submit" value="Изменить данные"></td>
+                            </form>
+<!--                            <td>{{item.pk}}</td>-->
+<!--                            <td>{{item}}</td>-->
+<!--                            <td> Изменить данные</td>-->
+                            <td>
+                                <form action="subjectRF/delete/{{item.pk}}" method="post">
+                                    {% csrf_token %}
+                                    <input type="submit" value="Удалить данные" name="pk">
+                                </form>
+<!--                                <a href="subjectRF/delete/{{item.pk}}">Удалить данные</a>-->
+                            </td>
+                        {% endfor %}
+                        </tr>
+                    </table>
+                    {% endblock table %}
+                </div>
+                {% endblock items-subject-rf %}
             </div>
-            {% endblock forma %}
+
             {% endblock content %}
         </div>
         {% endblock con %}
