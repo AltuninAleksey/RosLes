@@ -119,7 +119,7 @@ class SubjectRF(models.Model):
     name_subject_RF = models.CharField(max_length=255, verbose_name='Наименования субъекта РФ')
 
     def __str__(self):
-        return self.name_subject_RF
+        return self.name_subject_RF or ' '
 
     class Meta:
         verbose_name = 'Субъект РФ'

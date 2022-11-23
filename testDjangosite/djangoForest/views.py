@@ -384,7 +384,7 @@ class DistrictForestlyView(generics.ListCreateAPIView):
         return Response({"put": serealizer.data})
 
 
-class QuarterViev(generics.ListCreateAPIView):
+class QuarterView(generics.ListCreateAPIView):
     def get(self, request):
         lst = Quarter.objects.all()
         return Response({'get':QuarterSerializer(lst, many=True).data})
@@ -395,7 +395,7 @@ class QuarterViev(generics.ListCreateAPIView):
         serializer.save()
         return Response({'post': serializer.data})
 
-    def put(self, reqeust, *args, **kwargs):
+    def put(self, request, *args, **kwargs):
         pk = kwargs.get("pk")
         if not pk:
             return Response({"error": "Method put not allowed"})
@@ -405,7 +405,7 @@ class QuarterViev(generics.ListCreateAPIView):
         except:
             return Response({"error": "Объект с данным id не найден"})
 
-        serealizer = QuarterSerializer(data=reqeust.data, instance=instance)
+        serealizer = QuarterSerializer(data=request.data, instance=instance)
         serealizer.is_valid(raise_exception=True)
         serealizer.save()
         return Response({"put": serealizer.data})

@@ -38,16 +38,9 @@
                     <input type="submit" value="OK">
                 </form>
                     {% endblock forma %}
-                    {% block update_form %}
-<!--                    <form action="" method="post">-->
-<!--                        {% csrf_token %}-->
-<!--                        {{ form.as_p }}-->
-<!--                        {{ form.name_subject_RF }}-->
-<!--                    </form>-->
-                    {% endblock update_form %}
                 </div>
                 {% block items-subject-rf %}
-                <div class="items-subject-rf">
+                <div class="subjectRF">
                     {% block table %}
                     <table>
                         <th>Номер</th>
@@ -56,8 +49,8 @@
                         <tr>
                             <form action="subjectRF/update/{{item.pk}}" method="post">
                                 {% csrf_token %}
-                            <td>{{ item.pk }}</td>
-                            <td><input type="text" value="{{item}}"></td>
+                            <td><input type="text" value="{{ item.pk }}" name="pk" readonly></td>
+                            <td><input type="text" value="{{item}}" name="name_subject_RF"></td>
                             <td><input type="submit" value="Изменить данные"></td>
                             </form>
 <!--                            <td>{{item.pk}}</td>-->
@@ -75,9 +68,8 @@
                     </table>
                     {% endblock table %}
                 </div>
-                {% endblock items-subject-rf %}
+                {% endblock items-subject-rf%}
             </div>
-
             {% endblock content %}
         </div>
         {% endblock con %}

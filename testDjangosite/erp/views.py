@@ -3,9 +3,6 @@ from django.views.generic.edit import FormView, DeleteView, UpdateView
 from django.http import HttpResponse, HttpResponseRedirect
 from djangoForest.models import *
 from django.urls import reverse_lazy
-
-
-
 from .forms import *
 
 menudoc = ["Перечет на пробной площади", "Переченая ведомасть участка", "Объединить пробы"]
@@ -44,21 +41,6 @@ def guide(request):
 def index11(request):
     return render(request, 'erp/html/index11.html')
 
-
-# def subjectRFview(request):
-#     if request.method == "POST":
-#         form = SubjectRfForm(request.POST)
-#         if form.is_valid():
-#             print(form.cleaned_data)
-#             try:
-#                 SubjectRF.objects.create(**form.cleaned_data)
-#             except:
-#                 form.add_error("Ошибка")
-#     else:
-#         form = SubjectRfForm()
-#     return render(request, 'erp/html/subjectRF.html', {'menu': menugue, 'form': form, 'title': 'Субъекты РФ'})
-
-
 class SubjectRFView(FormView):
     queryset = SubjectRF.objects.all()
     template_name = 'erp/html/subjectRF.html'
@@ -73,17 +55,10 @@ class SubjectRFView(FormView):
             return self.form_valid(form)
 
     def get_queryset(self):
-        queryset = SubjectRF.objects.all()
-        return queryset
-
-    # def delete(self, request, *args, **kwargs):
-    #     subject = SubjectRF.objects.get(pk=request['pk'])
-    #     subject.delete()
-    #     return HttpResponseRedirect("/")
+        return SubjectRF.objects.all()
 
     def get(self, request):
-        self.queryset = self.get_queryset()
-        return render(request, self.template_name, {'menu': menugue, 'form': self.form_class, 'queryset': self.queryset})
+        return render(request, self.template_name, {'menu': menugue, 'form': self.form_class, 'queryset': self.get_queryset()})
 
 
 class SubjectRFDelete(DeleteView):
@@ -104,13 +79,9 @@ class SubjectRFUpdate(UpdateView):
     form_class = SubjectRFUpdateForm
 
     def post(self, request, pk):
-        form = SubjectRFUpdateForm(request.POST)
-        # form = self.get_form()
         subject = SubjectRF.objects.get(pk=pk)
-        # subject.name_subject_RF = request.POST.get('name_subject_RF')
-        subject.name_subject_RF = form.cleaned_data.get('name_subject_RF')
+        subject.name_subject_RF = request.POST.get('name_subject_RF')
         subject.save()
-        # form.save()
         return redirect('SubjectRF')
 
     def get(self, request):
@@ -118,9 +89,72 @@ class SubjectRFUpdate(UpdateView):
         return render(request, self.template_name, {'menu': menugue, 'form': self.form_class, 'queryset': self.queryset})
 
 
-def post_view(request):
-    return render(request, 'erp/html/post.html', {'title': 'Должности', 'menu': menugue})
+class PostView(FormView):
+    model = Post
+    success_url = reverse_lazy('PostView')
+    queryset = Post.objects.all()
+    form_class = PostForm
+    template_name = 'erp/html/post.html'
 
+    def post(self, request):
+        form = self.get_form()
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.save()
+            return self.form_valid(form)
+
+    def get(self, request):
+        self.queryset = self.get_queryset()
+        return render(request, self.template_name, {'menu': menugue, 'form': self.form_class, 'queryset': self.queryset})
+
+    def get_queryset(self):
+        queryset = Post.objects.all()
+        return queryset
+
+
+class PostViewDelete(DeleteView):
+    model = Post
+    success_url = reverse_lazy('PostView')
+    template_name = 'erp/html/post.html'
+
+    def delete(self, request, pk):
+        post = Post.objects.get(pk=pk)
+        post.delete()
+        return redirect('PostView')
+
+
+class PostViewUpdate(UpdateView):
+    model = Post
+    success_url = reverse_lazy('PostView')
+    template_name = 'erp/html/post.html'
+    form_class = PostUpdateForm
+
+    def post(self, request, pk):
+        post = Post.objects.get(pk=pk)
+        post.post_name = request.POST.get('post_name')
+        post.save()
+        return redirect('PostView')
+
+    def get(self, request):
+        self.queryset = self.get_queryset()
+        return render(request, self.template_name, {'menu': menugue, 'form': self.form_class, 'queryset': self.queryset})
+
+
+class ForestlyView(FormView):
+    model = Forestly
+    success_url = reverse_lazy("ForestlyView")
+    form_class = ForestlyForm
+    template_name = 'erp/html/forestly.html'
+    queryset = Forestly.objects.all()
+
+    def get(self, request):
+        self.queryset = self.get_queryset()
+        return render(request, self.template_name,
+                      {'menu': menugue, 'form': self.form_class, 'queryset': self.queryset})
+
+    def get_queryset(self):
+        queryset = Forestly.objects.all()
+        return queryset
 
 def gps_view(request):
     return render(request, 'erp/html/gps.html', {'title': 'GPS', 'menu': menugue})
@@ -136,10 +170,6 @@ def breeds_view(request):
 
 def district_forestly_view(request):
     return render(request, 'erp/html/district_forestly.html', {'title': 'Участоковые лестничества', 'menu': menugue})
-
-
-def forestly_view(request):
-    return render(request, 'erp/html/forestly.html', {'title': 'Лесничества', 'menu': menugue})
 
 
 def role_view(request):

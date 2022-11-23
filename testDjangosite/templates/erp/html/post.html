@@ -1,10 +1,75 @@
 {% extends 'erp/html/base.html' %}
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% block body %}
+{% block container %}
+    <div class="container">
+        {% block header %}
+        <div class="header">
+            <ul class="nav">
+                <li><a href="/">Главная</a></li>
+                <li><a href="documents">Документы</a></li>
+                <li><a href="guide">Справочники</a></li>
+            </ul>
+        </div>
+        {% endblock header %}
 
-</body>
-</html>
+        {% block con %}
+        <div class="con">
+            {% block menu %}
+            <div class="menu">
+                <ul class="navigat">
+                    {% for m in menu %}
+                    <li id="li"><a id="a" href="{{ m.url_name}} ">{{m.title}}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endblock menu %}
+            {% block content %}
+            <div class="content">
+                {% block forma %}
+                <div class="forma">
+                <form action="{{ success_url }} " method="post">
+<!--                    <input id="name_subject_RF" type="text" name="name_subject_RF">-->
+                    {% csrf_token %}
+<!--                    {{ form.as_p }}-->
+                    {% for f in form %}
+                    <p><label class="form-label" for="{{ f.id_for_label }}">{{ f.label }}</label> {{ f }}</p>
+                    <div class="form-error"> {{ f.errors }} </div>
+                    {% endfor %}
+                    <input type="submit" value="OK">
+                </form>
+                    {% endblock forma %}
+                </div>
+                {% block items-post %}
+                <div class="items-post">
+                    {% block table %}
+                    <table>
+                        <th>Номер</th>
+                        <th>Наименование должности</th>
+                        {% for item in queryset %}
+                        <tr>
+                            <form action="post/update/{{item.pk}}" method="post">
+                                {% csrf_token %}
+                            <td><input type="text" value="{{ item.pk }}" name="pk" readonly></td>
+                            <td><input type="text" value="{{item}}" name="post_name""></td>
+                            <td><input type="submit" value="Изменить данные"></td>
+                            </form>
+                            <td>
+                                <form action="post/delete/{{item.pk}}" method="post">
+                                    {% csrf_token %}
+                                    <input type="submit" value="Удалить данные" name="pk">
+                                </form>
+                            </td>
+                        {% endfor %}
+                        </tr>
+                    </table>
+                    {% endblock table %}
+                </div>
+                {% endblock items-post %}
+            </div>
+            {% endblock content %}
+        </div>
+        {% endblock con %}
+    </div>
+{% endblock %}
+    </div>
+{% endblock %}
