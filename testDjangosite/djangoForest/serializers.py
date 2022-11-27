@@ -90,23 +90,6 @@ class GPSSerializer(serializers.ModelSerializer):
 #         return instance
 
 
-class ListRegionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ListRegion
-        fields = '__all__'
-
-    def create(self, validated_data):
-        return ListRegion.objects.create(**validated_data)
-
-    def update(self, instance, validated_data):
-        instance.id_region = validated_data.get("id_region", instance.id_region)
-        instance.date = validated_data.get("date", instance.date)
-        instance.soil_lot = validated_data.get("soil_lot", instance.soil_lot)
-        instance.id_quarter = validated_data.get("id_quarter", instance.id_quarter)
-        instance.save()
-        return instance
-
-
 class SampleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Sample
@@ -267,3 +250,34 @@ class BranchesSerializer(serializers.ModelSerializer):
         instance.name_branch = validated_data.get("name_branch", instance.name_branch)
         instance.save()
         return instance
+
+
+class ListRegionSerializer(serializers.Serializer):
+    date = serializers.DateField()
+    sample_region = serializers.CharField(max_length=300)
+    id_quarter = serializers.CharField()
+    quarter = serializers.CharField(source='id_quarter.quarter_name')
+    district_forestly = serializers.CharField(source='id_quarter.id_district_forestly')
+    forestly = serializers.CharField(source='id_quarter.id_district_forestly.id_forestly')
+    subjectrf = serializers.CharField(source='id_quarter.id_district_forestly.id_forestly.id_subject_rf')
+    soil_lot = serializers.CharField(max_length=300)
+
+    def create(self, validated_data):
+        return ListRegion.objects.create(**validated_data)
+
+    def update(self, instance, validated_data):
+        instance.id_region = validated_data.get("id_region", instance.id_region)
+        instance.date = validated_data.get("date", instance.date)
+        instance.soil_lot = validated_data.get("soil_lot", instance.soil_lot)
+        instance.id_quarter = validated_data.get("id_quarter", instance.id_quarter)
+        instance.save()
+        return instance
+
+
+class AllListRegionSerializer(serializers.Serializer):
+    listregion = ListRegionSerializer(many=True)
+    quarter = QuarterSerializer(many=True)
+    district_forestly = DistrictForestlySerializer(many=True)
+    forestly = ForestlySerializer(many=True)
+    subjectrf = SubjectRFSerializer(many=True)
+

@@ -132,8 +132,9 @@ class GpsView(generics.ListCreateAPIView):
 
 class ListRegionViewSet(viewsets.ViewSet):
     def list(self, request):
-        ListRegionTuple = namedtuple('ListRegion', ('listregion','district_forestly', 'forestly', 'subjectrf'))
+        ListRegionTuple = namedtuple('ListRegion', ('quarter','listregion','district_forestly', 'forestly', 'subjectrf'))
         lst = ListRegionTuple(
+            quarter= Quarter.objects.all(),
             listregion=ListRegion.objects.all(),
             district_forestly=DistrictForestly.objects.all(),
             forestly=Forestly.objects.all(),
@@ -143,7 +144,7 @@ class ListRegionViewSet(viewsets.ViewSet):
         return Response(serializer.data)
 
 class ListRegionView(generics.ListCreateAPIView):
-
+    model = ListRegion
     def get(self, request):
         # ListRegionTuple = namedtuple('ListRegion', ('district_forestly', 'forestly', 'subjectrf'))
         # lst = ListRegionTuple(
@@ -153,6 +154,20 @@ class ListRegionView(generics.ListCreateAPIView):
         # )
         lst = ListRegion.objects.all()
         return JsonResponse(ListRegionSerializer(lst, many=True).data, safe=False)
+
+    # def get_queryset(self):
+    #     queryset = ListRegion.objects.all()
+    #     return queryset
+    #
+    # def get(self, request):
+    #     context = {
+    #         'set': ListRegionSerializer("json",
+    #                                     self.get_queryset(),
+    #                                     use_natural_foreign_keys = True,
+    #                                     use_natural_primary_keys = True,
+    #                                     ),
+    #     }
+    #     return JsonResponse(context)
 
     def post(self, request):
         serializer = ListRegionSerializer(data=request.data)
