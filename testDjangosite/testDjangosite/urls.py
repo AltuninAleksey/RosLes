@@ -24,6 +24,7 @@ urlpatterns = [
     path('api/v1/gettable', TestAPIView.as_view()),
     path('subjectRF', SubjectRFview.as_view()),
     path('subjectRF/<int:pk>', SubjectRFview.as_view()),
+    path('api/listregion', ListRegionViewSet.as_view({'get': 'list'})),
     path('profile', ProfileView.as_view()),
     path('profile/<int:pk>', ProfileView.as_view()),
     path('list', ListView.as_view()),
