@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect
 from django.views.generic.edit import FormView, DeleteView, UpdateView
-from django.http import HttpResponse, HttpResponseRedirect
 from djangoForest.models import *
 from django.urls import reverse_lazy
 from .forms import *
@@ -10,16 +9,37 @@ menudoc = ["Перечет на пробной площади", "Перечен�
 #            "Сотрудник", "Субъекты РФ", "Участковое лесничество",
 #            "Филиалы", "Синхронизация справочников"]
 
+menudoc = [
+    {'title': 'Перечет на пробной площади', 'url_name': 'listregion'},
+    {'title': 'Перечетная ведомость участка', 'url_name': 'sample'}
+]
+
 menugue = [
     {'title': "Должности", 'url_name': 'post'},
     {'title': "Субъекты РФ", 'url_name': 'subjectRF'},
     {'title': "Лесничества", 'url_name': 'forestly'},
     {'title': "Участковое лесничество", 'url_name': 'district_forestly'},
-    {'title': "Сотрудник", 'url_name': 'role'},
+    {'title': "Роль", 'url_name': 'role'},
     {'title': "Филиалы", 'url_name': 'branches'},
+    {'title': "GPS", 'url_name': 'gps'},
     {'title': "Синхронизация справочников", 'url_name': 'guide'}
            ]
 # Create your views here.
+
+class ListRegionView(FormView):
+    model = ListRegion
+    template_name = 'erp/html/listregion.html'
+
+    def get(self, request):
+        return render(request, self.template_name, {'menu': menugue})
+
+
+class SampleView(FormView):
+    model = List
+    template_name = 'erp/html/sample.html'
+
+    def get(self, request):
+        return render(request, self.template_name, {'menu': menugue})
 
 
 def index(request):
@@ -58,7 +78,8 @@ class SubjectRFView(FormView):
         return SubjectRF.objects.all()
 
     def get(self, request):
-        return render(request, self.template_name, {'menu': menugue, 'form': self.form_class, 'queryset': self.get_queryset()})
+        return render(request, self.template_name, {'menu': menugue, 'form': self.form_class,
+                                                    'queryset': self.get_queryset()})
 
 
 class SubjectRFDelete(DeleteView):
@@ -86,7 +107,8 @@ class SubjectRFUpdate(UpdateView):
 
     def get(self, request):
         self.queryset = self.get_queryset()
-        return render(request, self.template_name, {'menu': menugue, 'form': self.form_class, 'queryset': self.queryset})
+        return render(request, self.template_name, {'menu': menugue, 'form': self.form_class,
+                                                    'queryset': self.queryset})
 
 
 class PostView(FormView):
@@ -105,7 +127,8 @@ class PostView(FormView):
 
     def get(self, request):
         self.queryset = self.get_queryset()
-        return render(request, self.template_name, {'menu': menugue, 'form': self.form_class, 'queryset': self.queryset})
+        return render(request, self.template_name, {'menu': menugue, 'form': self.form_class,
+                                                    'queryset': self.queryset})
 
     def get_queryset(self):
         queryset = Post.objects.all()
@@ -137,7 +160,8 @@ class PostViewUpdate(UpdateView):
 
     def get(self, request):
         self.queryset = self.get_queryset()
-        return render(request, self.template_name, {'menu': menugue, 'form': self.form_class, 'queryset': self.queryset})
+        return render(request, self.template_name, {'menu': menugue, 'form': self.form_class,
+                                                    'queryset': self.queryset})
 
 
 class ForestlyView(FormView):
@@ -152,28 +176,213 @@ class ForestlyView(FormView):
         return render(request, self.template_name,
                       {'menu': menugue, 'form': self.form_class, 'queryset': self.queryset})
 
+    def post(self, request):
+        form = self.get_form()
+        if form.is_valid():
+            forestly = form.save(commit=False)
+            forestly.save()
+            return self.form_valid(form)
+
     def get_queryset(self):
         queryset = Forestly.objects.all()
         return queryset
 
-def gps_view(request):
-    return render(request, 'erp/html/gps.html', {'title': 'GPS', 'menu': menugue})
+
+class ForestlyViewDelete(DeleteView):
+    model = Forestly
+    success_url = reverse_lazy('ForestlyView')
+    template_name = 'erp/html/forestly.html'
+
+    def post(self, request, pk):
+        forestly = Forestly.objects.get(pk=pk)
+        forestly.delete()
+        return redirect('ForestlyView')
 
 
-def branches_view(request):
-    return render(request, 'erp/html/branches.html', {'title': 'Филиалы', 'menu': menugue})
+class ForestlyUpdateView(UpdateView):
+    model = Forestly
+    success_url = reverse_lazy('ForestlyView')
+    template_name = 'erp/html/forestly.html'
+
+    def post(self, request, pk):
+        forestly = Forestly.objects.get(pk=pk)
+        forestly.name_forestly = request.POST.get('name_forestly')
+        # forestly.id_subject_rf = request.POST.get('subjectrf')
+        forestly.save()
+        return redirect('ForestlyView')
+
+
+class DistrictForestlyView(FormView):
+    model = DistrictForestly
+    success_url = reverse_lazy("DistrictView")
+    form_class = DistrictForestlyForm
+    template_name = 'erp/html/district_forestly.html'
+    queryset = DistrictForestly.objects.all()
+
+    def get(self, request):
+        self.queryset = self.get_queryset()
+        return render(request, self.template_name,
+                      {'menu': menugue, 'form': self.form_class, 'queryset': self.queryset})
+
+    def post(self, request):
+        form = self.get_form()
+        if form.is_valid():
+            district_forestly = form.save(commit=False)
+            district_forestly.save()
+            return self.form_valid(form)
+
+    def get_queryset(self):
+        queryset = DistrictForestly.objects.all()
+        return queryset
+
+
+class DistrictForestlyDelete(DeleteView):
+    model = DistrictForestly
+    success_url = reverse_lazy('DistrictView')
+    template_name = 'erp/html/district_forestly.html'
+
+    def post(self, request, pk):
+        district_forestly = DistrictForestly.objects.get(pk=pk)
+        district_forestly.delete()
+        return redirect('DistrictView')
+
+
+class DistrictForestlyUpdateView(UpdateView):
+    model = DistrictForestly
+    success_url = reverse_lazy('DistrictView')
+    template_name = 'erp/html/district_forestly.html'
+
+    def post(self, request, pk):
+        district_forestly = DistrictForestly.objects.get(pk=pk)
+        district_forestly.name_district_forestly = request.POST.get('name_district_forestly')
+        # forestly.id_subject_rf = request.POST.get('subjectrf')
+        district_forestly.save()
+        return redirect('DistrictView')
+
+
+class RoleView(FormView):
+    model = Role
+    success_url = reverse_lazy('RoleView')
+    template_name = 'erp/html/role.html'
+    form_class = RoleForm
+    queryset = Role.objects.all()
+
+    def get(self, request):
+        self.queryset = self.get_queryset()
+        return render(request, self.template_name,
+                      {'menu': menugue, 'form': self.form_class, 'queryset': self.queryset})
+
+    def post(self, request):
+        form = self.get_form()
+        if form.is_valid():
+            role = form.save(commit=False)
+            role.save()
+            return self.form_valid(form)
+
+    def get_queryset(self):
+        queryset = Role.objects.all()
+        return queryset
+
+
+class RoleDelete(DeleteView):
+    model = Role
+    success_url = reverse_lazy('RoleView')
+    template_name = 'erp/html/role.html'
+
+    def post(self, request, pk):
+        role = Role.objects.get(pk=pk)
+        role.delete()
+        return redirect('RoleView')
+
+
+class RoleUpdate(UpdateView):
+    model = Role
+    success_url = reverse_lazy('RoleView')
+    template_name = 'erp/html/role.html'
+
+    def post(self, request, pk):
+        role = Role.objects.get(pk=pk)
+        role.name_role = request.POST.get('name_role')
+        # instanse = SubjectRF.objects.get(pk=request.POST.get('subjectrf')
+        # forestly.id_subject_rf = instance.name_subject_RF
+        # forestly.id_subject_rf = request.POST.get('subjectrf')
+        role.save()
+        return redirect('RoleView')
+
+
+class BranchesView(FormView):
+    model = Branches
+    success_url = reverse_lazy('BranchesView')
+    template_name = 'erp/html/branches.html'
+    form_class = BranchForm
+    queryset = Branches.objects.all()
+
+    def get(self, request):
+        self.queryset = self.get_queryset()
+        return render(request, self.template_name,
+                      {'menu': menugue, 'form': self.form_class, 'queryset': self.queryset})
+
+    def post(self, request):
+        form = self.get_form()
+        if form.is_valid():
+            branch = form.save(commit=False)
+            branch.save()
+            return self.form_valid(form)
+
+    def get_queryset(self):
+        queryset = Branches.objects.all()
+        return queryset
+
+
+class BranchesDelete(DeleteView):
+    model = Branches
+    success_url = reverse_lazy('BranchesView')
+    template_name = 'erp/html/branches.html'
+
+    def post(self, request, pk):
+        branch = Branches.objects.get(pk=pk)
+        branch.delete()
+        return redirect('BranchesView')
+
+
+class BranchesUpdate(UpdateView):
+    model = Role
+    success_url = reverse_lazy('BranchesView')
+    template_name = 'erp/html/branches.html'
+
+    def post(self, request, pk):
+        branch = Branches.objects.get(pk=pk)
+        branch.name_branch = request.POST.get('name_branch')
+        branch.save()
+        return redirect('BranchesView')
+
+
+class GpsView(FormView):
+    model = GPS
+    success_url = reverse_lazy('GPSView')
+    template_name = 'erp/html/gps.html'
+    form_class = GPSForm
+    queryset = GPS.objects.all()
+
+    def get(self, request):
+        self.queryset = self.get_queryset()
+        return render(request, self.template_name,
+                      {'menu': menugue, 'form': self.form_class, 'queryset': self.queryset})
+
+    def post(self, request):
+        form = self.get_form()
+        if form.is_valid():
+            gps = form.save(commit=False)
+            gps.save()
+            return self.form_valid(form)
+
+    def get_queryset(self):
+        queryset = GPS.objects.all()
+        return queryset
 
 
 def breeds_view(request):
     return render(request, 'erp/html/breeds.html', {'title': 'Породы', 'menu': menugue})
-
-
-def district_forestly_view(request):
-    return render(request, 'erp/html/district_forestly.html', {'title': 'Участоковые лестничества', 'menu': menugue})
-
-
-def role_view(request):
-    return render(request, 'erp/html/role.html', {'title': 'Сотрудники', 'menu': menugue})
 
 
 def type_of_reproduction_view(request):
