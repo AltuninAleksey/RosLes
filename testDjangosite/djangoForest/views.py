@@ -1,10 +1,11 @@
-from django.shortcuts import render
+from django.http import JsonResponse
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework import viewsets, permissions
 from rest_framework.decorators import api_view
 from .models import *
 from djangoForest.serializers import *
+from collections import namedtuple
 
 
 class TestAPIView(generics.ListAPIView):
@@ -15,7 +16,6 @@ class TestAPIView(generics.ListAPIView):
 
 class ProfileView(generics.ListCreateAPIView):
     def get(self, request):
-        # lst = Profile.objects.all().values("FIO", "phoneNumber", "email", "id_branches_id", "id_post", "id_role_id", "id_working_breeds_id")
         lst = Profile.objects.all()
         return Response({'get': ProfileSerializer(lst, many=True).data})
 
@@ -130,11 +130,29 @@ class GpsView(generics.ListCreateAPIView):
 #         serealizer.save()
 #         return Response({"put": serealizer.data})
 
+class ListRegionViewSet(viewsets.ViewSet):
+    def list(self, request):
+        ListRegionTuple = namedtuple('ListRegion', ('listregion','district_forestly', 'forestly', 'subjectrf'))
+        lst = ListRegionTuple(
+            listregion=ListRegion.objects.all(),
+            district_forestly=DistrictForestly.objects.all(),
+            forestly=Forestly.objects.all(),
+            subjectrf=SubjectRF.objects.all(),
+        )
+        serializer = AllListRegionSerializer(lst)
+        return Response(serializer.data)
 
 class ListRegionView(generics.ListCreateAPIView):
+
     def get(self, request):
+        # ListRegionTuple = namedtuple('ListRegion', ('district_forestly', 'forestly', 'subjectrf'))
+        # lst = ListRegionTuple(
+        #     district_forestly=DistrictForestly.objects.all(),
+        #     forestly=Forestly.objects.all(),
+        #     subjectrf=SubjectRF.objects.all(),
+        # )
         lst = ListRegion.objects.all()
-        return Response({'get': ListRegionSerializer(lst, many=True).data})
+        return JsonResponse(ListRegionSerializer(lst, many=True).data, safe=False)
 
     def post(self, request):
         serializer = ListRegionSerializer(data=request.data)
