@@ -259,6 +259,7 @@ class ListRegionSerializer(serializers.Serializer):
     id_quarter = serializers.CharField()
     quarter = serializers.CharField(source='id_quarter.quarter_name')
     district_forestly = serializers.CharField(source='id_quarter.id_district_forestly')
+    id_forestly = serializers.CharField(source='id_quarter.id_district_forestly.id_forestly.id')
     forestly = serializers.CharField(source='id_quarter.id_district_forestly.id_forestly')
     subjectrf = serializers.CharField(source='id_quarter.id_district_forestly.id_forestly.id_subject_rf')
     soil_lot = serializers.CharField(max_length=300)
@@ -275,6 +276,17 @@ class ListRegionSerializer(serializers.Serializer):
         return instance
 
 
+class ListRegionSerializerId(serializers.Serializer):
+    id = serializers.IntegerField()
+    date = serializers.DateField()
+    sample_region = serializers.CharField(max_length=300)
+    id_quarter = serializers.CharField(source='id_quarter.id')
+    id_district_forestly = serializers.CharField(source='id_quarter.id_district_forestly.id')
+    id_forestly = serializers.CharField(source='id_quarter.id_district_forestly.id_forestly.id')
+    id_subjectrf = serializers.CharField(source='id_quarter.id_district_forestly.id_forestly.id_subject_rf.id')
+    soil_lot = serializers.CharField(max_length=300)
+
+
 class AllListRegionSerializer(serializers.Serializer):
     listregion = ListRegionSerializer(many=True)
     quarter = QuarterSerializer(many=True)
@@ -282,3 +294,18 @@ class AllListRegionSerializer(serializers.Serializer):
     forestly = ForestlySerializer(many=True)
     subjectrf = SubjectRFSerializer(many=True)
 
+
+class NameOfDistrictSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    name_district_forestly = serializers.CharField()
+
+
+class NameOfForestlySerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    name_forestly = serializers.CharField()
+
+
+class AllForestSerializer(serializers.Serializer):
+    district_forestly = NameOfDistrictSerializer(many=True)
+    forestly = NameOfForestlySerializer(many=True)
+    subjectrf = SubjectRFSerializer(many=True)
