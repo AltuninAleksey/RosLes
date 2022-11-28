@@ -42,10 +42,6 @@ object Singletons {
     }
 
 
-    // --- repositories
-
-
-
     fun init(appContext: Context) {
         Singletons.appContext = appContext
     }

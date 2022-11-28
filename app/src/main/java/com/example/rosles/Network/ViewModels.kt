@@ -5,6 +5,13 @@ import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.rosles.DBCountWood
+import com.example.rosles.RequestClass.PerechetRequest
+import com.example.roslesdef.Adapters.UdelAdapter
+import com.example.roslesdef.Models.ItemWood
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.async
+import kotlin.coroutines.CoroutineContext
 
 
 class ViewModels():BaseViewModel(accountsRepository=Singletons.accountsRepository, logger = LogCatLogger){
@@ -21,7 +28,7 @@ class ViewModels():BaseViewModel(accountsRepository=Singletons.accountsRepositor
         val enableViews: Boolean get() = !signInInProgress
     }
 
-    fun requestSubjectRF(requestSubjectRF: String) = viewModelScope.safeLaunch {
+    fun requestSubjectRF(requestSubjectRF: String,context: Context) = viewModelScope.safeLaunch {
         try {
             accountsRepository?.requestSubjectRF(requestSubjectRF)
         } catch (e: EmptyFieldException) {
@@ -29,6 +36,30 @@ class ViewModels():BaseViewModel(accountsRepository=Singletons.accountsRepositor
         }
 
     }
+
+    fun reproduction(context: Context)=viewModelScope.safeLaunch{
+            try {
+                var resp=accountsRepository?.reproduction()
+
+                val db = DBCountWood(context,null)
+                db.addReproduction(resp?.get(0)?.name_reproduction.toString())
+                db.addReproduction(resp?.get(1)?.name_reproduction.toString())
+
+
+            } catch (e: EmptyFieldException) {
+                processEmptyFieldException(e)
+            }
+    }
+    fun perechet(perechetRequest: PerechetRequest,context: Context)=viewModelScope.safeLaunch{
+        try {
+            accountsRepository?.perechet(perechetRequest)
+        } catch (e: EmptyFieldException) {
+            processEmptyFieldException(e)
+        }
+    }
+
+
+
 
     private fun processEmptyFieldException(e: EmptyFieldException) {
         _state.value = _state.requireValue().copy(

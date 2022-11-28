@@ -3,16 +3,104 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:background="#ECECEC"
+    android:layout_height="match_parent">
 
-    <TextView
+
+    <Button
+        android:id="@+id/proba"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="60dp"
+        android:backgroundTint="@color/color_button_main"
+        android:text="Проба"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:strokeColor="@color/color_button_main_border"
+        app:strokeWidth="2dp" />
+
+    <Button
+        android:id="@+id/Settings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="28dp"
+        android:backgroundTint="@color/color_button_main"
+        android:text="Настройки"
+        app:cornerRadius="8dp"
+        app:layout_constraintStart_toEndOf="@+id/textView2"
+        app:layout_constraintTop_toTopOf="parent"
+        app:strokeColor="@color/color_button_main_border"
+        app:strokeWidth="2dp" />
+
+    <Button
+        android:id="@+id/GPS"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="120dp"
+        android:layout_marginTop="60dp"
+        android:backgroundTint="@color/color_button_main"
+        android:text="GPS"
+        app:cornerRadius="8dp"
+        app:layout_constraintStart_toEndOf="@+id/sync"
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:strokeColor="@color/color_button_main_border"
+        app:strokeWidth="2dp" />
+
+    <Button
+        android:id="@+id/sync"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="120dp"
+        android:layout_marginTop="60dp"
+        android:backgroundTint="@color/color_button_main"
+        android:text="Синхронизация"
+        app:cornerRadius="8dp"
+        app:layout_constraintStart_toEndOf="@+id/proba"
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:strokeColor="@color/color_button_main_border"
+        app:strokeWidth="2dp" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="385dp"
+        android:layout_height="150dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="30dp"
+        android:textAlignment="viewStart"
+        android:textColor="@color/black"
+        android:textSize="30sp"
+        android:text="Иванов Иван Иванович,ЦЗЛ Калужской области"
+        android:textFontWeight="@integer/material_motion_duration_long_2"
+        app:layout_constraintStart_toEndOf="@+id/imageView"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="30dp"
+        android:src="@drawable/photoprofile"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@tools:sample/avatars" />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/UdelRecycler"
+        android:layout_width="match_parent"
+        android:layout_height="179dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sync"
+        tools:ignore="MissingConstraints"
+        tools:itemCount="5"
+        tools:listitem="@layout/item_udel" />
 </androidx.constraintlayout.widget.ConstraintLayout>
