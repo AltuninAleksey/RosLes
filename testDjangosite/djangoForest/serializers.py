@@ -253,6 +253,7 @@ class BranchesSerializer(serializers.ModelSerializer):
 
 
 class ListRegionSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
     date = serializers.DateField()
     sample_region = serializers.CharField(max_length=300)
     id_quarter = serializers.CharField()
