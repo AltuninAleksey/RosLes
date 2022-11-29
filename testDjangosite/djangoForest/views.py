@@ -1,4 +1,7 @@
-from django.http import JsonResponse
+import json
+
+import simplejson
+from django.http import JsonResponse, HttpResponse
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework import viewsets, permissions
@@ -139,13 +142,11 @@ class ListRegionView(generics.ListCreateAPIView):
         pk = kwargs.get('pk')
         if pk:
             lst = ListRegion.objects.filter(pk=pk)
-            print('LASKHGJKSADNGJKNSJKDNGTJKSJKDG')
-            print(pk)
-            print(lst)
             return JsonResponse(ListRegionSerializerId(lst, many=True).data, safe=False)
         else:
             lst = ListRegion.objects.all()
-            return JsonResponse(ListRegionSerializer(lst, many=True).data, safe=False)
+            serealizer_class = ListRegionSerializer(lst, many=True)
+            return JsonResponse(ListRegionSerializerId(lst, many=True).data, safe=False)
         # lst = ListRegion.objects.all()
         # return JsonResponse(ListRegionSerializer(lst, many=True).data, safe=False)
 
@@ -189,7 +190,6 @@ class SampleView(generics.ListCreateAPIView):
         print(pk)
         if not pk:
             return Response({"error": "Method PUT not allowed"})
-
         try:
             instance = Sample.objects.get(pk=pk)
         except:
@@ -490,6 +490,18 @@ class AllForestlyViewSet(viewsets.ViewSet):
         )
         serializer = AllForestSerializer(lst)
         return Response(serializer.data)
+
+
+class GetDocumentListData(viewsets.ViewSet):
+    def list(self, request, *args, **kwargs):
+        pk = kwargs.get('pk')
+        print(pk)
+        lst = List.objects.filter(id_sample=pk)
+        state = Sample.objects.filter(pk=pk)
+        gps = GPS.objects.filter(id_sample=pk)
+        return JsonResponse({'list-data': GetDocumentListSerializer(lst, many=True).data,
+                             'post-data': GetFromSampleProfileSerializer(state, many=True).data,
+                             'gps-data': GetGPS(gps, many=True).data}, safe=False)
 
 
 class ForestViewSet(viewsets.ModelViewSet):

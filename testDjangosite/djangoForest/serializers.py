@@ -309,3 +309,27 @@ class AllForestSerializer(serializers.Serializer):
     district_forestly = NameOfDistrictSerializer(many=True)
     forestly = NameOfForestlySerializer(many=True)
     subjectrf = SubjectRFSerializer(many=True)
+
+
+class GetDocumentListSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    id_sample = serializers.CharField(source='id_sample.id')
+    id_type_of_reproduction = serializers.CharField(source='id_type_of_reproduction.name_reproduction')
+    to0_2 = serializers.IntegerField()
+    from0_21To0_5 = serializers.IntegerField()
+    from0_6To1_0 = serializers.IntegerField()
+    from1_1to1_5 = serializers.IntegerField()
+    from1_5 = serializers.IntegerField()
+    max_height = serializers.IntegerField()
+
+
+class GetGPS(serializers.Serializer):
+    id = serializers.IntegerField()
+    latitude = serializers.FloatField()
+    longitude = serializers.FloatField()
+    flag_center = serializers.IntegerField()
+
+
+class GetFromSampleProfileSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    FIO = serializers.CharField(source='id_profile.FIO')
