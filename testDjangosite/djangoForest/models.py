@@ -1,7 +1,6 @@
 from django.db import models
 
 
-
 class Table(models.Model):
     name = models.CharField(max_length=300)
     age = models.IntegerField()
@@ -26,7 +25,7 @@ class Profile(models.Model):
 
 
 class List(models.Model):
-    id_sample = models.ForeignKey('Sample', on_delete=models.CASCADE, verbose_name='Перечет', null=True)
+    id_sample = models.ForeignKey('Sample', on_delete=models.CASCADE, verbose_name='Проба', null=True)
     id_breed = models.ForeignKey('Breed', on_delete=models.CASCADE, verbose_name='Порода', null=True)
     id_type_of_reproduction = models.ForeignKey('Reproduction', on_delete=models.CASCADE,
                                                 verbose_name='Вид воспроизводства', null=True)
@@ -174,7 +173,7 @@ class DistrictForestly(models.Model):
 
 class Quarter(models.Model):
     quarter_name = models.CharField(u'Наименование', max_length=50)
-    id_forestly = models.ForeignKey("DistrictForestly", on_delete=models.CASCADE, verbose_name="Лесничество", null=True)
+    id_district_forestly = models.ForeignKey("DistrictForestly", on_delete=models.CASCADE, verbose_name="Лесничество", null=True)
 
     class Meta:
         verbose_name = 'Квартал'

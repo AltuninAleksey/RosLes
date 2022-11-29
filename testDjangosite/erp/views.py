@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect
 from django.views.generic.edit import FormView, DeleteView, UpdateView
+from django.views.generic import ListView
 from djangoForest.models import *
 from django.urls import reverse_lazy
 from .forms import *
 
-menudoc = ["Перечет на пробной площади", "Переченая ведомасть участка", "Объединить пробы"]
+# menudoc = ["Перечет на пробной площади", "Переченая ведомасть участка", "Объединить пробы"]
 # menugue = ["Должности", "Лесничества", "Лесообразующие породы",
 #            "Сотрудник", "Субъекты РФ", "Участковое лесничество",
 #            "Филиалы", "Синхронизация справочников"]
@@ -30,8 +31,8 @@ class ListRegionView(FormView):
     model = ListRegion
     template_name = 'erp/html/listregion.html'
 
-    def get(self, request):
-        return render(request, self.template_name, {'menu': menugue})
+    def get(self, request, pk=None):
+        return render(request, self.template_name, {'menu': menudoc})
 
 
 class SampleView(FormView):

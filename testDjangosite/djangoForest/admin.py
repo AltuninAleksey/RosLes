@@ -32,8 +32,13 @@ class GPSAdmin(admin.ModelAdmin):
 #     list_display_links = ('id', 'id_subject_rf', 'id_forestly', 'id_district_forestly', 'quarter', 'soil_lot', 'sample_region')
 #     search_fields = ('id', 'id_subject_rf', 'id_forestly', 'id_district_forestly', 'quarter', 'soil_lot', 'sample_region')
 
+class InlineListRegion(admin.TabularInline):
+    model = ListRegion
+    extra = 1
 
 class ListRegionAdmin(admin.ModelAdmin):
+    # model = ListRegion
+    # inlines = (InlineListRegion,)
     list_display = ('id', 'sample_region', 'date', 'soil_lot', 'id_quarter')
     list_display_links = ('id', 'sample_region', 'date', 'soil_lot', 'id_quarter')
     search_fields = ('id', 'sample_region', 'date', 'soil_lot', 'id_quarter')
@@ -98,7 +103,13 @@ class BranchesAdmin(admin.ModelAdmin):
     list_display_links = ('id', 'name_branch')
     search_fields = ('id', 'name_branch')
 
+class QuarterAdmin(admin.ModelAdmin):
+    list_display = ('id', 'quarter_name', 'id_district_forestly')
+    list_display_links = ('id', 'quarter_name', 'id_district_forestly')
+    search_fields = ('id', 'quarter_name', 'id_district_forestly')
 
+
+admin.site.register(Quarter, QuarterAdmin)
 admin.site.register(Profile, ProfileAdmin)#Профиль
 admin.site.register(GPS, GPSAdmin)#GPS
 # admin.site.register(Region, RegionAdmin)

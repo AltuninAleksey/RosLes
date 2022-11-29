@@ -33,6 +33,7 @@ urlpatterns = [
     path('guide/role/delete/<int:pk>', views.RoleDelete.as_view(), name='delete_role'),
     path('guide/type_of_reproduction', views.type_of_reproduction_view),
     path('guide/working_breeds', views.working_breeds_view),
-    path('documents/listregion', views.ListRegionView.as_view()),
+    path('documents/listregion', views.ListRegionView.as_view(), name='ListRegionView'),
     path('documents/sample', views.SampleView.as_view()),
 ]
+
