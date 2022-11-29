@@ -23,6 +23,7 @@ urlpatterns = [
     path('', include('djangoForest.urls')),
     path('api/v1/gettable', TestAPIView.as_view()),
     path('allforest', AllForestlyViewSet.as_view({'get': 'list'})),
+    path('getlistdata/<int:pk>', GetDocumentListData.as_view({'get': 'list'})),
     path('subjectRF', SubjectRFview.as_view()),
     path('subjectRF/<int:pk>', SubjectRFview.as_view()),
     path('profile', ProfileView.as_view()),
