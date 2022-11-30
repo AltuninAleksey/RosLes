@@ -109,19 +109,89 @@ class QuarterAdmin(admin.ModelAdmin):
     search_fields = ('id', 'quarter_name', 'id_district_forestly')
 
 
-admin.site.register(Quarter, QuarterAdmin)
-admin.site.register(Profile, ProfileAdmin)#Профиль
-admin.site.register(GPS, GPSAdmin)#GPS
+class PurposeOfForestsAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name_purpose')
+    list_display_links = ('id', 'name_purpose')
+    search_fields = ('id', 'name_purpose')
+
+
+class ForestProtectionCategoryAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name_forest_protection_category')
+    list_display_links = ('id', 'name_forest_protection_category')
+    search_fields = ('id', 'name_forest_protection_category')
+
+
+class CategoryOfForestFundLandsAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name_category')
+    list_display_links = ('id', 'name_category')
+    search_fields = ('id', 'name_category')
+
+
+class MethodOfReforestationAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name_of_method')
+    list_display_links = ('id', 'name_of_method')
+    search_fields = ('id', 'name_of_method')
+
+
+class BonitetOrlovAdmin(admin.ModelAdmin):
+    list_display = ('id', 'age_of_planting', 'height_planting_for_bonitet_class', 'class_bonitet')
+    list_display_links = ('id', 'age_of_planting', 'height_planting_for_bonitet_class', 'class_bonitet')
+    search_fields = ('id', 'age_of_planting', 'height_planting_for_bonitet_class', 'class_bonitet')
+
+
+class TypeForestGrowingConditionsAdmin(admin.ModelAdmin):
+    list_display = ('id', 'subtypes_of_humidity', 'subtypes_of_rich', 'type_forest_growing_conditions')
+    list_display_links = ('id', 'subtypes_of_humidity', 'subtypes_of_rich', 'type_forest_growing_conditions')
+    search_fields = ('id', 'subtypes_of_humidity', 'subtypes_of_rich', 'type_forest_growing_conditions')
+
+
+class EconomyAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name_economy')
+    list_display_links = ('id', 'name_economy')
+    search_fields = ('id', 'name_economy')
+
+
+class AccordanceMolodKrAndTPPLAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name_of_accordance')
+    list_display_links = ('id', 'name_of_accordance')
+    search_fields = ('id', 'name_of_accordance')
+
+
+class AccordanceNoneAccordanceEconomyAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name_accordance_none_economy')
+    list_display_links = ('id', 'name_accordance_none_economy')
+    search_fields = ('id', 'name_accordance_none_economy')
+
+
+class CategoryGroundLFInNoneAccordanceAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name_of_category_ground')
+    list_display_links = ('id', 'name_of_category_ground')
+    search_fields = ('id', 'name_of_category_ground')
+
+
+admin.site.register(PurposeOfForests, PurposeOfForestsAdmin)    # Целевое назначение лесов
+admin.site.register(ForestProtectionCategory, ForestProtectionCategoryAdmin)    # Категория защитности лесов
+admin.site.register(CategoryOfForestFundLands, CategoryOfForestFundLandsAdmin)  # Категория земель лесного фонда
+admin.site.register(MethodOfReforestation, MethodOfReforestationAdmin)  # Способ лесовосстановления
+admin.site.register(BonitetOrlov, BonitetOrlovAdmin)    # Бонитет по Орлову
+admin.site.register(TypeForestGrowingConditions, TypeForestGrowingConditionsAdmin)  # Тип лесорастительный условий
+admin.site.register(Economy, EconomyAdmin)  # Хозяйство
+admin.site.register(AccordanceMolodKrAndTPPL, AccordanceMolodKrAndTPPLAdmin)    # Соответ. молодняка кр. и тр. ПЛ
+admin.site.register(AccordanceNoneAccordanceEconomy, AccordanceNoneAccordanceEconomyAdmin)  # Соответ. не соответ. хозяйству
+admin.site.register(CategoryGroundLFInNoneAccordance, CategoryGroundLFInNoneAccordanceAdmin)    # Кат. земель лф в случ. несоотв.
+admin.site.register(Quarter, QuarterAdmin)  # Квартал
+admin.site.register(Profile, ProfileAdmin)  # Профиль
+admin.site.register(GPS, GPSAdmin)  # GPS
 # admin.site.register(Region, RegionAdmin)
 admin.site.register(List, ListAdmin)
 admin.site.register(ListRegion, ListRegionAdmin)
-admin.site.register(Sample, SampleAdmin)#Проба
-admin.site.register(Post, PostAdmin)#Должность
-admin.site.register(WorkingBreeds, WorkingBreedsAdmin)#Рабочие породы
-admin.site.register(SubjectRF, SubjectRFAdmin)#Субъект РФ
-admin.site.register(Role, RoleAdmin)#Роль
-admin.site.register(Reproduction, ReproductionAdmin)#Воспроизводство
-admin.site.register(Forestly, ForestlyAdmin)#Лесничество
-admin.site.register(DistrictForestly, DistrictForestlyAdmin)#Участковое лесничество
-admin.site.register(Breed, BreedAdmin)  #Участок
-admin.site.register(Branches, BranchesAdmin) # Филиал
+admin.site.register(Sample, SampleAdmin)    # Проба
+admin.site.register(Post, PostAdmin)    # Должность
+admin.site.register(WorkingBreeds, WorkingBreedsAdmin)  # Рабочие породы
+admin.site.register(SubjectRF, SubjectRFAdmin)  # Субъект РФ
+admin.site.register(Role, RoleAdmin)    # Роль
+admin.site.register(Reproduction, ReproductionAdmin)  # Воспроизводство
+admin.site.register(Forestly, ForestlyAdmin)    # Лесничество
+admin.site.register(DistrictForestly, DistrictForestlyAdmin)    # Участковое лесничество
+admin.site.register(Breed, BreedAdmin)  # Участок
+admin.site.register(Branches, BranchesAdmin)    # Филиал
