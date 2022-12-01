@@ -495,16 +495,21 @@ class AllForestlyViewSet(viewsets.ViewSet):
 class GetDocumentListData(viewsets.ViewSet):
     def list(self, request, *args, **kwargs):
         pk = kwargs.get('pk')
-        print(pk)
-        lst = List.objects.filter(id_sample=pk)
+        lst = List.objects.filter(id_sample=kwargs.get('pk'))
         state = Sample.objects.filter(pk=pk)
         gps = GPS.objects.filter(id_sample=pk)
 
-        #MPO - 01.12.22: Switch '-' to '_'
         return JsonResponse({'list_data': GetDocumentListSerializer(lst, many=True).data,
                              'post_data': GetFromSampleProfileSerializer(state, many=True).data,
                              'gps_data': GetGPS(gps, many=True).data}, safe=False)
 
+
+class GetSampleListData(viewsets.ViewSet):
+    def list(self, requests, *args, **kwargs):
+        pk = kwargs.get('pk')
+        lst = Sample.objects.filter(pk=pk)
+
+        return JsonResponse({'Sample_data': GetSampleListDataSerializer(lst, many=True).data}, safe=False)
 
 class ForestViewSet(viewsets.ModelViewSet):
     pass

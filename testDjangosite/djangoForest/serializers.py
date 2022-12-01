@@ -313,6 +313,7 @@ class AllForestSerializer(serializers.Serializer):
 
 class GetDocumentListSerializer(serializers.Serializer):
     id = serializers.IntegerField()
+    breed = serializers.CharField(source='id_breed.name_breed')
     id_sample = serializers.CharField(source='id_sample.id')
     id_type_of_reproduction = serializers.CharField(source='id_type_of_reproduction.name_reproduction')
     breed = serializers.CharField(source='id_breed.name_breed')
@@ -334,3 +335,19 @@ class GetGPS(serializers.Serializer):
 class GetFromSampleProfileSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     FIO = serializers.CharField(source='id_profile.FIO')
+
+
+class GetSampleListDataSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    id_quarter = serializers.CharField(source='id_list_region.id_quarter.id')
+    id_district_forestly = serializers.CharField(source='id_list_region.id_quarter.id')
+    id_forestly = serializers.CharField(source='id_list_region.id_quarter.id_district_forestly.id')
+    id_subjectrf = serializers.CharField(source='id_list_region.id_quarter.id_district_forestly.id_forestly.id')
+    date = serializers.DateField()
+    sample_area = serializers.FloatField()
+    id_profile = serializers.CharField(source='id_profile.id')
+    profile = serializers.CharField(source='id_profile.FIO')
+
+
+
+
