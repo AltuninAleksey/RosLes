@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    {% block title %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/navigation.css' %}">
+    <link rel="stylesheet" href="{% static 'css/recalculationOnTrialAreaDetail.css' %}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.0/axios.js"></script>
+    <script src="{% static 'js/global.js' %}"></script>
+    <title>Детальные данные перечет на пробной площади</title>
+    {% endblock %}
+</head>
+<body>
+    <input id="idDocument" type="hidden" name="idDocument" value={{idDocument}}>
+    <div class="container">
+        <div class="header">
+            <ul class="nav">
+                <li><a href="/">Главная</a></li>
+                <li><a href="documents">Документы</a></li>
+                <li><a href="guide">Справочники</a></li>
+            </ul>
+        </div>
+        <div class="con">
+            <input type="checkbox" id="nav-toggle" hidden>
+            <div class="menu">
+                <label for="nav-toggle" class="nav-toggle" onclick></label>
+                <ul class="navigat">
+                    <li><a href="">Перечет на пробной площади</a></li>
+                    <li><a href="">Перечетная ведомость</a></li>
+                </ul>
+            </div>
+            <div class="content">
+                <div class="con-header">
+                    <p>Перечет на пробной площади</p>
+                </div>
+                <div class="twomenu">
+                        <div class="forma">
+                            <form action="" method="post">
+                                <input type="submit" value="Провести и закрыть">
+                            </form>
+                        </div>
+                </div>
+                <div class="reread">
+                    <div class="re">
+                        <div class="forma">
+                            <p>Дата: </p>
+                            <form action="" method="post">
+                                <input type="date" id="start" name="trip-start" value="2022-11-28" min="2022-01-01" max="2022-12-31">
+                            </form>
+                        </div>
+                        <div class="forma">
+                            <p>id в центральной базе: </p>
+                            <form action="" method="post">
+                                <input type="text">
+                            </form>
+                        </div>
+                    </div>
+                    <div class="re1">
+                        <h3>Участок</h3>
+                        <div class="form1">
+                            <p class="p">Субьект РФ: </p>
+                            <form action="" method="post">
+                                <select name="regionId" id="regionRF">
+                                </select>
+                            </form>
+                        </div>
+                        <div class="form1">
+                            <p class="p1">Лестничество: </p>
+                            <form action="" method="post">
+                                <select name="lesId" id="lesName">
+                                </select>
+                            </form>
+                        </div>
+                        <div class="form1">
+                            <p class="p2">Участковое лестничество: </p>
+                            <form action="" method="post">
+                                <select name="ucLesId" id="ucLesName">
+                                </select>
+                            </form>
+                        </div>
+                        <div class="form1">
+                            <p class="p3">Квартал: </p>
+                            <form action="" method="post">
+                                <input id="quarter" type="text">
+                            </form>
+                        </div>
+                        <div class="form1">
+                            <p class="p4">Выдел: </p>
+                            <form action="" method="post">
+                                <input id="soil_lot" type="text">
+                            </form>
+                        </div>
+                        <div class="form1">
+                            <p class="p5">Площадь пробы: </p>
+                            <form action="" method="post">
+                                <input id="sample_region" type="text">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="table_1">
+                    <div class="table_1_switch_button">
+                        <div id="switchButton1" onclick="setDataInTableOne(1)" class="table_1_switch_button_item border-bottom-color-active"><p>Искусственноу восстановление</p></div>
+                        <div id="switchButton2" onclick="setDataInTableOne(2)" class="table_1_switch_button_item border-bottom-color-black"><p>Естественное возобновление (семенное)</p></div>
+                        <div id="switchButton3" onclick="setDataInTableOne(3)" class="table_1_switch_button_item border-bottom-color-black"><p>Естественное возобновление (вегетативное)</p></div>
+                    </div>
+                    <div class="table_1_active_button">
+                        <button>Добавить</button>
+                    </div>
+                    <div class="table_1_content">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th class="tab_1_td1">N</th>
+                                    <th class="tab_1_td2">Порода</th>
+                                    <th class="tab_1_td3">до 0.2</th>
+                                    <th class="tab_1_td4">0.21 - 0.5</th>
+                                    <th class="tab_1_td5">0.6 - 1.0</th>
+                                    <th class="tab_1_td6">1.1 - 1.5</th>
+                                    <th class="tab_1_td7">более 1.5</th>
+                                    <th class="tab_1_td8">Максимальная высота</th>
+                                </tr>
+                            </thead>
+                        </table>
+                        <div class="table_1_scroll-table-body">
+                            <table>
+                                <tbody id="table_1">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="table_2_3">
+                    <div class="staff">
+                        <div class="staff_header">
+                            <p>Сотрудники</p>
+                        </div>
+                        <div class="staff_active_button">
+                            <button>Добавить</button>
+                        </div>
+                        <div class="table_2">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th class="tab_2_td1">N</th>
+                                        <th>Сотрудник</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                            <div class="table_2_scroll-table-body">
+                                <table>
+                                    <tbody id="table_2">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="gpsPoints">
+                        <div class="staff_header">
+                            <p>GPS точки</p>
+                        </div>
+                        <div class="staff_active_button">
+                            <button>Добавить</button>
+                        </div>
+                        <div class="table_2">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th class="tab_2_td1">N</th>
+                                        <th class="tab_3_td2">Долгота</th>
+                                        <th class="tab_3_td3">Широта</th>
+                                        <th class="tab_3_td4">Центр</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                            <div class="table_2_scroll-table-body">
+                                <table>
+                                    <tbody id="table_3">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<script src="{% static 'js/recalculationOnTrialAreaDetail.js' %}"></script>
+</body>
+</html>

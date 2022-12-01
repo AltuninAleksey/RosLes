@@ -35,5 +35,8 @@ urlpatterns = [
     path('guide/working_breeds', views.working_breeds_view),
     path('documents/listregion', views.ListRegionView.as_view(), name='ListRegionView'),
     path('documents/sample', views.SampleView.as_view()),
+    #MPO 01.12.22: Add new url for page "recalculationOnTrialArea" and "recalculationOnTrialAreaDetail"
+    path('documents/recalculationOnTrialArea', views.getRecalculationOnTrialArea),
+    path('documents/recalculationOnTrialAreaDetail', views.getRecalculationOnTrialAreaDetail),
 ]
 

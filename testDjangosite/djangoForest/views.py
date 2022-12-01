@@ -499,9 +499,11 @@ class GetDocumentListData(viewsets.ViewSet):
         lst = List.objects.filter(id_sample=pk)
         state = Sample.objects.filter(pk=pk)
         gps = GPS.objects.filter(id_sample=pk)
-        return JsonResponse({'list-data': GetDocumentListSerializer(lst, many=True).data,
-                             'post-data': GetFromSampleProfileSerializer(state, many=True).data,
-                             'gps-data': GetGPS(gps, many=True).data}, safe=False)
+
+        #MPO - 01.12.22: Switch '-' to '_'
+        return JsonResponse({'list_data': GetDocumentListSerializer(lst, many=True).data,
+                             'post_data': GetFromSampleProfileSerializer(state, many=True).data,
+                             'gps_data': GetGPS(gps, many=True).data}, safe=False)
 
 
 class ForestViewSet(viewsets.ModelViewSet):

@@ -392,3 +392,9 @@ def type_of_reproduction_view(request):
 
 def working_breeds_view(request):
     return render(request, 'erp/html/working_breeds.html', {'title': 'Рабочие породы', 'menu': menugue})
+
+def getRecalculationOnTrialArea(request):
+    return render(request, 'erp/html/recalculationOnTrialArea.html')
+
+def getRecalculationOnTrialAreaDetail(request):
+    return render(request, 'erp/html/recalculationOnTrialAreaDetail.html', {'idDocument': request.GET.get('id')})
