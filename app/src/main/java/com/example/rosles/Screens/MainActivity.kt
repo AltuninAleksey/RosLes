@@ -3,17 +3,17 @@ package com.example.rosles.Screens
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import android.view.View
 import android.view.Window
-import android.widget.Toast
 import androidx.activity.viewModels
+import com.example.rosles.Adapters.BaseInterface
 import com.example.rosles.DBCountWood
 import com.example.rosles.Network.ViewModels
-import com.example.rosles.R
 import com.example.rosles.databinding.ActivityMainBinding
+import com.example.rosles.databinding.ItemUdelBinding
 import com.example.roslesdef.Adapters.UdelAdapter
 import com.example.roslesdef.Models.ItemWood
-import okhttp3.internal.wait
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -30,11 +30,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(view)
 
 
-
-        binding.proba.setOnClickListener(){
-            val intent = Intent(this, Wood::class.java)
-            startActivity(intent)
-        }
+//
+//        binding.proba.setOnClickListener(){
+//
+//        }
         binding.sync.setOnClickListener(){
             viewModel.reproduction(this)
         }
@@ -44,6 +43,11 @@ class MainActivity : AppCompatActivity() {
 
 
 
+    }
+    fun start(itemView: String) {
+        val intent = Intent(this, Wood::class.java)
+        intent.putExtra("udel",itemView)
+        startActivity(intent)
     }
 
     fun RecyclerviewInit(){
@@ -56,7 +60,14 @@ class MainActivity : AppCompatActivity() {
             ItemWood("Проба3")
         )
 
-        var adapter = UdelAdapter(a)
+        var adapter = UdelAdapter(a,object :BaseInterface{
+
+            override fun onClick(itemView: Any) {
+                start(itemView as String)
+            }
+        })
+
+
 
         binding.UdelRecycler.adapter=adapter
 

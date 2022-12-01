@@ -121,8 +121,32 @@ class DBCountWood (context: Context, factory: SQLiteDatabase.CursorFactory?) :
             cursor.getString(cursor.getColumnIndex(VALUE15))
             )
             return wood;
-
     }
+
+    @SuppressLint("Range")
+    fun readbyporoda(poroda:String): ClassWood {
+        var database:SQLiteDatabase = this.writableDatabase
+        val cursor: Cursor =  database.rawQuery("SELECT * FROM " + TABLE_NAME.toString() + " WHERE " + PORODA.toString() + "=" + poroda,
+            null)
+        cursor.moveToFirst()
+        val wood:ClassWood = ClassWood(
+            cursor.getString(cursor.getColumnIndex(ID_COL)),
+            cursor.getString(cursor.getColumnIndex(PORODA)),
+            cursor.getString(cursor.getColumnIndex(PROBA)),
+            cursor.getString(cursor.getColumnIndex(VIEWWOOD)),
+            cursor.getString(cursor.getColumnIndex(VALUE02)),
+            cursor.getString(cursor.getColumnIndex(VALUE05)),
+            cursor.getString(cursor.getColumnIndex(VALUE06)),
+            cursor.getString(cursor.getColumnIndex(VALUE11)),
+            cursor.getString(cursor.getColumnIndex(VALUE15))
+        )
+        return wood;
+    }
+
+
+
+
+
     companion object{
         // here we have defined variables for our database
         // below is variable for database name
@@ -130,7 +154,7 @@ class DBCountWood (context: Context, factory: SQLiteDatabase.CursorFactory?) :
         // below is the variable for database version
         private val DATABASE_VERSION = 1
         // below is the variable for table name
-        val TABLE_NAME = "users"
+        val TABLE_NAME = "Woods"
         // below is the variable for id column
         val ID_COL = "id"
         // below is the variable for name column

@@ -26,7 +26,7 @@
         tools:ignore="MissingConstraints" />
 
     <Button
-        android:id="@+id/text_button2"
+        android:id="@+id/text_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/color_button_main"

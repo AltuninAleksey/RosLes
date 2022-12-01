@@ -34,14 +34,14 @@
                 android:textSize="10sp" />
 
             <Button
-                android:id="@+id/button7"
+                android:id="@+id/buttonSync"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:backgroundTint="@color/color_button_navigation"
                 android:insetLeft="10dp"
                 android:insetRight="10dp"
-                android:text="Button"
+                android:text="Синхронизация"
                 android:textColor="@color/white"
                 android:textSize="10sp" />
 
@@ -74,7 +74,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/WoodRecycler"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="100dp"
             android:layout_marginTop="50dp"
             android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
@@ -376,6 +376,7 @@
                     </TextView>
 
                     <TextView
+                        android:id="@+id/nameudel"
                         android:layout_width="208dp"
                         android:layout_height="wrap_content"
                         android:layout_row="0"
