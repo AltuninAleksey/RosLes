@@ -201,3 +201,117 @@ class Branches(models.Model):
     class Meta:
         verbose_name = 'Филиал'
         verbose_name_plural = 'Филиал'
+
+
+class PurposeOfForests(models.Model):
+    name_purpose = models.CharField(max_length=350, verbose_name='Наименование')
+
+    def __str__(self):
+        return self.name_purpose
+
+    class Meta:
+        verbose_name = 'Целевое назначение лесов'
+        verbose_name_plural = 'Целевое назначение лесов'
+
+
+class ForestProtectionCategory(models.Model):
+    name_forest_protection_category = models.CharField(max_length=350, verbose_name='Наименование')
+
+    def __str__(self):
+        return self.name_forest_protection_category
+
+    class Meta:
+        verbose_name = 'Категория защитности лесов'
+        verbose_name_plural = 'Категория защитности лесов'
+
+
+class CategoryOfForestFundLands(models.Model):
+    name_category = models.CharField(max_length=350,  verbose_name='Наименование')
+
+    def __str__(self):
+        return self.name_category
+
+    class Meta:
+        verbose_name = 'Категория земель лесного фонда'
+        verbose_name_plural = 'Категория земель лесного фонда'
+
+
+class MethodOfReforestation(models.Model):
+    name_of_method = models.CharField(max_length=350, verbose_name='Наименование')
+
+    def __str__(self):
+        return self.name_of_method
+
+    class Meta:
+        verbose_name = 'Способ лесовосстановления'
+        verbose_name_plural = 'Способ лесовосстановления'
+
+
+class BonitetOrlov(models.Model):
+    age_of_planting = models.FloatField(verbose_name='Возраст насаждения')
+    height_planting_for_bonitet_class = models.FloatField('Высота насаждения по классам бонитета, м')
+    class_bonitet = models.CharField(max_length=300, verbose_name='Класс бонитета')
+
+    def __str__(self):
+        return self.class_bonitet
+
+    class Meta:
+        verbose_name = 'Бонитет по Орлову'
+        verbose_name_plural = 'Бонитет по Орлову'
+
+
+class TypeForestGrowingConditions(models.Model):
+    subtypes_of_humidity = models.CharField(max_length=300, verbose_name='Подтипы влажности')
+    subtypes_of_rich = models.CharField(max_length=300, verbose_name='Подтипы богатства')
+    type_forest_growing_conditions = models.CharField(max_length=300, verbose_name='Тип лесорастительный условий')
+
+    def __str__(self):
+        return self.type_forest_growing_conditions
+
+    class Meta:
+        verbose_name = 'Тип лесорастительный условий'
+        verbose_name_plural = 'Тип лесорастительный условий'
+
+
+class Economy(models.Model):
+    name_economy = models.CharField(max_length=300, verbose_name='Наименование')
+
+    def __str__(self):
+        return self.name_economy
+
+    class Meta:
+        verbose_name = 'Хозяйство'
+        verbose_name_plural = 'Хозяйство'
+
+
+class AccordanceMolodKrAndTPPL(models.Model):
+    name_of_accordance = models.CharField(max_length=300, verbose_name='Наименование')
+
+    def __str__(self):
+        return self.name_of_accordance
+
+    class Meta:
+        verbose_name = 'Соответ. молодняка кр. и тр. ПЛ'
+        verbose_name_plural = 'Соответ. молодняка кр. и тр. ПЛ'
+
+
+class AccordanceNoneAccordanceEconomy(models.Model):
+    name_accordance_none_economy = models.CharField(max_length=300, verbose_name='Наименование')
+
+    def __str__(self):
+        return self.name_accordance_none_economy
+
+    class Meta:
+        verbose_name = 'Соответ. не соответ. хозяйству'
+        verbose_name_plural = 'Соответ. не соответ. хозяйству '
+
+
+class CategoryGroundLFInNoneAccordance(models.Model):
+    name_of_category_ground = models.CharField(max_length=300, verbose_name='Наименование')
+
+    def __str__(self):
+        return self.name_of_category_ground
+
+    class Meta:
+        verbose_name = 'Кат. земель лф в случ. несоотв.'
+        verbose_name_plural = 'Кат. земель лф в случ. несоотв.'
