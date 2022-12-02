@@ -25,6 +25,7 @@ urlpatterns = [
     path('allforest', AllForestlyViewSet.as_view({'get': 'list'})),
     path('getlistdata/<int:pk>', GetDocumentListData.as_view({'get': 'list'})),
     path('getsampledata/<int:pk>', GetSampleListData.as_view({'get': 'list'})),
+    path('getallsampledata', GetAllSampleListData.as_view({'get': 'list'})),
     path('subjectRF', SubjectRFview.as_view()),
     path('subjectRF/<int:pk>', SubjectRFview.as_view()),
     path('profile', ProfileView.as_view()),
@@ -55,5 +56,6 @@ urlpatterns = [
     path('breed/<int:pk>', BreedView.as_view()),
     path('branches', BranchesView.as_view()),
     path('branches/<int:pk>', BranchesView.as_view()),
-    path('erp/', include('erp.urls'))
+    path('erp/', include('erp.urls')),
+    path('general_docs', include('general_docs.urls')),
 ]
