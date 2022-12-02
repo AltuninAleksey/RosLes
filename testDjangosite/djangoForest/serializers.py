@@ -349,5 +349,17 @@ class GetSampleListDataSerializer(serializers.Serializer):
     profile = serializers.CharField(source='id_profile.FIO')
 
 
+class GetAllSampleListDataSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    id_quarter = serializers.CharField(source='id_list_region.id_quarter.id')
+    id_district_forestly = serializers.CharField(source='id_list_region.id_quarter.id')
+    id_forestly = serializers.CharField(source='id_list_region.id_quarter.id_district_forestly.id')
+    id_subjectrf = serializers.CharField(source='id_list_region.id_quarter.id_district_forestly.id_forestly.id')
+    date = serializers.DateField()
+    sample_area = serializers.FloatField()
+    id_profile = serializers.CharField(source='id_profile.id')
+    profile = serializers.CharField(source='id_profile.FIO')
+
+
 
 
