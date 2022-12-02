@@ -1,0 +1,48 @@
+{% extends 'erp/html/base.html' %}
+{% block body %}
+{% block container %}
+    <div class="container">
+        {% block header %}
+        <div class="header">
+            <ul class="nav">
+                <li><a href="/">Главная</a></li>
+                <li><a href="documents">Документы</a></li>
+                <li><a href="guide">Справочники</a></li>
+            </ul>
+        </div>
+        {% endblock header %}
+
+        {% block con %}
+        <div class="con">
+            {% block menu %}
+            <div class="menu">
+                <ul class="navigat">
+                    {% for m in menu %}
+                    <li id="li"><a id="a" href="{{ m.url_name}} ">{{m.title}}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endblock menu %}
+            {% block content %}
+            <div class="content">
+                {% block table %}
+                    <table>
+                        <th>Номер</th>
+                        <th>Наименование</th>
+                        {% for item in queryset %}
+                        <tr>
+                            <td>{{item.pk}}</td>
+                            <td>{{item.name_of_category_ground}}</td>
+                        {% endfor %}
+                        </tr>
+                    </table>
+                    {% endblock table %}
+                </div>
+            </div>
+            {% endblock content %}
+        </div>
+        {% endblock con %}
+    </div>
+{% endblock %}
+    </div>
+{% endblock %}
