@@ -305,10 +305,16 @@ class NameOfForestlySerializer(serializers.Serializer):
     name_forestly = serializers.CharField()
 
 
+class QuarterOutDistrict(serializers.Serializer):
+    id = serializers.IntegerField()
+    quarter_name = serializers.CharField()
+
+
 class AllForestSerializer(serializers.Serializer):
     district_forestly = NameOfDistrictSerializer(many=True)
     forestly = NameOfForestlySerializer(many=True)
     subjectrf = SubjectRFSerializer(many=True)
+    quarter = QuarterOutDistrict(many=True)
 
 
 class GetDocumentListSerializer(serializers.Serializer):
@@ -347,6 +353,7 @@ class GetSampleListDataSerializer(serializers.Serializer):
     sample_area = serializers.FloatField()
     id_profile = serializers.CharField(source='id_profile.id')
     profile = serializers.CharField(source='id_profile.FIO')
+    soil_lot = serializers.FloatField()
 
 
 class GetAllSampleListDataSerializer(serializers.Serializer):
@@ -359,6 +366,7 @@ class GetAllSampleListDataSerializer(serializers.Serializer):
     sample_area = serializers.FloatField()
     id_profile = serializers.CharField(source='id_profile.id')
     profile = serializers.CharField(source='id_profile.FIO')
+    soil_lot = serializers.FloatField(source='id_list_region.soil_lot')
 
 
 

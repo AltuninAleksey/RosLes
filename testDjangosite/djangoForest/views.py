@@ -482,11 +482,12 @@ class BranchesView(generics.ListCreateAPIView):
 
 class AllForestlyViewSet(viewsets.ViewSet):
     def list(self, request):
-        AllForest = namedtuple('Forestly', ('district_forestly', 'forestly', 'subjectrf'))
+        AllForest = namedtuple('Forestly', ('district_forestly', 'forestly', 'subjectrf', 'quarter'))
         lst = AllForest(
             district_forestly=DistrictForestly.objects.all(),
             forestly=Forestly.objects.all(),
             subjectrf=SubjectRF.objects.all(),
+            quarter=Quarter.objects.all()
         )
         serializer = AllForestSerializer(lst)
         return Response(serializer.data)
