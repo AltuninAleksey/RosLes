@@ -57,5 +57,5 @@ urlpatterns = [
     path('branches', BranchesView.as_view()),
     path('branches/<int:pk>', BranchesView.as_view()),
     path('erp/', include('erp.urls')),
-    path('general_docs', include('general_docs.urls')),
+    path('general_docs/', include('general_docs.urls')),
 ]
