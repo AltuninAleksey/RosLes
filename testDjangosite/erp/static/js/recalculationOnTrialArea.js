@@ -1,17 +1,17 @@
 // MPO 01.12.22: Set data page recalculationOnTrialArea
 
-var subjectrf, forestly, district_forestly;
+var subjectrf, forestly, district_forestly, quarter;
 
 getAllRecalculationOnTrialArea();
 
 async function getAllRecalculationOnTrialArea() {
     var requestData = await axios({
       method: 'get',
-      url: urlGlobal + "/listregion",
+      url: urlGlobal + "/getallsampledata",
       responseType: 'json'
     });
 
-    var data = requestData.data;
+    var data = requestData.data.data;
 
     requestData = await axios({
         method: 'get',
@@ -22,6 +22,7 @@ async function getAllRecalculationOnTrialArea() {
     subjectrf = requestData.data.subjectrf;
     forestly = requestData.data.forestly;
     district_forestly = requestData.data.district_forestly;
+    quarter = requestData.data.quarter;
 
     var tableBody = document.getElementById("tbodyRecalculationOnTrialArea");
     var newHtml = "";
@@ -46,14 +47,20 @@ async function getAllRecalculationOnTrialArea() {
             }
         }
 
+        for(var j = 0; j < quarter.length; j++) {
+            if(quarter[j].id == data[i].id_quarter) {
+                data[i].quarter = quarter[j].quarter_name;
+            }
+        }
+
         newHtml = newHtml +  "<tr onclick=\"getRecalculationOnTrialAreaDetail("+ data[i].id +")\">"+
                                     "<td class=\"td1\">" + data[i].date + "</td>" +
                                     "<td class=\"td3\">" + data[i].subjectrf + "</td>" +
                                     "<td class=\"td4\">" + data[i].forestly + "</td>" +
                                     "<td class=\"td5\">" + data[i].district_forestly + "</td>" +
-                                    "<td class=\"td6\">" + data[i].id_quarter + "</td>" +
+                                    "<td class=\"td6\">" + data[i].quarter + "</td>" +
                                     "<td class=\"td7\">" + data[i].soil_lot + "</td>" +
-                                    "<td class=\"td8\">" + data[i].sample_region + "</td>" +
+                                    "<td class=\"td8\">" + data[i].sample_area + "</td>" +
                                     "<td class=\"td9\"></td>"+
                                 "</tr> \n";
     }

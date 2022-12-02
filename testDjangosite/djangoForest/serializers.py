@@ -353,7 +353,7 @@ class GetSampleListDataSerializer(serializers.Serializer):
     sample_area = serializers.FloatField()
     id_profile = serializers.CharField(source='id_profile.id')
     profile = serializers.CharField(source='id_profile.FIO')
-    soil_lot = serializers.FloatField()
+    soil_lot = serializers.FloatField(source='id_list_region.soil_lot')
 
 
 class GetAllSampleListDataSerializer(serializers.Serializer):

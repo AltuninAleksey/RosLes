@@ -517,7 +517,7 @@ class GetAllSampleListData(viewsets.ViewSet):
     def list(self, request, *args, **kwargs):
         lst = Sample.objects.all()
 
-        return JsonResponse({'': GetAllSampleListDataSerializer(lst, many=True).data}, safe=False)
+        return JsonResponse({'data': GetAllSampleListDataSerializer(lst, many=True).data}, safe=False)
 
 class ForestViewSet(viewsets.ModelViewSet):
     pass

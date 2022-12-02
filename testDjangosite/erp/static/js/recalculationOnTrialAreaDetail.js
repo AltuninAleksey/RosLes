@@ -1,7 +1,7 @@
 // MPO 01.12.22: Set data page recalculationOnTrialAreaDetail
 
 var idDocument = document.getElementById("idDocument").value;
-var documentData, subjectrf, forestly, district_forestly;
+var documentData, subjectrf, forestly, district_forestly, quarter;
 var dataTable_1, dataTable_2, dataTable_3;
 
 setDataInPage();
@@ -9,11 +9,11 @@ setDataInPage();
 async function setDataInPage() {
     var requestData = await axios({
       method: 'get',
-      url: urlGlobal + "/listregion/" + idDocument,
+      url: urlGlobal + "/getsampledata/" + idDocument,
       responseType: 'json'
     });
 
-    documentData = requestData.data[0];
+    documentData = requestData.data.Sample_data[0];
 
     requestData = await axios({
         method: 'get',
@@ -24,6 +24,7 @@ async function setDataInPage() {
     subjectrf = requestData.data.subjectrf;
     forestly = requestData.data.forestly;
     district_forestly = requestData.data.district_forestly;
+    quarter = requestData.data.quarter;
 
 
     requestData = await axios({
@@ -43,9 +44,16 @@ async function setDataInPage() {
 
 function setDocumentData() {
     document.getElementById("start").value = documentData.date;
-    document.getElementById("quarter").value = documentData.id_quarter;
-    document.getElementById("soil_lot").value = documentData.sample_region;
-    document.getElementById("sample_region").value = documentData.sample_region;
+
+    for(var j = 0; j < quarter.length; j++) {
+        if(quarter[j].id == documentData.id_quarter) {
+            documentData.quarter = quarter[j].quarter_name;
+        }
+    }
+
+    document.getElementById("quarter").value = documentData.quarter;
+    document.getElementById("soil_lot").value = documentData.soil_lot;
+    document.getElementById("sample_area").value = documentData.sample_area;
 
     var regions = document.getElementById("regionRF");
     var newHtml = "";
