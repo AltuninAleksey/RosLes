@@ -71,15 +71,29 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/WoodRecycler"
-            android:layout_width="match_parent"
+            android:layout_width="680dp"
             android:layout_height="100dp"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="10dp"
             android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:itemCount="5"
             tools:listitem="@layout/item_wood" />
+
+            <ImageView
+                android:id="@+id/imageViewAdd"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="30dp"
+                app:srcCompat="@drawable/dobavit" />
+        </LinearLayout>
 
         <ScrollView
             android:layout_width="match_parent"
@@ -401,8 +415,8 @@
                         android:onClick="onClickCell"
                         android:text="0"
                         android:textAlignment="center"
-                        android:textSize="35sp"
-                        android:textColor="@color/black">
+                        android:textColor="@color/black"
+                        android:textSize="35sp">
 
                     </TextView>
 
@@ -643,6 +657,14 @@
                         android:textColor="@color/color_text"
                         android:textSize="45sp" />
 
+                    <Spinner
+                        android:id="@+id/spinner"
+                        android:layout_width="112dp"
+                        android:layout_height="68dp"
+                        android:layout_row="4"
+                        android:layout_column="6"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
 
                 </GridLayout>

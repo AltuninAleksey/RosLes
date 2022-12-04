@@ -3,7 +3,7 @@ package com.example.rosles.ResponceClass
 data class RESPONCE(val list :List<ClassWood>)
 
 data class ClassWood(
-    val id :String,
+    val id :String="",
     var proba :String,
     var poroda :String,
     var Reproduction :String,

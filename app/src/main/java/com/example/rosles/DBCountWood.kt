@@ -31,7 +31,6 @@ class DBCountWood (context: Context, factory: SQLiteDatabase.CursorFactory?) :
         // method for executing our query
         db.execSQL(query)
 
-
         db.execSQL("CREATE TABLE REPRODUCTION (id INTEGER PRIMARY KEY, REPRODUCTIONNAME TEXT)")
     }
 
@@ -90,6 +89,24 @@ class DBCountWood (context: Context, factory: SQLiteDatabase.CursorFactory?) :
         // closing our database
         db.close()
     }
+
+    fun updateName(poroda : String,proba:String,
+                   viewwood : String, value02 : String,
+                   value05 : String, value06 : String,
+                   value11 : String, value15 : String){
+
+        val db = this.writableDatabase
+        val values = ContentValues()
+
+        // we are inserting our values
+        // in the form of key-value pair
+
+        val strSQL =
+            "UPDATE $TABLE_NAME SET value02 =$value02,value05=$value05,value06 =$value06,value11=$value11,value15=$value15 WHERE viewwood = '${viewwood}' and poroda='${poroda}' "
+
+        db.execSQL(strSQL)
+
+    }
     fun read(column: String): ArrayList<String>{
         val datalist = ArrayList<String>()
         val db = this.readableDatabase
@@ -123,10 +140,11 @@ class DBCountWood (context: Context, factory: SQLiteDatabase.CursorFactory?) :
             return wood;
     }
 
+
     @SuppressLint("Range")
-    fun readbyporoda(poroda:String): ClassWood {
+    fun readbyporoda(poroda:String,viewwod:String): ClassWood {
         var database:SQLiteDatabase = this.writableDatabase
-        val cursor: Cursor =  database.rawQuery("SELECT * FROM " + TABLE_NAME.toString() + " WHERE " + PORODA.toString() + "=" + poroda,
+        val cursor: Cursor =  database.rawQuery("SELECT * FROM  $TABLE_NAME  WHERE   $PORODA='${poroda}' AND $VIEWWOOD='${viewwod}' "  ,
             null)
         cursor.moveToFirst()
         val wood:ClassWood = ClassWood(

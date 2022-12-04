@@ -1,10 +1,10 @@
 package com.example.rosles.Screens
 
+import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.rosles.Adapters.BaseInterface
@@ -13,7 +13,7 @@ import com.example.rosles.Network.ViewModels
 import com.example.rosles.R
 import com.example.rosles.RequestClass.PerechetRequest
 import com.example.rosles.ResponceClass.ClassWood
-import com.example.rosles.databinding.ItemUdelBinding
+import com.example.rosles.databinding.DialogViewBinding
 import com.example.rosles.databinding.WoodBinding
 import com.example.roslesdef.Adapters.WoodAdapter
 import com.example.roslesdef.Models.ItemWood
@@ -26,8 +26,8 @@ class Wood : AppCompatActivity(){
     private lateinit var binding: WoodBinding
     private var bufview: View? =null
     private var kostl:Any?=null
-    private var vidWood:String="Береза"
-
+    private var vidWood:String=""
+    private  val db = DBCountWood(this,null)
     val viewModel by viewModels<ViewModels>()
 
 
@@ -38,8 +38,23 @@ class Wood : AppCompatActivity(){
         val view = binding.root
         setContentView(view)
 
+        var dialog:Dialog =  Dialog(this)
+        dialog.setContentView(R.layout.dialog_view)
+        var text:EditText=dialog.findViewById(R.id.NameWoodEditText)
+        var buttonAD:Button=dialog.findViewById(R.id.buttonAddWood)
+        var buttonclose:Button=dialog.findViewById(R.id.buttonCloseDialog)
+        buttonclose.setOnClickListener{
+            dialog.dismiss()
+        }
 
+        val countries = arrayOf("1", "2", "3", "4", "5")
+        var arrayAdapter=ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, countries)
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.spinner.adapter=arrayAdapter
 
+        binding.imageViewAdd.setOnClickListener{
+            dialog.show();
+        }
         val name=intent.getStringExtra("udel")
         binding.nameudel.text=name.toString()
 
@@ -47,28 +62,41 @@ class Wood : AppCompatActivity(){
             startActivity(Intent(this, MainActivity::class.java))
         }
 
-        val a = listOf(
+
+        var a = mutableListOf(
             ItemWood("Береза"),
             ItemWood("Сосна"),
-            ItemWood("ДуБаДуб")
+            ItemWood("Дуб"),
+            ItemWood("Елка"),
+            ItemWood("Осина")
         )
+        buttonAD.setOnClickListener{
+            if(text.text.isNotEmpty()){
+                a.add(ItemWood(text.text.toString()))
+                a.forEach {
+                    createTable(it.name)
+                }
+            }
+            dialog.dismiss()
+        }
+
 
         var adapter = WoodAdapter(a,object :BaseInterface{
             override fun onClick(itemView: Any) {
-                vidWood=itemView.toString()
-                updateTable()
+
+
+                UpdateTable(vidWood)
                 nullValue()
+                readbyporoda(itemView.toString())
+                vidWood=itemView.toString()
+
             }
         })
         binding.WoodRecycler.adapter=adapter
-
-
         binding.save.setOnClickListener(){
             WriteBD()
         }
-        binding.buttonSync.setOnClickListener{
-            fromTable()
-        }
+
 
         // REST API
         binding.buttonPoint.setOnClickListener(){
@@ -86,7 +114,6 @@ class Wood : AppCompatActivity(){
 
     //ЗАпись в БД
     fun WriteBD(){
-        val db = DBCountWood(this,null)
         with(binding){
             db.addName("poroda",proba.text.toString(),"estes",estes02.text.toString(),estes05.text.toString(),
                 estes06.text.toString(),estes11.text.toString(),estes15.text.toString())
@@ -120,25 +147,26 @@ class Wood : AppCompatActivity(){
         binding.buttonPlus.setOnClickListener(){
             var buffertext: TextView =findViewById(view.id)
             var value=buffertext.text.toString().toInt()
-            value=value+1
+            var test=binding.spinner.selectedItem.toString()
+            value=value+test.toInt()
             buffertext.text=value.toString()
         }
         binding.buttonMinus.setOnClickListener(){
 
             var buffertext: TextView =findViewById(view.id)
             var value=buffertext.text.toString().toInt()
-            value=value-1
+            var test=binding.spinner.selectedItem.toString()
+            value=value-test.toInt()
             if(value<=0)
                 value=0
             buffertext.text=value.toString()
         }
     }
 
-    private fun updateTable() {
+    private fun createTable(name:String) {
 
-            val db = DBCountWood(this,null)
             with(binding){
-
+            vidWood=name
 
             db.addName(vidWood,proba.text.toString(),"iskus",iskus02.text.toString(),iskus05.text.toString(),
                 iskus06.text.toString(),iskus11.text.toString(),iskus15.text.toString())
@@ -149,21 +177,36 @@ class Wood : AppCompatActivity(){
             db.addName(vidWood,proba.text.toString(),"podlesok",podlesok02.text.toString(),podlesok05.text.toString(),
                 podlesok06.text.toString(),podlesok11.text.toString(),podlesok15.text.toString())
 
-
-
         }
         //fromTable()
     }
-    fun fromTable(){
-        val db = DBCountWood(this, null)
-        var wood: ClassWood =db.readByID("1")
+    private fun UpdateTable(name:String) {
+        with(binding) {
+            db.updateName(vidWood,proba.text.toString(),"iskus",iskus02.text.toString(),iskus05.text.toString(),
+                iskus06.text.toString(),iskus11.text.toString(),iskus15.text.toString())
+            db.updateName(vidWood,proba.text.toString(),"estes",estes02.text.toString(),estes05.text.toString(),
+                estes06.text.toString(),estes11.text.toString(),estes15.text.toString())
+            db.updateName(vidWood,proba.text.toString(),"estestvennoe",estestvennoe02.text.toString(),estestvennoe05.text.toString(),
+                estestvennoe06.text.toString(),estestvennoe11.text.toString(),estestvennoe15.text.toString())
+            db.updateName(vidWood,proba.text.toString(),"podlesok",podlesok02.text.toString(),podlesok05.text.toString(),
+                podlesok06.text.toString(),podlesok11.text.toString(),podlesok15.text.toString())
+            vidWood = name
+        }
+    }
+
+
+
+
+    fun readbyporoda(poroda:String){
+        var wood: ClassWood =db.readbyporoda(poroda,"iskus")
         setvalueiskus(wood.value02,wood.value05,wood.value06,wood.value11,wood.value15)
-        wood =db.readByID("2")
+        wood =db.readbyporoda(poroda,"estes")
         setvalueestes(wood.value02,wood.value05,wood.value06,wood.value11,wood.value15)
-        wood =db.readByID("3")
+        wood =db.readbyporoda(poroda,"estestvennoe")
         setvalueestestvennoe(wood.value02,wood.value05,wood.value06,wood.value11,wood.value15)
-        wood =db.readByID("4")
+        wood =db.readbyporoda(poroda,"podlesok")
         setvaluepodlesok(wood.value02,wood.value05,wood.value06,wood.value11,wood.value15)
+
     }
     fun nullValue(){
         with(binding){

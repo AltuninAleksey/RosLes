@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
-
+        RecyclerviewInit()
 
 //
 //        binding.proba.setOnClickListener(){
@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
             viewModel.reproduction(this)
         }
         binding.Settings.setOnClickListener(){
-            RecyclerviewInit()
+
         }
 
 
@@ -55,9 +55,9 @@ class MainActivity : AppCompatActivity() {
         var value=db.read("REPRODUCTIONNAME")
 
         val a = listOf(
-            ItemWood(value.get(0)),
-            ItemWood(value.get(1)),
-            ItemWood("Проба3")
+            ItemWood("Перечетная ведомость 1"),
+            ItemWood("Перечетная ведомость 2 "),
+            ItemWood("Перечетная ведомость 3 ")
         )
 
         var adapter = UdelAdapter(a,object :BaseInterface{

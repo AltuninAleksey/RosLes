@@ -31,7 +31,7 @@
         android:layout_height="wrap_content"
         android:backgroundTint="@color/color_button_main"
 
-        android:text="Проба"
+        android:text="Открыть"
         app:layout_constraintEnd_toEndOf="@+id/text_udel_item"
         app:layout_constraintTop_toTopOf="parent"
         app:strokeColor="@color/color_button_main_border"
