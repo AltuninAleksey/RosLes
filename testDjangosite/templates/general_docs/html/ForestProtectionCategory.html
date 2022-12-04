@@ -5,17 +5,22 @@
         {% block header %}
         <div class="header">
             <ul class="nav">
-                <li><a href="/">Главная</a></li>
-                <li><a href="documents">Документы</a></li>
-                <li><a href="guide">Справочники</a></li>
+                <li><h1 class="hed">Общая справочная информация РОСЛЕСОЗАЩИТА</h1></li>
             </ul>
+<!--            <ul class="nav">-->
+<!--                <li><a href="/">Главная</a></li>-->
+<!--                <li><a href="documents">Документы</a></li>-->
+<!--                <li><a href="guide">Справочники</a></li>-->
+<!--            </ul>-->
         </div>
         {% endblock header %}
 
         {% block con %}
         <div class="con">
+            <input type="checkbox" id="nav-toggle" hidden>
             {% block menu %}
             <div class="menu">
+                <label for="nav-toggle" class="nav-toggle" onclick></label>
                 <ul class="navigat">
                     {% for m in menu %}
                     <li id="li"><a id="a" href="{{ m.url_name}} ">{{m.title}}</a></li>
@@ -25,6 +30,7 @@
             {% endblock menu %}
             {% block content %}
             <div class="content">
+                <h1 id="h1">Категория защитности лесов</h1>
                 {% block table %}
                     <table>
                         <th>Номер</th>

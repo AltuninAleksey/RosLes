@@ -7,6 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="{{url_for('static/js', filename='somejavascriptfile.js')}}"></script>
     <title>{{title}}</title>
 {% endblock %}
 </head>
@@ -20,8 +21,10 @@
 
         {% block con %}
         <div class="con">
+            <input type="checkbox" id="nav-toggle" hidden>
             {% block menu %}
             <div class="menu">
+                <label for="nav-toggle" class="nav-toggle" onclick></label>
                 <ul class="navigat">
                     {% for m in menu %}
                     <li id="li"><a id="a" href="{{ m.url_name}} ">{{m.title}}</a></li>

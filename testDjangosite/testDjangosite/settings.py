@@ -127,7 +127,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = 'static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'erp/static'),
-    os.path.join(BASE_DIR, 'general_docs')
+    os.path.join(BASE_DIR, 'general_docs/static')
 )
 
 # Default primary key field type

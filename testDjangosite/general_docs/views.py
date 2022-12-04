@@ -30,7 +30,7 @@ class ForestAreasView(ListView):
         return ForestAreas.objects.all()
 
     def get(self, request):
-        return render(request, self.template_name, {'menu': menu, 'queryset': self.queryset})
+        return render(request, self.template_name, {'menu': menu, 'queryset': self.get_queryset()})
 
 
 class PurposeOfForestsView(DetailView):
@@ -42,7 +42,7 @@ class PurposeOfForestsView(DetailView):
         return PurposeOfForests.objects.all()
 
     def get(self, request):
-        return render(request, self.template_name, {'menu': menu, 'queryset': self.queryset})
+        return render(request, self.template_name, {'menu': menu, 'queryset': self.get_queryset()})
 
 
 class ForestProtectionCategoryView(ListView):
@@ -53,7 +53,7 @@ class ForestProtectionCategoryView(ListView):
         return ForestProtectionCategory.objects.all()
 
     def get(self, request):
-        return render(request, self.template_name, {'menu': menu, 'queryset': self.queryset})
+        return render(request, self.template_name, {'menu': menu, 'queryset': self.get_queryset()})
 
 
 class CategoryOfForestFundLandsView(ListView):
@@ -64,7 +64,7 @@ class CategoryOfForestFundLandsView(ListView):
         return CategoryOfForestFundLands.objects.all()
 
     def get(self, request):
-        return render(request, self.template_name, {'menu': menu, 'queryset': self.queryset})
+        return render(request, self.template_name, {'menu': menu, 'queryset': self.get_queryset()})
 
 
 class MethodOfReforestationView(ListView):
@@ -75,7 +75,7 @@ class MethodOfReforestationView(ListView):
         return MethodOfReforestation.objects.all()
 
     def get(self, request):
-        return render(request, self.template_name, {'menu': menu, 'queryset': self.queryset})
+        return render(request, self.template_name, {'menu': menu, 'queryset': self.get_queryset()})
 
 
 class BonitetOrlovView(ListView):
@@ -86,7 +86,7 @@ class BonitetOrlovView(ListView):
         return BonitetOrlov.objects.all()
 
     def get(self, request):
-        return render(request, self.template_name, {'menu': menu, 'queryset': self.queryset})
+        return render(request, self.template_name, {'menu': menu, 'queryset': self.get_queryset()})
 
 
 class TypeForestGrowingConditionsView(ListView):
@@ -97,7 +97,7 @@ class TypeForestGrowingConditionsView(ListView):
         return TypeForestGrowingConditions.objects.all()
 
     def get(self, request):
-        return render(request, self.template_name, {'menu': menu, 'queryset': self.queryset})
+        return render(request, self.template_name, {'menu': menu, 'queryset': self.get_queryset()})
 
 
 class EconomyView(ListView):
@@ -119,7 +119,7 @@ class AccordanceMolodKrAndTPPLView(ListView):
         return AccordanceMolodKrAndTPPL.objects.all()
 
     def get(self, request):
-        return render(request, self.template_name, {'menu': menu, 'queryset': self.queryset})
+        return render(request, self.template_name, {'menu': menu, 'queryset': self.get_queryset()})
 
 
 class AccordanceNoneAccordanceEconomyView(ListView):
@@ -130,7 +130,7 @@ class AccordanceNoneAccordanceEconomyView(ListView):
         return AccordanceNoneAccordanceEconomy.objects.all()
 
     def get(self, request):
-        return render(request, self.template_name, {'menu': menu, 'queryset': self.queryset})
+        return render(request, self.template_name, {'menu': menu, 'queryset': self.get_queryset()})
 
 
 class CategoryGroundLFInNoneAccordanceView(ListView):
@@ -141,4 +141,4 @@ class CategoryGroundLFInNoneAccordanceView(ListView):
         return CategoryGroundLFInNoneAccordance.objects.all()
 
     def get(self, request):
-        return render(request, self.template_name, {'menu': menu, 'queryset': self.queryset})
+        return render(request, self.template_name, {'menu': menu, 'queryset': self.get_queryset()})
