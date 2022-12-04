@@ -3,7 +3,7 @@ from general_docs.views import *
 
 
 urlpatterns = [
-    path('general_docs', index),
+    path('', index),
     path('PurposeOfForests', PurposeOfForestsView.as_view(), name='purpose'),
     path('ForestProtectionCategory', ForestProtectionCategoryView.as_view()),
     path('CategoryOfForestFundLands', CategoryOfForestFundLandsView.as_view()),
