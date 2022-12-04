@@ -13,11 +13,24 @@ menu = [
     {'title': 'Соответ. молодняка кр. и тр. ПЛ', 'url_name': 'AccordanceMolodKrAndTPPL'},
     {'title': 'Соответ. не соответ. хозяйству', 'url_name': 'AccordanceNoneAccordanceEconomy'},
     {'title': 'Кат. земель лф в случ. несоотв.', 'url_name': 'CategoryGroundLFInNoneAccordance'},
+    {'title': 'Лесные районы', 'url_name': 'ForestAreas'},
 
 ]
 
 def index(request):
     return redirect('purpose')
+
+
+class ForestAreasView(ListView):
+    model = ForestAreas
+    template_name = 'general_docs/html/ForestAreas.html'
+    queryset = ForestAreas.objects.all()
+
+    def get_queryset(self):
+        return ForestAreas.objects.all()
+
+    def get(self, request):
+        return render(request, self.template_name, {'menu': menu, 'queryset': self.queryset})
 
 
 class PurposeOfForestsView(DetailView):

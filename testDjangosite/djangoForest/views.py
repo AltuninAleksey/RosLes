@@ -508,6 +508,7 @@ class GetDocumentListData(viewsets.ViewSet):
 class GetSampleListData(viewsets.ViewSet):
     def list(self, requests, *args, **kwargs):
         pk = kwargs.get('pk')
+        print(pk)
         lst = Sample.objects.filter(pk=pk)
 
         return JsonResponse({'Sample_data': GetSampleListDataSerializer(lst, many=True).data}, safe=False)

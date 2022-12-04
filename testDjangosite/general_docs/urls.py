@@ -14,6 +14,7 @@ urlpatterns = [
     path('AccordanceMolodKrAndTPPL', AccordanceMolodKrAndTPPLView.as_view()),
     path('AccordanceNoneAccordanceEconomy', AccordanceNoneAccordanceEconomyView.as_view()),
     path('CategoryGroundLFInNoneAccordance', CategoryGroundLFInNoneAccordanceView.as_view()),
+    path('ForestAreas', ForestAreasView.as_view()),
 
 ]
 

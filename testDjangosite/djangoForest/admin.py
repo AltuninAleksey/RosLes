@@ -169,6 +169,13 @@ class CategoryGroundLFInNoneAccordanceAdmin(admin.ModelAdmin):
     search_fields = ('id', 'name_of_category_ground')
 
 
+class ForestAreasAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name_forest_areas', 'composition_of_forest_areas', 'comm')
+    list_display_display = ('id', 'name_forest_areas', 'composition_of_forest_areas', 'comm')
+    search_fields = ('id', 'name_forest_areas', 'composition_of_forest_areas', 'comm')
+
+
+admin.site.register(ForestAreas, ForestAreasAdmin)
 admin.site.register(PurposeOfForests, PurposeOfForestsAdmin)    # Целевое назначение лесов
 admin.site.register(ForestProtectionCategory, ForestProtectionCategoryAdmin)    # Категория защитности лесов
 admin.site.register(CategoryOfForestFundLands, CategoryOfForestFundLandsAdmin)  # Категория земель лесного фонда

@@ -19,6 +19,9 @@ class Profile(models.Model):
     id_role = models.ForeignKey('Role', on_delete=models.CASCADE, verbose_name='Роль', null=True)
     id_branches = models.ForeignKey('Branches', on_delete=models.CASCADE, verbose_name='Филиал', null=True)
 
+    def __str__(self):
+        return self.FIO
+
     class Meta:
         verbose_name = 'Профили'
         verbose_name_plural = 'Профили'
@@ -73,7 +76,7 @@ class ListRegion(models.Model):
     date = models.DateField(u'Дата')
     sample_region = models.CharField(u'Плошадь участка', max_length=300)
     id_quarter = models.ForeignKey("Quarter", on_delete=models.CASCADE, verbose_name="Квартал", null=True)
-    soil_lot = models.CharField(u'Выдел', max_length=300)
+    soil_lot = models.FloatField(u'Выдел')
 
     class Meta:
         verbose_name = 'Перечетная ведомость участка'
@@ -82,7 +85,7 @@ class ListRegion(models.Model):
 
 class Sample(models.Model):
     date = models.DateField(u'Дата пробы', null=True)
-    sample_area = models.IntegerField(u'Площадь пробы')
+    sample_area = models.FloatField(verbose_name='Площадь пробы, га')
     id_profile = models.ForeignKey('Profile', on_delete=models.CASCADE, verbose_name='Сотрудник ', null=True)
     id_list_region = models.ForeignKey('ListRegion', on_delete=models.CASCADE,
                                        verbose_name='Перечетная ведомость участка', null=True)
@@ -182,7 +185,6 @@ class Quarter(models.Model):
 
 class Breed(models.Model):
     name_breed = models.CharField(max_length=350, verbose_name='Наименование породы')
-    id_forestly = models.ForeignKey('Forestly', on_delete=models.CASCADE, verbose_name="Лесничество", null=True)
 
     def __str__(self):
         return self.name_breed
@@ -249,7 +251,7 @@ class MethodOfReforestation(models.Model):
 
 class BonitetOrlov(models.Model):
     age_of_planting = models.FloatField(verbose_name='Возраст насаждения')
-    height_planting_for_bonitet_class = models.FloatField('Высота насаждения по классам бонитета, м')
+    height_planting_for_bonitet_class = models.CharField(max_length=300, verbose_name='Высота насаждения по классам бонитета, м')
     class_bonitet = models.CharField(max_length=300, verbose_name='Класс бонитета')
 
     def __str__(self):
@@ -315,3 +317,16 @@ class CategoryGroundLFInNoneAccordance(models.Model):
     class Meta:
         verbose_name = 'Кат. земель лф в случ. несоотв.'
         verbose_name_plural = 'Кат. земель лф в случ. несоотв.'
+
+
+class ForestAreas(models.Model):
+    name_forest_areas = models.CharField(max_length=300, verbose_name='Наименование')
+    composition_of_forest_areas = models.CharField(max_length=500, verbose_name='Состав лесных районов')
+    comm = models.CharField(max_length=500, verbose_name='Комментарий')
+
+    def __str__(self):
+        return self.name_forest_areas
+
+    class Meta:
+        verbose_name = 'Лесные районы'
+        verbose_name_plural = 'Лесные районы'
