@@ -67,7 +67,7 @@ class Wood : AppCompatActivity(){
             ItemWood("Береза"),
             ItemWood("Сосна"),
             ItemWood("Дуб"),
-            ItemWood("Елка"),
+            ItemWood("Ель"),
             ItemWood("Осина")
         )
         buttonAD.setOnClickListener{
