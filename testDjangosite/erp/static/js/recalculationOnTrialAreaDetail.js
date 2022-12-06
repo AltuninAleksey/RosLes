@@ -3,6 +3,7 @@
 var idDocument = document.getElementById("idDocument").value;
 var documentData, subjectrf, forestly, district_forestly, quarter;
 var dataTable_1, dataTable_2, dataTable_3;
+var table_1_active_group;
 
 setDataInPage();
 
@@ -98,7 +99,6 @@ function setDocumentData() {
 
 function setDataInTableOne(switchButton) {
 
-    var type_of_reproduction;
     var switchButton1 = document.getElementById("switchButton1");
     var switchButton2 = document.getElementById("switchButton2");
     var switchButton3 = document.getElementById("switchButton3");
@@ -112,7 +112,7 @@ function setDataInTableOne(switchButton) {
         switchButton2.classList.add("border-bottom-color-black");
         switchButton3.classList.add("border-bottom-color-black");
 
-        type_of_reproduction = "Искусственное восстановление";
+        table_1_active_group = "Искусственное восстановление";
     }
 
     if(switchButton == 2) {
@@ -124,7 +124,7 @@ function setDataInTableOne(switchButton) {
         switchButton2.classList.remove("border-bottom-color-black");
         switchButton3.classList.add("border-bottom-color-black");
 
-        type_of_reproduction = "Естественное восстановление(семенное)";
+        table_1_active_group = "Естественное восстановление(семенное)";
     }
 
     if(switchButton == 3) {
@@ -136,7 +136,7 @@ function setDataInTableOne(switchButton) {
         switchButton2.classList.add("border-bottom-color-black");
         switchButton3.classList.remove("border-bottom-color-black");
 
-        type_of_reproduction = "Естественное восстановление (вегетативное)";
+        table_1_active_group = "Естественное восстановление (вегетативное)";
     }
 
     var table_1 = document.getElementById("table_1");
@@ -144,7 +144,7 @@ function setDataInTableOne(switchButton) {
     var myCount = 1;
 
     for(var i = 0; i < dataTable_1.length; i++) {
-            if(dataTable_1[i].id_type_of_reproduction == type_of_reproduction) {
+            if(dataTable_1[i].id_type_of_reproduction == table_1_active_group) {
                 newHtml = newHtml + "<tr>" +
                                         "<td class=\"tab_1_td1\">" + myCount + "</td>" +
                                         "<td class=\"tab_1_td2\">" + dataTable_1[i].breed + "</td>" +
@@ -198,4 +198,32 @@ function setDataInTableThree() {
         }
     }
     table_3.innerHTML = newHtml;
+}
+
+function saveData() {
+    var dateForm = document.getElementById("start");
+    var regionRFForm = document.getElementById("regionRF");
+    var lesNameForm = document.getElementById("lesName");
+    var ucLesNameForm = document.getElementById("ucLesName");
+    var quarterForm = document.getElementById("quarter");
+    var soil_lotForm = document.getElementById("soil_lot");
+    var sample_areaForm = document.getElementById("sample_area");
+
+    var requestData = {
+        date : dateForm.value,
+        id : idDocument,
+        id_district_forestly : ucLesNameForm.value,
+        id_forestly : lesNameForm.value,
+        id_profile : dataTable_2[0].id,
+        id_quarter : quarterForm.value,
+        id_subjectrf : regionRFForm.value,
+        profile : dataTable_2[0].value,
+        sample_area : sample_areaForm.value,
+        soil_lot : soil_lotForm.value,
+        list_data : dataTable_1,
+        gps_data : dataTable_3
+    };
+
+    console.log(JSON.stringify(requestData));
+
 }
