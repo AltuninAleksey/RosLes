@@ -151,7 +151,11 @@ class ListRegionView(generics.ListCreateAPIView):
         # return JsonResponse(ListRegionSerializer(lst, many=True).data, safe=False)
 
     def post(self, request):
+        print(request.data)
+        print('============================')
+        print(request.data['list_data'])
         serializer = ListRegionSerializer(data=request.data)
+
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response({'post': serializer.data})
@@ -290,7 +294,7 @@ class RoleView(generics.ListCreateAPIView):
         lst = Role.objects.all()
         return Response({'get': RoleSerializer(lst, many=True).data})
 
-    def post(self, request):
+    def post(self, request, **kwargs):
         serializer = RoleSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -519,6 +523,71 @@ class GetAllSampleListData(viewsets.ViewSet):
         lst = Sample.objects.all()
 
         return JsonResponse({'data': GetAllSampleListDataSerializer(lst, many=True).data}, safe=False)
+
+
+class CreateSampleAndOther(generics.ListCreateAPIView):
+    def post(self, request):
+        serializer = SampleSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        sample_dict = {'id_sample': serializer.data['id']}
+        request.data['list_data'][0].update(sample_dict)
+        i = 0
+        while i < len(request.data['list_data']):
+            request.data['list_data'][i].update(sample_dict)
+            i += 1
+        request.data['gps_data'].update(sample_dict)
+        print(request.data['list_data'])
+        print(request.data['gps_data'])
+        serializer_list = ListSerializer(data=request.data['list_data'], many=True)
+        serializer_gps = GPSSerializer(data=request.data['gps_data'])
+        serializer_list.is_valid(raise_exception=True)
+        serializer_gps.is_valid(raise_exception=True)
+        serializer_list.save()
+        serializer_gps.save()
+        return Response({'sample': serializer.data,
+                         "list": serializer_list.data,
+                         "gps": serializer_gps.data})
+
+    def put(self, request, *args, **kwargs):
+        pk = kwargs.get("pk")
+        print(pk)
+        if not pk:
+            return Response({"error": "Method PUT not allowed"})
+        try:
+            instance = Sample.objects.get(pk=pk)
+        except:
+            return Response({"error": "Объект с данным id не найден"})
+
+        serealizer = SampleSerializer(data=request.data, instance=instance)
+        serealizer.is_valid(raise_exception=True)
+        serealizer.save()
+        return Response({"put": serealizer.data})
+
+
+class GetForestlyBySubjectRFId(viewsets.ViewSet):
+    def list(self, request, **kwargs):
+        pk = kwargs.get('pk')
+        lst = Forestly.objects.filter(id_subject_rf=pk)
+
+        return JsonResponse({'data': GetForestlyBySubjectRFIdSerializer(lst, many=True).data}, safe=False)
+
+
+class GetDistrictForestlyByForestlyId(viewsets.ViewSet):
+    def list(self, request, **kwargs):
+        pk = kwargs.get('pk')
+        lst = DistrictForestly.objects.filter(id_forestly=pk)
+
+        return JsonResponse({'data': GetDistrictForestlyByForestlyIdSerializer(lst, many=True).data}, safe=False)
+
+
+class GetQuarterByDistrictId(viewsets.ViewSet):
+    def list(self, request, **kwargs):
+        pk = kwargs.get('pk')
+        lst = Quarter.objects.filter(id_district_forestly=pk)
+
+        return JsonResponse({'data': GetQuarterByDistrictForestlyIdSerializer(lst, many=True).data}, safe=False)
+
 
 class ForestViewSet(viewsets.ModelViewSet):
     pass

@@ -58,25 +58,11 @@ class GPS(models.Model):
         verbose_name_plural = 'GPS'
 
 
-# class Region(models.Model):
-#     id_subject_rf = models.ForeignKey('SubjectRF', on_delete=models.CASCADE, verbose_name='Субъект РФ', null = True)
-#     id_forestly = models.ForeignKey('Forestly', on_delete=models.CASCADE, verbose_name='Лесничество', null = True)
-#     id_district_forestly = models.ForeignKey('DistrictForestly', on_delete=models.CASCADE,
-#                                              verbose_name='Участковое лесничество', null=True)
-#     quarter = models.IntegerField(u'Квартал')
-#     soil_lot = models.IntegerField(u'Выдел')
-#     sample_region = models.IntegerField(u'Площадь участка')
-#
-#     class Meta:
-#         verbose_name = 'Участок'
-#         verbose_name_plural = 'Участок'
-
-
 class ListRegion(models.Model):
     date = models.DateField(u'Дата')
-    sample_region = models.CharField(u'Плошадь участка', max_length=300)
+    sample_region = models.CharField(u'Плошадь участка, га', max_length=300)
     id_quarter = models.ForeignKey("Quarter", on_delete=models.CASCADE, verbose_name="Квартал", null=True)
-    soil_lot = models.FloatField(u'Выдел')
+    soil_lot = models.CharField(max_length=300, verbose_name='Выдел')
 
     class Meta:
         verbose_name = 'Перечетная ведомость участка'
@@ -89,6 +75,9 @@ class Sample(models.Model):
     id_profile = models.ForeignKey('Profile', on_delete=models.CASCADE, verbose_name='Сотрудник ', null=True)
     id_list_region = models.ForeignKey('ListRegion', on_delete=models.CASCADE,
                                        verbose_name='Перечетная ведомость участка', null=True)
+    id_quarter = models.ForeignKey('Quarter', on_delete=models.CASCADE,
+                                   verbose_name='Квартал', null=True)
+    soil_lot = models.CharField(max_length=300, verbose_name='Выдел')
 
     class Meta:
         verbose_name = 'Проба'

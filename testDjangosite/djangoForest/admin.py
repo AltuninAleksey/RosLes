@@ -87,9 +87,9 @@ class ForestlyAdmin(admin.ModelAdmin):
 
 
 class DistrictForestlyAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name_district_forestly')
-    list_display_links = ('id', 'name_district_forestly')
-    search_fields = ('id', 'name_district_forestly')
+    list_display = ('id', 'name_district_forestly', 'id_forestly')
+    list_display_links = ('id', 'name_district_forestly', 'id_forestly')
+    search_fields = ('id', 'name_district_forestly', 'id_forestly')
 
 
 class BreedAdmin(admin.ModelAdmin):

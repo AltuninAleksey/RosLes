@@ -264,6 +264,12 @@ class ListRegionSerializer(serializers.Serializer):
     subjectrf = serializers.CharField(source='id_quarter.id_district_forestly.id_forestly.id_subject_rf')
     soil_lot = serializers.CharField(max_length=300)
 
+
+class CreateListRegionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ListRegion
+        fields = "__all__"
+
     def create(self, validated_data):
         return ListRegion.objects.create(**validated_data)
 
@@ -322,7 +328,7 @@ class GetDocumentListSerializer(serializers.Serializer):
     breed = serializers.CharField(source='id_breed.name_breed')
     id_sample = serializers.CharField(source='id_sample.id')
     id_type_of_reproduction = serializers.CharField(source='id_type_of_reproduction.name_reproduction')
-    breed = serializers.CharField(source='id_breed.name_breed')
+    # breed = serializers.CharField(source='id_breed.name_breed')
     to0_2 = serializers.IntegerField()
     from0_21To0_5 = serializers.IntegerField()
     from0_6To1_0 = serializers.IntegerField()
@@ -369,5 +375,17 @@ class GetAllSampleListDataSerializer(serializers.Serializer):
     soil_lot = serializers.CharField(source='id_list_region.soil_lot')
 
 
+class GetForestlyBySubjectRFIdSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    name_forestly = serializers.CharField()
 
+
+class GetDistrictForestlyByForestlyIdSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    name_district_forestly = serializers.CharField()
+
+
+class GetQuarterByDistrictForestlyIdSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    quarter_name = serializers.CharField()
 
