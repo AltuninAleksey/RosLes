@@ -351,7 +351,8 @@ class GetFromSampleProfileSerializer(serializers.Serializer):
 
 class GetSampleListDataSerializer(serializers.Serializer):
     id = serializers.IntegerField()
-    id_quarter = serializers.CharField(source='id_list_region.id_quarter.id')
+    id_list_region = serializers.IntegerField(source='id_list_region.id')
+    id_quarter = serializers.CharField(source='id_quarter.id')
     id_district_forestly = serializers.CharField(source='id_list_region.id_quarter.id_district_forestly.id')
     id_forestly = serializers.CharField(source='id_list_region.id_quarter.id_district_forestly.id_forestly.id')
     id_subjectrf = serializers.CharField(source='id_list_region.id_quarter.id_district_forestly.id_forestly.id_subject_rf.id')
@@ -359,12 +360,13 @@ class GetSampleListDataSerializer(serializers.Serializer):
     sample_area = serializers.FloatField()
     id_profile = serializers.CharField(source='id_profile.id')
     profile = serializers.CharField(source='id_profile.FIO')
-    soil_lot = serializers.CharField(source='id_list_region.soil_lot')
+    soil_lot = serializers.CharField()
 
 
 class GetAllSampleListDataSerializer(serializers.Serializer):
     id = serializers.IntegerField()
-    id_quarter = serializers.CharField(source='id_list_region.id_quarter.id')
+    id_list_region = serializers.IntegerField(source='id_list_region.id')
+    id_quarter = serializers.IntegerField(source='id_quarter.id')
     id_district_forestly = serializers.CharField(source='id_list_region.id_quarter.id_district_forestly.id')
     id_forestly = serializers.CharField(source='id_list_region.id_quarter.id_district_forestly.id_forestly.id')
     id_subjectrf = serializers.CharField(source='id_list_region.id_quarter.id_district_forestly.id_forestly.id_subject_rf.id')
@@ -372,7 +374,7 @@ class GetAllSampleListDataSerializer(serializers.Serializer):
     sample_area = serializers.FloatField()
     id_profile = serializers.CharField(source='id_profile.id')
     profile = serializers.CharField(source='id_profile.FIO')
-    soil_lot = serializers.CharField(source='id_list_region.soil_lot')
+    soil_lot = serializers.CharField()
 
 
 class GetForestlyBySubjectRFIdSerializer(serializers.Serializer):

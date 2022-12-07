@@ -26,28 +26,20 @@ class GPSAdmin(admin.ModelAdmin):
     list_display_links = ('id', 'id_sample', 'latitude', 'longitude', 'flag_center')
     search_fields = ('id', 'id_sample', 'latitude', 'longitude', 'flag_center')
 
-
-# class RegionAdmin(admin.ModelAdmin):
-#     list_display = ('id', 'id_subject_rf', 'id_forestly', 'id_district_forestly', 'quarter', 'soil_lot', 'sample_region')
-#     list_display_links = ('id', 'id_subject_rf', 'id_forestly', 'id_district_forestly', 'quarter', 'soil_lot', 'sample_region')
-#     search_fields = ('id', 'id_subject_rf', 'id_forestly', 'id_district_forestly', 'quarter', 'soil_lot', 'sample_region')
-
 class InlineListRegion(admin.TabularInline):
     model = ListRegion
     extra = 1
 
 class ListRegionAdmin(admin.ModelAdmin):
-    # model = ListRegion
-    # inlines = (InlineListRegion,)
     list_display = ('id', 'sample_region', 'date', 'soil_lot', 'id_quarter')
     list_display_links = ('id', 'sample_region', 'date', 'soil_lot', 'id_quarter')
     search_fields = ('id', 'sample_region', 'date', 'soil_lot', 'id_quarter')
 
 
 class SampleAdmin(admin.ModelAdmin):
-    list_display = ('id', 'date', 'sample_area', 'id_profile', 'id_list_region')
-    list_display_links = ('id', 'date', 'sample_area', 'id_profile', 'id_list_region')
-    search_fields = ('id', 'date', 'sample_area', 'id_profile', 'id_list_region')
+    list_display = ('id', 'date', 'sample_area', 'id_profile', 'id_list_region', 'id_quarter', 'soil_lot')
+    list_display_links = ('id', 'date', 'sample_area', 'id_profile', 'id_list_region', 'id_quarter', 'soil_lot')
+    search_fields = ('id', 'date', 'sample_area', 'id_profile', 'id_list_region', 'id_quarter', 'soil_lot')
 
 
 class PostAdmin(admin.ModelAdmin):
