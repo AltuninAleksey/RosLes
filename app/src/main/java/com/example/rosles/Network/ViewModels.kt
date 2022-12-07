@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.rosles.DBCountWood
 import com.example.rosles.RequestClass.PerechetRequest
+import com.example.rosles.ResponceClass.GETReproductionResp
 import com.example.roslesdef.Adapters.UdelAdapter
 import com.example.roslesdef.Models.ItemWood
 import kotlinx.coroutines.CoroutineScope
@@ -17,8 +18,8 @@ import kotlin.coroutines.CoroutineContext
 class ViewModels():BaseViewModel(accountsRepository=Singletons.accountsRepository, logger = LogCatLogger){
 
     private val _state = MutableLiveData(State())
-    val state = _state.share()
-    var role:String?=null
+    var guide = MutableLiveData<List<GETReproductionResp>>()
+
     data class State(
         val emptyEmailError: Boolean = false,
         val emptyPasswordError: Boolean = false,
@@ -40,7 +41,7 @@ class ViewModels():BaseViewModel(accountsRepository=Singletons.accountsRepositor
     fun reproduction(context: Context)=viewModelScope.safeLaunch{
             try {
                 var resp=accountsRepository?.reproduction()
-
+                guide.postValue(resp)
                 val db = DBCountWood(context,null)
                 db.addReproduction(resp?.get(0)?.name_reproduction.toString())
                 db.addReproduction(resp?.get(1)?.name_reproduction.toString())

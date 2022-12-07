@@ -16,7 +16,7 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".Screens.Authorization"
+            android:name=".Screens.MainActivity"
             android:exported="false"
             >
 
@@ -26,7 +26,7 @@
         </activity>
         <activity android:name=".Screens.Wood"></activity>
         <activity
-            android:name=".Screens.MainActivity"
+            android:name=".Screens.Authorization"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

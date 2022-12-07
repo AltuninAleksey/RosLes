@@ -17,21 +17,23 @@
         android:id="@+id/user_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
         android:layout_below="@+id/Login"
-        android:layout_marginTop="75dp"
-        android:layout_marginLeft="10dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="14dp"
+        android:layout_marginTop="49dp"
         android:text="Пользователь:"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <EditText
         android:id="@+id/edit_user"
-        android:layout_width="wrap_content"
+        android:layout_width="158dp"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/user_text"
-        android:layout_marginLeft="35dp"
+        android:layout_marginLeft="99dp"
+        android:layout_marginBottom="-2dp"
         android:layout_toRightOf="@+id/user_text"
-        android:hint="введите имя " >
+        android:hint="введите имя ">
+
         <requestFocus />
     </EditText>
 
@@ -39,19 +41,23 @@
         android:id="@+id/password_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/user_text"
         android:layout_below="@+id/user_text"
-        android:layout_marginTop="40dp"
+        android:layout_alignLeft="@+id/user_text"
+        android:layout_marginLeft="3dp"
+        android:layout_marginTop="83dp"
         android:text="Пароль:"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <EditText
         android:id="@+id/edit_password"
-        android:layout_width="wrap_content"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/password_text"
         android:layout_alignLeft="@+id/edit_user"
         android:layout_alignRight="@+id/edit_user"
+        android:layout_alignBottom="@+id/password_text"
+        android:layout_marginLeft="1dp"
+        android:layout_marginRight="-1dp"
+        android:layout_marginBottom="2dp"
         android:hint="введите пароль"
         android:inputType="textPassword" />
 
@@ -59,13 +65,13 @@
         android:id="@+id/attempts"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/password_text"
         android:layout_below="@+id/password_text"
+        android:layout_alignLeft="@+id/password_text"
         android:layout_marginLeft="30dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="80dp"
         android:text="Попыток:"
-        android:visibility="invisible"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:visibility="invisible" />
 
     <Button
         android:id="@+id/button_login"
@@ -74,7 +80,6 @@
         android:layout_below="@+id/edit_password"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="94dp"
-        android:onClick="Login"
         android:text="Войти" />
 
     <TextView

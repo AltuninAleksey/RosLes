@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.view.Window
+import android.widget.Toast
 import androidx.activity.viewModels
 import com.example.rosles.Adapters.BaseInterface
 import com.example.rosles.DBCountWood
@@ -29,16 +30,21 @@ class MainActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
         RecyclerviewInit()
+        viewModel.reproduction(this)
 
-//
-//        binding.proba.setOnClickListener(){
-//
-//        }
+
         binding.sync.setOnClickListener(){
-            viewModel.reproduction(this)
+
         }
         binding.Settings.setOnClickListener(){
 
+
+            //viewModel.guide.value.toString()
+
+            viewModel.guide.observe(this){
+                Toast.makeText(this,it.get(0).name_reproduction.toString(),Toast.LENGTH_SHORT).show()
+
+            }
         }
 
 

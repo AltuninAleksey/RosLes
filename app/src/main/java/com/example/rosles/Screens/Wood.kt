@@ -25,7 +25,6 @@ class Wood : AppCompatActivity(){
 
     private lateinit var binding: WoodBinding
     private var bufview: View? =null
-    private var kostl:Any?=null
     private var vidWood:String=""
     private  val db = DBCountWood(this,null)
     val viewModel by viewModels<ViewModels>()
@@ -70,6 +69,13 @@ class Wood : AppCompatActivity(){
             ItemWood("Ель"),
             ItemWood("Осина")
         )
+        binding.buttonSync.setOnClickListener{
+            a.forEach {
+                createTable(it.name)
+            }
+            Toast.makeText(this,"Данные синхронизированы",Toast.LENGTH_SHORT).show()
+        }
+
         buttonAD.setOnClickListener{
             if(text.text.isNotEmpty()){
                 a.add(ItemWood(text.text.toString()))
@@ -136,26 +142,31 @@ class Wood : AppCompatActivity(){
         if (bufview==null){
             bufview=view
             bufview?.setBackgroundResource(R.drawable.rounded_active)
-            kostl=view.id
+
         }
         if (bufview!=null){
             bufview?.setBackgroundResource(R.drawable.rounded)
             bufview=view
             bufview?.setBackgroundResource(R.drawable.rounded_active)
-            kostl=view.id
+
         }
+
+        var buffertext: TextView =findViewById(view.id)
+        var value=buffertext.text.toString().toInt()
+        var test=binding.spinner.selectedItem.toString()
+
         binding.buttonPlus.setOnClickListener(){
-            var buffertext: TextView =findViewById(view.id)
-            var value=buffertext.text.toString().toInt()
-            var test=binding.spinner.selectedItem.toString()
+            buffertext =findViewById(view.id)
+            value=buffertext.text.toString().toInt()
+            test=binding.spinner.selectedItem.toString()
             value=value+test.toInt()
             buffertext.text=value.toString()
         }
         binding.buttonMinus.setOnClickListener(){
 
-            var buffertext: TextView =findViewById(view.id)
-            var value=buffertext.text.toString().toInt()
-            var test=binding.spinner.selectedItem.toString()
+            buffertext =findViewById(view.id)
+            value=buffertext.text.toString().toInt()
+            test=binding.spinner.selectedItem.toString()
             value=value-test.toInt()
             if(value<=0)
                 value=0
@@ -167,7 +178,6 @@ class Wood : AppCompatActivity(){
 
             with(binding){
             vidWood=name
-
             db.addName(vidWood,proba.text.toString(),"iskus",iskus02.text.toString(),iskus05.text.toString(),
                 iskus06.text.toString(),iskus11.text.toString(),iskus15.text.toString())
             db.addName(vidWood,proba.text.toString(),"estes",estes02.text.toString(),estes05.text.toString(),
