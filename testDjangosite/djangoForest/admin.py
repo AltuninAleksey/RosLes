@@ -189,7 +189,6 @@ admin.site.register(CategoryGroundLFInNoneAccordance, CategoryGroundLFInNoneAcco
 admin.site.register(Quarter, QuarterAdmin)  # Квартал
 admin.site.register(Profile, ProfileAdmin)  # Профиль
 admin.site.register(GPS, GPSAdmin)  # GPS
-# admin.site.register(Region, RegionAdmin)
 admin.site.register(List, ListAdmin)
 admin.site.register(ListRegion, ListRegionAdmin)
 admin.site.register(Sample, SampleAdmin)    # Проба

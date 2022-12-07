@@ -319,3 +319,4 @@ class ForestAreas(models.Model):
     class Meta:
         verbose_name = 'Лесные районы'
         verbose_name_plural = 'Лесные районы'
+

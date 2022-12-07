@@ -388,4 +388,3 @@ class GetDistrictForestlyByForestlyIdSerializer(serializers.Serializer):
 class GetQuarterByDistrictForestlyIdSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     quarter_name = serializers.CharField()
-

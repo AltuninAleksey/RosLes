@@ -589,5 +589,6 @@ class GetQuarterByDistrictId(viewsets.ViewSet):
         return JsonResponse({'data': GetQuarterByDistrictForestlyIdSerializer(lst, many=True).data}, safe=False)
 
 
+
 class ForestViewSet(viewsets.ModelViewSet):
     pass
