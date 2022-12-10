@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="166dp"
+        android:orientation="horizontal"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <Button
+            android:id="@+id/main"
+            android:layout_width="45dp"
+            android:layout_height="100dp"
+            android:layout_margin="20dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/color_button_main"
+            android:drawableLeft="@drawable/home_icon"
+            android:text="Главная"
+            android:textSize="10sp"
+            app:cornerRadius="30dp" />
+
+        <Button
+            android:id="@+id/profile"
+            android:layout_width="45dp"
+            android:layout_height="100dp"
+            android:layout_margin="20dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/color_button_main"
+            android:drawableLeft="@drawable/profile"
+            android:text="Профиль"
+            android:textSize="10sp"
+            app:cornerRadius="30dp" />
+
+        <Button
+            android:id="@+id/changeprofile"
+            android:layout_width="45dp"
+            android:layout_height="100dp"
+            android:layout_margin="20dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/color_button_main"
+            android:drawableLeft="@drawable/u_arrow"
+            android:text="Выйти"
+            android:textSize="10sp"
+            app:cornerRadius="30dp" />
+
+        <Button
+            android:id="@+id/addprofile"
+            android:layout_width="45dp"
+            android:layout_height="100dp"
+            android:layout_margin="20dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/color_button_main"
+            android:drawableLeft="@drawable/plus"
+            android:text="Добавить"
+            android:textSize="10sp"
+            app:cornerRadius="30dp" />
+
+        <Button
+            android:id="@+id/deleteprofile"
+            android:layout_width="45dp"
+            android:layout_height="100dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="20dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/color_button_main"
+            android:drawableLeft="@drawable/drop"
+            android:text="Удалить"
+            android:textSize="10sp"
+            app:cornerRadius="30dp" />
+
+    </LinearLayout>

@@ -17,14 +17,12 @@
         tools:targetApi="31">
         <activity
             android:name=".Screens.MainActivity"
-            android:exported="false"
-            >
-
+            android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-        <activity android:name=".Screens.Wood"></activity>
+
         <activity
             android:name=".Screens.Authorization"
             android:exported="true">
@@ -38,6 +36,9 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+
+        <activity android:name=".Screens.Wood"/>
+        <activity android:name=".Screens.profile"/>
     </application>
 
 </manifest>

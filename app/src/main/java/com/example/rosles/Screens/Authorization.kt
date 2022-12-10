@@ -12,6 +12,7 @@ import com.example.rosles.databinding.AuthorizationActivityBinding
 class Authorization: AppCompatActivity() {
     private lateinit var binding: AuthorizationActivityBinding
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -23,20 +24,23 @@ class Authorization: AppCompatActivity() {
                 startActivity(Intent(this, MainActivity::class.java))
                 saveText()}
         }
+
+
     }
     fun CheckUser(){
-        var sPref =getPreferences(MODE_PRIVATE)
+        var sPref =getSharedPreferences("PreferencesName", MODE_PRIVATE);
         var  savedLogin = sPref.getString("Login", "")
         var  savedPassword = sPref.getString("Password", "")
         if (savedLogin != "" && savedPassword!="")
             startActivity(Intent(this, MainActivity::class.java))
     }
     fun saveText() {
-        var sPref = getPreferences(MODE_PRIVATE);
+        var sPref = getSharedPreferences("PreferencesName", MODE_PRIVATE);
         var ed = sPref.edit();
         ed.putString("Login", binding.editUser.text.toString())
         ed.putString("Password", binding.editPassword.text.toString())
         ed.commit()
         Toast.makeText(this, "Text saved", Toast.LENGTH_SHORT).show()
     }
+
 }

@@ -5,4 +5,5 @@ import com.example.rosles.databinding.ItemUdelBinding
 
 interface BaseInterface {
     fun onClick(itemView: Any)
+    fun onClickButton(itemView: Any)=null
 }

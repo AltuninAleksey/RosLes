@@ -31,20 +31,18 @@ class MainActivity : AppCompatActivity() {
         setContentView(view)
         RecyclerviewInit()
         viewModel.reproduction(this)
-
+        binding.toolbar.main.setBackgroundColor(0xFF03DAC5.toInt())
+        binding.toolbar.profile.setOnClickListener{
+            startActivity(Intent(this, profile::class.java))
+        }
+        binding.toolbar.changeprofile.setOnClickListener{
+            var sPref = getSharedPreferences("PreferencesName", MODE_PRIVATE);
+            var ed = sPref.edit().clear().commit()
+            startActivity(Intent(this, Authorization::class.java))
+        }
 
         binding.sync.setOnClickListener(){
 
-        }
-        binding.Settings.setOnClickListener(){
-
-
-            //viewModel.guide.value.toString()
-
-            viewModel.guide.observe(this){
-                Toast.makeText(this,it.get(0).name_reproduction.toString(),Toast.LENGTH_SHORT).show()
-
-            }
         }
 
 
