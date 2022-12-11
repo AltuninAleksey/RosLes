@@ -21,8 +21,8 @@ from djangoForest.views import *
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('djangoForest.urls')),
-    path('api/post/sample', CreateSampleAndOther.as_view()),
-    path('api/post/sample/<int:pk>', CreateSampleAndOther.as_view()),
+    path('sampleandother', CreateSampleAndOther.as_view()),
+    path('sampleandother/<int:pk>', CreateSampleAndOther.as_view()),
     path('api/v1/gettable', TestAPIView.as_view()),
     path('allforest', AllForestlyViewSet.as_view({'get': 'list'})),
     path('getlistdata/<int:pk>', GetDocumentListData.as_view({'get': 'list'})),
