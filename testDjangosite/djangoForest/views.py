@@ -145,15 +145,12 @@ class ListRegionView(generics.ListCreateAPIView):
             return JsonResponse(ListRegionSerializerId(lst, many=True).data, safe=False)
         else:
             lst = ListRegion.objects.all()
-            serealizer_class = ListRegionSerializer(lst, many=True)
-            return JsonResponse(ListRegionSerializerId(lst, many=True).data, safe=False)
+            serealizer_class = GetListRegionSerializer(lst, many=True)
+            return JsonResponse(GetListRegionSerializer(lst, many=True).data, safe=False)
         # lst = ListRegion.objects.all()
         # return JsonResponse(ListRegionSerializer(lst, many=True).data, safe=False)
 
     def post(self, request):
-        print(request.data)
-        print('============================')
-        print(request.data['list_data'])
         serializer = ListRegionSerializer(data=request.data)
 
         serializer.is_valid(raise_exception=True)
@@ -162,7 +159,6 @@ class ListRegionView(generics.ListCreateAPIView):
 
     def put(self, request, *args, **kwargs):
         pk = kwargs.get("pk")
-        print(pk)
         if not pk:
             return Response({"error": "Method PUT in Subjects RF not allowed"})
 
@@ -191,7 +187,6 @@ class SampleView(generics.ListCreateAPIView):
 
     def put(self, request, *args, **kwargs):
         pk = kwargs.get("pk")
-        print(pk)
         if not pk:
             return Response({"error": "Method PUT not allowed"})
         try:
@@ -218,7 +213,6 @@ class PostView(generics.ListCreateAPIView):
 
     def put(self, request, *args, **kwargs):
         pk = kwargs.get("pk")
-        print(pk)
         if not pk:
             return Response({"error": "Method PUT in Subjects RF not allowed"})
 
@@ -246,7 +240,6 @@ class WorkingBreedView(generics.ListCreateAPIView):
 
     def put(self, request, *args, **kwargs):
         pk = kwargs.get("pk")
-        print(pk)
         if not pk:
             return Response({"error": "Method PUT in Subjects RF not allowed"})
 
@@ -274,7 +267,6 @@ class SubjectRFview(generics.ListCreateAPIView):
 
     def put(self, request, *args, **kwargs):
         pk = kwargs.get("pk")
-        print(pk)
         if not pk:
             return Response({"error": "Method PUT in Subjects RF not allowed"})
 
@@ -302,7 +294,6 @@ class RoleView(generics.ListCreateAPIView):
 
     def put(self, request, *args, **kwargs):
         pk = kwargs.get("pk")
-        print(pk)
         if not pk:
             return Response({"error": "Method PUT not allowed"})
 
@@ -330,7 +321,6 @@ class ReproductionView(generics.ListCreateAPIView):
 
     def put(self, request, *args, **kwargs):
         pk = kwargs.get("pk")
-        print(pk)
         if not pk:
             return Response({"error": "Method PUT not allowed"})
 
@@ -358,7 +348,6 @@ class ForestlyView(generics.ListCreateAPIView):
 
     def put(self, request, *args, **kwargs):
         pk = kwargs.get("pk")
-        print(pk)
         if not pk:
             return Response({"error": "Method PUT not allowed"})
 
@@ -386,7 +375,6 @@ class DistrictForestlyView(generics.ListCreateAPIView):
 
     def put(self, request, *args, **kwargs):
         pk = kwargs.get("pk")
-        print(pk)
         if not pk:
             return Response({"error": "Method PUT not allowed"})
 
@@ -527,42 +515,60 @@ class GetAllSampleListData(viewsets.ViewSet):
 
 class CreateSampleAndOther(generics.ListCreateAPIView):
     def post(self, request):
-        serializer = SampleSerializer(data=request.data)
+        serializer = SampleSerializer(data=request.data['sample'])
         serializer.is_valid(raise_exception=True)
         serializer.save()
         sample_dict = {'id_sample': serializer.data['id']}
-        request.data['list_data'][0].update(sample_dict)
         i = 0
         while i < len(request.data['list_data']):
             request.data['list_data'][i].update(sample_dict)
             i += 1
         request.data['gps_data'].update(sample_dict)
-        print(request.data['list_data'])
-        print(request.data['gps_data'])
+        request.data['sample'].update(sample_dict)
+        serializer_list_region = ListRegionSerializer(data=request.data['sample'])
         serializer_list = ListSerializer(data=request.data['list_data'], many=True)
         serializer_gps = GPSSerializer(data=request.data['gps_data'])
+        serializer_list_region.is_valid(raise_exception=True)
+        serializer_list_region.save()
         serializer_list.is_valid(raise_exception=True)
         serializer_gps.is_valid(raise_exception=True)
         serializer_list.save()
         serializer_gps.save()
         return Response({'sample': serializer.data,
+                         'list_region': serializer_list_region.data,
                          "list": serializer_list.data,
                          "gps": serializer_gps.data})
 
     def put(self, request, *args, **kwargs):
+        i = 0
         pk = kwargs.get("pk")
-        print(pk)
         if not pk:
             return Response({"error": "Method PUT not allowed"})
         try:
             instance = Sample.objects.get(pk=pk)
         except:
             return Response({"error": "Объект с данным id не найден"})
-
-        serealizer = SampleSerializer(data=request.data, instance=instance)
-        serealizer.is_valid(raise_exception=True)
-        serealizer.save()
-        return Response({"put": serealizer.data})
+        serializer = SampleSerializer(data=request.data['sample'], instance=instance)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        while i < len(request.data['list_data']):
+            instance_list = List.objects.get(pk=request.data['list_data'][i]['id'])
+            serializer_list = ListSerializer(data=request.data['list_data'][i], instance=instance_list)
+            serializer_list.is_valid(raise_exception=True)
+            serializer_list.save()
+            i += 1
+        instance_list_region = ListRegion.objects.get(pk=request.data['sample']['id_list_region'])
+        serializer_list_region = ListRegionSerializer(data=request.data['sample'], instance=instance_list_region)
+        serializer_list_region.is_valid(raise_exception=True)
+        serializer_list_region.save()
+        instance_gps = GPS.objects.get(pk=request.data['gps_data']['id'])
+        serializer_gps = GPSSerializer(data=request.data['gps_data'], instance=instance_gps)
+        serializer_gps.is_valid(raise_exception=True)
+        serializer_gps.save()
+        return Response({"sample": serializer.data,
+                         "list_region": serializer_list_region.data,
+                         "list": serializer_list.data,
+                         "gps": serializer_gps.data})
 
 
 class GetForestlyBySubjectRFId(viewsets.ViewSet):

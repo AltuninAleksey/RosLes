@@ -41,6 +41,7 @@ class ListSerializer(serializers.ModelSerializer):
         return List.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
+
         instance.id_sample = validated_data.get("id_sample", instance.id_sample)
         instance.id_breed = validated_data.get("id_breed", instance.id_breed)
         instance.id_type_of_reproduction = validated_data.get("id_type_of_reproduction", instance.id_type_of_reproduction)
@@ -102,9 +103,6 @@ class SampleSerializer(serializers.ModelSerializer):
         instance.id_list_region = validated_data.get("id_list_region", instance.id_list_region)
         instance.sample_area = validated_data.get("sample_area", instance.sample_area)
         instance.id_profile = validated_data.get("id_profile", instance.id_profile)
-        instance.id_subject_RF = validated_data.get("id_subject_RF", instance.id_subject_RF)
-        instance.id_forestly = validated_data.get("id_forestly", instance.id_forestly)
-        instance.id_district_forestly = validated_data.get("id_district_forestly", instance.id_district_forestly)
         instance.soil_lot = validated_data.get("soil_lot", instance.soil_lot)
         instance.id_list_region = validated_data.get("id_list_region", instance.id_list_region)
         instance.save()
@@ -252,7 +250,7 @@ class BranchesSerializer(serializers.ModelSerializer):
         return instance
 
 
-class ListRegionSerializer(serializers.Serializer):
+class GetListRegionSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     date = serializers.DateField()
     sample_region = serializers.CharField(max_length=300)
@@ -265,7 +263,7 @@ class ListRegionSerializer(serializers.Serializer):
     soil_lot = serializers.CharField(max_length=300)
 
 
-class CreateListRegionSerializer(serializers.ModelSerializer):
+class ListRegionSerializer(serializers.ModelSerializer):
     class Meta:
         model = ListRegion
         fields = "__all__"
@@ -274,7 +272,6 @@ class CreateListRegionSerializer(serializers.ModelSerializer):
         return ListRegion.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
-        instance.id_region = validated_data.get("id_region", instance.id_region)
         instance.date = validated_data.get("date", instance.date)
         instance.soil_lot = validated_data.get("soil_lot", instance.soil_lot)
         instance.id_quarter = validated_data.get("id_quarter", instance.id_quarter)
