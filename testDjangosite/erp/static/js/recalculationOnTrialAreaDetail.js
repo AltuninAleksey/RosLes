@@ -3,9 +3,33 @@
 var idDocument = document.getElementById("idDocument").value;
 var documentData, subjectrf, forestly, district_forestly, quarter;
 var dataTable_1, dataTable_2, dataTable_3;
-var table_1_active_group;
+var type_reproductions, breeds;
 
 setDataInPage();
+setEventListenerForObjects();
+
+function setEventListenerForObjects() {
+    var regions = document.getElementById("regionRF");
+    regions.addEventListener('change',function() {
+        changeDataSelectForestly(regions.value);
+    });
+
+    var forestlyObject = document.getElementById("lesName");
+    forestlyObject.addEventListener('change',function() {
+        changeDataSelectDistrictForestly(forestlyObject.value);
+    });
+
+    var districtForestly = document.getElementById("ucLesName");
+    districtForestly.addEventListener('change',function() {
+        changeDataSelectQuarter(districtForestly.value);
+    });
+
+    var buttonAddProba = document.getElementById("buttonAddProba");
+    buttonAddProba.addEventListener('click', function() {
+        console.log("test1");
+    });
+
+}
 
 async function setDataInPage() {
     var requestData = await axios({
@@ -22,11 +46,10 @@ async function setDataInPage() {
         responseType: 'json'
     });
 
-    subjectrf = requestData.data.subjectrf;
-    forestly = requestData.data.forestly;
-    district_forestly = requestData.data.district_forestly;
-    quarter = requestData.data.quarter;
-
+    subjectrf = await getAllSubjectrf();
+    forestly = await getForestlyByIdSubjectrf(documentData.id_subjectrf);
+    district_forestly = await getDistrictForestlyByIdForestly(documentData.id_forestly);
+    quarter = await getQuarterByIdDistrictForestly(documentData.id_district_forestly);
 
     requestData = await axios({
         method: 'get',
@@ -40,22 +63,31 @@ async function setDataInPage() {
     dataTable_2 = requestData.post_data;
     dataTable_3 = requestData.gps_data;
 
+    type_reproductions = await getAllTypeReproduction();
+    breeds = await getAllBreeds();
+
     setDocumentData();
 }
 
 function setDocumentData() {
     document.getElementById("start").value = documentData.date;
-
-    for(var j = 0; j < quarter.length; j++) {
-        if(quarter[j].id == documentData.id_quarter) {
-            documentData.quarter = quarter[j].quarter_name;
-        }
-    }
-
-    document.getElementById("quarter").value = documentData.quarter;
     document.getElementById("soil_lot").value = documentData.soil_lot;
     document.getElementById("sample_area").value = documentData.sample_area;
 
+    drawSelectSubjectRF();
+    drawSelectForestly();
+    drawSelectDistrictForestly();
+    drawSelectQuarter();
+
+    setDataInTableOne(1);
+    setDataInTableTwo();
+    setDataInTableThree();
+
+    var breedName_proba = document.getElementById("breedName-proba");
+
+}
+
+function drawSelectSubjectRF() {
     var regions = document.getElementById("regionRF");
     var newHtml = "";
 
@@ -67,9 +99,11 @@ function setDocumentData() {
         }
     }
     regions.innerHTML = newHtml;
+}
 
+function drawSelectForestly() {
     var lesName = document.getElementById("lesName");
-    newHtml = "";
+    var newHtml = "";
 
     for(var i = 0; i < forestly.length; i++) {
         if(forestly[i].id == documentData.id_forestly) {
@@ -79,9 +113,11 @@ function setDocumentData() {
         }
     }
     lesName.innerHTML = newHtml;
+}
 
+function drawSelectDistrictForestly() {
     var ucLesName = document.getElementById("ucLesName");
-    newHtml = "";
+    var newHtml = "";
 
     for(var i = 0; i < district_forestly.length; i++) {
         if(district_forestly[i].id == documentData.id_district_forestly) {
@@ -91,11 +127,20 @@ function setDocumentData() {
         }
     }
     ucLesName.innerHTML = newHtml;
-
-    setDataInTableOne(1);
-    setDataInTableTwo();
-    setDataInTableThree();
 }
+
+function drawSelectQuarter() {
+    var newHtml = "";
+    for(var j = 0; j < quarter.length; j++) {
+        if(quarter[j].id == documentData.id_quarter) {
+            newHtml = newHtml + "<option selected value=\"" + quarter[j].id + "\">" + quarter[j].quarter_name + "</option>";
+        } else {
+            newHtml = newHtml + "<option value=\"" + quarter[j].id + "\">" + quarter[j].quarter_name + "</option>";
+        }
+    }
+    document.getElementById("quarter").innerHTML = newHtml;
+}
+
 
 function setDataInTableOne(switchButton) {
 
@@ -111,8 +156,6 @@ function setDataInTableOne(switchButton) {
         switchButton1.classList.remove("border-bottom-color-black");
         switchButton2.classList.add("border-bottom-color-black");
         switchButton3.classList.add("border-bottom-color-black");
-
-        table_1_active_group = "Искусственное восстановление";
     }
 
     if(switchButton == 2) {
@@ -123,8 +166,6 @@ function setDataInTableOne(switchButton) {
         switchButton1.classList.add("border-bottom-color-black");
         switchButton2.classList.remove("border-bottom-color-black");
         switchButton3.classList.add("border-bottom-color-black");
-
-        table_1_active_group = "Естественное восстановление(семенное)";
     }
 
     if(switchButton == 3) {
@@ -135,8 +176,6 @@ function setDataInTableOne(switchButton) {
         switchButton1.classList.add("border-bottom-color-black");
         switchButton2.classList.add("border-bottom-color-black");
         switchButton3.classList.remove("border-bottom-color-black");
-
-        table_1_active_group = "Естественное восстановление (вегетативное)";
     }
 
     var table_1 = document.getElementById("table_1");
@@ -144,10 +183,20 @@ function setDataInTableOne(switchButton) {
     var myCount = 1;
 
     for(var i = 0; i < dataTable_1.length; i++) {
-            if(dataTable_1[i].id_type_of_reproduction == table_1_active_group) {
+            if(dataTable_1[i].id_type_of_reproduction == switchButton) {
+
+                var name_breed;
+
+                for(var i = 0; i < breeds.length; i++) {
+                    if(breeds[i].id == dataTable_1[i].breed) {
+                        name_breed = breeds[i].name_breed;
+                        break;
+                    }
+                }
+
                 newHtml = newHtml + "<tr>" +
                                         "<td class=\"tab_1_td1\">" + myCount + "</td>" +
-                                        "<td class=\"tab_1_td2\">" + dataTable_1[i].breed + "</td>" +
+                                        "<td class=\"tab_1_td2\">" + name_breed + "</td>" +
                                         "<td class=\"tab_1_td3\">" + dataTable_1[i].to0_2 + "</td>" +
                                         "<td class=\"tab_1_td4\">" + dataTable_1[i].from0_21To0_5 + "</td>" +
                                         "<td class=\"tab_1_td5\">" + dataTable_1[i].from0_6To1_0 + "</td>" +
@@ -199,6 +248,70 @@ function setDataInTableThree() {
     }
     table_3.innerHTML = newHtml;
 }
+
+async function changeDataSelectForestly(id) {
+    forestly = await getForestlyByIdSubjectrf(id);
+    drawSelectForestly();
+
+    var forestlyObject = document.getElementById("lesName");
+    changeDataSelectDistrictForestly(forestlyObject.value);
+}
+
+async function changeDataSelectDistrictForestly(id) {
+    if(id != undefined && id != null && id != "") {
+        district_forestly = await getDistrictForestlyByIdForestly(id);
+    } else {
+        district_forestly = [];
+    }
+    drawSelectDistrictForestly();
+
+    var districtForestly = document.getElementById("ucLesName");
+    changeDataSelectQuarter(districtForestly.value);
+}
+
+async function changeDataSelectQuarter(id) {
+    if(id != undefined && id != null && id != "") {
+        quarter = await getQuarterByIdDistrictForestly(id);
+    } else {
+        quarter = [];
+    }
+    drawSelectQuarter();
+}
+
+
+function openAddForm(id) {
+    var formAddProba = document.getElementById(id);
+    formAddProba.classList.remove("display-none");
+
+    var body = document.getElementById("body");
+    body.classList.add("overflowHiddenImportant");
+}
+
+function closeAddForm(id) {
+    var formAddProba = document.getElementById(id);
+    formAddProba.classList.add("display-none");
+
+    var body = document.getElementById("body");
+    body.classList.remove("overflowHiddenImportant");
+
+    var breedName_proba = document.getElementById("breedName-proba");
+    var proba_021_05 = document.getElementById("proba-0.21-0.5");
+    var proba_11_15 = document.getElementById("proba-1.1-1.5");
+    var proba_02 = document.getElementById("proba-0.2");
+    var proba_06_10 = document.getElementById("proba-0.6-1.0");
+    var proba_15 = document.getElementById("proba-1.5");
+    var proba_maxheig = document.getElementById("proba-maxheig");
+
+    breedName_proba.value = "";
+    proba_021_05.value = "";
+    proba_11_15.value = "";
+    proba_02.value = "";
+    proba_06_10.value = "";
+    proba_15.value = "";
+    proba_maxheig.value = "";
+}
+
+
 
 function saveData() {
     var dateForm = document.getElementById("start");

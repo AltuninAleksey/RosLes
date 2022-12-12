@@ -268,3 +268,11 @@ p{
     justify-content: space-between;
     max-width: 400px;
 }
+
+.overflowHiddenImportant {
+    overflow: hidden !important;
+}
+
+.display-none {
+    display: none;
+}
