@@ -8,12 +8,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'css/navigation.css' %}">
     <link rel="stylesheet" href="{% static 'css/recalculationOnTrialAreaDetail.css' %}">
+    <link rel="stylesheet" href="{% static 'css/add-form-proba.css' %}">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.0/axios.js"></script>
     <script src="{% static 'js/global.js' %}"></script>
     <title>Детальные данные перечет на пробной площади</title>
     {% endblock %}
 </head>
-<body>
+<body id="body">
     <input id="idDocument" type="hidden" name="idDocument" value={{idDocument}}>
     <div class="container">
         <div class="header">
@@ -82,7 +83,8 @@
                         <div class="form1">
                             <p class="p3">Квартал: </p>
                             <form action="" method="post">
-                                <input id="quarter" type="text">
+                                <select name="quarter" id="quarter">
+                                </select>
                             </form>
                         </div>
                         <div class="form1">
@@ -106,7 +108,7 @@
                         <div id="switchButton3" onclick="setDataInTableOne(3)" class="table_1_switch_button_item border-bottom-color-black"><p>Естественное возобновление (вегетативное)</p></div>
                     </div>
                     <div class="table_1_active_button">
-                        <button>Добавить</button>
+                        <button onclick="openAddForm('form-add-proba')" >Добавить</button>
                     </div>
                     <div class="table_1_content">
                         <table>
@@ -184,6 +186,53 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+    <div id="form-add-proba" class="addFormfon display-none">
+        <div class="proba">
+            <h3>Добавление пробы</h3>
+            <div class="exitFormAddProba" onclick="closeAddForm('form-add-proba')"></div>
+            <div class="proba-content">
+                <div class="content-item">
+                    <div class="proba-select">
+                        <form action="">
+                            <select id="breedName-proba" class="proba-input">
+                                <option value="Береза">Береза</option>
+                                <option value="Сосна">Сосна</option>
+                                <option value="Дуб">Дуб</option>
+                            </select>
+                        </form>
+                    </div>
+                    <div class="proba-form1">
+                        <p>0.21-0.5</p>
+                        <input id="proba-0.21-0.5" type="text" class="proba-input">
+                    </div>
+                    <div class="proba-form1">
+                        <p class="p">1.1-1.5</p>
+                        <input id="proba-1.1-1.5" type="text" class="proba-input">
+                    </div>
+                </div>
+                <div class="content-item item2">
+                    <div class="proba-form1">
+                        <p class="p1">До 0.2</p>
+                        <input id="proba-0.2" type="text" class="proba-input">
+                    </div>
+                    <div class="proba-form1">
+                        <p class="p2">0.6-1.0</p>
+                        <input id="proba-0.6-1.0" type="text" class="proba-input">
+                    </div>
+                    <div class="proba-form1">
+                        <p>Более 1.5</p>
+                        <input id="proba-1.5" type="text" class="proba-input">
+                    </div>
+                </div>
+                <div class="maxheig">
+                    <p>Максимальная высота</p>
+                    <input id="proba-maxheig" type="text" class="proba-input">
+                    <button id="buttonAddProba">Добавить</button>
+                </div>
+            </div>
+
         </div>
     </div>
 <script src="{% static 'js/recalculationOnTrialAreaDetail.js' %}"></script>
