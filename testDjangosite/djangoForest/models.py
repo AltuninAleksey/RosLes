@@ -85,6 +85,7 @@ class Sample(models.Model):
                                    verbose_name='Квартал', null=True)
     soil_lot = models.CharField(max_length=300, verbose_name='Выдел')
 
+
     class Meta:
         verbose_name = 'Проба'
         verbose_name_plural = 'Проба'
