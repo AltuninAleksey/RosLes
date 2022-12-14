@@ -1,9 +1,9 @@
 // MPO 01.12.22: Set data page recalculationOnTrialAreaDetail
 
 var idDocument = document.getElementById("idDocument").value;
-var documentData, subjectrf, forestly, district_forestly, quarter;
+var documentData, subjectrf, forestly, district_forestly, quarter, states = null;
 var dataTable_1, dataTable_2, dataTable_3;
-var type_reproductions, breeds;
+var type_reproductions, breeds, active_type_reproduction;
 
 setDataInPage();
 setEventListenerForObjects();
@@ -26,7 +26,17 @@ function setEventListenerForObjects() {
 
     var buttonAddProba = document.getElementById("buttonAddProba");
     buttonAddProba.addEventListener('click', function() {
-        console.log("test1");
+        addProba();
+    });
+
+    var buttonAddState = document.getElementById("buttonAddState");
+    buttonAddState.addEventListener('click', function() {
+        addState();
+    });
+
+    var buttonAddGps = document.getElementById("buttonAddGps");
+    buttonAddGps.addEventListener('click', function() {
+        addGps();
     });
 
 }
@@ -83,7 +93,7 @@ function setDocumentData() {
     setDataInTableTwo();
     setDataInTableThree();
 
-    var breedName_proba = document.getElementById("breedName-proba");
+    setDataFormAddProba();
 
 }
 
@@ -156,6 +166,8 @@ function setDataInTableOne(switchButton) {
         switchButton1.classList.remove("border-bottom-color-black");
         switchButton2.classList.add("border-bottom-color-black");
         switchButton3.classList.add("border-bottom-color-black");
+
+        active_type_reproduction = 1;
     }
 
     if(switchButton == 2) {
@@ -166,6 +178,8 @@ function setDataInTableOne(switchButton) {
         switchButton1.classList.add("border-bottom-color-black");
         switchButton2.classList.remove("border-bottom-color-black");
         switchButton3.classList.add("border-bottom-color-black");
+
+        active_type_reproduction = 2;
     }
 
     if(switchButton == 3) {
@@ -176,6 +190,8 @@ function setDataInTableOne(switchButton) {
         switchButton1.classList.add("border-bottom-color-black");
         switchButton2.classList.add("border-bottom-color-black");
         switchButton3.classList.remove("border-bottom-color-black");
+
+        active_type_reproduction = 3;
     }
 
     var table_1 = document.getElementById("table_1");
@@ -183,13 +199,13 @@ function setDataInTableOne(switchButton) {
     var myCount = 1;
 
     for(var i = 0; i < dataTable_1.length; i++) {
-            if(dataTable_1[i].id_type_of_reproduction == switchButton) {
+            if(Number(dataTable_1[i].id_type_of_reproduction) == switchButton) {
 
                 var name_breed;
 
-                for(var i = 0; i < breeds.length; i++) {
-                    if(breeds[i].id == dataTable_1[i].breed) {
-                        name_breed = breeds[i].name_breed;
+                for(var j = 0; j < breeds.length; j++) {
+                    if(breeds[j].id == dataTable_1[i].breed) {
+                        name_breed = breeds[j].name_breed;
                         break;
                     }
                 }
@@ -278,8 +294,99 @@ async function changeDataSelectQuarter(id) {
     drawSelectQuarter();
 }
 
+function setDataFormAddProba() {
+    var breedName_proba = document.getElementById("breedName-proba");
+    var newHtml = "";
 
-function openAddForm(id) {
+    for(var i = 0; i < breeds.length; i++) {
+        newHtml = newHtml + "<option value=\"" + breeds[i].id + "\">" + breeds[i].name_breed + "</option>";
+    }
+
+    breedName_proba.innerHTML = newHtml;
+
+}
+
+function addProba() {
+    var breedName_proba = document.getElementById("breedName-proba");
+    var proba_021_05 = document.getElementById("proba-0.21-0.5");
+    var proba_11_15 = document.getElementById("proba-1.1-1.5");
+    var proba_02 = document.getElementById("proba-0.2");
+    var proba_06_10 = document.getElementById("proba-0.6-1.0");
+    var proba_15 = document.getElementById("proba-1.5");
+    var proba_maxheig = document.getElementById("proba-maxheig");
+
+    var newData = {
+        id : "",
+        breed : breedName_proba.value,
+        id_sample : idDocument,
+        id_type_of_reproduction : Number(active_type_reproduction),
+        to0_2 : Number(proba_02.value),
+        from0_21To0_5 : Number(proba_021_05.value),
+        from0_6To1_0 : Number(proba_06_10.value),
+        from1_1to1_5 : Number(proba_11_15.value),
+        from1_5 : Number(proba_15.value),
+        max_height : Number(proba_maxheig.value)
+    };
+
+    dataTable_1.push(newData);
+    setDataInTableOne(active_type_reproduction);
+    closeAddForm("form-add-proba");
+}
+
+function addState() {
+    var stateName = document.getElementById("stateName");
+    var FIO = "";
+
+    for(var i = 0; i < states.length; i++) {
+        if(states[i].id == stateName.value) {
+            FIO = states[i].FIO;
+        }
+    }
+
+    var newState = {
+        id : stateName.value,
+        FIO : FIO
+    };
+
+    dataTable_2.push(newState);
+    setDataInTableTwo();
+    closeAddForm("form-add-state");
+
+}
+
+function addGps() {
+    var latitudeAdd = document.getElementById("latitude-add");
+    var longitudeAdd = document.getElementById("longitude-add");
+
+    var newGps = {
+        latitude : latitudeAdd.value,
+        longitude : longitudeAdd.value,
+        flag_center : 1
+    }
+
+    latitudeAdd.value = "";
+    longitudeAdd.value = "";
+
+    dataTable_3.push(newGps);
+    setDataInTableThree();
+    closeAddForm("form-add-gps");
+}
+
+async function openAddForm(id) {
+
+    if(id == "form-add-state" && states == null) {
+        var stateName = document.getElementById("stateName");
+        var newHtml = "";
+
+        states = await getAllProfile();
+
+        for(var i = 0; i < states.length; i++) {
+            newHtml = newHtml + "<option value=\"" + states[i].id + "\">" + states[i].FIO + "</option>";
+        }
+
+        stateName.innerHTML = newHtml;
+    }
+
     var formAddProba = document.getElementById(id);
     formAddProba.classList.remove("display-none");
 
@@ -294,21 +401,23 @@ function closeAddForm(id) {
     var body = document.getElementById("body");
     body.classList.remove("overflowHiddenImportant");
 
-    var breedName_proba = document.getElementById("breedName-proba");
-    var proba_021_05 = document.getElementById("proba-0.21-0.5");
-    var proba_11_15 = document.getElementById("proba-1.1-1.5");
-    var proba_02 = document.getElementById("proba-0.2");
-    var proba_06_10 = document.getElementById("proba-0.6-1.0");
-    var proba_15 = document.getElementById("proba-1.5");
-    var proba_maxheig = document.getElementById("proba-maxheig");
+    if(id == "form-add-proba") {
+        var breedName_proba = document.getElementById("breedName-proba");
+        var proba_021_05 = document.getElementById("proba-0.21-0.5");
+        var proba_11_15 = document.getElementById("proba-1.1-1.5");
+        var proba_02 = document.getElementById("proba-0.2");
+        var proba_06_10 = document.getElementById("proba-0.6-1.0");
+        var proba_15 = document.getElementById("proba-1.5");
+        var proba_maxheig = document.getElementById("proba-maxheig");
 
-    breedName_proba.value = "";
-    proba_021_05.value = "";
-    proba_11_15.value = "";
-    proba_02.value = "";
-    proba_06_10.value = "";
-    proba_15.value = "";
-    proba_maxheig.value = "";
+        proba_021_05.value = "";
+        proba_11_15.value = "";
+        proba_02.value = "";
+        proba_06_10.value = "";
+        proba_15.value = "";
+        proba_maxheig.value = "";
+    }
+
 }
 
 
