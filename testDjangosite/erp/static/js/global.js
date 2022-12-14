@@ -68,3 +68,13 @@ async function getAllBreeds() {
 
     return requestData.data.get;
 }
+
+async function getAllProfile() {
+    var requestData = await axios({
+        method: 'get',
+        url: urlGlobal + "/profile",
+        responseType: 'json'
+    });
+
+    return requestData.data.get;
+}
