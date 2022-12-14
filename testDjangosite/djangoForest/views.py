@@ -502,14 +502,12 @@ class GetSampleListData(viewsets.ViewSet):
         pk = kwargs.get('pk')
         print(pk)
         lst = Sample.objects.filter(pk=pk)
-
         return JsonResponse({'Sample_data': GetSampleListDataSerializer(lst, many=True).data}, safe=False)
 
 
 class GetAllSampleListData(viewsets.ViewSet):
     def list(self, request, *args, **kwargs):
         lst = Sample.objects.all()
-
         return JsonResponse({'data': GetAllSampleListDataSerializer(lst, many=True).data}, safe=False)
 
 
@@ -541,10 +539,8 @@ class CreateSampleAndOther(generics.ListCreateAPIView):
 
     def put(self, request, *args, **kwargs):
         i = 0
-        print(request.data['sample']['id'])
         try:
             instance = Sample.objects.get(pk=request.data['sample']['id'])
-            print(request.data['sample']['id'])
         except:
             return Response({"error": "Объект с данным id не найден"})
         serializer = SampleSerializer(data=request.data['sample'], instance=instance)

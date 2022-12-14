@@ -57,6 +57,9 @@ class GPS(models.Model):
         verbose_name = 'GPS'
         verbose_name_plural = 'GPS'
 
+    def __str__(self):
+        return f"{self.latitude}, {self.longitude} "
+
 
 class ListRegion(models.Model):
     date = models.DateField(u'Дата')
@@ -67,6 +70,9 @@ class ListRegion(models.Model):
     class Meta:
         verbose_name = 'Перечетная ведомость участка'
         verbose_name_plural = 'Перечетная ведомость участка'
+
+    def __str__(self):
+        return f"{self.id}"
 
 
 class Sample(models.Model):
@@ -170,6 +176,9 @@ class Quarter(models.Model):
     class Meta:
         verbose_name = 'Квартал'
         verbose_name_plural = 'Квартал'
+
+    def __str__(self):
+        return self.quarter_name
 
 
 class Breed(models.Model):
