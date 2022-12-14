@@ -362,8 +362,8 @@ class GetSampleListDataSerializer(serializers.Serializer):
 
 class GetAllSampleListDataSerializer(serializers.Serializer):
     id = serializers.IntegerField()
-    id_list_region = serializers.IntegerField(source='id_list_region.id')
-    id_quarter = serializers.IntegerField(source='id_quarter.id')
+    id_list_region = serializers.CharField(source='id_list_region.id')
+    id_quarter = serializers.CharField(source='id_quarter.id')
     id_district_forestly = serializers.CharField(source='id_list_region.id_quarter.id_district_forestly.id')
     id_forestly = serializers.CharField(source='id_list_region.id_quarter.id_district_forestly.id_forestly.id')
     id_subjectrf = serializers.CharField(source='id_list_region.id_quarter.id_district_forestly.id_forestly.id_subject_rf.id')
@@ -387,3 +387,4 @@ class GetDistrictForestlyByForestlyIdSerializer(serializers.Serializer):
 class GetQuarterByDistrictForestlyIdSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     quarter_name = serializers.CharField()
+
