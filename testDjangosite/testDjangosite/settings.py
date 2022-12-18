@@ -89,18 +89,18 @@ DATABASES = {
     }
 }
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'TIME_ZONE': 'UTC',
-        'NAME': 'rosLes',
-        'USER': 'PythonUser',
-        'PASSWORD': 'PPythonUserassword',
-        'HOST': '90.156.208.88',
-        'PORT': '3306'
-
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'TIME_ZONE': 'UTC',
+#         'NAME': 'rosLes',
+#         'USER': 'PythonUser',
+#         'PASSWORD': 'PPythonUserassword',
+#         'HOST': '90.156.208.88',
+#         'PORT': '3306'
+#
+#     }
+# }
 
 
 
