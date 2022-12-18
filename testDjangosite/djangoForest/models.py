@@ -10,6 +10,11 @@ class Table(models.Model):
         verbose_name_plural = "Таблицы"
 
 
+class CheckTrigger(models.Model):
+    bool = models.BooleanField(default=False)
+
+
+
 class Profile(models.Model):
     FIO = models.CharField(u'ФИО', max_length=255)
     phoneNumber = models.CharField(u'Номер телефона', max_length=30)
@@ -44,7 +49,7 @@ class List(models.Model):
         verbose_name_plural = 'Перечет'
 
     def __str__(self):
-        return f'{self.to0_2}'
+        return f'{self.to0_2}, {self.from0_21To0_5},\n {self.from0_6To1_0}, {self.from1_1to1_5}, {self.from1_5}'
 
 
 class GPS(models.Model):
@@ -72,7 +77,7 @@ class ListRegion(models.Model):
         verbose_name_plural = 'Перечетная ведомость участка'
 
     def __str__(self):
-        return f"{self.id}"
+        return f"{self.date}, {self.soil_lot}"
 
 
 class Sample(models.Model):
@@ -83,12 +88,15 @@ class Sample(models.Model):
                                        verbose_name='Перечетная ведомость участка', null=True)
     id_quarter = models.ForeignKey('Quarter', on_delete=models.CASCADE,
                                    verbose_name='Квартал', null=True)
-    soil_lot = models.CharField(max_length=300, verbose_name='Выдел')
+    soil_lot = models.CharField(max_length=300, verbose_name='Выдел', null=True)
 
 
     class Meta:
         verbose_name = 'Проба'
         verbose_name_plural = 'Проба'
+
+    def __str__(self):
+        return f"{self.date}, {self.sample_area}, {self.soil_lot}"
 
 
 class Post(models.Model):
