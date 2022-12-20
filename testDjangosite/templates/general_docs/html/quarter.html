@@ -27,20 +27,25 @@
             {% endblock menu %}
             {% block content %}
             <div class="content">
-                <h1 id="h1">Кат. земель лф в случ. несоотв.</h1>
+                <h1 id="h1">Квартал</h1>
                 {% block table %}
-                    <table>
-                        <th>id в базе</th>
-                        <th>Наименование</th>
-                        {% for item in queryset %}
-                        <tr>
-                            <td>{{item.pk}}</td>
-                            <td>{{item.name_of_category_ground}}</td>
+                <table>
+                    <th>id в базе</th>
+                    <th>Наименование</th>
+                    <th>Участковое лесничество</th>
+                    <th>Лесничество</th>
+                    <th>Субъект РФ</th>
+                    {% for item in queryset %}
+                    <tr>
+                        <td>{{ item.pk }}</td>
+                        <td>{{item.quarter_name}}</td>
+                        <td>{{ item.id_district_forestly }}</td>
+                        <td> {{ item.id_district_forestly.id_forestly}}</td>
+                        <td> {{item.id_district_forestly.id_forestly.id_subject_rf }}</td>
                         {% endfor %}
-                        </tr>
-                    </table>
-                    {% endblock table %}
-                </div>
+                    </tr>
+                </table>
+                {% endblock table %}
             </div>
             {% endblock content %}
         </div>

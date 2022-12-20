@@ -27,20 +27,29 @@
             {% endblock menu %}
             {% block content %}
             <div class="content">
-                <h1 id="h1">Кат. земель лф в случ. несоотв.</h1>
-                {% block table %}
+                <h1 id="h1">Проба</h1>
+                    {% block table %}
                     <table>
                         <th>id в базе</th>
-                        <th>Наименование</th>
+                        <th>Дата</th>
+                        <th>Площадь пробы</th>
+                        <th>Перечетная ведомость участка</th>
+                        <th>Сотрудник</th>
+                        <th>Квартал</th>
+                        <th>Выдел</th>
                         {% for item in queryset %}
                         <tr>
-                            <td>{{item.pk}}</td>
-                            <td>{{item.name_of_category_ground}}</td>
+                            <td>{{ item.pk }}</td>
+                            <td>{{item.date}}</td>
+                            <td>{{item.sample_area}}</td>
+                            <td>{{item.id_list_region_id}}</td>
+                            <td>{{item.id_profile_id}}</td>
+                            <td>{{item.id_quarter_id}}</td>
+                            <td>{{item.soil_lot}}</td>
                         {% endfor %}
                         </tr>
                     </table>
-                    {% endblock table %}
-                </div>
+                {% endblock table %}
             </div>
             {% endblock content %}
         </div>
