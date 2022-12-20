@@ -27,20 +27,35 @@
             {% endblock menu %}
             {% block content %}
             <div class="content">
-                <h1 id="h1">Кат. земель лф в случ. несоотв.</h1>
-                {% block table %}
+                <h1 id="h1">Перечет</h1>
+                    {% block table %}
                     <table>
                         <th>id в базе</th>
-                        <th>Наименование</th>
+                        <th>До 0,2</th>
+                        <th>0,21-0,5</th>
+                        <th>0,6-1,0</th>
+                        <th>1,1-1,5</th>
+                        <th>более 1,5</th>
+                        <th>Максимальная высота</th>
+                        <th>Проба</th>
+                        <th>Порода</th>
+                        <th>Вид воспроизводства</th>
                         {% for item in queryset %}
                         <tr>
-                            <td>{{item.pk}}</td>
-                            <td>{{item.name_of_category_ground}}</td>
+                            <td>{{ item.pk }}</td>
+                            <td>{{item.to0_2}}</td>
+                            <td>{{item.from0_21To0_5}}</td>
+                            <td>{{item.from0_6To1_0}}</td>
+                            <td>{{item.from1_1to1_5}}</td>
+                            <td>{{item.from1_5}}</td>
+                            <td>{{item.max_height}}</td>
+                            <td>{{item.id_breed_id}}</td>
+                            <td>{{item.id_sample_id}}</td>
+                            <td>{{item.id_type_of_reproduction_id}}</td>
                         {% endfor %}
                         </tr>
                     </table>
-                    {% endblock table %}
-                </div>
+                {% endblock table %}
             </div>
             {% endblock content %}
         </div>
