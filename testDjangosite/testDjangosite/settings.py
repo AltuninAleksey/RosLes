@@ -71,11 +71,6 @@ TEMPLATES = [
             ],
         },
     },
-    # {
-    #     'BACKEND': 'django.template.backends.django.DjangoTemplates',
-    #     'DIRS': ["erp/templates/html"],
-    #     'APP_DIRS': True
-    # }
 ]
 
 WSGI_APPLICATION = 'testDjangosite.wsgi.application'
@@ -94,7 +89,6 @@ DATABASES = {
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.mysql',
-#         'TIME_ZONE': 'UTC',
 #         'NAME': 'rosLes',
 #         'USER': 'PythonUser',
 #         'PASSWORD': 'PPythonUserassword',
@@ -127,6 +121,7 @@ AUTH_PASSWORD_VALIDATORS = [
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8080",
     "http://127.0.0.1:9000",
+    "http://90.156.208.88:8093",
 ]
 
 # Internationalization
@@ -134,7 +129,7 @@ CORS_ALLOWED_ORIGINS = [
 
 LANGUAGE_CODE = 'ru'
 
-TIME_ZONE = 'Europe/Moscow'
+TIME_ZONE = 'UTC'
 
 USE_I18N = True
 

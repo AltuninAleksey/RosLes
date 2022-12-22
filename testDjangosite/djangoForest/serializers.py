@@ -233,7 +233,9 @@ class QuarterSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         instance.quarter_name = validated_data.get('quarter_name', instance.quarter_name)
-        instance.id_forestly = validated_data.get('id_forestly', instance.id_forestly)
+        instance.id_district_forestly = validated_data.get('id_district_forestly', instance.id_district_forestly)
+        instance.save()
+        return instance
 
 
 class BranchesSerializer(serializers.ModelSerializer):

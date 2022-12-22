@@ -5,8 +5,6 @@ from django.http import JsonResponse, HttpResponse
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework import viewsets, permissions
-from rest_framework.decorators import api_view
-from .models import *
 from djangoForest.serializers import *
 from collections import namedtuple
 
@@ -29,13 +27,8 @@ class ProfileView(generics.ListCreateAPIView):
         return Response({'post': serializer.data})
 
     def put(self, request, *args, **kwargs):
-        pk = kwargs.get("pk")
-        print(pk)
-        if not pk:
-            return Response({"error": "Method PUT in Subjects RF not allowed"})
-
         try:
-            instance = Profile.objects.get(pk=pk)
+            instance = Profile.objects.get(pk=request.data['id'])
         except:
             return Response({"error": "Объект с данным id не найден"})
 
@@ -62,13 +55,8 @@ class ListView(generics.ListCreateAPIView):
         return Response({'post': serializer.data})
 
     def put(self, request, *args, **kwargs):
-        pk = kwargs.get("pk")
-        print(pk)
-        if not pk:
-            return Response({"error": "Method PUT in Subjects RF not allowed"})
-
         try:
-            instance = List.objects.get(pk=pk)
+            instance = List.objects.get(pk=request.data['id'])
         except:
             return Response({"error": "Объект с данным id не найден"})
 
@@ -90,13 +78,8 @@ class GpsView(generics.ListCreateAPIView):
         return Response({'post': serializer.data})
 
     def put(self, request, *args, **kwargs):
-        pk = kwargs.get("pk")
-        print(pk)
-        if not pk:
-            return Response({"error": "Method PUT in Subjects RF not allowed"})
-
         try:
-            instance = GPS.objects.get(pk=pk)
+            instance = GPS.objects.get(pk=request.data['id'])
         except:
             return Response({"error": "Объект с данным id не найден"})
 
@@ -104,34 +87,6 @@ class GpsView(generics.ListCreateAPIView):
         serealizer.is_valid(raise_exception=True)
         serealizer.save()
         return Response({"put": serealizer.data})
-
-
-# class RegionView(generics.ListCreateAPIView):
-#     def get(self, request):
-#         lst = Region.objects.all()
-#         return Response({'get': RegionSerializer(lst, many=True).data})
-#
-#     def post(self, request):
-#         serializer = RegionSerializer(data=request.data)
-#         serializer.is_valid(raise_exception=True)
-#         serializer.save()
-#         return Response({'post': serializer.data})
-#
-#     def put(self, request, *args, **kwargs):
-#         pk = kwargs.get("pk")
-#         print(pk)
-#         if not pk:
-#             return Response({"error": "Method PUT in Subjects RF not allowed"})
-#
-#         try:
-#             instance = Region.objects.get(pk=pk)
-#         except:
-#             return Response({"error": "Объект с данным id не найден"})
-#
-#         serealizer = RegionSerializer(data=request.data, instance=instance)
-#         serealizer.is_valid(raise_exception=True)
-#         serealizer.save()
-#         return Response({"put": serealizer.data})
 
 
 class ListRegionView(generics.ListCreateAPIView):
@@ -158,12 +113,8 @@ class ListRegionView(generics.ListCreateAPIView):
         return Response({'post': serializer.data})
 
     def put(self, request, *args, **kwargs):
-        pk = kwargs.get("pk")
-        if not pk:
-            return Response({"error": "Method PUT in Subjects RF not allowed"})
-
         try:
-            instance = ListRegion.objects.get(pk=pk)
+            instance = ListRegion.objects.get(pk=request.data['id'])
         except:
             return Response({"error": "Объект с данным id не найден"})
 
@@ -186,11 +137,8 @@ class SampleView(generics.ListCreateAPIView):
         return Response({'post': serializer.data})
 
     def put(self, request, *args, **kwargs):
-        pk = kwargs.get("pk")
-        if not pk:
-            return Response({"error": "Method PUT not allowed"})
         try:
-            instance = Sample.objects.get(pk=pk)
+            instance = Sample.objects.get(pk=request.data['id'])
         except:
             return Response({"error": "Объект с данным id не найден"})
 
@@ -212,12 +160,8 @@ class PostView(generics.ListCreateAPIView):
         return Response({'post': serializer.data})
 
     def put(self, request, *args, **kwargs):
-        pk = kwargs.get("pk")
-        if not pk:
-            return Response({"error": "Method PUT in Subjects RF not allowed"})
-
         try:
-            instance = Post.objects.get(pk=pk)
+            instance = Post.objects.get(pk=request.data['id'])
         except:
             return Response({"error": "Объект с данным id не найден"})
 
@@ -239,12 +183,8 @@ class WorkingBreedView(generics.ListCreateAPIView):
         return Response({'post': serializer.data})
 
     def put(self, request, *args, **kwargs):
-        pk = kwargs.get("pk")
-        if not pk:
-            return Response({"error": "Method PUT in Subjects RF not allowed"})
-
         try:
-            instance = WorkingBreeds.objects.get(pk=pk)
+            instance = WorkingBreeds.objects.get(pk=request.data['id'])
         except:
             return Response({"error": "Объект с данным id не найден"})
 
@@ -266,12 +206,8 @@ class SubjectRFview(generics.ListCreateAPIView):
         return Response({'post': serializer.data})
 
     def put(self, request, *args, **kwargs):
-        pk = kwargs.get("pk")
-        if not pk:
-            return Response({"error": "Method PUT in Subjects RF not allowed"})
-
         try:
-            instance = SubjectRF.objects.get(pk=pk)
+            instance = SubjectRF.objects.get(pk=request.data['id'])
         except:
             return Response({"error": "Объект с данным id не найден"})
 
@@ -293,12 +229,8 @@ class RoleView(generics.ListCreateAPIView):
         return Response({'post': serializer.data})
 
     def put(self, request, *args, **kwargs):
-        pk = kwargs.get("pk")
-        if not pk:
-            return Response({"error": "Method PUT not allowed"})
-
         try:
-            instance = Role.objects.get(pk=pk)
+            instance = Role.objects.get(pk=request.data['id'])
         except:
             return Response({"error": "Объект с данным id не найден"})
 
@@ -320,12 +252,8 @@ class ReproductionView(generics.ListCreateAPIView):
         return Response({'post': serializer.data})
 
     def put(self, request, *args, **kwargs):
-        pk = kwargs.get("pk")
-        if not pk:
-            return Response({"error": "Method PUT not allowed"})
-
         try:
-            instance = Reproduction.objects.get(pk=pk)
+            instance = Reproduction.objects.get(pk=request.data['id'])
         except:
             return Response({"error": "Объект с данным id не найден"})
 
@@ -347,12 +275,8 @@ class ForestlyView(generics.ListCreateAPIView):
         return Response({'post': serializer.data})
 
     def put(self, request, *args, **kwargs):
-        pk = kwargs.get("pk")
-        if not pk:
-            return Response({"error": "Method PUT not allowed"})
-
         try:
-            instance = Forestly.objects.get(pk=pk)
+            instance = Forestly.objects.get(pk=request.data['id'])
         except:
             return Response({"error": "Объект с данным id не найден"})
 
@@ -374,12 +298,8 @@ class DistrictForestlyView(generics.ListCreateAPIView):
         return Response({'post': serializer.data})
 
     def put(self, request, *args, **kwargs):
-        pk = kwargs.get("pk")
-        if not pk:
-            return Response({"error": "Method PUT not allowed"})
-
         try:
-            instance = DistrictForestly.objects.get(pk=pk)
+            instance = DistrictForestly.objects.get(pk=request.data['id'])
         except:
             return Response({"error": "Объект с данным id не найден"})
 
@@ -401,15 +321,10 @@ class QuarterView(generics.ListCreateAPIView):
         return Response({'post': serializer.data})
 
     def put(self, request, *args, **kwargs):
-        pk = kwargs.get("pk")
-        if not pk:
-            return Response({"error": "Method put not allowed"})
-
         try:
-            instance = Breed.objects.get(pk=pk)
+            instance = Quarter.objects.get(pk=request.data['id'])
         except:
             return Response({"error": "Объект с данным id не найден"})
-
         serealizer = QuarterSerializer(data=request.data, instance=instance)
         serealizer.is_valid(raise_exception=True)
         serealizer.save()
@@ -428,16 +343,10 @@ class BreedView(generics.ListCreateAPIView):
         return Response({'post': serializer.data})
 
     def put(self, request, *args, **kwargs):
-        pk = kwargs.get("pk")
-        print(pk)
-        if not pk:
-            return Response({"error": "Method PUT not allowed"})
-
         try:
-            instance = Breed.objects.get(pk=pk)
+            instance = Breed.objects.get(pk=request.data['id'])
         except:
             return Response({"error": "Объект с данным id не найден"})
-
         serealizer = BreedSerializer(data=request.data, instance=instance)
         serealizer.is_valid(raise_exception=True)
         serealizer.save()
@@ -456,16 +365,10 @@ class BranchesView(generics.ListCreateAPIView):
         return Response({'post': serializer.data})
 
     def put(self, request, *args, **kwargs):
-        pk = kwargs.get("pk")
-        print(pk)
-        if not pk:
-            return Response({"error": "Method PUT not allowed"})
-
         try:
-            instance = Branches.objects.get(pk=pk)
+            instance = Branches.objects.get(pk=request.data["id"])
         except:
             return Response({"error": "Объект с данным id не найден"})
-
         serealizer = BranchesSerializer(data=request.data, instance=instance)
         serealizer.is_valid(raise_exception=True)
         serealizer.save()
@@ -500,7 +403,6 @@ class GetDocumentListData(viewsets.ViewSet):
 class GetSampleListData(viewsets.ViewSet):
     def list(self, requests, *args, **kwargs):
         pk = kwargs.get('pk')
-        print(pk)
         lst = Sample.objects.filter(pk=pk)
         return JsonResponse({'Sample_data': GetSampleListDataSerializer(lst, many=True).data}, safe=False)
 
