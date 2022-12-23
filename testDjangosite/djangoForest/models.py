@@ -125,7 +125,7 @@ class SubjectRF(models.Model):
     name_subject_RF = models.CharField(max_length=255, verbose_name='Наименования субъекта РФ')
 
     def __str__(self):
-        return f"{self.id}. {self.name_subject_RF}"
+        return f"{self.name_subject_RF}"
 
     class Meta:
         verbose_name = 'Субъект РФ'
@@ -159,7 +159,7 @@ class Forestly(models.Model):
     id_subject_rf = models.ForeignKey('SubjectRF', on_delete=models.CASCADE, verbose_name="Субъект РФ", null=True)
 
     def __str__(self):
-        return f"{self.id}. {self.name_forestly}"
+        return f"{self.name_forestly}"
 
     class Meta:
         verbose_name = 'Лесничество'
