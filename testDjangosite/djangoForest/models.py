@@ -13,7 +13,12 @@ class Table(models.Model):
 class CheckTrigger(models.Model):
     bool = models.BooleanField(default=False)
 
+class PhotoPoint(models.Model):
+    photo = models.ImageField(upload_to="photos/%Y/%m/%d/")
 
+    class Meta:
+        verbose_name = 'Фото точка'
+        verbose_name_plural = 'Фото точка'
 
 class Profile(models.Model):
     FIO = models.CharField(u'ФИО', max_length=255)
