@@ -422,7 +422,7 @@ function closeAddForm(id) {
 
 
 
-function saveData() {
+async function saveData() {
     var dateForm = document.getElementById("start");
     var regionRFForm = document.getElementById("regionRF");
     var lesNameForm = document.getElementById("lesName");
@@ -432,19 +432,24 @@ function saveData() {
     var sample_areaForm = document.getElementById("sample_area");
 
     var requestData = {
-        date : dateForm.value,
-        id : idDocument,
-        id_district_forestly : ucLesNameForm.value,
-        id_forestly : lesNameForm.value,
-        id_profile : dataTable_2[0].id,
-        id_quarter : quarterForm.value,
-        id_subjectrf : regionRFForm.value,
-        profile : dataTable_2[0].value,
-        sample_area : sample_areaForm.value,
-        soil_lot : soil_lotForm.value,
+        sample: {
+            date : dateForm.value,
+            id : idDocument,
+            id_district_forestly : ucLesNameForm.value,
+            id_list_region : documentData.id_list_region,
+            id_forestly : lesNameForm.value,
+            id_profile : dataTable_2[0].id,
+            id_quarter : quarterForm.value,
+            id_subjectrf : regionRFForm.value,
+            profile : dataTable_2[0].value,
+            sample_area : sample_areaForm.value,
+            soil_lot : soil_lotForm.value
+        },
         list_data : dataTable_1,
         gps_data : dataTable_3
     };
+
+    await getUpdateRecalculationDetailData(requestData);
 
     console.log(JSON.stringify(requestData));
 

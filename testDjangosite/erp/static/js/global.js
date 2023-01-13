@@ -78,3 +78,13 @@ async function getAllProfile() {
 
     return requestData.data.get;
 }
+
+async function getUpdateRecalculationDetailData(data) {
+    var requestData = await axios({
+        method: 'put',
+        url: urlGlobal + "/sampleandother",
+        data: data,
+        responseType: 'json'
+    });
+
+}
