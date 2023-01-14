@@ -10,6 +10,11 @@ class Table(models.Model):
         verbose_name_plural = "Таблицы"
 
 
+class Users(models.Model):
+    email = models.EmailField()
+    password = models.CharField(max_length=300)
+    token = models.CharField(max_length=300)
+
 class CheckTrigger(models.Model):
     bool = models.BooleanField(default=False)
 

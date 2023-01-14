@@ -41,9 +41,7 @@ class ProfileView(generics.ListCreateAPIView):
 class ListView(generics.ListCreateAPIView):
     def get(self, request):
         lst = List.objects.all()
-        print("1")
-        print(Response({'post': ListSerializer(lst, many=True).data}))
-        return Response({'post': ListSerializer(lst, many=True).data})
+        return Response({'get': ListSerializer(lst, many=True).data})
         # return render(request, 'listview/list.html', {
         #     "post": lst
         # })
@@ -97,11 +95,11 @@ class ListRegionView(generics.ListCreateAPIView):
         pk = kwargs.get('pk')
         if pk:
             lst = ListRegion.objects.filter(pk=pk)
-            return JsonResponse(ListRegionSerializerId(lst, many=True).data, safe=False)
+            return JsonResponse(ListRegionSerializer(lst, many=True).data, safe=False)
         else:
             lst = ListRegion.objects.all()
             serealizer_class = GetListRegionSerializer(lst, many=True)
-            return JsonResponse(GetListRegionSerializer(lst, many=True).data, safe=False)
+            return JsonResponse(ListRegionSerializer(lst, many=True).data, safe=False)
         # lst = ListRegion.objects.all()
         # return JsonResponse(ListRegionSerializer(lst, many=True).data, safe=False)
 
@@ -415,6 +413,10 @@ class GetAllSampleListData(viewsets.ViewSet):
 
 class CreateSampleAndOther(generics.ListCreateAPIView):
     def post(self, request, **kwargs):
+        serializer_list_region = ListRegionSerializer(data=request.data['sample'])
+        serializer_list_region.is_valid(raise_exception=True)
+        serializer_list_region.save()
+        request.data['sample'].update({'id_list_region': serializer_list_region.data['id']})
         serializer = SampleSerializer(data=request.data['sample'])
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -425,11 +427,11 @@ class CreateSampleAndOther(generics.ListCreateAPIView):
             i += 1
         request.data['gps_data'].update(sample_dict)
         request.data['sample'].update(sample_dict)
-        serializer_list_region = ListRegionSerializer(data=request.data['sample'])
+        print(serializer_list_region.data['id'])
         serializer_list = ListSerializer(data=request.data['list_data'], many=True)
         serializer_gps = GPSSerializer(data=request.data['gps_data'])
-        serializer_list_region.is_valid(raise_exception=True)
-        serializer_list_region.save()
+        # serializer_list_region.is_valid(raise_exception=True)
+        # serializer_list_region.save()
         serializer_list.is_valid(raise_exception=True)
         serializer_gps.is_valid(raise_exception=True)
         serializer_list.save()
@@ -449,17 +451,27 @@ class CreateSampleAndOther(generics.ListCreateAPIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         while i < len(request.data['list_data']):
-            instance_list = List.objects.get(pk=request.data['list_data'][i]['id'])
-            serializer_list = ListSerializer(data=request.data['list_data'][i], instance=instance_list)
+            try:
+                instance_list = List.objects.get(pk=request.data['list_data'][i]['id'])
+                serializer_list = ListSerializer(data=request.data['list_data'][i], instance=instance_list)
+            except:
+                serializer_list = ListSerializer(data=request.data['list_data'][i])
+            # serializer_list = ListSerializer(data=request.data['list_data'][i], instance=instance_list)
             serializer_list.is_valid(raise_exception=True)
             serializer_list.save()
             i += 1
-        instance_list_region = ListRegion.objects.get(pk=request.data['sample']['id_list_region'])
-        serializer_list_region = ListRegionSerializer(data=request.data['sample'], instance=instance_list_region)
+        try:
+            instance_list_region = ListRegion.objects.get(pk=request.data['sample']['id_list_region'])
+            serializer_list_region = ListRegionSerializer(data=request.data['sample'], instance=instance_list_region)
+        except:
+            serializer_list_region = ListRegionSerializer(data=request.data['sample'])
         serializer_list_region.is_valid(raise_exception=True)
         serializer_list_region.save()
-        instance_gps = GPS.objects.get(pk=request.data['gps_data']['id'])
-        serializer_gps = GPSSerializer(data=request.data['gps_data'], instance=instance_gps)
+        try:
+            instance_gps = GPS.objects.get(pk=request.data['gps_data']['id'])
+            serializer_gps = GPSSerializer(data=request.data['gps_data'], instance=instance_gps)
+        except:
+            serializer_gps = GPSSerializer(data=request.data['gps_data'])
         serializer_gps.is_valid(raise_exception=True)
         serializer_gps.save()
         return Response({"sample": serializer.data,
