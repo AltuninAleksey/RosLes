@@ -88,3 +88,13 @@ async function getUpdateRecalculationDetailData(data) {
     });
 
 }
+
+async function getCreateRecalculationDetailData(data) {
+    var requestData = await axios({
+        method: 'post',
+        url: urlGlobal + "/sampleandother",
+        data: data,
+        responseType: 'json'
+    });
+
+}

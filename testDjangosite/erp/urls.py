@@ -38,5 +38,6 @@ urlpatterns = [
     #MPO 01.12.22: Add new url for page "recalculationOnTrialArea" and "recalculationOnTrialAreaDetail"
     path('documents/recalculationOnTrialArea', views.getRecalculationOnTrialArea),
     path('documents/recalculationOnTrialAreaDetail', views.getRecalculationOnTrialAreaDetail),
+    path('documents/recalculationOnTrialAreaDetailNew', views.getRecalculationOnTrialAreaDetailNew),
 ]
 

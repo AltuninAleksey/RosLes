@@ -70,3 +70,7 @@ async function getAllRecalculationOnTrialArea() {
 function getRecalculationOnTrialAreaDetail(id) {
     window.location.href = urlGlobal + "/erp/documents/recalculationOnTrialAreaDetail?id=" + id;
 }
+
+function getRecalculationOnTrialAreaDetailNew() {
+    window.location.href = urlGlobal + "/erp/documents/recalculationOnTrialAreaDetailNew";
+}

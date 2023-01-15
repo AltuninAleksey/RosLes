@@ -1,8 +1,5 @@
-// MPO 01.12.22: Set data page recalculationOnTrialAreaDetail
-
-var idDocument = document.getElementById("idDocument").value;
-var documentData, subjectrf, forestly, district_forestly, quarter, states = null;
-var dataTable_1, dataTable_2, dataTable_3;
+var documentData, subjectrf = [], forestly = [], district_forestly = [], quarter = [], states = null;
+var dataTable_1 = [], dataTable_2 = [], dataTable_3 = [];
 var type_reproductions, breeds, active_type_reproduction;
 
 setDataInPage();
@@ -42,30 +39,35 @@ function setEventListenerForObjects() {
 }
 
 async function setDataInPage() {
-    var requestData = await axios({
-      method: 'get',
-      url: urlGlobal + "/getsampledata/" + idDocument,
-      responseType: 'json'
-    });
 
-    documentData = requestData.data.Sample_data[0];
+    documentData = {
+        id_subjectrf : 0,
+        id_forestly : 0,
+        id_district_forestly : 0,
+        id_quarter : 0
+    };
 
     subjectrf = await getAllSubjectrf();
-    forestly = await getForestlyByIdSubjectrf(documentData.id_subjectrf);
-    district_forestly = await getDistrictForestlyByIdForestly(documentData.id_forestly);
-    quarter = await getQuarterByIdDistrictForestly(documentData.id_district_forestly);
+    documentData.id_subjectrf = subjectrf[0].id;
 
-    requestData = await axios({
-        method: 'get',
-        url: urlGlobal + "/getlistdata/" + idDocument,
-        responseType: 'json'
-    });
+    if(subjectrf.length > 0) {
+        forestly = await getForestlyByIdSubjectrf(subjectrf[0].id);
 
-    requestData = requestData.data;
+        if(forestly.length > 0) {
+            documentData.id_forestly = forestly[0].id;
+            district_forestly = await getDistrictForestlyByIdForestly(forestly[0].id);
 
-    dataTable_1 = requestData.list_data;
-    dataTable_2 = requestData.post_data;
-    dataTable_3 = requestData.gps_data;
+            if(district_forestly.length > 0) {
+                documentData.id_district_forestly = district_forestly[0].id;
+                quarter = await getQuarterByIdDistrictForestly(district_forestly[0].id);
+
+                if(quarter.length > 0) {
+                    documentData.id_quarter = quarter[0].id;
+                }
+            }
+        }
+    }
+
 
     type_reproductions = await getAllTypeReproduction();
     breeds = await getAllBreeds();
@@ -74,9 +76,15 @@ async function setDataInPage() {
 }
 
 function setDocumentData() {
-    document.getElementById("start").value = documentData.date;
-    document.getElementById("soil_lot").value = documentData.soil_lot;
-    document.getElementById("sample_area").value = documentData.sample_area;
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+    today = yyyy + '-' + mm + '-' + dd;
+
+    document.getElementById("start").value = today;
+    document.getElementById("soil_lot").value = 0;
+    document.getElementById("sample_area").value = 0;
 
     drawSelectSubjectRF();
     drawSelectForestly();
@@ -145,7 +153,6 @@ function drawSelectQuarter() {
     document.getElementById("quarter").innerHTML = newHtml;
 }
 
-
 function setDataInTableOne(switchButton) {
 
     var switchButton1 = document.getElementById("switchButton1");
@@ -198,7 +205,7 @@ function setDataInTableOne(switchButton) {
                 var name_breed;
 
                 for(var j = 0; j < breeds.length; j++) {
-                    if(breeds[j].id == dataTable_1[i].id_breed) {
+                    if(breeds[j].id == dataTable_1[i].breed) {
                         name_breed = breeds[j].name_breed;
                         break;
                     }
@@ -259,6 +266,18 @@ function setDataInTableThree() {
     table_3.innerHTML = newHtml;
 }
 
+function setDataFormAddProba() {
+    var breedName_proba = document.getElementById("breedName-proba");
+    var newHtml = "";
+
+    for(var i = 0; i < breeds.length; i++) {
+        newHtml = newHtml + "<option value=\"" + breeds[i].id + "\">" + breeds[i].name_breed + "</option>";
+    }
+
+    breedName_proba.innerHTML = newHtml;
+
+}
+
 async function changeDataSelectForestly(id) {
     forestly = await getForestlyByIdSubjectrf(id);
     drawSelectForestly();
@@ -288,18 +307,6 @@ async function changeDataSelectQuarter(id) {
     drawSelectQuarter();
 }
 
-function setDataFormAddProba() {
-    var breedName_proba = document.getElementById("breedName-proba");
-    var newHtml = "";
-
-    for(var i = 0; i < breeds.length; i++) {
-        newHtml = newHtml + "<option value=\"" + breeds[i].id + "\">" + breeds[i].name_breed + "</option>";
-    }
-
-    breedName_proba.innerHTML = newHtml;
-
-}
-
 function addProba() {
     var breedName_proba = document.getElementById("breedName-proba");
     var proba_021_05 = document.getElementById("proba-0.21-0.5");
@@ -310,9 +317,7 @@ function addProba() {
     var proba_maxheig = document.getElementById("proba-maxheig");
 
     var newData = {
-        id : "",
         id_breed : breedName_proba.value,
-        id_sample : idDocument,
         id_type_of_reproduction : Number(active_type_reproduction),
         to0_2 : Number(proba_02.value),
         from0_21To0_5 : Number(proba_021_05.value),
@@ -353,7 +358,6 @@ function addGps() {
     var longitudeAdd = document.getElementById("longitude-add");
 
     var newGps = {
-        id_sample : idDocument,
         latitude : latitudeAdd.value,
         longitude : longitudeAdd.value,
         flag_center : 1
@@ -415,8 +419,6 @@ function closeAddForm(id) {
 
 }
 
-
-
 async function saveData() {
     var dateForm = document.getElementById("start");
     var regionRFForm = document.getElementById("regionRF");
@@ -429,10 +431,9 @@ async function saveData() {
     var requestData = {
         sample: {
             date : dateForm.value,
-            id : idDocument,
             id_district_forestly : ucLesNameForm.value,
             id_forestly : lesNameForm.value,
-            id_profile : documentData.id_profile,
+            id_profile : dataTable_2[0].id,
             id_quarter : quarterForm.value,
             id_subjectrf : regionRFForm.value,
             profile : dataTable_2[0].value,
@@ -443,7 +444,7 @@ async function saveData() {
         gps_data : dataTable_3
     };
 
-    await getUpdateRecalculationDetailData(requestData);
+    await getCreateRecalculationDetailData(requestData);
 
     getRecalculationOnTrialAreaPage();
 }

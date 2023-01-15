@@ -398,3 +398,6 @@ def getRecalculationOnTrialArea(request):
 
 def getRecalculationOnTrialAreaDetail(request):
     return render(request, 'erp/html/recalculationOnTrialAreaDetail.html', {'idDocument': request.GET.get('id')})
+
+def getRecalculationOnTrialAreaDetailNew(request):
+    return render(request, 'erp/html/recalculationOnTrialAreaDetailNew.html')
