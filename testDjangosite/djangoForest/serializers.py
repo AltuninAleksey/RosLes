@@ -342,7 +342,7 @@ class GetGPS(serializers.Serializer):
 
 
 class GetFromSampleProfileSerializer(serializers.Serializer):
-    id = serializers.IntegerField()
+    id = serializers.IntegerField(source='id_profile.id')
     FIO = serializers.CharField(source='id_profile.FIO')
 
 
