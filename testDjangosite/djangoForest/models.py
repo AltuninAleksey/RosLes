@@ -107,7 +107,7 @@ class Sample(models.Model):
         verbose_name_plural = 'Проба'
 
     def __str__(self):
-        return f"{self.date}, {self.sample_area}, {self.soil_lot}"
+        return f"({self.id})-{self.date}, {self.sample_area}, {self.soil_lot}"
 
 
 class Post(models.Model):
