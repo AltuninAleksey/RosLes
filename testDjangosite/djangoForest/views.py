@@ -443,6 +443,7 @@ class CreateSampleAndOther(generics.ListCreateAPIView):
 
     def put(self, request, *args, **kwargs):
         i = 0
+        j = 0
         try:
             instance = Sample.objects.get(pk=request.data['sample']['id'])
         except:
@@ -467,13 +468,15 @@ class CreateSampleAndOther(generics.ListCreateAPIView):
         #     serializer_list_region = ListRegionSerializer(data=request.data['sample'])
         # serializer_list_region.is_valid(raise_exception=True)
         # serializer_list_region.save()
-        try:
-            instance_gps = GPS.objects.get(pk=request.data['gps_data']['id'])
-            serializer_gps = GPSSerializer(data=request.data['gps_data'], instance=instance_gps)
-        except:
-            serializer_gps = GPSSerializer(data=request.data['gps_data'])
-        serializer_gps.is_valid(raise_exception=True)
-        serializer_gps.save()
+        while j < len(request.data['gps_data']):
+            try:
+                instance_gps = GPS.objects.get(pk=request.data['gps_data'][j]['id'])
+                serializer_gps = GPSSerializer(data=request.data['gps_data'][j], instance=instance_gps)
+            except:
+                serializer_gps = GPSSerializer(data=request.data['gps_data'][j])
+            serializer_gps.is_valid(raise_exception=True)
+            serializer_gps.save()
+            j += 1
         return Response({"sample": serializer.data,
                          # "list_region": serializer_list_region.data,
                          "list": serializer_list.data,
