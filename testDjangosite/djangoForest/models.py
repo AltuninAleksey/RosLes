@@ -87,7 +87,8 @@ class ListRegion(models.Model):
         verbose_name_plural = 'Перечетная ведомость участка'
 
     def __str__(self):
-        return f"{self.date}, {self.soil_lot}"
+        # return f"{self.date}, {self.soil_lot}"
+        return f"{self.id}"
 
 
 class Sample(models.Model):
