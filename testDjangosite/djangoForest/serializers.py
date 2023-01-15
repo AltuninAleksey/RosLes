@@ -322,7 +322,7 @@ class AllForestSerializer(serializers.Serializer):
 
 class GetDocumentListSerializer(serializers.Serializer):
     id = serializers.IntegerField()
-    breed = serializers.CharField(source='id_breed.id')
+    id_breed = serializers.CharField(source='id_breed.id')
     id_sample = serializers.CharField(source='id_sample.id')
     id_type_of_reproduction = serializers.CharField(source='id_type_of_reproduction.id')
     # breed = serializers.CharField(source='id_breed.name_breed')
