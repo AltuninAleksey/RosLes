@@ -407,7 +407,7 @@ class GetSampleListData(viewsets.ViewSet):
 
 class GetAllSampleListData(viewsets.ViewSet):
     def list(self, request, *args, **kwargs):
-        lst = Sample.objects.all().filter(id_list_region = None)
+        lst = Sample.objects.all().filter(id_list_region = None).order_by('-id')
         return JsonResponse({'data': GetAllSampleListDataSerializer(lst, many=True).data}, safe=False)
 
 
