@@ -422,14 +422,16 @@ class CreateSampleAndOther(generics.ListCreateAPIView):
         serializer.save()
         sample_dict = {'id_sample': serializer.data['id']}
         i = 0
+        j = 0
         while i < len(request.data['list_data']):
             request.data['list_data'][i].update(sample_dict)
             i += 1
-        request.data['gps_data'].update(sample_dict)
         request.data['sample'].update(sample_dict)
-        # print(serializer_list_region.data['id'])
+        while j < len(request.data['gps_data']):
+            request.data['gps_data'][j].update(sample_dict)
+            j += 1
         serializer_list = ListSerializer(data=request.data['list_data'], many=True)
-        serializer_gps = GPSSerializer(data=request.data['gps_data'])
+        serializer_gps = GPSSerializer(data=request.data['gps_data'], many=True)
         # serializer_list_region.is_valid(raise_exception=True)
         # serializer_list_region.save()
         serializer_list.is_valid(raise_exception=True)
