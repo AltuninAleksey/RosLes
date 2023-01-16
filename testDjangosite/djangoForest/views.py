@@ -31,7 +31,7 @@ class ProfileView(generics.ListCreateAPIView):
 
     def put(self, request, *args, **kwargs):
         try:
-            instance = Profile.objects.get()
+            instance = Profile.objects.get(pk=kwargs['pk'])
         except:
             return Response({"error": "Объект с данным id не найден"})
 
@@ -60,7 +60,7 @@ class ListView(generics.ListCreateAPIView):
 
     def put(self, request, *args, **kwargs):
         try:
-            instance = List.objects.get()
+            instance = List.objects.get(pk=kwargs['pk'])
         except:
             return Response({"error": "Объект с данным id не найден"})
 
@@ -86,7 +86,7 @@ class GpsView(generics.ListCreateAPIView):
 
     def put(self, request, *args, **kwargs):
         try:
-            instance = GPS.objects.get()
+            instance = GPS.objects.get(pk=kwargs['pk'])
         except:
             return Response({"error": "Объект с данным id не найден"})
 
@@ -120,7 +120,7 @@ class ListRegionView(generics.ListCreateAPIView):
 
     def put(self, request, *args, **kwargs):
         try:
-            instance = ListRegion.objects.get()
+            instance = ListRegion.objects.get(pk=kwargs['pk'])
         except:
             return Response({"error": "Объект с данным id не найден"})
 
@@ -147,7 +147,7 @@ class SampleView(generics.ListCreateAPIView):
 
     def put(self, request, *args, **kwargs):
         try:
-            instance = Sample.objects.get()
+            instance = Sample.objects.get(pk=kwargs['pk'])
         except:
             return Response({"error": "Объект с данным id не найден"})
 
@@ -173,7 +173,7 @@ class PostView(generics.ListCreateAPIView):
 
     def put(self, request, *args, **kwargs):
         try:
-            instance = Post.objects.get()
+            instance = Post.objects.get(pk=kwargs['pk'])
         except:
             return Response({"error": "Объект с данным id не найден"})
 
@@ -199,7 +199,7 @@ class WorkingBreedView(generics.ListCreateAPIView):
 
     def put(self, request, *args, **kwargs):
         try:
-            instance = WorkingBreeds.objects.get()
+            instance = WorkingBreeds.objects.get(pk=kwargs['pk'])
         except:
             return Response({"error": "Объект с данным id не найден"})
 
@@ -225,7 +225,7 @@ class SubjectRFview(generics.ListCreateAPIView):
 
     def put(self, request, *args, **kwargs):
         try:
-            instance = SubjectRF.objects.get()
+            instance = SubjectRF.objects.get(pk=kwargs['pk'])
         except:
             return Response({"error": "Объект с данным id не найден"})
 
@@ -251,7 +251,7 @@ class RoleView(generics.ListCreateAPIView):
 
     def put(self, request, *args, **kwargs):
         try:
-            instance = Role.objects.get()
+            instance = Role.objects.get(pk=kwargs['pk'])
         except:
             return Response({"error": "Объект с данным id не найден"})
 
@@ -277,7 +277,7 @@ class ReproductionView(generics.ListCreateAPIView):
 
     def put(self, request, *args, **kwargs):
         try:
-            instance = Reproduction.objects.get()
+            instance = Reproduction.objects.get(pk=kwargs['pk'])
         except:
             return Response({"error": "Объект с данным id не найден"})
 
@@ -303,7 +303,7 @@ class ForestlyView(generics.ListCreateAPIView):
 
     def put(self, request, *args, **kwargs):
         try:
-            instance = Forestly.objects.get()
+            instance = Forestly.objects.get(pk=kwargs['pk'])
         except:
             return Response({"error": "Объект с данным id не найден"})
 
@@ -330,7 +330,7 @@ class DistrictForestlyView(generics.ListCreateAPIView):
 
     def put(self, request, *args, **kwargs):
         try:
-            instance = DistrictForestly.objects.get()
+            instance = DistrictForestly.objects.get(pk=kwargs['pk'])
         except:
             return Response({"error": "Объект с данным id не найден"})
 
@@ -356,7 +356,6 @@ class QuarterView(generics.ListCreateAPIView):
         return Response({'post': serializer.data})
 
     def put(self, request, *args, **kwargs):
-        print(kwargs['id'])
         try:
             instance = Quarter.objects.get(pk=kwargs['id'])
         except:
@@ -368,7 +367,10 @@ class QuarterView(generics.ListCreateAPIView):
 
 
 class BreedView(generics.ListCreateAPIView):
-    def get(self, request):
+    def get(self, request, **kwargs):
+        if kwargs:
+            lst = Breed.objects.get(pk=kwargs['pk'])
+            return Response({'get': BreedSerializer(lst).data})
         lst = Breed.objects.all()
         return Response({'get': BreedSerializer(lst, many=True).data})
 
@@ -380,7 +382,7 @@ class BreedView(generics.ListCreateAPIView):
 
     def put(self, request, *args, **kwargs):
         try:
-            instance = Breed.objects.get()
+            instance = Breed.objects.get(pk=kwargs['pk'])
         except:
             return Response({"error": "Объект с данным id не найден"})
         serealizer = BreedSerializer(data=request.data, instance=instance)
@@ -390,7 +392,10 @@ class BreedView(generics.ListCreateAPIView):
 
 
 class BranchesView(generics.ListCreateAPIView):
-    def get(self, request):
+    def get(self, request, **kwargs):
+        if kwargs:
+            lst = Branches.objects.get(pk=kwargs['pk'])
+            return Response({'get': BranchesSerializer(lst).data})
         lst = Branches.objects.all()
         return Response({'get': BranchesSerializer(lst, many=True).data})
 
@@ -402,7 +407,7 @@ class BranchesView(generics.ListCreateAPIView):
 
     def put(self, request, *args, **kwargs):
         try:
-            instance = Branches.objects.get()
+            instance = Branches.objects.get(pk=kwargs['pk'])
         except:
             return Response({"error": "Объект с данным id не найден"})
         serealizer = BranchesSerializer(data=request.data, instance=instance)
