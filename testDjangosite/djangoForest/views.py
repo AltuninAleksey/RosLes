@@ -308,9 +308,18 @@ class DistrictForestlyView(generics.ListCreateAPIView):
 
 
 class QuarterView(generics.ListCreateAPIView):
-    def get(self, request):
-        lst = Quarter.objects.all()
-        return Response({'get':QuarterSerializer(lst, many=True).data})
+    def get(self, request, **kwargs):
+        print(kwargs['id'])
+        # print(request.data['id'])
+        if kwargs:
+            lst = Quarter.objects.get(pk=kwargs['id'])
+            # serializer = QuarterSerializer(data=lst)
+            # serializer.is_valid(raise_exception=True)
+            # serializer.save()
+            return Response({'get': QuarterSerializer(lst).data})
+        else:
+            lst = Quarter.objects.all()
+            return Response({'get':QuarterSerializer(lst, many=True).data})
 
     def post(self, request):
         serializer = QuarterSerializer(data=request.data)
@@ -319,8 +328,9 @@ class QuarterView(generics.ListCreateAPIView):
         return Response({'post': serializer.data})
 
     def put(self, request, *args, **kwargs):
+        print(kwargs['id'])
         try:
-            instance = Quarter.objects.get(pk=request.data['id'])
+            instance = Quarter.objects.get(pk=kwargs['id'])
         except:
             return Response({"error": "Объект с данным id не найден"})
         serealizer = QuarterSerializer(data=request.data, instance=instance)

@@ -47,6 +47,7 @@ urlpatterns = [
     path('breed', BreedView.as_view()),
     path('branches', BranchesView.as_view()),
     path('quarter', QuarterView.as_view()),
+    path('quarter/<int:id>', QuarterView.as_view()),
     path('erp/', include('erp.urls')),
     path('general_docs/', include('general_docs.urls')),
 ]
