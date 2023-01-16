@@ -16,7 +16,10 @@ class TestAPIView(generics.ListAPIView):
 
 
 class ProfileView(generics.ListCreateAPIView):
-    def get(self, request):
+    def get(self, request, **kwargs):
+        if kwargs:
+            lst = Profile.objects.get(pk=kwargs['pk'])
+            return Response({'get': ProfileSerializer(lst).data})
         lst = Profile.objects.all()
         return Response({'get': ProfileSerializer(lst, many=True).data})
 
@@ -28,7 +31,7 @@ class ProfileView(generics.ListCreateAPIView):
 
     def put(self, request, *args, **kwargs):
         try:
-            instance = Profile.objects.get(pk=request.data['id'])
+            instance = Profile.objects.get()
         except:
             return Response({"error": "Объект с данным id не найден"})
 
@@ -39,7 +42,10 @@ class ProfileView(generics.ListCreateAPIView):
 
 
 class ListView(generics.ListCreateAPIView):
-    def get(self, request):
+    def get(self, request, **kwargs):
+        if kwargs:
+            lst = List.objects.get(pk=kwargs['pk'])
+            return Response({'get': ListSerializer(lst).data})
         lst = List.objects.all()
         return Response({'get': ListSerializer(lst, many=True).data})
         # return render(request, 'listview/list.html', {
@@ -54,7 +60,7 @@ class ListView(generics.ListCreateAPIView):
 
     def put(self, request, *args, **kwargs):
         try:
-            instance = List.objects.get(pk=request.data['id'])
+            instance = List.objects.get()
         except:
             return Response({"error": "Объект с данным id не найден"})
 
@@ -65,7 +71,10 @@ class ListView(generics.ListCreateAPIView):
 
 
 class GpsView(generics.ListCreateAPIView):
-    def get(self, request):
+    def get(self, request, **kwargs):
+        if kwargs:
+            lst = GPS.objects.get(pk=kwargs['pk'])
+            return Response({'get': GPSSerializer(lst).data})
         lst = GPS.objects.all()
         return Response({'get': GPSSerializer(lst, many=True).data})
 
@@ -77,7 +86,7 @@ class GpsView(generics.ListCreateAPIView):
 
     def put(self, request, *args, **kwargs):
         try:
-            instance = GPS.objects.get(pk=request.data['id'])
+            instance = GPS.objects.get()
         except:
             return Response({"error": "Объект с данным id не найден"})
 
@@ -91,7 +100,6 @@ class ListRegionView(generics.ListCreateAPIView):
     model = ListRegion
 
     def get(self, request, *args, **kwargs):
-        print(kwargs.get('pk'))
         pk = kwargs.get('pk')
         if pk:
             lst = ListRegion.objects.filter(pk=pk)
@@ -112,7 +120,7 @@ class ListRegionView(generics.ListCreateAPIView):
 
     def put(self, request, *args, **kwargs):
         try:
-            instance = ListRegion.objects.get(pk=request.data['id'])
+            instance = ListRegion.objects.get()
         except:
             return Response({"error": "Объект с данным id не найден"})
 
@@ -123,7 +131,10 @@ class ListRegionView(generics.ListCreateAPIView):
 
 
 class SampleView(generics.ListCreateAPIView):
-    def get(self, request):
+    def get(self, request, **kwargs):
+        if kwargs:
+            lst = Sample.objects.get(pk=kwargs['pk'])
+            return Response({'get': SampleSerializer(lst).data})
         lst = Sample.objects.all()
         #         # return Response({'posts': list(lst) })
         return Response({'get': SampleSerializer(lst, many=True).data})
@@ -136,7 +147,7 @@ class SampleView(generics.ListCreateAPIView):
 
     def put(self, request, *args, **kwargs):
         try:
-            instance = Sample.objects.get(pk=request.data['id'])
+            instance = Sample.objects.get()
         except:
             return Response({"error": "Объект с данным id не найден"})
 
@@ -147,7 +158,10 @@ class SampleView(generics.ListCreateAPIView):
 
 
 class PostView(generics.ListCreateAPIView):
-    def get(self, request):
+    def get(self, request, **kwargs):
+        if kwargs:
+            lst = Post.objects.get(pk=kwargs['pk'])
+            return Response({'get': PostSerializer(lst).data})
         lst = Post.objects.all()
         return Response({'get': PostSerializer(lst, many=True).data})
 
@@ -159,7 +173,7 @@ class PostView(generics.ListCreateAPIView):
 
     def put(self, request, *args, **kwargs):
         try:
-            instance = Post.objects.get(pk=request.data['id'])
+            instance = Post.objects.get()
         except:
             return Response({"error": "Объект с данным id не найден"})
 
@@ -170,7 +184,10 @@ class PostView(generics.ListCreateAPIView):
 
 
 class WorkingBreedView(generics.ListCreateAPIView):
-    def get(self, request):
+    def get(self, request, **kwargs):
+        if kwargs:
+            lst = WorkingBreeds.objects.get(pk=kwargs['pk'])
+            return Response({'get': WorkingBreedsSerializer(lst).data})
         lst = WorkingBreeds.objects.all()
         return Response({'get': WorkingBreedsSerializer(lst, many=True).data})
 
@@ -182,7 +199,7 @@ class WorkingBreedView(generics.ListCreateAPIView):
 
     def put(self, request, *args, **kwargs):
         try:
-            instance = WorkingBreeds.objects.get(pk=request.data['id'])
+            instance = WorkingBreeds.objects.get()
         except:
             return Response({"error": "Объект с данным id не найден"})
 
@@ -193,7 +210,10 @@ class WorkingBreedView(generics.ListCreateAPIView):
 
 
 class SubjectRFview(generics.ListCreateAPIView):
-    def get(self, request):
+    def get(self, request, **kwargs):
+        if kwargs:
+            lst = SubjectRF.objects.get()
+            return Response({'get': SubjectRFSerializer(lst).data})
         lst = SubjectRF.objects.all()
         return Response({'get': SubjectRFSerializer(lst, many=True).data})
 
@@ -205,7 +225,7 @@ class SubjectRFview(generics.ListCreateAPIView):
 
     def put(self, request, *args, **kwargs):
         try:
-            instance = SubjectRF.objects.get(pk=request.data['id'])
+            instance = SubjectRF.objects.get()
         except:
             return Response({"error": "Объект с данным id не найден"})
 
@@ -216,7 +236,10 @@ class SubjectRFview(generics.ListCreateAPIView):
 
 
 class RoleView(generics.ListCreateAPIView):
-    def get(self, request):
+    def get(self, request, **kwargs):
+        if kwargs:
+            lst = Role.objects.get()
+            return Response({'get': RoleSerializer(lst).data})
         lst = Role.objects.all()
         return Response({'get': RoleSerializer(lst, many=True).data})
 
@@ -228,7 +251,7 @@ class RoleView(generics.ListCreateAPIView):
 
     def put(self, request, *args, **kwargs):
         try:
-            instance = Role.objects.get(pk=request.data['id'])
+            instance = Role.objects.get()
         except:
             return Response({"error": "Объект с данным id не найден"})
 
@@ -239,7 +262,10 @@ class RoleView(generics.ListCreateAPIView):
 
 
 class ReproductionView(generics.ListCreateAPIView):
-    def get(self, request):
+    def get(self, request, **kwargs):
+        if kwargs:
+            lst = Reproduction.objects.get()
+            return Response({'get': ReproductionSerializer(lst).data})
         lst = Reproduction.objects.all()
         return Response({'get': ReproductionSerializer(lst, many=True).data})
 
@@ -251,7 +277,7 @@ class ReproductionView(generics.ListCreateAPIView):
 
     def put(self, request, *args, **kwargs):
         try:
-            instance = Reproduction.objects.get(pk=request.data['id'])
+            instance = Reproduction.objects.get()
         except:
             return Response({"error": "Объект с данным id не найден"})
 
@@ -262,7 +288,10 @@ class ReproductionView(generics.ListCreateAPIView):
 
 
 class ForestlyView(generics.ListCreateAPIView):
-    def get(self, request):
+    def get(self, request, **kwargs):
+        if kwargs:
+            lst = Forestly.objects.get()
+            return Response({'get': ForestlySerializer(lst).data})
         lst = Forestly.objects.all()
         return Response({'get': ForestlySerializer(lst, many=True).data})
 
@@ -274,7 +303,7 @@ class ForestlyView(generics.ListCreateAPIView):
 
     def put(self, request, *args, **kwargs):
         try:
-            instance = Forestly.objects.get(pk=request.data['id'])
+            instance = Forestly.objects.get()
         except:
             return Response({"error": "Объект с данным id не найден"})
 
@@ -285,8 +314,12 @@ class ForestlyView(generics.ListCreateAPIView):
 
 
 class DistrictForestlyView(generics.ListCreateAPIView):
-    def get(self, request):
-        lst = DistrictForestly.objects.all()
+    def get(self, request, **kwargs):
+        if kwargs:
+            lst = DistrictForestly.objects.get()
+            return Response({'get': DistrictForestlySerializer(lst).data})
+        else:
+            lst = DistrictForestly.objects.all()
         return Response({'get': DistrictForestlySerializer(lst, many=True).data})
 
     def post(self, request):
@@ -297,7 +330,7 @@ class DistrictForestlyView(generics.ListCreateAPIView):
 
     def put(self, request, *args, **kwargs):
         try:
-            instance = DistrictForestly.objects.get(pk=request.data['id'])
+            instance = DistrictForestly.objects.get()
         except:
             return Response({"error": "Объект с данным id не найден"})
 
@@ -309,13 +342,8 @@ class DistrictForestlyView(generics.ListCreateAPIView):
 
 class QuarterView(generics.ListCreateAPIView):
     def get(self, request, **kwargs):
-        print(kwargs['id'])
-        # print(request.data['id'])
         if kwargs:
-            lst = Quarter.objects.get(pk=kwargs['id'])
-            # serializer = QuarterSerializer(data=lst)
-            # serializer.is_valid(raise_exception=True)
-            # serializer.save()
+            lst = Quarter.objects.get()
             return Response({'get': QuarterSerializer(lst).data})
         else:
             lst = Quarter.objects.all()
@@ -352,7 +380,7 @@ class BreedView(generics.ListCreateAPIView):
 
     def put(self, request, *args, **kwargs):
         try:
-            instance = Breed.objects.get(pk=request.data['id'])
+            instance = Breed.objects.get()
         except:
             return Response({"error": "Объект с данным id не найден"})
         serealizer = BreedSerializer(data=request.data, instance=instance)
@@ -374,7 +402,7 @@ class BranchesView(generics.ListCreateAPIView):
 
     def put(self, request, *args, **kwargs):
         try:
-            instance = Branches.objects.get(pk=request.data["id"])
+            instance = Branches.objects.get()
         except:
             return Response({"error": "Объект с данным id не найден"})
         serealizer = BranchesSerializer(data=request.data, instance=instance)
@@ -466,7 +494,7 @@ class CreateSampleAndOther(generics.ListCreateAPIView):
         i = 0
         j = 0
         try:
-            instance = Sample.objects.get(pk=request.data['sample']['id'])
+            instance = Sample.objects.get()
         except:
             return Response({"error": "Объект с данным id не найден"})
         serializer = SampleSerializer(data=request.data['sample'], instance=instance)
@@ -475,7 +503,7 @@ class CreateSampleAndOther(generics.ListCreateAPIView):
         if len(request.data['list_data']) != 0:
             while i < len(request.data['list_data']):
                 try:
-                    instance_list = List.objects.get(pk=request.data['list_data'][i]['id'])
+                    instance_list = List.objects.get()
                     serializer_list = ListSerializer(data=request.data['list_data'][i], instance=instance_list)
                 except:
                     serializer_list = ListSerializer(data=request.data['list_data'][i])
@@ -496,7 +524,7 @@ class CreateSampleAndOther(generics.ListCreateAPIView):
         if len(request.data['gps_data']) != 0:
             while j < len(request.data['gps_data']):
                 try:
-                    instance_gps = GPS.objects.get(pk=request.data['gps_data'][j]['id'])
+                    instance_gps = GPS.objects.get()
                     serializer_gps = GPSSerializer(data=request.data['gps_data'][j], instance=instance_gps)
                 except:
                     serializer_gps = GPSSerializer(data=request.data['gps_data'][j])
