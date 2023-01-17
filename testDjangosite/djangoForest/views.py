@@ -508,7 +508,8 @@ class CreateSampleAndOther(generics.ListCreateAPIView):
         if len(request.data['list_data']) != 0:
             while i < len(request.data['list_data']):
                 try:
-                    instance_list = List.objects.get(pk=request.data['list_data']['id'][i])
+                    print(request.data['list_data'][i]['id'])
+                    instance_list = List.objects.get(pk=request.data['list_data'][i]['id'])
                     serializer_list = ListSerializer(data=request.data['list_data'][i], instance=instance_list)
                 except:
                     serializer_list = ListSerializer(data=request.data['list_data'][i])
@@ -529,7 +530,7 @@ class CreateSampleAndOther(generics.ListCreateAPIView):
         if len(request.data['gps_data']) != 0:
             while j < len(request.data['gps_data']):
                 try:
-                    instance_gps = GPS.objects.get(pk=request.data['gps_data']['id'][j])
+                    instance_gps = GPS.objects.get(pk=request.data['gps_data'][j]['id'])
                     serializer_gps = GPSSerializer(data=request.data['gps_data'][j], instance=instance_gps)
                 except:
                     serializer_gps = GPSSerializer(data=request.data['gps_data'][j])
