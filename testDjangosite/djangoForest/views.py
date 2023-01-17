@@ -212,7 +212,7 @@ class WorkingBreedView(generics.ListCreateAPIView):
 class SubjectRFview(generics.ListCreateAPIView):
     def get(self, request, **kwargs):
         if kwargs:
-            lst = SubjectRF.objects.get()
+            lst = SubjectRF.objects.get(pk=kwargs['pk'])
             return Response({'get': SubjectRFSerializer(lst).data})
         lst = SubjectRF.objects.all()
         return Response({'get': SubjectRFSerializer(lst, many=True).data})
@@ -499,7 +499,7 @@ class CreateSampleAndOther(generics.ListCreateAPIView):
         i = 0
         j = 0
         try:
-            instance = Sample.objects.get()
+            instance = Sample.objects.get(pk=request.data['sample']['id'])
         except:
             return Response({"error": "Объект с данным id не найден"})
         serializer = SampleSerializer(data=request.data['sample'], instance=instance)
@@ -508,7 +508,7 @@ class CreateSampleAndOther(generics.ListCreateAPIView):
         if len(request.data['list_data']) != 0:
             while i < len(request.data['list_data']):
                 try:
-                    instance_list = List.objects.get()
+                    instance_list = List.objects.get(pk=request.data['list_data']['id'][i])
                     serializer_list = ListSerializer(data=request.data['list_data'][i], instance=instance_list)
                 except:
                     serializer_list = ListSerializer(data=request.data['list_data'][i])
@@ -529,7 +529,7 @@ class CreateSampleAndOther(generics.ListCreateAPIView):
         if len(request.data['gps_data']) != 0:
             while j < len(request.data['gps_data']):
                 try:
-                    instance_gps = GPS.objects.get()
+                    instance_gps = GPS.objects.get(pk=request.data['gps_data']['id'][j])
                     serializer_gps = GPSSerializer(data=request.data['gps_data'][j], instance=instance_gps)
                 except:
                     serializer_gps = GPSSerializer(data=request.data['gps_data'][j])
