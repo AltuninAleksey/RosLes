@@ -238,7 +238,7 @@ class SubjectRFview(generics.ListCreateAPIView):
 class RoleView(generics.ListCreateAPIView):
     def get(self, request, **kwargs):
         if kwargs:
-            lst = Role.objects.get()
+            lst = Role.objects.get(pk=kwargs['pk'])
             return Response({'get': RoleSerializer(lst).data})
         lst = Role.objects.all()
         return Response({'get': RoleSerializer(lst, many=True).data})
@@ -264,7 +264,7 @@ class RoleView(generics.ListCreateAPIView):
 class ReproductionView(generics.ListCreateAPIView):
     def get(self, request, **kwargs):
         if kwargs:
-            lst = Reproduction.objects.get()
+            lst = Reproduction.objects.get(pk=kwargs['pk'])
             return Response({'get': ReproductionSerializer(lst).data})
         lst = Reproduction.objects.all()
         return Response({'get': ReproductionSerializer(lst, many=True).data})
@@ -290,7 +290,7 @@ class ReproductionView(generics.ListCreateAPIView):
 class ForestlyView(generics.ListCreateAPIView):
     def get(self, request, **kwargs):
         if kwargs:
-            lst = Forestly.objects.get()
+            lst = Forestly.objects.get(pk=kwargs['pk'])
             return Response({'get': ForestlySerializer(lst).data})
         lst = Forestly.objects.all()
         return Response({'get': ForestlySerializer(lst, many=True).data})
@@ -316,7 +316,7 @@ class ForestlyView(generics.ListCreateAPIView):
 class DistrictForestlyView(generics.ListCreateAPIView):
     def get(self, request, **kwargs):
         if kwargs:
-            lst = DistrictForestly.objects.get()
+            lst = DistrictForestly.objects.get(pk=kwargs['pk'])
             return Response({'get': DistrictForestlySerializer(lst).data})
         else:
             lst = DistrictForestly.objects.all()
@@ -343,7 +343,7 @@ class DistrictForestlyView(generics.ListCreateAPIView):
 class QuarterView(generics.ListCreateAPIView):
     def get(self, request, **kwargs):
         if kwargs:
-            lst = Quarter.objects.get()
+            lst = Quarter.objects.get(pk=kwargs['pk'])
             return Response({'get': QuarterSerializer(lst).data})
         else:
             lst = Quarter.objects.all()
