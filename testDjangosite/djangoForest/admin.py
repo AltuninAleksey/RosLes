@@ -173,6 +173,13 @@ class PhotoPointAdmin(admin.ModelAdmin):
     search_fields = ('id', 'photo')
 
 
+class TrackingAdmin(admin.ModelAdmin):
+    list_display = ('id', 'id_profile', 'data', 'map')
+    list_display_links = ('id', 'id_profile', 'data', 'map')
+    search_fields = ('id', 'id_profile', 'data', 'map')
+
+
+admin.site.register(Track, TrackingAdmin)
 admin.site.register(PhotoPoint, PhotoPointAdmin)
 admin.site.register(ForestAreas, ForestAreasAdmin)
 admin.site.register(PurposeOfForests, PurposeOfForestsAdmin)    # Целевое назначение лесов

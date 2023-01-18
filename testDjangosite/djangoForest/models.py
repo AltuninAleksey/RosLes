@@ -17,6 +17,16 @@ class Users(models.Model):
 
 class CheckTrigger(models.Model):
     bool = models.BooleanField(default=False)
+    
+
+class Track(models.Model):
+    id_profile = models.ForeignKey('Profile', on_delete=models.CASCADE, verbose_name='Профиль')
+    data = models.DateField()
+    map = models.CharField(max_length=1)
+
+    class Meta:
+        verbose_name = 'Трекинг'
+        verbose_name_plural = 'Трекинг'
 
 class PhotoPoint(models.Model):
     photo = models.ImageField(upload_to="photos/%Y/%m/%d/")
@@ -203,6 +213,8 @@ class Quarter(models.Model):
 
 class Breed(models.Model):
     name_breed = models.CharField(max_length=350, verbose_name='Наименование породы')
+    is_pine = models.BooleanField(null=True, default=0, verbose_name="Хвойное")
+    is_foliar = models.BooleanField(null=True, default=0, verbose_name="Лиственное")
 
     def __str__(self):
         return self.name_breed
