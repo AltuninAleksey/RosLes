@@ -516,7 +516,6 @@ class CreateSampleAndOther(generics.ListCreateAPIView):
         if len(request.data['list_data']) != 0:
             while i < len(request.data['list_data']):
                 try:
-                    print(request.data['list_data'][i]['id'])
                     instance_list = List.objects.get(pk=request.data['list_data'][i]['id'])
                     serializer_list = ListSerializer(data=request.data['list_data'][i], instance=instance_list)
                 except:

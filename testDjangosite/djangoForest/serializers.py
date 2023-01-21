@@ -336,6 +336,7 @@ class GetDocumentListSerializer(serializers.Serializer):
 
 class GetGPS(serializers.Serializer):
     id = serializers.IntegerField()
+    id_sample = serializers.CharField(source='id_sample.id')
     latitude = serializers.FloatField()
     longitude = serializers.FloatField()
     flag_center = serializers.IntegerField()
@@ -391,6 +392,7 @@ class GetQuarterByDistrictForestlyIdSerializer(serializers.Serializer):
 
 class GetAllListRegionDataSerializer(serializers.Serializer):
     id = serializers.IntegerField()
+    date = serializers.DateField()
     sample_region = serializers.CharField()
     id_quarter = serializers.CharField()
     id_district_forestly = serializers.IntegerField(source="id_quarter.id_district_forestly.id")
