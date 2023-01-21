@@ -348,7 +348,7 @@ class GetFromSampleProfileSerializer(serializers.Serializer):
 
 class GetSampleListDataSerializer(serializers.Serializer):
     id = serializers.IntegerField()
-    id_list_region = serializers.IntegerField()
+    id_list_region = serializers.CharField()
     id_quarter = serializers.CharField(source='id_quarter.id')
     id_district_forestly = serializers.CharField(source='id_quarter.id_district_forestly.id')
     id_forestly = serializers.CharField(source='id_quarter.id_district_forestly.id_forestly.id')
