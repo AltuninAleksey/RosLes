@@ -89,7 +89,7 @@ class SubjectRFDelete(DeleteView):
     template_name = 'erp/html/subjectRF.html'
 
     def delete(self, request, pk):
-        subject = SubjectRF.objects.get(pk=pk)
+        subject = SubjectRF.objects.get()
         subject.delete()
         return redirect('SubjectRF')
 
@@ -101,7 +101,7 @@ class SubjectRFUpdate(UpdateView):
     form_class = SubjectRFUpdateForm
 
     def post(self, request, pk):
-        subject = SubjectRF.objects.get(pk=pk)
+        subject = SubjectRF.objects.get()
         subject.name_subject_RF = request.POST.get('name_subject_RF')
         subject.save()
         return redirect('SubjectRF')
@@ -142,7 +142,7 @@ class PostViewDelete(DeleteView):
     template_name = 'erp/html/post.html'
 
     def delete(self, request, pk):
-        post = Post.objects.get(pk=pk)
+        post = Post.objects.get()
         post.delete()
         return redirect('PostView')
 
@@ -154,7 +154,7 @@ class PostViewUpdate(UpdateView):
     form_class = PostUpdateForm
 
     def post(self, request, pk):
-        post = Post.objects.get(pk=pk)
+        post = Post.objects.get()
         post.post_name = request.POST.get('post_name')
         post.save()
         return redirect('PostView')
@@ -195,7 +195,7 @@ class ForestlyViewDelete(DeleteView):
     template_name = 'erp/html/forestly.html'
 
     def post(self, request, pk):
-        forestly = Forestly.objects.get(pk=pk)
+        forestly = Forestly.objects.get()
         forestly.delete()
         return redirect('ForestlyView')
 
@@ -206,7 +206,7 @@ class ForestlyUpdateView(UpdateView):
     template_name = 'erp/html/forestly.html'
 
     def post(self, request, pk):
-        forestly = Forestly.objects.get(pk=pk)
+        forestly = Forestly.objects.get()
         forestly.name_forestly = request.POST.get('name_forestly')
         # forestly.id_subject_rf = request.POST.get('subjectrf')
         forestly.save()
@@ -243,7 +243,7 @@ class DistrictForestlyDelete(DeleteView):
     template_name = 'erp/html/district_forestly.html'
 
     def post(self, request, pk):
-        district_forestly = DistrictForestly.objects.get(pk=pk)
+        district_forestly = DistrictForestly.objects.get()
         district_forestly.delete()
         return redirect('DistrictView')
 
@@ -254,7 +254,7 @@ class DistrictForestlyUpdateView(UpdateView):
     template_name = 'erp/html/district_forestly.html'
 
     def post(self, request, pk):
-        district_forestly = DistrictForestly.objects.get(pk=pk)
+        district_forestly = DistrictForestly.objects.get()
         district_forestly.name_district_forestly = request.POST.get('name_district_forestly')
         # forestly.id_subject_rf = request.POST.get('subjectrf')
         district_forestly.save()
@@ -291,7 +291,7 @@ class RoleDelete(DeleteView):
     template_name = 'erp/html/role.html'
 
     def post(self, request, pk):
-        role = Role.objects.get(pk=pk)
+        role = Role.objects.get()
         role.delete()
         return redirect('RoleView')
 
@@ -302,7 +302,7 @@ class RoleUpdate(UpdateView):
     template_name = 'erp/html/role.html'
 
     def post(self, request, pk):
-        role = Role.objects.get(pk=pk)
+        role = Role.objects.get()
         role.name_role = request.POST.get('name_role')
         # instanse = SubjectRF.objects.get(pk=request.POST.get('subjectrf')
         # forestly.id_subject_rf = instance.name_subject_RF
@@ -341,7 +341,7 @@ class BranchesDelete(DeleteView):
     template_name = 'erp/html/branches.html'
 
     def post(self, request, pk):
-        branch = Branches.objects.get(pk=pk)
+        branch = Branches.objects.get()
         branch.delete()
         return redirect('BranchesView')
 
@@ -352,7 +352,7 @@ class BranchesUpdate(UpdateView):
     template_name = 'erp/html/branches.html'
 
     def post(self, request, pk):
-        branch = Branches.objects.get(pk=pk)
+        branch = Branches.objects.get()
         branch.name_branch = request.POST.get('name_branch')
         branch.save()
         return redirect('BranchesView')

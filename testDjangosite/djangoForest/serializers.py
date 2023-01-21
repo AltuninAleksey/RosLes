@@ -394,9 +394,9 @@ class GetAllListRegionDataSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     date = serializers.DateField()
     sample_region = serializers.CharField()
-    id_quarter = serializers.CharField()
+    id_quarter = serializers.CharField(source='id_quarter.id')
     id_district_forestly = serializers.IntegerField(source="id_quarter.id_district_forestly.id")
     id_forestly = serializers.IntegerField(source="id_quarter.id_district_forestly.id_forestly.id")
-    id_subject_rf = serializers.IntegerField(source="id_quarter.id_district_forestly.id_forestly.id")
+    id_subject_rf = serializers.IntegerField(source="id_quarter.id_district_forestly.id_forestly.id_subject_rf.id")
     soil_lot = serializers.CharField()
 
