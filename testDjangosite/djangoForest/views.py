@@ -450,8 +450,16 @@ class GetSampleListData(viewsets.ViewSet):
 
 class GetAllSampleListData(viewsets.ViewSet):
     def list(self, request, *args, **kwargs):
-        lst = Sample.objects.all().filter(id_list_region = None).order_by('-id')
+        # lst = Sample.objects.all().filter(id_list_region = None).order_by('-id')
+        lst = Sample.objects.all()
         return JsonResponse({'data': GetAllSampleListDataSerializer(lst, many=True).data}, safe=False)
+
+
+class GetAllListRegionData(viewsets.ViewSet):
+
+    def list(self, request, **kwargs):
+        lst = ListRegion.objects.all()
+        return JsonResponse({'data': GetAllListRegionDataSerializer(lst, many=True).data}, safe=False)
 
 
 class CreateSampleAndOther(generics.ListCreateAPIView):
@@ -520,13 +528,6 @@ class CreateSampleAndOther(generics.ListCreateAPIView):
         else:
             serializer_list = ListSerializer(data="")
             serializer_list.is_valid(raise_exception=False)
-        # try:
-        #     instance_list_region = ListRegion.objects.get(pk=request.data['sample']['id_list_region'])
-        #     serializer_list_region = ListRegionSerializer(data=request.data['sample'], instance=instance_list_region)
-        # except:
-        #     serializer_list_region = ListRegionSerializer(data=request.data['sample'])
-        # serializer_list_region.is_valid(raise_exception=True)
-        # serializer_list_region.save()
         if len(request.data['gps_data']) != 0:
             while j < len(request.data['gps_data']):
                 try:
@@ -569,6 +570,11 @@ class GetQuarterByDistrictId(viewsets.ViewSet):
 
         return JsonResponse({'data': GetQuarterByDistrictForestlyIdSerializer(lst, many=True).data}, safe=False)
 
+
+class AutUsers(viewsets.ViewSet):
+
+    def list(self, request, **kwargs):
+        pass
 
 
 class ForestViewSet(viewsets.ModelViewSet):
