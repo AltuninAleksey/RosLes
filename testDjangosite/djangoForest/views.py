@@ -573,10 +573,13 @@ class GetQuarterByDistrictId(viewsets.ViewSet):
 class UnionListRegions(generics.ListCreateAPIView):
 
     def get(self, request, **kwargs):
-        lst = Sample.objects.filter(id_list_region = request.data['id2']).update(id_list_region = request.data['id1'])
-        object_region = ListRegion.objects.get(id=request.data['id2'])
-        object_region.delete()
-        return JsonResponse({'result': 'success'})
+        try:
+            lst = Sample.objects.filter(id_list_region = request.data['id2']).update(id_list_region = request.data['id1'])
+            object_region = ListRegion.objects.get(id=request.data['id2'])
+            object_region.delete()
+            return JsonResponse({'result': 'success'})
+        except:
+            return JsonResponse({'result': 'error'})
 
 class ForestViewSet(viewsets.ModelViewSet):
     pass
