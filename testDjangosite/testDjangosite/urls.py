@@ -31,6 +31,7 @@ urlpatterns = [
     path('getdistrictbyforestly/<int:pk>', GetDistrictForestlyByForestlyId.as_view({'get':'list'})),
     path('getquarterbydistrictid/<int:pk>', GetQuarterByDistrictId.as_view({'get':'list'})),
     path('getalllistregion', GetAllListRegionData.as_view({'get':'list'})),
+    path('unionlistregion', UnionListRegions.as_view()),
     path('subjectRF', SubjectRFview.as_view()),
     path('subjectRF/<int:pk>', SubjectRFview.as_view()),
     path('profile', ProfileView.as_view()),
