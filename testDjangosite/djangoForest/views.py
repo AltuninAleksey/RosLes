@@ -5,6 +5,7 @@ from django.http import JsonResponse, HttpResponse
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework import viewsets, permissions
+from rest_framework.authtoken.models import Token
 from djangoForest.serializers import *
 from collections import namedtuple
 
@@ -570,6 +571,8 @@ class GetQuarterByDistrictId(viewsets.ViewSet):
         return JsonResponse({'data': GetQuarterByDistrictForestlyIdSerializer(lst, many=True).data}, safe=False)
 
 
+
+
 class UnionListRegions(generics.ListCreateAPIView):
 
     def get(self, request, **kwargs):
@@ -580,6 +583,29 @@ class UnionListRegions(generics.ListCreateAPIView):
             return JsonResponse({'result': 'success'})
         except:
             return JsonResponse({'result': 'error'})
+
+
+class UserRegistration(generics.ListCreateAPIView):
+
+    def post(self, request, **kwargs):
+        serializers = ProfileSerializer(data=request.data, context={'request':request})
+        serializers.is_valid(raise_exception=True)
+        serializers.save()
+        user = serializers.data['id']
+        token, created = Token.objects.get_or_create(user_id=user)
+        return Response({
+            'token': token.key,
+        })
+
+
+class UserAuth(generics.ListCreateAPIView):
+
+    def get(self, request, **kwargs):
+        user = Users.objects.filter(email = request.data['email'], password = request.data['password']).values('id').get()
+        token = Token.objects.get(user_id = user['id'])
+        return Response({
+            'token': token.key
+        })
 
 class ForestViewSet(viewsets.ModelViewSet):
     pass

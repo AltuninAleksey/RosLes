@@ -21,6 +21,8 @@ from djangoForest.views import *
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('djangoForest.urls')),
+    path('auth', UserAuth.as_view()),
+    path('registration', UserRegistration.as_view()),
     path('sampleandother', CreateSampleAndOther.as_view()),
     path('api/v1/gettable', TestAPIView.as_view()),
     path('allforest', AllForestlyViewSet.as_view({'get': 'list'})),
@@ -61,7 +63,7 @@ urlpatterns = [
     path('branches', BranchesView.as_view()),
     path('branches/<int:pk>', BranchesView.as_view()),
     path('quarter', QuarterView.as_view()),
-    path('quarter/<int:id>', QuarterView.as_view()),
+    path('quarter/<int:pk>', QuarterView.as_view()),
     path('erp/', include('erp.urls')),
     path('general_docs/', include('general_docs.urls')),
 ]
