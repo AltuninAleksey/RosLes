@@ -604,10 +604,10 @@ class UserAuth(generics.ListCreateAPIView):
 
     def get(self, request, **kwargs):
         user = Users.objects.filter(email = request.data['email'], password = request.data['password']).values('id').get()
-        profile = Profile.objects.filter(id_user_id = user['id']).values('id').get()
+        profile = Profile.objects.filter(id_user_id = user['id']).values('id', 'FIO').get()
         return Response({
             'id_user': user['id'],
-            'id_profile': profile['id']
+            'id_profile': profile
         })
 
 
