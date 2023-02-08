@@ -588,13 +588,15 @@ class UnionListRegions(generics.ListCreateAPIView):
 class UserRegistration(generics.ListCreateAPIView):
 
     def post(self, request, **kwargs):
+        user_serializer = UserSerializer(data=request.data)
+        user_serializer.is_valid(raise_exception=True)
+        user_serializer.save()
+        request.data.update({'id_user': user_serializer.data['id']})
         serializers = ProfileSerializer(data=request.data, context={'request':request})
         serializers.is_valid(raise_exception=True)
         serializers.save()
-        user = serializers.data['id']
-        token, created = Token.objects.get_or_create(user_id=user)
         return Response({
-            'token': token.key,
+            "profile": serializers.data
         })
 
 
@@ -602,10 +604,12 @@ class UserAuth(generics.ListCreateAPIView):
 
     def get(self, request, **kwargs):
         user = Users.objects.filter(email = request.data['email'], password = request.data['password']).values('id').get()
-        token = Token.objects.get(user_id = user['id'])
+        profile = Profile.objects.filter(id_user_id = user['id']).values('id').get()
         return Response({
-            'token': token.key
+            'id_user': user['id'],
+            'id_profile': profile['id']
         })
+
 
 class ForestViewSet(viewsets.ModelViewSet):
     pass

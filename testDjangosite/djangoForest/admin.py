@@ -10,9 +10,9 @@ class TodoAdmin(admin.ModelAdmin):
 
 
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ('id', 'FIO', 'phoneNumber', 'email', 'id_post', 'id_working_breeds', 'id_role', 'id_branches')
-    list_display_links = ('id', 'FIO', 'phoneNumber', 'email', 'id_post', 'id_working_breeds', 'id_role', 'id_branches')
-    search_fields = ('id', 'FIO', 'phoneNumber', 'email', 'id_post', 'id_working_breeds', 'id_role', 'id_branches')
+    list_display = ('id', 'FIO', 'phoneNumber', 'id_post', 'id_role', 'id_branches')
+    list_display_links = ('id', 'FIO', 'phoneNumber', 'id_post', 'id_role', 'id_branches')
+    search_fields = ('id', 'FIO', 'phoneNumber', 'id_post', 'id_role', 'id_branches')
 
 
 class ListAdmin(admin.ModelAdmin):

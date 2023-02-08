@@ -56,10 +56,8 @@ class Profile(models.Model):
     FIO = models.CharField(u'ФИО', max_length=255)
     id_user = models.ForeignKey('Users', on_delete=models.CASCADE, verbose_name='Пользователь', null=True)
     phoneNumber = models.CharField(u'Номер телефона', max_length=30)
-    email = models.EmailField(u'e-mail адрес')
     # password = models.CharField(u'Пароль', max_length=100)
     id_post = models.ForeignKey("Post", on_delete=models.CASCADE, verbose_name='Должность', null=True)
-    id_working_breeds = models.ForeignKey('WorkingBreeds', on_delete=models.CASCADE, verbose_name='Рабочая порода', null=True)
     id_role = models.ForeignKey('Role', on_delete=models.CASCADE, verbose_name='Роль', null=True)
     id_branches = models.ForeignKey('Branches', on_delete=models.CASCADE, verbose_name='Филиал', null=True)
 
@@ -116,6 +114,7 @@ class ListRegion(models.Model):
     sample_region = models.CharField(u'Плошадь участка, га', max_length=300)
     id_quarter = models.ForeignKey("Quarter", on_delete=models.CASCADE, verbose_name="Квартал", null=True)
     soil_lot = models.CharField(max_length=300, verbose_name='Выдел')
+    mark_del = models.BooleanField(default=0)
 
     class Meta:
         verbose_name = 'Перечетная ведомость участка'
