@@ -47,6 +47,7 @@ class Track(models.Model):
 
 class PhotoPoint(models.Model):
     photo = models.ImageField(upload_to="photos/%Y/%m/%d/")
+    id_sample = models.ForeignKey("Sample", on_delete=models.CASCADE, verbose_name='Проба', null = True)
 
     class Meta:
         verbose_name = 'Фото точка'
@@ -241,6 +242,11 @@ class Quarter(models.Model):
 class ForestFormingByDefault(models.Model):
     id_profile = models.ForeignKey('Profile', on_delete = models.CASCADE, verbose_name='Профиль')
     id_breed = models.ForeignKey('Breed', on_delete= models.CASCADE, verbose_name='Порода')
+
+    def save(self, *args,  **kwargs):
+        if ForestFormingByDefault.objects.get(id_profile_id = self.id_profile, id_breed_id = self.id_breed):
+            return self
+        super(ForestFormingByDefault, self).save(*args, **kwargs)
 
     class Meta:
         verbose_name = "Лесообразующие породы по умолчанию"
