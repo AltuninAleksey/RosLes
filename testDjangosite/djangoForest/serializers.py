@@ -414,7 +414,7 @@ class PhotoPointSerializer(serializers.Serializer):
 
     class Meta:
         model = PhotoPoint
-        fields = ('photo')
+        fields = '__all__'
 
     def create(self, validated_data):
         return PhotoPoint.objects.create(**validated_data)

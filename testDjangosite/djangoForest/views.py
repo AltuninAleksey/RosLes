@@ -622,8 +622,8 @@ class UserAuth(generics.ListCreateAPIView):
 class PhotoPointView(APIView):
     parser_classes = (FormParser, MultiPartParser, FileUploadParser)
     def post(self, request, format = None):
-        if len(request.data):
-            return HttpResponse({"400_BAD_REQUEST\nempty content"}, status=400)
+        if request.data['photo'] == '':
+            return HttpResponse({"no image"}, status=400)
         serializer_photo = PhotoPointSerializer(data=request.data)
         if serializer_photo.is_valid():
             serializer_photo.save(photo=request.data.get('photo'))
