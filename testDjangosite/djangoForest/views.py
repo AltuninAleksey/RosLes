@@ -626,7 +626,8 @@ class PhotoPointView(APIView):
             return HttpResponse({"no image"}, status=400)
         serializer_photo = PhotoPointSerializer(data=request.data)
         if serializer_photo.is_valid():
-            serializer_photo.save(photo=request.data.get('photo'))
+            serializer_photo.save(id_sample_id = request.data.get('id'),
+            photo=request.data.get('photo'))
             return HttpResponse(status=201)
         return Response(serializer_photo.errors, status=400)
 
