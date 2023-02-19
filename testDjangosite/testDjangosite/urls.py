@@ -21,6 +21,7 @@ from djangoForest.views import *
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('djangoForest.urls')),
+    path('upload', PhotoPointView.as_view()),
     path('auth', UserAuth.as_view()),
     path('registration', UserRegistration.as_view()),
     path('sampleandother', CreateSampleAndOther.as_view()),

@@ -409,3 +409,12 @@ class GetAllListRegionDataSerializer(serializers.Serializer):
     id_subject_rf = serializers.IntegerField(source="id_quarter.id_district_forestly.id_forestly.id_subject_rf.id")
     soil_lot = serializers.CharField()
 
+
+class PhotoPointSerializer(serializers.Serializer):
+
+    class Meta:
+        model = PhotoPoint
+        fields = ('photo')
+
+    def create(self, validated_data):
+        return PhotoPoint.objects.create(**validated_data)

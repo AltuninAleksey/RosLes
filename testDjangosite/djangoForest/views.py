@@ -3,9 +3,12 @@ import json
 import simplejson
 from django.http import JsonResponse, HttpResponse
 from rest_framework import generics
+from rest_framework.parsers import FileUploadParser, MultiPartParser, FormParser
 from rest_framework.response import Response
 from rest_framework import viewsets, permissions
 from rest_framework.authtoken.models import Token
+from rest_framework.views import APIView
+
 from djangoForest.serializers import *
 from collections import namedtuple
 
@@ -603,12 +606,29 @@ class UserRegistration(generics.ListCreateAPIView):
 class UserAuth(generics.ListCreateAPIView):
 
     def post(self, request, **kwargs):
-        user = Users.objects.filter(email = request.data['email'], password = request.data['password']).values('id').get()
-        profile = Profile.objects.filter(id_user_id = user['id']).values('id', 'FIO').get()
-        return Response({
-            'id_user': user['id'],
-            'id_profile': profile
-        })
+        try:
+            user = Users.objects.filter(email = request.data['email'], password = request.data['password']).values('id').get()
+            profile = Profile.objects.filter(id_user_id = user['id']).values('id', 'FIO').get()
+            return Response({
+                'id_user': user['id'],
+                'id_profile': profile
+            })
+        except:
+            return Response({
+            "invalid password or email"
+            })
+
+
+class PhotoPointView(APIView):
+    parser_classes = (FormParser, MultiPartParser, FileUploadParser)
+    def post(self, request, format = None):
+        if len(request.data):
+            return HttpResponse({"400_BAD_REQUEST\nempty content"}, status=400)
+        serializer_photo = PhotoPointSerializer(data=request.data)
+        if serializer_photo.is_valid():
+            serializer_photo.save(photo=request.data.get('photo'))
+            return HttpResponse(status=201)
+        return Response(serializer_photo.errors, status=400)
 
 
 class ForestViewSet(viewsets.ModelViewSet):
