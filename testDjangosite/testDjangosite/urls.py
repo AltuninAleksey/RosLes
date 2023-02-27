@@ -17,7 +17,6 @@ from django.contrib import admin
 from django.urls import path, include, re_path
 from djangoForest.views import *
 from django.views.static import serve
-
 from testDjangosite import settings
 
 urlpatterns = [
