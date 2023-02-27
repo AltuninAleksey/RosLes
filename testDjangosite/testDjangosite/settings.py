@@ -16,6 +16,8 @@ import rest_framework
 BASE_DIR = Path(__file__).resolve().parent.parent
 mimetypes.add_type("text/css", ".css", True)
 mimetypes.add_type("application/json", ".js", True)
+mimetypes.add_type("image/png", ".png", True)
+mimetypes.add_type("image/jpg", ".jpg", True)
 print(BASE_DIR)
 
 
@@ -29,7 +31,7 @@ SECRET_KEY = 'django-insecure-e3jq*c1(yxlmcs*&89)m_+tc*x)dykr^=mcbmq=(qznwackn#f
 DEBUG = False
 
 #ALLOWED_HOSTS = ['90.156.208.88']
-ALLOWED_HOSTS = ['127.0.0.1', '90.156.208.88']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
