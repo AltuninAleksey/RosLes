@@ -1,0 +1,256 @@
+--
+-- File generated with SQLiteStudio v3.4.1 on Вт янв 31 20:18:15 2023
+--
+-- Text encoding used: UTF-8
+--
+PRAGMA foreign_keys = off;
+BEGIN TRANSACTION;
+
+-- Table: auth_group
+CREATE TABLE IF NOT EXISTS "auth_group" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name" varchar(150) NOT NULL UNIQUE);
+
+-- Table: auth_group_permissions
+CREATE TABLE IF NOT EXISTS "auth_group_permissions" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "group_id" integer NOT NULL REFERENCES "auth_group" ("id") DEFERRABLE INITIALLY DEFERRED, "permission_id" integer NOT NULL REFERENCES "auth_permission" ("id") DEFERRABLE INITIALLY DEFERRED);
+
+-- Table: auth_permission
+CREATE TABLE IF NOT EXISTS "auth_permission" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "content_type_id" integer NOT NULL REFERENCES "django_content_type" ("id") DEFERRABLE INITIALLY DEFERRED, "codename" varchar(100) NOT NULL, "name" varchar(255) NOT NULL);
+
+-- Table: auth_user
+CREATE TABLE IF NOT EXISTS "auth_user" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "password" varchar(128) NOT NULL, "last_login" datetime NULL, "is_superuser" bool NOT NULL, "username" varchar(150) NOT NULL UNIQUE, "last_name" varchar(150) NOT NULL, "email" varchar(254) NOT NULL, "is_staff" bool NOT NULL, "is_active" bool NOT NULL, "date_joined" datetime NOT NULL, "first_name" varchar(150) NOT NULL);
+
+-- Table: auth_user_groups
+CREATE TABLE IF NOT EXISTS "auth_user_groups" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "user_id" integer NOT NULL REFERENCES "auth_user" ("id") DEFERRABLE INITIALLY DEFERRED, "group_id" integer NOT NULL REFERENCES "auth_group" ("id") DEFERRABLE INITIALLY DEFERRED);
+
+-- Table: auth_user_user_permissions
+CREATE TABLE IF NOT EXISTS "auth_user_user_permissions" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "user_id" integer NOT NULL REFERENCES "auth_user" ("id") DEFERRABLE INITIALLY DEFERRED, "permission_id" integer NOT NULL REFERENCES "auth_permission" ("id") DEFERRABLE INITIALLY DEFERRED);
+
+-- Table: authtoken_token
+CREATE TABLE IF NOT EXISTS "authtoken_token" ("key" varchar(40) NOT NULL PRIMARY KEY, "created" datetime NOT NULL, "user_id" integer NOT NULL UNIQUE REFERENCES "auth_user" ("id") DEFERRABLE INITIALLY DEFERRED);
+
+-- Table: django_admin_log
+CREATE TABLE IF NOT EXISTS "django_admin_log" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "object_id" text NULL, "object_repr" varchar(200) NOT NULL, "action_flag" smallint unsigned NOT NULL CHECK ("action_flag" >= 0), "change_message" text NOT NULL, "content_type_id" integer NULL REFERENCES "django_content_type" ("id") DEFERRABLE INITIALLY DEFERRED, "user_id" integer NOT NULL REFERENCES "auth_user" ("id") DEFERRABLE INITIALLY DEFERRED, "action_time" datetime NOT NULL);
+
+-- Table: django_content_type
+CREATE TABLE IF NOT EXISTS "django_content_type" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "app_label" varchar(100) NOT NULL, "model" varchar(100) NOT NULL);
+
+-- Table: django_migrations
+CREATE TABLE IF NOT EXISTS "django_migrations" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "app" varchar(255) NOT NULL, "name" varchar(255) NOT NULL, "applied" datetime NOT NULL);
+
+-- Table: django_session
+CREATE TABLE IF NOT EXISTS "django_session" ("session_key" varchar(40) NOT NULL PRIMARY KEY, "session_data" text NOT NULL, "expire_date" datetime NOT NULL);
+
+-- Table: djangoForest_accordancemolodkrandtppl
+CREATE TABLE IF NOT EXISTS "djangoForest_accordancemolodkrandtppl" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name_of_accordance" varchar(300) NOT NULL);
+
+-- Table: djangoForest_accordancenoneaccordanceeconomy
+CREATE TABLE IF NOT EXISTS "djangoForest_accordancenoneaccordanceeconomy" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name_accordance_none_economy" varchar(300) NOT NULL);
+
+-- Table: djangoForest_bonitetorlov
+CREATE TABLE IF NOT EXISTS "djangoForest_bonitetorlov" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "age_of_planting" real NOT NULL, "class_bonitet" varchar(300) NOT NULL, "height_planting_for_bonitet_class" varchar(300) NOT NULL);
+
+-- Table: djangoForest_branches
+CREATE TABLE IF NOT EXISTS "djangoForest_branches" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name_branch" varchar(350) NOT NULL);
+
+-- Table: djangoForest_breed
+CREATE TABLE IF NOT EXISTS "djangoForest_breed" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name_breed" varchar(350) NOT NULL, "is_foliar" bool NULL, "is_pine" bool NULL, "ShortName" varchar(10) NULL, "main" bool NULL);
+
+-- Table: djangoForest_categorygroundlfinnoneaccordance
+CREATE TABLE IF NOT EXISTS "djangoForest_categorygroundlfinnoneaccordance" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name_of_category_ground" varchar(300) NOT NULL);
+
+-- Table: djangoForest_categoryofforestfundlands
+CREATE TABLE IF NOT EXISTS "djangoForest_categoryofforestfundlands" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name_category" varchar(350) NOT NULL);
+
+-- Table: djangoForest_checktrigger
+CREATE TABLE IF NOT EXISTS "djangoForest_checktrigger" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "bool" bool NOT NULL);
+
+-- Table: djangoForest_districtforestly
+CREATE TABLE IF NOT EXISTS "djangoForest_districtforestly" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name_district_forestly" varchar(500) NOT NULL, "id_forestly_id" bigint NULL REFERENCES "djangoForest_forestly" ("id") DEFERRABLE INITIALLY DEFERRED);
+
+-- Table: djangoForest_economy
+CREATE TABLE IF NOT EXISTS "djangoForest_economy" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name_economy" varchar(300) NOT NULL);
+
+-- Table: djangoForest_forestareas
+CREATE TABLE IF NOT EXISTS "djangoForest_forestareas" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name_forest_areas" varchar(300) NOT NULL, "composition_of_forest_areas" varchar(500) NOT NULL, "comm" varchar(500) NOT NULL);
+
+-- Table: djangoForest_forestformingbydefault
+CREATE TABLE IF NOT EXISTS "djangoForest_forestformingbydefault" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "id_breed_id" bigint NOT NULL REFERENCES "djangoForest_breed" ("id") DEFERRABLE INITIALLY DEFERRED, "id_profile_id" bigint NOT NULL REFERENCES "djangoForest_profile" ("id") DEFERRABLE INITIALLY DEFERRED);
+
+-- Table: djangoForest_forestly
+CREATE TABLE IF NOT EXISTS "djangoForest_forestly" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name_forestly" varchar(500) NOT NULL, "id_subject_rf_id" bigint NULL REFERENCES "djangoForest_subjectrf" ("id") DEFERRABLE INITIALLY DEFERRED);
+
+-- Table: djangoForest_forestprotectioncategory
+CREATE TABLE IF NOT EXISTS "djangoForest_forestprotectioncategory" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name_forest_protection_category" varchar(350) NOT NULL);
+
+-- Table: djangoForest_gps
+CREATE TABLE IF NOT EXISTS "djangoForest_gps" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "latitude" real NOT NULL, "longitude" real NOT NULL, "flag_center" integer NOT NULL, "id_sample_id" bigint NULL REFERENCES "djangoForest_sample" ("id") DEFERRABLE INITIALLY DEFERRED);
+
+-- Table: djangoForest_list
+CREATE TABLE IF NOT EXISTS "djangoForest_list" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "to0_2" integer NULL, "from0_21To0_5" integer NULL, "from0_6To1_0" integer NULL, "from1_1to1_5" integer NULL, "from1_5" integer NULL, "id_breed_id" bigint NULL REFERENCES "djangoForest_breed" ("id") DEFERRABLE INITIALLY DEFERRED, "id_sample_id" bigint NULL REFERENCES "djangoForest_sample" ("id") DEFERRABLE INITIALLY DEFERRED, "id_type_of_reproduction_id" bigint NULL REFERENCES "djangoForest_reproduction" ("id") DEFERRABLE INITIALLY DEFERRED, "avg_diameter" real NULL, "avg_height" real NULL, "count_of_plants" integer NULL, "max_height" real NULL, "id_undergrowth_id" bigint NULL REFERENCES "djangoForest_undergrowth" ("id") DEFERRABLE INITIALLY DEFERRED);
+
+-- Table: djangoForest_listregion
+CREATE TABLE IF NOT EXISTS "djangoForest_listregion" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "date" date NOT NULL, "sample_region" varchar(300) NOT NULL, "id_quarter_id" bigint NULL REFERENCES "djangoForest_quarter" ("id") DEFERRABLE INITIALLY DEFERRED, "soil_lot" varchar(300) NOT NULL);
+
+-- Table: djangoForest_methodofreforestation
+CREATE TABLE IF NOT EXISTS "djangoForest_methodofreforestation" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name_of_method" varchar(350) NOT NULL);
+
+-- Table: djangoForest_photopoint
+CREATE TABLE IF NOT EXISTS "djangoForest_photopoint" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "photo" varchar(100) NOT NULL);
+
+-- Table: djangoForest_post
+CREATE TABLE IF NOT EXISTS "djangoForest_post" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "post_name" varchar(255) NOT NULL);
+
+-- Table: djangoForest_profile
+CREATE TABLE IF NOT EXISTS "djangoForest_profile" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "FIO" varchar(255) NOT NULL, "phoneNumber" varchar(30) NOT NULL, "email" varchar(254) NOT NULL, "id_branches_id" bigint NULL REFERENCES "djangoForest_branches" ("id") DEFERRABLE INITIALLY DEFERRED, "id_post_id" bigint NULL REFERENCES "djangoForest_post" ("id") DEFERRABLE INITIALLY DEFERRED, "id_role_id" bigint NULL REFERENCES "djangoForest_role" ("id") DEFERRABLE INITIALLY DEFERRED, "id_working_breeds_id" bigint NULL REFERENCES "djangoForest_workingbreeds" ("id") DEFERRABLE INITIALLY DEFERRED, "id_user_id" bigint NULL REFERENCES "djangoForest_users" ("id") DEFERRABLE INITIALLY DEFERRED);
+
+-- Table: djangoForest_purposeofforests
+CREATE TABLE IF NOT EXISTS "djangoForest_purposeofforests" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name_purpose" varchar(350) NOT NULL);
+
+-- Table: djangoForest_quarter
+CREATE TABLE IF NOT EXISTS "djangoForest_quarter" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "quarter_name" varchar(50) NOT NULL, "id_district_forestly_id" bigint NULL REFERENCES "djangoForest_districtforestly" ("id") DEFERRABLE INITIALLY DEFERRED);
+
+-- Table: djangoForest_reproduction
+CREATE TABLE IF NOT EXISTS "djangoForest_reproduction" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name_reproduction" varchar(500) NOT NULL);
+
+-- Table: djangoForest_role
+CREATE TABLE IF NOT EXISTS "djangoForest_role" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name_role" varchar(300) NOT NULL);
+
+-- Table: djangoForest_sample
+CREATE TABLE IF NOT EXISTS "djangoForest_sample" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "date" date NULL, "sample_area" real NOT NULL, "id_list_region_id" bigint NULL REFERENCES "djangoForest_listregion" ("id") DEFERRABLE INITIALLY DEFERRED, "id_profile_id" bigint NULL REFERENCES "djangoForest_profile" ("id") DEFERRABLE INITIALLY DEFERRED, "id_quarter_id" bigint NULL REFERENCES "djangoForest_quarter" ("id") DEFERRABLE INITIALLY DEFERRED, "soil_lot" varchar(300) NOT NULL);
+
+-- Table: djangoForest_subjectrf
+CREATE TABLE IF NOT EXISTS "djangoForest_subjectrf" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name_subject_RF" varchar(255) NOT NULL);
+
+-- Table: djangoForest_table
+CREATE TABLE IF NOT EXISTS "djangoForest_table" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name" varchar(300) NOT NULL, "age" integer NOT NULL);
+
+-- Table: djangoForest_track
+CREATE TABLE IF NOT EXISTS "djangoForest_track" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "data" date NOT NULL, "map" varchar(1) NOT NULL, "id_profile_id" bigint NOT NULL REFERENCES "djangoForest_profile" ("id") DEFERRABLE INITIALLY DEFERRED);
+
+-- Table: djangoForest_typeforestgrowingconditions
+CREATE TABLE IF NOT EXISTS "djangoForest_typeforestgrowingconditions" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "subtypes_of_humidity" varchar(300) NOT NULL, "subtypes_of_rich" varchar(300) NOT NULL, "type_forest_growing_conditions" varchar(300) NOT NULL);
+
+-- Table: djangoForest_undergrowth
+CREATE TABLE IF NOT EXISTS "djangoForest_undergrowth" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name" varchar(350) NOT NULL);
+
+-- Table: djangoForest_undergrowthbydefault
+CREATE TABLE IF NOT EXISTS "djangoForest_undergrowthbydefault" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "id_profile_id" bigint NOT NULL REFERENCES "djangoForest_profile" ("id") DEFERRABLE INITIALLY DEFERRED, "id_undergrowth_id" bigint NOT NULL REFERENCES "djangoForest_undergrowth" ("id") DEFERRABLE INITIALLY DEFERRED);
+
+-- Table: djangoForest_users
+CREATE TABLE IF NOT EXISTS "djangoForest_users" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "email" varchar(254) NOT NULL UNIQUE, "password" varchar(300) NOT NULL UNIQUE);
+
+-- Table: djangoForest_workingbreeds
+CREATE TABLE IF NOT EXISTS "djangoForest_workingbreeds" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name_breeds" varchar(255) NOT NULL);
+
+-- Index: auth_group_permissions_group_id_b120cbf9
+CREATE INDEX IF NOT EXISTS "auth_group_permissions_group_id_b120cbf9" ON "auth_group_permissions" ("group_id");
+
+-- Index: auth_group_permissions_group_id_permission_id_0cd325b0_uniq
+CREATE UNIQUE INDEX IF NOT EXISTS "auth_group_permissions_group_id_permission_id_0cd325b0_uniq" ON "auth_group_permissions" ("group_id", "permission_id");
+
+-- Index: auth_group_permissions_permission_id_84c5c92e
+CREATE INDEX IF NOT EXISTS "auth_group_permissions_permission_id_84c5c92e" ON "auth_group_permissions" ("permission_id");
+
+-- Index: auth_permission_content_type_id_2f476e4b
+CREATE INDEX IF NOT EXISTS "auth_permission_content_type_id_2f476e4b" ON "auth_permission" ("content_type_id");
+
+-- Index: auth_permission_content_type_id_codename_01ab375a_uniq
+CREATE UNIQUE INDEX IF NOT EXISTS "auth_permission_content_type_id_codename_01ab375a_uniq" ON "auth_permission" ("content_type_id", "codename");
+
+-- Index: auth_user_groups_group_id_97559544
+CREATE INDEX IF NOT EXISTS "auth_user_groups_group_id_97559544" ON "auth_user_groups" ("group_id");
+
+-- Index: auth_user_groups_user_id_6a12ed8b
+CREATE INDEX IF NOT EXISTS "auth_user_groups_user_id_6a12ed8b" ON "auth_user_groups" ("user_id");
+
+-- Index: auth_user_groups_user_id_group_id_94350c0c_uniq
+CREATE UNIQUE INDEX IF NOT EXISTS "auth_user_groups_user_id_group_id_94350c0c_uniq" ON "auth_user_groups" ("user_id", "group_id");
+
+-- Index: auth_user_user_permissions_permission_id_1fbb5f2c
+CREATE INDEX IF NOT EXISTS "auth_user_user_permissions_permission_id_1fbb5f2c" ON "auth_user_user_permissions" ("permission_id");
+
+-- Index: auth_user_user_permissions_user_id_a95ead1b
+CREATE INDEX IF NOT EXISTS "auth_user_user_permissions_user_id_a95ead1b" ON "auth_user_user_permissions" ("user_id");
+
+-- Index: auth_user_user_permissions_user_id_permission_id_14a6b632_uniq
+CREATE UNIQUE INDEX IF NOT EXISTS "auth_user_user_permissions_user_id_permission_id_14a6b632_uniq" ON "auth_user_user_permissions" ("user_id", "permission_id");
+
+-- Index: django_admin_log_content_type_id_c4bce8eb
+CREATE INDEX IF NOT EXISTS "django_admin_log_content_type_id_c4bce8eb" ON "django_admin_log" ("content_type_id");
+
+-- Index: django_admin_log_user_id_c564eba6
+CREATE INDEX IF NOT EXISTS "django_admin_log_user_id_c564eba6" ON "django_admin_log" ("user_id");
+
+-- Index: django_content_type_app_label_model_76bd3d3b_uniq
+CREATE UNIQUE INDEX IF NOT EXISTS "django_content_type_app_label_model_76bd3d3b_uniq" ON "django_content_type" ("app_label", "model");
+
+-- Index: django_session_expire_date_a5c62663
+CREATE INDEX IF NOT EXISTS "django_session_expire_date_a5c62663" ON "django_session" ("expire_date");
+
+-- Index: djangoForest_districtforestly_id_forestly_id_8d57b4f6
+CREATE INDEX IF NOT EXISTS "djangoForest_districtforestly_id_forestly_id_8d57b4f6" ON "djangoForest_districtforestly" ("id_forestly_id");
+
+-- Index: djangoForest_forestformingbydefault_id_breed_id_4a07abd1
+CREATE INDEX IF NOT EXISTS "djangoForest_forestformingbydefault_id_breed_id_4a07abd1" ON "djangoForest_forestformingbydefault" ("id_breed_id");
+
+-- Index: djangoForest_forestformingbydefault_id_profile_id_1a43bad2
+CREATE INDEX IF NOT EXISTS "djangoForest_forestformingbydefault_id_profile_id_1a43bad2" ON "djangoForest_forestformingbydefault" ("id_profile_id");
+
+-- Index: djangoForest_forestly_id_subject_rf_id_db160798
+CREATE INDEX IF NOT EXISTS "djangoForest_forestly_id_subject_rf_id_db160798" ON "djangoForest_forestly" ("id_subject_rf_id");
+
+-- Index: djangoForest_gps_id_sample_id_6877d75e
+CREATE INDEX IF NOT EXISTS "djangoForest_gps_id_sample_id_6877d75e" ON "djangoForest_gps" ("id_sample_id");
+
+-- Index: djangoForest_list_id_breed_id_818099fb
+CREATE INDEX IF NOT EXISTS "djangoForest_list_id_breed_id_818099fb" ON "djangoForest_list" ("id_breed_id");
+
+-- Index: djangoForest_list_id_sample_id_a446b4c9
+CREATE INDEX IF NOT EXISTS "djangoForest_list_id_sample_id_a446b4c9" ON "djangoForest_list" ("id_sample_id");
+
+-- Index: djangoForest_list_id_type_of_reproduction_id_3f515d72
+CREATE INDEX IF NOT EXISTS "djangoForest_list_id_type_of_reproduction_id_3f515d72" ON "djangoForest_list" ("id_type_of_reproduction_id");
+
+-- Index: djangoForest_list_id_undergrowth_id_02d0f36b
+CREATE INDEX IF NOT EXISTS "djangoForest_list_id_undergrowth_id_02d0f36b" ON "djangoForest_list" ("id_undergrowth_id");
+
+-- Index: djangoForest_listregion_id_quarter_id_cd3b2ab8
+CREATE INDEX IF NOT EXISTS "djangoForest_listregion_id_quarter_id_cd3b2ab8" ON "djangoForest_listregion" ("id_quarter_id");
+
+-- Index: djangoForest_profile_id_branches_id_ecc09e8c
+CREATE INDEX IF NOT EXISTS "djangoForest_profile_id_branches_id_ecc09e8c" ON "djangoForest_profile" ("id_branches_id");
+
+-- Index: djangoForest_profile_id_post_id_3ebc259a
+CREATE INDEX IF NOT EXISTS "djangoForest_profile_id_post_id_3ebc259a" ON "djangoForest_profile" ("id_post_id");
+
+-- Index: djangoForest_profile_id_role_id_a92c9632
+CREATE INDEX IF NOT EXISTS "djangoForest_profile_id_role_id_a92c9632" ON "djangoForest_profile" ("id_role_id");
+
+-- Index: djangoForest_profile_id_user_id_a5391657
+CREATE INDEX IF NOT EXISTS "djangoForest_profile_id_user_id_a5391657" ON "djangoForest_profile" ("id_user_id");
+
+-- Index: djangoForest_profile_id_working_breeds_id_e94986e9
+CREATE INDEX IF NOT EXISTS "djangoForest_profile_id_working_breeds_id_e94986e9" ON "djangoForest_profile" ("id_working_breeds_id");
+
+-- Index: djangoForest_quarter_id_district_forestly_id_71afc36f
+CREATE INDEX IF NOT EXISTS "djangoForest_quarter_id_district_forestly_id_71afc36f" ON "djangoForest_quarter" ("id_district_forestly_id");
+
+-- Index: djangoForest_sample_id_list_region_id_d4ea853d
+CREATE INDEX IF NOT EXISTS "djangoForest_sample_id_list_region_id_d4ea853d" ON "djangoForest_sample" ("id_list_region_id");
+
+-- Index: djangoForest_sample_id_profile_id_326ca965
+CREATE INDEX IF NOT EXISTS "djangoForest_sample_id_profile_id_326ca965" ON "djangoForest_sample" ("id_profile_id");
+
+-- Index: djangoForest_sample_id_quarter_id_eb7f4fa2
+CREATE INDEX IF NOT EXISTS "djangoForest_sample_id_quarter_id_eb7f4fa2" ON "djangoForest_sample" ("id_quarter_id");
+
+-- Index: djangoForest_track_id_profile_id_07b234ed
+CREATE INDEX IF NOT EXISTS "djangoForest_track_id_profile_id_07b234ed" ON "djangoForest_track" ("id_profile_id");
+
+-- Index: djangoForest_undergrowthbydefault_id_profile_id_23b572fe
+CREATE INDEX IF NOT EXISTS "djangoForest_undergrowthbydefault_id_profile_id_23b572fe" ON "djangoForest_undergrowthbydefault" ("id_profile_id");
+
+-- Index: djangoForest_undergrowthbydefault_id_undergrowth_id_b789efb4
+CREATE INDEX IF NOT EXISTS "djangoForest_undergrowthbydefault_id_undergrowth_id_b789efb4" ON "djangoForest_undergrowthbydefault" ("id_undergrowth_id");
+
+COMMIT TRANSACTION;
+PRAGMA foreign_keys = on;

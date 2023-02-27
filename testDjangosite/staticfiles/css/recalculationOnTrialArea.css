@@ -1,0 +1,76 @@
+// MPO 01.12.22: Style for page recalculationOnTrialArea
+.content {
+    padding-top: 1%;
+    padding-bottom: 1%;
+    padding-left: 3%;
+    padding-right: 3%;
+    overflow-x: auto;
+}
+
+.con-header p {
+    font-size: 25px;
+}
+
+.con-activebutton button {
+    font-size: 15px;
+}
+
+.con-table {
+    margin-top: 10px;
+    min-width: 1200px;
+    max-height: 80%;
+}
+
+th, td {
+    padding: 0 !important;
+    padding-left: 5px !important;
+    padding-right: 5px !important;
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+}
+
+tr {
+    cursor: pointer;
+}
+
+.scroll-table-body {
+	height: 90%;
+	overflow-x: auto;
+}
+
+.td1 {
+    width: 100px;
+}
+
+.td2 {
+    width: 100px;
+}
+
+.td3 {
+    width: 200px;
+}
+
+.td4 {
+    width: 100px;
+}
+
+.td5 {
+    width: 150px;
+}
+
+.td6 {
+    width: 50px;
+}
+
+.td7 {
+    width: 50px;
+}
+
+.td8 {
+    width: 100px;
+    text-align: right;
+}
+
+.td9 {
+    width: 70px;
+}

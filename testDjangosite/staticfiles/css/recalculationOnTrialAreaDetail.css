@@ -1,0 +1,176 @@
+// MPO 01.12.22: Style for page recalculationOnTrialAreaDetail
+.content {
+    padding-top: 1%;
+    padding-bottom: 1%;
+    padding-left: 3%;
+    padding-right: 3%;
+    overflow-y: auto;
+}
+
+.menu {
+    overflow: hidden;
+}
+
+.con-header p {
+    font-size: 25px;
+}
+
+.reread input, select {
+    width: 150px;
+    margin-left: 10px;
+}
+
+.table_1 {
+    width: 100%;
+    margin-top: 20px;
+    border: 1px solid #cfcaca;
+    min-width: 1200px;
+}
+
+.table_1_switch_button {
+    width: 100%;
+    height: 40px;
+    display: flex;
+}
+
+.table_1_switch_button_item {
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-left: 5px;
+    cursor: pointer;
+}
+
+.border-bottom-color-black {
+    border-bottom: 2px solid black;
+}
+
+.border-bottom-color-active {
+    border-bottom: 2px solid #3bc1a0;
+}
+
+.table_1_switch_button_item p {
+    font-size: 15px;
+}
+
+.table_1_switch_button_item:hover {
+    border-bottom: 2px solid #3bc1a0;
+}
+
+.table_1_active_button {
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
+.table_1_content {
+    margin-top: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.table_1_scroll-table-body {
+    min-height: 100px;
+    max-height: 400px;
+    overflow-x: auto;
+}
+
+.tab_1_td1 {
+    width: 20px;
+    text-align: center;
+}
+
+.tab_1_td2 {
+    width: 170px;
+}
+
+.tab_1_td3 {
+    width: 130px;
+    text-align: right;
+}
+
+.tab_1_td4 {
+    width: 130px;
+    text-align: right;
+}
+
+.tab_1_td5 {
+    width: 130px;
+    text-align: right;
+}
+
+.tab_1_td6 {
+    width: 130px;
+    text-align: right;
+}
+
+.tab_1_td7 {
+    width: 130px;
+    text-align: right;
+}
+
+.tab_1_td8 {
+    width: 170px;
+    text-align: right;
+}
+
+.table_2_3 {
+    width: 100%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    min-width: 1200px;
+}
+
+.staff {
+    width: 40%;
+    padding: 5px;
+}
+
+.staff_header {
+    width: 100%;
+    height: 40px;
+}
+
+.staff_header p {
+    margin-left: 10px;
+    font-size: 23px;
+    color: #3bc1a0;
+}
+
+.staff_active_button {
+    padding-left: 10px;
+}
+
+.table_2 {
+    margin-top: 10px;
+    border: 1px solid #cfcaca;
+}
+
+.tab_2_td1 {
+    width: 50px;
+    text-align: center;
+}
+
+.table_2_scroll-table-body {
+    max-height: 200px;
+    min-height: 50px;
+    overflow-x:auto
+}
+
+.gpsPoints {
+    width: 60%;
+    padding: 5px;
+}
+
+.tab_3_td2 {
+    width: 200px;
+}
+
+.tab_3_td3 {
+    width: 300px;
+}
+
+.tab_3_td4 {
+    width: 100px;
+    padding-right: 30px;
+    text-align: right;
+}

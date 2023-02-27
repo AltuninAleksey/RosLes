@@ -1,0 +1,216 @@
+CREATE TABLE djangoForest_workingbreeds (
+    id          INTEGER       NOT NULL
+                              PRIMARY KEY AUTOINCREMENT,
+    name_breeds VARCHAR (255) NOT NULL
+);
+CREATE TABLE djangoForest_users (
+    id       INTEGER       NOT NULL
+                           PRIMARY KEY AUTOINCREMENT,
+    email    VARCHAR (254) NOT NULL
+                           UNIQUE,
+    password VARCHAR (300) NOT NULL
+                           UNIQUE
+);
+CREATE TABLE djangoForest_undergrowthbydefault (
+    id                INTEGER NOT NULL
+                              PRIMARY KEY AUTOINCREMENT,
+    id_profile_id     BIGINT  NOT NULL
+                              REFERENCES djangoForest_profile (id) DEFERRABLE INITIALLY DEFERRED,
+    id_undergrowth_id BIGINT  NOT NULL
+                              REFERENCES djangoForest_undergrowth (id) DEFERRABLE INITIALLY DEFERRED
+);
+
+CREATE TABLE djangoForest_undergrowth (
+    id   INTEGER       NOT NULL
+                       PRIMARY KEY AUTOINCREMENT,
+    name VARCHAR (350) NOT NULL
+);
+CREATE TABLE djangoForest_typeforestgrowingconditions (
+    id                             INTEGER       NOT NULL
+                                                 PRIMARY KEY AUTOINCREMENT,
+    subtypes_of_humidity           VARCHAR (300) NOT NULL,
+    subtypes_of_rich               VARCHAR (300) NOT NULL,
+    type_forest_growing_conditions VARCHAR (300) NOT NULL
+);
+CREATE TABLE djangoForest_track (
+    id            INTEGER     NOT NULL
+                              PRIMARY KEY AUTOINCREMENT,
+    data          DATE        NOT NULL,
+    map           VARCHAR (1) NOT NULL,
+    id_profile_id BIGINT      NOT NULL
+                              REFERENCES djangoForest_profile (id) DEFERRABLE INITIALLY DEFERRED
+);
+CREATE TABLE djangoForest_subjectrf (
+    id              INTEGER       NOT NULL
+                                  PRIMARY KEY AUTOINCREMENT,
+    name_subject_RF VARCHAR (255) NOT NULL
+);
+CREATE TABLE djangoForest_sample (
+    id                INTEGER       NOT NULL
+                                    PRIMARY KEY AUTOINCREMENT,
+    date              DATE,
+    sample_area       REAL          NOT NULL,
+    id_list_region_id BIGINT        REFERENCES djangoForest_listregion (id) DEFERRABLE INITIALLY DEFERRED,
+    id_profile_id     BIGINT        REFERENCES djangoForest_profile (id) DEFERRABLE INITIALLY DEFERRED,
+    id_quarter_id     BIGINT        REFERENCES djangoForest_quarter (id) DEFERRABLE INITIALLY DEFERRED,
+    soil_lot          VARCHAR (300) NOT NULL
+);
+CREATE TABLE djangoForest_role (
+    id        INTEGER       NOT NULL
+                            PRIMARY KEY AUTOINCREMENT,
+    name_role VARCHAR (300) NOT NULL
+);
+CREATE TABLE djangoForest_reproduction (
+    id                INTEGER       NOT NULL
+                                    PRIMARY KEY AUTOINCREMENT,
+    name_reproduction VARCHAR (500) NOT NULL
+);
+CREATE TABLE djangoForest_quarter (
+    id                      INTEGER      NOT NULL
+                                         PRIMARY KEY AUTOINCREMENT,
+    quarter_name            VARCHAR (50) NOT NULL,
+    id_district_forestly_id BIGINT       REFERENCES djangoForest_districtforestly (id) DEFERRABLE INITIALLY DEFERRED
+);
+CREATE TABLE djangoForest_purposeofforests (
+    id           INTEGER       NOT NULL
+                               PRIMARY KEY AUTOINCREMENT,
+    name_purpose VARCHAR (350) NOT NULL
+);
+CREATE TABLE djangoForest_profile (
+    id                   INTEGER       NOT NULL
+                                       PRIMARY KEY AUTOINCREMENT,
+    FIO                  VARCHAR (255) NOT NULL,
+    phoneNumber          VARCHAR (30)  NOT NULL,
+    email                VARCHAR (254) NOT NULL,
+    id_branches_id       BIGINT        REFERENCES djangoForest_branches (id) DEFERRABLE INITIALLY DEFERRED,
+    id_post_id           BIGINT        REFERENCES djangoForest_post (id) DEFERRABLE INITIALLY DEFERRED,
+    id_role_id           BIGINT        REFERENCES djangoForest_role (id) DEFERRABLE INITIALLY DEFERRED,
+    id_working_breeds_id BIGINT        REFERENCES djangoForest_workingbreeds (id) DEFERRABLE INITIALLY DEFERRED,
+    id_user_id           BIGINT        REFERENCES djangoForest_users (id) DEFERRABLE INITIALLY DEFERRED
+);
+CREATE TABLE djangoForest_post (
+    id        INTEGER       NOT NULL
+                            PRIMARY KEY AUTOINCREMENT,
+    post_name VARCHAR (255) NOT NULL
+);
+CREATE TABLE djangoForest_photopoint (
+    id    INTEGER       NOT NULL
+                        PRIMARY KEY AUTOINCREMENT,
+    photo VARCHAR (100) NOT NULL
+);
+CREATE TABLE djangoForest_methodofreforestation (
+    id             INTEGER       NOT NULL
+                                 PRIMARY KEY AUTOINCREMENT,
+    name_of_method VARCHAR (350) NOT NULL
+);
+CREATE TABLE djangoForest_listregion (
+    id            INTEGER       NOT NULL
+                                PRIMARY KEY AUTOINCREMENT,
+    date          DATE          NOT NULL,
+    sample_region VARCHAR (300) NOT NULL,
+    id_quarter_id BIGINT        REFERENCES djangoForest_quarter (id) DEFERRABLE INITIALLY DEFERRED,
+    soil_lot      VARCHAR (300) NOT NULL
+);
+CREATE TABLE djangoForest_list (
+    id                         INTEGER NOT NULL
+                                       PRIMARY KEY AUTOINCREMENT,
+    to0_2                      INTEGER,
+    from0_21To0_5              INTEGER,
+    from0_6To1_0               INTEGER,
+    from1_1to1_5               INTEGER,
+    from1_5                    INTEGER,
+    id_breed_id                BIGINT  REFERENCES djangoForest_breed (id) DEFERRABLE INITIALLY DEFERRED,
+    id_sample_id               BIGINT  REFERENCES djangoForest_sample (id) DEFERRABLE INITIALLY DEFERRED,
+    id_type_of_reproduction_id BIGINT  REFERENCES djangoForest_reproduction (id) DEFERRABLE INITIALLY DEFERRED,
+    avg_diameter               REAL,
+    avg_height                 REAL,
+    count_of_plants            INTEGER,
+    max_height                 REAL,
+    id_undergrowth_id          BIGINT  REFERENCES djangoForest_undergrowth (id) DEFERRABLE INITIALLY DEFERRED
+);
+CREATE TABLE djangoForest_gps (
+    id           INTEGER NOT NULL
+                         PRIMARY KEY AUTOINCREMENT,
+    latitude     REAL    NOT NULL,
+    longitude    REAL    NOT NULL,
+    flag_center  INTEGER NOT NULL,
+    id_sample_id BIGINT  REFERENCES djangoForest_sample (id) DEFERRABLE INITIALLY DEFERRED
+);
+CREATE TABLE djangoForest_forestprotectioncategory (
+    id                              INTEGER       NOT NULL
+                                                  PRIMARY KEY AUTOINCREMENT,
+    name_forest_protection_category VARCHAR (350) NOT NULL
+);
+CREATE TABLE djangoForest_forestly (
+    id               INTEGER       NOT NULL
+                                   PRIMARY KEY AUTOINCREMENT,
+    name_forestly    VARCHAR (500) NOT NULL,
+    id_subject_rf_id BIGINT        REFERENCES djangoForest_subjectrf (id) DEFERRABLE INITIALLY DEFERRED
+);
+CREATE TABLE djangoForest_forestformingbydefault (
+    id            INTEGER NOT NULL
+                          PRIMARY KEY AUTOINCREMENT,
+    id_breed_id   BIGINT  NOT NULL
+                          REFERENCES djangoForest_breed (id) DEFERRABLE INITIALLY DEFERRED,
+    id_profile_id BIGINT  NOT NULL
+                          REFERENCES djangoForest_profile (id) DEFERRABLE INITIALLY DEFERRED
+);
+CREATE TABLE djangoForest_forestareas (
+    id                          INTEGER       NOT NULL
+                                              PRIMARY KEY AUTOINCREMENT,
+    name_forest_areas           VARCHAR (300) NOT NULL,
+    composition_of_forest_areas VARCHAR (500) NOT NULL,
+    comm                        VARCHAR (500) NOT NULL
+);
+CREATE TABLE djangoForest_economy (
+    id           INTEGER       NOT NULL
+                               PRIMARY KEY AUTOINCREMENT,
+    name_economy VARCHAR (300) NOT NULL
+);
+CREATE TABLE djangoForest_districtforestly (
+    id                     INTEGER       NOT NULL
+                                         PRIMARY KEY AUTOINCREMENT,
+    name_district_forestly VARCHAR (500) NOT NULL,
+    id_forestly_id         BIGINT        REFERENCES djangoForest_forestly (id) DEFERRABLE INITIALLY DEFERRED
+);
+CREATE TABLE djangoForest_categoryofforestfundlands (
+    id            INTEGER       NOT NULL
+                                PRIMARY KEY AUTOINCREMENT,
+    name_category VARCHAR (350) NOT NULL
+);
+CREATE TABLE djangoForest_categorygroundlfinnoneaccordance (
+    id                      INTEGER       NOT NULL
+                                          PRIMARY KEY AUTOINCREMENT,
+    name_of_category_ground VARCHAR (300) NOT NULL
+);
+CREATE TABLE djangoForest_breed (
+    id         INTEGER       NOT NULL
+                             PRIMARY KEY AUTOINCREMENT,
+    name_breed VARCHAR (350) NOT NULL,
+    is_foliar  BOOL,
+    is_pine    BOOL,
+    ShortName  VARCHAR (10),
+    main       BOOL
+);
+CREATE TABLE djangoForest_branches (
+    id          INTEGER       NOT NULL
+                              PRIMARY KEY AUTOINCREMENT,
+    name_branch VARCHAR (350) NOT NULL
+);
+CREATE TABLE djangoForest_bonitetorlov (
+    id                                INTEGER       NOT NULL
+                                                    PRIMARY KEY AUTOINCREMENT,
+    age_of_planting                   REAL          NOT NULL,
+    class_bonitet                     VARCHAR (300) NOT NULL,
+    height_planting_for_bonitet_class VARCHAR (300) NOT NULL
+);
+CREATE TABLE djangoForest_accordancenoneaccordanceeconomy (
+    id                           INTEGER       NOT NULL
+                                               PRIMARY KEY AUTOINCREMENT,
+    name_accordance_none_economy VARCHAR (300) NOT NULL
+);
+CREATE TABLE djangoForest_accordancemolodkrandtppl (
+    id                 INTEGER       NOT NULL
+                                     PRIMARY KEY AUTOINCREMENT,
+    name_of_accordance VARCHAR (300) NOT NULL
+);
