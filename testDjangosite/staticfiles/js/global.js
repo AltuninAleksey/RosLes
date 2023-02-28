@@ -9,6 +9,10 @@ function getListRegions() {
     window.location.href = urlGlobal + "/erp/documents/listRegions";
 }
 
+function getGeneralDoc() {
+    window.location.href = urlGlobal + "/general_docs";
+}
+
 async function getAllSubjectrf() {
 
     var requestData = await axios({
