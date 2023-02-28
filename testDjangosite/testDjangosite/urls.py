@@ -17,14 +17,15 @@ from django.contrib import admin
 from django.urls import path, include, re_path
 from djangoForest.views import *
 from django.views.static import serve
-from testDjangosite import settings
 
+from testDjangosite import settings
 
 urlpatterns = [
     re_path(r'^media/(?P<path>.*)$', serve,{'document_root': settings.MEDIA_ROOT}),
     re_path(r'^static/(?P<path>.*)$', serve,{'document_root': settings.STATIC_ROOT}),
     path('admin/', admin.site.urls),
     path('', include('djangoForest.urls')),
+    path('getbase', AnroidDownland.as_view()),
     path('upload', PhotoPointView.as_view()),
     path('auth', UserAuth.as_view()),
     path('registration', UserRegistration.as_view()),
