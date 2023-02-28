@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <script src="{{url_for('static/js', filename='somejavascriptfile.js')}}"></script>
+    <script src="{% static 'js/globalGeneralDocs.js' %}"></script>
     <title>{{title}}</title>
 {% endblock %}
 </head>
@@ -17,6 +18,7 @@
         {% block header %}
         <div class="header">
             <ul class="nav">
+                <li><a onclick="getRecalculationOnTrialAreaPage()">Документы</a></li>
                 <li><a href="general_books">Общие справочники</a></li>
                 <li><a href="gmvl">Справочники ГМВЛ</a></li>
                 <li><h1 class="hed">Справочная система РОСЛЕСОЗАЩИТЫ</h1></li>
