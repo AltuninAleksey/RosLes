@@ -625,11 +625,26 @@ class PhotoPointView(APIView):
         if request.data['photo'] == '':
             return HttpResponse({"no image"}, status=400)
         serializer_photo = PhotoPointSerializer(data=request.data)
-        if serializer_photo.is_valid():
+        if serializer_photo.is_valid(raise_exception=True):
             serializer_photo.save(id_sample_id = request.data.get('id_sample'),
             photo=request.data.get('photo'))
-            return HttpResponse(status=201)
+            return HttpResponse({"Object created"}, status=201)
         return Response(serializer_photo.errors, status=400)
+
+
+class AnroidDownland(APIView):
+
+    def get(self, *args, **kwargs):
+        return Response({"list": ListSerializer(List.objects.all(), many=True).data,
+                         "listregion": ListRegionSerializer(ListRegion.objects.all(), many=True).data,
+                         "sample": SampleSerializer(Sample.objects.all(), many=True).data,
+                         "subjectRF": SubjectRFSerializer(SubjectRF.objects.all(), many=True).data,
+                         "forestly": ForestlySerializer(Forestly.objects.all(), many=True).data,
+                         "district_forestly": DistrictForestlySerializer(DistrictForestly.objects.all(), many=True).data,
+                         "quarter": QuarterSerializer(Quarter.objects.all(), many=True).data,
+                         "breeds": BreedSerializer(Breed.objects.all(), many=True).data,
+                         "Undergrowth": UndergrowthSerializer(Undergrowth.objects.all(), many=True).data
+                         })
 
 
 class ForestViewSet(viewsets.ModelViewSet):

@@ -229,6 +229,14 @@ class BreedSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+class UndergrowthSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Undergrowth
+        fields = '__all__'
+
+    def create(self, validated_data):
+        return Undergrowth.objects.create(**validated_data)
 
 class QuarterSerializer(serializers.ModelSerializer):
     class Meta:
