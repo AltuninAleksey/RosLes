@@ -445,5 +445,5 @@ async function saveData() {
 
     await getUpdateRecalculationDetailData(requestData);
 
-    getRecalculationOnTrialAreaPage();
+    //getRecalculationOnTrialAreaPage();
 }

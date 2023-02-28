@@ -115,7 +115,7 @@ class ListRegion(models.Model):
     sample_region = models.CharField(u'Плошадь участка, га', max_length=300)
     id_quarter = models.ForeignKey("Quarter", on_delete=models.CASCADE, verbose_name="Квартал", null=True)
     soil_lot = models.CharField(max_length=300, verbose_name='Выдел')
-    mark_del = models.BooleanField(null = True)
+    mark_del = models.BooleanField(default=0)
 
     class Meta:
         verbose_name = 'Перечетная ведомость участка'
