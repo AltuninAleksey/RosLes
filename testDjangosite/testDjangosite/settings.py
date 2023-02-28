@@ -15,7 +15,7 @@ import rest_framework
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 mimetypes.add_type("text/css", ".css", True)
-mimetypes.add_type("application/json", ".js", True)
+# mimetypes.add_type("application/json", ".js", True)
 mimetypes.add_type("image/png", ".png", True)
 mimetypes.add_type("image/jpg", ".jpg", True)
 print(BASE_DIR)
