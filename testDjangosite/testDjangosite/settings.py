@@ -10,7 +10,6 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from pathlib import Path
 import os
 import mimetypes
-import rest_framework
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -19,7 +18,6 @@ mimetypes.add_type("text/css", ".css", True)
 mimetypes.add_type("image/png", ".png", True)
 mimetypes.add_type("image/jpg", ".jpg", True)
 print(BASE_DIR)
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
