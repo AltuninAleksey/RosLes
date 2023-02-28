@@ -6,8 +6,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <link rel="stylesheet" href="{% static 'css/navigation.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/navigation.css' %}">
     <link rel="stylesheet" href="{% static 'css/recalculationOnTrialArea.css' %}">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.0/axios.js"></script>
     <script src="{% static 'js/global.js' %}"></script>
@@ -19,9 +18,8 @@
     <div class="container">
         <div class="header">
             <ul class="nav">
-                <li><a href="/">Главная</a></li>
-                <li><a href="documents">Документы</a></li>
-                <li><a href="guide">Справочники</a></li>
+                <li><a onclick="getRecalculationOnTrialAreaPage()">Документы</a></li>
+                <li><a onclick="getGeneralDoc()">Справочники</a></li>
             </ul>
           </div>
         <div class="con">
@@ -29,8 +27,8 @@
             <div class="menu">
                 <label for="nav-toggle" class="nav-toggle" onclick></label>
                 <ul class="navigat">
-                    <li><a href="" onclick="getRecalculationOnTrialAreaPage()">Перечет на пробной площади</a></li>
-                    <li><a href="">Перечетная ведомость</a></li>
+                    <li><a onclick="getRecalculationOnTrialAreaPage()">Перечет на пробной площади</a></li>
+                    <li><a onclick="getListRegions()">Перечетная ведомость</a></li>
                 </ul>
             </div>
             <div class="content">

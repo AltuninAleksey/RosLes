@@ -205,7 +205,7 @@ function setDataInTableOne(switchButton) {
                 var name_breed;
 
                 for(var j = 0; j < breeds.length; j++) {
-                    if(breeds[j].id == dataTable_1[i].breed) {
+                    if(breeds[j].id == dataTable_1[i].id_breed) {
                         name_breed = breeds[j].name_breed;
                         break;
                     }

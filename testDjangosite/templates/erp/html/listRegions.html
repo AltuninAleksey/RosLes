@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    {% block title %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/navigation.css' %}">
+    <link rel="stylesheet" href="{% static 'css/recalculationOnTrialArea.css' %}">
+    <link rel="stylesheet" href="{% static 'css/consolidation-statement-form.css' %}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.0/axios.js"></script>
+    <script src="{% static 'js/global.js' %}"></script>
+    <script src="{% static 'js/listRegions.js' %}"></script>
+    <title>Список перечетных ведомостей</title>
+    {% endblock %}
+</head>
+<body id="body">
+    <div class="container">
+        <div class="header">
+            <ul class="nav">
+                <li><a onclick="getRecalculationOnTrialAreaPage()">Документы</a></li>
+                <li><a onclick="getGeneralDoc()">Справочники</a></li>
+            </ul>
+          </div>
+        <div class="con">
+            <input type="checkbox" id="nav-toggle" hidden>
+            <div class="menu">
+                <label for="nav-toggle" class="nav-toggle" onclick></label>
+                <ul class="navigat">
+                    <li><a onclick="getRecalculationOnTrialAreaPage()">Перечет на пробной площади</a></li>
+                    <li><a onclick="getListRegions()">Перечетная ведомость</a></li>
+                </ul>
+            </div>
+            <div class="content">
+                <div class="con-header">
+                    <p>Список перечетных ведомостей</p>
+                </div>
+                <div class="con-activebutton">
+                    <button onclick="getRecalculationOnTrialAreaDetailNew()">Создать</button>
+                    <button onclick="openForm('consolidation-form')">Объединение ведомостей</button>
+                </div>
+                <div class="con-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="td1">Дата</th>
+                                <th class="td3">Судьект РФ</th>
+                                <th class="td4">Лесничество</th>
+                                <th class="td5">Участковое лесничество</th>
+                                <th class="td6">Квартал</th>
+                                <th class="td7">Выдел</th>
+                                <th class="td8">Площать участка</th>
+                            </tr>
+                        </thead>
+                    </table>	
+                    <div class="scroll-table-body">
+                        <table>
+                            <tbody id="tbodyRecalculationOnTrialArea">
+
+                            </tbody>
+                        </table>
+                    </div>	
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="consolidation-form" class="addFormfon display-none">
+        <div class="consolidation">
+            <h3>Объединение ведомостей</h3>
+            <div class="exitFormAddProba" onclick="closeForm('consolidation-form')"></div>
+            <button>Объединить</button>
+            <div class="consolidation-content">
+                <div class="dateDoc">
+                    <label>Максимальный разрыв между датами (в днях): </label>
+                    <input id="dateDoc" type="number" value="2">
+                </div>
+                <div class="firstDoc">
+                    <label>Первый документ: </label>
+                    <input id="firstDoc" type="text" class="consolidation-doc" readonly onclick="openForm('consolidation-list-form', 1)">
+                    <input id="firstDoc-value" type="hidden">
+                </div>
+                <div class="secondDoc">
+                    <label>Второй документ: </label>
+                    <input id="secondDoc" type="text" class="consolidation-doc" readonly onclick="openForm('consolidation-list-form', 2)">
+                    <input id="secondDoc-value" type="hidden">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="consolidation-list-form" class="addFormfon display-none">
+        <div class="consolidation-list">
+            <h3>Доступные для объединения ведомости</h3>
+            <div class="exitFormAddProba" onclick="closeForm('consolidation-list-form')"></div>
+            <div class="consolidation-list-content">
+                <table>
+                        <thead>
+                            <tr>
+                                <th class="td1">Дата</th>
+                                <th class="td3">Судьект РФ</th>
+                                <th class="td4">Лесничество</th>
+                                <th class="td5">Участковое лесничество</th>
+                                <th class="td6">Квартал</th>
+                                <th class="td7">Выдел</th>
+                            </tr>
+                        </thead>
+                    </table>
+                    <div class="scroll-table-body">
+                        <table>
+                            <tbody id="consolidation-list">
+                                <tr>
+                                    <td class="td1">02.12.2023</td>
+                                    <td class="td3">Брянская область</td>
+                                    <td class="td4">Черкасово</td>
+                                    <td class="td5">Люберцы</td>
+                                    <td class="td6">78</td>
+                                    <td class="td7">23.78</td>
+                                </tr>
+                                <tr>
+                                    <td class="td1">02.12.2023</td>
+                                    <td class="td3">Брянская область</td>
+                                    <td class="td4">Черкасово</td>
+                                    <td class="td5">Люберцы</td>
+                                    <td class="td6">78</td>
+                                    <td class="td7">23.78</td>
+                                </tr>
+                                <tr>
+                                    <td class="td1">02.12.2023</td>
+                                    <td class="td3">Брянская область</td>
+                                    <td class="td4">Черкасово</td>
+                                    <td class="td5">Люберцы</td>
+                                    <td class="td6">78</td>
+                                    <td class="td7">23.78</td>
+                                </tr>
+                                <tr>
+                                    <td class="td1">02.12.2023</td>
+                                    <td class="td3">Брянская область</td>
+                                    <td class="td4">Черкасово</td>
+                                    <td class="td5">Люберцы</td>
+                                    <td class="td6">78</td>
+                                    <td class="td7">23.78</td>
+                                </tr>
+                                <tr>
+                                    <td class="td1">02.12.2023</td>
+                                    <td class="td3">Брянская область</td>
+                                    <td class="td4">Черкасово</td>
+                                    <td class="td5">Люберцы</td>
+                                    <td class="td6">78</td>
+                                    <td class="td7">23.78</td>
+                                </tr>
+                                <tr>
+                                    <td class="td1">02.12.2023</td>
+                                    <td class="td3">Брянская область</td>
+                                    <td class="td4">Черкасово</td>
+                                    <td class="td5">Люберцы</td>
+                                    <td class="td6">78</td>
+                                    <td class="td7">23.78</td>
+                                </tr>
+                                <tr>
+                                    <td class="td1">02.12.2023</td>
+                                    <td class="td3">Брянская область</td>
+                                    <td class="td4">Черкасово</td>
+                                    <td class="td5">Люберцы</td>
+                                    <td class="td6">78</td>
+                                    <td class="td7">23.78</td>
+                                </tr>
+                                <tr>
+                                    <td class="td1">02.12.2023</td>
+                                    <td class="td3">Брянская область</td>
+                                    <td class="td4">Черкасово</td>
+                                    <td class="td5">Люберцы</td>
+                                    <td class="td6">78</td>
+                                    <td class="td7">23.78</td>
+                                </tr>
+                                <tr>
+                                    <td class="td1">02.12.2023</td>
+                                    <td class="td3">Брянская область</td>
+                                    <td class="td4">Черкасово</td>
+                                    <td class="td5">Люберцы</td>
+                                    <td class="td6">78</td>
+                                    <td class="td7">23.78</td>
+                                </tr>
+                                <tr>
+                                    <td class="td1">02.12.2023</td>
+                                    <td class="td3">Брянская область</td>
+                                    <td class="td4">Черкасово</td>
+                                    <td class="td5">Люберцы</td>
+                                    <td class="td6">78</td>
+                                    <td class="td7">23.78</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

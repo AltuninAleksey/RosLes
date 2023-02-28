@@ -1,61 +1,10 @@
 <component name="InspectionProjectProfileManager">
   <profile version="1.0">
     <option name="myName" value="Project Default" />
-    <inspection_tool class="PyAbstractClassInspection" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
-    <inspection_tool class="PyBroadExceptionInspection" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
-    <inspection_tool class="PyMethodMayBeStaticInspection" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
-    <inspection_tool class="PyPackageRequirementsInspection" enabled="true" level="WARNING" enabled_by_default="true">
-      <option name="ignoredPackages">
-        <value>
-          <list size="2">
-            <item index="0" class="java.lang.String" itemvalue="pickle5" />
-            <item index="1" class="java.lang.String" itemvalue="scikit-learn" />
-          </list>
-        </value>
-      </option>
-    </inspection_tool>
-    <inspection_tool class="PyPep8Inspection" enabled="true" level="WEAK WARNING" enabled_by_default="true">
-      <option name="ignoredErrors">
-        <list>
-          <option value="E722" />
-          <option value="E302" />
-          <option value="E501" />
-        </list>
-      </option>
-    </inspection_tool>
-    <inspection_tool class="PyPep8NamingInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true">
-      <option name="ignoredErrors">
-        <list>
-          <option value="N806" />
-          <option value="N802" />
-        </list>
-      </option>
-    </inspection_tool>
     <inspection_tool class="PyUnresolvedReferencesInspection" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="ignoredIdentifiers">
         <list>
-          <option value="testDjangosite.testDjangosite.urls.index" />
-          <option value="models.SubjectRF.objects" />
-          <option value="models.ListRegion.objects" />
-          <option value="models.Economy.objects" />
-          <option value="models.CategoryGroundLFInNoneAccordance.objects" />
-          <option value="models.AccordanceNoneAccordanceEconomy.*" />
-          <option value="models.AccordanceMolodKrAndTPPL.*" />
-          <option value="models.TypeForestGrowingConditions.objects" />
-          <option value="models.BonitetOrlov.objects" />
-          <option value="models.MethodOfReforestation.objects" />
-          <option value="models.CategoryOfForestFundLands.objects" />
-          <option value="djangoForest.models.List.*" />
-          <option value="djangoForest.models.Sample.*" />
-          <option value="djangoForest.models.GPS.*" />
-          <option value="djangoForest.models.Forestly.*" />
-          <option value="djangoForest.models.SubjectRF.*" />
-          <option value="djangoForest.models.Quarter.*" />
-          <option value="djangoForest.models.DistrictForestly.*" />
-          <option value="djangoForest.models.Branches.*" />
-          <option value="djangoForest.models.Breed.*" />
-          <option value="djangoForest.models.Reproduction.*" />
-          <option value="djangoForest.models.Role.*" />
+          <option value="testDjangosite.erp.views.djangoForest" />
         </list>
       </option>
     </inspection_tool>
