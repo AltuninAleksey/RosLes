@@ -1,13 +1,23 @@
+import datetime
 import json
+import os
+from email.mime import multipart
 
 import simplejson
+from django.core.files.images import ImageFile
 from django.http import JsonResponse, HttpResponse
-from rest_framework import generics
+from rest_framework import generics, status
+from PIL import Image
+import io
+from rest_framework.generics import ListAPIView
 from rest_framework.parsers import FileUploadParser, MultiPartParser, FormParser
 from rest_framework.response import Response
 from rest_framework import viewsets, permissions
 from rest_framework.authtoken.models import Token
 from rest_framework.views import APIView
+from rest_framework.renderers import MultiPartRenderer, JSONRenderer
+from testDjangosite.settings import MEDIA_URL, MEDIA_ROOT
+from django.core.files.base import ContentFile
 
 from djangoForest.serializers import *
 from collections import namedtuple
@@ -620,17 +630,40 @@ class UserAuth(generics.ListCreateAPIView):
 
 
 class PhotoPointView(APIView):
-    parser_classes = (FormParser, MultiPartParser, FileUploadParser)
-    def post(self, request, format = MultiPartParser):
-        if request.data['photo'] == '':
-            return HttpResponse({"no image"}, status=400)
-        serializer_photo = PhotoPointSerializer(data=request.data)
-        if serializer_photo.is_valid(raise_exception=True):
-            serializer_photo.save(id_sample_id = request.data.get('id_sample'),
-            photo=request.data.get('photo'))
-            return HttpResponse({"Object created"}, status=201)
-        return Response(serializer_photo.errors, status=400)
+    # parser_classes = (MultiPartParser, FormParser)
+    # renderer_classes = [JSONRenderer]
+    # parser_classes = (MultiPartParser, FormParser)
 
+    # parser_classes = (MultiPartParser, FormParser)
+    parser_classes = (FileUploadParser, MultiPartParser)
+    def post(self, request, format = 'jpg', *args, **kwargs):
+
+        file_serializer = PhotoPointSerializer(data=request.data)
+        if file_serializer.is_valid():
+            file_serializer.save(id_sample_id = 3,
+                                 photo = request.FILES.get('file'))
+            print(file_serializer)
+        return Response("vse ok")
+
+    # def post(self, request, *args, **kwargs):
+    #     uploads_serializer = PhotoPointSerializer(data=request.data)
+    #
+    #     if uploads_serializer.is_valid():
+    #         uploads_serializer.save()
+    #         return Response(uploads_serializer.data, status=status.HTTP_201_CREATED)
+    #     else:
+    #         return Response(uploads_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    # parser_classes = (FileUploadParser, )
+    # # parser_classes = (MultiPartParser, FormParser)
+    # def post(self, request, filename):
+    #     print(request.data)
+    #     print(request.FILES)
+    #     print(request.data)
+    #     serializer = PhotoPointSerializer(data=request.data)
+    #     serializer.is_valid()
+    #     serializer.save(id_sample_id = 3,
+    #                     photo = request.FILES.get('file'))
+    #     return Response("kaif")
 
 class AnroidDownland(APIView):
 
@@ -645,6 +678,30 @@ class AnroidDownland(APIView):
                          "breeds": BreedSerializer(Breed.objects.all(), many=True).data,
                          "Undergrowth": UndergrowthSerializer(Undergrowth.objects.all(), many=True).data
                          })
+
+
+class GetAllEqualListRegion(ListAPIView):
+    queryset = ListRegion.objects.all()
+
+    def get_queryset(self):
+        return ListRegion.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        self.queryset = self.get_queryset()
+        local_queryset = list()
+        id_list = list()
+        for i in range(len(self.queryset)-1):
+            if self.queryset[i].id in id_list:
+                continue
+            queryset = ListRegion.objects.filter(date = self.queryset[i].date,
+                                                 sample_region = self.queryset[i].sample_region,
+                                                 id_quarter_id = self.queryset[i].id_quarter_id).values()
+            for j in range(len(queryset)):
+                id_list.append(queryset[j].get('id'))
+            if len(queryset) > 1:
+                local_queryset.append(queryset)
+        return Response({"query":local_queryset })
+
 
 
 class ForestViewSet(viewsets.ModelViewSet):
