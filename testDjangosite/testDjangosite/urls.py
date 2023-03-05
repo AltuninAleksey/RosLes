@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path, include, re_path
 from djangoForest.views import *
 from django.views.static import serve
+from django.conf.urls.static import static
 
 from testDjangosite import settings
 
@@ -26,6 +27,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('djangoForest.urls')),
     path('getbase', AnroidDownland.as_view()),
+    # re_path(r'upload/(?P<filename>[^/]+)$', PhotoPointView.as_view()),
+    path('getallequallistregion', GetAllEqualListRegion.as_view()),
     path('upload', PhotoPointView.as_view()),
     path('auth', UserAuth.as_view()),
     path('registration', UserRegistration.as_view()),
@@ -73,3 +76,6 @@ urlpatterns = [
     path('erp/', include('erp.urls')),
     path('general_docs/', include('general_docs.urls')),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
