@@ -1,5 +1,10 @@
 var subjectrf, forestly, district_forestly, quarter;
 
+var appObject = {
+    consolidationListData: [],
+    activeGroupConsolidationObject: null
+};
+
 getAlllistRegions();
 
 async function getAlllistRegions() {
@@ -45,11 +50,7 @@ async function getAlllistRegions() {
             }
         }
 
-        for(var j = 0; j < quarter.length; j++) {
-            if(quarter[j].id == data[i].id_quarter) {
-                data[i].quarter = quarter[j].quarter_name;
-            }
-        }
+        data[i].quarter = CommonFunction.getQuarterNameByQuarterId(quarter, data[i].id_quarter);
 
         newHtml = newHtml +  "<tr>"+
                                     "<td class=\"td1\">" + data[i].date + "</td>" +
@@ -64,19 +65,110 @@ async function getAlllistRegions() {
     tableBody.innerHTML = newHtml;
 }
 
-async function openForm(id, typeConsolidationList) {
+async function buildConsolidationListForm(typeConsolidationList) {
 
-    var formAddProba = document.getElementById(id);
-    formAddProba.classList.remove("display-none");
+    if(appObject.activeGroupConsolidationObject == null
+        || appObject.activeGroupConsolidationObject == undefined) {
+
+        typeConsolidationList = 1;
+
+        let request = await axios({
+            method: 'get',
+            url: urlGlobal + "/getallequallistregion",
+            responseType: 'json'
+        });
+
+        appObject.consolidationListData = request.data.query;
+
+    }
+
+    let tbodyNode = document.getElementById('consolidation-list');
+    let newHtml = "";
+
+    if(typeConsolidationList == 1) {
+        for(let i = 0; i < appObject.consolidationListData.length; i++) {
+
+            let quarter_name;
+            if(appObject.consolidationListData[i].length > 0) {
+                quarter_name = CommonFunction.getQuarterNameByQuarterId(quarter, appObject.consolidationListData[i][0].id_quarter_id);
+            }
+
+            for(let j = 0; j < appObject.consolidationListData[i].length; j++) {
+                newHtml += `        <tr onclick="saveIdObjectForConsolidation(${typeConsolidationList}, ${appObject.consolidationListData[i][j].id}, ${i})">
+                                        <td class="td1">${appObject.consolidationListData[i][j].date}</td>
+                                        <td class="td3">Брянская область</td>
+                                        <td class="td4">Черкасово</td>
+                                        <td class="td5">Люберцы</td>
+                                        <td class="td6">${quarter_name}</td>
+                                        <td class="td7">${appObject.consolidationListData[i][j].soil_lot}</td>
+                                    </tr>`;
+            }
+        }
+    } else {
+        let quarter_name;
+        if(appObject.consolidationListData[appObject.activeGroupConsolidationObject].length > 0) {
+            quarter_name = CommonFunction.getQuarterNameByQuarterId(quarter, appObject.consolidationListData[appObject.activeGroupConsolidationObject][0].id_quarter_id)
+        }
+
+        for(let j = 0; j < appObject.consolidationListData[appObject.activeGroupConsolidationObject].length; j++) {
+            if(appObject.consolidationListData[appObject.activeGroupConsolidationObject][j].id != appObject.idObjectForConsolidation_1) {
+                newHtml += `        <tr onclick="saveIdObjectForConsolidation(${typeConsolidationList}, ${appObject.consolidationListData[appObject.activeGroupConsolidationObject][j].id}, ${appObject.activeGroupConsolidationObject})">
+                                    <td class="td1">${appObject.consolidationListData[appObject.activeGroupConsolidationObject][j].date}</td>
+                                    <td class="td3">Брянская область</td>
+                                    <td class="td4">Черкасово</td>
+                                    <td class="td5">Люберцы</td>
+                                    <td class="td6">${quarter_name}</td>
+                                    <td class="td7">${appObject.consolidationListData[appObject.activeGroupConsolidationObject][j].soil_lot}</td>
+                                </tr>`;
+            }
+        }
+    }
+
+
+    tbodyNode.innerHTML = newHtml;
+}
+
+function saveIdObjectForConsolidation(typeConsolidationList, idObjectForConsolidation, activeGroupConsolidationObject) {
+
+    let activeObject;
+
+    for(let j = 0; j < appObject.consolidationListData[activeGroupConsolidationObject].length; j++) {
+        if(appObject.consolidationListData[activeGroupConsolidationObject][j].id = idObjectForConsolidation) {
+            activeObject = appObject.consolidationListData[activeGroupConsolidationObject][j];
+            break;
+        }
+    }
+
+    let quarter_name = CommonFunction.getQuarterNameByQuarterId(quarter, activeObject.id_quarter_id);
+
+    if(typeConsolidationList == 1) {
+        appObject.activeGroupConsolidationObject = activeGroupConsolidationObject;
+        appObject.idObjectForConsolidation_1 = idObjectForConsolidation;
+
+        let firstObjectNode = document.getElementById("firstDoc");
+        firstObjectNode.value = "" + activeObject.date + " Брянская область, Черкасово, Люберцы, " + quarter_name + ", " + activeObject.soil_lot;
+
+    } else {
+        appObject.idObjectForConsolidation_2 = idObjectForConsolidation;
+
+        let secondObjectNode = document.getElementById("secondDoc");
+        secondObjectNode.value = "" + activeObject.date + " Брянская область, Черкасово, Люберцы, " + quarter_name + ", " + activeObject.soil_lot;
+    }
+
+    closeForm('consolidation-list-form');
+}
+
+async function openForm(id, typeConsolidationList) {
 
     if(id != 'consolidation-list-form') {
         var body = document.getElementById("body");
         body.classList.add("overflowHiddenImportant");
     } else {
-
-
-
+        await buildConsolidationListForm(typeConsolidationList);
     }
+
+    var formAddProba = document.getElementById(id);
+    formAddProba.classList.remove("display-none");
 }
 
 function closeForm(id) {
@@ -86,6 +178,19 @@ function closeForm(id) {
     if(id != 'consolidation-list-form') {
         var body = document.getElementById("body");
         body.classList.remove("overflowHiddenImportant");
+
+        if(id == 'consolidation-form') {
+            let firstObjectNode = document.getElementById("firstDoc");
+            firstObjectNode.value = "";
+
+            let secondObjectNode = document.getElementById("secondDoc");
+            secondObjectNode.value = "";
+
+            appObject.activeGroupConsolidationObject = null;
+            appObject.consolidationListData = null;
+        }
+
+    } else {
     }
 
 }

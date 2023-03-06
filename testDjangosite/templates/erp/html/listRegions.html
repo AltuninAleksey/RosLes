@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="{% static 'css/consolidation-statement-form.css' %}">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.0/axios.js"></script>
     <script src="{% static 'js/global.js' %}"></script>
+    <script src="{% static 'js/commonFunction.js' %}"></script>
     <script src="{% static 'js/listRegions.js' %}"></script>
     <title>Список перечетных ведомостей</title>
     {% endblock %}
@@ -78,12 +79,10 @@
                 <div class="firstDoc">
                     <label>Первый документ: </label>
                     <input id="firstDoc" type="text" class="consolidation-doc" readonly onclick="openForm('consolidation-list-form', 1)">
-                    <input id="firstDoc-value" type="hidden">
                 </div>
                 <div class="secondDoc">
                     <label>Второй документ: </label>
                     <input id="secondDoc" type="text" class="consolidation-doc" readonly onclick="openForm('consolidation-list-form', 2)">
-                    <input id="secondDoc-value" type="hidden">
                 </div>
             </div>
         </div>
@@ -108,86 +107,6 @@
                     <div class="scroll-table-body">
                         <table>
                             <tbody id="consolidation-list">
-                                <tr>
-                                    <td class="td1">02.12.2023</td>
-                                    <td class="td3">Брянская область</td>
-                                    <td class="td4">Черкасово</td>
-                                    <td class="td5">Люберцы</td>
-                                    <td class="td6">78</td>
-                                    <td class="td7">23.78</td>
-                                </tr>
-                                <tr>
-                                    <td class="td1">02.12.2023</td>
-                                    <td class="td3">Брянская область</td>
-                                    <td class="td4">Черкасово</td>
-                                    <td class="td5">Люберцы</td>
-                                    <td class="td6">78</td>
-                                    <td class="td7">23.78</td>
-                                </tr>
-                                <tr>
-                                    <td class="td1">02.12.2023</td>
-                                    <td class="td3">Брянская область</td>
-                                    <td class="td4">Черкасово</td>
-                                    <td class="td5">Люберцы</td>
-                                    <td class="td6">78</td>
-                                    <td class="td7">23.78</td>
-                                </tr>
-                                <tr>
-                                    <td class="td1">02.12.2023</td>
-                                    <td class="td3">Брянская область</td>
-                                    <td class="td4">Черкасово</td>
-                                    <td class="td5">Люберцы</td>
-                                    <td class="td6">78</td>
-                                    <td class="td7">23.78</td>
-                                </tr>
-                                <tr>
-                                    <td class="td1">02.12.2023</td>
-                                    <td class="td3">Брянская область</td>
-                                    <td class="td4">Черкасово</td>
-                                    <td class="td5">Люберцы</td>
-                                    <td class="td6">78</td>
-                                    <td class="td7">23.78</td>
-                                </tr>
-                                <tr>
-                                    <td class="td1">02.12.2023</td>
-                                    <td class="td3">Брянская область</td>
-                                    <td class="td4">Черкасово</td>
-                                    <td class="td5">Люберцы</td>
-                                    <td class="td6">78</td>
-                                    <td class="td7">23.78</td>
-                                </tr>
-                                <tr>
-                                    <td class="td1">02.12.2023</td>
-                                    <td class="td3">Брянская область</td>
-                                    <td class="td4">Черкасово</td>
-                                    <td class="td5">Люберцы</td>
-                                    <td class="td6">78</td>
-                                    <td class="td7">23.78</td>
-                                </tr>
-                                <tr>
-                                    <td class="td1">02.12.2023</td>
-                                    <td class="td3">Брянская область</td>
-                                    <td class="td4">Черкасово</td>
-                                    <td class="td5">Люберцы</td>
-                                    <td class="td6">78</td>
-                                    <td class="td7">23.78</td>
-                                </tr>
-                                <tr>
-                                    <td class="td1">02.12.2023</td>
-                                    <td class="td3">Брянская область</td>
-                                    <td class="td4">Черкасово</td>
-                                    <td class="td5">Люберцы</td>
-                                    <td class="td6">78</td>
-                                    <td class="td7">23.78</td>
-                                </tr>
-                                <tr>
-                                    <td class="td1">02.12.2023</td>
-                                    <td class="td3">Брянская область</td>
-                                    <td class="td4">Черкасово</td>
-                                    <td class="td5">Люберцы</td>
-                                    <td class="td6">78</td>
-                                    <td class="td7">23.78</td>
-                                </tr>
                             </tbody>
                         </table>
                     </div>
