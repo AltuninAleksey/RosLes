@@ -304,6 +304,7 @@ class ListRegionSerializerId(serializers.Serializer):
     id_district_forestly = serializers.CharField(source='id_quarter.id_district_forestly.id')
     id_forestly = serializers.CharField(source='id_quarter.id_district_forestly.id_forestly.id')
     id_subjectrf = serializers.CharField(source='id_quarter.id_district_forestly.id_forestly.id_subject_rf.id')
+    mark_del = serializers.BooleanField()
     soil_lot = serializers.CharField(max_length=300)
 
 
@@ -422,7 +423,7 @@ class PhotoPointSerializer(serializers.Serializer):
 
     class Meta:
         model = PhotoPoint
-        fields = '__all__'
+        fields = ('id_sample_id', 'photo')
 
     def create(self, validated_data):
         return PhotoPoint.objects.create(**validated_data)
