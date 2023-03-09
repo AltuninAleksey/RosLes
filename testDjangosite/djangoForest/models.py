@@ -1,6 +1,7 @@
 from django.db import models
 
 
+
 class Table(models.Model):
     name = models.CharField(max_length=300)
     age = models.IntegerField()
@@ -86,6 +87,7 @@ class List(models.Model):
     avg_diameter = models.FloatField(u'Средний диаметр', null=True)
     count_of_plants = models.IntegerField(u'Количество растений для подлеска', null = True)
     avg_height = models.FloatField(u'Средняя высота', null=True)
+    avg_height_undergrowth = models.FloatField(u'Средняя высота подлеска', null = True)
     main = models.BooleanField(null=True, default=0)
 
     class Meta:

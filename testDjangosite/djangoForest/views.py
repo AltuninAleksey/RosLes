@@ -704,6 +704,24 @@ class GetAllEqualListRegion(ListAPIView):
         return Response({"query":local_queryset})
 
 
+    def post(self, request, *args, **kwargs):
+        self.queryset = self.get_queryset()
+        local_queryset = list()
+        id_list = list()
+        for i in range(len(self.queryset) - 1):
+            if self.queryset[i].id in id_list:
+                continue
+            queryset = ListRegionSerializerId(
+                ListRegion.objects.filter(date=self.queryset[i].date,
+                                          sample_region=self.queryset[i].sample_region,
+                                          id_quarter_id=self.queryset[i].id_quarter_id), many=True).data
+            for j in range(len(queryset)):
+                id_list.append(queryset[j].get('id'))
+            if len(queryset) > 1:
+                local_queryset.append(queryset)
+        return Response({"query": local_queryset})
+
+
 
 class ForestViewSet(viewsets.ModelViewSet):
     pass
