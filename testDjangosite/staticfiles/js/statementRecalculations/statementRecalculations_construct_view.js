@@ -33,3 +33,17 @@ async function buildStatementRecalculationsTbody() {
     tableBody.innerHTML = newHtml;
 
 }
+
+/*
+{
+    bSubjectrf: true,
+    idSubjectrf: 1,
+    bForestly: false,
+    idForestly: 0,
+    bDistrictForestly: true,
+    idDistrictForestly: 2,
+    bQuarter: false,
+    idQuarter: 0,
+    bDate: false,
+    date: ""
+}*/
