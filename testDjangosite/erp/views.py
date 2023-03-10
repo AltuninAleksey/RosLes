@@ -404,3 +404,6 @@ def getRecalculationOnTrialAreaDetailNew(request):
 
 def getListRegions(request):
     return render(request, 'erp/html/listRegions.html')
+
+def getStatementRecalculations(request):
+    return render(request, 'erp/html/statementRecalculations.html')
