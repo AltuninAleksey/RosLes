@@ -708,6 +708,7 @@ class GetAllEqualListRegion(ListAPIView):
         self.queryset = self.get_queryset()
         local_queryset = list()
         id_list = list()
+        date_request = request.data['date_in_days']
         for i in range(len(self.queryset) - 1):
             if self.queryset[i].id in id_list:
                 continue
@@ -722,6 +723,27 @@ class GetAllEqualListRegion(ListAPIView):
         return Response({"query": local_queryset})
 
 
+class ListRegionFilters(ListAPIView):
+
+    def post(self, request, *args, **kwargs):
+        ser2 = ListRegion.objects.all()
+        if request.data['bSubjectrf']:
+            idSubjectrf = request.data['idSubjectrf']
+            ser2 = ser2.filter(id_quarter__id_district_forestly__id_forestly__id_subject_rf = idSubjectrf)
+        if request.data['bForestly']:
+            idForestly = request.data['idForestly']
+            ser2 = ser2.filter(id_quarter__id_district_forestly__id_forestly = idForestly)
+        if request.data['bDistrictForestly']:
+            idDistrictForestly = request.data['idDistrictForestly']
+            ser2 = ser2.filter(id_quarter__id_district_forestly=idDistrictForestly)
+        if request.data['bQuarter']:
+            idQuarter = request.data['idQuarter']
+            ser2 = ser2.filter(id_quarter = idQuarter)
+        if request.data['bDate']:
+            requestDate = request.data['date']
+            ser2 = ser2.filter(date = requestDate)
+        ser2 = ListRegionSerializerId(ser2, many=True)
+        return Response({"data":ser2.data}, status=200 )
 
 class ForestViewSet(viewsets.ModelViewSet):
     pass
