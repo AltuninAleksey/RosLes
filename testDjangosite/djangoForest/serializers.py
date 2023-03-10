@@ -308,6 +308,14 @@ class ListRegionSerializerId(serializers.Serializer):
     soil_lot = serializers.CharField(max_length=300)
 
 
+class ListRegionFiltersSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    date = serializers.DateField()
+    sample_region = serializers.CharField(max_length=300)
+    id_quarter = serializers.CharField(source='id_quarter.id_district_forestly.id_forestly.id_subject_rf.id')
+    mark_del = serializers.BooleanField()
+    soil_lot = serializers.CharField(max_length=300)
+
 class AllListRegionSerializer(serializers.Serializer):
     listregion = ListRegionSerializer(many=True)
     quarter = QuarterSerializer(many=True)

@@ -28,6 +28,7 @@ urlpatterns = [
     path('', include('djangoForest.urls')),
     path('getbase', AnroidDownland.as_view()),
     # re_path(r'upload/(?P<filename>[^/]+)$', PhotoPointView.as_view()),
+    path('listregionfilters', ListRegionFilters.as_view()),
     path('getallequallistregion', GetAllEqualListRegion.as_view()),
     path('upload', PhotoPointView.as_view()),
     path('auth', UserAuth.as_view()),
