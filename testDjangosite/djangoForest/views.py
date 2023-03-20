@@ -755,7 +755,7 @@ class SendResponseSQLite(ListAPIView):
         with open(file_path, 'rb') as f:
             dbfile = f.read()
         response = HttpResponse(dbfile, content_type='application/x-sqlite3')
-        response['Content-Disposition'] = 'attachment; filename=db.sqlite3'
+        response['Content-Disposition'] = 'attachment; filename=db.db'
         return response
 
 
