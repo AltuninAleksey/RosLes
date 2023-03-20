@@ -15,9 +15,12 @@ from rest_framework.response import Response
 from rest_framework import viewsets, permissions
 from rest_framework.authtoken.models import Token
 from rest_framework.views import APIView
+
+import settings
+from settings import BASE_DIR
 from rest_framework.renderers import MultiPartRenderer, JSONRenderer
 from testDjangosite.settings import MEDIA_URL, MEDIA_ROOT
-from django.core.files.base import ContentFile
+from django.core.files import File
 
 from djangoForest.serializers import *
 from collections import namedtuple
@@ -744,6 +747,17 @@ class ListRegionFilters(ListAPIView):
             ser2 = ser2.filter(date = requestDate)
         ser2 = ListRegionSerializerId(ser2, many=True)
         return Response({"data":ser2.data}, status=200 )
+
+
+class SendResponseSQLite(ListAPIView):
+    def get(self, *args, **kwargs):
+        file_path = str(BASE_DIR) + "\\testDjangosite\\db.sqlite3"
+        with open(file_path, 'rb') as f:
+            dbfile = f.read()
+        response = HttpResponse(dbfile, content_type='application/x-sqlite3')
+        response['Content-Disposition'] = 'attachment; filename=db.sqlite3'
+        return response
+
 
 class ForestViewSet(viewsets.ModelViewSet):
     pass
