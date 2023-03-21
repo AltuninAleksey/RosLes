@@ -1,10 +1,7 @@
 import datetime
-import json
-import os
-from email.mime import multipart
-
 import simplejson
 from django.core.files.images import ImageFile
+from django.db.models import F
 from django.http import JsonResponse, HttpResponse
 from rest_framework import generics, status
 from PIL import Image
@@ -732,6 +729,7 @@ class ListRegionFilters(ListAPIView):
         ser2 = ListRegion.objects.all()
         if request.data['bSubjectrf']:
             idSubjectrf = request.data['idSubjectrf']
+            print("subjectrf")
             ser2 = ser2.filter(id_quarter__id_district_forestly__id_forestly__id_subject_rf = idSubjectrf)
         if request.data['bForestly']:
             idForestly = request.data['idForestly']
@@ -744,9 +742,12 @@ class ListRegionFilters(ListAPIView):
             ser2 = ser2.filter(id_quarter = idQuarter)
         if request.data['bDate']:
             requestDate = request.data['date']
-            ser2 = ser2.filter(date = requestDate)
+            ser2 = ser2.filter(date__gte = requestDate)
+        if request.data['bDateSec']:
+            requestDateSec = request.data['dateSec']
+            ser2 = ser2.filter(date__lte = requestDateSec)
         ser2 = ListRegionSerializerId(ser2, many=True)
-        return Response({"data":ser2.data}, status=200 )
+        return Response({"data":ser2.data})
 
 
 class SendResponseSQLite(ListAPIView):
