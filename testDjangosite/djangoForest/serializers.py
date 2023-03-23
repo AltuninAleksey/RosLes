@@ -303,7 +303,7 @@ class ListRegionSerializerId(serializers.Serializer):
     id_quarter = serializers.CharField(source='id_quarter.id')
     id_district_forestly = serializers.CharField(source='id_quarter.id_district_forestly.id')
     id_forestly = serializers.CharField(source='id_quarter.id_district_forestly.id_forestly.id')
-    id_subjectrf = serializers.CharField(source='id_quarter.id_district_forestly.id_forestly.id_subject_rf.id')
+    id_subject_rf = serializers.CharField(source='id_quarter.id_district_forestly.id_forestly.id_subject_rf.id')
     mark_del = serializers.BooleanField()
     soil_lot = serializers.CharField(max_length=300)
 
