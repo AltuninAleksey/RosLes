@@ -118,10 +118,9 @@ class ListRegionView(generics.ListCreateAPIView):
         if pk:
             lst = ListRegion.objects.filter(pk=pk)
             return JsonResponse(ListRegionSerializer(lst, many=True).data, safe=False)
-        else:
-            lst = ListRegion.objects.all()
-            serealizer_class = GetListRegionSerializer(lst, many=True)
-            return JsonResponse(ListRegionSerializer(lst, many=True).data, safe=False)
+        lst = ListRegion.objects.all()
+        serealizer_class = GetListRegionSerializer(lst, many=True)
+        return JsonResponse(ListRegionSerializer(lst, many=True).data, safe=False)
         # lst = ListRegion.objects.all()
         # return JsonResponse(ListRegionSerializer(lst, many=True).data, safe=False)
 
@@ -724,6 +723,9 @@ class GetAllEqualListRegion(ListAPIView):
 
 
 class ListRegionFilters(ListAPIView):
+    """
+    Фильтры перечетной ведомости участка
+    """
 
     def post(self, request, *args, **kwargs):
         ser2 = ListRegion.objects.all()
@@ -751,13 +753,27 @@ class ListRegionFilters(ListAPIView):
 
 
 class SendResponseSQLite(ListAPIView):
+    '''
+    Отправка БД sqlite
+    '''
     def get(self, *args, **kwargs):
-        file_path = str(BASE_DIR) + "\\testDjangosite\\db.sqlite3"
+        import settings
+        print(settings.DATABASES['default']['NAME'])
+        # file_path = str(BASE_DIR) + "\\testDjangosite\\db.sqlite3"
+        file_path = settings.DATABASES['default']['NAME']
         with open(file_path, 'rb') as f:
             dbfile = f.read()
         response = HttpResponse(dbfile, content_type='application/x-sqlite3')
         response['Content-Disposition'] = 'attachment; filename=db.db'
         return response
+
+
+class GetListFromListRegionId(ListAPIView):
+
+    def post(self, request, *args, **kwargs):
+        ser = list(List.objects.filter(id_sample__id_list_region = request.data['id']).values_list('id', flat=True))
+        lst1 = ListSerializer(List.objects.all().filter(id__in = ser), many=True)
+        return Response({"data": lst1.data})
 
 
 class ForestViewSet(viewsets.ModelViewSet):

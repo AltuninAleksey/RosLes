@@ -24,6 +24,7 @@ from testDjangosite import settings
 urlpatterns = [
     re_path(r'^media/(?P<path>.*)$', serve,{'document_root': settings.MEDIA_ROOT}),
     re_path(r'^static/(?P<path>.*)$', serve,{'document_root': settings.STATIC_ROOT}),
+    path('getlistfromlistregion', GetListFromListRegionId.as_view()),
     path('responsesqlite', SendResponseSQLite.as_view()),
     path('admin/', admin.site.urls),
     path('', include('djangoForest.urls')),
