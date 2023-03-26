@@ -117,7 +117,7 @@ class ListRegionView(generics.ListCreateAPIView):
         pk = kwargs.get('pk')
         if pk:
             lst = ListRegion.objects.filter(pk=pk)
-            return JsonResponse(ListRegionSerializer(lst, many=True).data, safe=False)
+            return JsonResponse(ListRegionSerializerId(lst, many=True).data, safe=False)
         lst = ListRegion.objects.all()
         serealizer_class = GetListRegionSerializer(lst, many=True)
         return JsonResponse(ListRegionSerializer(lst, many=True).data, safe=False)
@@ -768,11 +768,11 @@ class SendResponseSQLite(ListAPIView):
         return response
 
 
-class GetListFromListRegionId(ListAPIView):
+class GetSampleFromListRegionId(ListAPIView):
 
     def post(self, request, *args, **kwargs):
-        ser = list(List.objects.filter(id_sample__id_list_region = request.data['id']).values_list('id', flat=True))
-        lst1 = ListSerializer(List.objects.all().filter(id__in = ser), many=True)
+        ser = list(Sample.objects.filter(id_list_region = request.data['id']).values_list('id', flat=True))
+        lst1 = SampleSerializer(Sample.objects.all().filter(id__in = ser), many=True)
         return Response({"data": lst1.data})
 
 
