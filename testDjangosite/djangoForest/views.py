@@ -772,7 +772,7 @@ class GetSampleFromListRegionId(ListAPIView):
 
     def post(self, request, *args, **kwargs):
         ser = list(Sample.objects.filter(id_list_region = request.data['id']).values_list('id', flat=True))
-        lst1 = SampleSerializer(Sample.objects.all().filter(id__in = ser), many=True)
+        lst1 = SampleSerializerId(Sample.objects.all().filter(id__in = ser), many=True)
         return Response({"data": lst1.data})
 
 

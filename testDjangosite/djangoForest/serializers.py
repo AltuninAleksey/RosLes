@@ -116,6 +116,22 @@ class SampleSerializer(serializers.ModelSerializer):
         return instance
 
 
+class SampleSerializerId(serializers.Serializer):
+    id = serializers.IntegerField()
+    date = serializers.DateField()
+    sample_area = serializers.FloatField()
+    id_profile = serializers.CharField()
+    id_quarter = serializers.CharField()
+    id_district_forestly = serializers.CharField(source='id_quarter.id_district_forestly.id')
+    id_forestly = serializers.CharField(source='id_quarter.id_district_forestly.id_forestly.id')
+    id_subject_rf = serializers.CharField(source='id_quarter.id_district_forestly.id_forestly.id_subject_rf.id')
+    width = serializers.FloatField()
+    lenght = serializers.FloatField()
+    square = serializers.FloatField()
+    soil_lot = serializers.CharField()
+
+
+
 class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
@@ -315,6 +331,7 @@ class ListRegionFiltersSerializer(serializers.Serializer):
     id_quarter = serializers.CharField(source='id_quarter.id_district_forestly.id_forestly.id_subject_rf.id')
     mark_del = serializers.BooleanField()
     soil_lot = serializers.CharField(max_length=300)
+
 
 class AllListRegionSerializer(serializers.Serializer):
     listregion = ListRegionSerializer(many=True)
