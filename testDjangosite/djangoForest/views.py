@@ -587,14 +587,18 @@ class GetQuarterByDistrictId(viewsets.ViewSet):
 
 class UnionListRegions(generics.ListCreateAPIView):
 
-    def get(self, request, **kwargs):
-        try:
-            lst = Sample.objects.filter(id_list_region = request.data['id2']).update(id_list_region = request.data['id1'])
-            object_region = ListRegion.objects.get(id=request.data['id2'])
+    def post(self, request, **kwargs):
+        for i in request.data['ids']:
+            try:
+                listing = ListRegion.objects.get(id = i['id'])
+            except:
+                continue
+            lst = Sample.objects.filter(id_list_region = i['id']).update(id_list_region = request.data['id'])
+            object_region = ListRegion.objects.get(id=i['id'])
             object_region.delete()
-            return JsonResponse({'result': 'success'})
-        except:
-            return JsonResponse({'result': 'error'})
+        print(request.data['id'])
+        lst_sample = Sample.objects.filter(id_list_region = request.data['id'])
+        return Response({"result": "Success"})
 
 
 class UserRegistration(generics.ListCreateAPIView):
@@ -758,9 +762,8 @@ class SendResponseSQLite(ListAPIView):
     '''
     def get(self, *args, **kwargs):
         import settings
-        print(settings.DATABASES['default']['NAME'])
-        # file_path = str(BASE_DIR) + "\\testDjangosite\\db.sqlite3"
-        file_path = settings.DATABASES['default']['NAME']
+        file_path = str(BASE_DIR) + "\\testDjangosite\\db.sqlite3"
+        # file_path = settings.DATABASES['default']['NAME']
         with open(file_path, 'rb') as f:
             dbfile = f.read()
         response = HttpResponse(dbfile, content_type='application/x-sqlite3')

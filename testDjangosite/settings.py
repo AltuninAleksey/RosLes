@@ -28,6 +28,7 @@ SECRET_KEY = 'django-insecure-e3jq*c1(yxlmcs*&89)m_+tc*x)dykr^=mcbmq=(qznwackn#f
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
+SECURE_CROSS_ORIGIN_OPENER_POLICY=None
 
 #ALLOWED_HOSTS = ['90.156.208.88']
 ALLOWED_HOSTS = ['127.0.0.1', '90.156.208.88']
@@ -89,6 +90,7 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
