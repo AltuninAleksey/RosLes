@@ -13,8 +13,7 @@ from rest_framework import viewsets, permissions
 from rest_framework.authtoken.models import Token
 from rest_framework.views import APIView
 
-import settings
-from settings import BASE_DIR
+from testDjangosite.settings import BASE_DIR
 from rest_framework.renderers import MultiPartRenderer, JSONRenderer
 from testDjangosite.settings import MEDIA_URL, MEDIA_ROOT
 from django.core.files import File
@@ -761,7 +760,7 @@ class SendResponseSQLite(ListAPIView):
     Отправка БД sqlite
     '''
     def get(self, *args, **kwargs):
-        import settings
+        import testDjangosite.settings
         file_path = str(BASE_DIR) + "\\testDjangosite\\db.sqlite3"
         # file_path = settings.DATABASES['default']['NAME']
         with open(file_path, 'rb') as f:
