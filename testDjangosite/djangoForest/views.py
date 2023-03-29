@@ -760,9 +760,9 @@ class SendResponseSQLite(ListAPIView):
     Отправка БД sqlite
     '''
     def get(self, *args, **kwargs):
-        import testDjangosite.settings
-        file_path = str(BASE_DIR) + "\\testDjangosite\\db.sqlite3"
-        # file_path = settings.DATABASES['default']['NAME']
+        import testDjangosite.settings as settings
+        # file_path = str(BASE_DIR) + "\\testDjangosite\\db.sqlite3"
+        file_path = settings.DATABASES['default']['NAME']
         with open(file_path, 'rb') as f:
             dbfile = f.read()
         response = HttpResponse(dbfile, content_type='application/x-sqlite3')
