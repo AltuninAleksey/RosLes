@@ -405,3 +405,35 @@ class ForestAreas(models.Model):
         verbose_name = 'Лесные районы'
         verbose_name_plural = 'Лесные районы'
 
+
+class point7Table(models.Model):
+    ratio_composition = models.IntegerField()
+    breed = models.IntegerField()
+    age = models.IntegerField()
+    avg_height = models.IntegerField()
+    avg_diameter = models.IntegerField()
+    count_register_wood_plants = models.IntegerField()
+
+
+class point7Table2Sapling(models.Model):
+    ratio_composition = models.IntegerField()
+    breed = models.IntegerField()
+    age = models.IntegerField()
+    avg_height = models.IntegerField()
+    avg_diameter = models.IntegerField()
+    count_register_wood_plants = models.IntegerField()
+
+
+class DescriptionRegion(models.Model):
+    id_list_region = models.ForeignKey("ListRegion",
+                                       on_delete=models.CASCADE,
+                                       verbose_name="Перечетная ведомость участка", null=True)
+    # MethodOfReforestation
+    id_method_of_reforestation = models.ForeignKey("MethodOfReforestation",
+                                                   on_delete=models.CASCADE, verbose_name="Способ лесовосстановления",
+                                                   null=True)
+    year_assignment_land = models.DateField(verbose_name="Год отнесения к землям")
+    year_format_fond_trees = models.DateField(verbose_name="Год образования категории фонда лесовосстановления")
+    inf_restore_forest = models.CharField(max_length=500)
+    breed_structure_sapling_act_land = models.CharField(max_length=300)
+    economy_act_land = models.CharField(max_length=300)

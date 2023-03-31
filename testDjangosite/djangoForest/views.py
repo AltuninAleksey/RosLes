@@ -632,20 +632,33 @@ class UserAuth(generics.ListCreateAPIView):
 
 
 class PhotoPointView(APIView):
+    """
+    Приемка фотокарточки
+    """
+
+    parser_classes = (MultiPartParser, FileUploadParser, )
+
+    def post(self, request, format = None):
+        serializer = PhotoPointSerializer(data=request.data)
+        serializer.is_valid()
+        serializer.save(id_sample_id = request.data.get('id_sample'),
+                        photo = request.FILES.get('photo'))
+        return Response(status=201)
+
     # parser_classes = (MultiPartParser, FormParser)
     # renderer_classes = [JSONRenderer]
     # parser_classes = (MultiPartParser, FormParser)
 
     # parser_classes = (MultiPartParser, FormParser)
-    parser_classes = (FileUploadParser, MultiPartParser)
-    def post(self, request, format = 'jpg', *args, **kwargs):
-
-        file_serializer = PhotoPointSerializer(data=request.data)
-        if file_serializer.is_valid():
-            file_serializer.save(id_sample_id = 3,
-                                 photo = request.FILES.get('file'))
-            print(file_serializer)
-        return Response("vse ok")
+    # parser_classes = (FileUploadParser, MultiPartParser)
+    # def post(self, request, format = 'jpg', *args, **kwargs):
+    #
+    #     file_serializer = PhotoPointSerializer(data=request.data)
+    #     if file_serializer.is_valid():
+    #         file_serializer.save(id_sample_id = 3,
+    #                              photo = request.FILES.get('file'))
+    #         print(file_serializer)
+    #     return Response("vse ok")
 
     # def post(self, request, *args, **kwargs):
     #     uploads_serializer = PhotoPointSerializer(data=request.data)
