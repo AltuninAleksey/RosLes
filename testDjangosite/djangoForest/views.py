@@ -639,11 +639,19 @@ class PhotoPointView(APIView):
     parser_classes = (MultiPartParser, FileUploadParser, )
 
     def post(self, request, format = None):
-        serializer = PhotoPointSerializer(data=request.data)
+        serializer = PhotoPointSerializer(data=request.data, context=request)
         serializer.is_valid()
         serializer.save(id_sample_id = request.data.get('id_sample'),
                         photo = request.FILES.get('photo'))
-        return Response(status=201)
+        return Response({"http": status.HTTP_200_OK}, status=201)
+
+
+    # def post(self, request, format = None):
+    #     serializer = PhotoPointSerializer(data=request.data)
+    #     serializer.is_valid()
+    #     serializer.save(id_sample_id = request.data.get('id_sample'),
+    #                     photo = request.FILES.get('photo'))
+    #     return Response(status=201)
 
     # parser_classes = (MultiPartParser, FormParser)
     # renderer_classes = [JSONRenderer]
@@ -773,15 +781,17 @@ class SendResponseSQLite(ListAPIView):
     Отправка БД sqlite
     '''
     def get(self, *args, **kwargs):
+        import pathlib
         import testDjangosite.settings as settings
         # file_path = str(BASE_DIR) + "\\testDjangosite\\db.sqlite3"
-        file_path = settings.DATABASES['default']['NAME']
-        with open(file_path, 'rb') as f:
-            dbfile = f.read()
-        response = HttpResponse(dbfile, content_type='application/x-sqlite3')
-        response['Content-Disposition'] = 'attachment; filename=db.db'
+        # file_path = settings.DATABASES['default']['NAME']
+        file_path = str('..' / settings.BASE_DIR / 'db.sqlite3')
+        response = Response({"BASED": file_path})
         return response
 
+
+# , content_type="application/sqlite-x")
+#         response['Content-Disposition'] = 'attachment; filename=db.db'
 
 class GetSampleFromListRegionId(ListAPIView):
 
