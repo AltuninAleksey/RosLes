@@ -287,6 +287,8 @@ class GetListRegionSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     date = serializers.DateField()
     sample_region = serializers.CharField(max_length=300)
+    mark_del = serializers.BooleanField()
+    mark_update = serializers.BooleanField()
     id_quarter = serializers.CharField()
     quarter = serializers.CharField(source='id_quarter.quarter_name')
     district_forestly = serializers.CharField(source='id_quarter.id_district_forestly')
@@ -308,6 +310,9 @@ class ListRegionSerializer(serializers.ModelSerializer):
         instance.date = validated_data.get("date")
         instance.soil_lot = validated_data.get("soil_lot")
         instance.id_quarter = validated_data.get("id_quarter")
+        instance.sample_region = validated_data.get("sample_region")
+        instance.mark_del = validated_data.get("mark_del")
+        instance.mark_update = validated_data.get("mark_update")
         instance.save()
         return instance
 
@@ -321,6 +326,7 @@ class ListRegionSerializerId(serializers.Serializer):
     id_forestly = serializers.CharField(source='id_quarter.id_district_forestly.id_forestly.id')
     id_subject_rf = serializers.CharField(source='id_quarter.id_district_forestly.id_forestly.id_subject_rf.id')
     mark_del = serializers.BooleanField()
+    mark_update = serializers.BooleanField()
     soil_lot = serializers.CharField(max_length=300)
 
 
@@ -329,6 +335,7 @@ class ListRegionFiltersSerializer(serializers.Serializer):
     date = serializers.DateField()
     sample_region = serializers.CharField(max_length=300)
     id_quarter = serializers.CharField(source='id_quarter.id_district_forestly.id_forestly.id_subject_rf.id')
+    mark_del = serializers.BooleanField()
     mark_del = serializers.BooleanField()
     soil_lot = serializers.CharField(max_length=300)
 
@@ -450,6 +457,18 @@ class PhotoPointSerializer(serializers.Serializer):
     class Meta:
         model = PhotoPoint
         fields = ('id_sample_id', 'photo')
+    # photo = serializers.ImageField(allow_null=False, max_length=100, required=True)
+    # id_sample = serializers.CharField()
+    #
+    #
+    # def save(self, **kwargs):
+    #     photo = self.validated_data.get('photo')
+    #     id_sample = self.validated_data.get('id_sample')
+    #     print(self.context)
+    #     self.context.photopoint.photo.save(photo.name, photo)
+    #     self.context.id_sample.save(id_sample)
+    #     return self.context.photopoint.save()
+    #
 
     def create(self, validated_data):
         return PhotoPoint.objects.create(**validated_data)
