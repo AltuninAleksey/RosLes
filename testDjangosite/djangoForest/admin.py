@@ -168,9 +168,9 @@ class ForestAreasAdmin(admin.ModelAdmin):
 
 
 class PhotoPointAdmin(admin.ModelAdmin):
-    list_display = ('id', 'photo')
-    list_display_links = ('id', 'photo')
-    search_fields = ('id', 'photo')
+    list_display = ('id', 'photo', 'id_sample')
+    list_display_links = ('id', 'photo', 'id_sample')
+    search_fields = ('id', 'photo', 'id_sample')
 
 
 class TrackingAdmin(admin.ModelAdmin):
