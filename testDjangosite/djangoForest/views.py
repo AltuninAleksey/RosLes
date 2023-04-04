@@ -801,5 +801,45 @@ class GetSampleFromListRegionId(ListAPIView):
         return Response({"data": lst1.data})
 
 
+class GetAllDescriptionRegion(ListAPIView):
+
+    def get(self, *args, **kwargs):
+        if kwargs:
+            lst = DescriptionRegionSerializer(DescriptionRegion.objects.get(id=kwargs['pk'])).data
+            return Response({
+                "DescriptionRegion":
+                    lst,
+                "ListRegion": ListRegionSerializerId(ListRegion.objects.get(id=lst['id_list_region'])).data
+            })
+        lst = DescriptionRegion.objects.all()
+        return Response({"get": DescriptionRegionSerializer(lst, many=True).data})
+
+
+class DescriptionRegionFilter(ListAPIView):
+
+    def post(self, request, *args, **kwargs):
+        ser2 = DescriptionRegion.objects.all()
+        if request.data['bSubjectrf']:
+            idSubjectrf = request.data['idSubjectrf']
+            print("subjectrf")
+            ser2 = ser2.filter(id_list_region__id_quarter__id_district_forestly__id_forestly__id_subject_rf=idSubjectrf)
+        if request.data['bForestly']:
+            idForestly = request.data['idForestly']
+            ser2 = ser2.filter(id_list_region__id_quarter__id_district_forestly__id_forestly=idForestly)
+        if request.data['bDistrictForestly']:
+            idDistrictForestly = request.data['idDistrictForestly']
+            ser2 = ser2.filter(id_list_region__id_quarter__id_district_forestly=idDistrictForestly)
+        if request.data['bQuarter']:
+            idQuarter = request.data['idQuarter']
+            ser2 = ser2.filter(id_list_region__id_quarter=idQuarter)
+        if request.data['bDate']:
+            # requestDate = request.data['date']
+            ser2 = ser2.filter(id_list_region__date__gte=request.data['date'])
+        if request.data['bDateSec']:
+            requestDateSec = request.data['dateSec']
+            ser2 = ser2.filter(id_list_region__date__lte=requestDateSec)
+        ser2 = DescriptionRegionSerializer(ser2, many=True)
+        return Response({"data": ser2.data})
+
 class ForestViewSet(viewsets.ModelViewSet):
     pass

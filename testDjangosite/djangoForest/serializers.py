@@ -472,3 +472,10 @@ class PhotoPointSerializer(serializers.Serializer):
 
     def create(self, validated_data):
         return PhotoPoint.objects.create(**validated_data)
+
+
+class DescriptionRegionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = DescriptionRegion
+        fields = '__all__'
