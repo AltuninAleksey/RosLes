@@ -128,7 +128,7 @@ class ListRegionView(generics.ListCreateAPIView):
             return JsonResponse(ListRegionSerializerId(lst, many=True).data, safe=False)
         lst = ListRegion.objects.all()
         serealizer_class = GetListRegionSerializer(lst, many=True)
-        return JsonResponse(ListRegionSerializer(lst, many=True).data, safe=False)
+        return Response({"get":ListRegionSerializer(lst, many=True).data})
         # lst = ListRegion.objects.all()
         # return JsonResponse(ListRegionSerializer(lst, many=True).data, safe=False)
 
