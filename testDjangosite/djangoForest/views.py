@@ -408,7 +408,7 @@ class QuarterView(generics.ListCreateAPIView):
 class UndergrowthView(APIView):
 
     def get(self, *args, **kwargs):
-        return Response(UndergrowthSerializer(Undergrowth.objects.all(), many=True).data)
+        return Response({"get":UndergrowthSerializer(Undergrowth.objects.all(), many=True).data})
 
 class BreedView(generics.ListCreateAPIView):
     def get(self, request, **kwargs):
