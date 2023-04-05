@@ -27,6 +27,7 @@ urlpatterns = [
     path('getsamplefromlistregion', GetSampleFromListRegionId.as_view()),
     path('responsesqlite', SendResponseSQLite.as_view()),
     path('admin/', admin.site.urls),
+    path('undergrowth', UndergrowthView.as_view()),
     path('', include('djangoForest.urls')),
     path('getbase', AnroidDownland.as_view()),
     path('descriptionregion', GetAllDescriptionRegion.as_view()),
