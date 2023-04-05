@@ -52,12 +52,18 @@ class ListSerializer(serializers.ModelSerializer):
         instance.id_sample = validated_data.get("id_sample")
         instance.id_breed = validated_data.get("id_breed")
         instance.id_type_of_reproduction = validated_data.get("id_type_of_reproduction")
+        instance.id_undergrowth = validated_data.get("id_undergrowth")
         instance.to0_2 = validated_data.get("to0_2")
         instance.from0_21To0_5 = validated_data.get("from0_21To0_5")
         instance.from0_6To1_0 = validated_data.get("from0_6To1_0")
         instance.from1_1to1_5 = validated_data.get("from1_1to1_5")
         instance.from1_5 = validated_data.get("from1_5")
         instance.max_height = validated_data.get("max_height")
+        instance.avg_diameter = validated_data.get("avg_diameter")
+        instance.count_of_plants = validated_data.get("count_of_plants")
+        instance.avg_height = validated_data.get("avg_height")
+        instance.avg_height_undergrowth = validated_data.get("avg_height_undergrowth")
+        instance.main = validated_data.get("main")
         instance.save()
         return instance
 
@@ -112,6 +118,10 @@ class SampleSerializer(serializers.ModelSerializer):
         instance.id_profile = validated_data.get("id_profile")
         instance.soil_lot = validated_data.get("soil_lot")
         instance.id_quarter = validated_data.get("id_quarter")
+        instance.id_list_region = validated_data.get("id_list_region")
+        instance.width = validated_data.get("width")
+        instance.lenght = validated_data.get("lenght")
+        instance.square = validated_data.get("square")
         instance.save()
         return instance
 

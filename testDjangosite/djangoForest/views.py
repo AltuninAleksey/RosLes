@@ -72,15 +72,24 @@ class ListView(generics.ListCreateAPIView):
         return Response({'post': serializer.data})
 
     def put(self, request, *args, **kwargs):
-        try:
-            instance = List.objects.get(pk=kwargs['pk'])
-        except:
-            return Response({"error": "Объект с данным id не найден"})
+        if kwargs:
+            try:
+                instance = List.objects.get(pk=kwargs['pk'])
+            except:
+                return Response({"Объект с данным id не найден"})
+            serealizer = ListSerializer(data=request.data, instance=instance)
+            serealizer.is_valid(raise_exception=True)
+            serealizer.save()
 
-        serealizer = ListSerializer(data=request.data, instance=instance)
-        serealizer.is_valid(raise_exception=True)
-        serealizer.save()
-        return Response({"put": serealizer.data})
+        for i in range(len(request.data['data'])):
+            try:
+                instance = List.objects.get(id=request.data['data'][i]["id"])
+            except:
+                continue
+            serealizer = ListSerializer(data=request.data["data"][i], instance=instance)
+            serealizer.is_valid(raise_exception=True)
+            serealizer.save()
+        return Response({"put": status.HTTP_200_OK})
 
 
 class GpsView(generics.ListCreateAPIView):
@@ -131,15 +140,24 @@ class ListRegionView(generics.ListCreateAPIView):
         return Response({'post': serializer.data})
 
     def put(self, request, *args, **kwargs):
-        try:
-            instance = ListRegion.objects.get(pk=kwargs['pk'])
-        except:
-            return Response({"error": "Объект с данным id не найден"})
+        if kwargs:
+            try:
+                instance = ListRegion.objects.get(pk=kwargs['pk'])
+            except:
+                return Response({"Объект с данным id не найден"})
+            serealizer = ListRegionSerializer(data=request.data, instance=instance)
+            serealizer.is_valid(raise_exception=True)
+            serealizer.save()
 
-        serealizer = ListRegionSerializer(data=request.data, instance=instance)
-        serealizer.is_valid(raise_exception=True)
-        serealizer.save()
-        return Response({"put": serealizer.data})
+        for i in range(len(request.data['data'])):
+            try:
+                instance = ListRegion.objects.get(id = request.data['data'][i]["id"])
+            except:
+                continue
+            serealizer = ListRegionSerializer(data=request.data["data"][i], instance=instance)
+            serealizer.is_valid(raise_exception=True)
+            serealizer.save()
+        return Response({"put": status.HTTP_200_OK})
 
 
 class SampleView(generics.ListCreateAPIView):
@@ -158,15 +176,24 @@ class SampleView(generics.ListCreateAPIView):
         return Response({'post': serializer.data})
 
     def put(self, request, *args, **kwargs):
-        try:
-            instance = Sample.objects.get(pk=kwargs['pk'])
-        except:
-            return Response({"error": "Объект с данным id не найден"})
+        if kwargs:
+            try:
+                instance = Sample.objects.get(pk=kwargs['pk'])
+            except:
+                return Response({"Объект с данным id не найден"})
+            serealizer = SampleSerializer(data=request.data, instance=instance)
+            serealizer.is_valid(raise_exception=True)
+            serealizer.save()
 
-        serealizer = SampleSerializer(data=request.data, instance=instance)
-        serealizer.is_valid(raise_exception=True)
-        serealizer.save()
-        return Response({"put": serealizer.data})
+        for i in range(len(request.data['data'])):
+            try:
+                instance = Sample.objects.get(id=request.data['data'][i]["id"])
+            except:
+                continue
+            serealizer = SampleSerializer(data=request.data["data"][i], instance=instance)
+            serealizer.is_valid(raise_exception=True)
+            serealizer.save()
+        return Response({"put": status.HTTP_200_OK})
 
 
 class PostView(generics.ListCreateAPIView):
