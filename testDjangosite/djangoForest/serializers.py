@@ -114,6 +114,7 @@ class SampleSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         instance.id_list_region = validated_data.get("id_list_region")
+        instance.date = validated_data.get("date")
         instance.sample_area = validated_data.get("sample_area")
         instance.id_profile = validated_data.get("id_profile")
         instance.soil_lot = validated_data.get("soil_lot")
