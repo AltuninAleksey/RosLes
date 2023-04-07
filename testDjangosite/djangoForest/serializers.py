@@ -265,6 +265,16 @@ class UndergrowthSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         return Undergrowth.objects.create(**validated_data)
 
+
+class UndergrowthByDefaultSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = UndergrowthByDefault
+        fields = '__all__'
+
+    def create(self, validated_data):
+        return UndergrowthByDefault.objects.create(**validated_data)
+
 class QuarterSerializer(serializers.ModelSerializer):
     class Meta:
         model = Quarter

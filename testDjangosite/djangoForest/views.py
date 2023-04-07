@@ -161,6 +161,11 @@ class ListRegionView(generics.ListCreateAPIView):
 
 
 class SampleView(generics.ListCreateAPIView):
+
+    def get_serializer_class(self):
+        return SampleSerializer
+
+    
     def get(self, request, **kwargs):
         if kwargs:
             lst = Sample.objects.get(pk=kwargs['pk'])
@@ -409,6 +414,12 @@ class UndergrowthView(APIView):
 
     def get(self, *args, **kwargs):
         return Response({"get":UndergrowthSerializer(Undergrowth.objects.all(), many=True).data})
+
+
+class UndergrowthByDefaultView(APIView):
+
+    def get(self, *args, **kwargs):
+        return Response({"get":UndergrowthByDefaultSerializer(UndergrowthByDefault.objects.all(), many=True).data})
 
 class BreedView(generics.ListCreateAPIView):
     def get(self, request, **kwargs):
