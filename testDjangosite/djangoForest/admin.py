@@ -31,9 +31,9 @@ class InlineListRegion(admin.TabularInline):
     extra = 1
 
 class ListRegionAdmin(admin.ModelAdmin):
-    list_display = ('id', 'sample_region', 'date', 'soil_lot', 'id_quarter')
-    list_display_links = ('id', 'sample_region', 'date', 'soil_lot', 'id_quarter')
-    search_fields = ('id', 'sample_region', 'date', 'soil_lot', 'id_quarter')
+    list_display = ('id', 'sample_region', 'date', 'soil_lot', 'id_quarter', 'mark_update')
+    list_display_links = ('id', 'sample_region', 'date', 'soil_lot', 'id_quarter', 'mark_update')
+    search_fields = ('id', 'sample_region', 'date', 'soil_lot', 'id_quarter', 'mark_update')
 
 
 class SampleAdmin(admin.ModelAdmin):

@@ -83,10 +83,10 @@ class List(models.Model):
     from0_6To1_0 = models.IntegerField(u'0,6 - 1,0', null=True)
     from1_1to1_5 = models.IntegerField(u'1,1 - 1,5', null=True)
     from1_5 = models.IntegerField(u'более 1,5', null=True)
-    max_height = models.FloatField(u'Максимальная высота', null=True)
-    avg_diameter = models.FloatField(u'Средний диаметр', null=True)
+    max_height = models.FloatField(u'Максимальная высота', null=True, default=0)
+    avg_diameter = models.FloatField(u'Средний диаметр', null=True, default=0)
     count_of_plants = models.IntegerField(u'Количество растений для подлеска', null = True)
-    avg_height = models.FloatField(u'Средняя высота', null=True)
+    avg_height = models.FloatField(u'Средняя высота', null=True, default=0)
     avg_height_undergrowth = models.FloatField(u'Средняя высота подлеска', null = True)
     main = models.BooleanField(null=True, default=0)
 
