@@ -421,6 +421,7 @@ class UndergrowthByDefaultView(APIView):
     def get(self, *args, **kwargs):
         return Response({"get":UndergrowthByDefaultSerializer(UndergrowthByDefault.objects.all(), many=True).data})
 
+
 class BreedView(generics.ListCreateAPIView):
     def get(self, request, **kwargs):
         if kwargs:
@@ -682,6 +683,7 @@ class PhotoPointView(APIView):
     parser_classes = (MultiPartParser, FileUploadParser, )
 
     def post(self, request, format = None):
+        print(request.data)
         serializer = PhotoPointSerializer(data=request.data, context=request)
         serializer.is_valid()
         serializer.save(id_sample_id = request.data.get('id_sample'),
