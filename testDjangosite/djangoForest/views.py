@@ -680,11 +680,13 @@ class PhotoPointView(APIView):
     Приемка фотокарточки
     """
 
-    parser_classes = (MultiPartParser, FileUploadParser, )
+    # parser_classes = (MultiPartParser, FileUploadParser, )
 
+    parser_classes = (FileUploadParser, MultiPartParser)
     def post(self, request, format = None):
+        print("хочу пальму")
         print(request.data)
-        # print(request.FILES)
+        print(request.FILES)
         if not request.data['photo']:
             return Response({"error": "file not found"})
         serializer = PhotoPointSerializer(data=request.data, context=request)
