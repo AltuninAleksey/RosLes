@@ -684,6 +684,9 @@ class PhotoPointView(APIView):
 
     def post(self, request, format = None):
         print(request.data)
+        # print(request.FILES)
+        if not request.data['photo']:
+            return Response({"error": "file not found"})
         serializer = PhotoPointSerializer(data=request.data, context=request)
         serializer.is_valid()
         serializer.save(id_sample_id = request.data.get('id_sample'),
