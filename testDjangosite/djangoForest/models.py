@@ -257,8 +257,8 @@ class ForestFormingByDefault(models.Model):
 
 class Breed(models.Model):
     name_breed = models.CharField(max_length=350, verbose_name='Наименование породы')
-    is_pine = models.IntegerField(null=True, default=0, verbose_name="Хвойное")
-    is_foliar = models.IntegerField(null=True, default=0, verbose_name="Лиственное")
+    is_pine = models.BooleanField(null=True, default=0, verbose_name="Хвойное")
+    is_foliar = models.BooleanField(null=True, default=0, verbose_name="Лиственное")
     ShortName = models.CharField(max_length=10, verbose_name='Сокр.', null = True)
 
     def __str__(self):
