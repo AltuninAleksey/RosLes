@@ -1,5 +1,5 @@
-let urlGlobal = "http://127.0.0.1:8000";
-//let urlGlobal = "http://90.156.208.88:8093";
+//let urlGlobal = "http://127.0.0.1:8000";
+let urlGlobal = "http://90.156.208.88:8093";
 
 function getRecalculationOnTrialAreaPage() {
     window.location.href = urlGlobal + "/erp/documents/recalculationOnTrialArea";
@@ -11,6 +11,18 @@ function getListRegions() {
 
 function getGeneralDoc() {
     window.location.href = urlGlobal + "/general_docs";
+}
+
+function getStatementRecalculations() {
+    window.location.href = urlGlobal + "/erp/documents/statementRecalculations";
+}
+
+function getMergeStatementRecalculations() {
+    window.location.href = urlGlobal + "/erp/documents/mergeStatementRecalculations";
+}
+
+function getStatementRecalculationsDetail(id) {
+    window.location.href = urlGlobal + "/erp/documents/statementRecalculationsDetail?id=" + id;
 }
 
 async function getAllSubjectrf() {

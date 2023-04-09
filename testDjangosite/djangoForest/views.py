@@ -738,7 +738,6 @@ class PhotoPointView(APIView):
     #                     photo = request.FILES.get('file'))
     #     return Response("kaif")
 
-
 class AnroidDownland(APIView):
 
     def get(self, *args, **kwargs):

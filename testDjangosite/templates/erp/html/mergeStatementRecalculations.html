@@ -8,13 +8,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Список перечетных ведомостей</title>
     <link rel="stylesheet" href="{% static 'css/common.css' %}">
-    <link rel="stylesheet" href="{% static 'css/statementRecalculations.css' %}">
+    <link rel="stylesheet" href="{% static 'css/mergeStatementRecalculations.css' %}">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.0/axios.js"></script>
     <script src="{% static 'js/global.js' %}"></script>
     <script src="{% static 'js/common/commonFunction.js' %}"></script>
     <script src="{% static 'js/common/common_business.js' %}"></script>
-    <script src="{% static 'js/statementRecalculations/statementRecalculations_business.js' %}" defer></script>
-    <script src="{% static 'js/statementRecalculations/statementRecalculations_construct_view.js' %}" defer></script>
+    <script src="{% static 'js/mergeStatementRecalculations/mergeStatementRecalculations_business.js' %}" defer></script>
+    <script src="{% static 'js/mergeStatementRecalculations/mergeStatementRecalculations_construct_view.js' %}" defer></script>
     {% endblock %}
 </head>
 <body style="margin:0 !important">
@@ -49,10 +49,10 @@
         <div class="hiv2">
             <div class="hid2">
                 <div class="point cursorPointer" onclick="getStatementRecalculations()">
-                    <a class="activeLink"><h3 style="color: black;">Список перечетных ведомостей</h3></a>
+                    <a><h3 style="color: black;">Список перечетных ведомостей</h3></a>
                 </div>
                 <div class="point cursorPointer" onclick="getMergeStatementRecalculations()">
-                    <a><h3  style="color: black;">Объединить перечетные ведомости</h3></a>
+                    <a class="activeLink"><h3  style="color: black;">Объединить перечетные ведомости</h3></a>
                 </div>
             </div>
         </div>
@@ -75,6 +75,13 @@
                 <path d="M7.40002 8.60005V12.2H8.60002V8.60005H12.2V7.40005H8.60002V3.80005H7.40002V7.40005H3.79999V8.60005H7.40002Z" fill="white"/>
             </svg>
             <p class="p">Создать новую перечетную ведомость</p>
+        </div>
+        <div class="butmenuadd merger" id="merge_button">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-top: 4px; margin-left: 5px;">
+                <path d="M8 13V15C8 16.1046 8.89543 17 10 17H18C19.1046 17 20 16.1046 20 15V7C20 5.89543 19.1046 5 18 5H15" stroke="#177164"/>
+                <rect x="3" y="1" width="12" height="12" rx="2" stroke="#177164"/>
+            </svg>
+            <p class="p">Объединить выделенные</p>
         </div>
     </div>
 

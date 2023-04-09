@@ -1,0 +1,137 @@
+.heading{
+    width: 621px;
+    height: 28px;
+    margin: 23px auto;
+
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 28px;
+}
+.menuform{
+    display: flex;
+    margin-left: 30px;
+    margin-right: 30px;
+}
+.butmenu{
+    display: flex;
+    justify-content: space-around;
+    align-content: center;
+    height: 30px;
+    width: 139px;
+    border: 1px solid #9B9B9B;
+    border-radius: 4px;
+    margin-right: 28px;
+}
+.butmenu:active{
+    cursor: pointer;
+    background-color: #40E0D0;
+}
+.butmenu:hover{
+    cursor: pointer;
+    background-color: #40E0D0;
+}
+.butmenu:active p{
+    cursor: pointer;
+    background-color: #40E0D0;
+    color: #000000;
+}
+.butmenu:hover p{
+    cursor: pointer;
+    background-color: #40E0D0;
+    color: #000000;
+}
+.task{
+    width: 194px;
+}
+.add{
+    width: 325px;
+    color: #000000;
+    margin-right: 0;
+    margin-left: 5px;
+    margin-bottom: 11px;
+    margin-top: -60px;
+}
+.add:hover{
+    background-color: #40E0D0;
+}
+.add:hover p{
+    background-color: #40E0D0;
+    color: #000000;
+}
+.add:active{
+    background-color: #40E0D0;
+}
+.add:active p{
+    background-color: #40E0D0;
+    color: #000000;
+}
+.add p{
+    vertical-align: middle;
+    margin: 6px 0 2px 0;
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 19px;
+}
+.p{
+    vertical-align: middle;
+    margin: 4px 15px 2px 4px;
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 19px;
+    color: #444;
+}
+.vvod{
+    margin-left: 30px;
+    margin-right: 30px;
+}
+.formcheck{
+    width: 452px;
+    height: 432px;
+    margin-top: 36px;
+    display: grid;
+    grid-template-columns: 180px 252px;
+    grid-template-rows: repeat(8, 39px);
+    row-gap: 15px;
+}
+.formcheck p{
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 38.4px;
+    margin-top: 0;
+    margin-bottom: 14.6px;
+}
+.formcheck input{
+    width: 248px;
+    height: 34.4px;
+    border-radius: 4px;
+    margin-bottom: 14.6px;
+    border: 1px solid #9B9B9B;
+}
+select{
+    width: 254px;
+    height: 38.4px;
+    border-radius: 4px;
+    margin-bottom: 14.6px;
+    border: 1px solid #9B9B9B;
+}
+input[type="date"]::-webkit-inner-spin-button,
+input[type="date"]::-webkit-calendar-picker-indicator {
+    display: none;
+    -webkit-appearance: none;
+}
+
+.content_table{
+    margin-top: 95px !important;
+}
+
+.td8 {
+    width: 50px;
+}

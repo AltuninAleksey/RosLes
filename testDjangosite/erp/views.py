@@ -407,3 +407,9 @@ def getListRegions(request):
 
 def getStatementRecalculations(request):
     return render(request, 'erp/html/statementRecalculations.html')
+
+def getMergeStatementRecalculations(request):
+    return render(request, 'erp/html/mergeStatementRecalculations.html')
+
+def getStatementRecalculationsDetail(request):
+    return render(request, 'erp/html/statementRecalculationsDetail.html', {'idDocument': request.GET.get('id')})
