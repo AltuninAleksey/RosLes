@@ -680,9 +680,9 @@ class PhotoPointView(APIView):
     Приемка фотокарточки
     """
 
-    # parser_classes = (MultiPartParser, FileUploadParser, )
+    parser_classes = (MultiPartParser, )
 
-    parser_classes = (FileUploadParser, MultiPartParser)
+    # parser_classes = (FileUploadParser, MultiPartParser)
     def post(self, request, format = None):
         print("xo4y palmy")
         print(request.data)
