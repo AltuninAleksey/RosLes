@@ -82,13 +82,18 @@ class ListView(generics.ListCreateAPIView):
             serealizer.save()
 
         for i in range(len(request.data['data'])):
-            try:
+            if request.data['data'][i]['mark_update'] == 1:
                 instance = List.objects.get(id=request.data['data'][i]["id"])
-            except:
-                continue
-            serealizer = ListSerializer(data=request.data["data"][i], instance=instance)
-            serealizer.is_valid(raise_exception=True)
-            serealizer.save()
+                serealizer = ListSerializer(data=request.data["data"][i], instance=instance)
+                serealizer.is_valid(raise_exception=True)
+                serealizer.save()
+            elif request.data['data'][i]['mark_update'] == 2:
+                serializer = ListSerializer(data=request.data['data'][i])
+                serializer.is_valid(raise_exception=True)
+                serializer.save()
+                lst = List.objects.get(id=serializer.data['id'])
+                lst.mark_update = 0
+                lst.save()
         return Response({"put": status.HTTP_200_OK})
 
 
@@ -150,13 +155,18 @@ class ListRegionView(generics.ListCreateAPIView):
             serealizer.save()
 
         for i in range(len(request.data['data'])):
-            try:
-                instance = ListRegion.objects.get(id = request.data['data'][i]["id"])
-            except:
-                continue
-            serealizer = ListRegionSerializer(data=request.data["data"][i], instance=instance)
-            serealizer.is_valid(raise_exception=True)
-            serealizer.save()
+            if request.data['data'][i]['mark_update'] == 1:
+                instance = ListRegion.objects.get(id=request.data['data'][i]["id"])
+                serealizer = ListRegionSerializer(data=request.data["data"][i], instance=instance)
+                serealizer.is_valid(raise_exception=True)
+                serealizer.save()
+            elif request.data['data'][i]['mark_update'] == 2:
+                serializer = ListRegionSerializer(data=request.data['data'][i])
+                serializer.is_valid(raise_exception=True)
+                serializer.save()
+                lst = ListRegion.objects.get(id=serializer.data['id'])
+                lst.mark_update = 0
+                lst.save()
         return Response({"put": status.HTTP_200_OK})
 
 
@@ -191,13 +201,24 @@ class SampleView(generics.ListCreateAPIView):
             serealizer.save()
 
         for i in range(len(request.data['data'])):
-            try:
+            # try:
+            #     instance = Sample.objects.get(id=request.data['data'][i]["id"])
+            #     print(instance)
+            # except:
+            #     continue
+            if request.data['data'][i]['mark_update'] == 1:
                 instance = Sample.objects.get(id=request.data['data'][i]["id"])
-            except:
-                continue
-            serealizer = SampleSerializer(data=request.data["data"][i], instance=instance)
-            serealizer.is_valid(raise_exception=True)
-            serealizer.save()
+                serealizer = SampleSerializer(data=request.data["data"][i], instance=instance)
+                serealizer.is_valid(raise_exception=True)
+                serealizer.save()
+            elif request.data['data'][i]['mark_update'] == 2:
+                # request.data['data'][i]['mark_update'].update('mark_update: 0')
+                serializer = SampleSerializer(data=request.data['data'][i])
+                serializer.is_valid(raise_exception=True)
+                serializer.save()
+                lst = Sample.objects.get(id=serializer.data['id'])
+                lst.mark_update = 0
+                lst.save()
         return Response({"put": status.HTTP_200_OK})
 
 

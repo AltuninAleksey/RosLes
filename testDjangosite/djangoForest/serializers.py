@@ -64,6 +64,7 @@ class ListSerializer(serializers.ModelSerializer):
         instance.avg_height = validated_data.get("avg_height")
         instance.avg_height_undergrowth = validated_data.get("avg_height_undergrowth")
         instance.main = validated_data.get("main")
+        instance.mark_update = 0
         instance.save()
         return instance
 
@@ -123,6 +124,7 @@ class SampleSerializer(serializers.ModelSerializer):
         instance.width = validated_data.get("width")
         instance.lenght = validated_data.get("lenght")
         instance.square = validated_data.get("square")
+        instance.mark_update = 0
         instance.save()
         return instance
 
@@ -333,7 +335,7 @@ class ListRegionSerializer(serializers.ModelSerializer):
         instance.id_quarter = validated_data.get("id_quarter")
         instance.sample_region = validated_data.get("sample_region")
         instance.mark_del = validated_data.get("mark_del")
-        instance.mark_update = validated_data.get("mark_update")
+        instance.mark_update = 0
         instance.save()
         return instance
 

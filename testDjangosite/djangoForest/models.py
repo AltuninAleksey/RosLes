@@ -89,6 +89,7 @@ class List(models.Model):
     avg_height = models.FloatField(u'Средняя высота', null=True, default=0)
     avg_height_undergrowth = models.FloatField(u'Средняя высота подлеска', null = True)
     main = models.IntegerField(null=True, default=0)
+    mark_update = models.IntegerField(null=True, default=0)
 
     class Meta:
         verbose_name = 'Перечет'
@@ -141,6 +142,7 @@ class Sample(models.Model):
     width = models.FloatField(u'Ширина', null=True)
     lenght = models.FloatField(u'Длина', null=True)
     square = models.FloatField(u'Площадь', null=True)
+    mark_update = models.IntegerField(null=True, default=0)
 
 
     class Meta:
