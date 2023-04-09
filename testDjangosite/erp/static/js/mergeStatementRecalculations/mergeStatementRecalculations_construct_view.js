@@ -1,8 +1,9 @@
 
 buildStatementRecalculationsTbody();
+setEventForButtons();
 
 async function buildStatementRecalculationsTbody() {
-    var data = await StatementRecalculationsBusiness.getAllStatementList();
+    var data = await MergeStatementRecalculationsBusiness.getAllStatementList();
     var allForestData = await CommonBusiness.getAllForest();
 
     APP.subjectrf = allForestData.subjectrf;
@@ -16,6 +17,8 @@ async function buildStatementRecalculationsTbody() {
 }
 
 function updateDataInStatementRecalculationsTbody(data) {
+    APP.idActiveItemTr = [];
+
     var tableBody = document.getElementById("statementRecalculations_tbody");
     var newHtml = "";
 
@@ -26,9 +29,10 @@ function updateDataInStatementRecalculationsTbody(data) {
         data[i].district_forestly = CommonFunction.getDistrictForestlyNameByQuarterId(APP.district_forestly, data[i].id_district_forestly);
         data[i].quarter = CommonFunction.getQuarterNameByQuarterId(APP.quarter, data[i].id_quarter);
 
-        let strGetStatementRecalculationsDetail = "getStatementRecalculationsDetail(" + data[i].id  + ")"
-        newHtml = newHtml + `<tr class="cursorPointer" onClick=${strGetStatementRecalculationsDetail}>
-                            <td class="textAlignCenter td1">${data[i].date}</td>
+        let id = "statement_" + data[i].id;
+
+        newHtml = newHtml + "<div>" + '<tr id="' + id + '" class="cursorPointer" onClick="addOrRemoveActiveItemTr(' + data[i].id + ')">' +
+                            `<td class="textAlignCenter td1">${data[i].date}</td>
                             <td class="textAlignCenter td8">${data[i].id}</td>
                             <td class="td2">${data[i].subjectrf}</td>
                             <td class="td3">${data[i].forestly}</td>
@@ -36,9 +40,39 @@ function updateDataInStatementRecalculationsTbody(data) {
                             <td class="textAlignCenter td5">${data[i].quarter}</td>
                             <td class="textAlignCenter td6">${data[i].soil_lot}</td>
                             <td class="textAlignCenter td7">${data[i].sample_region}</td>
-                        </tr> \n`;
+                        </tr> \n` + "</div>";
     }
     tableBody.innerHTML = newHtml;
+}
+
+async function setEventForButtons() {
+    document
+        .querySelector("#merge_button")
+        .addEventListener('click', async (e)=>{
+            startMergeStatementRecalculations();
+        });
+}
+
+async function startMergeStatementRecalculations() {
+    if(APP.idActiveItemTr.length > 1) {
+        let data = {
+            id: APP.idActiveItemTr[0],
+            ids: []
+        }
+
+        for(let i = 1; i < APP.idActiveItemTr.length; i++) {
+            let item = {
+                id: APP.idActiveItemTr[i]
+            }
+            data.ids.push(item);
+        }
+
+        await MergeStatementRecalculationsBusiness.mergeStatementRecalculations(data);
+
+        let statementList = await MergeStatementRecalculationsBusiness.getAllStatementList();
+        updateDataInStatementRecalculationsTbody(statementList);
+        APP.idActiveItemTr = [];
+    }
 }
 
 async function setEventForElementsFilter() {
@@ -52,16 +86,16 @@ async function setEventForElementsFilter() {
             if(e.target.checked) {
                 subjectNode.removeAttribute("disabled")
                 subjectNode.addEventListener('change', async (e)=>{
-                    await setOptionInForestly(StatementRecalculationsBusiness.TypeData.BYID);
+                    await setOptionInForestly(MergeStatementRecalculationsBusiness.TypeData.BYID);
                 });
-                await setOptionInForestly(StatementRecalculationsBusiness.TypeData.BYID);
+                await setOptionInForestly(MergeStatementRecalculationsBusiness.TypeData.BYID);
             } else {
                 subjectNode.setAttribute("disabled", "on");
-                await setOptionInForestly(StatementRecalculationsBusiness.TypeData.ALL);
+                await setOptionInForestly(MergeStatementRecalculationsBusiness.TypeData.ALL);
             }
         });
 
-    await setOptionInForestly(StatementRecalculationsBusiness.TypeData.ALL);
+    await setOptionInForestly(MergeStatementRecalculationsBusiness.TypeData.ALL);
 
     document
         .querySelector("#checkbox_filter_forestly")
@@ -70,16 +104,16 @@ async function setEventForElementsFilter() {
             if(e.target.checked) {
                 forestlyNode.removeAttribute("disabled");
                 forestlyNode.addEventListener('change', async (e)=>{
-                    await setOptionInDistrictForestly(StatementRecalculationsBusiness.TypeData.BYID);
+                    await setOptionInDistrictForestly(MergeStatementRecalculationsBusiness.TypeData.BYID);
                 });
-                await setOptionInDistrictForestly(StatementRecalculationsBusiness.TypeData.BYID);
+                await setOptionInDistrictForestly(MergeStatementRecalculationsBusiness.TypeData.BYID);
             } else {
                 forestlyNode.setAttribute("disabled", "on");
-                await setOptionInDistrictForestly(StatementRecalculationsBusiness.TypeData.ALL);
+                await setOptionInDistrictForestly(MergeStatementRecalculationsBusiness.TypeData.ALL);
             }
         });
 
-    await setOptionInDistrictForestly(StatementRecalculationsBusiness.TypeData.ALL);
+    await setOptionInDistrictForestly(MergeStatementRecalculationsBusiness.TypeData.ALL);
 
     document
         .querySelector("#checkbox_filter_district_forestly")
@@ -88,16 +122,16 @@ async function setEventForElementsFilter() {
             if(e.target.checked) {
                 districtForestly.removeAttribute("disabled");
                 districtForestly.addEventListener('change', async (e)=>{
-                    await setOptionInQuarter(StatementRecalculationsBusiness.TypeData.BYID);
+                    await setOptionInQuarter(MergeStatementRecalculationsBusiness.TypeData.BYID);
                 });
-                await setOptionInQuarter(StatementRecalculationsBusiness.TypeData.BYID);
+                await setOptionInQuarter(MergeStatementRecalculationsBusiness.TypeData.BYID);
             } else {
                 districtForestly.setAttribute("disabled", "on");
-                await setOptionInQuarter(StatementRecalculationsBusiness.TypeData.ALL);
+                await setOptionInQuarter(MergeStatementRecalculationsBusiness.TypeData.ALL);
             }
         });
 
-    await setOptionInQuarter(StatementRecalculationsBusiness.TypeData.ALL);
+    await setOptionInQuarter(MergeStatementRecalculationsBusiness.TypeData.ALL);
 
     document
         .querySelector("#checkbox_filter_quartal")
@@ -164,14 +198,14 @@ async function setOptionInSubject() {
 
     subjectNode.innerHTML = newHtml;
 
-    await setOptionInForestly(StatementRecalculationsBusiness.TypeData.BYID);
+    await setOptionInForestly(MergeStatementRecalculationsBusiness.TypeData.BYID);
 }
 
 async function setOptionInForestly(status) {
     let forestlyNode = document.querySelector("#filter_forestly");
     let forestly;
 
-    if(status == StatementRecalculationsBusiness.TypeData.BYID) {
+    if(status == MergeStatementRecalculationsBusiness.TypeData.BYID) {
         let subjectNode = document.querySelector("#filter_subject_rf");
         forestly = await CommonBusiness.getForestlyByIdSubjectrf(subjectNode.value);
     } else {
@@ -189,14 +223,14 @@ async function setOptionInForestly(status) {
     }
     forestlyNode.innerHTML = newHtml;
 
-    await setOptionInDistrictForestly(StatementRecalculationsBusiness.TypeData.BYID);
+    await setOptionInDistrictForestly(MergeStatementRecalculationsBusiness.TypeData.BYID);
 }
 
 async function setOptionInDistrictForestly(status) {
     let districtForestlyNode = document.querySelector("#filter_district_forestly");
     let districtForestly;
 
-    if(status == StatementRecalculationsBusiness.TypeData.BYID) {
+    if(status == MergeStatementRecalculationsBusiness.TypeData.BYID) {
         let forestlyNode = document.querySelector("#filter_forestly");
         districtForestly = await CommonBusiness.getDistrictForestlyByIdForestly(forestlyNode.value);
     } else {
@@ -215,7 +249,7 @@ async function setOptionInDistrictForestly(status) {
 
     districtForestlyNode.innerHTML = newHtml;
 
-    await setOptionInQuarter(StatementRecalculationsBusiness.TypeData.BYID);
+    await setOptionInQuarter(MergeStatementRecalculationsBusiness.TypeData.BYID);
 }
 
 async function setOptionInQuarter(status) {
@@ -223,7 +257,7 @@ async function setOptionInQuarter(status) {
     let quarterNode = document.querySelector("#filter_quartal");
     let quarter;
 
-    if(status == StatementRecalculationsBusiness.TypeData.BYID) {
+    if(status == MergeStatementRecalculationsBusiness.TypeData.BYID) {
         let districtForestlyNode = document.querySelector("#filter_district_forestly");
         quarter = await CommonBusiness.getQuarterByIdDistrictForestly(districtForestlyNode.value);
     } else {
@@ -278,12 +312,36 @@ async function searchByFilter() {
         };
 
 
-        data = await StatementRecalculationsBusiness.getCreateRecalculationDetailData(responseData);
+        data = await MergeStatementRecalculationsBusiness.getCreateRecalculationDetailData(responseData);
     } else {
 
-        data = await StatementRecalculationsBusiness.getAllStatementList();
+        data = await MergeStatementRecalculationsBusiness.getAllStatementList();
     }
 
 
     updateDataInStatementRecalculationsTbody(data);
+}
+
+function addOrRemoveActiveItemTr(id) {
+
+    if(APP.idActiveItemTr.indexOf(id) == -1) {
+        APP.idActiveItemTr.push(id);
+        document
+            .querySelector("#statement_" + id)
+            .classList.add("activeTr");
+    } else {
+        let buff = APP.idActiveItemTr;
+        APP.idActiveItemTr = [];
+
+        for(let i = 0; i < buff.length; i++) {
+            if(buff[i] != id) {
+                APP.idActiveItemTr.push(buff[i]);
+            }
+        }
+
+        document
+            .querySelector("#statement_" + id)
+            .classList.remove("activeTr");
+    }
+
 }

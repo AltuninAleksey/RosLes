@@ -42,5 +42,7 @@ urlpatterns = [
     #MPO 21.01.23: Add new url
     path('documents/listRegions', views.getListRegions),
     path('documents/statementRecalculations', views.getStatementRecalculations),
+    path('documents/mergeStatementRecalculations', views.getMergeStatementRecalculations),
+    path('documents/statementRecalculationsDetail', views.getStatementRecalculationsDetail),
 ]
 

@@ -108,12 +108,19 @@ h3{
 }
 
 .content_table{
-    max-height: 550px;
+    height: 550px;
     display: flex;
     flex-direction: column;
     margin-top: 120px;
     margin-left: 30px;
     margin-right: 30px;
+}
+
+td:last-child{
+    border-right: 0px solid white;
+}
+th:last-child{
+    border-right: 0px solid white;
 }
 
 .scroll-table-body {
@@ -124,8 +131,7 @@ h3{
 table {
     text-align: left;
     border-collapse: separate;
-    border-spacing: 5px;
-    border-radius: 20px;
+    border-spacing: 0px;
 }
 
 .scroll-table-body table {
@@ -142,10 +148,10 @@ th {
     font-size: 18px;
     padding: 10px;
     text-align: left;
+    border-right: 5px solid white;
 }
 td {
     padding: 10px;
-    background: white;
     border-bottom: 1px solid #D9D9D9;
 }
 
@@ -229,4 +235,14 @@ td {
     width: 216px;
     color: #000000;
     margin-right: 0px;
+}
+
+.merger {
+    width: 230px;
+    color: #000000;
+    margin-left: 5px;
+}
+
+.activeTr {
+    background: #40E0D0;
 }

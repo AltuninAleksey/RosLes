@@ -26,8 +26,10 @@ function updateDataInStatementRecalculationsTbody(data) {
         data[i].district_forestly = CommonFunction.getDistrictForestlyNameByQuarterId(APP.district_forestly, data[i].id_district_forestly);
         data[i].quarter = CommonFunction.getQuarterNameByQuarterId(APP.quarter, data[i].id_quarter);
 
-        newHtml = newHtml + `<tr>
+        let strGetStatementRecalculationsDetail = "getStatementRecalculationsDetail(" + data[i].id  + ")"
+        newHtml = newHtml + `<tr class="cursorPointer" onClick=${strGetStatementRecalculationsDetail}>
                             <td class="textAlignCenter td1">${data[i].date}</td>
+                            <td class="textAlignCenter td8">${data[i].id}</td>
                             <td class="td2">${data[i].subjectrf}</td>
                             <td class="td3">${data[i].forestly}</td>
                             <td class="td4">${data[i].district_forestly}</td>
@@ -272,7 +274,7 @@ async function searchByFilter() {
             bDate: checkboxFilterDateStartNode.checked,
             date: dateStartNode.value,
             bDateSec: checkboxFilterDateEnd.checked,
-            bDate: dateEndNode.value
+            dateSec: dateEndNode.value
         };
 
 

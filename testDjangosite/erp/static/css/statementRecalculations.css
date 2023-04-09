@@ -76,7 +76,7 @@ h3{
 }
 .form{
     display: grid;
-    grid-template-columns: 510px 490px 300px ;
+    grid-template-columns: 490px 470px 290px ;
     grid-template-rows: repeat(2, 50px);
     position: absolute;
     margin-top: 10px;
@@ -90,9 +90,13 @@ h3{
     border-radius: 3px;
     border-radius: 4px;
     margin-bottom: 14.6px;
-
-
+    cursor: pointer;
 }
+
+.form input {
+    cursor: pointer;
+}
+
 .but{
     height: 20px;
     margin: 16px auto;
@@ -104,7 +108,7 @@ h3{
 }
 
 .content_table{
-    height: 550px;
+    max-height: 550px;
     display: flex;
     flex-direction: column;
     margin-top: 120px;
@@ -172,6 +176,11 @@ td {
 .td7 {
     width: 100px;
 }
+
+.td8 {
+    width: 50px;
+}
+
 
 .p{
     vertical-align: middle;

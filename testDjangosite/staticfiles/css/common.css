@@ -2,6 +2,6 @@
     text-align: center;
 }
 
-.activeItemInMenu {
-    border-bottom: 2px solid #40E0D0;
+.cursorPointer {
+    cursor: pointer;
 }
