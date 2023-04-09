@@ -34,7 +34,7 @@ class Users(models.Model):
 
 
 class CheckTrigger(models.Model):
-    bool = models.BooleanField(default=False)
+    bool = models.IntegerField(default=False)
     
 
 class Track(models.Model):
@@ -88,7 +88,7 @@ class List(models.Model):
     count_of_plants = models.IntegerField(u'Количество растений для подлеска', null = True)
     avg_height = models.FloatField(u'Средняя высота', null=True, default=0)
     avg_height_undergrowth = models.FloatField(u'Средняя высота подлеска', null = True)
-    main = models.BooleanField(null=True, default=0)
+    main = models.IntegerField(null=True, default=0)
 
     class Meta:
         verbose_name = 'Перечет'
@@ -117,8 +117,8 @@ class ListRegion(models.Model):
     sample_region = models.FloatField(u'Плошадь участка, га', max_length=300)
     id_quarter = models.ForeignKey("Quarter", on_delete=models.CASCADE, verbose_name="Квартал", null=True)
     soil_lot = models.CharField(max_length=300, verbose_name='Выдел')
-    mark_del = models.BooleanField(null = True)
-    mark_update = models.BooleanField(null= True)
+    mark_del = models.IntegerField(null = True)
+    mark_update = models.IntegerField(null= True)
 
     class Meta:
         verbose_name = 'Перечетная ведомость участка'
@@ -257,8 +257,8 @@ class ForestFormingByDefault(models.Model):
 
 class Breed(models.Model):
     name_breed = models.CharField(max_length=350, verbose_name='Наименование породы')
-    is_pine = models.BooleanField(null=True, default=0, verbose_name="Хвойное")
-    is_foliar = models.BooleanField(null=True, default=0, verbose_name="Лиственное")
+    is_pine = models.IntegerField(null=True, default=0, verbose_name="Хвойное")
+    is_foliar = models.IntegerField(null=True, default=0, verbose_name="Лиственное")
     ShortName = models.CharField(max_length=10, verbose_name='Сокр.', null = True)
 
     def __str__(self):

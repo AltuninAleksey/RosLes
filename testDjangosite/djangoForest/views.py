@@ -680,18 +680,20 @@ class PhotoPointView(APIView):
     Приемка фотокарточки
     """
 
-    parser_classes = (MultiPartParser, )
+    parser_classes = (MultiPartParser, FileUploadParser )
 
     # parser_classes = (FileUploadParser, MultiPartParser)
     def post(self, request, format = None):
-        print("xo4y palmy")
         print(request.data)
         print(request.FILES)
+        # with open(BASE_DIR, "wb") as f:
+        #     f.write(request.data)
+        #     f.write(request.FILES)
         serializer = PhotoPointSerializer(data=request.data, context=request)
         serializer.is_valid()
         serializer.save(id_sample_id = request.data.get('id_sample'),
                         photo = request.data.get('photo'))
-        return Response({"http": status.HTTP_200_OK}, status=201)
+        return Response({"http": status.HTTP_200_OK}, status=200)
 
 
     # def post(self, request, format = None):
@@ -735,6 +737,7 @@ class PhotoPointView(APIView):
     #     serializer.save(id_sample_id = 3,
     #                     photo = request.FILES.get('file'))
     #     return Response("kaif")
+
 
 class AnroidDownland(APIView):
 
