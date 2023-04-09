@@ -684,7 +684,7 @@ class PhotoPointView(APIView):
 
     parser_classes = (FileUploadParser, MultiPartParser)
     def post(self, request, format = None):
-        print("хочу пальму")
+        print("xo4y palmy")
         print(request.data)
         print(request.FILES)
         serializer = PhotoPointSerializer(data=request.data, context=request)
