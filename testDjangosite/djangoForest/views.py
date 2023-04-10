@@ -12,6 +12,7 @@ from rest_framework.response import Response
 from rest_framework import viewsets, permissions
 from rest_framework.authtoken.models import Token
 from rest_framework.views import APIView
+from django.contrib.auth.hashers import make_password, check_password
 
 from testDjangosite.settings import BASE_DIR
 from rest_framework.renderers import MultiPartRenderer, JSONRenderer
@@ -675,25 +676,22 @@ class UserRegistration(generics.ListCreateAPIView):
         serializers = ProfileSerializer(data=request.data, context={'request':request})
         serializers.is_valid(raise_exception=True)
         serializers.save()
-        return Response({
-            "profile": serializers.data
-        })
+        return Response(
+            serializers.data)
 
 
 class UserAuth(generics.ListCreateAPIView):
 
     def post(self, request, **kwargs):
-        try:
-            user = Users.objects.filter(email = request.data['email'], password = request.data['password']).values('id').get()
+        # print(check_password(request.data["password"], "pbkdf2_sha256"))
+        # user = Users.objects.filter(email = request.data['email'], password = request.data['password']).values('id').get()
+        user = Users.objects.filter(email=request.data['email']).values(
+            'id', "password").get()
+        print(check_password(request.data["password"], user["password"]))
+        if check_password(request.data["password"], user["password"]):
             profile = Profile.objects.filter(id_user_id = user['id']).values('id', 'FIO').get()
-            return Response({
-                'id_user': user['id'],
-                'id_profile': profile
-            })
-        except:
-            return Response({
-            "invalid password or email"
-            })
+            return Response(profile)
+        return Response("invalid password or email")
 
 
 class PhotoPointView(APIView):

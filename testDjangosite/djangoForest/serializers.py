@@ -1,5 +1,6 @@
 import io
 
+from django.contrib.auth.hashers import make_password
 from rest_framework import serializers
 from .models import *
 
@@ -36,7 +37,9 @@ class UserSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def create(self, validated_data):
-        return Users.objects.create(**validated_data)
+        return Users.objects.create(email = validated_data['email'],
+                                    password = make_password(validated_data['password'], "pbkdf2_sha256")
+                                    )
 
 
 class ListSerializer(serializers.ModelSerializer):

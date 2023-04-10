@@ -117,7 +117,7 @@ class ListRegion(models.Model):
     date = models.DateField(u'Дата')
     sample_region = models.FloatField(u'Плошадь участка, га', max_length=300)
     id_quarter = models.ForeignKey("Quarter", on_delete=models.CASCADE, verbose_name="Квартал", null=True)
-    soil_lot = models.CharField(max_length=300, verbose_name='Выдел')
+    soil_lot = models.CharField(max_length=300, verbose_name='Выдел', default=0, null=True)
     mark_del = models.IntegerField(null = True)
     mark_update = models.IntegerField(null= True)
 
@@ -138,10 +138,10 @@ class Sample(models.Model):
                                        verbose_name='Перечетная ведомость участка', null=True)
     id_quarter = models.ForeignKey('Quarter', on_delete=models.CASCADE,
                                    verbose_name='Квартал', null=True)
-    soil_lot = models.CharField(max_length=300, verbose_name='Выдел', null=True)
-    width = models.FloatField(u'Ширина', null=True)
-    lenght = models.FloatField(u'Длина', null=True)
-    square = models.FloatField(u'Площадь', null=True)
+    soil_lot = models.CharField(max_length=300, verbose_name='Выдел', null=True, default=0)
+    width = models.FloatField(u'Ширина', null=True, default=0)
+    lenght = models.FloatField(u'Длина', null=True, default=0)
+    square = models.FloatField(u'Площадь', null=True, default=0)
     mark_update = models.IntegerField(null=True, default=0)
 
 
