@@ -676,8 +676,7 @@ class UserRegistration(generics.ListCreateAPIView):
         serializers = ProfileSerializer(data=request.data, context={'request':request})
         serializers.is_valid(raise_exception=True)
         serializers.save()
-        return Response(
-            serializers.data)
+        return Response(status.HTTP_201_CREATED)
 
 
 class UserAuth(generics.ListCreateAPIView):

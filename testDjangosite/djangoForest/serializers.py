@@ -35,6 +35,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = Users
         fields = '__all__'
+        # extra_kwargs= {"email": {"error_messages": {"required": "хуй"}}}
 
     def create(self, validated_data):
         return Users.objects.create(email = validated_data['email'],
