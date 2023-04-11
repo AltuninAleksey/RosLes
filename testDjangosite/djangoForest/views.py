@@ -2,7 +2,7 @@ import datetime
 import simplejson
 from django.core.files.images import ImageFile
 from django.db.models import F
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse, HttpResponse, FileResponse
 from rest_framework import generics, status
 from PIL import Image
 import io
@@ -690,7 +690,7 @@ class UserAuth(generics.ListCreateAPIView):
         if check_password(request.data["password"], user["password"]):
             profile = Profile.objects.filter(id_user_id = user['id']).values('id', 'FIO').get()
             return Response(profile)
-        return Response("invalid password or email")
+        return Response({"invalid password or email"})
 
 
 class PhotoPointView(APIView):
@@ -701,6 +701,25 @@ class PhotoPointView(APIView):
     parser_classes = (MultiPartParser, FileUploadParser )
 
     # parser_classes = (FileUploadParser, MultiPartParser)
+
+    def get(self, *args, **kwargs):
+        if kwargs:
+            from testDjangosite.settings import MEDIA_ROOT
+            import os
+            print(kwargs['pk'])
+            lst = PhotoPoint.objects.filter(id_sample=kwargs['pk']).values("photo")
+            if len(lst) == 0: return Response("id not found")
+            for i in range(len(lst)):
+                file_path = os.path.join(MEDIA_ROOT, lst[i]['photo'])
+                print(file_path)
+                if os.path.isfile(file_path):
+                    response = FileResponse(open(file_path, 'rb'))
+                    response['Content-Disposition'] = 'attachment; filename=' + lst[i]['photo'].split('/')[-1]
+                    response['X-Sendfile'] = file_path
+                    return response
+        return Response(PhotoPointSer(PhotoPoint.objects.all(), many=True).data)
+
+
     def post(self, request, format = None):
         print(request.data)
         print(request.FILES)

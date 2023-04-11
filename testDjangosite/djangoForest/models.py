@@ -49,6 +49,9 @@ class Track(models.Model):
 class PhotoPoint(models.Model):
     photo = models.ImageField(upload_to="photos/%Y/%m/%d/")
     id_sample = models.ForeignKey("Sample", on_delete=models.CASCADE, verbose_name='Проба', null = True)
+    latitude = models.FloatField(u'Широта', default=0)
+    longitude = models.FloatField(u'Долгота', default=0)
+    date = models.DateField(u'Дата', null=True)
 
     class Meta:
         verbose_name = 'Фото точка'

@@ -38,6 +38,7 @@ urlpatterns = [
     path('listregionfilters', ListRegionFilters.as_view()),
     path('getallequallistregion', GetAllEqualListRegion.as_view()),
     path('upload', PhotoPointView.as_view()),
+    path('upload/<int:pk>', PhotoPointView.as_view()),
     path('auth', UserAuth.as_view()),
     path('registration', UserRegistration.as_view()),
     path('sampleandother', CreateSampleAndOther.as_view()),

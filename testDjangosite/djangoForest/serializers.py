@@ -35,7 +35,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = Users
         fields = '__all__'
-        # extra_kwargs= {"email": {"error_messages": {"required": "хуй"}}}
+        # extra_kwargs= {"email": {"error_messages": {"required": {"хуй"}}}}
 
     def create(self, validated_data):
         return Users.objects.create(email = validated_data['email'],
@@ -500,6 +500,12 @@ class PhotoPointSerializer(serializers.Serializer):
     def create(self, validated_data):
         return PhotoPoint.objects.create(**validated_data)
 
+
+class PhotoPointSer(serializers.ModelSerializer):
+
+    class Meta:
+        model = PhotoPoint
+        fields = '__all__'
 
 class DescriptionRegionSerializer(serializers.ModelSerializer):
 
