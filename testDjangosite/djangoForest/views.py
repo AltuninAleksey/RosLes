@@ -690,7 +690,7 @@ class UserAuth(generics.ListCreateAPIView):
         if check_password(request.data["password"], user["password"]):
             profile = Profile.objects.filter(id_user_id = user['id']).values('id', 'FIO').get()
             return Response(profile)
-        return Response({"invalid password or email"})
+        return Response("invalid password or email")
 
 
 class PhotoPointView(APIView):
