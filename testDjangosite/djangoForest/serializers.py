@@ -35,7 +35,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = Users
         fields = '__all__'
-        # extra_kwargs= {"email": {"error_messages": {"required": {"хуй"}}}}
+        extra_kwargs= {"email": {"error_messages": {"required": {"Это обязательное поле"}}}}
 
     def create(self, validated_data):
         return Users.objects.create(email = validated_data['email'],
@@ -479,11 +479,26 @@ class GetAllListRegionDataSerializer(serializers.Serializer):
     soil_lot = serializers.CharField()
 
 
-class PhotoPointSerializer(serializers.Serializer):
+class PhotoPointSerializer(serializers.ModelSerializer):
+    # photo = serializers.ImageField(required=True)
+    # id_sample_id = serializers.CharField(required=True)
+    # date = serializers.DateField(required=True)
+    # longitude = serializers.FloatField(required=True)
+    # latitude = serializers.FloatField(required=True)
 
     class Meta:
         model = PhotoPoint
-        fields = ('id_sample_id', 'photo', 'date', 'longitude', 'latitude')
+        # fields = ('id_sample_id', 'photo', 'date', 'longitude', 'latitude')
+        fields = '__all__'
+        extra_kwargs = {
+            'latitude': {'required': True},
+            'photo': {'required': True},
+            'id_sample': {'required':True},
+            'date': {'required': True},
+            'longitude': {'required': True}
+        }
+        # required = ('id_sample_id', 'photo', 'date', 'longitude', 'latitude')
+
     # photo = serializers.ImageField(allow_null=False, max_length=100, required=True)
     # id_sample = serializers.CharField()
     #
@@ -496,7 +511,12 @@ class PhotoPointSerializer(serializers.Serializer):
     #     self.context.id_sample.save(id_sample)
     #     return self.context.photopoint.save()
     #
-
+    # def create(self, validated_data):
+    #     return PhotoPoint.objects.create(id_sample_id=validated_data['id_sample'],
+    #                                  photo=validated_data['id_photo'],
+    #                                  longitude=validated_data['longitude'],
+    #                                  latitude=validated_data['latitude'],
+    #                                  date=validated_data['date'])
     def create(self, validated_data):
         return PhotoPoint.objects.create(**validated_data)
 

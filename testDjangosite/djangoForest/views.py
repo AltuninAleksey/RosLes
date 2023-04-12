@@ -721,13 +721,8 @@ class PhotoPointView(APIView):
 
 
     def post(self, request, format = None):
-        print(request.data)
-        print(request.FILES)
-        # with open(BASE_DIR, "wb") as f:
-        #     f.write(request.data)
-        #     f.write(request.FILES)
         serializer = PhotoPointSerializer(data=request.data, context=request)
-        serializer.is_valid()
+        serializer.is_valid(raise_exception=True)
         serializer.save(id_sample_id = request.data.get('id_sample'),
                         photo = request.data.get('photo'),
                         longitude = request.data.get('longitude'),
