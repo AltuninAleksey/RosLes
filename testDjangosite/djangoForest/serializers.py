@@ -480,15 +480,9 @@ class GetAllListRegionDataSerializer(serializers.Serializer):
 
 
 class PhotoPointSerializer(serializers.ModelSerializer):
-    # photo = serializers.ImageField(required=True)
-    # id_sample_id = serializers.CharField(required=True)
-    # date = serializers.DateField(required=True)
-    # longitude = serializers.FloatField(required=True)
-    # latitude = serializers.FloatField(required=True)
 
     class Meta:
         model = PhotoPoint
-        # fields = ('id_sample_id', 'photo', 'date', 'longitude', 'latitude')
         fields = '__all__'
         extra_kwargs = {
             'latitude': {'required': True},
@@ -497,26 +491,7 @@ class PhotoPointSerializer(serializers.ModelSerializer):
             'date': {'required': True},
             'longitude': {'required': True}
         }
-        # required = ('id_sample_id', 'photo', 'date', 'longitude', 'latitude')
 
-    # photo = serializers.ImageField(allow_null=False, max_length=100, required=True)
-    # id_sample = serializers.CharField()
-    #
-    #
-    # def save(self, **kwargs):
-    #     photo = self.validated_data.get('photo')
-    #     id_sample = self.validated_data.get('id_sample')
-    #     print(self.context)
-    #     self.context.photopoint.photo.save(photo.name, photo)
-    #     self.context.id_sample.save(id_sample)
-    #     return self.context.photopoint.save()
-    #
-    # def create(self, validated_data):
-    #     return PhotoPoint.objects.create(id_sample_id=validated_data['id_sample'],
-    #                                  photo=validated_data['id_photo'],
-    #                                  longitude=validated_data['longitude'],
-    #                                  latitude=validated_data['latitude'],
-    #                                  date=validated_data['date'])
     def create(self, validated_data):
         return PhotoPoint.objects.create(**validated_data)
 

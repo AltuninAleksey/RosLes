@@ -51,7 +51,7 @@ class PhotoPoint(models.Model):
     id_sample = models.ForeignKey("Sample", on_delete=models.CASCADE, verbose_name='Проба', null = True)
     latitude = models.FloatField(u'Широта', blank=True, default=0)
     longitude = models.FloatField(u'Долгота', blank=True, default=0)
-    date = models.DateField(u'Дата', null=True)
+    date = models.CharField(u'Дата', null=True, max_length=100)
 
     class Meta:
         verbose_name = 'Фото точка'
