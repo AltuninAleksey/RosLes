@@ -729,7 +729,11 @@ class PhotoPointView(APIView):
         serializer = PhotoPointSerializer(data=request.data, context=request)
         serializer.is_valid()
         serializer.save(id_sample_id = request.data.get('id_sample'),
-                        photo = request.data.get('photo'))
+                        photo = request.data.get('photo'),
+                        longitude = request.data.get('longitude'),
+                        latitude = request.data.get('latitude'),
+                        date = request.data.get('date')
+                        )
         return Response({"http": status.HTTP_200_OK}, status=200)
 
 

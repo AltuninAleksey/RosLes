@@ -483,7 +483,7 @@ class PhotoPointSerializer(serializers.Serializer):
 
     class Meta:
         model = PhotoPoint
-        fields = ('id_sample_id', 'photo')
+        fields = ('id_sample_id', 'photo', 'date', 'longitude', 'latitude')
     # photo = serializers.ImageField(allow_null=False, max_length=100, required=True)
     # id_sample = serializers.CharField()
     #
