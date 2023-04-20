@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="500dp"
+    android:layout_height="600dp"
+    android:background="#000000">
+
+    <ImageView
+        android:id="@+id/imagebit"
+        android:layout_width="400dp"
+        android:layout_height="450dp"
+        android:src="@drawable/download"
+        app:layout_constraintBottom_toTopOf="@+id/coord"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/coord"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="100dp"
+        android:gravity="left"
+        android:paddingLeft="25dp"
+        android:text="Координаты: "
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+    <!--        <Button-->
+<!--            android:id="@+id/delete"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="100dp"-->
+<!--            android:layout_marginTop="180dp"-->
+<!--            android:layout_marginEnd="20dp"-->
+<!--            android:layout_weight="1"-->
+<!--            android:backgroundTint="@color/red_color"-->
+<!--            android:drawableLeft="@drawable/minus"-->
+<!--            android:text="Удалить"-->
+<!--            android:textColor="#FFFFFF"-->
+<!--            app:cornerRadius="30dp"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/textView15" />-->
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,114 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="248dp"
+        android:layout_height="220dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="0dp"
+        android:src="@drawable/logo" />
+
+
+
+    <TextView
+        android:id="@+id/emaileror"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/inputemail"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="70dp"
+        android:textColor="@color/red_color"
+        android:textSize="18sp"
+        android:text="Введите email"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/inputemail"
+        android:layout_width="match_parent"
+        android:layout_height="61dp"
+        android:textSize="24sp"
+        android:layout_below="@+id/logo"
+        android:gravity="center"
+        android:textColor="#959595"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="0dp"
+        android:text="Введите свою почту и пароль, чтобы войти" />
+
+    <TextView
+        android:id="@+id/passeror"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/login"
+        android:layout_marginStart="70dp"
+        android:layout_marginTop="20dp"
+        android:textColor="@color/red_color"
+        android:textSize="18sp"
+        android:text="Введите пароль"
+        android:visibility="gone"/>
+
+
+    <include
+        android:id="@+id/pass"
+        layout="@layout/custom_input_form_pass"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/inputemail"
+        android:layout_marginStart="50dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="250dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginBottom="50dp" />
+
+    <include
+        android:id="@+id/login"
+        layout="@layout/custom_input_form"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/inputemail"
+        android:layout_marginStart="50dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginBottom="50dp" />
+
+    <TextView
+        android:id="@+id/createuser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/button_login"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:textAlignment="center"
+        android:layout_marginStart="200dp"
+        android:layout_marginTop="77dp"
+        android:layout_marginEnd="200dp"
+        android:text="Нет аккаунта? "
+        android:textSize="14sp" />
+
+    <Button
+        android:id="@+id/button_login"
+        style="@style/MaterialAlertDialog.Material3"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_below="@+id/pass"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="250dp"
+        android:layout_marginTop="130dp"
+        android:layout_marginEnd="250dp"
+        android:text="ВОЙТИ " />
+
+
+</RelativeLayout>

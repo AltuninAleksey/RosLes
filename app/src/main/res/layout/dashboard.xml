@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+<!--    <include-->
+<!--        android:id="@+id/include"-->
+<!--        layout="@layout/nav_menu"-->
+
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
+
+
+    <Button
+        android:id="@+id/perechet"
+        android:layout_width="400dp"
+        android:layout_height="170dp"
+        android:layout_marginTop="80dp"
+        android:drawableLeft="@drawable/keyboard"
+        android:text="Перечетная ведомость"
+        android:textSize="22sp"
+        app:cornerRadius="50dp"
+        style="@style/MaterialAlertDialog.Material3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/gps"
+        android:layout_width="400dp"
+        android:layout_height="170dp"
+        android:layout_marginTop="100dp"
+        android:paddingEnd="80dp"
+        android:drawableLeft="@drawable/location"
+        android:text="GPS трекер"
+        android:textSize="22sp"
+        app:cornerRadius="50dp"
+        style="@style/MaterialAlertDialog.Material3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/perechet"
+        tools:ignore="RtlSymmetry" />
+
+
+    <Button
+        android:id="@+id/profile"
+        android:layout_width="400dp"
+        android:layout_height="170dp"
+        android:layout_marginTop="100dp"
+        android:drawableLeft="@drawable/man"
+        android:text="Профиль"
+        android:textSize="22sp"
+        app:cornerRadius="50dp"
+        style="@style/MaterialAlertDialog.Material3"
+        android:paddingRight="80dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gps" />
+
+    <Button
+        android:id="@+id/ALLDOWNLOAD"
+        android:layout_width="400dp"
+        android:layout_height="170dp"
+        android:layout_marginTop="100dp"
+        android:drawableLeft="@drawable/download"
+        android:text="Загрузка данных"
+        android:textSize="22sp"
+        app:cornerRadius="50dp"
+        style="@style/MaterialAlertDialog.Material3"
+        android:paddingRight="50dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

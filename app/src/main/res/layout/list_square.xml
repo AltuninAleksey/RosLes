@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <TableLayout
+        android:id="@+id/tbl_layout"
+        android:layout_width="fill_parent"
+
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:stretchColumns="*">
+
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/background_table">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="5dip"
+                android:text="Лесничество"
+                android:textColor="#ffff"
+                android:textSize="24sp" />
+
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="5dip"
+                android:text="Участковое &#10;лесничество"
+                android:textColor="#ffff"
+                android:textSize="24sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="5dip"
+                android:text="Квартал"
+                android:textColor="#ffff"
+                android:textSize="24sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="5dip"
+                android:text="Выдел"
+                android:textColor="#ffff"
+                android:textSize="24sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="5dip"
+                android:text="Дата"
+                android:textColor="#ffff"
+                android:textSize="24sp" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#00EDCA">
+
+            <TextView
+                android:id="@+id/lesnnich"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="5dip"
+                android:text="Брянское"
+                android:textColor="#000"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/district"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="5dip"
+                android:text="Мичуринское"
+                android:textColor="#000"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/quater"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="5dip"
+                android:text="3"
+                android:textColor="#000"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/vudel"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="5dip"
+                android:text="25-4"
+                android:textColor="#000"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/date"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="5dip"
+                android:text="01.01.2023"
+                android:textColor="#000"
+                android:textSize="24sp" />
+        </TableRow>
+
+
+    </TableLayout>
+
+
+    <TableLayout
+        android:id="@+id/tbl_layout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:stretchColumns="*"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tbl_layout">
+
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/background_table">
+
+            <TextView
+                android:layout_width="224dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="5dip"
+                android:text="Площадь участка"
+                android:textColor="#ffff"
+                android:textSize="24sp" />
+
+            <TextView
+                android:layout_width="570dp"
+                android:layout_height="75dp"
+                android:gravity="center"
+                android:padding="5dip"
+                android:text="Необходимое количество пробных площадей"
+                android:textColor="#ffff"
+                android:textSize="24sp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/square"
+                android:layout_width="224dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="5dip"
+                android:text="Площадь участка"
+                android:textColor="@color/black"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/resultprob"
+                android:layout_width="570dp"
+                android:layout_height="75dp"
+                android:gravity="center"
+                android:padding="5dip"
+                android:text="3"
+                android:textColor="@color/red_color"
+                android:textSize="48px" />
+        </TableRow>
+    </TableLayout>
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="50dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tbl_layout2">
+
+        <!--<HorizontalScrollView-->
+        <!--android:id="@+id/tabscrvie"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_marginLeft="5dp"-->
+        <!--&gt;-->
+        <TableLayout
+            android:id="@+id/tbl_layout3"
+            android:layout_width="fill_parent"
+            android:layout_height="500dp"
+            android:stretchColumns="*"
+            >
+
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/background_table">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:padding="5dip"
+                    android:text="№ Пробы"
+                    android:textColor="#ffff"
+                    android:textSize="24sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:padding="5dip"
+                    android:text="Длина"
+                    android:textColor="#ffff"
+                    android:textSize="24sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="80dp"
+                    android:gravity="center"
+                    android:padding="5dip"
+                    android:text="Ширина"
+                    android:textColor="#ffff"
+                    android:textSize="24sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:padding="5dip"
+                    android:text="Площадь"
+                    android:textColor="#ffff"
+                    android:textSize="24sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:padding="5dip"
+                    android:text="Дата"
+                    android:textColor="#ffff"
+                    android:textSize="24sp" />
+
+            </TableRow>
+            <TableRow
+                android:id="@+id/level1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/background_table"/>
+
+        </TableLayout>
+        <!--</HorizontalScrollView>-->
+    </ScrollView>
+
+
+    <!--</HorizontalScrollView>-->
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/menu"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="0dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

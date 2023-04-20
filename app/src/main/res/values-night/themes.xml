@@ -1,0 +1,20 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Rosles" >
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">#177164</item>
+        <item name="colorPrimaryVariant">#177164</item>
+        <item name="colorOnPrimary">#177164</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/teal_200</item>
+        <item name="colorOnSecondary">#177164</item>
+
+
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">#177164</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:textSize">25sp</item>
+        <!-- Customize your theme here. -->
+    </style>
+</resources>

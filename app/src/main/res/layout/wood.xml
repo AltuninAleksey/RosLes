@@ -1,0 +1,831 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ECECEC">
+
+
+
+    <TableLayout
+        android:id="@+id/tbl_layoutHight"
+        android:layout_width="fill_parent"
+
+        android:layout_height="wrap_content"
+        android:stretchColumns="*"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/background_table">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="5dip"
+                android:text="Лесничество"
+                android:textColor="#ffff"
+                android:textSize="24sp" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="5dip"
+                android:text="Участковое &#10;лесничество"
+                android:textColor="#ffff"
+                android:textSize="24sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="5dip"
+                android:text="Квартал"
+                android:textColor="#ffff"
+                android:textSize="24sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="5dip"
+                android:text="Выдел"
+                android:textColor="#ffff"
+                android:textSize="24sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="5dip"
+                android:text="Проба"
+                android:textColor="#ffff"
+                android:textSize="24sp" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/lesnnich"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="5dip"
+                android:text="Брянское"
+                android:textColor="#000"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/district"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="5dip"
+                android:text="Мичуринское"
+                android:textColor="#000"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/quater"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="5dip"
+                android:text="3"
+                android:textColor="#000"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/vudel"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="5dip"
+                android:text="25-4"
+                android:textColor="#000"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/proba"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="5dip"
+                android:text="1"
+                android:textColor="@color/red_color"
+                android:textSize="48px" />
+        </TableRow>
+    </TableLayout>
+
+    <TableLayout
+        android:id="@+id/tbl_layout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:stretchColumns="*"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tbl_layoutHight">
+
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/background_table">
+
+            <TextView
+                android:layout_width="224dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="5dip"
+                android:text="Количество деревьев главной породы"
+                android:textColor="#ffff"
+                android:textSize="24sp" />
+
+            <TextView
+                android:layout_width="570dp"
+                android:layout_height="75dp"
+                android:gravity="center"
+                android:padding="5dip"
+                android:text="Необходимое количество деревьев"
+                android:textColor="#ffff"
+                android:textSize="24sp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+            <TextView
+                android:id="@+id/valuewood"
+                android:layout_width="224dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="5dip"
+                android:text=""
+                android:textColor="@color/black"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/needvaluewood"
+                android:layout_width="570dp"
+                android:layout_height="50dp"
+                android:gravity="center"
+                android:padding="5dip"
+                android:text="100"
+                android:textColor="@color/red_color"
+                android:textSize="30px" />
+        </TableRow>
+    </TableLayout>
+
+
+
+    <LinearLayout
+        android:id="@+id/switch_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/WoodRecycler"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tbl_layout2">
+
+        <TextView
+            android:id="@+id/lesoblast"
+            android:layout_width="429dp"
+            android:layout_height="match_parent"
+            android:background="@color/activecolumn"
+            android:text="Лесообразующая порода"
+            android:textAlignment="center"
+            android:textColor="@color/gray"
+            android:textSize="32px" />
+
+        <TextView
+            android:id="@+id/podlesoblast"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:paddingStart="16dp"
+            android:textSize="32px"
+            android:textColor="@color/gray"
+            android:background="#DADADA"
+            android:text="Подлесок" />
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/WoodRecycler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/activecolumn"
+        android:orientation="horizontal"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/switch_toolbar"
+        tools:itemCount="5"
+        tools:listitem="@layout/item_wood"
+        android:visibility="visible"        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/WoodRecyclerpodles"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/activecolumn"
+        android:visibility="invisible"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/switch_toolbar"
+        tools:itemCount="5"
+        tools:listitem="@layout/item_wood" />
+
+    <TableLayout
+        android:id="@+id/tbl_layoutpodlesok"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:stretchColumns="*"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/WoodRecyclerpodles"
+        android:visibility="gone">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/background_table">
+
+            <TextView
+                android:layout_width="224dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="5dip"
+                android:text="Количество растений"
+                android:textColor="#ffff"
+                android:textSize="24sp" />
+
+            <TextView
+                android:layout_width="570dp"
+                android:layout_height="75dp"
+                android:gravity="center"
+                android:padding="5dip"
+                android:text="Средняя высота"
+                android:textColor="#ffff"
+                android:textSize="24sp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/kolras"
+                android:layout_width="wrap_content"
+                android:layout_height="65dp"
+                android:layout_margin="5dp"
+
+                android:background="@drawable/rounded"
+                android:onClick="onClickCell"
+                android:text="0"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="35sp" />
+
+
+            <EditText
+                android:id="@+id/avgHeight"
+                android:layout_width="wrap_content"
+                android:layout_height="65dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/rounded"
+                android:textAlignment="center"
+                android:inputType="numberDecimal"
+                android:imeOptions="actionDone"
+                android:hint="0"
+                android:textColor="@color/black"
+                android:textSize="35sp" />
+
+        </TableRow>
+    </TableLayout>
+
+
+    <ImageView
+        android:id="@+id/buttonMinus"
+        android:layout_width="wrap_content"
+        android:layout_height="90dp"
+        android:layout_marginStart="140dp"
+        android:layout_marginTop="555dp"
+        android:src="@drawable/iconminus"
+        app:layout_constraintEnd_toStartOf="@+id/buttonPlus"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/switch_toolbar" />
+
+
+    <ImageView
+        android:id="@+id/buttonPlus"
+        android:layout_width="wrap_content"
+        android:layout_height="90dp"
+        android:layout_marginTop="555dp"
+        android:layout_marginEnd="192dp"
+        android:src="@drawable/iconplus"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/switch_toolbar" />
+
+    <TableLayout
+        android:id="@+id/tbl_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:stretchColumns="*"
+        app:layout_constraintTop_toBottomOf="@+id/WoodRecycler"
+        android:visibility="visible">
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/background_table">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="5dip"
+                android:text="до 0.2"
+                android:textColor="#ffff"
+                android:textSize="24sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="5dip"
+                android:text="0.2-&#10;0.5"
+                android:textColor="#ffff"
+                android:textSize="24sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="5dip"
+                android:text="0.6-&#10;1"
+                android:textColor="#ffff"
+                android:textSize="24sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="5dip"
+                android:text="1.1-&#10;1.5"
+                android:textColor="#ffff"
+                android:textSize="24sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="5dip"
+                android:text=">1.5"
+                android:textColor="#ffff"
+                android:textSize="24sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="5dip"
+                android:text="Макс &#10; высота"
+                android:textColor="#ffff"
+                android:textSize="24sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="5dip"
+                android:text="Средняя &#10; высота"
+                android:textColor="#ffff"
+                android:textSize="24sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="5dip"
+                android:text="Средний &#10; диаметр"
+                android:textColor="#ffff"
+                android:textSize="24sp" />
+
+
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:id="@+id/iskus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_span="8"
+                android:layout_margin="3dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="Искусственное"
+                android:textAlignment="center"
+                android:textColor="@color/color_text"
+                android:textSize="24sp" />
+        </TableRow>
+
+        <TableRow
+
+            android:layout_width="wrap_content"
+            android:layout_height="100dp">
+
+            <TextView
+                android:id="@+id/iskus02"
+                android:layout_width="wrap_content"
+                android:layout_height="65dp"
+                android:background="@drawable/rounded"
+                android:onClick="onClickCell"
+                android:text="0"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="35sp" />
+
+            <TextView
+                android:id="@+id/iskus05"
+                android:layout_width="wrap_content"
+                android:layout_height="65dp"
+                android:background="@drawable/rounded"
+                android:onClick="onClickCell"
+                android:text="0"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="35sp" />
+
+            <TextView
+                android:id="@+id/iskus06"
+                android:layout_width="wrap_content"
+                android:layout_height="65dp"
+                android:background="@drawable/rounded"
+                android:onClick="onClickCell"
+                android:text="0"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="35sp" />
+
+            <TextView
+                android:id="@+id/iskus11"
+                android:layout_width="wrap_content"
+                android:layout_height="65dp"
+                android:background="@drawable/rounded"
+                android:onClick="onClickCell"
+                android:text="0"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="35sp" />
+
+            <TextView
+                android:id="@+id/iskus15"
+                android:layout_width="wrap_content"
+                android:layout_height="65dp"
+                android:background="@drawable/rounded"
+                android:onClick="onClickCell"
+                android:text="0"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="35sp" />
+
+            <EditText
+                android:id="@+id/maksHeightIskus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded"
+                android:hint="0"
+                android:text="0"
+                android:inputType="numberDecimal"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="35sp" />
+
+
+            <TextView
+                android:id="@+id/AvgHeightIskus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded"
+                android:hint="0"
+                android:inputType="numberDecimal"
+                android:text="0"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="35sp" />
+
+            <EditText
+                android:id="@+id/AvgDiametrIskus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded"
+                android:hint="0"
+                android:inputType="numberDecimal"
+                android:text="0"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="35sp" />
+        </TableRow>
+        <TableRow>
+            <TextView
+                android:id="@+id/estes"
+                android:layout_width="wrap_content"
+                android:layout_height="38dp"
+                android:layout_gravity="center"
+                android:textAlignment="center"
+                android:layout_span="8"
+                android:layout_margin="3dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="Естественное"
+                android:textColor="@color/color_text"
+                android:textSize="24sp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+           >
+
+
+            <TextView
+                android:id="@+id/estes02"
+                android:layout_width="wrap_content"
+                android:layout_height="60dp"
+                android:background="@drawable/rounded"
+                android:onClick="onClickCell"
+                android:text="0"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="35sp" />
+
+            <TextView
+                android:id="@+id/estes05"
+                android:layout_width="wrap_content"
+                android:layout_height="60dp"
+                android:background="@drawable/rounded"
+                android:onClick="onClickCell"
+                android:text="0"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="35sp" />
+
+            <TextView
+                android:id="@+id/estes06"
+                android:layout_width="wrap_content"
+                android:layout_height="60dp"
+                android:background="@drawable/rounded"
+                android:onClick="onClickCell"
+                android:text="0"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="35sp" />
+
+            <TextView
+                android:id="@+id/estes11"
+                android:layout_width="wrap_content"
+                android:layout_height="60dp"
+                android:background="@drawable/rounded"
+                android:onClick="onClickCell"
+                android:text="0"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="35sp" />
+
+            <TextView
+                android:id="@+id/estes15"
+                android:layout_width="wrap_content"
+                android:layout_height="60dp"
+                android:background="@drawable/rounded"
+                android:onClick="onClickCell"
+                android:text="0"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="35sp" />
+
+            <EditText
+                android:id="@+id/maksHeightestes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded"
+                android:hint="0"
+                android:text="0"
+                android:inputType="numberDecimal"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="35sp" />
+
+
+            <TextView
+                android:id="@+id/AvgHeightestes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded"
+                android:hint="0"
+                android:text="0"
+                android:inputType="numberDecimal"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="35sp" />
+
+            <EditText
+                android:id="@+id/AvgDiametrestes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded"
+                android:hint="0"
+                android:inputType="numberDecimal"
+                android:text="0"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="35sp" />
+
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:id="@+id/estestvennoe"
+                android:layout_width="wrap_content"
+                android:layout_height="38dp"
+                android:layout_gravity="center"
+                android:textAlignment="center"
+                android:layout_span="8"
+                android:fontFamily="sans-serif-medium"
+                android:text="Естесвенное порослевое"
+                android:layout_margin="3dp"
+                android:textColor="@color/color_text"
+                android:textSize="24sp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="100dp">
+
+            <TextView
+                android:id="@+id/estestvennoe02"
+                android:layout_width="wrap_content"
+                android:layout_height="60dp"
+                android:background="@drawable/rounded"
+                android:onClick="onClickCell"
+                android:text="0"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="35sp" />
+
+            <TextView
+                android:id="@+id/estestvennoe05"
+                android:layout_width="wrap_content"
+                android:layout_height="60dp"
+                android:background="@drawable/rounded"
+                android:onClick="onClickCell"
+                android:text="0"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="35sp" />
+
+            <TextView
+                android:id="@+id/estestvennoe06"
+                android:layout_width="wrap_content"
+                android:layout_height="60dp"
+                android:background="@drawable/rounded"
+                android:onClick="onClickCell"
+                android:text="0"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="35sp" />
+
+            <TextView
+                android:id="@+id/estestvennoe11"
+                android:layout_width="wrap_content"
+                android:layout_height="60dp"
+
+                android:background="@drawable/rounded"
+                android:onClick="onClickCell"
+                android:text="0"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="35sp" />
+
+            <TextView
+                android:id="@+id/estestvennoe15"
+                android:layout_width="wrap_content"
+                android:layout_height="60dp"
+
+                android:background="@drawable/rounded"
+                android:onClick="onClickCell"
+                android:text="0"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="35sp" />
+
+            <EditText
+                android:id="@+id/maksHeightestestvennoe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded"
+                android:hint="0"
+                android:inputType="numberDecimal"
+                android:text="0"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="35sp" />
+
+
+            <TextView
+                android:id="@+id/AvgHeightestestvennoe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded"
+                android:hint="0"
+                android:inputType="numberDecimal"
+                android:text="0"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="35sp" />
+
+            <EditText
+                android:id="@+id/AvgDiametrestestvennoe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded"
+                android:hint="0"
+                android:inputType="numberDecimal"
+                android:text="0"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="35sp" />
+
+        </TableRow>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="80dp"
+            android:layout_marginTop="5dp">
+
+            <TextView
+                android:id="@+id/ddd"
+                android:layout_width="132dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:fontFamily="sans-serif-medium"
+                android:gravity="center"
+                android:text="Общее &#10; количество"
+                android:textAlignment="center"
+                android:textColor="@color/color_text"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/asd"
+                android:layout_width="323dp"
+                android:layout_height="53dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginStart="219dp"
+                android:layout_marginLeft="0dp"
+                android:layout_marginRight="0dp"
+                android:layout_span="6"
+                android:background="@drawable/rounded"
+                android:text="0"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="35sp" />
+
+
+        </RelativeLayout>
+
+    </TableLayout>
+
+
+
+
+
+    <include
+        android:id="@+id/include"
+        layout="@layout/menu3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

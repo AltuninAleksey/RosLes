@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="166dp"
+        android:orientation="horizontal"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+    <Button
+        android:id="@+id/addbutton"
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:layout_margin="10dp"
+        android:layout_weight="1"
+        android:backgroundTint="@color/color_button_main"
+        android:drawableLeft="@drawable/pluscircle"
+        android:text="Добавить"
+        android:textSize="9sp"
+        app:cornerRadius="30dp" />
+
+    <Button
+        android:id="@+id/reload"
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:layout_margin="10dp"
+        android:layout_weight="1"
+        android:backgroundTint="@color/color_button_main"
+        android:drawableLeft="@drawable/reload"
+        android:text="Обновить"
+        android:textSize="9sp"
+        app:cornerRadius="30dp" />
+
+    <Button
+        android:id="@+id/open"
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:layout_margin="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_weight="1"
+        android:backgroundTint="@color/color_button_main"
+        android:drawableLeft="@drawable/file"
+        android:text="Открыть "
+        android:textSize="9sp"
+        app:cornerRadius="30dp" />
+
+    <Button
+        android:id="@+id/save"
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:layout_margin="10dp"
+        android:layout_weight="1"
+        android:backgroundTint="@color/color_button_main"
+        android:drawableLeft="@drawable/edit"
+        android:text="Изменить"
+        android:textSize="9sp"
+        app:cornerRadius="30dp" />
+
+    <Button
+        android:id="@+id/delete"
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:layout_margin="10dp"
+        android:layout_weight="1"
+        android:backgroundTint="@color/color_button_main"
+        android:drawableLeft="@drawable/minus"
+        android:text="Удалить"
+        android:textSize="9sp"
+        app:cornerRadius="30dp" />
+
+    </LinearLayout>
