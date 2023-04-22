@@ -150,7 +150,6 @@ class lisq_square : AppCompatActivity() {
             tableRow.layoutParams = layoutParams
         }
 
-        binding.toolbar.reload.isGone = true
         binding.toolbar.save.isGone = true
         binding.toolbar.addbutton.setOnClickListener {
             val intent = Intent(this, AddProb::class.java)
