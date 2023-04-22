@@ -66,7 +66,7 @@ class SelectPhoto:AppCompatActivity() {
 
         val photoFile = file
         val photo = MultipartBody.Part.createFormData(
-            "file",
+            "photo",
             photoFile.name,
             photoFile.asRequestBody("image/*".toMediaType())
         )

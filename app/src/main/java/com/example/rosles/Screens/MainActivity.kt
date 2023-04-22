@@ -82,7 +82,7 @@ class MainActivity : AppCompatActivity() {
 
     @SuppressLint("Range")
     fun RecyclerviewInit() {
-        var porodaList = db.readbyporoda()
+        val porodaList = db.readbyporoda()
 
         var activetableRow: TableRow? = null
         for (i in 0..porodaList.size) {

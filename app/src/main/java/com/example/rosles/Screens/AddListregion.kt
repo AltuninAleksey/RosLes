@@ -75,7 +75,7 @@ class AddListregion:AppCompatActivity() {
         val buf:Int?=intent.getStringExtra("id")?.toInt()
         val quater = db.getQuaterbyID(buf)
 
-        binding.idCvartal.text = quater.quarterName
+        binding.idCvartal.text = quater.toString()
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         binding.date.text = LocalDateTime.now().format(formatter).toString()
     }

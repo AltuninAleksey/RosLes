@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.core.database.getBlobOrNull
+import com.example.rosles.Models.*
 import com.example.rosles.ResponceClass.*
 import com.example.rosles.Screens.GPStracker
 import com.example.roslesdef.Models.SpinerItem
@@ -368,10 +369,8 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     }
 
     @SuppressLint("Range")
-    fun readbyporoda(): Cursor {
-
-        val database: SQLiteDatabase = this.readableDatabase
-
+    fun readbyporoda(): List<Poroda> {
+        val database: SQLiteDatabase = this.writableDatabase
         val cursor: Cursor = database.rawQuery(
             """select listregion.id,listregion.mark_update, s3.name_forestly, s3.name_district_forestly, s3.quarter_name, s3.soil_lot, s3.sample_region, s3.date
                     from (((djangoForest_listregion as listregion  INNER join djangoForest_quarter as quartal on listregion.id_quarter_id = quartal.id) as s1
@@ -379,60 +378,156 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
                     inner join djangoForest_forestly as forestly on s2.id_forestly_id = forestly.id) as s3""",
             null
         )
-        return cursor
-        database.close()
-    }
+        val porodaList: MutableList<Poroda> = mutableListOf<Poroda>();
+        cursor.moveToFirst()
 
-    fun getsubject(): Cursor {
+        for (i in 1..cursor.count) {
+            val poroda = Poroda(
+                cursor.getString(cursor.getColumnIndex("name_forestly")),
+                cursor.getString(cursor.getColumnIndex("name_district_forestly")),
+                cursor.getString(cursor.getColumnIndex("quarter_name")),
+                cursor.getString(cursor.getColumnIndex("soil_lot")),
+                cursor.getString(cursor.getColumnIndex("date")),
+                cursor.getString(cursor.getColumnIndex("id")),
+                cursor.getString(cursor.getColumnIndex("mark_update"))
+            )
+            porodaList.add(poroda)
+            cursor.moveToNext()
+        }
+        cursor.close()
+        database.close()
+
+        return porodaList
+    }
+    @SuppressLint("Range")
+    fun getsubject(): List<Subject> {
         val database: SQLiteDatabase = this.writableDatabase
         val cursor: Cursor =
             database.rawQuery("SELECT id,name_subject_RF FROM djangoForest_subjectrf", null)
-        return cursor
+
+        val subjectsList = mutableListOf<Subject>()
+        cursor.moveToFirst()
+        for (i in 1..cursor.count) {
+            val subject = Subject(
+                cursor.getString(cursor.getColumnIndex("id")),
+                cursor.getString(cursor.getColumnIndex("name_subject_RF"))
+            )
+            subjectsList.add(subject)
+            cursor.moveToNext()
+        }
+        cursor.close()
         database.close()
+
+        return subjectsList
     }
 
-    fun getLesnich(id_subject_rf: Int): Cursor {
-        var database: SQLiteDatabase = this.writableDatabase
+    @SuppressLint("Range")
+    fun getLesnich(id_subject_rf: Int): List<Lesnich> {
+        val database: SQLiteDatabase = this.writableDatabase
         val cursor: Cursor = database.rawQuery(
             "SELECT * FROM djangoForest_forestly as s1 WHERE s1.id_subject_rf_id = $id_subject_rf;",
             null
         )
-        return cursor
+        val lesnichList = mutableListOf<Lesnich>()
+        cursor.moveToFirst()
+
+        for (i in 1 .. cursor.count) {
+            val lesnich = Lesnich(
+                cursor.getString(cursor.getColumnIndex("id")),
+                cursor.getString(cursor.getColumnIndex("name_forestly"))
+            )
+            lesnichList.add(lesnich)
+            cursor.moveToNext()
+        }
+
+        cursor.close()
         database.close()
+        return lesnichList
     }
 
-    fun getDistrict(id_forestly: Int): Cursor {
-        var database: SQLiteDatabase = this.writableDatabase
+    @SuppressLint("Range")
+    fun getDistrict(id_forestly: Int): List<District> {
+        val database: SQLiteDatabase = this.writableDatabase
         val cursor: Cursor = database.rawQuery(
             "SELECT * FROM djangoForest_districtforestly as s2 WHERE s2.id_forestly_id = $id_forestly;",
             null
         )
-        return cursor
+        val districtList = mutableListOf<District>()
+        cursor.moveToFirst()
+
+        for (i in 1 .. cursor.count) {
+            val district = District(
+                cursor.getInt(cursor.getColumnIndex("id")),
+                cursor.getString(cursor.getColumnIndex("name_district_forestly"))
+            )
+            districtList.add(district)
+            cursor.moveToNext()
+        }
+
+        cursor.close()
         database.close()
+        return districtList
+
     }
 
-    fun getQuater(id_district: Int): Cursor {
-        var database: SQLiteDatabase = this.writableDatabase
+    @SuppressLint("Range")
+    fun getQuater(id_district: Int): List<Quater> {
+        val database: SQLiteDatabase = this.writableDatabase
         val cursor: Cursor = database.rawQuery(
             "SELECT * FROM djangoForest_quarter as s3 WHERE  s3.id_district_forestly_id = $id_district;",
             null
         )
-        return cursor
-        database.close()
-    }
+        val quaterList = mutableListOf<Quater>()
+        cursor.moveToFirst()
 
-    fun getQuaterbyID(id: Int?): Cursor {
-        var database: SQLiteDatabase = this.writableDatabase
+        for (i in 1 .. cursor.count) {
+            val quater = Quater(
+                cursor.getString(cursor.getColumnIndex("id")),
+                cursor.getString(cursor.getColumnIndex("quarter_name"))
+            )
+            quaterList.add(quater)
+            cursor.moveToNext()
+        }
+
+        cursor.close()
+        database.close()
+
+        return quaterList
+    }
+    fun Updatevedom(
+        id: Int,
+        date: String,
+        sample_region: String,
+        id_quarter_id: Int,
+        soil_lot: String
+    ) {
+        val db = this.writableDatabase
+        //Log.v(date,"")
+        db.execSQL("Update djangoForest_listregion set date = '$date', sample_region = '$sample_region', id_quarter_id = $id_quarter_id, soil_lot = '$soil_lot'  where id = $id")
+        db.close()
+    }
+    @SuppressLint("Range")
+    fun getQuaterbyID(id: Int?): Quater {
+        val database: SQLiteDatabase = this.writableDatabase
         val cursor: Cursor = database.rawQuery(
             "select id, quarter_name, id_district_forestly_id from djangoForest_quarter where id = $id",
             null
         )
-        return cursor
+        cursor.moveToFirst()
+        val quater = Quater(
+            cursor.getString(cursor.getColumnIndex("id")),
+            cursor.getString(cursor.getColumnIndex("quarter_name"))
+        )
+
+        cursor.close()
         database.close()
+        return quater
+
     }
 
-    fun getVedombyID(id: Int?): Cursor {
-        var database: SQLiteDatabase = this.writableDatabase
+    @SuppressLint("Range")
+    fun getVedombyID(id: Int?): Vedom {
+        val database: SQLiteDatabase = this.writableDatabase
         val cursor: Cursor = database.rawQuery(
             "select listregion.id, s3.name_forestly, s3.name_district_forestly, s3.quarter_name, s3.id_quarter_id, s3.soil_lot, s3.sample_region, s3.date  \n" +
                     "from (((djangoForest_listregion as listregion inner join djangoForest_quarter as quartal on listregion.id_quarter_id = quartal.id) as s1\n" +
@@ -440,19 +535,48 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
                     "inner join djangoForest_forestly as forestly on s2.id_forestly_id = forestly.id) as s3 where listregion.id = $id",
             null
         )
-        return cursor
+        cursor.moveToFirst()
+        val vadom = Vedom(
+            cursor.getString(cursor.getColumnIndex("name_forestly")),
+            cursor.getString(cursor.getColumnIndex("name_district_forestly")),
+            cursor.getString(cursor.getColumnIndex("quarter_name")),
+            cursor.getString(cursor.getColumnIndex("soil_lot")),
+            cursor.getString(cursor.getColumnIndex("date")),
+            cursor.getString(cursor.getColumnIndex("sample_region")),
+            cursor.getString(cursor.getColumnIndex("id_quarter_id"))
+        )
+
+        cursor.close()
         database.close()
+        return vadom
     }
 
 
-    fun getlistsquare(id: Int): Cursor {
-        var database: SQLiteDatabase = this.writableDatabase
+    @SuppressLint("Range")
+    fun getlistsquare(id: Int): List<Square> {
+        val database: SQLiteDatabase = this.writableDatabase
         val cursor: Cursor = database.rawQuery(
             "select * from djangoForest_sample as s1 WHERE s1.id_list_region_id = $id ",
             null
         )
-        return cursor
+        cursor.moveToFirst()
+        val squareList = mutableListOf<Square>()
+
+        for(i in 1 .. cursor.count) {
+            val square = Square(
+                cursor.getString(cursor.getColumnIndex("id")),
+                cursor.getString(cursor.getColumnIndex("lenght")),
+                cursor.getString(cursor.getColumnIndex("width")),
+                cursor.getString(cursor.getColumnIndex("square")),
+                cursor.getString(cursor.getColumnIndex("date"))
+            )
+            squareList.add(square)
+            cursor.moveToNext()
+        }
+
+        cursor.close()
         database.close()
+        return squareList
     }
     fun UpdateSample(
         id: Int,
@@ -527,28 +651,60 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         database.close()
     }
 
-    fun getFavoriteLes(id: Int): Cursor {
-        var database: SQLiteDatabase = this.writableDatabase
+    @SuppressLint("Range")
+    fun getFavoriteLes(id: Int): List<FavoriteLes> {
+        val database: SQLiteDatabase = this.writableDatabase
         val cursor: Cursor = database.rawQuery(
             "select s1.id, s2.name_breed from djangoForest_forestformingbydefault as s1 inner join djangoForest_breed as s2 ON s1.id_breed_id = s2.id WHERE s1.id_profile_id = $id;",
             null
         )
+        val favoriteLesList = mutableListOf<FavoriteLes>()
+        cursor.moveToFirst()
 
-        return cursor
+        for (i in 1 .. cursor.count) {
+            val favoriteLes = FavoriteLes(
+                cursor.getString(cursor.getColumnIndex("name_breed")),
+                cursor.getString(cursor.getColumnIndex("id"))
+            )
+            favoriteLesList.add(favoriteLes)
+            cursor.moveToNext()
+        }
+
+        cursor.close()
         database.close()
+        return favoriteLesList
     }
+    fun updatevalue(id: Int){
+        val database: SQLiteDatabase = this.writableDatabase
+        database.execSQL(
+            "update djangoForest_listregion set mark_update = 1 where id = $id"
+        )
 
-    fun getFavoritePodles(id: Int): Cursor {
-        var database: SQLiteDatabase = this.writableDatabase
+    }
+    @SuppressLint("Range")
+    fun getFavoritePodles(id: Int): List<FavoritePodles> {
+        val database: SQLiteDatabase = this.writableDatabase
         val cursor: Cursor = database.rawQuery(
             "select s3.id_undergrowth_id, s4.name,s3.id from djangoForest_undergrowthbydefault as s3 inner join djangoForest_undergrowth as s4 ON s3.id_undergrowth_id = s4.id WHERE s3.id_profile_id = $id;",
             null
         )
+        cursor.moveToFirst()
+        val favoritePodlesList = mutableListOf<FavoritePodles>()
 
-        return cursor
+        for (i in 1 .. cursor.count) {
+            val favoritePodles = FavoritePodles(
+                cursor.getString(cursor.getColumnIndex("name")),
+                cursor.getString(cursor.getColumnIndex("id")),
+                cursor.getString(cursor.getColumnIndex("id_undergrowth_id"))
+            )
+            favoritePodlesList.add(favoritePodles)
+            cursor.moveToNext()
+        }
+
+        cursor.close()
         database.close()
+        return favoritePodlesList
     }
-
 
     fun createLISTREGION(date: String, sample_region: String, id_quarter_id: Int, soil_lot: String,mark_update:Int) {
         val db = this.writableDatabase
@@ -854,7 +1010,7 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         val a= mutableListOf<Photo>()
         for (i in 1..cursor.getCount()) {
             var phototemp=cursor.getString(cursor.getColumnIndex("photo"))
-            val bmp=gpStracker.convertToBitmap(phototemp)
+            val bmp:Bitmap?=null
             val photosample=cursor.getInt(cursor.getColumnIndex("id_sample_id"))
             val latitude=cursor.getFloat(cursor.getColumnIndex("latitude"))
             val longitude=cursor.getFloat(cursor.getColumnIndex("longitude"))
@@ -876,7 +1032,7 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         val a= mutableListOf<Photo>()
         for (i in 1..cursor.getCount()) {
             var phototemp=cursor.getString(cursor.getColumnIndex("photo"))
-            val bmp=gpStracker.convertToBitmap(phototemp)
+            val bmp:Bitmap?=null
             val photosample=cursor.getInt(cursor.getColumnIndex("id_sample_id"))
             val latitude=cursor.getFloat(cursor.getColumnIndex("latitude"))
             val longitude=cursor.getFloat(cursor.getColumnIndex("longitude"))
@@ -886,6 +1042,17 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         }
         cursor.close()
         return a
+    }
+
+    fun createvedom(date: String, sample_region: String, id_quarter_id: Int, soil_lot: String) {
+        val db = this.writableDatabase
+        //Log.v(date,"")
+        db.execSQL(
+            "Insert into djangoForest_listregion\n" +
+                    "(date, sample_region, id_quarter_id, soil_lot) \n" +
+                    "values ('$date', '$sample_region', $id_quarter_id, '$soil_lot')"
+        )
+        db.close()
     }
 
 

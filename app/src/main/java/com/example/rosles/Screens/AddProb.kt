@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.*
@@ -92,7 +91,7 @@ class AddProb : AppCompatActivity() {
                 binding.vudel.text.toString(),
                 binding.idCvartal.text.toString(),
                 binding.samplearea.text.toString(),
-                binding.vudel.text.toString()
+                binding.vudel.text.toString(),1
             )
             Toast.makeText(this, "Данные добавлены", Toast.LENGTH_LONG).show()
 

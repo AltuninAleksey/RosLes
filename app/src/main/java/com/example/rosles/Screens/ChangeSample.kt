@@ -13,8 +13,6 @@ import com.example.rosles.DBCountWood
 import com.example.rosles.R
 import com.example.rosles.Screens.Sample.Companion.id_region
 import com.example.rosles.databinding.AddProbBinding
-import com.example.rosles.databinding.AddVedomostBinding
-import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 
@@ -70,6 +68,9 @@ class ChangeSample:AppCompatActivity() {
         popup.show()
 
     }
+
+
+
 
     @SuppressLint("Range")
     fun RecyclerviewInit() {

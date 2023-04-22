@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.*
@@ -76,7 +75,7 @@ class AddVedomost:AppCompatActivity() {
         val buf:Int?=intent.getStringExtra("id")?.toInt()
         val quater = db.getQuaterbyID(buf)
 
-        binding.idCvartal.text = quater.quarterName
+        binding.idCvartal.text = quater.toString()
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         binding.date.text = LocalDateTime.now().format(formatter).toString()
     }
@@ -86,7 +85,8 @@ class AddVedomost:AppCompatActivity() {
                 binding.date.text.toString(),
                 binding.samplearea.text.toString(),
                 intent.getStringExtra("id")!!.toInt(),
-                binding.vudel.text.toString())
+                binding.vudel.text.toString(),
+                )
             Toast.makeText(this,"Данные добавлены",Toast.LENGTH_LONG).show()
             startActivity(Intent(this, MainActivity::class.java))
         }

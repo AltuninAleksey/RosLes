@@ -109,15 +109,15 @@ class ViewModels():BaseViewModel(accountsRepository=Singletons.accountsRepositor
     }
 
     fun reproduction(context: Context)=viewModelScope.safeLaunch{
-            try {
-                var resp=accountsRepository?.reproduction()
-                //guide.postValue(resp)
-                val db = DBCountWood(context,null)
-                db.addReproduction(resp?.get(0)?.name_reproduction.toString())
-                db.addReproduction(resp?.get(1)?.name_reproduction.toString())
-            } catch (e: EmptyFieldException) {
-                processEmptyFieldException(e)
-            }
+        try {
+            var resp=accountsRepository?.reproduction()
+            //guide.postValue(resp)
+            val db = DBCountWood(context,null)
+            db.addReproduction(resp?.get(0)?.name_reproduction.toString())
+            db.addReproduction(resp?.get(1)?.name_reproduction.toString())
+        } catch (e: EmptyFieldException) {
+            processEmptyFieldException(e)
+        }
     }
     fun perechet(perechetRequest: PerechetRequest,context: Context)=viewModelScope.safeLaunch{
         try {

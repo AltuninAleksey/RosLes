@@ -77,7 +77,6 @@ public class GPStracker implements LocationListener {
     public void onProviderEnabled(String provider) {
 
     }
-
     @Override
     public void onProviderDisabled(String provider) {
 
