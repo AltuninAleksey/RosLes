@@ -12,6 +12,7 @@ import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.get
 import com.example.rosles.DBCountWood
+import com.example.rosles.Models.Poroda
 import com.example.rosles.Network.ViewModels
 import com.example.rosles.R
 import com.example.rosles.databinding.ActivityMainBinding
@@ -82,12 +83,13 @@ class MainActivity : AppCompatActivity() {
 
     @SuppressLint("Range")
     fun RecyclerviewInit() {
-        val porodaList = db.readbyporoda()
+        val porodaList :List<Poroda> = db.readbyporoda()
 
         var activetableRow: TableRow? = null
         for (i in 0..porodaList.size) {
             val tableRow = TableRow(this)
-
+            if (porodaList.size==0)
+                break
             /* Порядок важен, знацения будут добавляться в колонки таблицы
             * в порядке указанном в valuesOfPoroda */
             val valuesOfPorodaList: List<String> = mutableListOf(

@@ -43,7 +43,7 @@ class Authorization: AppCompatActivity() {
                 )
             )
             viewModel.user.observe(this) {
-                saveText(it.id_profile.id, it.id_profile.FIO)
+                saveText(it.id, it.FIO)
                 startActivity(Intent(this, Dashboard::class.java))
             }
         }

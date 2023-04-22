@@ -30,22 +30,39 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
     <Button
-        android:id="@+id/gps"
+        android:id="@+id/reload"
         android:layout_width="400dp"
         android:layout_height="170dp"
-        android:layout_marginTop="100dp"
-        android:paddingEnd="80dp"
+        android:layout_margin="10dp"
+        android:layout_weight="1"
+        android:backgroundTint="@color/color_button_main"
+        android:drawableLeft="@drawable/reload"
+        android:text="Обновить"
+        style="@style/MaterialAlertDialog.Material3"
+        android:textSize="22sp"
+        app:cornerRadius="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.465"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ALLDOWNLOAD" />
+
+    <Button
+        android:id="@+id/gps"
+        style="@style/MaterialAlertDialog.Material3"
+        android:layout_width="400dp"
+        android:layout_height="170dp"
+        android:layout_marginTop="48dp"
         android:drawableLeft="@drawable/location"
+        android:paddingEnd="80dp"
         android:text="GPS трекер"
         android:textSize="22sp"
         app:cornerRadius="50dp"
-        style="@style/MaterialAlertDialog.Material3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/perechet"
         tools:ignore="RtlSymmetry" />
-
 
     <Button
         android:id="@+id/profile"

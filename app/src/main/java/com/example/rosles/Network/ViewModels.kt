@@ -93,8 +93,8 @@ class ViewModels():BaseViewModel(accountsRepository=Singletons.accountsRepositor
     fun get_user(body:AuthRequest)=viewModelScope.safeLaunch {
         try {
             user.postValue(accountsRepository.get_user(body))
-        } catch (e: EmptyFieldException) {
-            processEmptyFieldException(e)
+        } catch (e: Exception) {
+            Log.e("asd",e.toString())
         }
     }
     fun upload(body: UpdateRequest)=viewModelScope.safeLaunch {
