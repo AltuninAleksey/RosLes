@@ -9,6 +9,11 @@ class TodoAdmin(admin.ModelAdmin):
     search_fields = ('id', 'name', 'age')
 
 
+class UserAdmin(admin.ModelAdmin):
+    list = ('id', 'email')
+    list_display = ('id', 'email')
+    list_display_links = ('id', 'email')
+
 class ProfileAdmin(admin.ModelAdmin):
     list_display = ('id', 'FIO', 'phoneNumber', 'id_post', 'id_role', 'id_branches')
     list_display_links = ('id', 'FIO', 'phoneNumber', 'id_post', 'id_role', 'id_branches')
@@ -179,6 +184,7 @@ class TrackingAdmin(admin.ModelAdmin):
     search_fields = ('id', 'id_profile', 'data', 'map')
 
 
+admin.site.register(Users, UserAdmin)
 admin.site.register(Track, TrackingAdmin)
 admin.site.register(PhotoPoint, PhotoPointAdmin)
 admin.site.register(ForestAreas, ForestAreasAdmin)

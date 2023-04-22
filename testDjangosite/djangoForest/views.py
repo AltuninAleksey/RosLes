@@ -684,13 +684,15 @@ class UserAuth(generics.ListCreateAPIView):
     def post(self, request, **kwargs):
         # print(check_password(request.data["password"], "pbkdf2_sha256"))
         # user = Users.objects.filter(email = request.data['email'], password = request.data['password']).values('id').get()
-        user = Users.objects.filter(email=request.data['email']).values(
-            'id', "password").get()
-        print(check_password(request.data["password"], user["password"]))
+        try:
+            user = Users.objects.filter(email=request.data['email']).values(
+                'id', "password", "email").get()
+        except:
+            return Response("invalid email")
         if check_password(request.data["password"], user["password"]):
             profile = Profile.objects.filter(id_user_id = user['id']).values('id', 'FIO').get()
             return Response(profile)
-        return Response("invalid password or email")
+        return Response("invalid email")
 
 
 class PhotoPointView(APIView):
@@ -926,6 +928,25 @@ class DescriptionRegionFilter(ListAPIView):
             ser2 = ser2.filter(id_list_region__date__lte=requestDateSec)
         ser2 = DescriptionRegionSerializer(ser2, many=True)
         return Response({"data": ser2.data})
+
+
+# class testviews(ListAPIView):
+#     print("BOOMBOX")
+#     # file_patj = str()
+# #     # print(BASE_DIR / 'test.xlsx' )
+#     import pandas as pd
+#     excel = pd.ExcelFile(rf"{BASE_DIR / 'test.xlsx'}")
+#     sheetX = excel.parse(0)
+#     print(sheetX)
+#     column1 = sheetX['Порода'][3]
+#     # print(sheetX['Порода'][3])
+#     # print(sheetX['Порода'])
+#     ser = WorkingBreedsSerializer
+    # for i in sheetX:
+    #     print(sheetX['Порода'][i])
+    #     print('====')
+#         WorkingBreeds.objects.create(name_breeds = i)
+
 
 class ForestViewSet(viewsets.ModelViewSet):
     pass
