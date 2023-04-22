@@ -74,6 +74,7 @@ class AddPorod : AppCompatActivity() {
         binding.podles.adapter = arrayAdapter1
 
         val hash = db.gethashFavoriteLes(id)
+
         val hashpodles = db.gethashFavoritepodLes(id)
 
         binding.buttonAuto.setOnClickListener {
@@ -111,7 +112,7 @@ class AddPorod : AppCompatActivity() {
 
     @SuppressLint("Range")
     fun getidbreed(value: String?,dbCountWood: DBCountWood):Int?{
-        val cursor=dbCountWood.getallporod()
+        val cursor=dbCountWood.getallporod() // swap to getallporodArray()
         cursor.moveToFirst()
         val hash= HashMap<String,Int>()
         for (i in 1..cursor.getCount()){
@@ -121,7 +122,7 @@ class AddPorod : AppCompatActivity() {
             cursor.moveToNext()
         }
         cursor.close()
-        return hash.get(value)
+        return hash.get(value) // Q3?
     }
 
 }

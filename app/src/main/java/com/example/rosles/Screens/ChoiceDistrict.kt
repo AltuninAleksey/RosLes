@@ -15,7 +15,7 @@ import com.example.rosles.R
 import com.example.rosles.ResponceClass.BaseRespObject
 import com.example.rosles.databinding.ChoicesubjectBinding
 
-class ChoiceDistrict:AppCompatActivity() {
+class ChoiceDistrict : AppCompatActivity() {
 
 
     private val db = DBCountWood(this, null)
@@ -29,7 +29,7 @@ class ChoiceDistrict:AppCompatActivity() {
         setContentView(binding.root)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = ""
-        binding.textView4.text="Выберите участковое лесничество"
+        binding.textView4.text = "Выберите участковое лесничество"
 
         var id = intent.getStringExtra("id")
 
@@ -38,41 +38,39 @@ class ChoiceDistrict:AppCompatActivity() {
     }
 
     @SuppressLint("Range")
-    fun initcorutine(id:Int){
-        var a : MutableList<BaseRespObject>  = mutableListOf()
+    fun initcorutine(id: Int) {
+        var a: MutableList<BaseRespObject> = mutableListOf()
 
-        var cursor=db.getDistrict(id)
-        cursor.moveToFirst()
+        var districtList = db.getDistrict(id)
 
 
-        for (i in 1..cursor.getCount()) {
-            a.add(BaseRespObject(cursor.getString(cursor.getColumnIndex("id")).toInt(),
-                cursor.getString(cursor.getColumnIndex("name_district_forestly"))))
-            cursor.moveToNext()
+        for (i in 0..districtList.size) {
+            a.add(districtList[i].toBaseRespObject())
         }
-        cursor.close()
-            var adapter = ChoiceSubjectAdapter(a,object : BaseInterface {
 
-                override fun onClick(itemView: Any) {
-                    start(itemView as Int)
-                }
+        var adapter = ChoiceSubjectAdapter(a, object : BaseInterface {
 
-                override fun onClickButton() {
+            override fun onClick(itemView: Any) {
+                start(itemView as Int)
+            }
 
-                }
-            })
-            if (a.isEmpty()){
-                binding.GuideRecycler.emptytext.isVisible=true
+            override fun onClickButton() {
 
             }
-            binding.GuideRecycler.GuideRecycler.adapter=adapter
+        })
+        if (a.isEmpty()) {
+            binding.GuideRecycler.emptytext.isVisible = true
+
+        }
+        binding.GuideRecycler.GuideRecycler.adapter = adapter
 
     }
+
     fun start(itemView: Int) {
         val intent1 = Intent(this, ChoiceCvartal::class.java)
-        intent1.putExtra("id",itemView.toString())
-        intent1.putExtra("id_Vedomost",intent.getStringExtra("id_Vedomost"))
-        var a=intent.getStringExtra("id_Vedomost")
+        intent1.putExtra("id", itemView.toString())
+        intent1.putExtra("id_Vedomost", intent.getStringExtra("id_Vedomost"))
+        var a = intent.getStringExtra("id_Vedomost")
         startActivity(intent1)
     }
 

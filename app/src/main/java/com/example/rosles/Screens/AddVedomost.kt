@@ -74,9 +74,9 @@ class AddVedomost:AppCompatActivity() {
     @SuppressLint("Range")
     fun RecyclerviewInit() {
         val buf:Int?=intent.getStringExtra("id")?.toInt()
-        val cursor=db.getQuaterbyID(buf)
-        cursor.moveToFirst()
-        binding.idCvartal.text =cursor.getString(cursor.getColumnIndex("quarter_name"))
+        val quater = db.getQuaterbyID(buf)
+
+        binding.idCvartal.text = quater.quarterName
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         binding.date.text = LocalDateTime.now().format(formatter).toString()
     }

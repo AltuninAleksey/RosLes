@@ -28,7 +28,6 @@ import java.math.RoundingMode
 import java.text.DecimalFormat
 import kotlin.collections.HashMap
 
-
 class Wood : AppCompatActivity() {
 
     private lateinit var binding: WoodBinding
@@ -72,13 +71,13 @@ class Wood : AppCompatActivity() {
             showpopupmenu(it)
         }
 
-        val cursor = db.getVedombyID(id_vdomost)
-        cursor.moveToFirst()
-        binding.lesnnich.text = cursor.getString(cursor.getColumnIndex("name_forestly"))
-        binding.district.text = cursor.getString(cursor.getColumnIndex("name_district_forestly"))
-        binding.quater.text =   cursor.getString(cursor.getColumnIndex("quarter_name"))
-        binding.vudel.text =    cursor.getString(cursor.getColumnIndex("soil_lot"))
-        cursor.close()
+        val vedom = db.getVedombyID(id_vdomost)
+
+        binding.lesnnich.text = vedom.nameForestly
+        binding.district.text = vedom.nameDistrictForestly
+        binding.quater.text =   vedom.quarterName
+        binding.vudel.text =    vedom.soilLot
+
         binding.needvaluewood.text=intent.getStringExtra("valuewood")
         // хранение перечета В hashmap
         val vidvos = mutableListOf(
@@ -112,31 +111,17 @@ class Wood : AppCompatActivity() {
         val id_user = sPref.getString("id", "1")!!.toInt()
         val leslist = mutableListOf<ItemWood>()
         val podleslist = mutableListOf<ItemWood>()
-        var cursorinitrecycler = db.getFavoriteLes(id_user)
-        cursorinitrecycler.moveToFirst()
+        var favoriteLesList = db.getFavoriteLes(id_user)
 
+        for (i in 0..favoriteLesList.size) {
+            leslist.add(favoriteLesList[i].toItemWood())
+        }
 
-        for (i in 1..cursorinitrecycler.getCount()) {
-            leslist.add(
-                ItemWood(
-                    cursorinitrecycler.getString(cursorinitrecycler.getColumnIndex("name_breed")),
-                    cursorinitrecycler.getString(cursorinitrecycler.getColumnIndex("id")).toInt()
-                )
-            )
-            cursorinitrecycler.moveToNext()
+        val favoritePodlesList = db.getFavoritePodles(id_user)
+
+        for (i in 0..favoritePodlesList.size) {
+            podleslist.add(favoritePodlesList[i].toItemWood())
         }
-        cursorinitrecycler = db.getFavoritePodles(id_user)
-        cursorinitrecycler.moveToFirst()
-        for (i in 1..cursorinitrecycler.getCount()) {
-            podleslist.add(
-                ItemWood(
-                    cursorinitrecycler.getString(cursorinitrecycler.getColumnIndex("name")),
-                    cursorinitrecycler.getString(cursorinitrecycler.getColumnIndex("id_undergrowth_id")).toInt()
-                )
-            )
-            cursorinitrecycler.moveToNext()
-        }
-        cursorinitrecycler.close()
 
         //инициализация меню
         binding.include.user.setOnClickListener {

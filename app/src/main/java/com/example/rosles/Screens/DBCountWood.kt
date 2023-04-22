@@ -6,6 +6,7 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import com.example.rosles.Models.*
 import com.example.rosles.ResponceClass.PerechetWood
 import com.example.rosles.ResponceClass.PodlesokWood
 import com.example.rosles.ResponceClass.ProbaWoodSimple
@@ -28,8 +29,8 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     }
 
     @SuppressLint("Range")
-    fun readbyporoda(): Cursor {
-        var database: SQLiteDatabase = this.writableDatabase
+    fun readbyporoda(): List<Poroda> {
+        val database: SQLiteDatabase = this.writableDatabase
         val cursor: Cursor = database.rawQuery(
             """select listregion.id,listregion.mark_update, s3.name_forestly, s3.name_district_forestly, s3.quarter_name, s3.soil_lot, s3.sample_region, s3.date
                     from (((djangoForest_listregion as listregion  INNER join djangoForest_quarter as quartal on listregion.id_quarter_id = quartal.id) as s1
@@ -37,60 +38,146 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
                     inner join djangoForest_forestly as forestly on s2.id_forestly_id = forestly.id) as s3""",
             null
         )
-        return cursor
+        val porodaList: MutableList<Poroda> = mutableListOf<Poroda>();
+        cursor.moveToFirst()
+
+        for (i in 1..cursor.count) {
+            val poroda = Poroda(
+                cursor.getString(cursor.getColumnIndex("name_forestly")),
+                cursor.getString(cursor.getColumnIndex("name_district_forestly")),
+                cursor.getString(cursor.getColumnIndex("quarter_name")),
+                cursor.getString(cursor.getColumnIndex("soil_lot")),
+                cursor.getString(cursor.getColumnIndex("date")),
+                cursor.getString(cursor.getColumnIndex("id")),
+                cursor.getString(cursor.getColumnIndex("mark_update"))
+                )
+            porodaList.add(poroda)
+            cursor.moveToNext()
+        }
+        cursor.close()
         database.close()
+
+        return porodaList
     }
 
-    fun getsubject(): Cursor {
-        var database: SQLiteDatabase = this.writableDatabase
+    @SuppressLint("Range")
+    fun getsubject(): List<Subject> {
+        val database: SQLiteDatabase = this.writableDatabase
         val cursor: Cursor =
             database.rawQuery("SELECT id,name_subject_RF FROM djangoForest_subjectrf", null)
-        return cursor
+
+        val subjectsList = mutableListOf<Subject>()
+        cursor.moveToFirst()
+        for (i in 1..cursor.count) {
+            val subject = Subject(
+                cursor.getString(cursor.getColumnIndex("id")),
+                cursor.getString(cursor.getColumnIndex("name_subject_RF"))
+            )
+            subjectsList.add(subject)
+            cursor.moveToNext()
+        }
+        cursor.close()
         database.close()
+
+        return subjectsList
     }
 
-    fun getLesnich(id_subject_rf: Int): Cursor {
-        var database: SQLiteDatabase = this.writableDatabase
+    @SuppressLint("Range")
+    fun getLesnich(id_subject_rf: Int): List<Lesnich> {
+        val database: SQLiteDatabase = this.writableDatabase
         val cursor: Cursor = database.rawQuery(
             "SELECT * FROM djangoForest_forestly as s1 WHERE s1.id_subject_rf_id = $id_subject_rf;",
             null
         )
-        return cursor
+        val lesnichList = mutableListOf<Lesnich>()
+        cursor.moveToFirst()
+
+        for (i in 1 .. cursor.count) {
+            val lesnich = Lesnich(
+                cursor.getString(cursor.getColumnIndex("id")),
+                cursor.getString(cursor.getColumnIndex("name_forestly"))
+            )
+            lesnichList.add(lesnich)
+            cursor.moveToNext()
+        }
+
+        cursor.close()
         database.close()
+        return lesnichList
     }
 
-    fun getDistrict(id_forestly: Int): Cursor {
-        var database: SQLiteDatabase = this.writableDatabase
+    @SuppressLint("Range")
+    fun getDistrict(id_forestly: Int): List<District> {
+        val database: SQLiteDatabase = this.writableDatabase
         val cursor: Cursor = database.rawQuery(
             "SELECT * FROM djangoForest_districtforestly as s2 WHERE s2.id_forestly_id = $id_forestly;",
             null
         )
-        return cursor
+        val districtList = mutableListOf<District>()
+        cursor.moveToFirst()
+
+        for (i in 1 .. cursor.count) {
+            val district = District(
+                cursor.getString(cursor.getColumnIndex("id")),
+                cursor.getString(cursor.getColumnIndex("name_district_forestly"))
+            )
+            districtList.add(district)
+            cursor.moveToNext()
+        }
+
+        cursor.close()
         database.close()
+        return districtList
+
     }
 
-    fun getQuater(id_district: Int): Cursor {
-        var database: SQLiteDatabase = this.writableDatabase
+    @SuppressLint("Range")
+    fun getQuater(id_district: Int): List<Quater> {
+        val database: SQLiteDatabase = this.writableDatabase
         val cursor: Cursor = database.rawQuery(
             "SELECT * FROM djangoForest_quarter as s3 WHERE  s3.id_district_forestly_id = $id_district;",
             null
         )
-        return cursor
+        val quaterList = mutableListOf<Quater>()
+        cursor.moveToFirst()
+
+        for (i in 1 .. cursor.count) {
+            val quater = Quater(
+                cursor.getString(cursor.getColumnIndex("id")),
+                cursor.getString(cursor.getColumnIndex("quarter_name"))
+            )
+            quaterList.add(quater)
+            cursor.moveToNext()
+        }
+
+        cursor.close()
         database.close()
+
+        return quaterList
     }
 
-    fun getQuaterbyID(id: Int?): Cursor {
-        var database: SQLiteDatabase = this.writableDatabase
+    @SuppressLint("Range")
+    fun getQuaterbyID(id: Int?): Quater {
+        val database: SQLiteDatabase = this.writableDatabase
         val cursor: Cursor = database.rawQuery(
             "select id, quarter_name, id_district_forestly_id from djangoForest_quarter where id = $id",
             null
         )
-        return cursor
+        cursor.moveToFirst()
+        val quater = Quater(
+            cursor.getString(cursor.getColumnIndex("id")),
+            cursor.getString(cursor.getColumnIndex("quarter_name"))
+        )
+
+        cursor.close()
         database.close()
+        return quater
+
     }
 
-    fun getVedombyID(id: Int?): Cursor {
-        var database: SQLiteDatabase = this.writableDatabase
+    @SuppressLint("Range")
+    fun getVedombyID(id: Int?): Vedom {
+        val database: SQLiteDatabase = this.writableDatabase
         val cursor: Cursor = database.rawQuery(
             "select listregion.id, s3.name_forestly, s3.name_district_forestly, s3.quarter_name, s3.id_quarter_id, s3.soil_lot, s3.sample_region, s3.date  \n" +
                     "from (((djangoForest_listregion as listregion inner join djangoForest_quarter as quartal on listregion.id_quarter_id = quartal.id) as s1\n" +
@@ -98,11 +185,23 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
                     "inner join djangoForest_forestly as forestly on s2.id_forestly_id = forestly.id) as s3 where listregion.id = $id",
             null
         )
-        return cursor
+        cursor.moveToFirst()
+        val vadom = Vedom(
+            cursor.getString(cursor.getColumnIndex("name_forestly")),
+            cursor.getString(cursor.getColumnIndex("name_district_forestly")),
+            cursor.getString(cursor.getColumnIndex("quarter_name")),
+            cursor.getString(cursor.getColumnIndex("soil_lot")),
+            cursor.getString(cursor.getColumnIndex("date")),
+            cursor.getString(cursor.getColumnIndex("sample_region")),
+            cursor.getString(cursor.getColumnIndex("id_quarter_id"))
+        )
+
+        cursor.close()
         database.close()
+        return vadom
     }
     fun getVedombyIDObject(id: Int?){
-        var database: SQLiteDatabase = this.writableDatabase
+        val database: SQLiteDatabase = this.writableDatabase
         val cursor: Cursor = database.rawQuery(
             "select listregion.id, s3.name_forestly, s3.name_district_forestly, s3.quarter_name, s3.id_quarter_id, s3.soil_lot, s3.sample_region, s3.date  \n" +
                     "from (((djangoForest_listregion as listregion inner join djangoForest_quarter as quartal on listregion.id_quarter_id = quartal.id) as s1\n" +
@@ -114,14 +213,31 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
 
     }
 
-    fun getlistsquare(id: Int): Cursor {
-        var database: SQLiteDatabase = this.writableDatabase
+    @SuppressLint("Range")
+    fun getlistsquare(id: Int): List<Square> {
+        val database: SQLiteDatabase = this.writableDatabase
         val cursor: Cursor = database.rawQuery(
             "select * from djangoForest_sample as s1 WHERE s1.id_list_region_id = $id ",
             null
         )
-        return cursor
+        cursor.moveToFirst()
+        val squareList = mutableListOf<Square>()
+
+        for(i in 1 .. cursor.count) {
+            val square = Square(
+                cursor.getString(cursor.getColumnIndex("id")),
+                cursor.getString(cursor.getColumnIndex("lenght")),
+                cursor.getString(cursor.getColumnIndex("width")),
+                cursor.getString(cursor.getColumnIndex("square")),
+                cursor.getString(cursor.getColumnIndex("date"))
+            )
+            squareList.add(square)
+            cursor.moveToNext()
+        }
+
+        cursor.close()
         database.close()
+        return squareList
     }
 
     fun insertintolistsquare(
@@ -144,32 +260,34 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
 
     @SuppressLint("Range")
     fun gethashFavoriteLes(id: Int): HashMap<Int, String> {
-        var database: SQLiteDatabase = this.writableDatabase
+        val database: SQLiteDatabase = this.writableDatabase
         val cursor: Cursor = database.rawQuery(
             "select s1.id, s2.name_breed from djangoForest_forestformingbydefault as s1 inner join djangoForest_breed as s2 ON s1.id_breed_id = s2.id WHERE s1.id_profile_id = $id;",
             null
         )
-        var hash = HashMap<Int, String>()
         cursor.moveToFirst()
+        val hash = HashMap<Int, String>()
         for (i in 1..cursor.getCount()) {
             hash.put(
-                (cursor.getString(cursor.getColumnIndex("id"))).toInt(),
+                (cursor.getString(cursor.getColumnIndex("id")).toInt()),
                 (cursor.getString(cursor.getColumnIndex("name_breed")))
             )
             cursor.moveToNext()
         }
-        return hash
+
+        cursor.close()
         database.close()
+        return hash
     }
 
     @SuppressLint("Range")
     fun gethashFavoritepodLes(id: Int): HashMap<Int, String> {
-        var database: SQLiteDatabase = this.writableDatabase
+        val database: SQLiteDatabase = this.writableDatabase
         val cursor: Cursor = database.rawQuery(
             "select s3.id, s4.name from djangoForest_undergrowthbydefault as s3 inner join djangoForest_undergrowth as s4 ON s3.id_undergrowth_id = s4.id WHERE s3.id_profile_id = $id;",
             null
         )
-        var hash = HashMap<Int, String>()
+        val hash = HashMap<Int, String>()
         cursor.moveToFirst()
         for (i in 1..cursor.getCount()) {
             hash.put(
@@ -178,30 +296,59 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
             )
             cursor.moveToNext()
         }
-        return hash
+
+        cursor.close()
         database.close()
+        return hash
     }
 
-    fun getFavoriteLes(id: Int): Cursor {
-        var database: SQLiteDatabase = this.writableDatabase
+    @SuppressLint("Range")
+    fun getFavoriteLes(id: Int): List<FavoriteLes> {
+        val database: SQLiteDatabase = this.writableDatabase
         val cursor: Cursor = database.rawQuery(
             "select s1.id, s2.name_breed from djangoForest_forestformingbydefault as s1 inner join djangoForest_breed as s2 ON s1.id_breed_id = s2.id WHERE s1.id_profile_id = $id;",
             null
         )
+        val favoriteLesList = mutableListOf<FavoriteLes>()
+        cursor.moveToFirst()
 
-        return cursor
+        for (i in 1 .. cursor.count) {
+            val favoriteLes = FavoriteLes(
+                cursor.getString(cursor.getColumnIndex("name_breed")),
+                cursor.getString(cursor.getColumnIndex("id"))
+            )
+            favoriteLesList.add(favoriteLes)
+            cursor.moveToNext()
+        }
+
+        cursor.close()
         database.close()
+        return favoriteLesList
     }
 
-    fun getFavoritePodles(id: Int): Cursor {
-        var database: SQLiteDatabase = this.writableDatabase
+    @SuppressLint("Range")
+    fun getFavoritePodles(id: Int): List<FavoritePodles> {
+        val database: SQLiteDatabase = this.writableDatabase
         val cursor: Cursor = database.rawQuery(
             "select s3.id_undergrowth_id, s4.name,s3.id from djangoForest_undergrowthbydefault as s3 inner join djangoForest_undergrowth as s4 ON s3.id_undergrowth_id = s4.id WHERE s3.id_profile_id = $id;",
             null
         )
+        cursor.moveToFirst()
+        val favoritePodlesList = mutableListOf<FavoritePodles>()
 
-        return cursor
+        for (i in 1 .. cursor.count) {
+            val favoritePodles = FavoritePodles(
+                cursor.getString(cursor.getColumnIndex("name")),
+                cursor.getString(cursor.getColumnIndex("id")),
+                cursor.getString(cursor.getColumnIndex("id_undergrowth_id"))
+            )
+            favoritePodlesList.add(favoritePodles)
+            cursor.moveToNext()
+        }
+
+        cursor.close()
         database.close()
+        return favoritePodlesList
     }
 
 
@@ -229,13 +376,15 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         db.close()
     }
 
-    fun getallpodles(): Cursor {
+   /* fun getallpodles(): Cursor {
         val db = this.writableDatabase
         val cursor: Cursor =
             db.rawQuery("SELECT s1.id, s1.name FROM djangoForest_undergrowth as s1", null)
-        return cursor
+
+
         db.close()
-    }
+        return cursor
+    }*/
 
     @SuppressLint("Range")
     fun getallpodlesArray(): List<SpinerItem> {
@@ -245,15 +394,17 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         val countries1 = mutableListOf<SpinerItem>()
         countries1.add(SpinerItem("не добавлять",0))
         cursor.moveToFirst()
-        for (i in 1..cursor.getCount()) {
-            val name=cursor.getString(cursor.getColumnIndex("name"))
-            val id=cursor.getString(cursor.getColumnIndex("id")).toInt()
-            countries1.add(SpinerItem(name,id))
+        for (i in 1..cursor.count) {
+            countries1.add(
+                SpinerItem(cursor.getString(cursor.getColumnIndex("name")),
+                cursor.getString(cursor.getColumnIndex("id")).toInt())
+            )
             cursor.moveToNext()
         }
+
         cursor.close()
-        return countries1
         db.close()
+        return countries1
     }
 
     fun getallporod(): Cursor {
@@ -263,8 +414,8 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
             "SELECT s1.id, s1.name_breed, s1.is_foliar, s1.is_pine, s1.ShortName from djangoForest_breed as s1",
             null
         )
-        return cursor
         db.close()
+        return cursor
     }
 
     @SuppressLint("Range")
@@ -278,15 +429,18 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         cursor.moveToFirst()
         val countries = mutableListOf<SpinerItem>()
         countries.add(SpinerItem("не добавлять",0))
-        for (i in 1..cursor.getCount()) {
-
-            val id=cursor.getString(cursor.getColumnIndex("id")).toInt()
-            val name=cursor.getString(cursor.getColumnIndex("name_breed"))
-            countries.add(SpinerItem(name,id))
+        for (i in 1..cursor.count) {
+            countries.add(
+                SpinerItem(
+                    cursor.getString(cursor.getColumnIndex("name_breed")),
+                    cursor.getString(cursor.getColumnIndex("id")).toInt())
+            )
             cursor.moveToNext()
         }
-        return countries
+
+        cursor.close()
         db.close()
+        return countries
     }
 
 

@@ -40,17 +40,11 @@ class ChoiceCvartal:AppCompatActivity() {
     @SuppressLint("Range")
     fun initcorutine(id:Int){
         var a : MutableList<BaseRespObject>  = mutableListOf()
+        var quaterList = db.getQuater(id)
 
-        var cursor=db.getQuater(id)
-        cursor.moveToFirst()
-
-
-        for (i in 1..cursor.getCount()) {
-            a.add(BaseRespObject(cursor.getString(cursor.getColumnIndex("id")).toInt(),
-                cursor.getString(cursor.getColumnIndex("quarter_name"))))
-            cursor.moveToNext()
+        for (i in 0..quaterList.size) {
+            a.add(quaterList[i].toBaseRespObject())
         }
-        cursor.close()
 
             var adapter = ChoiceSubjectAdapter(a,object : BaseInterface {
 

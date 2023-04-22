@@ -86,12 +86,12 @@ class Listregion : AppCompatActivity() {
 
     @SuppressLint("Range")
     fun RecyclerviewInit() {
-        var cursor = db.readbyporoda()
-        cursor.moveToFirst()
+        var porodaList = db.readbyporoda()
+
 
         var activetableRow: TableRow? = null
 
-        for (i in 1..cursor.getCount()) {
+        for (i in 0..porodaList.size) {
             val tableRow = TableRow(this)
 
             val text0 = TextView(this)
@@ -120,14 +120,14 @@ class Listregion : AppCompatActivity() {
 
             text5.visibility=View.GONE
 
-            text0.setText(cursor.getString(cursor.getColumnIndex("name_forestly")))
-            text1.setText(cursor.getString(cursor.getColumnIndex("name_district_forestly")))
-            text2.setText(cursor.getString(cursor.getColumnIndex("quarter_name")))
-            text3.setText(cursor.getString(cursor.getColumnIndex("soil_lot")))
-            text4.setText(cursor.getString(cursor.getColumnIndex("date")))
-            text5.setText(cursor.getString(cursor.getColumnIndex("id")))
+            text0.setText(porodaList[i].nameForestly)
+            text1.setText(porodaList[i].nameDistrictForestly)
+            text2.setText(porodaList[i].quarterName)
+            text3.setText(porodaList[i].soilLot)
+            text4.setText(porodaList[i].date)
+            text5.setText(porodaList[i].id)
 
-            if((cursor.getInt(cursor.getColumnIndex("mark_update")))>0){
+            if(porodaList[i].nameForestly.toInt() > 0) {
                 text6.setImageResource(R.drawable.reloadred)
             }
 
@@ -138,6 +138,7 @@ class Listregion : AppCompatActivity() {
                 activetableRow = tableRow
                 activetableRow!!.setBackgroundResource(R.color.activecolumn)
             }
+
             tableRow.addView(text5,0)
             tableRow.addView(text0, 1)
             tableRow.addView(text1, 2)
@@ -151,9 +152,8 @@ class Listregion : AppCompatActivity() {
             val layoutParams = tableRow.layoutParams as TableLayout.LayoutParams
             layoutParams.setMargins(0, 10, 0, 10)
             tableRow.layoutParams = layoutParams
-            cursor.moveToNext()
+
         }
-        cursor.close()
 
         binding.toolbar.open.setOnClickListener {
             if (activetableRow != null) {

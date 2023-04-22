@@ -35,14 +35,12 @@ class ChoiceLes : AppCompatActivity() {
     @SuppressLint("Range", "SuspiciousIndentation")
     fun initcorutine(id:Int){
         var a : MutableList<BaseRespObject>  = mutableListOf()
-        var cursor=db.getLesnich(id)
-        cursor.moveToFirst()
+        var lesnichList = db.getLesnich(id)
 
-        for (i in 1..cursor.getCount()) {
-            a.add(BaseRespObject(cursor.getString(cursor.getColumnIndex("id")).toInt(),
-                cursor.getString(cursor.getColumnIndex("name_forestly"))))
-            cursor.moveToNext()
+        for (i in 0..lesnichList.size) {
+            a.add(lesnichList[i].toBaseRespObject())
         }
+
         var adapter = ChoiceSubjectAdapter(a,object : BaseInterface {
 
             override fun onClick(itemView: Any) {
@@ -53,11 +51,11 @@ class ChoiceLes : AppCompatActivity() {
 
             }
         })
+
         if (a.isEmpty()){
             binding.GuideRecycler.emptytext.isVisible=true
         }
         binding.GuideRecycler.GuideRecycler.adapter=adapter
-        cursor.close()
     }
     fun start(itemView: Int) {
         val intent1 = Intent(this, ChoiceDistrict::class.java)

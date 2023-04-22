@@ -85,38 +85,29 @@ class ChangeListregion: AppCompatActivity() {
 
         //квартал
 
-        cursor= db.getVedombyID(id_Vedomost)
-        cursor.moveToFirst()
-        var quarter_name =cursor.getString(cursor.getColumnIndex("quarter_name"))
-        val soil_lot =cursor.getString(cursor.getColumnIndex("soil_lot"))
-        val sample_region =cursor.getString(cursor.getColumnIndex("sample_region"))
-        val date =cursor.getString(cursor.getColumnIndex("date"))
-        var id_quarter_id =cursor.getString(cursor.getColumnIndex("id_quarter_id"))
-        cursor.close()
+        val vedom = db.getVedombyID(id_Vedomost)
 
+        var bufQuarter_name = vedom.quarterName
+        var bufId_quarter_id = vedom.idQuarterId
+
+        binding.idCvartal.text = bufQuarter_name
+        binding.vudel.setText(vedom.soilLot)
+        binding.samplearea.setText(vedom.sampleRegion)
+        binding.date.text = vedom.date
 
         if (idCvartal!=null){
-            cursor=db.getQuaterbyID(idCvartal)
-            cursor.moveToFirst()
-            id_quarter_id=cursor.getString(cursor.getColumnIndex("id"))
-            quarter_name=cursor.getString(cursor.getColumnIndex("quarter_name"))
-            cursor.close()
+            val quater = db.getQuaterbyID(idCvartal)
+
+            bufId_quarter_id = quater.id
+            bufQuarter_name = quater.quarterName
         }
-
-
-
-
-        binding.idCvartal.text =quarter_name
-        binding.vudel.setText(soil_lot)
-        binding.samplearea.setText(sample_region)
-        binding.date.text = date
 
         binding.buttonAuto.setOnClickListener {
             db.UpdateLISTREGION(
                 id_Vedomost!!,
                 binding.date.text.toString(),
                 binding.samplearea.text.toString(),
-                id_quarter_id.toInt(),
+                bufId_quarter_id.toInt(),
                 binding.vudel.text.toString()
             )
             db.Mark_Update_Listregion(id_Vedomost)

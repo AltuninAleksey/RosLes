@@ -10,6 +10,7 @@ import androidx.core.view.isVisible
 import com.example.rosles.Adapters.BaseInterface
 import com.example.rosles.Adapters.ChoiceSubjectAdapter
 import com.example.rosles.DBCountWood
+import com.example.rosles.Models.Subject
 import com.example.rosles.R
 import com.example.rosles.ResponceClass.BaseRespObject
 import com.example.rosles.databinding.ChoicesubjectBinding
@@ -27,25 +28,20 @@ class ChoiceSubject : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = ""
         initcorutine()
-        binding.textView4.text="Выберите субьект"
+        binding.textView4.text = "Выберите субьект"
     }
 
     @SuppressLint("Range", "SuspiciousIndentation")
-    fun initcorutine(){
+    fun initcorutine() {
 
-        var cursor=db.getsubject()
-        cursor.moveToFirst()
+        var subjectList: List<Subject> = db.getsubject()
+        var a: MutableList<BaseRespObject> = mutableListOf()
 
-        var a : MutableList<BaseRespObject>  = mutableListOf()
-
-        for (i in 1..cursor.getCount()) {
-            a.add(BaseRespObject(cursor.getString(cursor.getColumnIndex("id")).toInt(),
-                cursor.getString(cursor.getColumnIndex("name_subject_RF"))))
-            cursor.moveToNext()
+        for (i in 0..subjectList.size) {
+            a.add(subjectList[i].toBaseRespObject())
         }
-        cursor.close()
 
-        var adapter = ChoiceSubjectAdapter(a,object : BaseInterface {
+        var adapter = ChoiceSubjectAdapter(a, object : BaseInterface {
 
             override fun onClick(itemView: Any) {
                 start(itemView as Int)
@@ -55,16 +51,17 @@ class ChoiceSubject : AppCompatActivity() {
 
             }
         })
-            if(a.isEmpty()){
-                binding.GuideRecycler.emptytext.isVisible=true
-            }
-            binding.GuideRecycler.GuideRecycler.adapter=adapter
+
+        if (a.isEmpty()) {
+            binding.GuideRecycler.emptytext.isVisible = true
         }
+        binding.GuideRecycler.GuideRecycler.adapter = adapter
+    }
 
     fun start(itemView: Int) {
-        val intent1 = Intent(this,ChoiceLes::class.java)
-        intent1.putExtra("id",itemView.toString())
-        intent1.putExtra("id_Vedomost",intent.getStringExtra("id_Vedomost"))
+        val intent1 = Intent(this, ChoiceLes::class.java)
+        intent1.putExtra("id", itemView.toString())
+        intent1.putExtra("id_Vedomost", intent.getStringExtra("id_Vedomost"))
 
         startActivity(intent1)
     }

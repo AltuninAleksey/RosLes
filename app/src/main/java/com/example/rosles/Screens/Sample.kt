@@ -83,26 +83,22 @@ class Sample : AppCompatActivity() {
     fun RecyclerviewInit() {
         setregion(intent.getStringExtra("id_Vedomost")?.toInt())
         id_vdomost = id_region
-        var cursor = db.getVedombyID(id_vdomost!!.toInt())
-        cursor.moveToFirst()
-        binding.lesnnich.text = cursor.getString(cursor.getColumnIndex("name_forestly"))
-        binding.district.text = cursor.getString(cursor.getColumnIndex("name_district_forestly"))
-        binding.quater.text =   cursor.getString(cursor.getColumnIndex("quarter_name"))
-        binding.vudel.text =    cursor.getString(cursor.getColumnIndex("soil_lot"))
-        binding.date.text =     cursor.getString(cursor.getColumnIndex("date"))
-        binding.square.text =   cursor.getString(cursor.getColumnIndex("sample_region"))
-        binding.resultprob.text=
-            cursor.getString(cursor.getColumnIndex("sample_region")).toFloatOrNull()
-                ?.let { valueprob(it).toString() }
-        val bufer_quater_id = cursor.getString(cursor.getColumnIndex("id_quarter_id"))
-        cursor.close()
+        var vedom = db.getVedombyID(id_vdomost!!.toInt())
+        binding.lesnnich.text = vedom.nameForestly
+        binding.district.text = vedom.nameDistrictForestly
+        binding.quater.text =   vedom.quarterName
+        binding.vudel.text =    vedom.soilLot
+        binding.date.text =     vedom.date
+        binding.square.text =   vedom.sampleRegion
+        binding.resultprob.text =
+            vedom.sampleRegion.toFloatOrNull()?.let { valueprob(it).toString() }
+        val bufer_quater_id = vedom.idQuarterId
 
 
-        cursor = db.getlistsquare(id_vdomost!!.toInt())
-        cursor.moveToFirst()
+        val squareList = db.getlistsquare(id_vdomost!!.toInt())
         var activetableRow: TableRow? = null
         var id_sample = 0
-        for (i in 1..cursor.getCount()) {
+        for (i in 0..squareList.size) { // ?Q
 
             val tableRow = TableRow(this)
 
@@ -133,12 +129,12 @@ class Sample : AppCompatActivity() {
                 activetableRow = tableRow
                 activetableRow!!.setBackgroundResource(R.color.activecolumn)
             }
-            id_sample = cursor.getString(cursor.getColumnIndex("id")).toInt()
-            text0.setText(cursor.getString(cursor.getColumnIndex("id")))
-            text1.setText(cursor.getString(cursor.getColumnIndex("lenght")))
-            text2.setText(cursor.getString(cursor.getColumnIndex("width")))
-            text3.setText(cursor.getString(cursor.getColumnIndex("square")))
-            text4.setText(cursor.getString(cursor.getColumnIndex("date")))
+            id_sample = squareList[i].id.toInt()
+            text0.setText(squareList[i].id)
+            text1.setText(squareList[i].lenght)
+            text2.setText(squareList[i].width)
+            text3.setText(squareList[i].square)
+            text4.setText(squareList[i].date)
 
             tableRow.addView(text0, 0)
             tableRow.addView(text1, 1)
@@ -151,10 +147,7 @@ class Sample : AppCompatActivity() {
             val layoutParams = tableRow.layoutParams as TableLayout.LayoutParams
             layoutParams.setMargins(0, 10, 0, 10)
             tableRow.layoutParams = layoutParams
-            cursor.moveToNext()
         }
-        cursor.close()
-
 
         binding.toolbar.reload.isGone = true
         binding.toolbar.save.setOnClickListener{

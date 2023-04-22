@@ -92,13 +92,11 @@ class profile:AppCompatActivity() {
         var leftright:Boolean=false
 
         var activetableRow: TableRow?=null
-        var cursorles=db.getFavoriteLes(id)
-        var cursorpodles=db.getFavoritePodles(id)
-        cursorles.moveToFirst()
-        cursorpodles.moveToFirst()
+        var favoriteLesList = db.getFavoriteLes(id)
+        var favoritePodlesList = db.getFavoritePodles(id)
 
 
-        for (i in 1..cursorles.getCount() ) {
+        for (i in 0..favoriteLesList.size) {
 
             val tableRow = TableRow(this)
             val text0 = TextView(this)
@@ -107,8 +105,8 @@ class profile:AppCompatActivity() {
             text1.visibility=View.GONE
             text0.setTextColor(getResources().getColor(R.color.color_button_main))
             text0.setTextSize(20f)
-            text0.setText(cursorles.getString(cursorles.getColumnIndex("name_breed")))
-            text1.setText(cursorles.getString(cursorles.getColumnIndex("id")))
+            text0.setText(favoriteLesList[i].nameBreed)
+            text1.setText(favoriteLesList[i].id)
             tableRow.addView(text0, 0)
             tableRow.addView(text1, 1)
 
@@ -120,13 +118,12 @@ class profile:AppCompatActivity() {
                 leftright=true
             }
             binding.tblPoros.addView(tableRow, i);
-            cursorles.moveToNext()
             val layoutParams = tableRow.layoutParams as TableLayout.LayoutParams
             layoutParams.setMargins(0, 10, 0, 10)
             tableRow.layoutParams = layoutParams
         }
 
-        for (i in 1..cursorpodles.getCount() ) {
+        for (i in 0..favoritePodlesList.size) {
 
             val tableRow = TableRow(this)
             val text0 = TextView(this)
@@ -135,8 +132,9 @@ class profile:AppCompatActivity() {
             text1.visibility=View.GONE
             text0.setTextColor(getResources().getColor(R.color.color_button_main))
             text0.setTextSize(20f)
-            text0.setText(cursorpodles.getString(cursorpodles.getColumnIndex("name")))
-            text1.setText(cursorpodles.getString(cursorpodles.getColumnIndex("id")))
+
+            text0.setText(favoritePodlesList[i].name)
+            text1.setText(favoritePodlesList[i].id)
 
             tableRow.addView(text0, 0)
             tableRow.addView(text1, 1)
@@ -152,10 +150,7 @@ class profile:AppCompatActivity() {
             val layoutParams = tableRow.layoutParams as TableLayout.LayoutParams
             layoutParams.setMargins(0, 10, 0, 10)
             tableRow.layoutParams = layoutParams
-            cursorpodles.moveToNext()
         }
-        cursorles.close()
-        cursorpodles.close()
 
         binding.toolbar.user.setOnClickListener{
             startActivity(Intent(this, create_user::class.java))
