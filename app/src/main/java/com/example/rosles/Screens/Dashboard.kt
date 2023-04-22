@@ -15,15 +15,21 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.example.rosles.DBCountWood
 import com.example.rosles.Network.ViewModels
 import com.example.rosles.R
 import com.example.rosles.databinding.DashboardBinding
+import com.example.rosles.sync
 import java.io.File
 
 
 class Dashboard: AppCompatActivity() {
 
     private lateinit var binding: DashboardBinding
+    val viewModel by viewModels<ViewModels>()
+    private val db = DBCountWood(this, null)
+    var synhro=sync()
+
 
     @SuppressLint("SdCardPath", "SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -86,6 +92,9 @@ class Dashboard: AppCompatActivity() {
 //            val txtFile = resources.openRawResource(R.raw.db_sqlite3)
 //            GPStracker.copy(txtFile,inputBase)
 //            Toast.makeText(this, "Данные обновленны", Toast.LENGTH_SHORT).show()
+        }
+        binding.reload.setOnClickListener{
+            synhro?.main1(viewModel,db,this)
         }
 
     }

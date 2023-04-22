@@ -9,9 +9,21 @@ import com.squareup.moshi.Moshi
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Retrofit
+import retrofit2.http.GET
 
 
 interface AccountsSource {
+
+
+    suspend fun getUNDER():UNDER_RESP
+    suspend fun getBREED():BREED_RESP
+    suspend fun getQUATER():QUATER_RESP
+    suspend fun getDISTRICTFORESTLY():DISTRICTFORESTLY_RESP
+    suspend fun getFORESTLY():FORESTLY_RESP
+    suspend fun getSUBJECTRF():SUBJECTRF_RESP
+    suspend fun getLISTREGION():LISTREGION_RESP
+    suspend fun getSAMPLE():SAMPLE_RESP
+    suspend fun getLIST():LIST_RESP
 
 
     suspend fun reproduction(): ReproductionResp
@@ -36,6 +48,17 @@ interface AccountsSource {
 
 
 class AccountsRepository( private val accountsSource: AccountsSource) {
+
+
+    suspend fun getUNDER():UNDER_RESP=accountsSource.getUNDER()
+    suspend fun getBREED():BREED_RESP=accountsSource.getBREED()
+    suspend fun getQUATER():QUATER_RESP=accountsSource.getQUATER()
+    suspend fun getDISTRICTFORESTLY():DISTRICTFORESTLY_RESP=accountsSource.getDISTRICTFORESTLY()
+    suspend fun getFORESTLY():FORESTLY_RESP=accountsSource.getFORESTLY()
+    suspend fun getSUBJECTRF():SUBJECTRF_RESP=accountsSource.getSUBJECTRF()
+    suspend fun getLISTREGION():LISTREGION_RESP=accountsSource.getLISTREGION()
+    suspend fun getSAMPLE():SAMPLE_RESP=accountsSource.getSAMPLE()
+    suspend fun getLIST():LIST_RESP=accountsSource.getLIST()
 
 
     suspend fun reproduction(): List<GETReproductionResp> = accountsSource.reproduction().get

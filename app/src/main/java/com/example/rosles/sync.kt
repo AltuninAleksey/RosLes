@@ -24,36 +24,36 @@ class sync {
 
     fun main1(viewModels: ViewModels, db: DBCountWood, context: AppCompatActivity) {
 
-//
-//        if (!db.djangoForest_undergrowth())
-//            viewModels.getUNDER(db)
-//
-//        if (!db.djangoForest_breed())
-//            viewModels.getBREED(db)
-//
-//        if (!db.djangoForest_quarter())
-//            viewModels.getQUATER(db)
-//
-//        if (!db.djangoForest_districtforestly())
-//            viewModels.getDISTRICTFORESTLY(db)
-//
-//        if (!db.djangoForest_forestly())
-//            viewModels.getFORESTLY(db)
-//
-//        if (!db.djangoForest_subjectrf())
-//            viewModels.getSUBJECTRF(db)
-//
-//        if (!db.djangoForest_listregion())
-//            viewModels.getLISTREGION(db)
-//
-//        if (!db.djangoForest_sample())
-//            viewModels.getSAMPLE(db)
-//
-//        if (!db.djangoForest_list())
-//            viewModels.getLIST(db)
-//
-//        Toast.makeText(context, "Данные обновленны", Toast.LENGTH_SHORT).show()
-//        Thread.sleep(1000)
+
+        if (!db.djangoForest_undergrowth())
+            viewModels.getUNDER(db)
+
+        if (!db.djangoForest_breed())
+            viewModels.getBREED(db)
+
+        if (!db.djangoForest_quarter())
+            viewModels.getQUATER(db)
+
+        if (!db.djangoForest_districtforestly())
+            viewModels.getDISTRICTFORESTLY(db)
+
+        if (!db.djangoForest_forestly())
+            viewModels.getFORESTLY(db)
+
+        if (!db.djangoForest_subjectrf())
+            viewModels.getSUBJECTRF(db)
+
+        if (!db.djangoForest_listregion())
+            viewModels.getLISTREGION(db)
+
+        if (!db.djangoForest_sample())
+            viewModels.getSAMPLE(db)
+
+        if (!db.djangoForest_list())
+            viewModels.getLIST(db)
+
+        Toast.makeText(context, "Данные обновленны", Toast.LENGTH_SHORT).show()
+        Thread.sleep(1000)
     }
 
     fun load(viewModels: ViewModels, db: DBCountWood, context: AppCompatActivity){

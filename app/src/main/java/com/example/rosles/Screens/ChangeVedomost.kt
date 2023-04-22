@@ -112,7 +112,7 @@ class ChangeVedomost: AppCompatActivity() {
                 bugId_quarter_id.toInt(),
                 binding.vudel.text.toString()
             )
-            startActivity(Intent(this, MainActivity::class.java))
+            finish()
         }
         binding.idCvartal.setOnClickListener{
             val intent1=Intent(this, ChoiceSubject::class.java)

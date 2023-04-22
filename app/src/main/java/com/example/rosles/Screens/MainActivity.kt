@@ -81,15 +81,24 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+
+    override fun onRestart() {
+        val buf= binding.firstColum
+        binding.tblLayout.removeAllViews()
+        binding.tblLayout.addView(buf)
+        RecyclerviewInit()
+        super.onRestart()
+    }
+
     @SuppressLint("Range")
     fun RecyclerviewInit() {
         val porodaList :List<Poroda> = db.readbyporoda()
 
         var activetableRow: TableRow? = null
-        for (i in 0..porodaList.size) {
+
+        // отсюда вчитаем единицу тк как в противном случае выходим в оут оф баунс(данные не записываются в полном обьеме)
+        for (i in 0..porodaList.size-1) {
             val tableRow = TableRow(this)
-            if (porodaList.size==0)
-                break
             /* Порядок важен, знацения будут добавляться в колонки таблицы
             * в порядке указанном в valuesOfPoroda */
             val valuesOfPorodaList: List<String> = mutableListOf(
@@ -126,7 +135,8 @@ class MainActivity : AppCompatActivity() {
                 activetableRow!!.setBackgroundResource(R.color.activecolumn)
             }
 
-            binding.tblLayout.addView(tableRow, i);
+            //в table view на 0 элементе находиться тайтл таблицы поэтому к счетчику добавляем единицу
+            binding.tblLayout.addView(tableRow, i+1);
 
             val layoutParams = tableRow.layoutParams as TableLayout.LayoutParams
             layoutParams.setMargins(0, 10, 0, 10)

@@ -27,6 +27,25 @@ interface API {
     suspend fun getbd():BaseResp
 
 
+    @GET("undergrowth")
+    suspend fun getUNDER():UNDER_RESP
+    @GET("breed")
+    suspend fun getBREED():BREED_RESP
+    @GET("quarter")
+    suspend fun getQUATER():QUATER_RESP
+    @GET("districtforestly")
+    suspend fun getDISTRICTFORESTLY():DISTRICTFORESTLY_RESP
+    @GET("forestly")
+    suspend fun getFORESTLY():FORESTLY_RESP
+    @GET("subjectRF")
+    suspend fun getSUBJECTRF():SUBJECTRF_RESP
+    @GET("listregion")
+    suspend fun getLISTREGION():LISTREGION_RESP
+    @GET("sample")
+    suspend fun getSAMPLE():SAMPLE_RESP
+    @GET("list")
+    suspend fun getLIST():LIST_RESP
+
     @Multipart
     @POST("upload")
     @Headers(

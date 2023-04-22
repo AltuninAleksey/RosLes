@@ -7,14 +7,10 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import androidx.core.database.getBlobOrNull
 import com.example.rosles.Models.*
 import com.example.rosles.ResponceClass.*
 import com.example.rosles.Screens.GPStracker
 import com.example.roslesdef.Models.SpinerItem
-import java.io.ByteArrayOutputStream
-import java.nio.ByteBuffer
 import java.util.*
 
 
@@ -122,7 +118,10 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
 
 
 
-    fun writeLISTREGION(id:Int,date: String, sample_region: String, id_quarter_id: Int, soil_lot: String,mark_update: Int?) {
+    fun writeLISTREGION(
+        id:Int,
+        date: String, sample_region: Float?, id_quarter_id: Int, soil_lot: String,
+        mark_update: Int?) {
         val db = this.writableDatabase
         //Log.v(date,"")
         db.execSQL(

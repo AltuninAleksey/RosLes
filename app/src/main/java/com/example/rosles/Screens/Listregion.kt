@@ -165,13 +165,13 @@ class Listregion : AppCompatActivity() {
                 startActivity(intent)
             }
         }
-        binding.toolbar.reload.setOnClickListener(){
-            val a = sync()
-            a.load(viewModels,db,this)
-            finish()
-            startActivity(Intent(this, Listregion::class.java))
-            Toast.makeText(this, "Данные отправлены", Toast.LENGTH_SHORT).show()
-        }
+//        binding.toolbar.reload.setOnClickListener(){
+//            val a = sync()
+//            a.load(viewModels,db,this)
+//            finish()
+//            startActivity(Intent(this, Listregion::class.java))
+//            Toast.makeText(this, "Данные отправлены", Toast.LENGTH_SHORT).show()
+//        }
 
         binding.toolbar.save.setOnClickListener() {
             if (activetableRow != null) {

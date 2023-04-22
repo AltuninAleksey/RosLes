@@ -3,12 +3,58 @@ package com.example.rosles.Network
 import com.example.rosles.RequestClass.*
 import com.example.rosles.ResponceClass.*
 import kotlinx.coroutines.delay
+import retrofit2.http.GET
 
 class RetrofitAccountsSource(
     config: RetrofitConfig
 ) : BaseRetrofitSource(config), AccountsSource {
 
     private val accountsApi = retrofit.create(API::class.java)
+    override suspend fun getUNDER(): UNDER_RESP= wrapRetrofitExceptions  {
+        delay(1000)
+        accountsApi.getUNDER()
+    }
+
+    override suspend fun getBREED(): BREED_RESP= wrapRetrofitExceptions  {
+        delay(1000)
+        accountsApi.getBREED()
+    }
+
+    override suspend fun getQUATER(): QUATER_RESP = wrapRetrofitExceptions {
+        delay(1000)
+        accountsApi.getQUATER()
+    }
+
+    override suspend fun getDISTRICTFORESTLY(): DISTRICTFORESTLY_RESP= wrapRetrofitExceptions  {
+        delay(1000)
+        accountsApi.getDISTRICTFORESTLY()
+    }
+
+    override suspend fun getFORESTLY(): FORESTLY_RESP= wrapRetrofitExceptions  {
+        delay(1000)
+        accountsApi.getFORESTLY()
+    }
+
+    override suspend fun getSUBJECTRF(): SUBJECTRF_RESP= wrapRetrofitExceptions  {
+        delay(1000)
+        accountsApi.getSUBJECTRF()
+    }
+
+    override suspend fun getLISTREGION(): LISTREGION_RESP= wrapRetrofitExceptions  {
+        delay(1000)
+        accountsApi.getLISTREGION()
+    }
+
+    override suspend fun getSAMPLE(): SAMPLE_RESP = wrapRetrofitExceptions {
+        delay(1000)
+        accountsApi.getSAMPLE()
+    }
+
+    override suspend fun getLIST(): LIST_RESP= wrapRetrofitExceptions  {
+        delay(1000)
+        accountsApi.getLIST()
+    }
+
 
     override suspend fun reproduction(): ReproductionResp = wrapRetrofitExceptions {
         delay(1000)

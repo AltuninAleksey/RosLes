@@ -2,7 +2,6 @@ package com.example.rosles.Network
 
 import android.content.Context
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -14,7 +13,10 @@ import com.example.rosles.RequestClass.UpdateRequest
 import com.example.rosles.ResponceClass.*
 
 
-class ViewModels():BaseViewModel(accountsRepository=Singletons.accountsRepository, logger = LogCatLogger, ){
+class ViewModels():BaseViewModel(
+    accountsRepository = Singletons.accountsRepository,
+    logger = LogCatLogger
+){
 
     private lateinit var accountsSource: AccountsSource
 
@@ -28,6 +30,13 @@ class ViewModels():BaseViewModel(accountsRepository=Singletons.accountsRepositor
     var breed = MutableLiveData<BreedResp>()
     var user=MutableLiveData<AuthReSponce>()
     var uploadbd=MutableLiveData<BaseResp>()
+
+
+
+
+
+
+
 
 
     data class State(
@@ -47,6 +56,90 @@ class ViewModels():BaseViewModel(accountsRepository=Singletons.accountsRepositor
         }
     }
 
+    fun getUNDER(dbCountWood: DBCountWood)=viewModelScope.safeLaunch {
+        try {
+            accountsRepository.getUNDER().get.forEach {
+                dbCountWood.writeundergrowth(it.id,it.name)
+            }
+        } catch (e: EmptyFieldException) {
+            processEmptyFieldException(e)
+        }
+    }
+    fun getBREED(dbCountWood: DBCountWood)=viewModelScope.safeLaunch {
+        try {
+            accountsRepository.getBREED().get.forEach {
+                dbCountWood.writeBREED(it.id,it.name_breed,it.is_foliar,it.is_pine,it.ShortName)
+            }
+        } catch (e: EmptyFieldException) {
+            processEmptyFieldException(e)
+        }
+    }
+    fun getQUATER(dbCountWood: DBCountWood)=viewModelScope.safeLaunch {
+        try {
+            accountsRepository.getQUATER().get.forEach {
+                dbCountWood.writeQUATER(it.id,it.quarter_name,it.id_district_forestly)
+            }
+        } catch (e: EmptyFieldException) {
+            processEmptyFieldException(e)
+        }
+    }
+    fun getDISTRICTFORESTLY(dbCountWood: DBCountWood)=viewModelScope.safeLaunch {
+        try {
+            accountsRepository.getDISTRICTFORESTLY().get.forEach {
+                dbCountWood.writeDISTRICT(it.id,it.name_district_forestly,it.id_forestly)
+            }
+        } catch (e: EmptyFieldException) {
+            processEmptyFieldException(e)
+        }
+    }
+    fun getFORESTLY(dbCountWood: DBCountWood)=viewModelScope.safeLaunch {
+        try {
+            accountsRepository.getFORESTLY().get.forEach {
+                dbCountWood.writeFORESTLY(it.id,it.name_forestly,it.id_subject_rf)
+            }
+        } catch (e: EmptyFieldException) {
+            processEmptyFieldException(e)
+        }
+    }
+    fun getSUBJECTRF(dbCountWood: DBCountWood)=viewModelScope.safeLaunch {
+        try {
+            accountsRepository.getSUBJECTRF().get.forEach {
+                dbCountWood.writeSUBJECTRF(it.id,it.name_subject_RF)
+            }
+        } catch (e: EmptyFieldException) {
+            processEmptyFieldException(e)
+        }
+    }
+    fun getLISTREGION(dbCountWood: DBCountWood)=viewModelScope.safeLaunch {
+        try {
+            accountsRepository.getLISTREGION().get.forEach {
+                dbCountWood.writeLISTREGION(it.id,it.date,it.sample_region,it.id_quarter,it.soil_lot,it.mark_update)
+            }
+        } catch (e: EmptyFieldException) {
+            processEmptyFieldException(e)
+        }
+    }
+    fun getSAMPLE(dbCountWood: DBCountWood)=viewModelScope.safeLaunch {
+        try {
+            accountsRepository.getSAMPLE().get.forEach {
+                dbCountWood.writeSAMPLE(it.id,it.date,it.sample_area,it.id_list_region,
+                    it.id_profile,it.id_quarter,it.soil_lot,it.lenght,it.square,it.width)
+            }
+        } catch (e: EmptyFieldException) {
+            processEmptyFieldException(e)
+        }
+    }
+    fun getLIST(dbCountWood: DBCountWood)=viewModelScope.safeLaunch {
+        try {
+            accountsRepository.getLIST().get.forEach {
+                dbCountWood.writeLIST(it.id,it.to0_2,it.from0_21To0_5,it.from0_6To1_0,it.from1_1to1_5,
+                it.from1_5,it.max_height,it.id_breed,it.id_sample,it.id_type_of_reproduction,it.avg_diameter,
+                it.avg_height,it.count_of_plants,it.id_undergrowth,it.main,it.avg_height_undergrowth)
+            }
+        } catch (e: EmptyFieldException) {
+            processEmptyFieldException(e)
+        }
+    }
 
 
     fun getrequestsubjectRF()=viewModelScope.safeLaunch {
