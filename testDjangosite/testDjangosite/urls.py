@@ -35,6 +35,8 @@ urlpatterns = [
     path('descriptionregion/<int:pk>', GetAllDescriptionRegion.as_view()),
     path('descriptionregionfilter', DescriptionRegionFilter.as_view()),
     path('fieldcardfilter', DescriptionRegionFilter.as_view()),
+    path('fieldcardfilter/<int:pk>', DescriptionRegionFilter.as_view()),
+    path('fieldcardfilter', DescriptionRegionFilter.as_view()),
     # re_path(r'upload/(?P<filename>[^/]+)$', PhotoPointView.as_view()),
     path('listregionfilters', ListRegionFilters.as_view()),
     path('getallequallistregion', GetAllEqualListRegion.as_view()),

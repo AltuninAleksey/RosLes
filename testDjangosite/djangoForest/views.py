@@ -905,6 +905,9 @@ class GetAllDescriptionRegion(ListAPIView):
 
 
 class DescriptionRegionFilter(ListAPIView):
+    '''
+    Фильтр описания региона
+    '''
 
     def post(self, request, *args, **kwargs):
         ser2 = DescriptionRegion.objects.all()
@@ -933,6 +936,10 @@ class DescriptionRegionFilter(ListAPIView):
 
 class GetFieldCard(ListAPIView):
 
+    '''
+    GET all & get one
+    '''
+
     def get(self, *args, **kwargs):
         if kwargs:
             FieldCardSerializer().validate_pk(kwargs['pk'])
@@ -947,6 +954,9 @@ class GetFieldCard(ListAPIView):
 
 
 class FieldCardFilter(ListAPIView):
+    '''
+    Фильтр для полевой карточки
+    '''
 
     def post(self, request, *args, **kwargs):
         ser2 = DescriptionRegion.objects.all()
