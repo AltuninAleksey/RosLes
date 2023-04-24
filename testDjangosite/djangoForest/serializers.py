@@ -42,7 +42,13 @@ class UserSerializer(serializers.ModelSerializer):
                                     password = make_password(validated_data['password'], "pbkdf2_sha256")
                                     )
 
-
+    def validate_email(self, value):
+        try:
+            Users.objects.filter(email=value).values(
+                'id', "password", "email").get()
+            return value
+        except:
+            raise serializers.ValidationError("invalid email")
 class ListSerializer(serializers.ModelSerializer):
     class Meta:
         model = List
@@ -496,6 +502,13 @@ class PhotoPointSerializer(serializers.ModelSerializer):
         return PhotoPoint.objects.create(**validated_data)
 
 
+    def validate_sample(self, value):
+        try:
+            lst = PhotoPoint.objects.filter(id_sample=value).get()
+            return value
+        except:
+            raise serializers.ValidationError("id_sample not found")
+
 class PhotoPointSer(serializers.ModelSerializer):
 
     class Meta:
@@ -507,3 +520,26 @@ class DescriptionRegionSerializer(serializers.ModelSerializer):
     class Meta:
         model = DescriptionRegion
         fields = '__all__'
+
+
+    def validate_pk(self, value):
+        try:
+            DescriptionRegion.objects.get(id=value)
+            return value
+        except:
+            raise serializers.ValidationError("pk not found")
+
+
+class FieldCardSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = FieldСard
+        fields = '__all__'
+
+
+    def validate_pk(self, value):
+        try:
+            FieldСard.objects.get(id=value)
+            return value
+        except:
+            raise serializers.ValidationError("pk not found")

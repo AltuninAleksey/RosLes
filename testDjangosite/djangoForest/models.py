@@ -32,6 +32,10 @@ class Users(models.Model):
     def __str__(self):
         return self.id
 
+    class Meta:
+        verbose_name = 'Пользователи'
+        verbose_name_plural = 'Пользователи'
+
 
 class CheckTrigger(models.Model):
     bool = models.IntegerField(default=False)
@@ -440,9 +444,75 @@ class DescriptionRegion(models.Model):
                                                    null=True)
     year_assignment_land = models.DateField(verbose_name="Год отнесения к землям")
     year_format_fond_trees = models.DateField(verbose_name="Год образования категории фонда лесовосстановления")
-    inf_restore_forest = models.CharField(max_length=500)
-    breed_structure_sapling_act_land = models.CharField(max_length=500)
-    economy_act_land = models.CharField(max_length=500)
-    change_breed_and_structure_sapling = models.CharField(max_length=500, null=True)
-    results_surtvey = models.CharField(max_length=600, null=True)
-    recommendation = models.CharField(max_length=300, null=True)
+    inf_restore_forest = models.CharField(max_length=500,
+                                          verbose_name="Данные о проведенных мероприятиях по уходу за лесами")
+    breed_structure_sapling_act_land = models.CharField(max_length=500,
+                                                        verbose_name="Породный состав молодняка по Акту отнесения земель")
+    economy_act_land = models.CharField(max_length=500,
+                                        verbose_name="Хозяйство по Акту отнесения земель")
+    change_breed_and_structure_sapling = models.CharField(max_length=500, null=True,
+                                                          verbose_name="Изменение породного и качественного состава молодняка")
+    results_surtvey = models.CharField(max_length=600, null=True, verbose_name="Вывод по результатам обследования")
+    recommendation = models.CharField(max_length=300, null=True, verbose_name="Рекомендации")
+    schema_mixing_breeds = models.CharField(max_length=300, null=True, verbose_name="Схема смешения пород")
+    count_plants = models.FloatField(verbose_name="Количество высаженных растений на 1 га",
+                                     null=True)
+    preservation_breed = models.CharField(max_length=300,
+                                          verbose_name="сохранность культивируемой породы на момент обследования",
+                                          null=True)
+
+
+class FieldСard(models.Model):
+    id_list_region = models.ForeignKey("ListRegion",
+                                       on_delete=models.CASCADE,
+                                       verbose_name="Перечетная ведомость участка", null=True)
+    id_purpose_of_forests = models.ForeignKey("PurposeOfForests",
+                                              on_delete=models.CASCADE,
+                                              verbose_name="Целевое назначение лесов")
+    id_forest_protection_category = models.ForeignKey("ForestProtectionCategory",
+                                                      on_delete=models.CASCADE,
+                                                      verbose_name="Категория защитных лесов")
+    protected_areas_of_forests = models.CharField(max_length=300)
+    rent_area = models.BooleanField(default=0)
+    id_category_of_forest_fund_lands = models.ForeignKey("CategoryOfForestFundLands",
+                                                         on_delete=models.CASCADE,
+                                                         verbose_name="Категория земель лесного фонда")
+    id_method_of_reforestation = models.ForeignKey("MethodOfReforestation",
+                                                   on_delete=models.CASCADE,
+                                                   verbose_name="Способ лесовосстановления")
+    time_of_reforestation = models.CharField(max_length=300, verbose_name="Срок проведения лесовосстановления")
+    id_type_forest_growing_conditions = models.ForeignKey("TypeForestGrowingConditions",
+                                                          on_delete=models.CASCADE,
+                                                          verbose_name="Тип лесорастительных условий")
+    point7year = models.DateField(format(['%Y']))
+    point7date = models.DateField()
+    point7number = models.IntegerField()
+    point7agreed = models.CharField(max_length=300)
+    point7_natural_composition = models.CharField(max_length=300)
+    point7_natural_composition2 = models.CharField(max_length=300)
+    square_one_sample_area = models.FloatField(verbose_name="Площадь 1 пробной площади")
+    count_sample_area = models.IntegerField(verbose_name="Количество пробных площадей")
+    breed_composition = models.CharField(max_length=500, verbose_name="Породный состав")
+    id_economy = models.ForeignKey("Economy",
+                                   on_delete=models.CASCADE,
+                                   verbose_name="Хозяйство")
+    completeness = models.CharField(max_length=300, verbose_name="Полнота")
+    stock = models.IntegerField(verbose_name="Запас")
+    id_point7_table2_sapling = models.ForeignKey("point7Table2Sapling",
+                                                 on_delete=models.CASCADE,
+                                                 verbose_name="Таблица 2 молодняк")
+    conclusion = models.CharField(max_length=500, verbose_name="Заключение")
+    plot_farm_referring_land = models.CharField(max_length=500, verbose_name="Участок хозяйству при отнесении к землям")
+    recomendation = models.CharField(max_length=300, verbose_name="Рекомендации")
+    plot_features = models.CharField(max_length=500, verbose_name="Особенности участка")
+    site_survey = models.CharField(max_length=300, verbose_name="Обследование провел")
+    in_front = models.CharField(max_length=300, verbose_name="В присуствии")
+    date_and_time = models.DateTimeField(verbose_name="Дата и время обследования")
+
+
+    class Meta:
+        verbose_name = "Полевая карточка"
+        verbose_name_plural = "Полевая карточка"
+
+
+#

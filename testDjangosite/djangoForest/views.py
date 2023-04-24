@@ -682,6 +682,8 @@ class UserRegistration(generics.ListCreateAPIView):
 class UserAuth(generics.ListCreateAPIView):
 
     def post(self, request, **kwargs):
+        # ser = UserSerializer(data=request.data)
+        # ser.validate_email(request.data['email'])
         try:
             user = Users.objects.filter(email=request.data['email']).values(
                 'id', "password", "email").get()
@@ -706,9 +708,9 @@ class PhotoPointView(APIView):
         if kwargs:
             from testDjangosite.settings import MEDIA_ROOT
             import os
-            print(kwargs['pk'])
+            # ser = PhotoPointSerializer(data={'id_sample': kwargs['pk']}).validate_sample(kwargs['pk'])
             lst = PhotoPoint.objects.filter(id_sample=kwargs['pk']).values("photo")
-            if len(lst) == 0: return Response("id not found")
+            if len(lst) == 0: return Response("id_sample1 not found")
             for i in range(len(lst)):
                 file_path = os.path.join(MEDIA_ROOT, lst[i]['photo'])
                 print(file_path)
@@ -891,6 +893,7 @@ class GetAllDescriptionRegion(ListAPIView):
 
     def get(self, *args, **kwargs):
         if kwargs:
+            DescriptionRegionSerializer().validate_pk(kwargs['pk'])
             lst = DescriptionRegionSerializer(DescriptionRegion.objects.get(id=kwargs['pk'])).data
             return Response({
                 "DescriptionRegion":
@@ -902,6 +905,48 @@ class GetAllDescriptionRegion(ListAPIView):
 
 
 class DescriptionRegionFilter(ListAPIView):
+
+    def post(self, request, *args, **kwargs):
+        ser2 = DescriptionRegion.objects.all()
+        if request.data['bSubjectrf']:
+            idSubjectrf = request.data['idSubjectrf']
+            print("subjectrf")
+            ser2 = ser2.filter(id_list_region__id_quarter__id_district_forestly__id_forestly__id_subject_rf=idSubjectrf)
+        if request.data['bForestly']:
+            idForestly = request.data['idForestly']
+            ser2 = ser2.filter(id_list_region__id_quarter__id_district_forestly__id_forestly=idForestly)
+        if request.data['bDistrictForestly']:
+            idDistrictForestly = request.data['idDistrictForestly']
+            ser2 = ser2.filter(id_list_region__id_quarter__id_district_forestly=idDistrictForestly)
+        if request.data['bQuarter']:
+            idQuarter = request.data['idQuarter']
+            ser2 = ser2.filter(id_list_region__id_quarter=idQuarter)
+        if request.data['bDate']:
+            # requestDate = request.data['date']
+            ser2 = ser2.filter(id_list_region__date__gte=request.data['date'])
+        if request.data['bDateSec']:
+            requestDateSec = request.data['dateSec']
+            ser2 = ser2.filter(id_list_region__date__lte=requestDateSec)
+        ser2 = DescriptionRegionSerializer(ser2, many=True)
+        return Response({"data": ser2.data})
+
+
+class GetFieldCard(ListAPIView):
+
+    def get(self, *args, **kwargs):
+        if kwargs:
+            FieldCardSerializer().validate_pk(kwargs['pk'])
+            lst = FieldCardSerializer(FieldСard.objects.get(id=kwargs['pk'])).data
+            return Response({
+                "FieldCard":
+                    lst,
+                "ListRegion": ListRegionSerializerId(ListRegion.objects.get(id=lst['id_list_region'])).data
+            })
+        lst = FieldСard.objects.all()
+        return Response({"get": FieldCardSerializer(lst, many=True).data})
+
+
+class FieldCardFilter(ListAPIView):
 
     def post(self, request, *args, **kwargs):
         ser2 = DescriptionRegion.objects.all()
