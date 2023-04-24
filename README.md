@@ -1,5 +1,7 @@
 # RosLes
 Defender forest
+<h1> Swagger </h1> <br>
+https://app.swaggerhub.com/apis/ADDKUDI/rosles/1.0.0
 
 <h1>Для установки всех зависимостей:</h1> <br>
 cd testDjangosite
