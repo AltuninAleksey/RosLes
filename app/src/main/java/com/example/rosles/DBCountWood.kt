@@ -16,7 +16,7 @@ import java.util.*
 
 class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     SQLiteOpenHelper(context, DATABASE_NAME, factory, DATABASE_VERSION) {
-
+    val context=context
     var gpStracker= GPStracker(context)
     override fun onCreate(db: SQLiteDatabase) {
 
@@ -1031,7 +1031,10 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         val a= mutableListOf<Photo>()
         for (i in 1..cursor.getCount()) {
             var phototemp=cursor.getString(cursor.getColumnIndex("photo"))
-            val bmp:Bitmap?=null
+            var bmp:Bitmap?=null
+            val temp=GPStracker(context)
+
+            bmp=temp.base_to_bitmap(phototemp)
             val photosample=cursor.getInt(cursor.getColumnIndex("id_sample_id"))
             val latitude=cursor.getFloat(cursor.getColumnIndex("latitude"))
             val longitude=cursor.getFloat(cursor.getColumnIndex("longitude"))

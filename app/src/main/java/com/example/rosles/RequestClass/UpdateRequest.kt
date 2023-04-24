@@ -5,4 +5,4 @@ import retrofit2.http.Field
 
 
 
-data class  UpdateRequest(var file: MultipartBody.Part,var id:Int)
+data class  UpdateRequest(var file: MultipartBody.Part,val id:Int,val latitude:Double,val longitude:Double,val date:String)

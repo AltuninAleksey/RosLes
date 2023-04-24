@@ -54,7 +54,10 @@ interface API {
 //        "Content-Disposition: attachment; filename=aaa.jpg"
     )
     suspend fun upload( @Part photo: MultipartBody.Part?,
-                        @Part("id_sample") id_sample: Int): BaseResp
+                        @Part("id_sample") id_sample: Int,
+                        @Part("latitude") latitude: Double,
+                        @Part("longitude") longitude: Double,
+                        @Part("date") date: String,): BaseResp
 
     @POST("list")
     suspend fun perechet(@Body body: PerechetRequest): BaseResp

@@ -17,12 +17,14 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
 import java.util.*
 
-class sync {
+class sync(val viewModels: ViewModels,val db: DBCountWood, val context: AppCompatActivity) {
 
 
-    fun main1(viewModels: ViewModels, db: DBCountWood, context: AppCompatActivity) {
+
+    fun main1() {
 
 
         if (!db.djangoForest_undergrowth())
@@ -91,5 +93,26 @@ class sync {
 //
 //
     }
+
+    fun sendFileRequest(image: Bitmap) {
+        val wrapper = ContextWrapper(context)
+        var file = wrapper.getDir("Images", Context.MODE_PRIVATE)
+        file = File(file,"${UUID.randomUUID()}.jpg")
+        val stream: OutputStream = FileOutputStream(file)
+        image.compress(Bitmap.CompressFormat.JPEG,25,stream)
+        stream.flush()
+        stream.close()
+
+        val photoFile = file
+        val photo = MultipartBody.Part.createFormData(
+            "photo",
+            photoFile.name,
+            photoFile.asRequestBody("image/*".toMediaType())
+        )
+//        viewModel.upload(UpdateRequest(photo,98,latitude!!,longitude!!,
+//            LocalDateTime.now().format(formatter).toString()))
+    }
+
+
 }
 

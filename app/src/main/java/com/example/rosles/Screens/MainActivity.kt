@@ -53,7 +53,6 @@ class MainActivity : AppCompatActivity() {
         menu.setOnClickListener{
             showpopupmenu(it)
         }
-
     }
     fun showpopupmenu (view: View) {
         val popup = PopupMenu(this, view)
@@ -80,8 +79,6 @@ class MainActivity : AppCompatActivity() {
         popup.show()
 
     }
-
-
     override fun onRestart() {
         val buf= binding.firstColum
         binding.tblLayout.removeAllViews()
@@ -89,7 +86,6 @@ class MainActivity : AppCompatActivity() {
         RecyclerviewInit()
         super.onRestart()
     }
-
     @SuppressLint("Range")
     fun RecyclerviewInit() {
         val porodaList :List<Poroda> = db.readbyporoda()

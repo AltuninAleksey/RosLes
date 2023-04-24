@@ -28,7 +28,7 @@ class Dashboard: AppCompatActivity() {
     private lateinit var binding: DashboardBinding
     val viewModel by viewModels<ViewModels>()
     private val db = DBCountWood(this, null)
-    var synhro=sync()
+    var synhro=sync(viewModel,db,this)
 
 
     @SuppressLint("SdCardPath", "SetTextI18n")
@@ -94,7 +94,7 @@ class Dashboard: AppCompatActivity() {
 //            Toast.makeText(this, "Данные обновленны", Toast.LENGTH_SHORT).show()
         }
         binding.reload.setOnClickListener{
-            synhro?.main1(viewModel,db,this)
+            synhro.main1()
         }
 
     }

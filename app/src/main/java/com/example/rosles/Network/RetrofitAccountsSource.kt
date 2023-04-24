@@ -63,7 +63,7 @@ class RetrofitAccountsSource(
 
     override suspend fun upload(body: UpdateRequest): BaseResp =wrapRetrofitExceptions {
         delay(1000)
-        accountsApi.upload( body.file,body.id)
+        accountsApi.upload( body.file,body.id,body.latitude,body.longitude,body.date)
     }
 
     override suspend fun perechet(perechetRequest: PerechetRequest): BaseResp = wrapRetrofitExceptions {
