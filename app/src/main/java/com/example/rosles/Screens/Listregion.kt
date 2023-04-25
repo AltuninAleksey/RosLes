@@ -84,6 +84,14 @@ class Listregion : AppCompatActivity() {
 
     }
 
+    override fun onRestart() {
+        val buf= binding.firstColum
+        binding.tblLayout.removeAllViews()
+        binding.tblLayout.addView(buf)
+        RecyclerviewInit()
+        super.onRestart()
+    }
+
     @SuppressLint("Range")
     fun RecyclerviewInit() {
         var porodaList = db.readbyporoda()
@@ -91,7 +99,7 @@ class Listregion : AppCompatActivity() {
 
         var activetableRow: TableRow? = null
 
-        for (i in 0..porodaList.size) {
+        for (i in 0..porodaList.size-1) {
             val tableRow = TableRow(this)
 
             val text0 = TextView(this)
@@ -147,7 +155,7 @@ class Listregion : AppCompatActivity() {
             tableRow.addView(text4, 5)
             tableRow.addView(text6, 6)
 
-            binding.tblLayout.addView(tableRow, i);
+            binding.tblLayout.addView(tableRow, i+1);
 
             val layoutParams = tableRow.layoutParams as TableLayout.LayoutParams
             layoutParams.setMargins(0, 10, 0, 10)

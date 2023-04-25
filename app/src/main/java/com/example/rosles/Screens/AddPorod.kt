@@ -104,7 +104,6 @@ class AddPorod : AppCompatActivity() {
             if (flagpodles){
                 db.addpodlesporod(id, valuepodles.id)
             }
-            startActivity(Intent(this, profile::class.java))
             finish()
         }
 

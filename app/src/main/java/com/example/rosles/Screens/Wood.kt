@@ -111,13 +111,13 @@ class Wood : AppCompatActivity() {
         val podleslist = mutableListOf<ItemWood>()
         var favoriteLesList = db.getFavoriteLes(id_user)
 
-        for (i in 0..favoriteLesList.size) {
+        for (i in 0..favoriteLesList.size-1) {
             leslist.add(favoriteLesList[i].toItemWood())
         }
 
         val favoritePodlesList = db.getFavoritePodles(id_user)
 
-        for (i in 0..favoritePodlesList.size) {
+        for (i in 0..favoritePodlesList.size-1) {
             podleslist.add(favoritePodlesList[i].toItemWood())
         }
 

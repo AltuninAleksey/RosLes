@@ -44,7 +44,7 @@ class ChoiceDistrict : AppCompatActivity() {
         var districtList = db.getDistrict(id)
 
 
-        for (i in 0..districtList.size) {
+        for (i in 0..districtList.size-1) {
             a.add(districtList[i].toBaseRespObject())
         }
 

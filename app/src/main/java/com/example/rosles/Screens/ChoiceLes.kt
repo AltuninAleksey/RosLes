@@ -37,7 +37,7 @@ class ChoiceLes : AppCompatActivity() {
         var a : MutableList<BaseRespObject>  = mutableListOf()
         var lesnichList = db.getLesnich(id)
 
-        for (i in 0..lesnichList.size) {
+        for (i in 0..lesnichList.size-1) {
             a.add(lesnichList[i].toBaseRespObject())
         }
 

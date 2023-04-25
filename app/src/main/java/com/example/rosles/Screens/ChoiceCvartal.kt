@@ -42,7 +42,7 @@ class ChoiceCvartal:AppCompatActivity() {
         var a : MutableList<BaseRespObject>  = mutableListOf()
         var quaterList = db.getQuater(id)
 
-        for (i in 0..quaterList.size) {
+        for (i in 0..quaterList.size-1) {
             a.add(quaterList[i].toBaseRespObject())
         }
 

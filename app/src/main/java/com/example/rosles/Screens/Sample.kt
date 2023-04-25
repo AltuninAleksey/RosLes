@@ -79,6 +79,14 @@ class Sample : AppCompatActivity() {
         }
     }
 
+    override fun onRestart() {
+        val buf= binding.firstColum
+        binding.tblLayout3.removeAllViews()
+        binding.tblLayout3.addView(buf)
+        RecyclerviewInit()
+        super.onRestart()
+    }
+
     @SuppressLint("Range")
     fun RecyclerviewInit() {
         setregion(intent.getStringExtra("id_Vedomost")?.toInt())
@@ -98,7 +106,7 @@ class Sample : AppCompatActivity() {
         val squareList = db.getlistsquare(id_vdomost!!.toInt())
         var activetableRow: TableRow? = null
         var id_sample = 0
-        for (i in 0..squareList.size) { // ?Q
+        for (i in 0..squareList.size-1) {
 
             val tableRow = TableRow(this)
 
@@ -142,7 +150,7 @@ class Sample : AppCompatActivity() {
             tableRow.addView(text3, 3)
             tableRow.addView(text4, 4)
 
-            binding.tblLayout3.addView(tableRow, i);
+            binding.tblLayout3.addView(tableRow, i+1);
 
             val layoutParams = tableRow.layoutParams as TableLayout.LayoutParams
             layoutParams.setMargins(0, 10, 0, 10)

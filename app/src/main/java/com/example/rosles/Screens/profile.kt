@@ -51,7 +51,6 @@ class profile:AppCompatActivity() {
         binding.toolbar.save.visibility=android.view.View.GONE
         binding.toolbar.addporod.setOnClickListener {
             startActivity(Intent(this, AddPorod::class.java))
-            finish()
         }
     }
 
@@ -81,10 +80,20 @@ class profile:AppCompatActivity() {
 
     }
 
+    override fun onRestart() {
+        val bufPodel= binding.firstColumPodle
+        val bufPoros = binding.firstColumPoros
+        binding.tblPoros.removeAllViews()
+        binding.podle.removeAllViews()
+        binding.tblPoros.addView(bufPoros)
+        binding.podle.addView(bufPodel)
+        initscreen()
+        super.onRestart()
+    }
 
     @SuppressLint("Range")
     fun initscreen(){
-        var sPref =getSharedPreferences("PreferencesName", MODE_PRIVATE);
+        var sPref = getSharedPreferences("PreferencesName", MODE_PRIVATE);
         var id= sPref.getString("id", "1")!!.toInt()
         binding.fio.text=sPref.getString("FIO", "")
         var leftright:Boolean=false
@@ -94,7 +103,7 @@ class profile:AppCompatActivity() {
         var favoritePodlesList = db.getFavoritePodles(id)
 
 
-        for (i in 0..favoriteLesList.size) {
+        for (i in 0..favoriteLesList.size-1) {
 
             val tableRow = TableRow(this)
             val text0 = TextView(this)
@@ -115,13 +124,13 @@ class profile:AppCompatActivity() {
                 activetableRow!!.setBackgroundResource(R.color.activecolumn)
                 leftright=true
             }
-            binding.tblPoros.addView(tableRow, i);
+            binding.tblPoros.addView(tableRow, i+1);
             val layoutParams = tableRow.layoutParams as TableLayout.LayoutParams
             layoutParams.setMargins(0, 10, 0, 10)
             tableRow.layoutParams = layoutParams
         }
 
-        for (i in 0..favoritePodlesList.size) {
+        for (i in 0..favoritePodlesList.size-1) {
 
             val tableRow = TableRow(this)
             val text0 = TextView(this)
@@ -144,7 +153,7 @@ class profile:AppCompatActivity() {
                 activetableRow!!.setBackgroundResource(R.color.activecolumn)
                 leftright=false
             }
-            binding.podle.addView(tableRow, i);
+            binding.podle.addView(tableRow, i+1);
             val layoutParams = tableRow.layoutParams as TableLayout.LayoutParams
             layoutParams.setMargins(0, 10, 0, 10)
             tableRow.layoutParams = layoutParams
@@ -152,6 +161,7 @@ class profile:AppCompatActivity() {
 
         binding.toolbar.user.setOnClickListener{
             startActivity(Intent(this, create_user::class.java))
+
         }
 
         binding.toolbar.delete.setOnClickListener {
@@ -183,7 +193,6 @@ class profile:AppCompatActivity() {
                     }
 
             }
-
 
             }
         }

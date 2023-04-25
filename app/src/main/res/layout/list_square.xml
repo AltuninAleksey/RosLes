@@ -213,6 +213,7 @@
             >
 
             <TableRow
+                android:id="@+id/first_colum"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@color/background_table">

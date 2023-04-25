@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
 <!--    <include-->
 <!--        android:id="@+id/include"-->
@@ -18,13 +19,16 @@
 
     <Button
         android:id="@+id/perechet"
-        android:layout_width="400dp"
-        android:layout_height="170dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="80dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
         android:drawableLeft="@drawable/keyboard"
         android:text="Перечетная ведомость"
-        android:textSize="22sp"
+        android:textSize="30dp"
         app:cornerRadius="50dp"
+        android:layout_weight="1"
         style="@style/MaterialAlertDialog.Material3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -33,15 +37,16 @@
 
     <Button
         android:id="@+id/reload"
-        android:layout_width="400dp"
-        android:layout_height="170dp"
-        android:layout_margin="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
         android:backgroundTint="@color/color_button_main"
         android:drawableLeft="@drawable/reload"
         android:text="Обновить"
         style="@style/MaterialAlertDialog.Material3"
-        android:textSize="22sp"
+        android:textSize="30dp"
         app:cornerRadius="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.465"
@@ -51,13 +56,14 @@
     <Button
         android:id="@+id/gps"
         style="@style/MaterialAlertDialog.Material3"
-        android:layout_width="400dp"
-        android:layout_height="170dp"
-        android:layout_marginTop="48dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
         android:drawableLeft="@drawable/location"
-        android:paddingEnd="80dp"
         android:text="GPS трекер"
-        android:textSize="22sp"
+        android:textSize="30dp"
         app:cornerRadius="50dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -66,27 +72,32 @@
 
     <Button
         android:id="@+id/profile"
-        android:layout_width="400dp"
-        android:layout_height="170dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
         android:layout_marginTop="100dp"
         android:drawableLeft="@drawable/man"
         android:text="Профиль"
-        android:textSize="22sp"
+        android:textSize="30dp"
         app:cornerRadius="50dp"
         style="@style/MaterialAlertDialog.Material3"
-        android:paddingRight="80dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/gps" />
 
     <Button
         android:id="@+id/ALLDOWNLOAD"
-        android:layout_width="400dp"
-        android:layout_height="170dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
         android:layout_marginTop="100dp"
         android:drawableLeft="@drawable/download"
         android:text="Загрузка данных"
-        android:textSize="22sp"
+        android:textSize="30dp"
         app:cornerRadius="50dp"
         style="@style/MaterialAlertDialog.Material3"
         android:paddingRight="50dp"
@@ -95,4 +106,4 @@
         app:layout_constraintTop_toBottomOf="@+id/profile" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

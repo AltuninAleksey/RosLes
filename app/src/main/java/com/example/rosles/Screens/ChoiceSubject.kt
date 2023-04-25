@@ -37,7 +37,7 @@ class ChoiceSubject : AppCompatActivity() {
         var subjectList: List<Subject> = db.getsubject()
         var a: MutableList<BaseRespObject> = mutableListOf()
 
-        for (i in 0..subjectList.size) {
+        for (i in 0..subjectList.size-1) {
             a.add(subjectList[i].toBaseRespObject())
         }
 
