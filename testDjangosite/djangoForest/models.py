@@ -1,4 +1,9 @@
 from django.db import models
+import datetime
+
+
+YEAR_CHOICES = [(r,r) for r in range(1900, datetime.date.today().year+1)]
+
 
 
 
@@ -442,8 +447,10 @@ class DescriptionRegion(models.Model):
     id_method_of_reforestation = models.ForeignKey("MethodOfReforestation",
                                                    on_delete=models.CASCADE, verbose_name="Способ лесовосстановления",
                                                    null=True)
-    year_assignment_land = models.DateField(verbose_name="Год отнесения к землям")
-    year_format_fond_trees = models.DateField(verbose_name="Год образования категории фонда лесовосстановления")
+    year_assignment_land = models.DateField(choices=YEAR_CHOICES, default=datetime.datetime.now().year,
+                                            verbose_name="Год отнесения к землям")
+    year_format_fond_trees = models.DateField(choices=YEAR_CHOICES, default=datetime.datetime.now().year,
+                                              verbose_name="Год образования категории фонда лесовосстановления")
     inf_restore_forest = models.CharField(max_length=500,
                                           verbose_name="Данные о проведенных мероприятиях по уходу за лесами")
     breed_structure_sapling_act_land = models.CharField(max_length=500,
@@ -473,8 +480,8 @@ class FieldСard(models.Model):
     id_forest_protection_category = models.ForeignKey("ForestProtectionCategory",
                                                       on_delete=models.CASCADE,
                                                       verbose_name="Категория защитных лесов")
-    protected_areas_of_forests = models.CharField(max_length=300)
-    rent_area = models.BooleanField(default=0)
+    protected_areas_of_forests = models.CharField(max_length=300, verbose_name="Особо защитные участки лесов")
+    rent_area = models.BooleanField(default=0, verbose_name="Участок находится в аренде")
     id_category_of_forest_fund_lands = models.ForeignKey("CategoryOfForestFundLands",
                                                          on_delete=models.CASCADE,
                                                          verbose_name="Категория земель лесного фонда")
@@ -485,12 +492,13 @@ class FieldСard(models.Model):
     id_type_forest_growing_conditions = models.ForeignKey("TypeForestGrowingConditions",
                                                           on_delete=models.CASCADE,
                                                           verbose_name="Тип лесорастительных условий")
-    point7year = models.DateField()
-    point7date = models.DateField()
-    point7number = models.IntegerField()
-    point7agreed = models.CharField(max_length=300)
-    point7_natural_composition = models.CharField(max_length=300)
-    point7_natural_composition2 = models.CharField(max_length=300)
+    point7year = models.IntegerField(choices=YEAR_CHOICES, default=datetime.datetime.now().year,
+                                     verbose_name="Год")
+    point7date = models.DateField(verbose_name="Дата")
+    point7number = models.IntegerField(verbose_name="Номер")
+    point7agreed = models.CharField(max_length=300, verbose_name="Утверждено")
+    point7_natural_composition = models.CharField(max_length=300, verbose_name="Природный состав")
+    point7_natural_composition2 = models.CharField(max_length=300, verbose_name="Природный состав 2")
     square_one_sample_area = models.FloatField(verbose_name="Площадь 1 пробной площади")
     count_sample_area = models.IntegerField(verbose_name="Количество пробных площадей")
     breed_composition = models.CharField(max_length=500, verbose_name="Породный состав")
