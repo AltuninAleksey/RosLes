@@ -454,7 +454,8 @@ class DescriptionRegion(models.Model):
                                                           verbose_name="Изменение породного и качественного состава молодняка")
     results_surtvey = models.CharField(max_length=600, null=True, verbose_name="Вывод по результатам обследования")
     recommendation = models.CharField(max_length=300, null=True, verbose_name="Рекомендации")
-    schema_mixing_breeds = models.CharField(max_length=300, null=True, verbose_name="Схема смешения пород")
+    id_schema_mixing_breeds = models.ForeignKey("SchemaMixingBreeds", on_delete=models.CASCADE,
+                                                null=True, verbose_name="Схема смешения пород")
     count_plants = models.FloatField(verbose_name="Количество высаженных растений на 1 га",
                                      null=True)
     preservation_breed = models.CharField(max_length=300,
@@ -484,7 +485,7 @@ class FieldСard(models.Model):
     id_type_forest_growing_conditions = models.ForeignKey("TypeForestGrowingConditions",
                                                           on_delete=models.CASCADE,
                                                           verbose_name="Тип лесорастительных условий")
-    point7year = models.DateField(format(['%Y']))
+    point7year = models.DateField()
     point7date = models.DateField()
     point7number = models.IntegerField()
     point7agreed = models.CharField(max_length=300)
@@ -514,5 +515,8 @@ class FieldСard(models.Model):
         verbose_name = "Полевая карточка"
         verbose_name_plural = "Полевая карточка"
 
+
+    class SchemaMixingBreeds(models.Model):
+        name_schema = models.CharField(max_length=300)
 
 #
