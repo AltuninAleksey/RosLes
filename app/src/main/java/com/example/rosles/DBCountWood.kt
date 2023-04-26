@@ -388,7 +388,7 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
                 cursor.getString(cursor.getColumnIndex("soil_lot")),
                 cursor.getString(cursor.getColumnIndex("date")),
                 cursor.getString(cursor.getColumnIndex("id")),
-                cursor.getString(cursor.getColumnIndex("mark_update"))
+                cursor.getString(cursor.getColumnIndex("mark_update")) ?: "0" // Q2
             )
             porodaList.add(poroda)
             cursor.moveToNext()
