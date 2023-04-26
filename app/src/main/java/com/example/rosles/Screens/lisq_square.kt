@@ -164,7 +164,6 @@ class lisq_square : AppCompatActivity() {
             intent.putExtra("id", id_vdomost.toString())
             intent.putExtra("id_quater", bufer_quater_id)
             startActivity(intent)
-            finish()
         }
         var defaultvalue=100
         if(binding.resultprob.text=="1"){
