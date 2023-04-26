@@ -2,8 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="500dp"
-    android:layout_height="600dp"
+    android:layout_width="@dimen/custom_size_dialog"
+    android:layout_height="@dimen/custom_size_dialog"
     android:background="#177164">
 
 
@@ -11,11 +11,11 @@
         android:id="@+id/textView15"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="75px"
+        android:layout_marginTop="15dp"
         android:gravity="center"
         android:text="Вы действительно хотите&#10; удалить запись?"
         android:textColor="#FFFFFF"
-        android:textSize="30sp"
+        android:textSize="@dimen/custom_size_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -24,35 +24,40 @@
     <Button
         android:id="@+id/close"
         android:layout_width="wrap_content"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="180dp"
+        android:layout_marginBottom="20dp"
         android:layout_weight="1"
         android:backgroundTint="#00EDCA"
         android:drawableLeft="@drawable/blackminus"
         android:text="Отмена"
+        android:layout_marginEnd="2dp"
         android:textColor="#000000"
+        android:textSize="@dimen/custom_size_table"
         app:cornerRadius="30dp"
-
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView15" />
+        app:layout_constraintEnd_toStartOf="@+id/delete"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/delete"
         android:layout_width="wrap_content"
-        android:layout_height="100dp"
-        android:layout_marginTop="180dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="120dp"
         android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
         android:layout_weight="1"
+        android:layout_marginStart="2dp"
         android:backgroundTint="@color/red_color"
         android:drawableLeft="@drawable/minus"
         android:text="Удалить"
+        android:textSize="@dimen/custom_size_table"
         android:textColor="#FFFFFF"
         app:cornerRadius="30dp"
+        app:layout_constraintStart_toEndOf="@+id/close"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView15" />
+        />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

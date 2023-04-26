@@ -9,25 +9,28 @@
 
     <TextView
         android:id="@+id/textView2"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="20dp"
+        android:gravity="center"
         android:text="Перечетная ведомость участка"
         android:textColor="#000000"
-        android:textSize="20sp"
+        android:textSize="@dimen/custom_size_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textView16"
-        android:layout_width="100dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="140dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="120dp"
         android:text="Дата "
         android:textColor="#000000"
-        android:textSize="18sp"
+        android:textSize="@dimen/custom_size_text"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
@@ -35,99 +38,95 @@
         android:id="@+id/textView18"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="188dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="15dp"
         android:text="Квартал"
         android:textColor="#000000"
-        android:textSize="18sp"
+        android:textSize="@dimen/custom_size_text"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintTop_toBottomOf="@+id/textView16" />
 
     <TextView
         android:id="@+id/textView21"
-        android:layout_width="77dp"
-        android:layout_height="34dp"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="240dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="15dp"
         android:text="Выдел"
         android:textColor="#000000"
-        android:textSize="18sp"
+        android:textSize="@dimen/custom_size_text"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintTop_toBottomOf="@+id/textView18" />
 
     <TextView
         android:id="@+id/textView23"
-        android:layout_width="139dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="288dp"
-        android:text="Площадь участка"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="15dp"
+        android:text="Площадь\nучастка"
         android:textColor="#000000"
-        android:textSize="18sp"
+        android:textSize="@dimen/custom_size_text"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintTop_toBottomOf="@+id/textView21" />
 
     <TextView
         android:id="@+id/date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="68dp"
-        android:layout_marginTop="140dp"
+        android:layout_marginTop="120dp"
+        android:layout_marginEnd="20dp"
         android:text="TextView"
         android:textColor="#000000"
-        android:textSize="16sp"
+        android:textSize="@dimen/custom_size_text"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView16"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
     <EditText
         android:id="@+id/vudel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="68dp"
-        android:layout_marginTop="240dp"
+        android:layout_marginEnd="20dp"
         android:hint="0"
         android:inputType="numberDecimal"
         android:text=""
-        android:textSize="16sp"
+        android:textSize="@dimen/custom_size_text"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView16"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintTop_toBottomOf="@+id/id_cvartal"/>
 
     <EditText
         android:id="@+id/samplearea"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="68dp"
-        android:layout_marginTop="292dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="20dp"
         android:hint="0"
         android:inputType="numberDecimal"
         android:text=""
-        android:textSize="16sp"
+        android:textSize="@dimen/custom_size_text"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView16"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintTop_toBottomOf="@+id/vudel" />
 
     <TextView
         android:id="@+id/id_cvartal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="68dp"
-        android:layout_marginTop="192dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="20dp"
         android:text="TextView"
         android:textColor="#000000"
-        android:textSize="16sp"
+        android:textSize="@dimen/custom_size_text"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView16"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintTop_toBottomOf="@+id/date" />
 
     <RelativeLayout
         android:id="@+id/button_auto"
-        android:layout_width="251dp"
-        android:layout_height="69dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginBottom="150dp"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginEnd="100dp"
+        android:layout_marginStart="100dp"
+
+        android:layout_marginBottom="15dp"
         android:background="@drawable/button_auto"
         android:clipToOutline="true"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -136,16 +135,15 @@
 
         <TextView
             android:id="@+id/write_button"
-            android:layout_width="79dp"
-            android:layout_height="32dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginStart="0dp"
-            android:layout_marginEnd="0dp"
-            android:layout_marginBottom="21dp"
+            android:layout_alignParentTop="true"
             android:gravity="center_horizontal|center_vertical"
             android:text="Записать"
+            android:textSize="@dimen/custom_size_text"
             android:textAppearance="@style/some_id" />
     </RelativeLayout>
 

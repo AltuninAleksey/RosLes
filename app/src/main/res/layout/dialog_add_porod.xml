@@ -5,77 +5,88 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/textLes"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="200dp"
-        android:textColor="@color/black"
-        android:textSize="20dp"
-        android:text="Лесообразующая порода"
+    <LinearLayout
+        android:id="@+id/firstL"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="150dp"
+        android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/textpodles"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="200dp"
-        android:textColor="@color/black"
-        android:textSize="20dp"
-        android:text="Подлесок"
+        <TextView
+            android:id="@+id/textLes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:text="Лесообразующая порода"
+            android:textColor="@color/black"
+            android:textSize="@dimen/custom_size_text" />
+
+        <Spinner
+            android:id="@+id/les"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:spinnerMode="dialog" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/SecL"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="15dp"
+        android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textLes" />
+        app:layout_constraintTop_toBottomOf="@+id/firstL">
 
-    <Spinner
-        android:id="@+id/les"
-        android:layout_width="151dp"
-        android:layout_height="20dp"
-        android:layout_marginTop="200dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginEnd="150dp"
-        android:spinnerMode="dialog"
-        app:layout_constraintStart_toEndOf="@+id/textLes"
-        app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/textpodles"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:text="Подлесок"
+            android:textColor="@color/black"
+            android:textSize="@dimen/custom_size_text" />
 
-    <Spinner
-        android:id="@+id/podles"
-        android:layout_width="151dp"
-        android:layout_height="20dp"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="200dp"
-        android:spinnerMode="dialog"
-        app:layout_constraintStart_toEndOf="@+id/textLes"
-        app:layout_constraintTop_toTopOf="@+id/les" />
+
+        <Spinner
+            android:id="@+id/podles"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:spinnerMode="dialog" />
+
+    </LinearLayout>
 
 
     <RelativeLayout
         android:id="@+id/button_auto"
-        android:layout_width="251dp"
-        android:layout_height="69dp"
+        android:layout_width="match_parent"
+        android:layout_height="110dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="50dp"
-        android:layout_marginBottom="36dp"
+        android:layout_marginStart="110dp"
+        android:layout_marginEnd="110dp"
+        android:layout_marginBottom="32dp"
         android:background="@drawable/button_auto"
         android:clipToOutline="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.48"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textpodles" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/write_button"
         android:layout_width="wrap_content"
-        android:layout_height="32dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:gravity="center_horizontal|center_vertical"
         android:text="Записать"
+        android:textSize="@dimen/custom_size_text_medium"
         android:textAppearance="@style/some_id"
         app:layout_constraintBottom_toBottomOf="@+id/button_auto"
         app:layout_constraintEnd_toEndOf="@+id/button_auto"

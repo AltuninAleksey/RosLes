@@ -14,7 +14,7 @@
         android:layout_weight="2"
         android:layout_marginTop="20dp"
         android:text="Заполните все поля, чтобы создать аккаунт"
-        android:textSize="25dp"
+        android:textSize="@dimen/custom_size_text_medium"
         android:gravity="center"
         android:textColor="@color/black" />
 

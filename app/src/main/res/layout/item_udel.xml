@@ -8,18 +8,17 @@
     xmlns:tools="http://schemas.android.com/tools"
 
     android:layout_marginTop="16dp"
-    android:layout_marginBottom="8dp"
-    >
+    android:layout_marginBottom="8dp">
 
     <TextView
         android:id="@+id/text_udel_item"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:text="Иванов Иван Иванович,ЦЗЛ Калужской области"
         android:textAlignment="viewStart"
         android:textColor="@color/black"
         android:textFontWeight="@integer/material_motion_duration_long_2"
-        android:textSize="20sp"
+        android:textSize="@dimen/custom_size_text_medium"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -29,24 +28,25 @@
     <Button
         android:id="@+id/delete"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginEnd="20dp"
         android:backgroundTint="@color/color_button_main"
-        android:visibility="invisible"
         android:text="Удалить"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/text_button"
         app:layout_constraintTop_toTopOf="parent"
         app:strokeColor="@color/color_button_main_border"
         app:strokeWidth="2dp" />
 
     <Button
-        android:visibility="invisible"
         android:id="@+id/text_button"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:backgroundTint="@color/color_button_main"
-        android:layout_marginEnd="20dp"
         android:text="Открыть"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/text_udel_item"
         app:layout_constraintTop_toTopOf="parent"
         app:strokeColor="@color/color_button_main_border"

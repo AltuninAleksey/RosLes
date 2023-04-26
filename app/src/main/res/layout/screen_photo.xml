@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
+   <ImageView
         android:id="@+id/test"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -21,12 +21,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-        <!--<HorizontalScrollView-->
-        <!--android:id="@+id/tabscrvie"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_marginLeft="5dp"-->
-        <!--&gt;-->
+
         <TableLayout
             android:id="@+id/tbl_layout"
             android:layout_width="match_parent"
@@ -36,33 +31,36 @@
             <TableRow
                 android:id="@+id/first_colum"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:background="@color/background_table">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="70dp"
                     android:gravity="center"
                     android:padding="3dip"
                     android:text="№ точки"
                     android:textColor="#ffff"
-                    android:textSize="24sp" />
+                    android:textSize="@dimen/custom_size_table" />
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="80dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
                     android:gravity="center"
                     android:text="Дата/Время"
                     android:textColor="#ffff"
-                    android:textSize="24sp" />
+                    android:textSize="@dimen/custom_size_table" />
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:text="Изображение"
                     android:textColor="#ffff"
-                    android:textSize="24sp" />
+                    android:textSize="@dimen/custom_size_table" />
             </TableRow>
 
         </TableLayout>

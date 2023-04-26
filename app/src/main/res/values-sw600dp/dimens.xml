@@ -2,4 +2,10 @@
 <resources>
     <dimen name="custom_size_table">24sp</dimen>
     <dimen name="custom_size_text">40sp</dimen>
+    <dimen name="custom_size_text_big">50sp</dimen>
+    <dimen name="custom_size_text_medium">35sp</dimen>
+
+    <dimen name="custom_size_button_text">35dp</dimen>
+
+    <dimen name="custom_size_dialog">500dp</dimen>
 </resources>

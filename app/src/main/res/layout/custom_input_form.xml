@@ -44,6 +44,7 @@
         android:background="@null"
         android:inputType="textEmailAddress"
         android:hint="введите email "
+        android:textSize="@dimen/custom_size_table"
         android:textColor="@color/black"
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp"

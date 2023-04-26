@@ -2,4 +2,11 @@
 <resources>
     <dimen name="custom_size_table">13sp</dimen>
     <dimen name="custom_size_text">20sp</dimen>
+    <dimen name="custom_size_text_big">40sp</dimen>
+    <dimen name="custom_size_text_medium">20sp</dimen>
+
+    <dimen name="custom_size_button_text">20dp</dimen>
+
+    <dimen name="custom_size_dialog">300dp</dimen>
+
 </resources>

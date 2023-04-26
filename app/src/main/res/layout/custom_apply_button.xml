@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:text="принять"
         android:textColor="@color/white"
-        android:textSize="20sp"
+        android:textSize="@dimen/custom_size_text_medium"
         app:layout_constraintBottom_toBottomOf="@+id/proba"
         app:layout_constraintEnd_toEndOf="@+id/proba"
         app:layout_constraintStart_toStartOf="@+id/proba"

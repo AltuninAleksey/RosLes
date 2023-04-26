@@ -17,7 +17,7 @@
         android:gravity="center"
         android:text="Добавление пробной площади"
         android:textColor="#000000"
-        android:textSize="40dp"
+        android:textSize="@dimen/custom_size_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -30,7 +30,7 @@
         android:layout_marginTop="120dp"
         android:text="Дата "
         android:textColor="#000000"
-        android:textSize="40dp"
+        android:textSize="@dimen/custom_size_text"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
     <TextView
@@ -41,7 +41,7 @@
         android:layout_marginTop="15dp"
         android:text="Длина"
         android:textColor="#000000"
-        android:textSize="40dp"
+        android:textSize="@dimen/custom_size_text"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView16" />
 
@@ -53,7 +53,7 @@
         android:layout_marginTop="15dp"
         android:text="Ширина"
         android:textColor="#000000"
-        android:textSize="40dp"
+        android:textSize="@dimen/custom_size_text"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView18" />
 
@@ -65,7 +65,7 @@
         android:layout_marginTop="15dp"
         android:text="Площадь\nучастка"
         android:textColor="#000000"
-        android:textSize="40dp"
+        android:textSize="@dimen/custom_size_text"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView21" />
 
@@ -77,7 +77,7 @@
         android:layout_marginEnd="20dp"
         android:text="TextView"
         android:textColor="#000000"
-        android:textSize="40dp"
+        android:textSize="@dimen/custom_size_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
@@ -89,7 +89,7 @@
         android:hint="0"
         android:inputType="numberDecimal"
         android:text=""
-        android:textSize="40dp"
+        android:textSize="@dimen/custom_size_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/id_cvartal" />
 
@@ -102,7 +102,7 @@
         android:hint="0"
         android:inputType="numberDecimal"
         android:text=""
-        android:textSize="40dp"
+        android:textSize="@dimen/custom_size_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/vudel" />
 
@@ -115,7 +115,7 @@
         android:inputType="numberDecimal"
         android:text=""
         android:textColor="#000000"
-        android:textSize="40dp"
+        android:textSize="@dimen/custom_size_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/date" />
 
@@ -123,8 +123,8 @@
         android:id="@+id/button_auto"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginStart="30dp"
+        android:layout_marginEnd="100dp"
+        android:layout_marginStart="100dp"
 
         android:layout_marginBottom="15dp"
         android:background="@drawable/button_auto"
@@ -143,7 +143,7 @@
             android:layout_alignParentTop="true"
             android:gravity="center_horizontal|center_vertical"
             android:text="Записать"
-            android:textSize="40dp"
+            android:textSize="@dimen/custom_size_text"
             android:textAppearance="@style/some_id" />
     </RelativeLayout>
 

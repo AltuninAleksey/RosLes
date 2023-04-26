@@ -28,7 +28,7 @@
         android:textColor="@color/black"
         android:textFontWeight="@integer/material_motion_duration_long_2"
         android:gravity="center"
-        android:textSize="28sp"
+        android:textSize="@dimen/custom_size_text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

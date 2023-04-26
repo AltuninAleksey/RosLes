@@ -6,37 +6,36 @@
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="16dp"
     xmlns:tools="http://schemas.android.com/tools"
-
     android:layout_marginTop="16dp"
-    android:layout_marginBottom="8dp"
-    >
+    android:layout_marginBottom="8dp">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="wrap_content"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="0dp">
 
-
         <TextView
             android:id="@+id/text_udel_item"
-            android:layout_width="330dp"
-            android:layout_height="50dp"
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="wrap_content"
             android:layout_marginTop="0dp"
+            android:layout_gravity="center"
             android:text="Наименование справочника"
-            android:textAlignment="viewStart"
             android:textColor="@color/black"
             android:textFontWeight="@integer/material_motion_duration_long_2"
-            android:textSize="20sp"
+            android:textSize="@dimen/custom_size_text_medium"
             tools:ignore="MissingConstraints" />
 
         <CheckBox
-            android:layout_marginTop="8dp"
             android:id="@+id/checkBox"
-            android:layout_width="20dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_weight="0.4"
+            android:layout_gravity="center"
+
             android:text="" />
     </LinearLayout>
 

@@ -67,12 +67,12 @@
 
                     <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_height="70dp"
                         android:gravity="center"
                         android:padding="5dip"
                         android:text="Лесообразующие породы"
                         android:textColor="#ffff"
-                        android:textSize="24dp" />
+                        android:textSize="@dimen/custom_size_text" />
 
                 </TableRow>
 
@@ -110,17 +110,17 @@
                 <TableRow
                     android:id="@+id/first_colum_podle"
                     android:layout_width="wrap_content"
-                    android:layout_height="53dp"
+                    android:layout_height="500dp"
                     android:background="#177164">
 
                     <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_height="70dp"
                         android:gravity="center"
                         android:padding="5dip"
                         android:text="Подлесок"
                         android:textColor="#ffff"
-                        android:textSize="24dp" />
+                        android:textSize="@dimen/custom_size_text" />
 
 
                 </TableRow>
