@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">rosles</string>
+    <string name="connection_error">Can\'t connect to the server</string>
+    <string name="internal_error">Internal error! Please try again later.</string>
+
+    <string name="menu_open">Открыть</string>
+    <string name="menu_add">Добавить</string>
+    <string name="menu_change">Изменить</string>
+    <string name="menu_delete">Удалить</string>
+    <string name="menu_card">Личная карточка</string>
+    <string name="menu_add_porod">Добавить породу</string>
+    <string name="menu_save">Сохранить</string>
+    <string name="menu_gps">GPS-точка</string>
+    <string name="menu_photo_point">Фото-точка</string>
+</resources>

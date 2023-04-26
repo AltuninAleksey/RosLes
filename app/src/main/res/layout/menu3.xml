@@ -12,25 +12,26 @@
 
     <Button
         android:id="@+id/addporod"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="100dp"
-        android:layout_margin="20dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="15dp"
         android:layout_weight="1"
         android:backgroundTint="@color/color_button_main"
         android:drawableLeft="@drawable/leaf"
-        android:text="Добавить породу"
+        android:text="@string/menu_add_porod"
         android:textSize="10sp"
         app:cornerRadius="30dp" />
 
     <Button
         android:id="@+id/user"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="100dp"
-        android:layout_margin="20dp"
+        android:layout_marginEnd="10dp"
         android:layout_weight="1"
         android:backgroundTint="@color/color_button_main"
         android:drawableLeft="@drawable/gps"
-        android:text="GPS-точка"
+        android:text="@string/menu_gps"
         android:textSize="10sp"
         app:cornerRadius="30dp" />
 
@@ -38,43 +39,28 @@
 
     <Button
         android:id="@+id/open"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="100dp"
         android:layout_marginTop="10dp"
-        android:layout_margin="20dp"
+        android:layout_marginEnd="10dp"
         android:layout_weight="1"
         android:backgroundTint="@color/color_button_main"
         android:drawableLeft="@drawable/camera"
-        android:text="Фото-точка"
+        android:text="@string/menu_photo_point"
         android:textSize="10sp"
 
         app:cornerRadius="30dp" />
 
     <Button
         android:id="@+id/save"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="100dp"
-        android:layout_margin="20dp"
+        android:layout_marginEnd="15dp"
         android:layout_weight="1"
         android:backgroundTint="@color/color_button_main"
         android:drawableLeft="@drawable/save"
-        android:text="Сохранить"
+        android:text="@string/menu_save"
         android:textSize="10sp"
         app:cornerRadius="30dp" />
-
-<!--    <Button-->
-<!--        android:id="@+id/delete"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="100dp"-->
-<!--        android:layout_marginLeft="20dp"-->
-<!--        android:layout_marginTop="20dp"-->
-<!--        android:layout_marginRight="20dp"-->
-<!--        android:layout_marginBottom="20dp"-->
-<!--        android:layout_weight="1"-->
-<!--        android:backgroundTint="@color/color_button_main"-->
-<!--        android:drawableLeft="@drawable/minus"-->
-<!--        android:text="Удалить"-->
-<!--        android:textSize="10sp"-->
-<!--        app:cornerRadius="30dp" />-->
 
 </LinearLayout>

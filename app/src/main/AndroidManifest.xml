@@ -29,7 +29,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".Screens.SelectPhoto"
+            android:name=".Screens.Authorization"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -52,7 +52,7 @@
         <activity android:name=".Screens.AddProb" />
         <activity android:name=".Screens.Dashboard" />
         <activity android:name=".Screens.gps_activity" />
-<!--        <activity android:name=".Screens.SelectPhoto" />-->
+        <activity android:name=".Screens.SelectPhoto" />
         <activity android:name=".Screens.lisq_square" />
         <activity android:name=".Screens.create_user" />
         <activity android:name=".Screens.AddVedomost" />

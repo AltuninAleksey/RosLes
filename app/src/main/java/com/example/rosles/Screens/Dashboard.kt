@@ -26,17 +26,15 @@ import java.io.File
 class Dashboard: AppCompatActivity() {
 
     private lateinit var binding: DashboardBinding
-    val viewModel by viewModels<ViewModels>()
     private val db = DBCountWood(this, null)
-    var synhro=sync(viewModel,db,this)
-
 
     @SuppressLint("SdCardPath", "SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 //        requestWindowFeature(Window.FEATURE_NO_TITLE)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        val viewModel by viewModels<ViewModels>()
+        val viewModel by viewModels<ViewModels>() // Q
+        var synhro=sync(viewModel,db,this)
         binding = DashboardBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

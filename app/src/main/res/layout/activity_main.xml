@@ -17,12 +17,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-        <!--<HorizontalScrollView-->
-        <!--android:id="@+id/tabscrvie"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_marginLeft="5dp"-->
-        <!--&gt;-->
         <TableLayout
             android:id="@+id/tbl_layout"
             android:layout_width="match_parent"
@@ -35,67 +29,77 @@
                 android:layout_height="wrap_content"
                 android:background="@color/background_table">
 
-
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.3"
                     android:layout_height="match_parent"
+                    android:padding="2dip"
                     android:gravity="center"
                     android:text="ID"
                     android:textColor="#ffff"
-                    android:visibility="gone"
-                    android:textSize="24sp" />
+                    android:textSize="@dimen/custom_size_table"
+                    android:visibility="invisible" />
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1.5"
+
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:padding="3dip"
+                    android:padding="2dip"
                     android:text="Лесничество"
                     android:textColor="#ffff"
-                    android:textSize="24sp" />
+                    android:textSize="@dimen/custom_size_table" />
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1.5"
                     android:layout_height="80dp"
                     android:gravity="center"
-
+                    android:padding="2dip"
                     android:text="Участковое &#10;лесничество"
                     android:textColor="#ffff"
-                    android:textSize="24sp" />
+                    android:textSize="@dimen/custom_size_table" />
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="match_parent"
                     android:gravity="center"
-
+                    android:padding="2dip"
                     android:text="Квартал"
                     android:textColor="#ffff"
-                    android:textSize="24sp" />
+                    android:textSize="@dimen/custom_size_table" />
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="match_parent"
                     android:gravity="center"
-
+                    android:padding="2dip"
                     android:text="Выдел"
                     android:textColor="#ffff"
-                    android:textSize="24sp" />
+                    android:textSize="@dimen/custom_size_table" />
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="match_parent"
                     android:gravity="center"
+                    android:padding="2dip"
                     android:text="Дата"
                     android:textColor="#ffff"
-                    android:textSize="24sp" />
+                    android:textSize="@dimen/custom_size_table" />
 
                 <ImageView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
                     android:layout_height="wrap_content"
-                    android:paddingTop="20dp"
-
+                    android:padding="2dip"
                     android:gravity="center"
+                    android:paddingTop="20dp"
                     android:src="@drawable/reload" />
+
             </TableRow>
 
         </TableLayout>

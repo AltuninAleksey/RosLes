@@ -2,5 +2,15 @@
     <string name="app_name">rosles</string>
     <string name="connection_error">Can\'t connect to the server</string>
     <string name="internal_error">Internal error! Please try again later.</string>
+
+    <string name="menu_open"> </string>
+    <string name="menu_add"> </string>
+    <string name="menu_change"> </string>
+    <string name="menu_delete"> </string>
+    <string name="menu_card"> </string>
+    <string name="menu_add_porod"> </string>
+    <string name="menu_save"> </string>
+    <string name="menu_gps"> </string>
+    <string name="menu_photo_point"> </string>
 </resources>
 
