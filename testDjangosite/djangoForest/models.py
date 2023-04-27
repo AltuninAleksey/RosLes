@@ -524,7 +524,7 @@ class FieldСard(models.Model):
         verbose_name_plural = "Полевая карточка"
 
 
-    class SchemaMixingBreeds(models.Model):
-        name_schema = models.CharField(max_length=300)
+class SchemaMixingBreeds(models.Model):
+    name_schema = models.CharField(max_length=300)
 
 #
