@@ -46,6 +46,18 @@ interface API {
     @GET("list")
     suspend fun getLIST():LIST_RESP
 
+    @PUT("listregion")
+    suspend fun putLISTREGION(@Body body:LISTREGION_REQUEST):ResponseBody
+
+    @PUT("sample")
+    suspend fun putSAMPLE(@Body body:SAMPLE_REQEST):ResponseBody
+
+    @PUT("list")
+    suspend fun putLIST(@Body body:LIST_REQEST):ResponseBody
+
+
+
+
     @Multipart
     @POST("upload")
     @Headers(

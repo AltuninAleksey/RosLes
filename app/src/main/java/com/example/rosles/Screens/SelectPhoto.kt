@@ -1,6 +1,7 @@
 package com.example.rosles.Screens
 
 import android.Manifest
+import android.app.Dialog
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
@@ -13,12 +14,10 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.view.View
-import android.widget.ImageView
-import android.widget.TableRow
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.ActionBar
 import androidx.core.app.ActivityCompat
+import androidx.core.view.get
 import com.example.rosles.DBCountWood
 import com.example.rosles.R
 import com.example.rosles.databinding.ScreenPhotoBinding
@@ -36,7 +35,8 @@ class SelectPhoto:BaseAppClass() {
     var latitude: Double? = 0.0
     var longitude: Double? = 0.0
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-    var id_sample=98
+    var photobuf:Bitmap?=null
+    var id_sample=0
     private val REQUEST_TAKE_PHOTO = 1
     private lateinit var binding: ScreenPhotoBinding
     private lateinit var locationManager: LocationManager
@@ -52,10 +52,12 @@ class SelectPhoto:BaseAppClass() {
         supportActionBar!!.setCustomView(R.layout.custom_action_bar)
 
         // проверяем что разрешение получено
-
+        id_sample=intent.getIntExtra("id_sample",98)
         setLocation()
 
         db.getphotoall()
+
+        inittable()
 
         val view: View = supportActionBar!!.customView
 
@@ -72,13 +74,8 @@ class SelectPhoto:BaseAppClass() {
                 e.printStackTrace()
             }
         }
-        binding.toolbar.delete.setOnClickListener{
-            for (i in 0 .. binding.tblLayout.childCount){
-                val row=binding.tblLayout.getChildAt(i)
+        binding.toolbar.delete.visibility=View.GONE
 
-            }
-
-        }
     }
 
     private fun setLocation() {
@@ -136,7 +133,7 @@ class SelectPhoto:BaseAppClass() {
                 if (data.hasExtra("data")) {
                     val thumbnailBitmap: Bitmap? = data.getParcelableExtra("data")
                     // Какие-то действия с миниатюрой
-                    binding.test.setImageBitmap(thumbnailBitmap)
+
                     val temp=GPStracker(this)
 
                     db.writephoto(temp.bitmap_to_base(thumbnailBitmap), id_sample,latitude,longitude,LocalDateTime.now().format(formatter).toString())
@@ -146,27 +143,67 @@ class SelectPhoto:BaseAppClass() {
         }
     }
 
+
+    override fun onRestart() {
+        val buf= binding.tblLayout.getChildAt(0)
+        binding.tblLayout.removeAllViews()
+        binding.tblLayout.addView(buf)
+        inittable()
+        super.onRestart()
+    }
     fun inittable(){
 
-                    val tableRow = TableRow(this)
+        var activetableRow: TableRow? = null
+        val list=db.getphoto(id_sample)
 
-                    val text1=TextView(this)
-                    val text2=TextView(this)
-                    val text3=TextView(this)
-                    val text4=TextView(this)
+        list.forEach {
+            val tableRow = TableRow(this)
 
-//                    text1.setText(BITMAP.toString().substringAfter('@'))
-                    text2.setText(latitude.toString())
-                    text3.setText(longitude.toString())
-                    text4.setText(LocalDateTime.now().format(formatter).toString())
+            val text1=TextView(this)
+            val text2=TextView(this)
+            val text3=TextView(this)
+            val text4=TextView(this)
+            val photo=it.photo
 
-                    val textvalues=listOf(text1, text2, text3, text4)
-                    textvalues.forEach {
-                        it.textAlignment=View.TEXT_ALIGNMENT_CENTER
-                        it.setTextColor(-0x1000000)
-                        tableRow.addView(it)
-                    }
-                    binding.tblLayout.addView(tableRow)
+            text1.setText(it.photo.toString().substringAfter('@'))
+            text2.setText(it.latitude.toString())
+            text3.setText(it.longitude.toString())
+            text4.setText(it.date.format(formatter).toString())
+
+            val textvalues=listOf(text1, text2, text3, text4)
+            textvalues.forEach {
+                it.textAlignment=View.TEXT_ALIGNMENT_CENTER
+                it.setTextColor(-0x1000000)
+                tableRow.addView(it)
+            }
+            tableRow.setOnClickListener{
+                photobuf=photo
+                activetableRow?.setBackgroundResource(R.color.color_transporent)
+                tableRow.setBackgroundResource(R.color.color_transporent)
+                activetableRow = tableRow
+                activetableRow!!.setBackgroundResource(R.color.activecolumn)
+            }
+            binding.tblLayout.addView(tableRow)
+        }
+
+        binding.toolbar.open.setOnClickListener{
+            if(activetableRow!=null){
+                val latitude = activetableRow?.get(1) as TextView
+                val longitude = activetableRow?.get(2) as TextView
+                val date_value = activetableRow?.get(3) as TextView
+                val dialog: Dialog = Dialog(this)
+                dialog.setContentView(R.layout.view_image_dialog)
+                val image = dialog.findViewById<ImageView>(R.id.image_for_photo)
+                val coords = dialog.findViewById<TextView>(R.id.value_coord)
+                val date = dialog.findViewById<TextView>(R.id.value_date)
+                val delete = dialog.findViewById<Button>(R.id.delete)
+                image.setImageBitmap(photobuf)
+                coords.setText("${latitude.text} ${longitude.text}")
+                date.setText("${date_value.text}")
+                dialog.show()
+            }
+        }
+
     }
 }
 

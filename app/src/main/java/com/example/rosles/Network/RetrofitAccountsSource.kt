@@ -3,6 +3,7 @@ package com.example.rosles.Network
 import com.example.rosles.RequestClass.*
 import com.example.rosles.ResponceClass.*
 import kotlinx.coroutines.delay
+import okhttp3.ResponseBody
 import retrofit2.http.GET
 
 class RetrofitAccountsSource(
@@ -54,6 +55,22 @@ class RetrofitAccountsSource(
         delay(1000)
         accountsApi.getLIST()
     }
+
+    override suspend fun putLISTREGION(body:LISTREGION_REQUEST): ResponseBody = wrapRetrofitExceptions  {
+        delay(1000)
+        accountsApi.putLISTREGION(body)
+    }
+
+    override suspend fun putSAMPLE(body:SAMPLE_REQEST): ResponseBody = wrapRetrofitExceptions  {
+        delay(1000)
+        accountsApi.putSAMPLE(body)
+    }
+
+    override suspend fun putLIST(body:LIST_REQEST): ResponseBody = wrapRetrofitExceptions  {
+        delay(1000)
+        accountsApi.putLIST(body)
+    }
+
 
 
     override suspend fun reproduction(): ReproductionResp = wrapRetrofitExceptions {

@@ -39,6 +39,12 @@ interface AccountsSource {
     suspend fun get_user(body:AuthRequest):AuthReSponce
     suspend fun upload(body: UpdateRequest): BaseResp
 
+    suspend fun putLISTREGION(body: LISTREGION_REQUEST): ResponseBody
+
+    suspend fun putSAMPLE(body: SAMPLE_REQEST): ResponseBody
+
+    suspend fun putLIST(body: LIST_REQEST): ResponseBody
+
 
     //suspend fun roleRequst(): responceRole
 
@@ -59,6 +65,12 @@ class AccountsRepository( private val accountsSource: AccountsSource) {
     suspend fun getLISTREGION():LISTREGION_RESP=accountsSource.getLISTREGION()
     suspend fun getSAMPLE():SAMPLE_RESP=accountsSource.getSAMPLE()
     suspend fun getLIST():LIST_RESP=accountsSource.getLIST()
+
+    suspend fun putLISTREGION(body: LISTREGION_REQUEST):ResponseBody = accountsSource.putLISTREGION(body)
+
+    suspend fun putSAMPLE(body: SAMPLE_REQEST):ResponseBody = accountsSource.putSAMPLE(body)
+
+    suspend fun putLIST(body: LIST_REQEST):ResponseBody = accountsSource.putLIST(body)
 
 
     suspend fun reproduction(): List<GETReproductionResp> = accountsSource.reproduction().get
@@ -88,6 +100,8 @@ class AccountsRepository( private val accountsSource: AccountsSource) {
 
 
 
+
+
 //    suspend fun roleRequest():List<GetResp> {
 //        var resp=try {
 //            accountsSource.roleRequst().get
@@ -99,3 +113,4 @@ class AccountsRepository( private val accountsSource: AccountsSource) {
 //        return resp
 //    }
 }
+

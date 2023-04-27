@@ -1025,12 +1025,12 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     @SuppressLint("Recycle", "Range")
     fun getphotoall():List<Photo>{
         val db = this.readableDatabase
-        var cursor = db.rawQuery(
+        val cursor = db.rawQuery(
             """SELECT * FROM djangoForest_photopoint """.trimMargin(),null)
         cursor.moveToFirst()
         val a= mutableListOf<Photo>()
         for (i in 1..cursor.getCount()) {
-            var phototemp=cursor.getString(cursor.getColumnIndex("photo"))
+            val phototemp=cursor.getString(cursor.getColumnIndex("photo"))
             var bmp:Bitmap?=null
             val temp=GPStracker(context)
 

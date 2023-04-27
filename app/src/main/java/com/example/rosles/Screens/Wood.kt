@@ -126,7 +126,9 @@ class Wood : AppCompatActivity() {
             startActivity(Intent(this, gps_activity::class.java))
         }
         binding.include.open.setOnClickListener {
-            startActivity(Intent(this, SelectPhoto::class.java))
+            val intent=Intent(this, SelectPhoto::class.java)
+            intent.putExtra("id_sample",id_sample)
+            startActivity(intent)
         }
 
         // Диалог добавления породы
