@@ -837,6 +837,7 @@ class GetAllEqualListRegion(ListAPIView):
 class ListRegionFilters(ListAPIView):
     """
     Фильтры перечетной ведомости участка
+
     """
 
     def post(self, request, *args, **kwargs):
@@ -959,7 +960,7 @@ class FieldCardFilter(ListAPIView):
     '''
 
     def post(self, request, *args, **kwargs):
-        ser2 = DescriptionRegion.objects.all()
+        ser2 = FieldСard.objects.all()
         if request.data['bSubjectrf']:
             idSubjectrf = request.data['idSubjectrf']
             print("subjectrf")
@@ -1000,6 +1001,14 @@ class FieldCardFilter(ListAPIView):
     #     print('====')
 #         WorkingBreeds.objects.create(name_breeds = i)
 
+
+# class SchemaMixingBreedsView(ListAPIView):
+#
+#     def post(self, request, *args, **kwargs):
+#         print("111")
+#         SchemaMixingBreeds.objects.update_or_create(name_schema=request.data['name'])
+#         print("222")
+#         return Response("k")
 
 class ForestViewSet(viewsets.ModelViewSet):
     pass
