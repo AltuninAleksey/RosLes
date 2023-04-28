@@ -88,7 +88,7 @@ class Wood : AppCompatActivity() {
             binding.lesoblast.setBackgroundResource(R.color.activecolumn)
             binding.podlesoblast.setBackgroundResource(R.color.noactivecolumn)
             binding.tblLayoutpodlesok.isVisible = false
-            binding.tblLayout.isVisible = true
+            binding.tblLayout.visibility = View.VISIBLE
             binding.WoodRecycler.isVisible = true
             binding.WoodRecyclerpodles.isVisible = false
             invisibleplus()
@@ -96,7 +96,7 @@ class Wood : AppCompatActivity() {
         binding.podlesoblast.setOnClickListener {
             binding.podlesoblast.setBackgroundResource(R.color.activecolumn)
             binding.lesoblast.setBackgroundResource(R.color.noactivecolumn)
-            binding.tblLayout.isVisible = false
+            binding.tblLayout.visibility = View.INVISIBLE
             binding.tblLayoutpodlesok.isVisible = true
             binding.WoodRecycler.isVisible = false
             binding.WoodRecyclerpodles.isVisible = true

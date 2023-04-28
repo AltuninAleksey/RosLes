@@ -3,6 +3,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:imeOptions="flagNoFullscreen"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
@@ -13,12 +14,14 @@
     <Button
         android:id="@+id/addporod"
         android:layout_width="0dp"
-        android:layout_height="100dp"
+        android:layout_height="@dimen/custom_size_button_menu"
         android:layout_marginEnd="10dp"
         android:layout_marginStart="15dp"
         android:layout_weight="1"
+        android:layout_gravity="center"
+
         android:backgroundTint="@color/color_button_main"
-        android:drawableLeft="@drawable/leaf"
+        android:drawableTop="@drawable/leaf"
         android:text="@string/menu_add_porod"
         android:textSize="10sp"
         app:cornerRadius="30dp" />
@@ -26,11 +29,13 @@
     <Button
         android:id="@+id/user"
         android:layout_width="0dp"
-        android:layout_height="100dp"
+        android:layout_height="@dimen/custom_size_button_menu"
         android:layout_marginEnd="10dp"
         android:layout_weight="1"
+        android:layout_gravity="center"
         android:backgroundTint="@color/color_button_main"
-        android:drawableLeft="@drawable/gps"
+        android:paddingTop="8dp"
+        android:drawableTop="@drawable/gps"
         android:text="@string/menu_gps"
         android:textSize="10sp"
         app:cornerRadius="30dp" />
@@ -40,12 +45,13 @@
     <Button
         android:id="@+id/open"
         android:layout_width="0dp"
-        android:layout_height="100dp"
-        android:layout_marginTop="10dp"
+        android:layout_height="@dimen/custom_size_button_menu"
+        android:layout_gravity="center"
         android:layout_marginEnd="10dp"
         android:layout_weight="1"
         android:backgroundTint="@color/color_button_main"
-        android:drawableLeft="@drawable/camera"
+        android:drawableTop="@drawable/camera"
+
         android:text="@string/menu_photo_point"
         android:textSize="10sp"
 
@@ -54,11 +60,13 @@
     <Button
         android:id="@+id/save"
         android:layout_width="0dp"
-        android:layout_height="100dp"
+        android:layout_height="@dimen/custom_size_button_menu"
+        android:layout_gravity="center"
         android:layout_marginEnd="15dp"
         android:layout_weight="1"
         android:backgroundTint="@color/color_button_main"
-        android:drawableLeft="@drawable/save"
+        android:drawableTop="@drawable/save"
+        android:paddingTop="8dp"
         android:text="@string/menu_save"
         android:textSize="10sp"
         app:cornerRadius="30dp" />

@@ -4,8 +4,11 @@
     <dimen name="custom_size_text">40sp</dimen>
     <dimen name="custom_size_text_big">50sp</dimen>
     <dimen name="custom_size_text_medium">35sp</dimen>
+    <dimen name="custom_size_text_small">18sp</dimen>
 
     <dimen name="custom_size_button_text">35dp</dimen>
+    <dimen name="custom_size_button_big">100dp</dimen>
+    <dimen name="custom_size_button_menu">100dp</dimen>
 
     <dimen name="custom_size_dialog">500dp</dimen>
 </resources>

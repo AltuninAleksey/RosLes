@@ -5,6 +5,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:imeOptions="flagNoFullscreen"
         android:orientation="horizontal"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -14,65 +15,65 @@
     <Button
         android:id="@+id/addbutton"
         android:layout_width="0dp"
-        android:layout_height="100dp"
+        android:layout_height="@dimen/custom_size_button_menu"
         android:layout_weight="1"
         android:layout_marginEnd="10dp"
         android:layout_marginStart="10dp"
         android:backgroundTint="@color/color_button_main"
-        android:drawableLeft="@drawable/pluscircle"
+        android:drawableTop="@drawable/pluscircle"
         android:text="@string/menu_add"
-        android:textSize="9sp"
+        android:textSize="10sp"
         app:cornerRadius="30dp" />
 
     <Button
         android:id="@+id/reload"
         android:layout_width="0dp"
-        android:layout_height="100dp"
+        android:layout_height="@dimen/custom_size_button_menu"
         android:layout_weight="1"
         android:layout_marginEnd="10dp"
         android:visibility="gone"
         android:backgroundTint="@color/color_button_main"
-        android:drawableLeft="@drawable/pluscircle"
+        android:drawableTop="@drawable/pluscircle"
         android:text="@string/menu_add"
-        android:textSize="9sp"
+        android:textSize="10sp"
         app:cornerRadius="30dp" />
-
 
     <Button
         android:id="@+id/open"
         android:layout_width="0dp"
-        android:layout_height="100dp"
+        android:layout_height="@dimen/custom_size_button_menu"
         android:layout_marginTop="10dp"
         android:layout_weight="1"
         android:layout_marginEnd="10dp"
         android:backgroundTint="@color/color_button_main"
-        android:drawableLeft="@drawable/file"
+        android:drawableTop="@drawable/file"
         android:text="@string/menu_open"
-        android:textSize="9sp"
+        android:textSize="10sp"
         app:cornerRadius="30dp" />
 
     <Button
         android:id="@+id/save"
         android:layout_width="0dp"
-        android:layout_height="100dp"
+        android:layout_height="@dimen/custom_size_button_menu"
         android:layout_marginEnd="10dp"
         android:layout_weight="1"
         android:backgroundTint="@color/color_button_main"
-        android:drawableLeft="@drawable/edit"
+        android:drawableTop="@drawable/edit"
         android:text="@string/menu_change"
-        android:textSize="9sp"
+        android:textSize="10sp"
         app:cornerRadius="30dp" />
 
     <Button
         android:id="@+id/delete"
         android:layout_width="0dp"
-        android:layout_height="100dp"
+        android:layout_height="@dimen/custom_size_button_menu"
         android:layout_marginEnd="10dp"
+        android:paddingTop="10dp"
         android:layout_weight="1"
         android:backgroundTint="@color/color_button_main"
-        android:drawableLeft="@drawable/minus"
+        android:drawableTop="@drawable/minus"
         android:text="@string/menu_delete"
-        android:textSize="9sp"
+        android:textSize="10sp"
         app:cornerRadius="30dp" />
 
     </LinearLayout>
