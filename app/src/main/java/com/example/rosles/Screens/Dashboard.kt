@@ -37,13 +37,9 @@ class Dashboard: AppCompatActivity() {
 //        requestWindowFeature(Window.FEATURE_NO_TITLE)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         val viewModel by viewModels<ViewModels>() // Q
-        var synhro=sync(viewModel,db,this)
+        var synhro=sync()
         binding = DashboardBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-
-
-
 
         supportActionBar!!.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
         supportActionBar!!.setDisplayShowCustomEnabled(true)

@@ -44,7 +44,7 @@ class gps_activity:AppCompatActivity() {
             123
         ) // запрос разрешение на использовние геопозиции
 
-        var i=1
+        var i=0
         binding.toolbar.addbutton.setOnClickListener {
 
             var location=gpStracker.location

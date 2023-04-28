@@ -155,7 +155,7 @@ class Listregion : AppCompatActivity() {
             tableRow.addView(text4, 5)
             tableRow.addView(text6, 6)
 
-            binding.tblLayout.addView(tableRow, i+1);
+            binding.tblLayout.addView(tableRow, i);
 
             val layoutParams = tableRow.layoutParams as TableLayout.LayoutParams
             layoutParams.setMargins(0, 10, 0, 10)

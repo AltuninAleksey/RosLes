@@ -150,7 +150,7 @@ class Sample : AppCompatActivity() {
             tableRow.addView(text3, 3)
             tableRow.addView(text4, 4)
 
-            binding.tblLayout3.addView(tableRow, i+1);
+            binding.tblLayout3.addView(tableRow, i);
 
             val layoutParams = tableRow.layoutParams as TableLayout.LayoutParams
             layoutParams.setMargins(0, 10, 0, 10)

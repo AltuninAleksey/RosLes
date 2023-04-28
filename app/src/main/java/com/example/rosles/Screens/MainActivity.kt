@@ -80,9 +80,7 @@ class MainActivity : AppCompatActivity() {
 
     }
     override fun onRestart() {
-        val buf= binding.firstColum
         binding.tblLayout.removeAllViews()
-        binding.tblLayout.addView(buf)
         RecyclerviewInit()
         super.onRestart()
     }
@@ -132,7 +130,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             //в table view на 0 элементе находиться тайтл таблицы поэтому к счетчику добавляем единицу
-            binding.tblLayout.addView(tableRow, i+1);
+            binding.tblLayout.addView(tableRow, i);
 
             val layoutParams = tableRow.layoutParams as TableLayout.LayoutParams
             layoutParams.setMargins(0, 10, 0, 10)

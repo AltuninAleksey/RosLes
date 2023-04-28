@@ -923,7 +923,7 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         for (i in 1..cursor.getCount()) {
             example?.id=cursor.getString(cursor.getColumnIndex("id")).toInt()
             example?.value=cursor.getString(cursor.getColumnIndex("count_of_plants")).toInt()
-            example?.avgHeightpodles=cursor.getString(cursor.getColumnIndex("avg_height_undergrowth")).toFloatOrNull()
+            example?.avgHeightpodles=cursor?.getString(cursor.getColumnIndex("avg_height_undergrowth"))?.toFloatOrNull() //fix
         }
         cursor.close()
         return example

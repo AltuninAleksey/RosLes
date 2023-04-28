@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
     <TableLayout
         android:id="@+id/tbl_layout"
         android:layout_width="fill_parent"
@@ -31,7 +30,6 @@
                 android:text="Лесничество"
                 android:textColor="#ffff"
                 android:textSize="@dimen/custom_size_table" />
-
 
 
             <TextView
@@ -205,89 +203,82 @@
     </TableLayout>
 
 
-    <ScrollView
+    <LinearLayout
+        android:id="@+id/first_colum"
         android:layout_width="match_parent"
-        android:layout_height="500dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/toolbar"
         app:layout_constraintTop_toBottomOf="@id/tbl_layout2"
-        android:paddingBottom="210dp">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        android:background="@color/background_table">
 
-        <!--<HorizontalScrollView-->
-        <!--android:id="@+id/tabscrvie"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_marginLeft="5dp"-->
-        <!--&gt;-->
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:padding="5dip"
+            android:text="№ Пробы"
+            android:textColor="#ffff"
+            android:textSize="@dimen/custom_size_table" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:padding="5dip"
+            android:text="Длина"
+            android:textColor="#ffff"
+            android:textSize="@dimen/custom_size_table" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:padding="5dip"
+            android:text="Ширина"
+            android:textColor="#ffff"
+            android:textSize="@dimen/custom_size_table" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:padding="5dip"
+            android:text="Площадь"
+            android:textColor="#ffff"
+            android:textSize="@dimen/custom_size_table" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:padding="5dip"
+            android:text="Дата"
+            android:textColor="#ffff"
+            android:textSize="@dimen/custom_size_table" />
+
+    </LinearLayout>
+
+    <ScrollView
+        android:id="@+id/scroll"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/toolbar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/first_colum"
+        app:layout_constraintVertical_bias="0.0">
+
         <TableLayout
             android:id="@+id/tbl_layout3"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:stretchColumns="*"
-            >
-
-            <TableRow
-                android:id="@+id/first_colum"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/background_table">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:padding="5dip"
-                    android:text="№ Пробы"
-                    android:textColor="#ffff"
-                    android:textSize="@dimen/custom_size_table" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:padding="5dip"
-                    android:text="Длина"
-                    android:textColor="#ffff"
-                    android:textSize="@dimen/custom_size_table" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:padding="5dip"
-                    android:text="Ширина"
-                    android:textColor="#ffff"
-                    android:textSize="@dimen/custom_size_table" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:padding="5dip"
-                    android:text="Площадь"
-                    android:textColor="#ffff"
-                    android:textSize="@dimen/custom_size_table" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:padding="5dip"
-                    android:text="Дата"
-                    android:textColor="#ffff"
-                    android:textSize="@dimen/custom_size_table" />
-
-            </TableRow>
-            <TableRow
-                android:id="@+id/level1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/background_table"/>
+            android:stretchColumns="*">
 
         </TableLayout>
         <!--</HorizontalScrollView>-->

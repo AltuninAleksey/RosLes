@@ -23,7 +23,7 @@
             android:textAlignment="center"
             android:text="РОСЛЕС"
             android:textColor="@color/white"
-            android:textSize="@dimen/custom_size_text_medium" />
+            android:textSize="@dimen/custom_size_table" />
 
         <ImageView
             android:id="@+id/back"
