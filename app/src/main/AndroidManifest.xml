@@ -41,7 +41,7 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-        <activity android:name=".Screens.Wood" />
+        <activity android:name=".Screens.Wood"  />
         <activity android:name=".Screens.ChoiceSubject" />
         <activity android:name=".Screens.profile" />
         <activity android:name=".Screens.AddPorod" />

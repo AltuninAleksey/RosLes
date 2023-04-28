@@ -20,11 +20,11 @@ import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.util.*
 
-class sync(val viewModels: ViewModels,val db: DBCountWood, val context: AppCompatActivity) {
+class sync() {
 
 
 
-    fun main1() {
+    fun main1( viewModels: ViewModels, db: DBCountWood,  context: AppCompatActivity) {
 
 
         if (!db.djangoForest_undergrowth())
@@ -59,59 +59,58 @@ class sync(val viewModels: ViewModels,val db: DBCountWood, val context: AppCompa
     }
 
     fun load(viewModels: ViewModels, db: DBCountWood, context: AppCompatActivity){
-//        val listregion=db.getLISTREGION()
-//        viewModels.putLISTREGION(LISTREGION_REQUEST(listregion))
-//
-//        listregion.forEach{
-//            viewModels.putSAMPLE(SAMPLE_REQEST( db.getSAMPLEbyID_Listregion(it.id)))
-//            db.getSAMPLEbyID_Listregion(it.id).forEach{
-//                it.id
-//                viewModels.putLIST(LIST_REQEST(db.getLIST(it.id)))
-//            }
-//            db.Synck_Update_Listregion(it.id)
-//        }
-//
-//        Thread.sleep(1000)
-//        db.getphotoall().forEach{
-//            val wrapper = ContextWrapper(context)
-//            var file = wrapper.getDir("Images", Context.MODE_PRIVATE)
-//            file = File(file,"${UUID.randomUUID()}.jpg")
-//            val stream: OutputStream = FileOutputStream(file)
-//            it.photo.compress(Bitmap.CompressFormat.JPEG,100,stream)
-//            stream.flush()
-//            stream.close()
-//
-//            val photoFile = file
-//            val photo = MultipartBody.Part.createFormData(
-//                "photo",
-//                photoFile.name,
-//                photoFile.asRequestBody("image/*".toMediaType())
-//            )
-//
-//            viewModels.upload(UpdateRequest(photo,it.id_sample,it.latitude.toDouble(),it.longitude.toDouble(),it.date))
-//        }
-//
-//
+        val listregion=db.getLISTREGION()
+        viewModels.putLISTREGION(LISTREGION_REQUEST(listregion))
+
+        listregion.forEach{
+            viewModels.putSAMPLE(SAMPLE_REQEST( db.getSAMPLEbyID_Listregion(it.id)))
+            db.getSAMPLEbyID_Listregion(it.id).forEach{
+                it.id
+                viewModels.putLIST(LIST_REQEST(db.getLIST(it.id)))
+            }
+            db.Synck_Update_Listregion(it.id)
+        }
+
+        Thread.sleep(1000)
+        db.getphotoall().forEach{
+            val wrapper = ContextWrapper(context)
+            var file = wrapper.getDir("Images", Context.MODE_PRIVATE)
+            file = File(file,"${UUID.randomUUID()}.jpg")
+            val stream: OutputStream = FileOutputStream(file)
+            it.photo!!.compress(Bitmap.CompressFormat.JPEG,100,stream)
+            stream.flush()
+            stream.close()
+
+            val photoFile = file
+            val photo = MultipartBody.Part.createFormData(
+                "photo",
+                photoFile.name,
+                photoFile.asRequestBody("image/*".toMediaType())
+            )
+
+            viewModels.upload(UpdateRequest(photo,it.id_sample,it.latitude.toDouble(),it.longitude.toDouble(),it.date))
+        }
+
+
     }
 
-    fun sendFileRequest(image: Bitmap) {
-        val wrapper = ContextWrapper(context)
-        var file = wrapper.getDir("Images", Context.MODE_PRIVATE)
-        file = File(file,"${UUID.randomUUID()}.jpg")
-        val stream: OutputStream = FileOutputStream(file)
-        image.compress(Bitmap.CompressFormat.JPEG,25,stream)
-        stream.flush()
-        stream.close()
-
-        val photoFile = file
-        val photo = MultipartBody.Part.createFormData(
-            "photo",
-            photoFile.name,
-            photoFile.asRequestBody("image/*".toMediaType())
-        )
-//        viewModel.upload(UpdateRequest(photo,98,latitude!!,longitude!!,
-//            LocalDateTime.now().format(formatter).toString()))
-    }
+//    fun sendFileRequest(image: Bitmap,latitude:Double,longitude:Double,date: String,id:Int) {
+//        val wrapper = ContextWrapper(context)
+//        var file = wrapper.getDir("Images", Context.MODE_PRIVATE)
+//        file = File(file,"${UUID.randomUUID()}.jpg")
+//        val stream: OutputStream = FileOutputStream(file)
+//        image.compress(Bitmap.CompressFormat.JPEG,25,stream)
+//        stream.flush()
+//        stream.close()
+//
+//        val photoFile = file
+//        val photo = MultipartBody.Part.createFormData(
+//            "photo",
+//            photoFile.name,
+//            photoFile.asRequestBody("image/*".toMediaType())
+//        )
+//        //viewModel.upload(UpdateRequest(photo,id,latitude,longitude,date))
+//    }
 
 
 }

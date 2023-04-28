@@ -26,7 +26,10 @@ import java.io.File
 class Dashboard: AppCompatActivity() {
 
     private lateinit var binding: DashboardBinding
+    val viewModel by viewModels<ViewModels>()
     private val db = DBCountWood(this, null)
+    var synhro=sync()
+
 
     @SuppressLint("SdCardPath", "SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,6 +40,8 @@ class Dashboard: AppCompatActivity() {
         var synhro=sync(viewModel,db,this)
         binding = DashboardBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+
 
 
 
@@ -81,7 +86,7 @@ class Dashboard: AppCompatActivity() {
         }
 
         binding.ALLDOWNLOAD.setOnClickListener{
-
+            synhro.main1(viewModel,db,this)
             viewModel.uploadbd.observe(this){
                 Log.v(it.msg.toString(),"")
             }
@@ -92,7 +97,7 @@ class Dashboard: AppCompatActivity() {
 //            Toast.makeText(this, "Данные обновленны", Toast.LENGTH_SHORT).show()
         }
         binding.reload.setOnClickListener{
-            synhro.main1()
+            synhro.load(viewModel,db,this)
         }
 
     }

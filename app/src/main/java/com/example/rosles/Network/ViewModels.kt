@@ -220,6 +220,20 @@ class ViewModels():BaseViewModel(
         }
     }
 
+     fun putLISTREGION(body:LISTREGION_REQUEST)=viewModelScope.safeLaunch{
+        accountsRepository.putLISTREGION(body)
+    }
+
+    fun putSAMPLE(body:SAMPLE_REQEST)=viewModelScope.safeLaunch{
+        accountsRepository.putSAMPLE(body)
+
+    }
+    fun putLIST(body:LIST_REQEST)=viewModelScope.safeLaunch{
+        accountsRepository.putLIST(body)
+
+    }
+
+
 
 
 
