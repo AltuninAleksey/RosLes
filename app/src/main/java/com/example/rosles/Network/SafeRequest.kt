@@ -32,7 +32,11 @@ class SafeRequest(val viewModel: ViewModels) {
                 protection.ifConnectionException()
             } catch (e: BackendException) {
                 logger.error("", e)
-                protection.ifBackendException()
+                if (e.code == 401) {
+                    protection.ifAuthException()
+                } else {
+                    protection.ifBackendException()
+                }
             } catch (e: AuthException) {
                 logger.error("", e)
                 protection.ifAuthException()
