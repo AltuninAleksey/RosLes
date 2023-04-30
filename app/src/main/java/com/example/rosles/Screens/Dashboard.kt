@@ -82,7 +82,7 @@ class Dashboard: AppCompatActivity() {
         }
 
         binding.ALLDOWNLOAD.setOnClickListener{
-            synhro.main1(viewModel,db,this)
+            synhro. main1(viewModel,db,this)
             viewModel.uploadbd.observe(this){
                 Log.v(it.msg.toString(),"")
             }
