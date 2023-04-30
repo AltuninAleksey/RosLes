@@ -1,8 +1,8 @@
 package com.example.rosles.ResponceClass
 
-data class LISTREGION_RESP(val get:List<LISTREGION_DATA>)
+data class LISTREGION_RESP(val get:List<LISTREGION_DATA>) : BaseResponceInterface
 
-data class LISTREGION_REQUEST(val data:List<LISTREGION_DATA>)
+data class LISTREGION_REQUEST(val data:List<LISTREGION_DATA>) : BaseResponceInterface
 
 data class LISTREGION_DATA(
     val id: Int,
@@ -12,4 +12,4 @@ data class LISTREGION_DATA(
     val mark_del: Int?,
     val mark_update: Int?,
     val id_quarter: Int
-    )
+    ) : BaseResponceInterface

@@ -1,8 +1,8 @@
 package com.example.rosles.ResponceClass
 
-data class LIST_RESP(val get:List<LIST_DATA>)
+data class LIST_RESP(val get:List<LIST_DATA>) : BaseResponceInterface
 
-data class LIST_REQEST(val data:List<LIST_DATA>)
+data class LIST_REQEST(val data:List<LIST_DATA>) : BaseResponceInterface
 
 data class LIST_DATA(
     val id: Int,
@@ -23,4 +23,4 @@ data class LIST_DATA(
     val id_undergrowth: Int,
     val mark_update: Int
 
-)
+) : BaseResponceInterface

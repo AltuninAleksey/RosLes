@@ -1,4 +1,4 @@
 package com.example.rosles.ResponceClass
 
-data class AuthReSponce(var id:Int,var FIO:String)
+data class AuthReSponce(var id:Int,var FIO:String) : BaseResponceInterface
 

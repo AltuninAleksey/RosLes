@@ -11,4 +11,4 @@ data  class UserResp (
     var id_working_breeds: Int,
     var id_role: Int,
     var id_branches: Int
-): Serializable
+): Serializable, BaseResponceInterface
