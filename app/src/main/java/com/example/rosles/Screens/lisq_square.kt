@@ -74,7 +74,7 @@ class lisq_square : AppCompatActivity() {
         var id_region=0
         fun setregion(value:Int?){
             if(value!=null)
-                id_region=value!!
+                id_region=value
         }
     }
 
@@ -89,7 +89,7 @@ class lisq_square : AppCompatActivity() {
         setregion(intent.getStringExtra("id_Vedomost")?.toInt())
         id_vdomost = id_region
 
-        var vedom = db.getVedombyID(id_vdomost!!.toInt())
+        val vedom = db.getVedombyID(id_vdomost!!.toInt())
         binding.lesnnich.text = vedom.nameForestly
         binding.district.text = vedom.nameDistrictForestly
         binding.quater.text =   vedom.quarterName
@@ -158,7 +158,7 @@ class lisq_square : AppCompatActivity() {
 
         binding.toolbar.save.isGone = true
         binding.toolbar.addbutton.setOnClickListener {
-            val intent = Intent(this, AddProb::class.java)
+            val intent = Intent(this, AddSample::class.java)
             intent.putExtra("id", id_vdomost.toString())
             intent.putExtra("id_quater", bufer_quater_id)
             startActivity(intent)

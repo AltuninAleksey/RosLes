@@ -567,7 +567,7 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
                 cursor.getString(cursor.getColumnIndex("id")),
                 cursor.getString(cursor.getColumnIndex("lenght")),
                 cursor.getString(cursor.getColumnIndex("width")),
-                cursor.getString(cursor.getColumnIndex("square")),
+                cursor.getInt(cursor.getColumnIndex("square")).toString(),
                 cursor.getString(cursor.getColumnIndex("date"))
             )
             squareList.add(square)

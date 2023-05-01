@@ -91,7 +91,8 @@ class AddProb : AppCompatActivity() {
                 binding.vudel.text.toString(),
                 binding.idCvartal.text.toString(),
                 binding.samplearea.text.toString(),
-                binding.vudel.text.toString(),1
+                binding.vudel.text.toString(),
+                2
             )
             Toast.makeText(this, "Данные добавлены", Toast.LENGTH_LONG).show()
 
