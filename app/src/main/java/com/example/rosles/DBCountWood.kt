@@ -323,7 +323,8 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         val database: SQLiteDatabase = this.writableDatabase
         val cursor: Cursor = database.rawQuery("select * from djangoForest_listregion where id='$id'",null)
         cursor.moveToFirst()
-        if(cursor.getInt(cursor.getColumnIndex("mark_update")) <= 0){
+        val buf=cursor.getInt(cursor.getColumnIndex("mark_update"))
+        if(cursor.getInt(cursor.getColumnIndex("mark_update")) == 0){
             database.execSQL(
                 "update djangoForest_listregion set mark_update = 1 where id = $id"
             )
@@ -388,7 +389,7 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
                 cursor.getString(cursor.getColumnIndex("soil_lot")),
                 cursor.getString(cursor.getColumnIndex("date")),
                 cursor.getString(cursor.getColumnIndex("id")),
-                cursor.getString(cursor.getColumnIndex("mark_update")) ?: "0" // Q2
+                cursor.getInt(cursor.getColumnIndex("mark_update"))  // Q2
             )
             porodaList.add(poroda)
             cursor.moveToNext()

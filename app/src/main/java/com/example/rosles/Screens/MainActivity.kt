@@ -90,7 +90,7 @@ class MainActivity : AppCompatActivity() {
 
         var activetableRow: TableRow? = null
 
-        // отсюда вчитаем единицу тк как в противном случае выходим в оут оф баунс(данные не записываются в полном обьеме)
+        // отсюда вычитаем единицу тк как в противном случае выходим в оут оф баунс(данные не записываются в полном обьеме)
         for (i in 0..porodaList.size-1) {
             val tableRow = TableRow(this)
             /* Порядок важен, знацения будут добавляться в колонки таблицы
@@ -107,20 +107,25 @@ class MainActivity : AppCompatActivity() {
             // сборка строки для тоблицы
             for((indexOfvalue, valueOfPoroda) in valuesOfPorodaList.withIndex()) {
                 val text = TextView(this)
-                val img = ImageView(this)
+
 
                 text.textAlignment = View.TEXT_ALIGNMENT_CENTER
                 text.setTextColor(-0x1000000)
                 text.text = valueOfPoroda
 
-                if (indexOfvalue == 1)
-                    text.visibility = View.VISIBLE
+//                if (indexOfvalue == 1)
+//                    text.visibility = View.GONE
 
-                if (porodaList[i].markUpdate.toInt() == 1)
-                    img.setImageResource(R.drawable.reloadred)
+
 
                 tableRow.addView(text, indexOfvalue)
             }
+            val img = ImageView(this)
+            if (porodaList[i].markUpdate == 1){
+                img.setImageResource(R.drawable.reloadred)
+                tableRow.addView(img)
+            }
+
 
             tableRow.setOnClickListener {
                 activetableRow?.setBackgroundResource(R.color.color_transporent)
@@ -150,7 +155,7 @@ class MainActivity : AppCompatActivity() {
 
         binding.toolbar.save.setOnClickListener() {
             if (activetableRow != null) {
-                val intent = Intent(this, ChangeVedomost::class.java)
+                val intent = Intent(this, ChangeListregion::class.java)
 
                 var bufer = activetableRow?.get(0)
 

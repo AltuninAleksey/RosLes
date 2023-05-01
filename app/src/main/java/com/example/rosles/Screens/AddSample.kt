@@ -58,7 +58,7 @@ class AddSample : AppCompatActivity() {
                     startActivity(Intent(this, Dashboard::class.java))
                 }
                 R.id.itemperechet -> {
-                    startActivity(Intent(this, Listregion::class.java))
+                    startActivity(Intent(this, MainActivity::class.java))
                 }
                 R.id.itemgps -> {
                     startActivity(Intent(this, gps_activity::class.java))

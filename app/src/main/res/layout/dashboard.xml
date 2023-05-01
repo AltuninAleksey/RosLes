@@ -9,7 +9,6 @@
 <!--    <include-->
 <!--        android:id="@+id/include"-->
 <!--        layout="@layout/nav_menu"-->
-
 <!--        android:layout_width="match_parent"-->
 <!--        android:layout_height="wrap_content"-->
 <!--        app:layout_constraintEnd_toEndOf="parent"-->
@@ -17,11 +16,13 @@
 <!--        app:layout_constraintTop_toTopOf="parent" />-->
 
 
+
+
     <Button
         android:id="@+id/perechet"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="50dp"
         android:layout_marginStart="25dp"
         android:layout_marginEnd="25dp"
         android:drawableLeft="@drawable/keyboard"
@@ -47,7 +48,7 @@
         android:text="Обновить"
         style="@style/MaterialAlertDialog.Material3"
         android:textSize="@dimen/custom_size_text"
-        app:cornerRadius="30dp"
+        app:cornerRadius="50dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.465"
         app:layout_constraintStart_toStartOf="parent"
@@ -77,7 +78,7 @@
         android:layout_weight="1"
         android:layout_marginStart="25dp"
         android:layout_marginEnd="25dp"
-        android:layout_marginTop="100dp"
+
         android:drawableLeft="@drawable/man"
         android:text="Профиль"
         android:textSize="@dimen/custom_size_text"
@@ -94,7 +95,6 @@
         android:layout_weight="1"
         android:layout_marginStart="25dp"
         android:layout_marginEnd="25dp"
-        android:layout_marginTop="50dp"
         android:drawableLeft="@drawable/download"
         android:text="Загрузка данных"
         android:textSize="@dimen/custom_size_text"
