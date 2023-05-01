@@ -26,6 +26,7 @@ class AddListregion:AppCompatActivity() {
         binding = AddVedomostBinding.inflate(layoutInflater)
         setContentView(binding.root)
         //инциализация навигации
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar!!.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
         supportActionBar!!.setDisplayShowCustomEnabled(true)
         supportActionBar!!.setCustomView(R.layout.custom_action_bar)
@@ -34,7 +35,7 @@ class AddListregion:AppCompatActivity() {
         val title=view.findViewById<TextView>(R.id.text)
         val back=view.findViewById<ImageView>(R.id.back)
         val menu=view.findViewById<ImageView>(R.id.burger)
-        title.setText("Добавление перечетной ведомости")
+        title.setText("Рослес")
         back.setOnClickListener{
             finish()
         }

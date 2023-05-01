@@ -8,6 +8,7 @@ import android.view.MenuItem
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.rosles.BaseActivity
 import com.example.rosles.DBCountWood
 import com.example.rosles.R
 import com.example.rosles.databinding.AddPorodBinding
@@ -16,7 +17,7 @@ import java.util.*
 import kotlin.collections.HashMap
 
 
-class AddPorod : AppCompatActivity() {
+class AddPorod : BaseActivity("Добавление") {
 
     private lateinit var binding: AddPorodBinding
     private val db = DBCountWood(this, null)
@@ -25,34 +26,7 @@ class AddPorod : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = AddPorodBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        //инциализация навигации
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = "Добавление"
         initActivity()
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            android.R.id.home -> finish()
-            R.id.main -> {
-                startActivity(Intent(this, Dashboard::class.java))
-            }
-            R.id.itemperechet -> {
-                startActivity(Intent(this, MainActivity::class.java))
-            }
-            R.id.itemgps -> {
-                startActivity(Intent(this, gps_activity::class.java))
-            }
-            R.id.profile -> {
-                startActivity(Intent(this, profile::class.java))
-            }
-        }
-        return true
     }
 
     @SuppressLint("SuspiciousIndentation")

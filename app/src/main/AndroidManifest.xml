@@ -56,6 +56,7 @@
         <activity android:name=".Screens.lisq_square" />
         <activity android:name=".Screens.create_user" />
         <activity android:name=".Screens.AddVedomost" />
+        <activity android:name=".Screens.AddPorod" />
         <activity android:name=".Screens.ChangeListregion" />
     </application>
 

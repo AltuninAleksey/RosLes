@@ -11,6 +11,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.get
+import com.example.rosles.BaseActivity
 import com.example.rosles.DBCountWood
 import com.example.rosles.Models.Poroda
 import com.example.rosles.Network.ViewModels
@@ -18,66 +19,20 @@ import com.example.rosles.R
 import com.example.rosles.databinding.ActivityMainBinding
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity("Перечетные ведомости") {
 
     //в ожидании звездного часа на синхрон
     val viewModel by viewModels<ViewModels>()
-
     private val db = DBCountWood(this, null)
     private lateinit var binding: ActivityMainBinding
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         //инциализация навигации
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         RecyclerviewInit()
-
-        supportActionBar!!.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
-        supportActionBar!!.setDisplayShowCustomEnabled(true)
-        supportActionBar!!.setCustomView(R.layout.custom_action_bar)
-
-        val view: View = supportActionBar!!.customView
-
-        val title=view.findViewById<TextView>(R.id.text)
-        val back=view.findViewById<ImageView>(R.id.back)
-        val menu=view.findViewById<ImageView>(R.id.burger)
-        title.setText("Перечетные ведомости")
-        back.setOnClickListener{
-            finish()
-        }
-        menu.setOnClickListener{
-            showpopupmenu(it)
-        }
-    }
-    fun showpopupmenu (view: View) {
-        val popup = PopupMenu(this, view)
-        popup.inflate(R.menu.menu)
-
-        popup.setOnMenuItemClickListener(PopupMenu.OnMenuItemClickListener { item: MenuItem? ->
-
-            when (item!!.itemId) {
-                R.id.main -> {
-                    startActivity(Intent(this, Dashboard::class.java))
-                }
-                R.id.itemperechet -> {
-                    startActivity(Intent(this, MainActivity::class.java))
-                }
-                R.id.itemgps -> {
-                    startActivity(Intent(this, gps_activity::class.java))
-                }
-                R.id.profile -> {
-                    startActivity(Intent(this, profile::class.java))
-                }
-            }
-            true
-        })
-        popup.show()
-
     }
     override fun onRestart() {
         binding.tblLayout.removeAllViews()
@@ -87,7 +42,6 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("Range")
     fun RecyclerviewInit() {
         val porodaList :List<Poroda> = db.readbyporoda()
-
         var activetableRow: TableRow? = null
 
         // отсюда вычитаем единицу тк как в противном случае выходим в оут оф баунс(данные не записываются в полном обьеме)
