@@ -26,6 +26,7 @@ class AddListregion:AppCompatActivity() {
         binding = AddVedomostBinding.inflate(layoutInflater)
         setContentView(binding.root)
         //инциализация навигации
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar!!.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
         supportActionBar!!.setDisplayShowCustomEnabled(true)
         supportActionBar!!.setCustomView(R.layout.custom_action_bar)
@@ -34,7 +35,7 @@ class AddListregion:AppCompatActivity() {
         val title=view.findViewById<TextView>(R.id.text)
         val back=view.findViewById<ImageView>(R.id.back)
         val menu=view.findViewById<ImageView>(R.id.burger)
-        title.setText("Добавление перечетной ведомости")
+        title.setText("Рослес")
         back.setOnClickListener{
             finish()
         }
@@ -55,7 +56,7 @@ class AddListregion:AppCompatActivity() {
                     startActivity(Intent(this, Dashboard::class.java))
                 }
                 R.id.itemperechet -> {
-                    startActivity(Intent(this, Listregion::class.java))
+                    startActivity(Intent(this, MainActivity::class.java))
                 }
                 R.id.itemgps -> {
                     startActivity(Intent(this, gps_activity::class.java))
@@ -88,7 +89,7 @@ class AddListregion:AppCompatActivity() {
                 binding.vudel.text.toString(),
                 2 )
             Toast.makeText(this,"Данные добавлены",Toast.LENGTH_LONG).show()
-            startActivity(Intent(this, Listregion::class.java))
+            startActivity(Intent(this, MainActivity::class.java))
         }
         binding.date.setOnClickListener {
             initDatePicker()

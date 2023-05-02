@@ -58,7 +58,7 @@ class ChangeListregion: AppCompatActivity() {
                     startActivity(Intent(this, Dashboard::class.java))
                 }
                 R.id.itemperechet -> {
-                    startActivity(Intent(this, Listregion::class.java))
+                    startActivity(Intent(this, MainActivity::class.java))
                 }
                 R.id.itemgps -> {
                     startActivity(Intent(this, gps_activity::class.java))
@@ -111,7 +111,7 @@ class ChangeListregion: AppCompatActivity() {
                 binding.vudel.text.toString()
             )
             db.Mark_Update_Listregion(id_Vedomost)
-            startActivity(Intent(this, Listregion::class.java))
+            startActivity(Intent(this, MainActivity::class.java))
         }
         binding.idCvartal.setOnClickListener{
             val intent1=Intent(this, ChoiceSubject::class.java)

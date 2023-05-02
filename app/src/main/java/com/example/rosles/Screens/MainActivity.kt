@@ -11,6 +11,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.get
+import com.example.rosles.BaseActivity
 import com.example.rosles.DBCountWood
 import com.example.rosles.Models.Poroda
 import com.example.rosles.Network.ViewModels
@@ -18,66 +19,20 @@ import com.example.rosles.R
 import com.example.rosles.databinding.ActivityMainBinding
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity("Перечетные ведомости") {
 
     //в ожидании звездного часа на синхрон
     val viewModel by viewModels<ViewModels>()
-
     private val db = DBCountWood(this, null)
     private lateinit var binding: ActivityMainBinding
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         //инциализация навигации
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         RecyclerviewInit()
-
-        supportActionBar!!.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
-        supportActionBar!!.setDisplayShowCustomEnabled(true)
-        supportActionBar!!.setCustomView(R.layout.custom_action_bar)
-
-        val view: View = supportActionBar!!.customView
-
-        val title=view.findViewById<TextView>(R.id.text)
-        val back=view.findViewById<ImageView>(R.id.back)
-        val menu=view.findViewById<ImageView>(R.id.burger)
-        title.setText("Перечетные ведомости")
-        back.setOnClickListener{
-            finish()
-        }
-        menu.setOnClickListener{
-            showpopupmenu(it)
-        }
-    }
-    fun showpopupmenu (view: View) {
-        val popup = PopupMenu(this, view)
-        popup.inflate(R.menu.menu)
-
-        popup.setOnMenuItemClickListener(PopupMenu.OnMenuItemClickListener { item: MenuItem? ->
-
-            when (item!!.itemId) {
-                R.id.main -> {
-                    startActivity(Intent(this, Dashboard::class.java))
-                }
-                R.id.itemperechet -> {
-                    startActivity(Intent(this, MainActivity::class.java))
-                }
-                R.id.itemgps -> {
-                    startActivity(Intent(this, gps_activity::class.java))
-                }
-                R.id.profile -> {
-                    startActivity(Intent(this, profile::class.java))
-                }
-            }
-            true
-        })
-        popup.show()
-
     }
     override fun onRestart() {
         binding.tblLayout.removeAllViews()
@@ -87,10 +42,9 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("Range")
     fun RecyclerviewInit() {
         val porodaList :List<Poroda> = db.readbyporoda()
-
         var activetableRow: TableRow? = null
 
-        // отсюда вчитаем единицу тк как в противном случае выходим в оут оф баунс(данные не записываются в полном обьеме)
+        // отсюда вычитаем единицу тк как в противном случае выходим в оут оф баунс(данные не записываются в полном обьеме)
         for (i in 0..porodaList.size-1) {
             val tableRow = TableRow(this)
             /* Порядок важен, знацения будут добавляться в колонки таблицы
@@ -107,20 +61,25 @@ class MainActivity : AppCompatActivity() {
             // сборка строки для тоблицы
             for((indexOfvalue, valueOfPoroda) in valuesOfPorodaList.withIndex()) {
                 val text = TextView(this)
-                val img = ImageView(this)
+
 
                 text.textAlignment = View.TEXT_ALIGNMENT_CENTER
                 text.setTextColor(-0x1000000)
                 text.text = valueOfPoroda
 
-                if (indexOfvalue == 1)
-                    text.visibility = View.VISIBLE
+//                if (indexOfvalue == 1)
+//                    text.visibility = View.GONE
 
-                if (porodaList[i].markUpdate.toInt() == 1)
-                    img.setImageResource(R.drawable.reloadred)
+
 
                 tableRow.addView(text, indexOfvalue)
             }
+            val img = ImageView(this)
+            if (porodaList[i].markUpdate == 1){
+                img.setImageResource(R.drawable.reloadred)
+                tableRow.addView(img)
+            }
+
 
             tableRow.setOnClickListener {
                 activetableRow?.setBackgroundResource(R.color.color_transporent)
@@ -150,7 +109,7 @@ class MainActivity : AppCompatActivity() {
 
         binding.toolbar.save.setOnClickListener() {
             if (activetableRow != null) {
-                val intent = Intent(this, ChangeVedomost::class.java)
+                val intent = Intent(this, ChangeListregion::class.java)
 
                 var bufer = activetableRow?.get(0)
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="custom_size_table">13sp</dimen>
+    <dimen name="custom_size_table">18sp</dimen>
     <dimen name="custom_size_text">20sp</dimen>
     <dimen name="custom_size_text_big">40sp</dimen>
     <dimen name="custom_size_text_medium">20sp</dimen>

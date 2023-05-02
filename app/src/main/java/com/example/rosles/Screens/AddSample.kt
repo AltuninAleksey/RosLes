@@ -58,7 +58,7 @@ class AddSample : AppCompatActivity() {
                     startActivity(Intent(this, Dashboard::class.java))
                 }
                 R.id.itemperechet -> {
-                    startActivity(Intent(this, Listregion::class.java))
+                    startActivity(Intent(this, MainActivity::class.java))
                 }
                 R.id.itemgps -> {
                     startActivity(Intent(this, gps_activity::class.java))
@@ -107,9 +107,6 @@ class AddSample : AppCompatActivity() {
             db.Mark_Update_Listregion(id_region)
             Toast.makeText(this, "Данные добавлены", Toast.LENGTH_LONG).show()
 
-            val intent = Intent(this, Sample::class.java)
-            intent.putExtra("id_Vedomost", id_region)
-            startActivity(intent)
             finish()
         }
         binding.date.setOnClickListener {

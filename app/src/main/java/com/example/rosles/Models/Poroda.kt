@@ -7,4 +7,4 @@ data class Poroda(
     val soilLot: String,
     val date: String,
     val id: String,
-    val markUpdate: String) : Modeldb
+    val markUpdate: Int) : Modeldb

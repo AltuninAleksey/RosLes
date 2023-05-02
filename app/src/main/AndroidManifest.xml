@@ -45,19 +45,19 @@
         <activity android:name=".Screens.Wood"  />
         <activity android:name=".Screens.ChoiceSubject" />
         <activity android:name=".Screens.profile" />
-        <activity android:name=".Screens.AddPorod" />
+        <activity android:name=".Screens.AddSample" />
         <activity android:name=".Screens.settings" />
         <activity android:name=".Screens.ChoiceLes" />
         <activity android:name=".Screens.ChoiceDistrict" />
         <activity android:name=".Screens.ChoiceCvartal" />
-        <activity android:name=".Screens.AddProb" />
         <activity android:name=".Screens.Dashboard" />
         <activity android:name=".Screens.gps_activity" />
         <activity android:name=".Screens.SelectPhoto" />
         <activity android:name=".Screens.lisq_square" />
         <activity android:name=".Screens.create_user" />
         <activity android:name=".Screens.AddVedomost" />
-        <activity android:name=".Screens.ChangeVedomost" />
+        <activity android:name=".Screens.AddPorod" />
+        <activity android:name=".Screens.ChangeListregion" />
     </application>
 
 </manifest>
