@@ -10,11 +10,12 @@ import android.widget.*
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.get
+import com.example.rosles.BaseActivity
 import com.example.rosles.DBCountWood
 import com.example.rosles.R
 import com.example.rosles.databinding.ProfileBinding
 
-class profile:AppCompatActivity() {
+class profile:BaseActivity("Профиль") {
 
 //    val viewModel by viewModels<ViewModels>()
 
@@ -25,25 +26,8 @@ class profile:AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        supportActionBar?.title = "Профиль"
         intiToolbar()
         initscreen()
-        supportActionBar!!.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
-        supportActionBar!!.setDisplayShowCustomEnabled(true)
-        supportActionBar!!.setCustomView(R.layout.custom_action_bar)
-
-        val view: View = supportActionBar!!.customView
-
-        val title=view.findViewById<TextView>(R.id.text)
-        val back=view.findViewById<ImageView>(R.id.back)
-        val menu=view.findViewById<ImageView>(R.id.burger)
-        title.setText("Профиль")
-        back.setOnClickListener{
-            finish()
-        }
-        menu.setOnClickListener{
-            showpopupmenu(it)
-        }
     }
 
     fun intiToolbar(){
@@ -52,32 +36,6 @@ class profile:AppCompatActivity() {
         binding.toolbar.addporod.setOnClickListener {
             startActivity(Intent(this, AddPorod::class.java))
         }
-    }
-
-    fun showpopupmenu (view: View) {
-        val popup = PopupMenu(this, view)
-        popup.inflate(R.menu.menu)
-
-        popup.setOnMenuItemClickListener(PopupMenu.OnMenuItemClickListener { item: MenuItem? ->
-
-            when (item!!.itemId) {
-                R.id.main -> {
-                    startActivity(Intent(this, Dashboard::class.java))
-                }
-                R.id.itemperechet -> {
-                    startActivity(Intent(this, MainActivity::class.java))
-                }
-                R.id.itemgps -> {
-                    startActivity(Intent(this, gps_activity::class.java))
-                }
-                R.id.profile -> {
-                    startActivity(Intent(this, profile::class.java))
-                }
-            }
-            true
-        })
-        popup.show()
-
     }
 
     override fun onRestart() {
@@ -178,18 +136,21 @@ class profile:AppCompatActivity() {
 
             close.setOnClickListener{
                 dialog.dismiss()
+                onRestart()
             }
             delete.setOnClickListener{
 
                     if (leftright) {
                         db.deletelesporod(textView.text.toString().toInt())
-                        startActivity(Intent(this, profile::class.java))
-                        finish()
+//                        startActivity(Intent(this, profile::class.java))
+                        dialog.dismiss()
+                        onRestart()
                     }
                     else{
                         db.deletepodlesporod(textView.text.toString().toInt())
-                        startActivity(Intent(this, profile::class.java))
-                        finish()
+//                        startActivity(Intent(this, profile::class.java))
+                        dialog.dismiss()
+                        onRestart()
                     }
 
             }

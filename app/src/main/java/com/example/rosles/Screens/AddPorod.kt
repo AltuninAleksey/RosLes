@@ -61,8 +61,9 @@ class AddPorod : BaseActivity("Добавление") {
                     flag=false
                     Toast.makeText(this, "Такая порода уже существует", Toast.LENGTH_SHORT).show()
                 }
+
             }
-            if (flag){
+            if (flag && valueles.name!="не добавлять"){
                 db.addlesporod(id, valueles.id)
             }
 
@@ -70,12 +71,12 @@ class AddPorod : BaseActivity("Добавление") {
             var flagpodles = true
 
             hashpodles.forEach { t, u ->
-                if (u == valuepodles.name) {
+                if (u == valuepodles.name || t==0) {
                     flagpodles = false
                     Toast.makeText(this, "Такая порода уже существует", Toast.LENGTH_SHORT).show()
                 }
             }
-            if (flagpodles){
+            if (flagpodles && valuepodles.id!=0 ){
                 db.addpodlesporod(id, valuepodles.id)
             }
             finish()

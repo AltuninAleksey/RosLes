@@ -47,9 +47,7 @@ class ChoiceSubject : AppCompatActivity() {
                 start(itemView as Int)
             }
 
-            override fun onClickButton() {
-
-            }
+            override fun onClickButton() {}
         })
 
         if (a.isEmpty()) {

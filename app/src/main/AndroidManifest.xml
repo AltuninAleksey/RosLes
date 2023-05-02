@@ -42,22 +42,25 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-        <activity android:name=".Screens.Wood"  />
-        <activity android:name=".Screens.ChoiceSubject" />
-        <activity android:name=".Screens.profile" />
-        <activity android:name=".Screens.AddSample" />
-        <activity android:name=".Screens.settings" />
-        <activity android:name=".Screens.ChoiceLes" />
-        <activity android:name=".Screens.ChoiceDistrict" />
-        <activity android:name=".Screens.ChoiceCvartal" />
-        <activity android:name=".Screens.Dashboard" />
-        <activity android:name=".Screens.gps_activity" />
-        <activity android:name=".Screens.SelectPhoto" />
-        <activity android:name=".Screens.lisq_square" />
-        <activity android:name=".Screens.create_user" />
-        <activity android:name=".Screens.AddVedomost" />
-        <activity android:name=".Screens.AddPorod" />
-        <activity android:name=".Screens.ChangeListregion" />
+        <activity android:name="com.example.rosles.Screens.Wood" android:windowSoftInputMode="adjustPan"/>
+        <activity android:name="com.example.rosles.Screens.ChoiceSubject"/>
+        <activity android:name="com.example.rosles.Screens.profile"/>
+        <activity android:name="com.example.rosles.Screens.AddPorod"/>
+        <activity android:name="com.example.rosles.Screens.settings"/>
+        <activity android:name="com.example.rosles.Screens.ChoiceLes"/>
+        <activity android:name="com.example.rosles.Screens.ChoiceDistrict"/>
+        <activity android:name="com.example.rosles.Screens.ChoiceCvartal"/>
+        <activity android:name="com.example.rosles.Screens.AddSample"/>
+        <activity android:name="com.example.rosles.Screens.Dashboard"/>
+<!--        <activity android:name="com.example.rosles.Screens.Dashboard"/>-->
+        <activity android:name="com.example.rosles.Screens.gps_activity"/>
+        <activity android:name="com.example.rosles.Screens.SelectPhoto"/>
+        <activity android:name="com.example.rosles.Screens.lisq_square"/>
+        <activity android:name="com.example.rosles.Screens.Sample"/>
+        <activity android:name="com.example.rosles.Screens.create_user"/>
+        <activity android:name="com.example.rosles.Screens.AddListregion"/>
+        <activity android:name="com.example.rosles.Screens.ChangeListregion"/>
+        <activity android:name="com.example.rosles.Screens.ChangeSample"/>
     </application>
 
 </manifest>

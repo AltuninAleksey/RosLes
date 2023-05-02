@@ -499,18 +499,18 @@
                 android:textColor="@color/black"
                 android:textSize="@dimen/custom_size_text" />
 
+
             <EditText
                 android:id="@+id/maksHeightIskus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/rounded"
-                android:hint="0"
-                android:text="0.0"
-                android:inputType="numberDecimal"
                 android:gravity="center"
+                android:hint="0"
+                android:inputType="numberDecimal"
+                android:text="0.0"
                 android:textColor="@color/black"
                 android:textSize="@dimen/custom_size_text" />
-
 
             <TextView
                 android:id="@+id/AvgHeightIskus"

@@ -13,6 +13,7 @@ import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.example.rosles.Adapters.BaseInterface
+import com.example.rosles.BaseActivity
 import com.example.rosles.DBCountWood
 import com.example.rosles.R
 import com.example.rosles.ResponceClass.PerechetWood
@@ -26,7 +27,7 @@ import java.math.RoundingMode
 import java.text.DecimalFormat
 import kotlin.collections.HashMap
 
-class Wood : AppCompatActivity() {
+class Wood : BaseActivity("Пробная площадь") {
 
     private lateinit var binding: WoodBinding
     private var bufview: View? = null
@@ -52,22 +53,6 @@ class Wood : AppCompatActivity() {
 
         invisibleplus()
 
-        //инциализация навигации
-        supportActionBar!!.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
-        supportActionBar!!.setDisplayShowCustomEnabled(true)
-        supportActionBar!!.setCustomView(R.layout.custom_action_bar)
-
-        val view: View = supportActionBar!!.customView
-        val title=view.findViewById<TextView>(R.id.text)
-        val back=view.findViewById<ImageView>(R.id.back)
-        val menu=view.findViewById<ImageView>(R.id.burger)
-        title.setText("Пробная площадь")
-        back.setOnClickListener{
-            finish()
-        }
-        menu.setOnClickListener{
-            showpopupmenu(it)
-        }
 
         val vedom = db.getVedombyID(id_vdomost)
 
@@ -136,6 +121,7 @@ class Wood : AppCompatActivity() {
         binding.include.addporod.setOnClickListener {
             val dialog = Dialog(this)
             dialog.setContentView(R.layout.dialog_add_porod)
+
             val les: Spinner = dialog.findViewById(R.id.les)
             val poldes = dialog.findViewById<Spinner>(R.id.podles)
             dialog.show()
@@ -237,7 +223,7 @@ class Wood : AppCompatActivity() {
                 }
             }
             db.updatevalue(id_vdomost)
-            finish()
+//            finish()
             Toast.makeText(this, "Данные записаны", Toast.LENGTH_SHORT)
                 .show()
         }
@@ -375,9 +361,7 @@ class Wood : AppCompatActivity() {
                 initdatapodles(vidWoodpodles)
                 visibleplus()
             }
-            override fun onClickButton() {
-
-            }
+            override fun onClickButton() {}
         })
         binding.WoodRecyclerpodles.adapter = adapterpodles
     }
@@ -413,10 +397,11 @@ class Wood : AppCompatActivity() {
             buffertext.text = value.toString()
             initasd()
         }
-        binding.maksHeightIskus.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
-            }
+
+        val textChangedListenerIskus = object: TextWatcher{
+            override fun afterTextChanged(p0: Editable?) {}
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 binding.AvgHeightIskus.text=
                     binding.maksHeightIskus.text.toString().toFloatOrNull()?.let {
@@ -429,13 +414,10 @@ class Wood : AppCompatActivity() {
                         ).toString()
                     }
             }
-            override fun afterTextChanged(p0: Editable?) {
-            }
-        })
-        binding.maksHeightestes.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
-            }
+        }
+        val textChangedListenerEstes = object: TextWatcher{
+            override fun afterTextChanged(p0: Editable?) {}
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 binding.AvgHeightestes.text=
                     binding.maksHeightestes.text.toString().toFloatOrNull()?.let {
@@ -448,39 +430,52 @@ class Wood : AppCompatActivity() {
                         ).toString()
                     }
             }
-
-            override fun afterTextChanged(p0: Editable?) {
-
-            }
-        })
-        binding.maksHeightestestvennoe.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
-            }
+        }
+        val textChangedListenerEstestvennoe = object: TextWatcher{
+            override fun afterTextChanged(p0: Editable?){}
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int){}
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 binding.AvgHeightestestvennoe.text=
                     binding.maksHeightestestvennoe.text.toString().toFloatOrNull()?.let {
                         avgHeight(binding.iskus02.text.toString().toFloat(),
-                            binding.estes05.text.toString().toFloat(),
-                            binding.estes06.text.toString().toFloat(),
-                            binding.estes11.text.toString().toFloat(),
-                            binding.estes15.text.toString().toFloat(),
+                            binding.estestvennoe05.text.toString().toFloat(),
+                            binding.estestvennoe06.text.toString().toFloat(),
+                            binding.estestvennoe11.text.toString().toFloat(),
+                            binding.estestvennoe15.text.toString().toFloat(),
                             it
                         ).toString()
                     }
             }
-            override fun afterTextChanged(p0: Editable?) {
-            }
-        })
+        }
+
+        binding.iskus02.addTextChangedListener(textChangedListenerIskus)
+        binding.iskus05.addTextChangedListener(textChangedListenerIskus)
+        binding.iskus06.addTextChangedListener(textChangedListenerIskus)
+        binding.iskus11.addTextChangedListener(textChangedListenerIskus)
+        binding.iskus15.addTextChangedListener(textChangedListenerIskus)
+        binding.maksHeightIskus.addTextChangedListener(textChangedListenerIskus)
+
+        binding.estes02.addTextChangedListener(textChangedListenerEstes)
+        binding.estes05.addTextChangedListener(textChangedListenerEstes)
+        binding.estes06.addTextChangedListener(textChangedListenerEstes)
+        binding.estes11.addTextChangedListener(textChangedListenerEstes)
+        binding.estes15.addTextChangedListener(textChangedListenerEstes)
+        binding.maksHeightestes.addTextChangedListener(textChangedListenerEstes)
+
+        binding.estestvennoe02.addTextChangedListener(textChangedListenerEstestvennoe)
+        binding.estestvennoe05.addTextChangedListener(textChangedListenerEstestvennoe)
+        binding.estestvennoe06.addTextChangedListener(textChangedListenerEstestvennoe)
+        binding.estestvennoe11.addTextChangedListener(textChangedListenerEstestvennoe)
+        binding.estestvennoe15.addTextChangedListener(textChangedListenerEstestvennoe)
+        binding.maksHeightestestvennoe.addTextChangedListener(textChangedListenerEstestvennoe)
+
+
+
+
     }
 
-     fun avgHeight(value1:Float,
-                   value2:Float,
-                   value3:Float,
-                   value4:Float,
-                   value5:Float,valuemax:Float):Float?{
+     fun avgHeight(value1:Float,value2:Float,value3:Float,value4:Float,value5:Float,valuemax:Float):Float?{
         val sum=value1+value2+value3+value4+value5
-
 
          val df = DecimalFormat("#.#")
          df.roundingMode = RoundingMode.DOWN
@@ -522,31 +517,7 @@ class Wood : AppCompatActivity() {
         binding.buttonMinus.isVisible=true
     }
 
-    fun showpopupmenu (view: View) {
-        val popup = PopupMenu(this, view)
-        popup.inflate(R.menu.menu)
 
-        popup.setOnMenuItemClickListener(PopupMenu.OnMenuItemClickListener { item: MenuItem? ->
-
-            when (item!!.itemId) {
-                R.id.main -> {
-                    startActivity(Intent(this, Dashboard::class.java))
-                }
-                R.id.itemperechet -> {
-                    startActivity(Intent(this, MainActivity::class.java))
-                }
-                R.id.itemgps -> {
-                    startActivity(Intent(this, gps_activity::class.java))
-                }
-                R.id.profile -> {
-                    startActivity(Intent(this, profile::class.java))
-                }
-            }
-            true
-        })
-        popup.show()
-
-    }
 
 }
 
