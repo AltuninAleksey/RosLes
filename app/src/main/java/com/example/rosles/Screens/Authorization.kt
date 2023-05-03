@@ -62,12 +62,12 @@ class Authorization: AppCompatActivity() {
                     startActivity(Intent(this@Authorization, Dashboard::class.java))
                 }
 
-                override fun ifException() {
-                    Toast.makeText(this@Authorization, "Не верный логин или пароль", Toast.LENGTH_SHORT).show()
-                }
-
                 override fun ifConnectionException() {
                     Toast.makeText(this@Authorization, "Нет подключения к интернету", Toast.LENGTH_SHORT).show()
+                }
+
+                override fun ifAuthException() {
+                    Toast.makeText(this@Authorization, "Не верный логин или пароль", Toast.LENGTH_SHORT).show()
                 }
 
             })
