@@ -688,11 +688,11 @@ class UserAuth(generics.ListCreateAPIView):
             user = Users.objects.filter(email=request.data['email']).values(
                 'id', "password", "email").get()
         except:
-            return Response("invalid email")
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
         if check_password(request.data["password"], user["password"]):
             profile = Profile.objects.filter(id_user_id = user['id']).values('id', 'FIO').get()
             return Response(profile)
-        return Response("invalid pass")
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
 
 
 class PhotoPointView(APIView):
