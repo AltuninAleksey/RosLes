@@ -20,6 +20,7 @@ class lisq_square : AppCompatActivity() {
 
     private val db = DBCountWood(this, null)
     var id_vdomost:Int?=0
+    var numberOfSelectPoroda: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -134,10 +135,11 @@ class lisq_square : AppCompatActivity() {
                 activetableRow?.setBackgroundResource(R.color.color_transporent)
                 tableRow.setBackgroundResource(R.color.color_transporent)
                 activetableRow = tableRow
+                numberOfSelectPoroda = (tableRow.getChildAt(0) as TextView).text.toString()
                 activetableRow!!.setBackgroundResource(R.color.activecolumn)
             }
             id_sample = squareList[i].id.toInt()
-            text0.setText(squareList[i].id)
+            text0.setText((i+1).toString())
             text1.setText(squareList[i].lenght)
             text2.setText(squareList[i].width)
             text3.setText(squareList[i].square)
@@ -174,6 +176,7 @@ class lisq_square : AppCompatActivity() {
                 val intent = Intent(this, Wood::class.java)
                 intent.putExtra("udel", textView.text)
                 intent.putExtra("proba", id_vdomost.toString())
+                intent.putExtra("numberOfPoroda", numberOfSelectPoroda)
                 intent.putExtra("valuewood", defaultvalue.toString())
                 startActivity(intent)
             }
