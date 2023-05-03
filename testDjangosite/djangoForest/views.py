@@ -688,11 +688,11 @@ class UserAuth(generics.ListCreateAPIView):
             user = Users.objects.filter(email=request.data['email']).values(
                 'id', "password", "email").get()
         except:
-            return Response(status.HTTP_401_UNAUTHORIZED,status=status.HTTP_401_UNAUTHORIZED)
+            return Response({ "error" :status.HTTP_401_UNAUTHORIZED},status=status.HTTP_401_UNAUTHORIZED)
         if check_password(request.data["password"], user["password"]):
             profile = Profile.objects.filter(id_user_id = user['id']).values('id', 'FIO').get()
             return Response(profile)
-        return Response(status.HTTP_401_UNAUTHORIZED, status=status.HTTP_401_UNAUTHORIZED)
+        return Response({"error": status.HTTP_401_UNAUTHORIZED}, status=status.HTTP_401_UNAUTHORIZED)
 
 
 class PhotoPointView(APIView):
@@ -733,48 +733,6 @@ class PhotoPointView(APIView):
                         )
         return Response({"http": status.HTTP_200_OK}, status=200)
 
-
-    # def post(self, request, format = None):
-    #     serializer = PhotoPointSerializer(data=request.data)
-    #     serializer.is_valid()
-    #     serializer.save(id_sample_id = request.data.get('id_sample'),
-    #                     photo = request.FILES.get('photo'))
-    #     return Response(status=201)
-
-    # parser_classes = (MultiPartParser, FormParser)
-    # renderer_classes = [JSONRenderer]
-    # parser_classes = (MultiPartParser, FormParser)
-
-    # parser_classes = (MultiPartParser, FormParser)
-    # parser_classes = (FileUploadParser, MultiPartParser)
-    # def post(self, request, format = 'jpg', *args, **kwargs):
-    #
-    #     file_serializer = PhotoPointSerializer(data=request.data)
-    #     if file_serializer.is_valid():
-    #         file_serializer.save(id_sample_id = 3,
-    #                              photo = request.FILES.get('file'))
-    #         print(file_serializer)
-    #     return Response("vse ok")
-
-    # def post(self, request, *args, **kwargs):
-    #     uploads_serializer = PhotoPointSerializer(data=request.data)
-    #
-    #     if uploads_serializer.is_valid():
-    #         uploads_serializer.save()
-    #         return Response(uploads_serializer.data, status=status.HTTP_201_CREATED)
-    #     else:
-    #         return Response(uploads_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    # parser_classes = (FileUploadParser, )
-    # # parser_classes = (MultiPartParser, FormParser)
-    # def post(self, request, filename):
-    #     print(request.data)
-    #     print(request.FILES)
-    #     print(request.data)
-    #     serializer = PhotoPointSerializer(data=request.data)
-    #     serializer.is_valid()
-    #     serializer.save(id_sample_id = 3,
-    #                     photo = request.FILES.get('file'))
-    #     return Response("kaif")
 
 class AnroidDownland(APIView):
 
