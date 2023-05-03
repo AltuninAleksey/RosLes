@@ -15,6 +15,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.example.rosles.BaseActivity
 import com.example.rosles.DBCountWood
 import com.example.rosles.Network.ViewModels
 import com.example.rosles.R
@@ -23,7 +24,7 @@ import com.example.rosles.sync
 import java.io.File
 
 
-class Dashboard: AppCompatActivity() {
+class Dashboard: BaseActivity() {
 
     private lateinit var binding: DashboardBinding
     val viewModel by viewModels<ViewModels>()
@@ -98,31 +99,6 @@ class Dashboard: AppCompatActivity() {
 
     }
 
-    fun showpopupmenu (view: View) {
-        val popup = PopupMenu(this, view)
-        popup.inflate(R.menu.menu)
-
-        popup.setOnMenuItemClickListener(PopupMenu.OnMenuItemClickListener { item: MenuItem? ->
-
-            when (item!!.itemId) {
-                R.id.main -> {
-                    startActivity(Intent(this, Dashboard::class.java))
-                }
-                R.id.itemperechet -> {
-                    startActivity(Intent(this, MainActivity::class.java))
-                }
-                R.id.itemgps -> {
-                    startActivity(Intent(this, gps_activity::class.java))
-                }
-                R.id.profile -> {
-                    startActivity(Intent(this, profile::class.java))
-                }
-            }
-            true
-        })
-        popup.show()
-
-    }
 
 
 }

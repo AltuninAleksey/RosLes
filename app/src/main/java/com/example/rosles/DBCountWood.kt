@@ -737,7 +737,7 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     fun getallpodles(): Cursor {
         val db = this.writableDatabase
         val cursor: Cursor =
-            db.rawQuery("SELECT s1.id, s1.name FROM djangoForest_undergrowth as s1", null)
+            db.rawQuery("SELECT s1.id, s1.name FROM djangoForest_undergrowth as s1 where s1.id != 0", null)
         return cursor
         db.close()
     }
