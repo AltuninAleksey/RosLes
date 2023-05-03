@@ -12,18 +12,17 @@
             android:id="@+id/text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="50dp"
+            android:layout_marginStart="20dp"
             android:letterSpacing="0.05"
-            android:fontWeight="700"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginEnd="50dp"
+            android:layout_marginEnd="20dp"
             android:layout_toStartOf="@+id/burger"
             android:layout_toEndOf="@+id/back"
             android:textAlignment="center"
             android:text="РОСЛЕС"
-            android:textColor="@color/white"
-            android:textSize="30sp" />
+            android:textSize="@dimen/custom_size_table"
+            android:textColor="@color/white" />
 
         <ImageView
             android:id="@+id/back"
@@ -39,8 +38,6 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:src="@drawable/gamburger"/>
-
-
 
     </RelativeLayout>
 
