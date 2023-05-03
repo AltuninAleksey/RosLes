@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.rosles.DBCountWood
 import com.example.rosles.R
 import com.example.rosles.databinding.AddProbBinding
+import com.example.rosles.setSizeRelativeCurrentWindow
 
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -118,6 +119,7 @@ class AddSample : AppCompatActivity() {
     fun initDatePicker() {
         val dialog = Dialog(this)
         dialog.setContentView(R.layout.dialog_datepicker)
+        dialog.setSizeRelativeCurrentWindow(0.85, 0.6)
 
         val mInfoTextView = dialog.findViewById<TextView>(R.id.textView)
         val mDatePicker = dialog.findViewById<DatePicker>(R.id.datePicker)

@@ -19,6 +19,7 @@ import com.example.rosles.ResponceClass.PerechetWood
 import com.example.rosles.ResponceClass.PodlesokWood
 import com.example.rosles.ResponceClass.ProbaWoodSimple
 import com.example.rosles.databinding.WoodBinding
+import com.example.rosles.setSizeRelativeCurrentWindow
 import com.example.roslesdef.Adapters.WoodAdapter
 import com.example.roslesdef.Models.ItemWood
 import com.example.roslesdef.Models.SpinerItem
@@ -136,6 +137,8 @@ class Wood : AppCompatActivity() {
         binding.include.addporod.setOnClickListener {
             val dialog = Dialog(this)
             dialog.setContentView(R.layout.dialog_add_porod)
+            dialog.setSizeRelativeCurrentWindow(0.85, 0.6)
+
             val les: Spinner = dialog.findViewById(R.id.les)
             val poldes = dialog.findViewById<Spinner>(R.id.podles)
             dialog.show()
