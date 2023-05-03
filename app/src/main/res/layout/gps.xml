@@ -10,7 +10,6 @@
         android:id="@+id/first_colum"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="1dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:background="@color/background_table">
@@ -18,10 +17,11 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_weight="0.5"
+            android:maxLines="2"
             android:gravity="center"
             android:padding="3dip"
-            android:text="№ точки"
+            android:text="№\nточки"
             android:textColor="#ffff"
             android:textSize="@dimen/custom_size_table" />
 
@@ -30,6 +30,7 @@
             android:layout_height="60dp"
             android:gravity="center"
             android:layout_weight="1"
+            android:maxLines="1"
             android:text="Долгота"
             android:textColor="#ffff"
             android:textSize="@dimen/custom_size_table" />
@@ -39,6 +40,7 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:layout_weight="1"
+            android:maxLines="1"
             android:text="Широта"
             android:textColor="#ffff"
             android:textSize="@dimen/custom_size_table" />
@@ -46,7 +48,8 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_weight="0.5"
+            android:maxLines="1"
             android:gravity="center"
             android:text="Центр"
             android:textColor="#ffff"
