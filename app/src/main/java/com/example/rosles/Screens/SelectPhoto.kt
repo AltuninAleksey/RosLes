@@ -18,6 +18,7 @@ import android.widget.*
 import androidx.appcompat.app.ActionBar
 import androidx.core.app.ActivityCompat
 import androidx.core.view.get
+import com.example.rosles.BaseActivity
 import com.example.rosles.DBCountWood
 import com.example.rosles.R
 import com.example.rosles.databinding.ScreenPhotoBinding
@@ -26,7 +27,7 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 
-class SelectPhoto:BaseAppClass() {
+class SelectPhoto:BaseActivity() {
 
 
     private val db = DBCountWood(this, null)
@@ -37,6 +38,7 @@ class SelectPhoto:BaseAppClass() {
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
     var photobuf:Bitmap?=null
     var id_sample=0
+    var id_vdomost=0
     private val REQUEST_TAKE_PHOTO = 1
     private lateinit var binding: ScreenPhotoBinding
     private lateinit var locationManager: LocationManager
@@ -46,16 +48,13 @@ class SelectPhoto:BaseAppClass() {
         super.onCreate(savedInstanceState)
         binding = ScreenPhotoBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        //инциализация навигации
-        supportActionBar!!.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
-        supportActionBar!!.setDisplayShowCustomEnabled(true)
-        supportActionBar!!.setCustomView(R.layout.custom_action_bar)
 
         // проверяем что разрешение получено
-        id_sample=intent.getIntExtra("id_sample",98)
+        id_sample=intent.getIntExtra("id_sample",0)
+        id_vdomost=intent.getIntExtra("id_vdomost",0)
         setLocation()
 
-        db.getphotoall()
+//        db.getphotoall()
 
         inittable()
 
@@ -137,7 +136,8 @@ class SelectPhoto:BaseAppClass() {
                     val temp=GPStracker(this)
 
                     db.writephoto(temp.bitmap_to_base(thumbnailBitmap), id_sample,latitude,longitude,LocalDateTime.now().format(formatter).toString())
-
+                    db.Mark_Update_Sample(id_sample)
+                    db.Mark_Update_Listregion(id_vdomost)
                 }
             }
         }

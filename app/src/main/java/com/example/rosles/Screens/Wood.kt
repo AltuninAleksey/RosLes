@@ -49,7 +49,7 @@ class Wood : BaseActivity("Пробная площадь") {
         binding = WoodBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.title = "Пробная площадь"
-        val id_sample =  intent.getStringExtra("udel").toString().toInt()
+        val id_sample =  intent.getIntExtra("udel",0)
         val id_vdomost = intent.getStringExtra("proba").toString().toInt()
 
         invisibleplus()
@@ -115,6 +115,7 @@ class Wood : BaseActivity("Пробная площадь") {
         binding.include.open.setOnClickListener {
             val intent=Intent(this, SelectPhoto::class.java)
             intent.putExtra("id_sample",id_sample)
+            intent.putExtra("id_vdomost",id_vdomost)
             startActivity(intent)
         }
 
@@ -226,6 +227,7 @@ class Wood : BaseActivity("Пробная площадь") {
                 }
             }
             db.updatevalue(id_vdomost)
+            db.Mark_Update_Sample(id_sample)
 //            finish()
             Toast.makeText(this, "Данные записаны", Toast.LENGTH_SHORT)
                 .show()

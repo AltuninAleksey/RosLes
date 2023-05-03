@@ -10,67 +10,27 @@ import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.get
 import androidx.core.view.isGone
+import com.example.rosles.BaseActivity
 import com.example.rosles.DBCountWood
 import com.example.rosles.R
 import com.example.rosles.databinding.ListSquareBinding
 
-class lisq_square : AppCompatActivity() {
+class lisq_square : BaseActivity("Список пробных площадей") {
 
     private lateinit var binding: ListSquareBinding
 
     private val db = DBCountWood(this, null)
     var id_vdomost:Int?=0
+    var id_sample = 0
     var numberOfSelectPoroda: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ListSquareBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        //инциализация навигации
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = "Список пробных площадей"
         RecyclerviewInit()
-        supportActionBar!!.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
-        supportActionBar!!.setDisplayShowCustomEnabled(true)
-        supportActionBar!!.setCustomView(R.layout.custom_action_bar)
-
-        val view: View = supportActionBar!!.customView
-        val title=view.findViewById<TextView>(R.id.text)
-        val back=view.findViewById<ImageView>(R.id.back)
-        val menu=view.findViewById<ImageView>(R.id.burger)
-        title.setText("Список пробных площадей")
-        back.setOnClickListener{
-            finish()
-        }
-        menu.setOnClickListener{
-            showpopupmenu(it)
-        }
     }
-    fun showpopupmenu (view: View) {
-        val popup = PopupMenu(this, view)
-        popup.inflate(R.menu.menu)
 
-        popup.setOnMenuItemClickListener(PopupMenu.OnMenuItemClickListener { item: MenuItem? ->
-
-            when (item!!.itemId) {
-                R.id.main -> {
-                    startActivity(Intent(this, Dashboard::class.java))
-                }
-                R.id.itemperechet -> {
-                    startActivity(Intent(this, MainActivity::class.java))
-                }
-                R.id.itemgps -> {
-                    startActivity(Intent(this, gps_activity::class.java))
-                }
-                R.id.profile -> {
-                    startActivity(Intent(this, profile::class.java))
-                }
-            }
-            true
-        })
-        popup.show()
-
-    }
     companion object{
         var id_region=0
         fun setregion(value:Int?){
@@ -105,7 +65,7 @@ class lisq_square : AppCompatActivity() {
         val squareList = db.getlistsquare(id_vdomost!!.toInt())
 
         var activetableRow: TableRow? = null
-        var id_sample = 0
+
         for (i in 0..squareList.size-1) {
 
             val tableRow = TableRow(this)
@@ -137,8 +97,9 @@ class lisq_square : AppCompatActivity() {
                 activetableRow = tableRow
                 numberOfSelectPoroda = (tableRow.getChildAt(0) as TextView).text.toString()
                 activetableRow!!.setBackgroundResource(R.color.activecolumn)
+                id_sample = squareList[i].id.toInt()
             }
-            id_sample = squareList[i].id.toInt()
+
             text0.setText((i+1).toString())
             text1.setText(squareList[i].lenght)
             text2.setText(squareList[i].width)
@@ -174,7 +135,7 @@ class lisq_square : AppCompatActivity() {
                 val bufer = activetableRow?.get(0)
                 val textView = bufer as TextView
                 val intent = Intent(this, Wood::class.java)
-                intent.putExtra("udel", textView.text)
+                intent.putExtra("udel", id_sample)
                 intent.putExtra("proba", id_vdomost.toString())
                 intent.putExtra("numberOfPoroda", numberOfSelectPoroda)
                 intent.putExtra("valuewood", defaultvalue.toString())

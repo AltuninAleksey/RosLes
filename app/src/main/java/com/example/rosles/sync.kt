@@ -65,14 +65,18 @@ class sync() {
         listregion.forEach{
             viewModels.putSAMPLE(SAMPLE_REQEST( db.getSAMPLEbyID_Listregion(it.id)))
             db.getSAMPLEbyID_Listregion(it.id).forEach{
-                it.id
+                sendphoto(db,it.id,context,viewModels)
                 viewModels.putLIST(LIST_REQEST(db.getLIST(it.id)))
             }
-            db.Synck_Update_Listregion(it.id)
+            db.Synck_Update_All()
         }
 
         Thread.sleep(1000)
-        db.getphotoall().forEach{
+
+    }
+
+    fun sendphoto(db: DBCountWood,id:Int,context: Context,viewModels: ViewModels){
+        db.getphotoall(id).forEach{
             val wrapper = ContextWrapper(context)
             var file = wrapper.getDir("Images", Context.MODE_PRIVATE)
             file = File(file,"${UUID.randomUUID()}.jpg")
@@ -80,18 +84,14 @@ class sync() {
             it.photo!!.compress(Bitmap.CompressFormat.JPEG,100,stream)
             stream.flush()
             stream.close()
-
             val photoFile = file
             val photo = MultipartBody.Part.createFormData(
                 "photo",
                 photoFile.name,
                 photoFile.asRequestBody("image/*".toMediaType())
             )
-
             viewModels.upload(UpdateRequest(photo,it.id_sample,it.latitude.toDouble(),it.longitude.toDouble(),it.date))
         }
-
-
     }
 
 //    fun sendFileRequest(image: Bitmap,latitude:Double,longitude:Double,date: String,id:Int) {
