@@ -439,6 +439,13 @@ class QuarterView(generics.ListCreateAPIView):
 class UndergrowthView(APIView):
 
     def get(self, *args, **kwargs):
+        if kwargs:
+            try:
+                lst = Undergrowth.objects.get(pk=kwargs['pk'])
+                return Response(UndergrowthSerializer(lst).data)
+            except:
+                return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
+                                status=status.HTTP_404_NOT_FOUND)
         return Response({"get":UndergrowthSerializer(Undergrowth.objects.all(), many=True).data})
 
 
