@@ -58,8 +58,12 @@ class ProfileView(generics.ListCreateAPIView):
 class ListView(generics.ListCreateAPIView):
     def get(self, request, **kwargs):
         if kwargs:
-            lst = List.objects.get(pk=kwargs['pk'])
-            return Response({'get': ListSerializer(lst).data})
+            try:
+                lst = List.objects.get(pk=kwargs['pk'])
+                return Response({'get': ListSerializer(lst).data})
+            except:
+                return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id list"},
+                                status=status.HTTP_404_NOT_FOUND)
         lst = List.objects.all()
         return Response({'get': ListSerializer(lst, many=True).data})
         # return render(request, 'listview/list.html', {
@@ -938,7 +942,7 @@ class FieldCardFilter(ListAPIView):
         if request.data['bDateSec']:
             requestDateSec = request.data['dateSec']
             ser2 = ser2.filter(id_list_region__date__lte=requestDateSec)
-        ser2 = DescriptionRegionSerializer(ser2, many=True)
+        ser2 = FieldCardSerializer(ser2, many=True)
         return Response({"data": ser2.data})
 
 

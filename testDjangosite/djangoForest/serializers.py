@@ -516,11 +516,13 @@ class PhotoPointSer(serializers.ModelSerializer):
         fields = '__all__'
 
 class DescriptionRegionSerializer(serializers.ModelSerializer):
-
+    id_quarter = serializers.CharField(source='id_list_region.id_quarter.id')
+    id_district_forestly = serializers.IntegerField(source="id_list_region.id_quarter.id_district_forestly.id")
+    id_forestly = serializers.IntegerField(source="id_list_region.id_quarter.id_district_forestly.id_forestly.id")
+    id_subject_rf = serializers.IntegerField(source="id_list_region.id_quarter.id_district_forestly.id_forestly.id_subject_rf.id")
     class Meta:
         model = DescriptionRegion
         fields = '__all__'
-
 
     def validate_pk(self, value):
         try:
@@ -531,7 +533,10 @@ class DescriptionRegionSerializer(serializers.ModelSerializer):
 
 
 class FieldCardSerializer(serializers.ModelSerializer):
-
+    id_quarter = serializers.CharField(source='id_list_region.id_quarter.id')
+    id_district_forestly = serializers.IntegerField(source="id_list_region.id_quarter.id_district_forestly.id")
+    id_forestly = serializers.IntegerField(source="id_list_region.id_quarter.id_district_forestly.id_forestly.id")
+    id_subject_rf = serializers.IntegerField(source="id_list_region.id_quarter.id_district_forestly.id_forestly.id_subject_rf.id")
     class Meta:
         model = FieldСard
         fields = '__all__'
