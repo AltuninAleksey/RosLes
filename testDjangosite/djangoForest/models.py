@@ -132,6 +132,7 @@ class ListRegion(models.Model):
     soil_lot = models.CharField(max_length=300, verbose_name='Выдел', default=0, null=True)
     mark_del = models.IntegerField(null = True)
     mark_update = models.IntegerField(null= True)
+    number_region = models.CharField(max_length=100, default=0)
 
     class Meta:
         verbose_name = 'Перечетная ведомость участка'
