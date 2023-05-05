@@ -717,19 +717,24 @@ class PhotoPointView(APIView):
 
     def get(self, *args, **kwargs):
         if kwargs:
+            lst = PhotoPoint.objects.filter(id_sample=kwargs['pk']).values("photo")
+            if len(lst) == 0: return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
+                                              status=status.HTTP_404_NOT_FOUND)
+            return Response(lst)
             from testDjangosite.settings import MEDIA_ROOT
             import os
-            # ser = PhotoPointSerializer(data={'id_sample': kwargs['pk']}).validate_sample(kwargs['pk'])
-            lst = PhotoPoint.objects.filter(id_sample=kwargs['pk']).values("photo")
-            if len(lst) == 0: return Response("id_sample1 not found")
-            for i in range(len(lst)):
-                file_path = os.path.join(MEDIA_ROOT, lst[i]['photo'])
-                print(file_path)
-                if os.path.isfile(file_path):
-                    response = FileResponse(open(file_path, 'rb'))
-                    response['Content-Disposition'] = 'attachment; filename=' + lst[i]['photo'].split('/')[-1]
-                    response['X-Sendfile'] = file_path
-                    return response
+            # lst = PhotoPoint.objects.filter(pk=kwargs['pk']).values("photo")
+            # if len(lst) == 0:
+            #     return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
+            #                     status=status.HTTP_404_NOT_FOUND)
+            # return Response(lst)
+            # file_path = os.path.join(MEDIA_ROOT, lst['photo'])
+            # print(file_path)
+            # if os.path.isfile(file_path):
+            # response = FileResponse(open(file_path, 'rb'))
+            # response['Content-Disposition'] = 'attachment; filename=' + lst['photo'].split('/')[-1]
+            # response['X-Sendfile'] = file_path
+            # return response
         return Response(PhotoPointSer(PhotoPoint.objects.all(), many=True).data)
 
 
