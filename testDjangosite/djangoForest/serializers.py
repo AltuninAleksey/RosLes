@@ -361,6 +361,7 @@ class ListRegionSerializerId(serializers.Serializer):
     mark_del = serializers.BooleanField()
     mark_update = serializers.BooleanField()
     soil_lot = serializers.CharField(max_length=300)
+    number_region = serializers.CharField(max_length=100)
 
 
 class ListRegionFiltersSerializer(serializers.Serializer):
