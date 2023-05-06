@@ -38,16 +38,20 @@ class gps_activity:AppCompatActivity() {
         binding.toolbar.save.visibility=View.GONE
 
         var gpStracker=GPStracker(this)
-        ActivityCompat.requestPermissions(
-            this,
-            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-            123
-        ) // запрос разрешение на использовние геопозиции
 
         var i=0
         binding.toolbar.addbutton.setOnClickListener {
 
             var location=gpStracker.location
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                123
+            ) // запрос разрешение на использовние геопозиции
+
+            if (location == null ) {
+                return@setOnClickListener
+            }
 
             var tableRow = TableRow(this)
             var text1=TextView(this)
@@ -69,6 +73,7 @@ class gps_activity:AppCompatActivity() {
 
 
             text1.setText(i.toString())
+
             text2.setText(location.latitude.toString())
             text3.setText(location.longitude.toString())
 
