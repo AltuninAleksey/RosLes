@@ -116,6 +116,7 @@ class GPSSerializer(serializers.ModelSerializer):
 
 
 class SampleSerializer(serializers.ModelSerializer):
+    number_region = serializers.CharField(max_length=100, source='id_list_region.number_region')
     class Meta:
         model = Sample
         fields = '__all__'
@@ -152,6 +153,7 @@ class SampleSerializerId(serializers.Serializer):
     lenght = serializers.FloatField()
     square = serializers.FloatField()
     soil_lot = serializers.CharField()
+    number_region = serializers.CharField(max_length=100, source='id_list_region.number_region')
 
 
 
@@ -404,18 +406,22 @@ class AllForestSerializer(serializers.Serializer):
     quarter = QuarterOutDistrict(many=True)
 
 
-class GetDocumentListSerializer(serializers.Serializer):
-    id = serializers.IntegerField()
+class GetDocumentListSerializer(serializers.ModelSerializer):
+    # id = serializers.IntegerField()
     id_breed = serializers.CharField(source='id_breed.id')
     id_sample = serializers.CharField(source='id_sample.id')
     id_type_of_reproduction = serializers.CharField(source='id_type_of_reproduction.id')
-    # breed = serializers.CharField(source='id_breed.name_breed')
-    to0_2 = serializers.IntegerField()
-    from0_21To0_5 = serializers.IntegerField()
-    from0_6To1_0 = serializers.IntegerField()
-    from1_1to1_5 = serializers.IntegerField()
-    from1_5 = serializers.IntegerField()
-    max_height = serializers.IntegerField()
+    # # breed = serializers.CharField(source='id_breed.name_breed')
+    # to0_2 = serializers.IntegerField()
+    # from0_21To0_5 = serializers.IntegerField()
+    # from0_6To1_0 = serializers.IntegerField()
+    # from1_1to1_5 = serializers.IntegerField()
+    # from1_5 = serializers.IntegerField()
+    # max_height = serializers.IntegerField()
+
+    class Meta:
+        model = List
+        fields = '__all__'
 
 
 class GetGPS(serializers.Serializer):
