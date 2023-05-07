@@ -349,6 +349,7 @@ class ListRegionSerializer(serializers.ModelSerializer):
         instance.id_quarter = validated_data.get("id_quarter")
         instance.sample_region = validated_data.get("sample_region")
         instance.mark_del = validated_data.get("mark_del")
+        instance.number_region = validated_data.get("number_region")
         instance.mark_update = 0
         instance.save()
         return instance
