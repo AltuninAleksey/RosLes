@@ -197,7 +197,7 @@ class SampleView(generics.ListCreateAPIView):
         if kwargs:
             try:
                 lst = Sample.objects.get(pk=kwargs['pk'])
-                return Response({'get': SampleSerializer(lst).data})
+                return Response({'get': SampleSerializerId(lst).data})
             except:
                 return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
                                 status=status.HTTP_404_NOT_FOUND)

@@ -116,7 +116,9 @@ class GPSSerializer(serializers.ModelSerializer):
 
 
 class SampleSerializer(serializers.ModelSerializer):
-    number_region = serializers.CharField(max_length=100, source='id_list_region.number_region')
+    # number_region = serializers.CharField(source='id_list_region.number_region')
+
+
     class Meta:
         model = Sample
         fields = '__all__'
