@@ -32,8 +32,12 @@ class TestAPIView(generics.ListAPIView):
 class ProfileView(generics.ListCreateAPIView):
     def get(self, request, **kwargs):
         if kwargs:
-            lst = Profile.objects.get(pk=kwargs['pk'])
-            return Response({'get': ProfileSerializer(lst).data})
+            try:
+                lst = Profile.objects.get(pk=kwargs['pk'])
+                return Response({'get': ProfileSerializer(lst).data})
+            except:
+                return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
+                                status=status.HTTP_404_NOT_FOUND)
         lst = Profile.objects.all()
         return Response({'get': ProfileSerializer(lst, many=True).data})
 
@@ -62,7 +66,7 @@ class ListView(generics.ListCreateAPIView):
                 lst = List.objects.get(pk=kwargs['pk'])
                 return Response({'get': ListSerializer(lst).data})
             except:
-                return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id list"},
+                return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
                                 status=status.HTTP_404_NOT_FOUND)
         lst = List.objects.all()
         return Response({'get': ListSerializer(lst, many=True).data})
@@ -105,8 +109,12 @@ class ListView(generics.ListCreateAPIView):
 class GpsView(generics.ListCreateAPIView):
     def get(self, request, **kwargs):
         if kwargs:
-            lst = GPS.objects.get(pk=kwargs['pk'])
-            return Response({'get': GPSSerializer(lst).data})
+            try:
+                lst = GPS.objects.get(pk=kwargs['pk'])
+                return Response({'get': GPSSerializer(lst).data})
+            except:
+                return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
+                                status=status.HTTP_404_NOT_FOUND)
         lst = GPS.objects.all()
         return Response({'get': GPSSerializer(lst, many=True).data})
 
@@ -134,8 +142,12 @@ class ListRegionView(generics.ListCreateAPIView):
     def get(self, request, *args, **kwargs):
         pk = kwargs.get('pk')
         if pk:
-            lst = ListRegion.objects.filter(pk=pk)
-            return JsonResponse(ListRegionSerializerId(lst, many=True).data, safe=False)
+            try:
+                lst = ListRegion.objects.filter(pk=pk)
+                return JsonResponse(ListRegionSerializerId(lst, many=True).data, safe=False)
+            except:
+                return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
+                                status=status.HTTP_404_NOT_FOUND)
         lst = ListRegion.objects.all()
         serealizer_class = GetListRegionSerializer(lst, many=True)
         return Response({"get":ListRegionSerializer(lst, many=True).data})
@@ -183,8 +195,12 @@ class SampleView(generics.ListCreateAPIView):
     
     def get(self, request, **kwargs):
         if kwargs:
-            lst = Sample.objects.get(pk=kwargs['pk'])
-            return Response({'get': SampleSerializer(lst).data})
+            try:
+                lst = Sample.objects.get(pk=kwargs['pk'])
+                return Response({'get': SampleSerializer(lst).data})
+            except:
+                return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
+                                status=status.HTTP_404_NOT_FOUND)
         lst = Sample.objects.all()
         #         # return Response({'posts': list(lst) })
         return Response({'get': SampleSerializer(lst, many=True).data})
@@ -230,8 +246,12 @@ class SampleView(generics.ListCreateAPIView):
 class PostView(generics.ListCreateAPIView):
     def get(self, request, **kwargs):
         if kwargs:
-            lst = Post.objects.get(pk=kwargs['pk'])
-            return Response({'get': PostSerializer(lst).data})
+            try:
+                lst = Post.objects.get(pk=kwargs['pk'])
+                return Response({'get': PostSerializer(lst).data})
+            except:
+                return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
+                                status=status.HTTP_404_NOT_FOUND)
         lst = Post.objects.all()
         return Response({'get': PostSerializer(lst, many=True).data})
 
@@ -256,8 +276,12 @@ class PostView(generics.ListCreateAPIView):
 class WorkingBreedView(generics.ListCreateAPIView):
     def get(self, request, **kwargs):
         if kwargs:
-            lst = WorkingBreeds.objects.get(pk=kwargs['pk'])
-            return Response({'get': WorkingBreedsSerializer(lst).data})
+            try:
+                lst = WorkingBreeds.objects.get(pk=kwargs['pk'])
+                return Response({'get': WorkingBreedsSerializer(lst).data})
+            except:
+                return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
+                                status=status.HTTP_404_NOT_FOUND)
         lst = WorkingBreeds.objects.all()
         return Response({'get': WorkingBreedsSerializer(lst, many=True).data})
 
@@ -282,8 +306,12 @@ class WorkingBreedView(generics.ListCreateAPIView):
 class SubjectRFview(generics.ListCreateAPIView):
     def get(self, request, **kwargs):
         if kwargs:
-            lst = SubjectRF.objects.get(pk=kwargs['pk'])
-            return Response({'get': SubjectRFSerializer(lst).data})
+            try:
+                lst = SubjectRF.objects.get(pk=kwargs['pk'])
+                return Response({'get': SubjectRFSerializer(lst).data})
+            except:
+                return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
+                                status=status.HTTP_404_NOT_FOUND)
         lst = SubjectRF.objects.all()
         return Response({'get': SubjectRFSerializer(lst, many=True).data})
 
@@ -308,8 +336,12 @@ class SubjectRFview(generics.ListCreateAPIView):
 class RoleView(generics.ListCreateAPIView):
     def get(self, request, **kwargs):
         if kwargs:
-            lst = Role.objects.get(pk=kwargs['pk'])
-            return Response({'get': RoleSerializer(lst).data})
+            try:
+                lst = Role.objects.get(pk=kwargs['pk'])
+                return Response({'get': RoleSerializer(lst).data})
+            except:
+                return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
+                                status=status.HTTP_404_NOT_FOUND)
         lst = Role.objects.all()
         return Response({'get': RoleSerializer(lst, many=True).data})
 
@@ -334,8 +366,12 @@ class RoleView(generics.ListCreateAPIView):
 class ReproductionView(generics.ListCreateAPIView):
     def get(self, request, **kwargs):
         if kwargs:
-            lst = Reproduction.objects.get(pk=kwargs['pk'])
-            return Response({'get': ReproductionSerializer(lst).data})
+            try:
+                lst = Reproduction.objects.get(pk=kwargs['pk'])
+                return Response({'get': ReproductionSerializer(lst).data})
+            except:
+                return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
+                                status=status.HTTP_404_NOT_FOUND)
         lst = Reproduction.objects.all()
         return Response({'get': ReproductionSerializer(lst, many=True).data})
 
@@ -360,8 +396,12 @@ class ReproductionView(generics.ListCreateAPIView):
 class ForestlyView(generics.ListCreateAPIView):
     def get(self, request, **kwargs):
         if kwargs:
-            lst = Forestly.objects.get(pk=kwargs['pk'])
-            return Response({'get': ForestlySerializer(lst).data})
+            try:
+                lst = Forestly.objects.get(pk=kwargs['pk'])
+                return Response({'get': ForestlySerializer(lst).data})
+            except:
+                return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
+                                status=status.HTTP_404_NOT_FOUND)
         lst = Forestly.objects.all()
         return Response({'get': ForestlySerializer(lst, many=True).data})
 
@@ -386,10 +426,13 @@ class ForestlyView(generics.ListCreateAPIView):
 class DistrictForestlyView(generics.ListCreateAPIView):
     def get(self, request, **kwargs):
         if kwargs:
-            lst = DistrictForestly.objects.get(pk=kwargs['pk'])
-            return Response({'get': DistrictForestlySerializer(lst).data})
-        else:
-            lst = DistrictForestly.objects.all()
+            try:
+                lst = DistrictForestly.objects.get(pk=kwargs['pk'])
+                return Response({'get': DistrictForestlySerializer(lst).data})
+            except:
+                return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
+                                status=status.HTTP_404_NOT_FOUND)
+        lst = DistrictForestly.objects.all()
         return Response({'get': DistrictForestlySerializer(lst, many=True).data})
 
     def post(self, request):
@@ -413,11 +456,14 @@ class DistrictForestlyView(generics.ListCreateAPIView):
 class QuarterView(generics.ListCreateAPIView):
     def get(self, request, **kwargs):
         if kwargs:
-            lst = Quarter.objects.get(pk=kwargs['pk'])
-            return Response({'get': QuarterSerializer(lst).data})
-        else:
-            lst = Quarter.objects.all()
-            return Response({'get':QuarterSerializer(lst, many=True).data})
+            try:
+                lst = Quarter.objects.get(pk=kwargs['pk'])
+                return Response({'get': QuarterSerializer(lst).data})
+            except:
+                return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
+                                status=status.HTTP_404_NOT_FOUND)
+        lst = Quarter.objects.all()
+        return Response({'get':QuarterSerializer(lst, many=True).data})
 
     def post(self, request):
         serializer = QuarterSerializer(data=request.data)
@@ -458,8 +504,12 @@ class UndergrowthByDefaultView(APIView):
 class BreedView(generics.ListCreateAPIView):
     def get(self, request, **kwargs):
         if kwargs:
-            lst = Breed.objects.get(pk=kwargs['pk'])
-            return Response({'get': BreedSerializer(lst).data})
+            try:
+                lst = Breed.objects.get(pk=kwargs['pk'])
+                return Response({'get': BreedSerializer(lst).data})
+            except:
+                return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
+                                status=status.HTTP_404_NOT_FOUND)
         lst = Breed.objects.all()
         return Response({'get': BreedSerializer(lst, many=True).data})
 
@@ -483,8 +533,12 @@ class BreedView(generics.ListCreateAPIView):
 class BranchesView(generics.ListCreateAPIView):
     def get(self, request, **kwargs):
         if kwargs:
-            lst = Branches.objects.get(pk=kwargs['pk'])
-            return Response({'get': BranchesSerializer(lst).data})
+            try:
+                lst = Branches.objects.get(pk=kwargs['pk'])
+                return Response({'get': BranchesSerializer(lst).data})
+            except:
+                return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
+                                status=status.HTTP_404_NOT_FOUND)
         lst = Branches.objects.all()
         return Response({'get': BranchesSerializer(lst, many=True).data})
 
