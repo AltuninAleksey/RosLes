@@ -771,7 +771,7 @@ class PhotoPointView(APIView):
 
     def get(self, *args, **kwargs):
         if kwargs:
-            lst = PhotoPoint.objects.filter(id_sample=kwargs['pk']).values("photo", "date")
+            lst = PhotoPoint.objects.filter(id_sample=kwargs['pk']).values("id", "photo", "date")
             if len(lst) == 0: return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
                                               status=status.HTTP_404_NOT_FOUND)
             return Response(lst)
