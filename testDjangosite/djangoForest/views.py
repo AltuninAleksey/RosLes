@@ -415,8 +415,8 @@ class ForestlyView(generics.ListCreateAPIView):
         try:
             instance = Forestly.objects.get(pk=kwargs['pk'])
         except:
-            return Response({"error": "Объект с данным id не найден"})
-
+            return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
+                            status=status.HTTP_404_NOT_FOUND)
         serealizer = ForestlySerializer(data=request.data, instance=instance)
         serealizer.is_valid(raise_exception=True)
         serealizer.save()
@@ -771,7 +771,7 @@ class PhotoPointView(APIView):
 
     def get(self, *args, **kwargs):
         if kwargs:
-            lst = PhotoPoint.objects.filter(id_sample=kwargs['pk']).values("photo")
+            lst = PhotoPoint.objects.filter(id_sample=kwargs['pk']).values("photo", "date")
             if len(lst) == 0: return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
                                               status=status.HTTP_404_NOT_FOUND)
             return Response(lst)
