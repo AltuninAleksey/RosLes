@@ -559,6 +559,124 @@ class BranchesView(generics.ListCreateAPIView):
         return Response({"put": serealizer.data})
 
 
+class SchemaMixingBreedsView(ListAPIView):
+
+    def get(self, request, *args, **kwargs):
+        if kwargs:
+            try:
+                return Response({"get": SchemaMixingBreedsSerializer(SchemaMixingBreeds.objects.get(id=kwargs["pk"])).data})
+            except:
+                return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
+                                status=status.HTTP_404_NOT_FOUND)
+        return Response({"get": SchemaMixingBreedsSerializer(SchemaMixingBreeds.objects.all(), many=True).data})
+
+
+class Point7TableView(ListAPIView):
+
+    def get(self, request, *args, **kwargs):
+        if kwargs:
+            try:
+                return Response({"get": Point7TableSerializer(point7Table.objects.get(id=kwargs["pk"])).data})
+            except:
+                return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
+                                status=status.HTTP_404_NOT_FOUND)
+        return Response({"get": Point7TableSerializer(point7Table.objects.all(), many=True).data})
+
+
+class Point7TableSaplingView(ListAPIView):
+
+    def get(self, request, *args, **kwargs):
+        if kwargs:
+            try:
+                return Response({"get": Point7TableSaplingSerializer(point7Table2Sapling.objects.get(id=kwargs["pk"])).data})
+            except:
+                return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
+                                status=status.HTTP_404_NOT_FOUND)
+        return Response({"get": Point7TableSaplingSerializer(point7Table2Sapling.objects.all(), many=True).data})
+
+
+class PurposeOfForestsView(ListAPIView):
+
+    def get(self, request, *args, **kwargs):
+        if kwargs:
+            try:
+                return Response({"get": PurposeOfForestsSerializer(PurposeOfForests.objects.get(id=kwargs["pk"])).data})
+            except:
+                return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
+                                status=status.HTTP_404_NOT_FOUND)
+        return Response({"get": PurposeOfForestsSerializer(PurposeOfForests.objects.all(), many=True).data})
+
+
+class ForestProtectionCategoryView(ListAPIView):
+
+    def get(self, request, *args, **kwargs):
+        if kwargs:
+            try:
+                return Response({"get": ForestProtectionCategorySerializer(
+                    ForestProtectionCategory.objects.get(id=kwargs["pk"])).data})
+            except:
+                return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
+                                status=status.HTTP_404_NOT_FOUND)
+        return Response({"get": ForestProtectionCategorySerializer(
+            ForestProtectionCategory.objects.all(), many=True).data})
+
+
+class CategoryOfForestFundLandsView(ListAPIView):
+
+    def get(self, request, *args, **kwargs):
+        if kwargs:
+            try:
+                return Response({"get": CategoryOfForestFundLandsSerializer(
+                    CategoryOfForestFundLands.objects.get(id=kwargs["pk"])).data})
+            except:
+                return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
+                                status=status.HTTP_404_NOT_FOUND)
+        return Response({"get": CategoryOfForestFundLandsSerializer(
+            CategoryOfForestFundLands.objects.all(), many=True).data})
+
+
+class MethodOfReforestationView(ListAPIView):
+
+    def get(self, request, *args, **kwargs):
+        if kwargs:
+            try:
+                return Response({"get": MethodOfReforestationSerializer(
+                    MethodOfReforestation.objects.get(id=kwargs["pk"])).data})
+            except:
+                return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
+                                status=status.HTTP_404_NOT_FOUND)
+        return Response({"get": MethodOfReforestationSerializer(
+            MethodOfReforestation.objects.all(), many=True).data})
+
+
+class TypeForestGrowingConditionsView(ListAPIView):
+
+    def get(self, request, *args, **kwargs):
+        if kwargs:
+            try:
+                return Response({"get": TypeForestGrowingConditionsSerializer(
+                    TypeForestGrowingConditions.objects.get(id=kwargs["pk"])).data})
+            except:
+                return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
+                                status=status.HTTP_404_NOT_FOUND)
+        return Response({"get": TypeForestGrowingConditionsSerializer(
+            TypeForestGrowingConditions.objects.all(), many=True).data})
+
+
+class EconomyView(ListAPIView):
+
+    def get(self, request, *args, **kwargs):
+        if kwargs:
+            try:
+                return Response({"get": EconomySerializer(
+                    Economy.objects.get(id=kwargs["pk"])).data})
+            except:
+                return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
+                                status=status.HTTP_404_NOT_FOUND)
+        return Response({"get": EconomySerializer(
+            Economy.objects.all(), many=True).data})
+
+
 class AllForestlyViewSet(viewsets.ViewSet):
     def list(self, request):
         AllForest = namedtuple('Forestly', ('district_forestly', 'forestly', 'subjectrf', 'quarter'))
@@ -1030,13 +1148,7 @@ class FieldCardFilter(ListAPIView):
 #         WorkingBreeds.objects.create(name_breeds = i)
 
 
-# class SchemaMixingBreedsView(ListAPIView):
-#
-#     def post(self, request, *args, **kwargs):
-#         print("111")
-#         SchemaMixingBreeds.objects.update_or_create(name_schema=request.data['name'])
-#         print("222")
-#         return Response("k")
+
 
 class ForestViewSet(viewsets.ModelViewSet):
     pass

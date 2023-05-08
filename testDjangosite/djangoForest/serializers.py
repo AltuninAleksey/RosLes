@@ -564,3 +564,66 @@ class FieldCardSerializer(serializers.ModelSerializer):
             return value
         except:
             raise serializers.ValidationError("pk not found")
+
+
+class SchemaMixingBreedsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = SchemaMixingBreeds
+        fields = "__all__"
+
+
+class Point7TableSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = point7Table
+        fields = "__all__"
+
+
+class Point7TableSaplingSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = point7Table2Sapling
+        fields = "__all__"
+
+
+class PurposeOfForestsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = PurposeOfForests
+        fields = "__all__"
+
+
+class ForestProtectionCategorySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ForestProtectionCategory
+        fields = "__all__"
+
+
+class CategoryOfForestFundLandsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CategoryOfForestFundLands
+        fields = "__all__"
+
+
+class MethodOfReforestationSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = MethodOfReforestation
+        fields = "__all__"
+
+
+class TypeForestGrowingConditionsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = TypeForestGrowingConditions
+        fields = "__all__"
+
+
+class EconomySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Economy
+        fields = "__all__"

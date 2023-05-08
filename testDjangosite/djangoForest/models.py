@@ -424,7 +424,7 @@ class ForestAreas(models.Model):
 
 class point7Table(models.Model):
     ratio_composition = models.IntegerField()
-    breed = models.IntegerField()
+    id_breed = models.ForeignKey("Breed", on_delete=models.CASCADE, verbose_name="Порода", default=1)
     age = models.IntegerField()
     avg_height = models.IntegerField()
     avg_diameter = models.IntegerField()
