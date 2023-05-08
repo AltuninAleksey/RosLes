@@ -727,6 +727,9 @@ class GetAllListRegionData(viewsets.ViewSet):
 
 
 class CreateSampleAndOther(generics.ListCreateAPIView):
+    """
+    Создание/обновление пробы, перечета, gps.
+    """
     def post(self, request, **kwargs):
         # serializer_list_region = ListRegionSerializer(data=request.data['sample'])
         # serializer_list_region.is_valid(raise_exception=True)

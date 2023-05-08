@@ -469,6 +469,12 @@ class DescriptionRegion(models.Model):
     preservation_breed = models.CharField(max_length=300,
                                           verbose_name="сохранность культивируемой породы на момент обследования",
                                           null=True)
+    farm_according_data_survey = models.CharField(max_length=300,
+                                                  verbose_name="Хозяйство по данным натурного обследования ",
+                                                  null=True)
+    breed_composition_sapling_data_surver = models.CharField(max_length=300,
+                                                             verbose_name="Породный состав молодняка по данным натурного обследования",
+                                                             null=True)
 
 
 class FieldСard(models.Model):
