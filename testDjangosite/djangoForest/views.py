@@ -143,8 +143,21 @@ class ListRegionView(generics.ListCreateAPIView):
         pk = kwargs.get('pk')
         if pk:
             try:
-                lst = ListRegion.objects.filter(pk=pk)
-                return JsonResponse(ListRegionSerializerId(lst, many=True).data, safe=False)
+                lst = ListRegion.objects.get(pk=pk)
+                ser_lst = ListRegionSerializerId(lst).data
+                try:
+                    lst_field = FieldСard.objects.get(id_list_region=pk)
+                    ser_field = FieldCardSerializer(lst_field).data
+                    ser_lst.update({"id_field_card": ser_field['id']})
+                except:
+                    ser_lst.update({"id_field_card": 0})
+                try:
+                    lst_desc = DescriptionRegion.objects.get(id_list_region=pk)
+                    ser_desc = DescriptionRegionSerializer(lst_desc).data
+                    ser_lst.update({"id_desc": ser_desc['id']})
+                except:
+                    ser_lst.update({"id_desc": 0})
+                return Response(ser_lst)
             except:
                 return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
                                 status=status.HTTP_404_NOT_FOUND)
@@ -735,6 +748,8 @@ class CreateSampleAndOther(generics.ListCreateAPIView):
         # serializer_list_region.is_valid(raise_exception=True)
         # serializer_list_region.save()
         # request.data['sample'].update({'id_list_region': serializer_list_region.data['id']})
+        serializer_undergrowth = UndergrowthSerializer()
+        serializer_photopoint = PhotoPointSerializer()
         serializer = SampleSerializer(data=request.data['sample'])
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -762,6 +777,11 @@ class CreateSampleAndOther(generics.ListCreateAPIView):
         else:
             serializer_gps = GPSSerializer(data="")
             serializer_gps.is_valid(raise_exception=False)
+        if len(request.data['photopoint']) != 0:
+            pass
+        if len(request.data['undergrowth']) != 0:
+            # for k in range(len(request.data['undergrowth'])):
+            serializer_undergrowth = UndergrowthSerializer(data=request.data['undergrowth'], many=True)
             # serializer_gps.save()
         # serializer_list_region.is_valid(raise_exception=True)
         # serializer_list_region.save()
@@ -771,6 +791,7 @@ class CreateSampleAndOther(generics.ListCreateAPIView):
                          "gps": serializer_gps.data})
 
     def put(self, request, *args, **kwargs):
+
         i = 0
         j = 0
         try:
@@ -807,6 +828,7 @@ class CreateSampleAndOther(generics.ListCreateAPIView):
         else:
             serializer_gps = GPSSerializer(data="")
             serializer_gps.is_valid(raise_exception=False)
+
         return Response({"sample": serializer.data,
                          # "list_region": serializer_list_region.data,
                          "list": serializer_list.data,

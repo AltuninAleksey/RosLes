@@ -375,7 +375,7 @@ class ListRegionFiltersSerializer(serializers.Serializer):
     sample_region = serializers.CharField(max_length=300)
     id_quarter = serializers.CharField(source='id_quarter.id_district_forestly.id_forestly.id_subject_rf.id')
     mark_del = serializers.BooleanField()
-    mark_del = serializers.BooleanField()
+    mark_update = serializers.BooleanField()
     soil_lot = serializers.CharField(max_length=300)
 
 
