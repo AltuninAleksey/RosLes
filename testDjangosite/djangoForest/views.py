@@ -693,11 +693,14 @@ class AllForestlyViewSet(viewsets.ViewSet):
 class GetDocumentListData(viewsets.ViewSet):
     def list(self, request, *args, **kwargs):
         pk = kwargs.get('pk')
-        lst = List.objects.filter(id_sample=kwargs.get('pk'))
+        lst = List.objects.filter(id_sample=kwargs.get('pk'), id_undergrowth__isnull = True)
+        lst2 = List.objects.filter(id_sample=kwargs.get('pk'), id_undergrowth__isnull = False)
         state = Sample.objects.filter(pk=pk)
         gps = GPS.objects.filter(id_sample=pk)
 
         return JsonResponse({'list_data': GetDocumentListSerializer(lst, many=True).data,
+                             # 'non_null_list_data': GetDocumentListSerializer(lst2, many=True).data,
+                             'non_null_list_data': GetDocumentListSerializerNonNull(lst2, many=True).data,
                              'post_data': GetFromSampleProfileSerializer(state, many=True).data,
                              'gps_data': GetGPS(gps, many=True).data}, safe=False)
 
@@ -1044,9 +1047,7 @@ class GetAllDescriptionRegion(ListAPIView):
             lst = DescriptionRegionSerializer(DescriptionRegion.objects.get(id=kwargs['pk'])).data
             return Response({
                 "DescriptionRegion":
-                    lst,
-                "ListRegion": ListRegionSerializerId(ListRegion.objects.get(id=lst['id_list_region'])).data
-            })
+                    lst})
         lst = DescriptionRegion.objects.all()
         return Response({"get": DescriptionRegionSerializer(lst, many=True).data})
 
@@ -1093,9 +1094,7 @@ class GetFieldCard(ListAPIView):
             lst = FieldCardSerializer(FieldСard.objects.get(id=kwargs['pk'])).data
             return Response({
                 "FieldCard":
-                    lst,
-                "ListRegion": ListRegionSerializerId(ListRegion.objects.get(id=lst['id_list_region'])).data
-            })
+                    lst })
         lst = FieldСard.objects.all()
         return Response({"get": FieldCardSerializer(lst, many=True).data})
 

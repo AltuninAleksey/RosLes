@@ -427,6 +427,13 @@ class GetDocumentListSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class GetDocumentListSerializerNonNull(serializers.ModelSerializer):
+
+    class Meta:
+        model = List
+        fields = ('id', 'count_of_plants', 'avg_height', 'id_undergrowth', 'id_breed')
+
+
 class GetGPS(serializers.Serializer):
     id = serializers.IntegerField()
     id_sample = serializers.CharField(source='id_sample.id')
@@ -533,6 +540,8 @@ class DescriptionRegionSerializer(serializers.ModelSerializer):
     soil_lot = serializers.CharField(source="id_list_region.soil_lot")
     sample_region = serializers.FloatField(source="id_list_region.sample_region")
     date = serializers.DateField(source="id_list_region.date")
+    id_list_region = serializers.CharField(source="id_list_region.id")
+    number_region = serializers.CharField(source="id_list_region.number_region")
     class Meta:
         model = DescriptionRegion
         fields = '__all__'
@@ -553,6 +562,8 @@ class FieldCardSerializer(serializers.ModelSerializer):
     soil_lot = serializers.CharField(source="id_list_region.soil_lot")
     sample_region = serializers.FloatField(source="id_list_region.sample_region")
     date = serializers.DateField(source="id_list_region.date")
+    id_list_region = serializers.CharField(source="id_list_region.id")
+    number_region = serializers.CharField(source="id_list_region.number_region")
     class Meta:
         model = FieldСard
         fields = '__all__'
