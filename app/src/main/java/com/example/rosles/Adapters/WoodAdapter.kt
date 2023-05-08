@@ -54,7 +54,7 @@ class WoodAdapter(private val names: List<ItemWood>,val inter:BaseInterface) : R
                 itemWood.setBackgroundResource(R.drawable.rounded_red)
                 itemWood.setTextColor(Color.parseColor("#ffffff"))
                 favoritebutton=itemWood
-                inter.onClickButton()
+                inter.onClickButton(itemWood.text)
                 return@setOnLongClickListener true
 
             }
