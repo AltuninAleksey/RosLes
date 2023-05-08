@@ -533,15 +533,16 @@ class PhotoPointSer(serializers.ModelSerializer):
         fields = '__all__'
 
 class DescriptionRegionSerializer(serializers.ModelSerializer):
-    id_quarter = serializers.CharField(source='id_list_region.id_quarter.id')
-    id_district_forestly = serializers.IntegerField(source="id_list_region.id_quarter.id_district_forestly.id")
-    id_forestly = serializers.IntegerField(source="id_list_region.id_quarter.id_district_forestly.id_forestly.id")
-    id_subject_rf = serializers.IntegerField(source="id_list_region.id_quarter.id_district_forestly.id_forestly.id_subject_rf.id")
-    soil_lot = serializers.CharField(source="id_list_region.soil_lot")
-    sample_region = serializers.FloatField(source="id_list_region.sample_region")
-    date = serializers.DateField(source="id_list_region.date")
-    id_list_region = serializers.CharField(source="id_list_region.id")
-    number_region = serializers.CharField(source="id_list_region.number_region")
+    id_quarter = serializers.CharField(source='id_list_region.id_quarter.id', read_only=True)
+    id_district_forestly = serializers.IntegerField(source="id_list_region.id_quarter.id_district_forestly.id", read_only=True)
+    id_forestly = serializers.IntegerField(source="id_list_region.id_quarter.id_district_forestly.id_forestly.id", read_only=True)
+    id_subject_rf = serializers.IntegerField(
+        source="id_list_region.id_quarter.id_district_forestly.id_forestly.id_subject_rf.id", read_only=True)
+    soil_lot = serializers.CharField(source="id_list_region.soil_lot", read_only=True)
+    sample_region = serializers.FloatField(source="id_list_region.sample_region", read_only=True)
+    date = serializers.DateField(source="id_list_region.date", read_only=True)
+    # id_list_region = serializers.CharField(source="id_list_region.id")
+    number_region = serializers.CharField(source="id_list_region.number_region", read_only=True)
     class Meta:
         model = DescriptionRegion
         fields = '__all__'
@@ -552,6 +553,26 @@ class DescriptionRegionSerializer(serializers.ModelSerializer):
             return value
         except:
             raise serializers.ValidationError("pk not found")
+
+
+    def update(self, instance, validated_data):
+        instance.id_list_region = validated_data.get('id_list_region')
+        instance.id_method_of_reforestation = validated_data.get("id_method_of_reforestation")
+        instance.year_assignment_land = validated_data.get("year_assignment_land")
+        instance.year_format_fond_trees = validated_data.get("year_format_fond_trees")
+        instance.inf_restore_forest = validated_data.get("inf_restore_forest")
+        instance.breed_structure_sapling_act_land = validated_data.get("breed_structure_sapling_act_land")
+        instance.economy_act_land = validated_data.get("economy_act_land")
+        instance.change_breed_and_structure_sapling = validated_data.get('change_breed_and_structure_sapling')
+        instance.results_surtvey = validated_data.get("results_surtvey")
+        instance.recommendation = validated_data.get("recommendation")
+        instance.id_schema_mixing_breeds = validated_data.get("id_schema_mixing_breeds")
+        instance.count_plants = validated_data.get("count_plants")
+        instance.preservation_breed = validated_data.get("preservation_breed")
+        instance.farm_according_data_survey = validated_data.get("farm_according_data_survey")
+        instance.breed_composition_sapling_data_surver = validated_data.get("breed_composition_sapling_data_surver")
+        instance.save()
+        return instance
 
 
 class FieldCardSerializer(serializers.ModelSerializer):

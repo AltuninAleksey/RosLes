@@ -9,6 +9,11 @@ class TodoAdmin(admin.ModelAdmin):
     search_fields = ('id', 'name', 'age')
 
 
+class DescriptionRegionAdmin(admin.ModelAdmin):
+    list_display = '__all__'
+    list_display_links = '__all__'
+    search_fields = '__all__'
+
 class FieldCardAdmin(admin.ModelAdmin):
     list_display = ('id', 'id_list_region', "id_purpose_of_forests", "id_forest_protection_category", "protected_areas_of_forests",
             "rent_area", "id_category_of_forest_fund_lands", "id_method_of_reforestation", "time_of_reforestation",
@@ -210,6 +215,7 @@ class TrackingAdmin(admin.ModelAdmin):
     search_fields = ('id', 'id_profile', 'data', 'map')
 
 
+admin.site.register(DescriptionRegion)
 admin.site.register(FieldСard, FieldCardAdmin)
 admin.site.register(Users, UserAdmin)
 admin.site.register(Track, TrackingAdmin)

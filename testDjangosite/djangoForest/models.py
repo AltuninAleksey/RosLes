@@ -448,9 +448,9 @@ class DescriptionRegion(models.Model):
     id_method_of_reforestation = models.ForeignKey("MethodOfReforestation",
                                                    on_delete=models.CASCADE, verbose_name="Способ лесовосстановления",
                                                    null=True)
-    year_assignment_land = models.DateField(choices=YEAR_CHOICES, default=datetime.datetime.now().year,
+    year_assignment_land = models.IntegerField(choices=YEAR_CHOICES, default=datetime.datetime.now().year,
                                             verbose_name="Год отнесения к землям")
-    year_format_fond_trees = models.DateField(choices=YEAR_CHOICES, default=datetime.datetime.now().year,
+    year_format_fond_trees = models.IntegerField(choices=YEAR_CHOICES, default=datetime.datetime.now().year,
                                               verbose_name="Год образования категории фонда лесовосстановления")
     inf_restore_forest = models.CharField(max_length=500,
                                           verbose_name="Данные о проведенных мероприятиях по уходу за лесами")
