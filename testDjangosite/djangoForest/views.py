@@ -618,7 +618,12 @@ class Point7TableView(ListAPIView):
     def get(self, request, *args, **kwargs):
         if kwargs:
             try:
-                return Response({"get": Point7TableSerializer(point7Table.objects.get(id=kwargs["pk"])).data})
+                print(kwargs['pk'])
+                lst = List.objects.filter(id_sample__id_list_region = kwargs["pk"]).values(
+                    "age", "ratio_composition", "avg_height", "avg_diameter", "count_of_plants")
+                # print(lst)
+                return Response(lst)
+                # return Response({"get": Point7TableSerializer(point7Table.objects.get(id=kwargs["pk"])).data})
             except:
                 return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
                                 status=status.HTTP_404_NOT_FOUND)
@@ -630,7 +635,11 @@ class Point7TableSaplingView(ListAPIView):
     def get(self, request, *args, **kwargs):
         if kwargs:
             try:
-                return Response({"get": Point7TableSaplingSerializer(point7Table2Sapling.objects.get(id=kwargs["pk"])).data})
+                lst = List.objects.filter(id_sample__id_list_region=kwargs["pk"]).values(
+                    "age", "ratio_composition", "avg_height", "avg_diameter", "count_of_plants")
+                # print(lst)
+                return Response(lst)
+                # return Response({"get": Point7TableSaplingSerializer(point7Table2Sapling.objects.get(id=kwargs["pk"])).data})
             except:
                 return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
                                 status=status.HTTP_404_NOT_FOUND)

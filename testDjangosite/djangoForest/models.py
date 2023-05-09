@@ -102,6 +102,9 @@ class List(models.Model):
     avg_height_undergrowth = models.FloatField(u'Средняя высота подлеска', null = True)
     main = models.IntegerField(null=True, default=0)
     mark_update = models.IntegerField(null=True, default=0)
+    age = models.IntegerField(verbose_name="Возраст", null=True)
+    ratio_composition = models.IntegerField(verbose_name="Коэфф. состава", null=True)
+
 
     class Meta:
         verbose_name = 'Перечет'
