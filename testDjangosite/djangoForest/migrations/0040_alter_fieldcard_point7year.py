@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('djangoForest', '0039_alter_fieldсard_point7year'),
+        ('djangoForest', '0039_alter_fieldcard_point7year'),
     ]
 
     operations = [

@@ -7,12 +7,12 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('djangoForest', '0048_fieldсard_forest_type'),
+        ('djangoForest', '0048_fieldcard_forest_type'),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='fieldсard',
+            model_name='fieldcard',
             name='id_point7table',
             field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to='djangoForest.point7table'),
         ),

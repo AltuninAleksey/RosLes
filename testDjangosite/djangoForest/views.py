@@ -166,7 +166,7 @@ class ListRegionView(generics.ListCreateAPIView):
                 lst = ListRegion.objects.get(pk=pk)
                 ser_lst = ListRegionSerializerId(lst).data
                 try:
-                    lst_field = FieldСard.objects.get(id_list_region=pk)
+                    lst_field = FieldCard.objects.get(id_list_region=pk)
                     ser_field = FieldCardSerializer(lst_field).data
                     ser_lst.update({"id_field_card": ser_field['id']})
                 except:
@@ -1109,7 +1109,7 @@ class GetAllDescriptionRegion(ListAPIView):
             DescriptionRegionSerializer().validate_pk(kwargs['pk'])
             lst = DescriptionRegionSerializer(DescriptionRegion.objects.get(id=kwargs['pk'])).data
             try:
-                lst_FieldCard = FieldCardSerializer(FieldСard.objects.get(id_list_region = lst['id_list_region'])).data
+                lst_FieldCard = FieldCardSerializer(FieldCard.objects.get(id_list_region = lst['id_list_region'])).data
                 lst.update({"id_field_card": lst_FieldCard['id']})
             except:
                 lst.update({"id_field_card": ""})
@@ -1179,7 +1179,7 @@ class GetFieldCard(ListAPIView):
     def get(self, *args, **kwargs):
         if kwargs:
             FieldCardSerializer().validate_pk(kwargs['pk'])
-            lst = FieldCardSerializer(FieldСard.objects.get(id=kwargs['pk'])).data
+            lst = FieldCardSerializer(FieldCard.objects.get(id=kwargs['pk'])).data
             try:
                 lst_desc = DescriptionRegionSerializer(DescriptionRegion.objects.get(id_list_region=lst['id_list_region'])).data
                 lst.update({"id_desc": lst_desc['id']})
@@ -1188,12 +1188,12 @@ class GetFieldCard(ListAPIView):
             return Response({
                 "FieldCard":
                     lst })
-        lst = FieldСard.objects.all()
+        lst = FieldCard.objects.all()
         return Response({"get": FieldCardSerializer(lst, many=True).data})
 
     def put(self, request, *args, **kwargs):
         try:
-            instance = FieldСard.objects.get(pk=kwargs['pk'])
+            instance = FieldCard.objects.get(pk=kwargs['pk'])
 
         except:
             return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
@@ -1212,7 +1212,7 @@ class FieldCardFilter(ListAPIView):
     '''
 
     def post(self, request, *args, **kwargs):
-        ser2 = FieldСard.objects.all()
+        ser2 = FieldCard.objects.all()
         if request.data['bSubjectrf']:
             idSubjectrf = request.data['idSubjectrf']
             print("subjectrf")

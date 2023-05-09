@@ -7,7 +7,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('djangoForest', '0037_fieldсard'),
+        ('djangoForest', '0037_fieldcard'),
     ]
 
     operations = [

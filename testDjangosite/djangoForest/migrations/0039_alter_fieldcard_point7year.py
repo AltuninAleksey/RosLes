@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('djangoForest', '0038_schemamixingbreeds_alter_fieldсard_options_and_more'),
+        ('djangoForest', '0038_schemamixingbreeds_alter_fieldcard_options_and_more'),
     ]
 
     operations = [

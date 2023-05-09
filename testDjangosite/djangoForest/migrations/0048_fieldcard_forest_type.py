@@ -11,7 +11,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AddField(
-            model_name='fieldсard',
+            model_name='fieldcard',
             name='forest_type',
             field=models.CharField(max_length=100, null=True),
         ),

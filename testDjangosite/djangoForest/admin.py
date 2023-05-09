@@ -216,7 +216,7 @@ class TrackingAdmin(admin.ModelAdmin):
 
 
 admin.site.register(DescriptionRegion)
-admin.site.register(FieldСard, FieldCardAdmin)
+admin.site.register(FieldCard, FieldCardAdmin)
 admin.site.register(Users, UserAdmin)
 admin.site.register(Track, TrackingAdmin)
 admin.site.register(PhotoPoint, PhotoPointAdmin)

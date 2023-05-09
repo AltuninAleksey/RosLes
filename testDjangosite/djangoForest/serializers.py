@@ -603,13 +603,13 @@ class FieldCardSerializer(serializers.ModelSerializer):
     date = serializers.DateField(source="id_list_region.date", read_only=True)
     number_region = serializers.CharField(source="id_list_region.number_region", read_only=True)
     class Meta:
-        model = FieldСard
+        model = FieldCard
         fields = '__all__'
 
 
     def validate_pk(self, value):
         try:
-            FieldСard.objects.get(id=value)
+            FieldCard.objects.get(id=value)
             return value
         except:
             raise serializers.ValidationError({"error": 404, "error_text": "invalid id"})

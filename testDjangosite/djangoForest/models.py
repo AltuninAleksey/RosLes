@@ -480,7 +480,7 @@ class DescriptionRegion(models.Model):
                                                              null=True)
 
 
-class FieldСard(models.Model):
+class FieldCard(models.Model):
     id_list_region = models.ForeignKey("ListRegion",
                                        on_delete=models.CASCADE,
                                        verbose_name="Перечетная ведомость участка", null=True)

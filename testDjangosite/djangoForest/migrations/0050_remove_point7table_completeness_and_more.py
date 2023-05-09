@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('djangoForest', '0049_fieldсard_id_point7table_point7table_completeness_and_more'),
+        ('djangoForest', '0049_fieldcard_id_point7table_point7table_completeness_and_more'),
     ]
 
     operations = [
@@ -19,12 +19,12 @@ class Migration(migrations.Migration):
             name='stock',
         ),
         migrations.AddField(
-            model_name='fieldсard',
+            model_name='fieldcard',
             name='point7_completeness',
             field=models.CharField(max_length=300, null=True, verbose_name='Полнота'),
         ),
         migrations.AddField(
-            model_name='fieldсard',
+            model_name='fieldcard',
             name='point7_stock',
             field=models.IntegerField(null=True, verbose_name='Запас'),
         ),
