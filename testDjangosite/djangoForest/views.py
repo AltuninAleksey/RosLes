@@ -620,7 +620,7 @@ class Point7TableView(ListAPIView):
             try:
                 print(kwargs['pk'])
                 lst = List.objects.filter(id_sample__id_list_region = kwargs["pk"]).values(
-                    "age", "ratio_composition", "avg_height", "avg_diameter", "count_of_plants")
+                    "age", "ratio_composition", "avg_height", "avg_diameter", "count_of_plants", "id_breed")
                 # print(lst)
                 return Response(lst)
                 # return Response({"get": Point7TableSerializer(point7Table.objects.get(id=kwargs["pk"])).data})
@@ -636,7 +636,7 @@ class Point7TableSaplingView(ListAPIView):
         if kwargs:
             try:
                 lst = List.objects.filter(id_sample__id_list_region=kwargs["pk"]).values(
-                    "age", "ratio_composition", "avg_height", "avg_diameter", "count_of_plants")
+                    "age", "ratio_composition", "avg_height", "avg_diameter", "count_of_plants", "id_breed")
                 # print(lst)
                 return Response(lst)
                 # return Response({"get": Point7TableSaplingSerializer(point7Table2Sapling.objects.get(id=kwargs["pk"])).data})
