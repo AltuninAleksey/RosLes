@@ -355,6 +355,23 @@ class ListRegionSerializer(serializers.ModelSerializer):
         return instance
 
 
+class ListRegionUpdateNonMarkDel(serializers.ModelSerializer):
+
+    class Meta:
+        model = ListRegion
+        fields = '__all__'
+
+
+    def update(self, instance, validated_data):
+        instance.date = validated_data.get("date")
+        instance.soil_lot = validated_data.get("soil_lot")
+        instance.id_quarter = validated_data.get("id_quarter")
+        instance.sample_region = validated_data.get("sample_region")
+        instance.number_region = validated_data.get("number_region")
+        instance.save()
+        return instance
+
+
 class ListRegionSerializerId(serializers.Serializer):
     id = serializers.IntegerField()
     date = serializers.DateField()
@@ -533,7 +550,7 @@ class PhotoPointSer(serializers.ModelSerializer):
         fields = '__all__'
 
 class DescriptionRegionSerializer(serializers.ModelSerializer):
-    id_quarter = serializers.CharField(source='id_list_region.id_quarter.id', read_only=True)
+    id_quarter = serializers.CharField(source='id_list_region.id_quarter.id')
     id_district_forestly = serializers.IntegerField(source="id_list_region.id_quarter.id_district_forestly.id", read_only=True)
     id_forestly = serializers.IntegerField(source="id_list_region.id_quarter.id_district_forestly.id_forestly.id", read_only=True)
     id_subject_rf = serializers.IntegerField(
@@ -571,6 +588,7 @@ class DescriptionRegionSerializer(serializers.ModelSerializer):
         instance.preservation_breed = validated_data.get("preservation_breed")
         instance.farm_according_data_survey = validated_data.get("farm_according_data_survey")
         instance.breed_composition_sapling_data_surver = validated_data.get("breed_composition_sapling_data_surver")
+        # instance.id_quarter = validated_data.get("id_quarter")
         instance.save()
         return instance
 
@@ -594,7 +612,7 @@ class FieldCardSerializer(serializers.ModelSerializer):
             FieldСard.objects.get(id=value)
             return value
         except:
-            raise serializers.ValidationError("pk not found")
+            raise serializers.ValidationError({"error": 404, "error_text": "invalid id"})
 
     def update(self, instance, validated_data):
         instance.id_list_region = validated_data.get('id_list_region')

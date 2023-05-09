@@ -145,6 +145,17 @@ class GpsView(generics.ListCreateAPIView):
         return Response({"code": status.HTTP_200_OK}, status=status.HTTP_200_OK)
 
 
+class GpsBySampleView(ListAPIView):
+
+    def get(self, *args, **kwargs):
+        try:
+            lst = GPS.objects.filter(id_sample = kwargs['id_sample'], flag_center = 1)
+        except:
+            return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id sample"},
+                            status=status.HTTP_404_NOT_FOUND)
+        return Response(GPSSerializer(lst, many=True).data)
+
+
 class ListRegionView(generics.ListCreateAPIView):
     model = ListRegion
 
@@ -1088,6 +1099,11 @@ class GetAllDescriptionRegion(ListAPIView):
         if kwargs:
             DescriptionRegionSerializer().validate_pk(kwargs['pk'])
             lst = DescriptionRegionSerializer(DescriptionRegion.objects.get(id=kwargs['pk'])).data
+            try:
+                lst_FieldCard = FieldCardSerializer(FieldСard.objects.get(id_list_region = lst['id_list_region'])).data
+                lst.update({"id_field_card": lst_FieldCard['id']})
+            except:
+                lst.update({"id_field_card": ""})
             return Response({
                 "DescriptionRegion":
                     lst})
@@ -1098,11 +1114,17 @@ class GetAllDescriptionRegion(ListAPIView):
     def put(self, request, *args, **kwargs):
         try:
             instance = DescriptionRegion.objects.get(pk=kwargs['pk'])
-
         except:
             return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
                             status=status.HTTP_404_NOT_FOUND)
-
+        try:
+            instance_region = ListRegion.objects.get(id=request.data['id_list_region'])
+        except:
+            return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid list region id"},
+                            status=status.HTTP_404_NOT_FOUND)
+        ser_listregion = ListRegionUpdateNonMarkDel(data=request.data, instance=instance_region)
+        ser_listregion.is_valid(raise_exception=True)
+        ser_listregion.save()
         serealizer = DescriptionRegionSerializer(data=request.data, instance=instance)
         serealizer.is_valid(raise_exception=True)
         serealizer.save()
@@ -1149,6 +1171,11 @@ class GetFieldCard(ListAPIView):
         if kwargs:
             FieldCardSerializer().validate_pk(kwargs['pk'])
             lst = FieldCardSerializer(FieldСard.objects.get(id=kwargs['pk'])).data
+            try:
+                lst_desc = DescriptionRegionSerializer(DescriptionRegion.objects.get(id_list_region=lst['id_list_region'])).data
+                lst.update({"id_desc": lst_desc['id']})
+            except:
+                lst.update({"id_desc": ""})
             return Response({
                 "FieldCard":
                     lst })
