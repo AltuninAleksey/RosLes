@@ -44,5 +44,11 @@ urlpatterns = [
     path('documents/statementRecalculations', views.getStatementRecalculations),
     path('documents/mergeStatementRecalculations', views.getMergeStatementRecalculations),
     path('documents/statementRecalculationsDetail', views.getStatementRecalculationsDetail),
+    path('documents/descriptionListLand', views.getDescriptionListLand),
+    path('documents/fieldCard', views.getFieldCard),
+    path('documents/recalculatingDetail', views.getRecalculatingDetail),
+    path('documents/plotDescription', views.getPlotDescription),
+    path('documents/printFieldCard', views.getPrintFieldCard),
+
 ]
 

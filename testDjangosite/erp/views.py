@@ -413,3 +413,18 @@ def getMergeStatementRecalculations(request):
 
 def getStatementRecalculationsDetail(request):
     return render(request, 'erp/html/statementRecalculationsDetail.html', {'idDocument': request.GET.get('id')})
+
+def getDescriptionListLand(request):
+    return render(request, 'erp/html/descriptionListLand.html')
+
+def getFieldCard(request):
+    return render(request, 'erp/html/fieldCard.html')
+
+def getRecalculatingDetail(request):
+    return render(request, 'erp/html/recalculatingDetail.html', {'idDocument': request.GET.get('id'), 'idParent': request.GET.get('idParent')})
+
+def getPlotDescription(request):
+    return render(request, 'erp/html/plotDescription.html', {'idDocument': request.GET.get('id'), 'idParent': request.GET.get('idParent')})
+
+def getPrintFieldCard(request):
+    return render(request, 'erp/html/printFieldCard.html', {'idDocument': request.GET.get('id'), 'idParent': request.GET.get('idParent')})

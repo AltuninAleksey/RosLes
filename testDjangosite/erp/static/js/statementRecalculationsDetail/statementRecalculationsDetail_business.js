@@ -11,7 +11,7 @@ StatementRecalculationsBusinessDetail.getStatementRecalculationsDetailDataById =
       responseType: 'json'
     });
 
-    return requestData.data[0];
+    return requestData.data;
 }
 
 StatementRecalculationsBusinessDetail.getSampleByIdListRegion = async function(id) {

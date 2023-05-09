@@ -25,6 +25,28 @@ function getStatementRecalculationsDetail(id) {
     window.location.href = urlGlobal + "/erp/documents/statementRecalculationsDetail?id=" + id;
 }
 
+function getRecalculatingDetail(id, idParent) {
+    window.location.href = urlGlobal + "/erp/documents/recalculatingDetail?id=" + id + "&idParent=" + idParent;
+}
+
+function getDescriptionListLand() {
+    window.location.href = urlGlobal + "/erp/documents/descriptionListLand";
+}
+
+function getPlotDescription(id, idParent) {
+    window.location.href = urlGlobal + "/erp/documents/plotDescription?id=" + id + "&idParent=" + idParent;
+}
+
+function getFieldCard() {
+    window.location.href = urlGlobal + "/erp/documents/fieldCard";
+}
+
+function getPrintFieldCard(id, idParent) {
+    window.location.href = urlGlobal + "/erp/documents/printFieldCard?id=" + id + "&idParent=" + idParent;
+}
+
+
+
 async function getAllSubjectrf() {
 
     var requestData = await axios({

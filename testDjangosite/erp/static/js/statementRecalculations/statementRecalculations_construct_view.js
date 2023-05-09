@@ -278,7 +278,7 @@ async function searchByFilter() {
         };
 
 
-        data = await StatementRecalculationsBusiness.getCreateRecalculationDetailData(responseData);
+        data = await StatementRecalculationsBusiness.getStatementListByFilter(responseData);
     } else {
 
         data = await StatementRecalculationsBusiness.getAllStatementList();

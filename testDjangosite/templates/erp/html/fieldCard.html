@@ -6,15 +6,15 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Список перечетных ведомостей</title>
+    <title>Список описаний участков</title>
     <link rel="stylesheet" href="{% static 'css/common.css' %}">
     <link rel="stylesheet" href="{% static 'css/statementRecalculations.css' %}">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.0/axios.js"></script>
     <script src="{% static 'js/global.js' %}"></script>
     <script src="{% static 'js/common/commonFunction.js' %}"></script>
     <script src="{% static 'js/common/common_business.js' %}"></script>
-    <script src="{% static 'js/statementRecalculations/statementRecalculations_business.js' %}" defer></script>
-    <script src="{% static 'js/statementRecalculations/statementRecalculations_construct_view.js' %}" defer></script>
+    <script src="{% static 'js/fieldCard/fieldCard_business.js' %}" defer></script>
+    <script src="{% static 'js/fieldCard/fieldCard_construct_view.js' %}" defer></script>
     {% endblock %}
 </head>
 <body style="margin:0 !important">
@@ -35,7 +35,7 @@
                         </svg>
                     <a><h3>Полевые карточки</h3></a>
                 </div>
-                <div class="point cursorPointer" style="display: none;">
+                <div class="point cursorPointer">
                     <svg width="24" height="22" viewBox="0 0 24 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <rect x="4" y="5.10345" width="16" height="3.51724" rx="1" stroke="#40E0D0" stroke-width="2" stroke-linejoin="round"/>
                         <rect x="4" y="13.3793" width="16" height="3.51724" rx="1" stroke="#40E0D0" stroke-width="2" stroke-linejoin="round"/>
@@ -47,12 +47,12 @@
             </div>
         </div>
         <div class="hiv2">
-            <div class="hid2">
-                <div class="point cursorPointer" onclick="getStatementRecalculations()">
-                    <a class="activeLink"><h3 style="color: black;">Список перечетных ведомостей</h3></a>
+            <div class="hid2" style="margin-left: 30px;">
+                <div class="point cursorPointer" onclick="getDescriptionListLand()">
+                    <a><h3 style="color: black;">Описание участков</h3></a>
                 </div>
-                <div class="point cursorPointer" onclick="getMergeStatementRecalculations()">
-                    <a><h3  style="color: black;">Объединить перечетные ведомости</h3></a>
+                <div class="point cursorPointer" onclick="">
+                    <a class="activeLink"><h3  style="color: black;">Список полевых карточек</h3></a>
                 </div>
             </div>
         </div>
@@ -69,12 +69,12 @@
             </svg>
             <p class="p">Применить фильтры</p>
         </div>
-        <div class="butmenuadd" style="justify-content: flex-start;display: none;">
+        <div class="butmenuadd" style="justify-content: flex-start; display: none;">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin: 7px 10px 7px 15px;">
                 <circle cx="8" cy="8" r="8" fill="#177164"/>
                 <path d="M7.40002 8.60005V12.2H8.60002V8.60005H12.2V7.40005H8.60002V3.80005H7.40002V7.40005H3.79999V8.60005H7.40002Z" fill="white"/>
             </svg>
-            <p class="p">Создать новую перечетную ведомость</p>
+            <p class="p">Создать новую полевую карточку</p>
         </div>
     </div>
 
@@ -142,7 +142,7 @@
             </table>
             <div class="scroll-table-body">
                 <table>
-                    <tbody id="statementRecalculations_tbody">
+                    <tbody id="fieldCard_tbody">
                     </tbody>
                 </table>
             </div>
