@@ -577,14 +577,13 @@ class DescriptionRegionSerializer(serializers.ModelSerializer):
 
 class FieldCardSerializer(serializers.ModelSerializer):
     id_quarter = serializers.CharField(source='id_list_region.id_quarter.id')
-    id_district_forestly = serializers.IntegerField(source="id_list_region.id_quarter.id_district_forestly.id")
-    id_forestly = serializers.IntegerField(source="id_list_region.id_quarter.id_district_forestly.id_forestly.id")
-    id_subject_rf = serializers.IntegerField(source="id_list_region.id_quarter.id_district_forestly.id_forestly.id_subject_rf.id")
-    soil_lot = serializers.CharField(source="id_list_region.soil_lot")
-    sample_region = serializers.FloatField(source="id_list_region.sample_region")
-    date = serializers.DateField(source="id_list_region.date")
-    id_list_region = serializers.CharField(source="id_list_region.id")
-    number_region = serializers.CharField(source="id_list_region.number_region")
+    id_district_forestly = serializers.IntegerField(source="id_list_region.id_quarter.id_district_forestly.id", read_only=True)
+    id_forestly = serializers.IntegerField(source="id_list_region.id_quarter.id_district_forestly.id_forestly.id", read_only=True)
+    id_subject_rf = serializers.IntegerField(source="id_list_region.id_quarter.id_district_forestly.id_forestly.id_subject_rf.id", read_only=True)
+    soil_lot = serializers.CharField(source="id_list_region.soil_lot", read_only=True)
+    sample_region = serializers.FloatField(source="id_list_region.sample_region", read_only=True)
+    date = serializers.DateField(source="id_list_region.date", read_only=True)
+    number_region = serializers.CharField(source="id_list_region.number_region", read_only=True)
     class Meta:
         model = FieldСard
         fields = '__all__'
