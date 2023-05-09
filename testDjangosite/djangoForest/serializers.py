@@ -597,6 +597,41 @@ class FieldCardSerializer(serializers.ModelSerializer):
         except:
             raise serializers.ValidationError("pk not found")
 
+    def update(self, instance, validated_data):
+        instance.id_list_region = validated_data.get('id_list_region')
+        instance.id_purpose_of_forests = validated_data.get("id_purpose_of_forests")
+        instance.id_forest_protection_category = validated_data.get("id_forest_protection_category")
+        instance.protected_areas_of_forests = validated_data.get("protected_areas_of_forests")
+        instance.rent_area = validated_data.get("rent_area")
+        instance.id_category_of_forest_fund_lands = validated_data.get("id_category_of_forest_fund_lands")
+        instance.id_method_of_reforestation = validated_data.get("id_method_of_reforestation")
+        instance.time_of_reforestation = validated_data.get('time_of_reforestation')
+        instance.id_type_forest_growing_conditions = validated_data.get("id_type_forest_growing_conditions")
+        instance.forest_type = validated_data.get("forest_type")
+        instance.point7year = validated_data.get("point7year")
+        instance.point7date = validated_data.get("point7date")
+        instance.point7number = validated_data.get("point7number")
+        instance.point7agreed = validated_data.get("point7agreed")
+        instance.point7_natural_composition = validated_data.get("point7_natural_composition")
+        #
+        instance.point7_natural_composition2 = validated_data.get('point7_natural_composition2')
+        instance.square_one_sample_area = validated_data.get("square_one_sample_area")
+        instance.count_sample_area = validated_data.get("count_sample_area")
+        instance.breed_composition = validated_data.get("breed_composition")
+        instance.id_economy = validated_data.get("id_economy")
+        instance.completeness = validated_data.get("completeness")
+        instance.stock = validated_data.get("stock")
+        instance.id_point7_table2_sapling = validated_data.get('id_point7_table2_sapling')
+        instance.conclusion = validated_data.get("conclusion")
+        instance.plot_farm_referring_land = validated_data.get("plot_farm_referring_land")
+        instance.recomendation = validated_data.get("recomendation")
+        instance.plot_features = validated_data.get("plot_features")
+        instance.site_survey = validated_data.get("site_survey")
+        instance.in_front = validated_data.get("in_front")
+        instance.date_and_time = validated_data.get("date_and_time")
+        instance.save()
+        return instance
+
 
 class SchemaMixingBreedsSerializer(serializers.ModelSerializer):
 

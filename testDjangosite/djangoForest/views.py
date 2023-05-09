@@ -1155,6 +1155,20 @@ class GetFieldCard(ListAPIView):
         lst = FieldСard.objects.all()
         return Response({"get": FieldCardSerializer(lst, many=True).data})
 
+    def put(self, request, *args, **kwargs):
+        try:
+            instance = FieldСard.objects.get(pk=kwargs['pk'])
+
+        except:
+            return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
+                            status=status.HTTP_404_NOT_FOUND)
+
+        serealizer = FieldCardSerializer(data=request.data, instance=instance)
+        serealizer.is_valid(raise_exception=True)
+        serealizer.save()
+        return Response({'code': status.HTTP_200_OK}, status=status.HTTP_200_OK)
+
+
 
 class FieldCardFilter(ListAPIView):
     '''

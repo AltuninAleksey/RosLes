@@ -499,6 +499,7 @@ class FieldСard(models.Model):
     id_type_forest_growing_conditions = models.ForeignKey("TypeForestGrowingConditions",
                                                           on_delete=models.CASCADE,
                                                           verbose_name="Тип лесорастительных условий")
+    forest_type = models.CharField(max_length=100, null=True)
     point7year = models.IntegerField(choices=YEAR_CHOICES, default=datetime.datetime.now().year,
                                      verbose_name="Год")
     point7date = models.DateField(verbose_name="Дата")
