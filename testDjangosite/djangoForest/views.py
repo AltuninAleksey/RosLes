@@ -135,6 +135,15 @@ class GpsView(generics.ListCreateAPIView):
         serealizer.save()
         return Response({"put": serealizer.data})
 
+    def delete(self, *args, **kwargs):
+        try:
+            lst = GPS.objects.get(id = kwargs['pk'])
+        except:
+            return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
+                            status=status.HTTP_404_NOT_FOUND)
+        lst.delete()
+        return Response({"code": status.HTTP_200_OK}, status=status.HTTP_200_OK)
+
 
 class ListRegionView(generics.ListCreateAPIView):
     model = ListRegion
@@ -285,7 +294,6 @@ class PostView(generics.ListCreateAPIView):
         serealizer.save()
         return Response({"put": serealizer.data})
 
-
 class WorkingBreedView(generics.ListCreateAPIView):
     def get(self, request, **kwargs):
         if kwargs:
@@ -314,6 +322,16 @@ class WorkingBreedView(generics.ListCreateAPIView):
         serealizer.is_valid(raise_exception=True)
         serealizer.save()
         return Response({"put": serealizer.data})
+
+    def delete(self, *args, **kwargs):
+        try:
+            lst = WorkingBreeds.objects.get(id = kwargs['pk'])
+        except:
+            return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
+                            status=status.HTTP_404_NOT_FOUND)
+        lst.delete()
+        return Response({"code": status.HTTP_200_OK}, status=status.HTTP_200_OK)
+
 
 
 class SubjectRFview(generics.ListCreateAPIView):
