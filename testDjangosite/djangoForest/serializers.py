@@ -355,6 +355,24 @@ class ListRegionSerializer(serializers.ModelSerializer):
         return instance
 
 
+class ListRegionUpdateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ListRegion
+        fields = "__all__"
+
+    def update(self, instance, validated_data):
+        instance.date = validated_data.get("date")
+        instance.soil_lot = validated_data.get("soil_lot")
+        instance.id_quarter = validated_data.get("id_quarter")
+        instance.sample_region = validated_data.get("sample_region")
+        instance.mark_del = validated_data.get("mark_del")
+        instance.number_region = validated_data.get("number_region")
+        instance.mark_update = validated_data.get("mark_update")
+        instance.save()
+        return instance
+
+
 class ListRegionUpdateNonMarkDel(serializers.ModelSerializer):
 
     class Meta:

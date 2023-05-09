@@ -156,6 +156,18 @@ class GpsBySampleView(ListAPIView):
         return Response(GPSSerializer(lst, many=True).data)
 
 
+    # def put(self, request, *args, **kwargs):
+    #     try:
+    #         instance = GPS.objects.get(pk=kwargs['pk'])
+    #     except:
+    #         return Response({"error": "Объект с данным id не найден"})
+    #
+    #     serealizer = GPSSerializer(data=request.data, instance=instance)
+    #     serealizer.is_valid(raise_exception=True)
+    #     serealizer.save()
+    #     return Response({"put": serealizer.data})
+
+
 class ListRegionView(generics.ListCreateAPIView):
     model = ListRegion
 
@@ -218,6 +230,22 @@ class ListRegionView(generics.ListCreateAPIView):
                 lst.mark_update = 0
                 lst.save()
         return Response({"put": status.HTTP_200_OK})
+
+class ListRegionViewUpdate(ListView):
+
+    def put(self, request, *args, **kwargs):
+        try:
+            print(kwargs['pk'])
+            instance = ListRegion.objects.get(pk=kwargs['pk'])
+        except:
+            return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
+                            status=status.HTTP_404_NOT_FOUND)
+
+        serealizer = ListRegionSerializer(data=request.data, instance=instance)
+        serealizer.is_valid(raise_exception=True)
+        serealizer.save()
+        return Response({"code": status.HTTP_200_OK})
+
 
 
 class SampleView(generics.ListCreateAPIView):
