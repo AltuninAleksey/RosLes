@@ -39,6 +39,7 @@ class Wood : BaseActivity("Пробная площадь") {
     var Get_Id_breed_Class:AddPorod?= AddPorod()
 
     var CountMainPorod=""
+    var activeCountPorod=""
 
     var flaglesActive=false
     var flagpodleslesActive=false
@@ -263,7 +264,6 @@ class Wood : BaseActivity("Пробная площадь") {
     fun writedata(value_param: String) {
         val value = hashbufWood.get(value_param)
         with(binding) {
-
             value?.iskus?.o2         = iskus02.text.toString().toInt()
             value?.iskus?.o5         = iskus05.text.toString().toInt()
             value?.iskus?.o6         = iskus06.text.toString().toInt()
@@ -350,6 +350,7 @@ class Wood : BaseActivity("Пробная площадь") {
         val adapter = WoodAdapter(a, object : BaseInterface {
 
             override fun onClick(itemView: Any) {
+                activeCountPorod=itemView.toString()
                 writedata(vidWood)
                 vidWood = itemView.toString()
                 initdata(vidWood)
@@ -397,7 +398,7 @@ class Wood : BaseActivity("Пробная площадь") {
             value++
             buffertext.text = value.toString()
             initasd()
-//            GetCountWood(CountMainPorod)
+            GetCountWood(CountMainPorod)
         }
         binding.buttonMinus.setOnClickListener() {
 
@@ -408,7 +409,7 @@ class Wood : BaseActivity("Пробная площадь") {
                 value = 0
             buffertext.text = value.toString()
             initasd()
-//            GetCountWood(CountMainPorod)
+            GetCountWood(CountMainPorod)
         }
 
 
@@ -485,8 +486,6 @@ class Wood : BaseActivity("Пробная площадь") {
         binding.maksHeightestestvennoe.addTextChangedListener(textChangedListenerEstestvennoe)
 
 
-
-
     }
 
      fun avgHeight(value1:Float,value2:Float,value3:Float,value4:Float,value5:Float,valuemax:Float):Float?{
@@ -501,6 +500,9 @@ class Wood : BaseActivity("Пробная площадь") {
 
     }
     fun GetCountWood(value: String){
+        if (activeCountPorod==value){
+            writedata(value)
+        }
         val buf=hashbufWood.get(value)!!
         val temp=
         buf.iskus!!.o2!!.toInt()+
