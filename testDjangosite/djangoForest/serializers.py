@@ -640,14 +640,14 @@ class SchemaMixingBreedsSerializer(serializers.ModelSerializer):
 
 
 class Point7TableSerializer(serializers.ModelSerializer):
-
+    id_breed = serializers.CharField(source="id_list_region_breed.id_breed")
     class Meta:
         model = point7Table
         fields = "__all__"
 
 
 class Point7TableSaplingSerializer(serializers.ModelSerializer):
-
+    id_breed = serializers.CharField(source="id_list_region_breed.id_breed")
     class Meta:
         model = point7Table2Sapling
         fields = "__all__"
