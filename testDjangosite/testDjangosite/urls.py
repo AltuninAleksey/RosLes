@@ -82,7 +82,7 @@ urlpatterns = [
     path('list/<int:pk>', ListView.as_view()),
     path('gps', GpsView.as_view()),
     path('gps/<int:pk>', GpsView.as_view()),
-    path('gpsbysample/<int:id_sample>', GpsBySampleView.as_view()),
+    path('gpsbylistregion/<int:id_list_region>', GpsBySampleView.as_view()),
     path('listregion', ListRegionView.as_view()),
     path('listregion/<int:pk>', ListRegionView.as_view()),
     path('sample', SampleView.as_view()),

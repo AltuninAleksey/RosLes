@@ -149,7 +149,7 @@ class GpsBySampleView(ListAPIView):
 
     def get(self, *args, **kwargs):
         try:
-            lst = GPS.objects.filter(id_sample = kwargs['id_sample'], flag_center = 1)
+            lst = GPS.objects.filter(id_sample__id_list_region = kwargs['id_list_region'], flag_center = 1)
         except:
             return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id sample"},
                             status=status.HTTP_404_NOT_FOUND)
