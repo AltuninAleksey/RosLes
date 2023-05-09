@@ -14,7 +14,7 @@ StatementRecalculationsBusiness.getAllStatementList = async function() {
     return requestData.data.data;
 }
 
-StatementRecalculationsBusiness.getCreateRecalculationDetailData = async function(data) {
+StatementRecalculationsBusiness.getStatementListByFilter = async function(data) {
     var requestData = await axios({
         method: 'post',
         url: urlGlobal + "/listregionfilters",

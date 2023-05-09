@@ -1,8 +1,7 @@
+buildFieldCardTbody();
 
-buildStatementRecalculationsTbody();
-
-async function buildStatementRecalculationsTbody() {
-    var data = await StatementRecalculationsBusiness.getAllStatementList();
+async function buildFieldCardTbody() {
+    var data = await FieldCardBusiness.getAllFieldCardList();
     var allForestData = await CommonBusiness.getAllForest();
 
     APP.subjectrf = allForestData.subjectrf;
@@ -10,13 +9,13 @@ async function buildStatementRecalculationsTbody() {
     APP.district_forestly = allForestData.district_forestly;
     APP.quarter = allForestData.quarter;
 
-    updateDataInStatementRecalculationsTbody(data);
+    updateDataInFieldCardTbody(data);
 
     setEventForElementsFilter();
 }
 
-function updateDataInStatementRecalculationsTbody(data) {
-    var tableBody = document.getElementById("statementRecalculations_tbody");
+function updateDataInFieldCardTbody(data) {
+    var tableBody = document.getElementById("fieldCard_tbody");
     var newHtml = "";
 
     for(var i = 0; i < data.length; i++) {
@@ -26,9 +25,10 @@ function updateDataInStatementRecalculationsTbody(data) {
         data[i].district_forestly = CommonFunction.getDistrictForestlyNameByQuarterId(APP.district_forestly, data[i].id_district_forestly);
         data[i].quarter = CommonFunction.getQuarterNameByQuarterId(APP.quarter, data[i].id_quarter);
 
-        let strGetStatementRecalculationsDetail = "getStatementRecalculationsDetail(" + data[i].id  + ")"
-        newHtml = newHtml + `<tr class="cursorPointer" onClick=${strGetStatementRecalculationsDetail}>
-                            <td class="textAlignCenter td1">${data[i].date}</td>
+        let strGetFieldCardDetail = "getPrintFieldCard(" + data[i].id + ",0)";
+
+        newHtml = newHtml + `<tr class="cursorPointer" onClick=${strGetFieldCardDetail}>
+                            <td class="textAlignCenter td1">${data[i].date_and_time}</td>
                             <td class="textAlignCenter td8">${data[i].id}</td>
                             <td class="td2">${data[i].subjectrf}</td>
                             <td class="td3">${data[i].forestly}</td>
@@ -52,16 +52,16 @@ async function setEventForElementsFilter() {
             if(e.target.checked) {
                 subjectNode.removeAttribute("disabled")
                 subjectNode.addEventListener('change', async (e)=>{
-                    await setOptionInForestly(StatementRecalculationsBusiness.TypeData.BYID);
+                    await setOptionInForestly(FieldCardBusiness.TypeData.BYID);
                 });
-                await setOptionInForestly(StatementRecalculationsBusiness.TypeData.BYID);
+                await setOptionInForestly(FieldCardBusiness.TypeData.BYID);
             } else {
                 subjectNode.setAttribute("disabled", "on");
-                await setOptionInForestly(StatementRecalculationsBusiness.TypeData.ALL);
+                await setOptionInForestly(FieldCardBusiness.TypeData.ALL);
             }
         });
 
-    await setOptionInForestly(StatementRecalculationsBusiness.TypeData.ALL);
+    await setOptionInForestly(FieldCardBusiness.TypeData.ALL);
 
     document
         .querySelector("#checkbox_filter_forestly")
@@ -70,16 +70,16 @@ async function setEventForElementsFilter() {
             if(e.target.checked) {
                 forestlyNode.removeAttribute("disabled");
                 forestlyNode.addEventListener('change', async (e)=>{
-                    await setOptionInDistrictForestly(StatementRecalculationsBusiness.TypeData.BYID);
+                    await setOptionInDistrictForestly(FieldCardBusiness.TypeData.BYID);
                 });
-                await setOptionInDistrictForestly(StatementRecalculationsBusiness.TypeData.BYID);
+                await setOptionInDistrictForestly(FieldCardBusiness.TypeData.BYID);
             } else {
                 forestlyNode.setAttribute("disabled", "on");
-                await setOptionInDistrictForestly(StatementRecalculationsBusiness.TypeData.ALL);
+                await setOptionInDistrictForestly(FieldCardBusiness.TypeData.ALL);
             }
         });
 
-    await setOptionInDistrictForestly(StatementRecalculationsBusiness.TypeData.ALL);
+    await setOptionInDistrictForestly(FieldCardBusiness.TypeData.ALL);
 
     document
         .querySelector("#checkbox_filter_district_forestly")
@@ -88,16 +88,16 @@ async function setEventForElementsFilter() {
             if(e.target.checked) {
                 districtForestly.removeAttribute("disabled");
                 districtForestly.addEventListener('change', async (e)=>{
-                    await setOptionInQuarter(StatementRecalculationsBusiness.TypeData.BYID);
+                    await setOptionInQuarter(FieldCardBusiness.TypeData.BYID);
                 });
-                await setOptionInQuarter(StatementRecalculationsBusiness.TypeData.BYID);
+                await setOptionInQuarter(FieldCardBusiness.TypeData.BYID);
             } else {
                 districtForestly.setAttribute("disabled", "on");
-                await setOptionInQuarter(StatementRecalculationsBusiness.TypeData.ALL);
+                await setOptionInQuarter(FieldCardBusiness.TypeData.ALL);
             }
         });
 
-    await setOptionInQuarter(StatementRecalculationsBusiness.TypeData.ALL);
+    await setOptionInQuarter(FieldCardBusiness.TypeData.ALL);
 
     document
         .querySelector("#checkbox_filter_quartal")
@@ -164,14 +164,14 @@ async function setOptionInSubject() {
 
     subjectNode.innerHTML = newHtml;
 
-    await setOptionInForestly(StatementRecalculationsBusiness.TypeData.BYID);
+    await setOptionInForestly(FieldCardBusiness.TypeData.BYID);
 }
 
 async function setOptionInForestly(status) {
     let forestlyNode = document.querySelector("#filter_forestly");
     let forestly;
 
-    if(status == StatementRecalculationsBusiness.TypeData.BYID) {
+    if(status == FieldCardBusiness.TypeData.BYID) {
         let subjectNode = document.querySelector("#filter_subject_rf");
         forestly = await CommonBusiness.getForestlyByIdSubjectrf(subjectNode.value);
     } else {
@@ -189,14 +189,14 @@ async function setOptionInForestly(status) {
     }
     forestlyNode.innerHTML = newHtml;
 
-    await setOptionInDistrictForestly(StatementRecalculationsBusiness.TypeData.BYID);
+    await setOptionInDistrictForestly(FieldCardBusiness.TypeData.BYID);
 }
 
 async function setOptionInDistrictForestly(status) {
     let districtForestlyNode = document.querySelector("#filter_district_forestly");
     let districtForestly;
 
-    if(status == StatementRecalculationsBusiness.TypeData.BYID) {
+    if(status == FieldCardBusiness.TypeData.BYID) {
         let forestlyNode = document.querySelector("#filter_forestly");
         districtForestly = await CommonBusiness.getDistrictForestlyByIdForestly(forestlyNode.value);
     } else {
@@ -215,7 +215,7 @@ async function setOptionInDistrictForestly(status) {
 
     districtForestlyNode.innerHTML = newHtml;
 
-    await setOptionInQuarter(StatementRecalculationsBusiness.TypeData.BYID);
+    await setOptionInQuarter(FieldCardBusiness.TypeData.BYID);
 }
 
 async function setOptionInQuarter(status) {
@@ -223,7 +223,7 @@ async function setOptionInQuarter(status) {
     let quarterNode = document.querySelector("#filter_quartal");
     let quarter;
 
-    if(status == StatementRecalculationsBusiness.TypeData.BYID) {
+    if(status == FieldCardBusiness.TypeData.BYID) {
         let districtForestlyNode = document.querySelector("#filter_district_forestly");
         quarter = await CommonBusiness.getQuarterByIdDistrictForestly(districtForestlyNode.value);
     } else {
@@ -278,12 +278,12 @@ async function searchByFilter() {
         };
 
 
-        data = await StatementRecalculationsBusiness.getStatementListByFilter(responseData);
+        data = await FieldCardBusiness.getFieldCardListByFilter(responseData);
     } else {
 
-        data = await StatementRecalculationsBusiness.getAllStatementList();
+        data = await FieldCardBusiness.getAllFieldCardList();
     }
 
 
-    updateDataInStatementRecalculationsTbody(data);
+    updateDataInFieldCardTbody(data);
 }

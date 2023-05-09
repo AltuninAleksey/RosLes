@@ -41,3 +41,12 @@ CommonFunction.getDistrictForestlyNameByQuarterId = function(district_forestly, 
     return "";
 }
 
+CommonFunction.getBreedsName = function(breeds, id_breed) {
+    for(var j = 0; j < breeds.length; j++) {
+        if(breeds[j].id == id_breed) {
+            return breeds[j].name_breed;
+        }
+    }
+
+    return "";
+}

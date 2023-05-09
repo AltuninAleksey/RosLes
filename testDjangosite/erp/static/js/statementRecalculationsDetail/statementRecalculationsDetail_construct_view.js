@@ -29,9 +29,9 @@ async function setDetailDataIdPage() {
     let soilLotStatementNode = document.querySelector("#soilLotStatement");
     let sampleRegionStatementNode = document.querySelector("#sampleRegionStatement");
 
-    numberStatementInHeaderNode.innerHTML = APP.documentData.id;
+    numberStatementInHeaderNode.innerHTML = APP.documentData.number_region;
     daterStatementInHeaderNode.innerHTML = APP.documentData.date;
-    numberStatementNode.value = APP.documentData.id;
+    numberStatementNode.value = APP.documentData.number_region;
     dateStatementNode.value = APP.documentData.date;
     soilLotStatementNode.value = APP.documentData.soil_lot;
     sampleRegionStatementNode.value = APP.documentData.sample_region;
@@ -60,6 +60,17 @@ async function setEvent() {
                 await setQuarterStatement();
         });
 
+    document
+        .getElementById("plotDescription")
+        .addEventListener('click',function() {
+        getPlotDescription(APP.documentData.id_desc, APP.documentData.id);
+    });
+
+    document
+        .getElementById("printFieldCard")
+        .addEventListener('click',function() {
+        getPrintFieldCard(APP.documentData.id_field_card, APP.documentData.id);
+    });
 
 }
 
@@ -68,7 +79,10 @@ async function setSampleList() {
     let newHtml = "";
 
     for(let i = 0; i < APP.sampleList.length; i++) {
-        newHtml += `<tr>
+
+        let strGetRecalculatingDetail = "getRecalculatingDetail(" + APP.sampleList[i].id +  "," + document.querySelector("#idDocument").value  + ")"
+
+        newHtml += `<tr class="cursorPointer" onClick=${strGetRecalculatingDetail}>
                         <td class="td1">${APP.sampleList[i].date}</td>
                         <td class="td8">${APP.sampleList[i].id}</td>
                         <td class="td2">${CommonFunction.getSubjectNameByQuarterId(APP.subjectrf, APP.sampleList[i].id_subject_rf)}</td>

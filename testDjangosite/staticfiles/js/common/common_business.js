@@ -54,3 +54,23 @@ CommonBusiness.getQuarterByIdDistrictForestly = async function(id) {
 
     return requestData.data.data;
 }
+
+CommonBusiness.getAllBreeds = async function() {
+    var requestData = await axios({
+        method: 'get',
+        url: urlGlobal + "/breed",
+        responseType: 'json'
+    });
+
+    return requestData.data.get;
+}
+
+CommonBusiness.getAllTypeReproduction = async function() {
+    var requestData = await axios({
+        method: 'get',
+        url: urlGlobal + "/reproduction",
+        responseType: 'json'
+    });
+
+    return requestData.data.get;
+}
