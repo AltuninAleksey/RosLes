@@ -41,17 +41,17 @@ class Migration(migrations.Migration):
             field=models.DateField(verbose_name='Дата'),
         ),
         migrations.AlterField(
-            model_name='fieldсard',
+            model_name='fieldcard',
             name='point7number',
             field=models.IntegerField(verbose_name='Номер'),
         ),
         migrations.AlterField(
-            model_name='fieldсard',
+            model_name='fieldcard',
             name='protected_areas_of_forests',
             field=models.CharField(max_length=300, verbose_name='Особо защитные участки лесов'),
         ),
         migrations.AlterField(
-            model_name='fieldсard',
+            model_name='fieldcard',
             name='rent_area',
             field=models.BooleanField(default=0, verbose_name='Участок находится в аренде'),
         ),

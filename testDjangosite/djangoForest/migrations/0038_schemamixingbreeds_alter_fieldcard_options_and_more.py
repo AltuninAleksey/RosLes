@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.AlterModelOptions(
-            name='fieldсard',
+            name='fieldcard',
             options={'verbose_name': 'Полевая карточка', 'verbose_name_plural': 'Полевая карточка'},
         ),
         migrations.RemoveField(
