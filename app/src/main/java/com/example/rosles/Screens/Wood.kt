@@ -417,50 +417,51 @@ class Wood : BaseActivity("Пробная площадь") {
             override fun afterTextChanged(p0: Editable?) {}
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                binding.AvgHeightIskus.text=
+                val bufAvg: Float = binding.maksHeightIskus.text.toString().toFloatOrNull()?.let {
+                    avgHeight(binding.iskus02.text.toString().toFloat(),
+                        binding.iskus05.text.toString().toFloat(),
+                        binding.iskus06.text.toString().toFloat(),
+                        binding.iskus11.text.toString().toFloat(),
+                        binding.iskus15.text.toString().toFloat(),
+                        it
+                    )
+                } ?: 0.0f
 
-
-                    binding.maksHeightIskus.text.toString().toFloatOrNull()?.let {
-                        avgHeight(binding.iskus02.text.toString().toFloat(),
-                            binding.iskus05.text.toString().toFloat(),
-                            binding.iskus06.text.toString().toFloat(),
-                            binding.iskus11.text.toString().toFloat(),
-                            binding.iskus15.text.toString().toFloat(),
-                            it
-                        ).toString()
-                    }
+                binding.AvgHeightIskus.text = if (bufAvg.isNaN()) "0.0" else bufAvg.toString()
             }
         }
         val textChangedListenerEstes = object: TextWatcher{
             override fun afterTextChanged(p0: Editable?) {}
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                binding.AvgHeightestes.text=
-                    binding.maksHeightestes.text.toString().toFloatOrNull()?.let {
-                        avgHeight(binding.iskus02.text.toString().toFloat(),
-                            binding.estes05.text.toString().toFloat(),
-                            binding.estes06.text.toString().toFloat(),
-                            binding.estes11.text.toString().toFloat(),
-                            binding.estes15.text.toString().toFloat(),
-                            it
-                        ).toString()
-                    }
+                val bufAvg: Float = binding.maksHeightestes.text.toString().toFloatOrNull()?.let {
+                    avgHeight(binding.iskus02.text.toString().toFloat(),
+                        binding.estes05.text.toString().toFloat(),
+                        binding.estes06.text.toString().toFloat(),
+                        binding.estes11.text.toString().toFloat(),
+                        binding.estes15.text.toString().toFloat(),
+                        it
+                    )
+                } ?: 0.0f
+
+                binding.AvgHeightestes.text = if (bufAvg.isNaN()) "0.0" else bufAvg.toString()
             }
         }
         val textChangedListenerEstestvennoe = object: TextWatcher{
             override fun afterTextChanged(p0: Editable?){}
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int){}
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                binding.AvgHeightestestvennoe.text=
-                    binding.maksHeightestestvennoe.text.toString().toFloatOrNull()?.let {
-                        avgHeight(binding.iskus02.text.toString().toFloat(),
-                            binding.estestvennoe05.text.toString().toFloat(),
-                            binding.estestvennoe06.text.toString().toFloat(),
-                            binding.estestvennoe11.text.toString().toFloat(),
-                            binding.estestvennoe15.text.toString().toFloat(),
-                            it
-                        ).toString()
-                    }
+                val bufAvg: Float = binding.maksHeightestestvennoe.text.toString().toFloatOrNull()?.let {
+                    avgHeight(binding.iskus02.text.toString().toFloat(),
+                        binding.estestvennoe05.text.toString().toFloat(),
+                        binding.estestvennoe06.text.toString().toFloat(),
+                        binding.estestvennoe11.text.toString().toFloat(),
+                        binding.estestvennoe15.text.toString().toFloat(),
+                        it
+                    )
+                } ?: 0.0f
+
+                binding.AvgHeightestestvennoe.text = if (bufAvg.isNaN()) "0.0" else bufAvg.toString()
             }
         }
 
