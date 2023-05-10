@@ -271,9 +271,9 @@ class Wood : BaseActivity("Пробная площадь") {
             value?.iskus?.o15        = iskus15.text.toString().toInt()
             value?.iskus?.type       = 1
             value?.iskus?.id_breed   = Get_Id_breed_Class?.getidbreed(value_param,db)!!
-            value?.iskus?.maxHeight  = maksHeightIskus.text.toString().toFloatOrNull()
-            value?.iskus?.AVGHEight  = AvgHeightIskus.text.toString().toFloatOrNull()
-            value?.iskus?.AVGdiametr = AvgDiametrIskus.text.toString().toFloatOrNull()
+            value?.iskus?.maxHeight  = maksHeightIskus.text.toString().toFloatOrNull() ?: 0.0f
+            value?.iskus?.AVGHEight  = AvgHeightIskus.text.toString().toFloatOrNull() ?: 0.0f
+            value?.iskus?.AVGdiametr = AvgDiametrIskus.text.toString().toFloatOrNull() ?: 0.0f
 
             value?.estes?.o2         = estes02.text.toString().toInt()
             value?.estes?.o5         = estes05.text.toString().toInt()
@@ -282,9 +282,9 @@ class Wood : BaseActivity("Пробная площадь") {
             value?.estes?.o15        = estes15.text.toString().toInt()
             value?.estes?.type       = 2
             value?.estes?.id_breed   = Get_Id_breed_Class?.getidbreed(value_param,db)!!
-            value?.estes?.maxHeight  = maksHeightestes.text.toString().toFloatOrNull()
-            value?.estes?.AVGHEight  = AvgHeightestes.text.toString().toFloatOrNull()
-            value?.estes?.AVGdiametr = AvgDiametrestes.text.toString().toFloatOrNull()
+            value?.estes?.maxHeight  = maksHeightestes.text.toString().toFloatOrNull() ?: 0.0f
+            value?.estes?.AVGHEight  = AvgHeightestes.text.toString().toFloatOrNull() ?: 0.0f
+            value?.estes?.AVGdiametr = AvgDiametrestes.text.toString().toFloatOrNull() ?: 0.0f
 
             value?.estestvenn?.o2         = estestvennoe02.text.toString().toInt()
             value?.estestvenn?.o5         = estestvennoe05.text.toString().toInt()
@@ -293,9 +293,9 @@ class Wood : BaseActivity("Пробная площадь") {
             value?.estestvenn?.o15        = estestvennoe15.text.toString().toInt()
             value?.estestvenn?.type       = 3
             value?.estestvenn?.id_breed   = Get_Id_breed_Class?.getidbreed(value_param,db)!!
-            value?.estestvenn?.maxHeight  = maksHeightestestvennoe.text.toString().toFloatOrNull()
-            value?.estestvenn?.AVGHEight  = AvgHeightestestvennoe.text.toString().toFloatOrNull()
-            value?.estestvenn?.AVGdiametr = AvgDiametrestestvennoe.text.toString().toFloatOrNull()
+            value?.estestvenn?.maxHeight  = maksHeightestestvennoe.text.toString().toFloatOrNull() ?: 0.0f
+            value?.estestvenn?.AVGHEight  = AvgHeightestestvennoe.text.toString().toFloatOrNull() ?: 0.0f
+            value?.estestvenn?.AVGdiametr = AvgDiametrestestvennoe.text.toString().toFloatOrNull() ?: 0.0f
         }
     }
     //запись данных в хеш таблицу подлеска
@@ -488,22 +488,21 @@ class Wood : BaseActivity("Пробная площадь") {
 
     }
 
-     fun avgHeight(value1:Float,value2:Float,value3:Float,value4:Float,value5:Float,valuemax:Float):Float?{
+     fun avgHeight(value1:Float,value2:Float,value3:Float,value4:Float,value5:Float,valuemax:Float):Float{
         val sum=value1+value2+value3+value4+value5
-
-         val df = DecimalFormat("#.#")
-         df.roundingMode = RoundingMode.DOWN
 
          val result=((value1*0.1+value2*0.35+value3*0.8+value4*1.3+((valuemax+1.51)/2*value5))/sum).toFloat()
 
-        return  df.format(result).toFloatOrNull()
+        return  String.format("%.2f", result).replace(',', '.').toFloat()
 
     }
     fun GetCountWood(value: String){
         if (activeCountPorod==value){
             writedata(value)
         }
-        val buf=hashbufWood.get(value)!!
+        val buf = hashbufWood.get(value)
+        if (buf == null)
+            return
         val temp=
         buf.iskus!!.o2!!.toInt()+
         buf.iskus!!.o5!!.toInt()+
