@@ -136,6 +136,7 @@ class ListRegion(models.Model):
     mark_del = models.IntegerField(null = True)
     mark_update = models.IntegerField(null= True)
     number_region = models.CharField(max_length=100, default=0)
+    id_profile = models.ForeignKey("Profile", on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = 'Перечетная ведомость участка'
