@@ -172,10 +172,9 @@ class ListRegionView(generics.ListCreateAPIView):
     model = ListRegion
 
     def get(self, request, *args, **kwargs):
-        pk = kwargs.get('pk')
         if kwargs:
             try:
-                lst = ListRegion.objects.get(pk=pk)
+                lst = ListRegion.objects.get(pk=kwargs['pk'])
                 ser_lst = ListRegionSerializerId(lst).data
                 if FieldCard.objects.filter(id_list_region = kwargs['pk']).exists():
                     lst_field = FieldCard.objects.filter(id_list_region=kwargs['pk']).values("id")
@@ -192,10 +191,7 @@ class ListRegionView(generics.ListCreateAPIView):
                 return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
                                 status=status.HTTP_404_NOT_FOUND)
         lst = ListRegion.objects.all()
-        serealizer_class = GetListRegionSerializer(lst, many=True)
         return Response({"get":ListRegionSerializer(lst, many=True).data})
-        # lst = ListRegion.objects.all()
-        # return JsonResponse(ListRegionSerializer(lst, many=True).data, safe=False)
 
     def post(self, request):
         serializer = ListRegionSerializer(data=request.data)
@@ -206,19 +202,19 @@ class ListRegionView(generics.ListCreateAPIView):
         field.save()
         desc = DescriptionRegion(id_list_region = region)
         desc.save()
-        return Response({'post': serializer.data})
+        return Response({'code': status.HTTP_201_CREATED})
 
     def put(self, request, *args, **kwargs):
         if kwargs:
             try:
                 instance = ListRegion.objects.get(pk=kwargs['pk'])
+                serealizer = ListRegionSerializer(data=request.data, instance=instance)
+                serealizer.is_valid(raise_exception=True)
+                serealizer.save()
+                return Response({"put": status.HTTP_200_OK}, status=status.HTTP_200_OK)
             except:
-                return Response({"Объект с данным id не найден"})
-
-            serealizer = ListRegionSerializer(data=request.data, instance=instance)
-            serealizer.is_valid(raise_exception=True)
-            serealizer.save()
-        print(request.data['data'])
+                return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
+                         status=status.HTTP_404_NOT_FOUND)
         for i in range(len(request.data['data'])):
             if request.data['data'][i]['mark_update'] == 1:
                 instance = ListRegion.objects.get(id=request.data['data'][i]["id"])
@@ -243,7 +239,6 @@ class ListRegionViewUpdate(ListView):
 
     def put(self, request, *args, **kwargs):
         try:
-            print(kwargs['pk'])
             instance = ListRegion.objects.get(pk=kwargs['pk'])
         except:
             return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
@@ -254,6 +249,11 @@ class ListRegionViewUpdate(ListView):
         serealizer.save()
         return Response({"code": status.HTTP_200_OK})
 
+
+class ListRegionByProfileView(ListView):
+
+    def get(self, *args, **kwargs):
+        return Response({"get": ListRegionSerializer(ListRegion.objects.filter(id_profile = kwargs['pk_profile']), many=True).data})
 
 
 class SampleView(generics.ListCreateAPIView):

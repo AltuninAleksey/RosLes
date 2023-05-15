@@ -85,6 +85,7 @@ urlpatterns = [
     path('gpsbylistregion/<int:id_list_region>', GpsBySampleView.as_view()),
     path('listregion/update/<int:pk>', ListRegionViewUpdate.as_view()),
     path('listregion', ListRegionView.as_view()),
+    path('listregionbyprofile/<int:pk_profile>', ListRegionByProfileView.as_view()),
     path('listregion/<int:pk>', ListRegionView.as_view()),
     path('sample', SampleView.as_view()),
     path('sample/<int:pk>', SampleView.as_view()),
