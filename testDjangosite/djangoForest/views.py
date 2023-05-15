@@ -173,21 +173,19 @@ class ListRegionView(generics.ListCreateAPIView):
 
     def get(self, request, *args, **kwargs):
         pk = kwargs.get('pk')
-        if pk:
+        if kwargs:
             try:
                 lst = ListRegion.objects.get(pk=pk)
                 ser_lst = ListRegionSerializerId(lst).data
-                try:
-                    lst_field = FieldCard.objects.get(id_list_region=pk)
-                    ser_field = FieldCardSerializer(lst_field).data
-                    ser_lst.update({"id_field_card": ser_field['id']})
-                except:
+                if FieldCard.objects.filter(id_list_region = kwargs['pk']).exists():
+                    lst_field = FieldCard.objects.filter(id_list_region=kwargs['pk']).values("id")
+                    ser_lst.update({"id_field_card": lst_field[0]['id']})
+                else:
                     ser_lst.update({"id_field_card": 0})
-                try:
-                    lst_desc = DescriptionRegion.objects.get(id_list_region=pk)
-                    ser_desc = DescriptionRegionSerializer(lst_desc).data
-                    ser_lst.update({"id_desc": ser_desc['id']})
-                except:
+                if DescriptionRegion.objects.filter(id_list_region=kwargs['pk']).exists():
+                    lst_desc = DescriptionRegion.objects.filter(id_list_region=kwargs['pk']).values("id")
+                    ser_lst.update({"id_desc": lst_desc[0]['id']})
+                else:
                     ser_lst.update({"id_desc": 0})
                 return Response(ser_lst)
             except:
@@ -201,9 +199,13 @@ class ListRegionView(generics.ListCreateAPIView):
 
     def post(self, request):
         serializer = ListRegionSerializer(data=request.data)
-
         serializer.is_valid(raise_exception=True)
         serializer.save()
+        region = ListRegion.objects.get(id=serializer.data['id'])
+        field = FieldCard(id_list_region = region)
+        field.save()
+        desc = DescriptionRegion(id_list_region = region)
+        desc.save()
         return Response({'post': serializer.data})
 
     def put(self, request, *args, **kwargs):
@@ -212,10 +214,11 @@ class ListRegionView(generics.ListCreateAPIView):
                 instance = ListRegion.objects.get(pk=kwargs['pk'])
             except:
                 return Response({"Объект с данным id не найден"})
+
             serealizer = ListRegionSerializer(data=request.data, instance=instance)
             serealizer.is_valid(raise_exception=True)
             serealizer.save()
-
+        print(request.data['data'])
         for i in range(len(request.data['data'])):
             if request.data['data'][i]['mark_update'] == 1:
                 instance = ListRegion.objects.get(id=request.data['data'][i]["id"])
@@ -223,13 +226,18 @@ class ListRegionView(generics.ListCreateAPIView):
                 serealizer.is_valid(raise_exception=True)
                 serealizer.save()
             elif request.data['data'][i]['mark_update'] == 2:
+                print(request.data['data'][i]['mark_update'])
                 serializer = ListRegionSerializer(data=request.data['data'][i])
                 serializer.is_valid(raise_exception=True)
                 serializer.save()
                 lst = ListRegion.objects.get(id=serializer.data['id'])
+                field = FieldCard(id_list_region=lst)
+                field.save()
+                desc = DescriptionRegion(id_list_region=lst)
+                desc.save()
                 lst.mark_update = 0
                 lst.save()
-        return Response({"put": status.HTTP_200_OK})
+        return Response({"put": status.HTTP_200_OK}, status=status.HTTP_200_OK)
 
 class ListRegionViewUpdate(ListView):
 
@@ -805,17 +813,15 @@ class GetAllListRegionData(viewsets.ViewSet):
         return JsonResponse({'data': GetAllListRegionDataSerializer(lst, many=True).data}, safe=False)
 
 
-class CreateSampleAndOther(generics.ListCreateAPIView):
-    """
-    Создание/обновление пробы, перечета, gps.
-    """
+class CreateSampleAndOther(ListAPIView):
+
     def post(self, request, **kwargs):
         # serializer_list_region = ListRegionSerializer(data=request.data['sample'])
         # serializer_list_region.is_valid(raise_exception=True)
         # serializer_list_region.save()
         # request.data['sample'].update({'id_list_region': serializer_list_region.data['id']})
-        serializer_undergrowth = UndergrowthSerializer()
-        serializer_photopoint = PhotoPointSerializer()
+        # serializer_undergrowth = UndergrowthSerializer()
+        # serializer_photopoint = PhotoPointSerializer()
         serializer = SampleSerializer(data=request.data['sample'])
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -843,12 +849,12 @@ class CreateSampleAndOther(generics.ListCreateAPIView):
         else:
             serializer_gps = GPSSerializer(data="")
             serializer_gps.is_valid(raise_exception=False)
-        if len(request.data['photopoint']) != 0:
-            pass
-        if len(request.data['undergrowth']) != 0:
-            # for k in range(len(request.data['undergrowth'])):
-            serializer_undergrowth = UndergrowthSerializer(data=request.data['undergrowth'], many=True)
-            # serializer_gps.save()
+        # if len(request.data['photopoint']) != 0:
+        #     pass
+        # if len(request.data['undergrowth']) != 0:
+        #     # for k in range(len(request.data['undergrowth'])):
+        #     serializer_undergrowth = UndergrowthSerializer(data=request.data['undergrowth'], many=True)
+        #     # serializer_gps.save()
         # serializer_list_region.is_valid(raise_exception=True)
         # serializer_list_region.save()
         return Response({'sample': serializer.data,
@@ -857,7 +863,6 @@ class CreateSampleAndOther(generics.ListCreateAPIView):
                          "gps": serializer_gps.data})
 
     def put(self, request, *args, **kwargs):
-
         i = 0
         j = 0
         try:

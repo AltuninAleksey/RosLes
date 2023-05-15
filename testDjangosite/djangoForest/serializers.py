@@ -582,6 +582,7 @@ class DescriptionRegionSerializer(serializers.ModelSerializer):
         model = DescriptionRegion
         fields = '__all__'
 
+
     def validate_pk(self, value):
         try:
             DescriptionRegion.objects.get(id=value)
@@ -623,6 +624,7 @@ class FieldCardSerializer(serializers.ModelSerializer):
     class Meta:
         model = FieldCard
         fields = '__all__'
+
 
 
     def validate_pk(self, value):
