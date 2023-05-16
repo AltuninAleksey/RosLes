@@ -978,11 +978,11 @@ class UserRegistration(generics.ListCreateAPIView):
             #                  "error_text": user_serializer.errors[next(iter(user_serializer.errors))][0]},
             #                 status= status.HTTP_400_BAD_REQUEST)
         if not serializers.is_valid():
-            # return Response({'error': status.HTTP_400_BAD_REQUEST},
-            #          status=status.HTTP_400_BAD_REQUEST)
-            return Response({"error": status.HTTP_400_BAD_REQUEST,
-                             "error_text": serializers.errors[next(iter(serializers.errors))][0]},
-                            status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': status.HTTP_400_BAD_REQUEST},
+                     status=status.HTTP_400_BAD_REQUEST)
+            # return Response({"error": status.HTTP_400_BAD_REQUEST,
+            #                  "error_text": serializers.errors[next(iter(serializers.errors))][0]},
+            #                 status=status.HTTP_400_BAD_REQUEST)
         user_serializer.save()
         serializers.save()
         # # user = Users.objects.get(id = user_serializer.data['id'])
