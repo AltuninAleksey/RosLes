@@ -105,7 +105,14 @@ class ListView(generics.ListCreateAPIView):
                 lst.save()
         return Response({"put": status.HTTP_200_OK})
 
-
+    def delete(self, *args, **kwargs):
+        try:
+            lst = List.objects.get(id=kwargs['pk'])
+        except:
+            return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
+                            status=status.HTTP_404_NOT_FOUND)
+        lst.delete()
+        return Response({"code": status.HTTP_200_OK}, status=status.HTTP_200_OK)
 class GpsView(generics.ListCreateAPIView):
     def get(self, request, **kwargs):
         if kwargs:
@@ -311,6 +318,14 @@ class SampleView(generics.ListCreateAPIView):
                 lst.save()
         return Response({"put": status.HTTP_200_OK})
 
+    def delete(self, *args, **kwargs):
+        try:
+            lst = Sample.objects.get(id=kwargs['pk'])
+        except:
+            return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
+                            status=status.HTTP_404_NOT_FOUND)
+        lst.delete()
+        return Response({"code": status.HTTP_200_OK}, status=status.HTTP_200_OK)
 
 class PostView(generics.ListCreateAPIView):
     def get(self, request, **kwargs):
@@ -970,7 +985,7 @@ class UserAuth(generics.ListCreateAPIView):
             user = Users.objects.filter(email=request.data['email']).values(
                 'id', "password", "email").get()
         except:
-            return Response({ "error" :status.HTTP_401_UNAUTHORIZED},status=status.HTTP_401_UNAUTHORIZED)
+            return Response({ "error" :status.HTTP_401_UNAUTHORIZED}, status=status.HTTP_401_UNAUTHORIZED)
         if check_password(request.data["password"], user["password"]):
             profile = Profile.objects.filter(id_user_id = user['id']).values('id', 'FIO').get()
             return Response(profile)
