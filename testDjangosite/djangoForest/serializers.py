@@ -38,14 +38,19 @@ class ProfileSerializer(serializers.ModelSerializer):
         return instance
 
 
-    # def validate(self, data):
-    #
-    #     if data['FIO']:
-    #         for i in data['FIO']:
-    #             if i.isdigit():
-    #                 raise serializers.ValidationError({"error_text": "В поле ФИО присуствуют числа"})
-    #
-    #     return data
+    def validate(self, data):
+
+        if data['FIO']:
+            for i in data['FIO']:
+                if i.isdigit():
+                    raise serializers.ValidationError({"error_text": "В ФИО не могут находиться цифры"})
+
+        if data['phoneNumber']:
+            for i in data['phoneNumber']:
+                if i.isalpha():
+                    raise serializers.ValidationError({"error_text": "Номер телефона должен состоять только из цифр."})
+
+        return data
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -53,7 +58,10 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = Users
         fields = '__all__'
-
+        extra_kwargs = {
+            "email": {"error_messages": {'blank': "Поле email не может быть пустым"}},
+            "password": {"error_messages": {'blank': "Поле email не может быть пустым"}}
+        }
     def create(self, validated_data):
         return Users.objects.create(email = validated_data['email'],
                                     password = make_password(validated_data['password'], "pbkdf2_sha256")
