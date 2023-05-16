@@ -3,7 +3,7 @@ import io
 from django.contrib.auth.hashers import make_password
 from rest_framework import serializers, status
 from .models import *
-from django.core.validators import validate_email
+from django.core.validators import validate_email as val_email
 from django.core.exceptions import ValidationError
 # import django.core.exceptions
 from django.core.validators import EmailValidator
@@ -13,11 +13,17 @@ class TableSerializer(serializers.ModelSerializer):
         model = Table
         fields = '__all__'
 
+def non_blank(value):
+    return f"Поле {value} не может быть пустым"
 
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         fields = '__all__'
+        extra_kwargs = {
+            "FIO": {"error_messages": {'blank': "Поле ФИО не может быть пустым"}},
+            "phoneNumber": {"error_messages": {'blank': "Поле номер телефона не может быть пустым"}}
+        }
 
     def create(self, validated_data):
         return Profile.objects.create(**validated_data)
@@ -25,52 +31,53 @@ class ProfileSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         instance.FIO = validated_data.get("FIO")
         instance.phoneNumber = validated_data.get("phoneNumber")
-        instance.email = validated_data.get("email")
         instance.id_post = validated_data.get("id_post")
-        instance.id_working_breeds = validated_data.get("id_working_breeds")
         instance.id_role = validated_data.get("id_role")
         instance.id_branches = validated_data.get("id_branches")
         instance.save()
         return instance
 
 
-def required(value):
-    if value is None:
-        raise serializers.ValidationError({"error": status.HTTP_400_BAD_REQUEST})
+    # def validate(self, data):
+    #
+    #     if data['FIO']:
+    #         for i in data['FIO']:
+    #             if i.isdigit():
+    #                 raise serializers.ValidationError({"error_text": "В поле ФИО присуствуют числа"})
+    #
+    #     return data
+
 
 class UserSerializer(serializers.ModelSerializer):
-    # email = serializers.EmailField(validators=[required])
+
     class Meta:
         model = Users
         fields = '__all__'
-        # extra_kwargs= {'email': {'required': {"error": status.HTTP_400_BAD_REQUEST}}}
 
     def create(self, validated_data):
         return Users.objects.create(email = validated_data['email'],
                                     password = make_password(validated_data['password'], "pbkdf2_sha256")
                                     )
 
-    # def validate_email(self, value):
-    #     try:
-    #         Users.objects.filter(email=value).values(
-    #             'id', "password", "email").get()
-    #         return value
-    #     except:
-    #         raise serializers.ValidationError("invalid email")
+    def update(self, instance, validated_data):
+        instance.email = validated_data.get("email")
+        instance.password = make_password(validated_data.get("password"), "pbkdf2_sha256")
+        instance.save()
 
-    def validate_email(self, value):
-        # if value is None:
-        #     raise serializers.ValidationError({"error": status.HTTP_409_CONFLICT}, code=status.HTTP_409_CONFLICT)
-        if Users.objects.filter(email = value).exists():
-            raise serializers.ValidationError({"error": status.HTTP_409_CONFLICT}, code=status.HTTP_409_CONFLICT)
-        if not value:
-            raise serializers.ValidationError({"error": status.HTTP_400_BAD_REQUEST}, code=status.HTTP_400_BAD_REQUEST)
-        try:
-            validate_email(value)
-        except:
-            raise serializers.ValidationError({"error": status.HTTP_400_BAD_REQUEST}, code=status.HTTP_400_BAD_REQUEST)
 
-        return value
+    # def validate(self, data):
+
+        # if data['email']:
+        #     if len(data["email"]) == 0:
+        #         raise serializers.ValidationError({"error_text": "email не должен быть пустым"})
+        # if data['password']:
+        #     if len(data["password"]) == 0:
+        #         raise serializers.ValidationError({"error_text": "password не должен быть пустым"})
+        # return data
+
+
+
+
 
 class ListSerializer(serializers.ModelSerializer):
     class Meta:

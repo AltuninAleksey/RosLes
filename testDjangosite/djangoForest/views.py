@@ -966,19 +966,30 @@ class UnionListRegions(generics.ListCreateAPIView):
 class UserRegistration(generics.ListCreateAPIView):
 
     def post(self, request, **kwargs):
+        if Users.objects.filter(email = request.data['email']).exists():
+            return Response({"error": status.HTTP_409_CONFLICT},
+                            status= status.HTTP_409_CONFLICT)
         user_serializer = UserSerializer(data=request.data)
-        # if Users.objects.filter(email = request.data['email']).exists():
-        #     return Response({"error": status.HTTP_409_CONFLICT}, status=status.HTTP_409_CONFLICT)
-        # if not user_serializer.validate_email(request.data['email']):
-        #     return Response({"error": status.HTTP_400_BAD_REQUEST},
-        #                     status=status.HTTP_400_BAD_REQUEST)
-        user_serializer.validate_email(request.data['email'])
-        user_serializer.is_valid(raise_exception=True)
+        serializers = ProfileSerializer(data=request.data)
+        if not user_serializer.is_valid():
+            return Response({'error': status.HTTP_400_BAD_REQUEST},
+                     status=status.HTTP_400_BAD_REQUEST)
+            # return Response({"error": status.HTTP_400_BAD_REQUEST,
+            #                  "error_text": user_serializer.errors[next(iter(user_serializer.errors))][0]},
+            #                 status= status.HTTP_400_BAD_REQUEST)
+        if not serializers.is_valid():
+            # return Response({'error': status.HTTP_400_BAD_REQUEST},
+            #          status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": status.HTTP_400_BAD_REQUEST,
+                             "error_text": serializers.errors[next(iter(serializers.errors))][0]},
+                            status=status.HTTP_400_BAD_REQUEST)
         user_serializer.save()
-        request.data.update({'id_user': user_serializer.data['id']})
-        serializers = ProfileSerializer(data=request.data, context={'request':request})
-        serializers.is_valid(raise_exception=True)
         serializers.save()
+        # # user = Users.objects.get(id = user_serializer.data['id'])
+        lst = Profile.objects.get(id = serializers.data['id'])
+        lst.id_user_id = user_serializer.data['id']
+        lst.save()
+
         return Response({"code": status.HTTP_201_CREATED}, status=status.HTTP_201_CREATED)
 
 
