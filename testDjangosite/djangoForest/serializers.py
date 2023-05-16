@@ -1,9 +1,10 @@
 import io
 
 from django.contrib.auth.hashers import make_password
-from rest_framework import serializers
+from rest_framework import serializers, status
 from .models import *
-
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
 
 class TableSerializer(serializers.ModelSerializer):
     class Meta:
@@ -49,6 +50,17 @@ class UserSerializer(serializers.ModelSerializer):
     #         return value
     #     except:
     #         raise serializers.ValidationError("invalid email")
+
+    def validate_email(self, value):
+        # if Users.objects.filter(email=value).exists():
+        #     raise
+        # return value
+        try:
+            validate_email(value)
+        except ValidationError:
+            return False
+        return value
+
 class ListSerializer(serializers.ModelSerializer):
     class Meta:
         model = List
