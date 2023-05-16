@@ -1,6 +1,8 @@
 package com.example.rosles.Screens
 
 import android.graphics.Color
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
@@ -13,9 +15,13 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import com.example.rosles.Network.SafeRequest
+import com.example.rosles.Network.SourceProviderHolder
 import com.example.rosles.Network.ViewModels
 import com.example.rosles.R
 import com.example.rosles.RequestClass.RegistrationReqest
+import com.example.rosles.ResponceClass.BaseResp
+import com.example.rosles.ResponceClass.BaseResponceInterface
 import com.example.rosles.databinding.CreateUserBinding
 
 class create_user:AppCompatActivity() {
@@ -57,10 +63,15 @@ class create_user:AppCompatActivity() {
 
 
     fun  initview(){
-        binding.name.imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.profile_input_form))
-        binding.filial.imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.home_gray))
-        binding.password.imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.lock))
-        binding.passwordapply.imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.lock))
+        binding.name.imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.person))
+        binding.filial.imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.home))
+        binding.password.imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.password))
+        binding.passwordapply.imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.password))
+
+        binding.name.imageView.colorFilter = PorterDuffColorFilter(ContextCompat.getColor(
+            this,
+            R.color.red_color),
+            PorterDuff.Mode.SRC_IN)
 
         binding.name.editUser.setHint("ФИО")
         binding.filial.editUser.setHint("Телефон")
@@ -68,20 +79,42 @@ class create_user:AppCompatActivity() {
         binding.password.editUser.setHint("Password")
         binding.passwordapply.editUser.setHint("Confirm Password")
 
-        binding.CreateSave.setOnClickListener{
-            with(binding){
-                if (password.editUser.text.toString()==passwordapply.editUser.text.toString()) {
-                    val body = RegistrationReqest(
-                        email.editUser.text.toString(),
-                        password.editUser.text.toString(),
-                        name.editUser.text.toString(),
-                        filial.editUser.text.toString()
-                    )
-                    var a=viewModel.registration(body)
+        binding.CreateSave.setOnClickListener {
+            with(binding) {
+                if (isValidPassword()) {
+                    SafeRequest(viewModel).request(object: SafeRequest.Protection {
+                        override suspend fun makeRequest(): BaseResponceInterface? {
+                            val body = RegistrationReqest(
+                                email.editUser.text.toString(),
+                                password.editUser.text.toString(),
+                                name.editUser.text.toString(),
+                                filial.editUser.text.toString())
 
-                }
-                else{
-                    Toast.makeText(this@create_user, "Пароли не совпадают", Toast.LENGTH_SHORT).show()
+                            val responseFromReg: BaseResp = SourceProviderHolder.sourcesProvider
+                                .getAccountsSource().registration(body)
+
+                            return responseFromReg
+                        }
+
+                        override fun ifSuccess(responce: BaseResponceInterface?) {
+                           Toast.makeText(this@create_user, "Вы зарегестрировались",
+                               Toast.LENGTH_SHORT).show()
+                        }
+
+                        override fun ifException() {
+                            Toast.makeText(this@create_user, "Ошибка регистрации",
+                                Toast.LENGTH_SHORT).show()
+                        }
+
+                        override fun ifConnectionException() {
+                            Toast.makeText(this@create_user, "Нет подключения к интернету",
+                                Toast.LENGTH_SHORT).show()
+                        }
+
+                    })
+                } else {
+                    Toast.makeText(this@create_user, "Пароли не совпадают",
+                        Toast.LENGTH_SHORT).show()
                 }
             }
 
@@ -90,5 +123,13 @@ class create_user:AppCompatActivity() {
             //магия вне хогвартса отправка анкеты на сервер вжух хуяк-хуяк пользователь есть
             //ахуеть папаша вот это паштет навалилы базы + и метода
         }
+    }
+
+    fun isValidPassword(): Boolean {
+        val passwordBuffer: String = binding.password.editUser.text.toString()
+        val passwordApplyBuffer: String = binding.passwordapply.editUser.text.toString()
+
+        return passwordBuffer.isNotEmpty() && passwordApplyBuffer.isNotEmpty() &&
+                passwordBuffer.equals(passwordApplyBuffer)
     }
 }
