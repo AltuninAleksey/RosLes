@@ -1,6 +1,7 @@
 package com.example.rosles.Screens
 
 import android.graphics.Color
+import android.graphics.ColorFilter
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.os.Bundle
@@ -10,6 +11,7 @@ import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.MenuItem
 import android.view.Window
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -62,16 +64,11 @@ class create_user:AppCompatActivity() {
     }
 
 
-    fun  initview(){
+    fun  initview() {
         binding.name.imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.person))
         binding.filial.imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.home))
         binding.password.imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.password))
         binding.passwordapply.imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.password))
-
-        binding.name.imageView.colorFilter = PorterDuffColorFilter(ContextCompat.getColor(
-            this,
-            R.color.red_color),
-            PorterDuff.Mode.SRC_IN)
 
         binding.name.editUser.setHint("ФИО")
         binding.filial.editUser.setHint("Телефон")
