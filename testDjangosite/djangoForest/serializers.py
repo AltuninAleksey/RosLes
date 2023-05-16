@@ -39,7 +39,7 @@ def required(value):
         raise serializers.ValidationError({"error": status.HTTP_400_BAD_REQUEST})
 
 class UserSerializer(serializers.ModelSerializer):
-    email = serializers.EmailField(validators=[required])
+    # email = serializers.EmailField(validators=[required])
     class Meta:
         model = Users
         fields = '__all__'
@@ -60,13 +60,14 @@ class UserSerializer(serializers.ModelSerializer):
 
     def validate_email(self, value):
         # if value is None:
-        #     return False
+        #     raise serializers.ValidationError({"error": status.HTTP_409_CONFLICT}, code=status.HTTP_409_CONFLICT)
+        if Users.objects.filter(email = value).exists():
+            raise serializers.ValidationError({"error": status.HTTP_409_CONFLICT}, code=status.HTTP_409_CONFLICT)
         if not value:
             raise serializers.ValidationError({"error": status.HTTP_400_BAD_REQUEST}, code=status.HTTP_400_BAD_REQUEST)
         try:
             validate_email(value)
         except:
-            # return False
             raise serializers.ValidationError({"error": status.HTTP_400_BAD_REQUEST}, code=status.HTTP_400_BAD_REQUEST)
 
         return value
