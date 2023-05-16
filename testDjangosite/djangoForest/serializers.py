@@ -5,6 +5,7 @@ from rest_framework import serializers, status
 from .models import *
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
+# import django.core.exceptions
 from django.core.validators import EmailValidator
 
 class TableSerializer(serializers.ModelSerializer):
@@ -33,11 +34,16 @@ class ProfileSerializer(serializers.ModelSerializer):
         return instance
 
 
+def required(value):
+    if value is None:
+        raise serializers.ValidationError({"error": status.HTTP_400_BAD_REQUEST})
+
 class UserSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(validators=[required])
     class Meta:
         model = Users
         fields = '__all__'
-        # extra_kwargs= {"email": {"error_messages": {"required": {"Это обязательное поле"}}}}
+        # extra_kwargs= {'email': {'required': {"error": status.HTTP_400_BAD_REQUEST}}}
 
     def create(self, validated_data):
         return Users.objects.create(email = validated_data['email'],
@@ -53,12 +59,16 @@ class UserSerializer(serializers.ModelSerializer):
     #         raise serializers.ValidationError("invalid email")
 
     def validate_email(self, value):
-        # if not isinstance(value, str):
+        # if value is None:
         #     return False
+        if not value:
+            raise serializers.ValidationError({"error": status.HTTP_400_BAD_REQUEST}, code=status.HTTP_400_BAD_REQUEST)
         try:
             validate_email(value)
         except:
-            return False
+            # return False
+            raise serializers.ValidationError({"error": status.HTTP_400_BAD_REQUEST}, code=status.HTTP_400_BAD_REQUEST)
+
         return value
 
 class ListSerializer(serializers.ModelSerializer):
