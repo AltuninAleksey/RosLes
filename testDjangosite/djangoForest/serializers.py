@@ -5,6 +5,7 @@ from rest_framework import serializers, status
 from .models import *
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
+from django.core.validators import EmailValidator
 
 class TableSerializer(serializers.ModelSerializer):
     class Meta:
@@ -52,12 +53,11 @@ class UserSerializer(serializers.ModelSerializer):
     #         raise serializers.ValidationError("invalid email")
 
     def validate_email(self, value):
-        # if Users.objects.filter(email=value).exists():
-        #     raise
-        # return value
+        # if not isinstance(value, str):
+        #     return False
         try:
             validate_email(value)
-        except ValidationError:
+        except:
             return False
         return value
 
