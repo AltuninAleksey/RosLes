@@ -84,12 +84,12 @@ class ListView(generics.ListCreateAPIView):
         if kwargs:
             try:
                 instance = List.objects.get(pk=kwargs['pk'])
+                serealizer = ListSerializer(data=request.data, instance=instance)
+                serealizer.is_valid(raise_exception=True)
+                serealizer.save()
+                return Response({"put": status.HTTP_200_OK})
             except:
                 return Response({"Объект с данным id не найден"})
-            serealizer = ListSerializer(data=request.data, instance=instance)
-            serealizer.is_valid(raise_exception=True)
-            serealizer.save()
-            return Response({"put": status.HTTP_200_OK})
 
         for i in range(len(request.data['data'])):
             if request.data['data'][i]['mark_update'] == 1:
@@ -296,12 +296,12 @@ class SampleView(generics.ListCreateAPIView):
             print(123)
             try:
                 instance = Sample.objects.get(pk=kwargs['pk'])
+                serealizer = SampleSerializer(data=request.data, instance=instance)
+                serealizer.is_valid(raise_exception=True)
+                serealizer.save()
+                return Response({"put": status.HTTP_200_OK})
             except:
                 return Response({"Объект с данным id не найден"})
-            serealizer = SampleSerializer(data=request.data, instance=instance)
-            serealizer.is_valid(raise_exception=True)
-            serealizer.save()
-            return Response({"put": status.HTTP_200_OK})
 
         for i in range(len(request.data['data'])):
             if request.data['data'][i]['mark_update'] == 1:
