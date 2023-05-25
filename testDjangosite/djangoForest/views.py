@@ -89,6 +89,7 @@ class ListView(generics.ListCreateAPIView):
             serealizer = ListSerializer(data=request.data, instance=instance)
             serealizer.is_valid(raise_exception=True)
             serealizer.save()
+            return Response({"put": status.HTTP_200_OK})
 
         for i in range(len(request.data['data'])):
             if request.data['data'][i]['mark_update'] == 1:
@@ -113,6 +114,7 @@ class ListView(generics.ListCreateAPIView):
                             status=status.HTTP_404_NOT_FOUND)
         lst.delete()
         return Response({"code": status.HTTP_200_OK}, status=status.HTTP_200_OK)
+
 class GpsView(generics.ListCreateAPIView):
     def get(self, request, **kwargs):
         if kwargs:
@@ -127,7 +129,10 @@ class GpsView(generics.ListCreateAPIView):
 
     def post(self, request):
         serializer = GPSSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
+        if not serializer.is_valid():
+            return Response({"error": status.HTTP_400_BAD_REQUEST,
+                             "error_text": serializer.errors[next(iter(serializer.errors))][0]},
+                            status=status.HTTP_400_BAD_REQUEST)
         serializer.save()
         return Response({'post': serializer.data})
 
@@ -229,7 +234,6 @@ class ListRegionView(generics.ListCreateAPIView):
                 serealizer.is_valid(raise_exception=True)
                 serealizer.save()
             elif request.data['data'][i]['mark_update'] == 2:
-                print(request.data['data'][i]['mark_update'])
                 serializer = ListRegionSerializer(data=request.data['data'][i])
                 serializer.is_valid(raise_exception=True)
                 serializer.save()
@@ -285,10 +289,11 @@ class SampleView(generics.ListCreateAPIView):
         serializer = SampleSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response({'post': serializer.data})
+        return Response({'post': status.HTTP_201_CREATED}, status=status.HTTP_201_CREATED)
 
     def put(self, request, *args, **kwargs):
         if kwargs:
+            print(123)
             try:
                 instance = Sample.objects.get(pk=kwargs['pk'])
             except:
@@ -296,13 +301,9 @@ class SampleView(generics.ListCreateAPIView):
             serealizer = SampleSerializer(data=request.data, instance=instance)
             serealizer.is_valid(raise_exception=True)
             serealizer.save()
+            return Response({"put": status.HTTP_200_OK})
 
         for i in range(len(request.data['data'])):
-            # try:
-            #     instance = Sample.objects.get(id=request.data['data'][i]["id"])
-            #     print(instance)
-            # except:
-            #     continue
             if request.data['data'][i]['mark_update'] == 1:
                 instance = Sample.objects.get(id=request.data['data'][i]["id"])
                 serealizer = SampleSerializer(data=request.data["data"][i], instance=instance)
@@ -560,7 +561,10 @@ class QuarterView(generics.ListCreateAPIView):
 
     def post(self, request):
         serializer = QuarterSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
+        if not serializer.is_valid():
+            return Response({"error": status.HTTP_400_BAD_REQUEST,
+                             "error_text": serializer.errors[next(iter(serializer.errors))][0]},
+                            status=status.HTTP_400_BAD_REQUEST)
         serializer.save()
         return Response({'post': serializer.data})
 

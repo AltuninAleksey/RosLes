@@ -389,6 +389,7 @@ class ListRegionSerializer(serializers.ModelSerializer):
         instance.mark_del = validated_data.get("mark_del")
         instance.number_region = validated_data.get("number_region")
         instance.mark_update = 0
+        instance.id_profile = validated_data.get("id_profile")
         instance.save()
         return instance
 
