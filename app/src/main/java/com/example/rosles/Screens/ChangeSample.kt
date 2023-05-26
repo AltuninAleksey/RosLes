@@ -78,10 +78,8 @@ class ChangeSample:AppCompatActivity() {
         val buf:Int?=intent.getStringExtra("id_sample")?.toInt()
         val id_vdomost:Int?=intent.getStringExtra("id_vdomost")?.toInt()
         var sPref =getSharedPreferences("PreferencesName", MODE_PRIVATE);
-        var id= sPref.getString("id", "1")!!.toInt()
+        val id_user = sPref.getString("id", "")!!.toInt()
         val cursor=db.getSAMPLE(buf!!)
-
-
 
 
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
@@ -110,9 +108,9 @@ class ChangeSample:AppCompatActivity() {
                 )
             db.Mark_Update_Sample(buf)
             db.Mark_Update_Listregion(id_vdomost!!)
-            val intent = Intent(this, Sample::class.java)
-            intent.putExtra("id_Vedomost", id_region)
-            startActivity(intent)
+//            val intent = Intent(this, Sample::class.java)
+//            intent.putExtra("id_Vedomost", id_region)
+//            startActivity(intent)
             finish()
         }
         binding.date.setOnClickListener {

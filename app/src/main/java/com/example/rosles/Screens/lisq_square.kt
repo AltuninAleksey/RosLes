@@ -119,7 +119,12 @@ class lisq_square : BaseActivity("Список пробных площадей")
             tableRow.layoutParams = layoutParams
         }
 
-        binding.toolbar.save.isGone = true
+        binding.toolbar.save.setOnClickListener{
+            val intent = Intent(this, ChangeSample::class.java)
+            intent.putExtra("id_sample", id_sample.toString())
+            intent.putExtra("id_vdomost", bufer_quater_id)
+            startActivity(intent)
+        }
         binding.toolbar.addbutton.setOnClickListener {
             val intent = Intent(this, AddSample::class.java)
             intent.putExtra("id", id_vdomost.toString())

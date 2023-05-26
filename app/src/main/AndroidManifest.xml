@@ -51,8 +51,8 @@
         <activity android:name="com.example.rosles.Screens.ChoiceDistrict"/>
         <activity android:name="com.example.rosles.Screens.ChoiceCvartal"/>
         <activity android:name="com.example.rosles.Screens.AddSample"/>
+        <activity android:name="com.example.rosles.Screens.AddVedomost"/>
         <activity android:name="com.example.rosles.Screens.Dashboard"/>
-<!--        <activity android:name="com.example.rosles.Screens.Dashboard"/>-->
         <activity android:name="com.example.rosles.Screens.gps_activity"/>
         <activity android:name="com.example.rosles.Screens.SelectPhoto"/>
         <activity android:name="com.example.rosles.Screens.lisq_square"/>

@@ -4,6 +4,7 @@ import com.example.rosles.RequestClass.*
 import com.example.rosles.ResponceClass.*
 import kotlinx.coroutines.delay
 import okhttp3.ResponseBody
+import retrofit2.Response
 import retrofit2.http.GET
 
 class RetrofitAccountsSource(
@@ -88,7 +89,7 @@ class RetrofitAccountsSource(
         accountsApi.perechet(perechetRequest)
     }
 
-    override suspend fun registration(registrationReqest: RegistrationReqest): BaseResp = wrapRetrofitExceptions {
+    override suspend fun registration(registrationReqest: RegistrationReqest): Response<RegistrationReqest> = wrapRetrofitExceptions {
         delay(1000)
         accountsApi.registration(registrationReqest)
     }

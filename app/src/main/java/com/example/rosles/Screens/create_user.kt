@@ -25,6 +25,10 @@ import com.example.rosles.RequestClass.RegistrationReqest
 import com.example.rosles.ResponceClass.BaseResp
 import com.example.rosles.ResponceClass.BaseResponceInterface
 import com.example.rosles.databinding.CreateUserBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.json.JSONObject
 
 class create_user:AppCompatActivity() {
 
@@ -77,46 +81,26 @@ class create_user:AppCompatActivity() {
         binding.passwordapply.editUser.setHint("Confirm Password")
 
         binding.CreateSave.setOnClickListener {
-            with(binding) {
-                if (isValidPassword()) {
-                    SafeRequest(viewModel).request(object: SafeRequest.Protection {
-                        override suspend fun makeRequest(): BaseResponceInterface? {
-                            val body = RegistrationReqest(
-                                email.editUser.text.toString(),
-                                password.editUser.text.toString(),
-                                name.editUser.text.toString(),
-                                filial.editUser.text.toString())
 
-                            val responseFromReg: BaseResp = SourceProviderHolder.sourcesProvider
-                                .getAccountsSource().registration(body)
+            CoroutineScope(Dispatchers.IO).launch {
+                val value=viewModel.registration(RegistrationReqest(
+                    binding.email.editUser.text.toString(),
+                    binding.password.editUser.text.toString(),
+                    binding.name.editUser.text.toString(),
+                    binding.filial.editUser.text.toString()))
 
-                            return responseFromReg
+                runOnUiThread{
+                    when(value.code()){
+                        (201)->{
+                            Toast.makeText(this@create_user,"Пользователь создан",Toast.LENGTH_SHORT).show()
+                            finish()
+                        }else->{
+                        val a=value?.errorBody()?.string().let { JSONObject(it).getString("error_text") }
+                        Toast.makeText(this@create_user,a,Toast.LENGTH_SHORT).show()
                         }
-
-                        override fun ifSuccess(responce: BaseResponceInterface?) {
-                           Toast.makeText(this@create_user, "Вы зарегестрировались",
-                               Toast.LENGTH_SHORT).show()
-                        }
-
-                        override fun ifException() {
-                            Toast.makeText(this@create_user, "Ошибка регистрации",
-                                Toast.LENGTH_SHORT).show()
-                        }
-
-                        override fun ifConnectionException() {
-                            Toast.makeText(this@create_user, "Нет подключения к интернету",
-                                Toast.LENGTH_SHORT).show()
-                        }
-
-                    })
-                } else {
-                    Toast.makeText(this@create_user, "Пароли не совпадают",
-                        Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
-
-
-
             //магия вне хогвартса отправка анкеты на сервер вжух хуяк-хуяк пользователь есть
             //ахуеть папаша вот это паштет навалилы базы + и метода
         }

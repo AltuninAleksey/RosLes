@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.MenuItem
 import android.view.View
 import android.widget.*
@@ -71,12 +73,7 @@ class AddSample : AppCompatActivity() {
             true
         })
         popup.show()
-
     }
-
-
-
-
     fun InitClick() {
         binding.buttonAuto.setOnClickListener {
             val sPref = getSharedPreferences("PreferencesName", MODE_PRIVATE)
@@ -107,12 +104,25 @@ class AddSample : AppCompatActivity() {
             )
             db.Mark_Update_Listregion(id_region)
             Toast.makeText(this, "Данные добавлены", Toast.LENGTH_LONG).show()
-
             finish()
         }
         binding.date.setOnClickListener {
             initDatePicker()
         }
+        val summlistener = object: TextWatcher {
+            override fun afterTextChanged(p0: Editable?) {}
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+                val a=binding.vudel.text.toString().toInt()?: 0
+                val b=binding.idCvartal.text.toString().toInt()?: 0
+                binding.samplearea.setText((a*b).toString())
+            }
+        }
+        binding.vudel.addTextChangedListener(summlistener)
+
+
+
     }
 
     @SuppressLint("SetTextI18n")
