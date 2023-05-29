@@ -246,6 +246,15 @@ class ListRegionView(generics.ListCreateAPIView):
                 lst.save()
         return Response({"put": status.HTTP_200_OK}, status=status.HTTP_200_OK)
 
+    def delete(self, *args, **kwargs):
+        try:
+            lst = ListRegion.objects.get(id=kwargs['pk'])
+        except:
+            return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
+                            status=status.HTTP_404_NOT_FOUND)
+        lst.delete()
+        return Response({"code": status.HTTP_200_OK}, status=status.HTTP_200_OK)
+
 class ListRegionViewUpdate(ListView):
 
     def put(self, request, *args, **kwargs):
