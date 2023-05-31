@@ -420,9 +420,12 @@ class SubjectRFview(generics.ListCreateAPIView):
 
     def post(self, request):
         serializer = SubjectRFSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
+        if not serializer.is_valid():
+            return Response({"error": status.HTTP_400_BAD_REQUEST,
+                             "error_text": serializer.errors[next(iter(serializer.errors))][0]},
+                            status=status.HTTP_400_BAD_REQUEST)
         serializer.save()
-        return Response({'post': serializer.data})
+        return Response({'code': status.HTTP_201_CREATED}, status=status.HTTP_201_CREATED)
 
     def put(self, request, *args, **kwargs):
         try:
@@ -431,9 +434,12 @@ class SubjectRFview(generics.ListCreateAPIView):
             return Response({"error": "Объект с данным id не найден"})
 
         serealizer = SubjectRFSerializer(data=request.data, instance=instance)
-        serealizer.is_valid(raise_exception=True)
+        if not serealizer.is_valid():
+            return Response({"error": status.HTTP_400_BAD_REQUEST,
+                             "error_text": serealizer.errors[next(iter(serealizer.errors))][0]},
+                            status=status.HTTP_400_BAD_REQUEST)
         serealizer.save()
-        return Response({"put": serealizer.data})
+        return Response({"put": status.HTTP_200_OK})
 
 
 class RoleView(generics.ListCreateAPIView):
@@ -510,9 +516,12 @@ class ForestlyView(generics.ListCreateAPIView):
 
     def post(self, request):
         serializer = ForestlySerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
+        if not serializer.is_valid():
+            return Response({"error": status.HTTP_400_BAD_REQUEST,
+                             "error_text": serializer.errors[next(iter(serializer.errors))][0]},
+                            status=status.HTTP_400_BAD_REQUEST)
         serializer.save()
-        return Response({'post': serializer.data})
+        return Response({'code': status.HTTP_201_CREATED}, status=status.HTTP_201_CREATED)
 
     def put(self, request, *args, **kwargs):
         try:
@@ -521,9 +530,12 @@ class ForestlyView(generics.ListCreateAPIView):
             return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
                             status=status.HTTP_404_NOT_FOUND)
         serealizer = ForestlySerializer(data=request.data, instance=instance)
-        serealizer.is_valid(raise_exception=True)
+        if not serealizer.is_valid():
+            return Response({"error": status.HTTP_400_BAD_REQUEST,
+                             "error_text": serealizer.errors[next(iter(serealizer.errors))][0]},
+                            status=status.HTTP_400_BAD_REQUEST)
         serealizer.save()
-        return Response({"put": serealizer.data})
+        return Response({"put": status.HTTP_200_OK})
 
 
 class DistrictForestlyView(generics.ListCreateAPIView):
@@ -540,9 +552,12 @@ class DistrictForestlyView(generics.ListCreateAPIView):
 
     def post(self, request):
         serializer = DistrictForestlySerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
+        if not serializer.is_valid():
+            return Response({"error": status.HTTP_400_BAD_REQUEST,
+                             "error_text": serializer.errors[next(iter(serializer.errors))][0]},
+                            status=status.HTTP_400_BAD_REQUEST)
         serializer.save()
-        return Response({'post': serializer.data})
+        return Response({'post': status.HTTP_201_CREATED}, status=status.HTTP_201_CREATED)
 
     def put(self, request, *args, **kwargs):
         try:
@@ -551,7 +566,10 @@ class DistrictForestlyView(generics.ListCreateAPIView):
             return Response({"error": "Объект с данным id не найден"})
 
         serealizer = DistrictForestlySerializer(data=request.data, instance=instance)
-        serealizer.is_valid(raise_exception=True)
+        if not serealizer.is_valid():
+            return Response({"error": status.HTTP_400_BAD_REQUEST,
+                             "error_text": serealizer.errors[next(iter(serealizer.errors))][0]},
+                            status=status.HTTP_400_BAD_REQUEST)
         serealizer.save()
         return Response({"put": serealizer.data})
 
@@ -575,7 +593,7 @@ class QuarterView(generics.ListCreateAPIView):
                              "error_text": serializer.errors[next(iter(serializer.errors))][0]},
                             status=status.HTTP_400_BAD_REQUEST)
         serializer.save()
-        return Response({'post': serializer.data})
+        return Response({'post': status.HTTP_201_CREATED}, status=status.HTTP_201_CREATED)
 
     def put(self, request, *args, **kwargs):
         try:
@@ -585,7 +603,7 @@ class QuarterView(generics.ListCreateAPIView):
         serealizer = QuarterSerializer(data=request.data, instance=instance)
         serealizer.is_valid(raise_exception=True)
         serealizer.save()
-        return Response({"put": serealizer.data})
+        return Response({"put": status.HTTP_200_OK}, status= status.HTTP_200_OK)
 
 
 class UndergrowthView(APIView):

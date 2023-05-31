@@ -60,7 +60,7 @@ class UserSerializer(serializers.ModelSerializer):
         fields = '__all__'
         extra_kwargs = {
             "email": {"error_messages": {'blank': "Поле email не может быть пустым"}},
-            "password": {"error_messages": {'blank': "Поле email не может быть пустым"}}
+            "password": {"error_messages": {'blank': "Поле password не может быть пустым"}}
         }
     def create(self, validated_data):
         return Users.objects.create(email = validated_data['email'],
@@ -271,6 +271,11 @@ class ForestlySerializer(serializers.ModelSerializer):
     class Meta:
         model = Forestly
         fields = '__all__'
+        extra_kwargs = {
+            "name_forestly": {"error_messages": {'blank': "Поле forestly не может быть пустым"}},
+            "id_subject_rf": {"error_messages": {'blank': "Поле id_subject_rf не может быть пустым"}}
+        }
+
 
     def create(self, validated_data):
         return Forestly.objects.create(**validated_data)
@@ -286,6 +291,10 @@ class DistrictForestlySerializer(serializers.ModelSerializer):
     class Meta:
         model = DistrictForestly
         fields = '__all__'
+        extra_kwargs = {
+            "name_forestly": {"error_messages": {'blank': "Поле forestly не может быть пустым"}},
+            "id_subject_rf": {"error_messages": {'blank': "Поле id_subject_rf не может быть пустым"}}
+        }
 
     def create(self, validated_data):
         return DistrictForestly.objects.create(**validated_data)
@@ -333,6 +342,10 @@ class QuarterSerializer(serializers.ModelSerializer):
     class Meta:
         model = Quarter
         fields = '__all__'
+        extra_kwargs = {
+            "quarter_name": {"error_messages": {'blank': "Поле quarter_name не может быть пустым"}},
+            "id_district_forestly": {"error_messages": {'blank': "Поле id_district_forestly не может быть пустым"}}
+        }
 
     def create(self, validated_data):
         return Quarter.objects.create(**validated_data)
