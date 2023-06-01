@@ -76,7 +76,7 @@ class AddVedomost:AppCompatActivity() {
         val buf:Int?=intent.getStringExtra("id")?.toInt()
         val quater = db.getQuaterbyID(buf)
 
-        binding.idCvartal.text = quater.toString()
+        binding.idCvartal.text = quater.quarterName
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         binding.date.text = LocalDateTime.now().format(formatter).toString()
     }
