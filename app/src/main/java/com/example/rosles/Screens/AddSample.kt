@@ -114,8 +114,8 @@ class AddSample : AppCompatActivity() {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
-                val a=binding.vudel.text.toString().toInt()?: 0
-                val b=binding.idCvartal.text.toString().toInt()?: 0
+                val a = if (binding.vudel.text.toString().trim().length == 0) 0 else binding.vudel.text.toString().toInt()
+                val b = if (binding.idCvartal.text.toString().trim().length == 0) 0 else binding.idCvartal.text.toString().toInt()
                 binding.samplearea.setText((a*b).toString())
             }
         }
