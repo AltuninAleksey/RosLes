@@ -97,6 +97,9 @@ class Dashboard: BaseActivity() {
             synhro.load(viewModel,db,this)
         }
 
+        binding.gps.setOnClickListener{
+            startActivity(Intent(this, GpxTrack::class.java))
+        }
     }
 
 

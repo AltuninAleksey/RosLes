@@ -17,7 +17,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:forceDarkAllowed="false"
-
+        
 
         android:theme="@style/Theme.Rosles"
         android:usesCleartextTraffic="true"
@@ -61,6 +61,8 @@
         <activity android:name="com.example.rosles.Screens.AddListregion"/>
         <activity android:name="com.example.rosles.Screens.ChangeListregion"/>
         <activity android:name="com.example.rosles.Screens.ChangeSample"/>
+        <activity android:name="com.example.rosles.Screens.GpxTrack"/>
+
     </application>
 
 </manifest>
