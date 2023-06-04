@@ -70,7 +70,7 @@ public class GPStracker implements LocationListener {
         boolean isGPSEnabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
         // проверяем что GPS включен
         if(isGPSEnabled){
-            //lm.requestLocationUpdates(LocationManager.GPS_PROVIDER,6000, 10, this);
+            lm.requestLocationUpdates(LocationManager.GPS_PROVIDER,0, 0, this);
             Location l = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             return l;
         }else {

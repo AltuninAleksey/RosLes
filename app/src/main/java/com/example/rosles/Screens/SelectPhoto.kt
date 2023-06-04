@@ -18,18 +18,14 @@ import com.example.rosles.BaseActivity
 import com.example.rosles.DBCountWood
 import com.example.rosles.R
 import com.example.rosles.databinding.ScreenPhotoBinding
+import com.example.rosles.utils.gps.GpsManager
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 
 class SelectPhoto:BaseActivity() {
-
-
     private val db = DBCountWood(this, null)
 
-
-    var latitude: Double? = null
-    var longitude: Double? = null
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
     var photobuf:Bitmap?=null
     var id_sample=0
@@ -37,7 +33,7 @@ class SelectPhoto:BaseActivity() {
     private val REQUEST_TAKE_PHOTO = 1
     private lateinit var binding: ScreenPhotoBinding
     private lateinit var locationManager: LocationManager
-
+    private val gpsManager = GpsManager(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,7 +59,7 @@ class SelectPhoto:BaseActivity() {
         binding.toolbar.addbutton.setOnClickListener {
             //     getContent.launch("image/*")
             try {
-                setLocation()
+                gpsManager.updateLocation()
             } catch (illegalStateException: IllegalStateException) {
                 Toast.makeText(this, illegalStateException.message, Toast.LENGTH_LONG).show()
                 return@setOnClickListener
@@ -77,47 +73,7 @@ class SelectPhoto:BaseActivity() {
             }
         }
         binding.toolbar.delete.visibility=View.GONE
-
     }
-
-    private fun setLocation() {
-
-        // проверяем что разрешение получено
-        locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-
-        // Проверяем разрешения на использование местоположения
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-                ),
-                1
-            )
-            throw IllegalStateException("Разрешение на GPS не предоставлено")
-        }
-
-        // Получаем местоположение пользователя
-        val location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
-
-        if (location == null) {
-            throw IllegalStateException("Включите GPS")
-        } else {
-            latitude = location!!.latitude
-            longitude = location.longitude
-        }
-
-    }
-
-
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -125,8 +81,6 @@ class SelectPhoto:BaseActivity() {
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
             // Фотка сделана, извлекаем миниатюру картинки
             val thumbnailBitmap = data?.extras?.get("data") as Bitmap
-
-
         }
 
         if (requestCode === 1 && resultCode === RESULT_OK) {
@@ -138,7 +92,7 @@ class SelectPhoto:BaseActivity() {
 
                     val temp=GPStracker(this)
 
-                    db.writephoto(temp.bitmap_to_base(thumbnailBitmap), id_sample,latitude,longitude,LocalDateTime.now().format(formatter).toString())
+                    db.writephoto(temp.bitmap_to_base(thumbnailBitmap), id_sample,gpsManager.latitude,gpsManager.longitude,LocalDateTime.now().format(formatter).toString())
                     db.Mark_Update_Sample(id_sample)
                     db.Mark_Update_Listregion(id_vdomost)
                 }
