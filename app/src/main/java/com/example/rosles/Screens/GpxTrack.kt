@@ -8,6 +8,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.TableRow
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
@@ -37,6 +38,9 @@ class GpxTrack : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        Toast.makeText(this, "В РАЗРАБОТКЕ", Toast.LENGTH_SHORT).show()
+        finish()
+
         binding = GpsTrackerBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -52,10 +56,13 @@ class GpxTrack : AppCompatActivity() {
         initTable()
 
         binding.toolbar.addbutton.setOnClickListener {
-            // Имя файла, который вы хотите поделиться
-            /*val file = File(getExternalFilesDir(null), activetableNameFile)
 
-            val uri = FileProvider.getUriForFile(this, "com.example.rosles", file)
+            // Имя файла, который вы хотите поделиться
+            if (activetableNameFile == null)
+                return@setOnClickListener
+            val file = File(getExternalFilesDir(null), activetableNameFile)
+
+            val uri = FileProvider.getUriForFile(this, "com.example.fileprovider", file)
 
             val shareIntent = Intent(Intent.ACTION_SEND)
             shareIntent.type = "text/plain"
@@ -63,7 +70,7 @@ class GpxTrack : AppCompatActivity() {
 
             shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
 
-            startActivity(Intent.createChooser(shareIntent, "Поделиться файлом"))*/
+            startActivity(Intent.createChooser(shareIntent, "Поделиться файлом"))
         }
 
         val listWaypoint = arrayListOf<Waypoint>()
@@ -101,11 +108,14 @@ class GpxTrack : AppCompatActivity() {
         }
 
         binding.toolbar.delete.setOnClickListener {
+            if (activetableNameFile == null) return@setOnClickListener
             val directory = getExternalFilesDir(null)
             val fileToDelete = File(directory, activetableNameFile)
             if (fileToDelete.exists()) {
                 val deleted = fileToDelete.delete()
             }
+            activetableRow = null
+            activetableNameFile = null
 
             binding.tblLayout.removeAllViews()
             initTable()
@@ -113,6 +123,8 @@ class GpxTrack : AppCompatActivity() {
     }
 
     private fun initTable() {
+        activetableRow = null
+        activetableNameFile = null
         val storageDir = this.getExternalFilesDir(null)
         val fileList = mutableListOf<File>()
         storageDir?.let {

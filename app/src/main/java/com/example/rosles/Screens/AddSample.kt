@@ -120,9 +120,7 @@ class AddSample : AppCompatActivity() {
             }
         }
         binding.vudel.addTextChangedListener(summlistener)
-
-
-
+        binding.idCvartal.addTextChangedListener(summlistener)
     }
 
     @SuppressLint("SetTextI18n")
