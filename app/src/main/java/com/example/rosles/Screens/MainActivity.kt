@@ -75,7 +75,7 @@ class MainActivity : BaseActivity("Перечетные ведомости") {
                 tableRow.addView(text, indexOfvalue)
             }
             val img = ImageView(this)
-            if (porodaList[i].markUpdate == 1){
+            if (porodaList[i].markUpdate >= 1){
                 img.setImageResource(R.drawable.reloadred)
                 tableRow.addView(img)
             }

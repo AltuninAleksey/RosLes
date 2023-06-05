@@ -54,7 +54,7 @@ class profile:BaseActivity("Профиль") {
     @SuppressLint("Range")
     fun initscreen() {
         var sPref = getSharedPreferences("PreferencesName", MODE_PRIVATE);
-        var id = sPref.getString("id", "1")!!.toInt()
+        var id = sPref.getString("id", "0")!!.toInt()
         binding.fio.text = sPref.getString("FIO", "")
         var leftright: Boolean = false
 

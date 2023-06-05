@@ -121,13 +121,13 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     fun writeLISTREGION(
         id:Int,
         date: String, sample_region: Float?, id_quarter_id: Int, soil_lot: String,
-        mark_update: Int?) {
+        mark_update: Int?,id_profile: Int?,number_region: String?) {
         val db = this.writableDatabase
         //Log.v(date,"")
         db.execSQL(
             "Insert into djangoForest_listregion\n" +
-                    "(id,date, sample_region, id_quarter_id, soil_lot, mark_update)  \n" +
-                    "values ('$id','$date', '$sample_region', '$id_quarter_id', '$soil_lot','$mark_update')"
+                    "(id,date, sample_region, id_quarter_id, soil_lot, mark_update,id_profile,number_region)  \n" +
+                    "values ('$id','$date', '$sample_region', '$id_quarter_id', '$soil_lot','$mark_update','$id_profile','$number_region')"
         )
         db.close()
     }
@@ -726,12 +726,11 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         //Log.v(date,"")
         db.execSQL(
             "Insert into djangoForest_listregion\n" +
-                    "(date, sample_region, id_quarter_id, soil_lot,mark_update) \n" +
-                    "values ('$date', '$sample_region', '$id_quarter_id', '$soil_lot','$mark_update')"
+                    "(date, sample_region, id_quarter_id, soil_lot,mark_update,id_profile,number_region) \n" +
+                    "values ('$date', '$sample_region', '$id_quarter_id', '$soil_lot','$mark_update',11,'0')"
         )
         db.close()
     }
-
 
 
 
@@ -1062,13 +1061,14 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         return a
     }
 
-    fun createvedom(date: String, sample_region: String, id_quarter_id: Int, soil_lot: String) {
+    fun createvedom(date: String, sample_region: String, id_quarter_id: Int,
+                    soil_lot: String,mark_update:Int,id_profile:Int,number_region:String) {
         val db = this.writableDatabase
         //Log.v(date,"")
         db.execSQL(
             "Insert into djangoForest_listregion\n" +
-                    "(date, sample_region, id_quarter_id, soil_lot) \n" +
-                    "values ('$date', '$sample_region', $id_quarter_id, '$soil_lot')"
+                    "(date, sample_region, id_quarter_id, soil_lot,mark_update,id_profile,number_region) \n" +
+                    "values ('$date', '$sample_region', '$id_quarter_id', '$soil_lot','$mark_update','$id_profile','$number_region')"
         )
         db.close()
     }

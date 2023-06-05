@@ -79,14 +79,20 @@ class AddVedomost:AppCompatActivity() {
         binding.idCvartal.text = quater.quarterName
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         binding.date.text = LocalDateTime.now().format(formatter).toString()
+
     }
     fun InitClick() {
+        var sPref = getSharedPreferences("PreferencesName", MODE_PRIVATE);
+        var id = sPref.getString("id", "0")!!.toInt()
         binding.buttonAuto.setOnClickListener {
             db.createvedom(
                 binding.date.text.toString(),
                 binding.samplearea.text.toString(),
                 intent.getStringExtra("id")!!.toInt(),
                 binding.vudel.text.toString(),
+                2,
+                id,
+                "0"
                 )
             Toast.makeText(this,"Данные добавлены",Toast.LENGTH_LONG).show()
             startActivity(Intent(this, MainActivity::class.java))
