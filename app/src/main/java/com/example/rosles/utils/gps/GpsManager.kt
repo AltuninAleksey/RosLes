@@ -9,6 +9,7 @@ import android.location.LocationManager
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import kotlinx.coroutines.delay
 
 class GpsManager (private val activityCompat: AppCompatActivity) {
     public var longitude: Double = 0.0
@@ -46,6 +47,14 @@ class GpsManager (private val activityCompat: AppCompatActivity) {
             }
 
             override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
+
+            override fun onProviderEnabled(provider: String) {
+                // Ваш код для обработки включения поставщика местоположения
+            }
+
+            override fun onProviderDisabled(provider: String) {
+                // Ваш код для обработки отключения поставщика местоположения
+            }
         }
 
         // Запрашиваем обновления местоположения с использованием LocationListener
@@ -56,12 +65,17 @@ class GpsManager (private val activityCompat: AppCompatActivity) {
             locationListener
         )
 
+
         // Получаем последнее известное местоположение
-        val lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
-        if (lastKnownLocation != null) {
+        val lastKnownLocationNetworkProvider = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
+        val lastKnownLocationGpsProvider = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+        if (lastKnownLocationGpsProvider != null) {
             // Если есть последнее известное местоположение, обновляем координаты
-            latitude = lastKnownLocation.latitude
-            longitude = lastKnownLocation.longitude
+            latitude = lastKnownLocationGpsProvider.latitude
+            longitude = lastKnownLocationGpsProvider.longitude
+        } else if (lastKnownLocationNetworkProvider != null) {
+            latitude = lastKnownLocationNetworkProvider.latitude
+            longitude = lastKnownLocationNetworkProvider.longitude
         } else {
             throw IllegalStateException("Нет доступного местоположения")
         }
