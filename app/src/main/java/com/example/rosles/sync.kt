@@ -24,7 +24,7 @@ class sync() {
 
 
 
-    fun main1( viewModels: ViewModels, db: DBCountWood,  context: AppCompatActivity) {
+    fun main1( viewModels: ViewModels, db: DBCountWood,  context: AppCompatActivity,value: Int) {
 
 
         if (!db.djangoForest_undergrowth())
@@ -46,7 +46,7 @@ class sync() {
             viewModels.getSUBJECTRF(db)
 
         if (!db.djangoForest_listregion())
-            viewModels.getLISTREGION(db)
+            viewModels.getLISTREGION(db,value)
 
         if (!db.djangoForest_sample())
             viewModels.getSAMPLE(db)

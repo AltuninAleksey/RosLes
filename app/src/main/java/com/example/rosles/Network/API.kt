@@ -40,8 +40,8 @@ interface API {
     suspend fun getFORESTLY():FORESTLY_RESP
     @GET("subjectRF")
     suspend fun getSUBJECTRF():SUBJECTRF_RESP
-    @GET("listregion")
-    suspend fun getLISTREGION():LISTREGION_RESP
+    @GET("listregionbyprofile/{id}")
+    suspend fun getLISTREGION(@Path("id") pk_profile: Int):LISTREGION_RESP
     @GET("sample")
     suspend fun getSAMPLE():SAMPLE_RESP
     @GET("list")

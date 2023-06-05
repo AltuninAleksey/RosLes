@@ -111,9 +111,9 @@ class ViewModels():BaseViewModel(
             processEmptyFieldException(e)
         }
     }
-    fun getLISTREGION(dbCountWood: DBCountWood)=viewModelScope.safeLaunch {
+    fun getLISTREGION(dbCountWood: DBCountWood,pk_profile:Int)=viewModelScope.safeLaunch {
         try {
-            accountsRepository.getLISTREGION().get.forEach {
+            accountsRepository.getLISTREGION(pk_profile).get.forEach {
                 dbCountWood.writeLISTREGION(it.id,it.date,it.sample_region,it.id_quarter,it.soil_lot,it.mark_update)
             }
         } catch (e: EmptyFieldException) {

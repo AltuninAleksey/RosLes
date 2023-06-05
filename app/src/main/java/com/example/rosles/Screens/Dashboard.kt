@@ -46,14 +46,16 @@ class Dashboard: BaseActivity() {
         supportActionBar!!.setDisplayShowCustomEnabled(true)
         supportActionBar!!.setCustomView(R.layout.custom_action_bar)
 
-        val view: View = supportActionBar!!.customView
 
+        val sPref = getSharedPreferences("PreferencesName", MODE_PRIVATE)
+
+        val view: View = supportActionBar!!.customView
         val title=view.findViewById<TextView>(R.id.text)
         val back=view.findViewById<ImageView>(R.id.back)
         val menu=view.findViewById<ImageView>(R.id.burger)
         title.setText("Главная")
         back.setOnClickListener{
-            val sPref = getSharedPreferences("PreferencesName", MODE_PRIVATE)
+
             val ed = sPref.edit()
             ed.putString("id", "")
             ed.putString("FIO", "")
@@ -83,7 +85,9 @@ class Dashboard: BaseActivity() {
         }
 
         binding.ALLDOWNLOAD.setOnClickListener{
-            synhro. main1(viewModel,db,this)
+
+            val value=sPref.getString("id","0")!!.toInt()
+            synhro.main1(viewModel,db,this,value)
             viewModel.uploadbd.observe(this){
                 Log.v(it.msg.toString(),"")
             }

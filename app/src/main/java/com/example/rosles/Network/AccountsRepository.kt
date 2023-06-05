@@ -22,7 +22,7 @@ interface AccountsSource {
     suspend fun getDISTRICTFORESTLY():DISTRICTFORESTLY_RESP
     suspend fun getFORESTLY():FORESTLY_RESP
     suspend fun getSUBJECTRF():SUBJECTRF_RESP
-    suspend fun getLISTREGION():LISTREGION_RESP
+    suspend fun getLISTREGION(pk_profile:Int):LISTREGION_RESP
     suspend fun getSAMPLE():SAMPLE_RESP
     suspend fun getLIST():LIST_RESP
 
@@ -63,7 +63,7 @@ class AccountsRepository( private val accountsSource: AccountsSource) {
     suspend fun getDISTRICTFORESTLY():DISTRICTFORESTLY_RESP=accountsSource.getDISTRICTFORESTLY()
     suspend fun getFORESTLY():FORESTLY_RESP=accountsSource.getFORESTLY()
     suspend fun getSUBJECTRF():SUBJECTRF_RESP=accountsSource.getSUBJECTRF()
-    suspend fun getLISTREGION():LISTREGION_RESP=accountsSource.getLISTREGION()
+    suspend fun getLISTREGION(pk_profile:Int):LISTREGION_RESP=accountsSource.getLISTREGION(pk_profile)
     suspend fun getSAMPLE():SAMPLE_RESP=accountsSource.getSAMPLE()
     suspend fun getLIST():LIST_RESP=accountsSource.getLIST()
 
