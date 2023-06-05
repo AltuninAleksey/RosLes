@@ -7,11 +7,13 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.MenuItem
+import android.view.MotionEvent
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.lifecycle.coroutineScope
 import com.example.rosles.Adapters.BaseInterface
 import com.example.rosles.BaseActivity
 import com.example.rosles.DBCountWood
@@ -24,6 +26,8 @@ import com.example.rosles.setSizeRelativeCurrentWindow
 import com.example.roslesdef.Adapters.WoodAdapter
 import com.example.roslesdef.Models.ItemWood
 import com.example.roslesdef.Models.SpinerItem
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import kotlin.collections.HashMap
@@ -378,7 +382,13 @@ class Wood : BaseActivity("Пробная площадь") {
         binding.WoodRecyclerpodles.adapter = adapterpodles
     }
 
+    var flagActiveMultiPlus = false
+    var flagActiveMultiMinus = false
+    @SuppressLint("ClickableViewAccessibility")
     fun onClickCell(view: View) {
+        if (flagActiveMultiPlus || flagActiveMultiMinus) {
+            return@onClickCell
+        }
         if (bufview == null) {
             bufview = view
             bufview?.setBackgroundResource(R.drawable.rounded_active)
@@ -392,26 +402,50 @@ class Wood : BaseActivity("Пробная площадь") {
         var buffertext: TextView = findViewById(view.id)
         var value = buffertext.text.toString().toInt()
 
-        binding.buttonPlus.setOnClickListener() {
-            buffertext = findViewById(view.id)
-            value = buffertext.text.toString().toInt()
-            value++
-            buffertext.text = value.toString()
-            initasd()
-            GetCountWood(CountMainPorod)
+        binding.buttonPlus.setOnTouchListener { _, event ->
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                flagActiveMultiPlus = true
+                buffertext = findViewById(view.id)
+                value = buffertext.text.toString().toInt()
+                lifecycle.coroutineScope.launch {
+                    while (flagActiveMultiPlus) {
+                        value++
+                        buffertext.text = value.toString()
+                        initasd()
+                        GetCountWood(CountMainPorod)
+                        delay(100)
+                    }
+                }
+            } else if (event.getAction() == MotionEvent.ACTION_UP ||
+                event.getAction() == MotionEvent.ACTION_CANCEL) {
+                flagActiveMultiPlus = false
+            }
+            true
         }
-        binding.buttonMinus.setOnClickListener() {
 
-            buffertext = findViewById(view.id)
-            value = buffertext.text.toString().toInt()
-            value--
-            if (value <= 0)
-                value = 0
-            buffertext.text = value.toString()
-            initasd()
-            GetCountWood(CountMainPorod)
+
+        binding.buttonMinus.setOnTouchListener { _, event ->
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                flagActiveMultiMinus = true
+                buffertext = findViewById(view.id)
+                value = buffertext.text.toString().toInt()
+                lifecycle.coroutineScope.launch {
+                    while (flagActiveMultiMinus) {
+                        value--
+                        if (value <= 0)
+                            value = 0
+                        buffertext.text = value.toString()
+                        initasd()
+                        GetCountWood(CountMainPorod)
+                        delay(100)
+                    }
+                }
+            } else if (event.getAction() == MotionEvent.ACTION_UP ||
+                event.getAction() == MotionEvent.ACTION_CANCEL) {
+                flagActiveMultiMinus = false
+            }
+            true
         }
-
 
         val textChangedListenerIskus = object: TextWatcher{
             override fun afterTextChanged(p0: Editable?) {}
