@@ -29,7 +29,7 @@
         android:layout_alignBottom="@+id/rectangle_2"
         android:layout_toStartOf="@+id/edit_user"
         android:layout_marginLeft="25dp"
-        android:src="@drawable/lock"
+        android:src="@drawable/password"
         app:layout_constraintBottom_toBottomOf="@+id/rectangle_2"
         app:layout_constraintStart_toStartOf="@+id/rectangle_2"
         app:layout_constraintTop_toTopOf="@+id/rectangle_2" />

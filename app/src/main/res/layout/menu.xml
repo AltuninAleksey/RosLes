@@ -19,8 +19,9 @@
         android:layout_weight="1"
         android:layout_marginEnd="10dp"
         android:layout_marginStart="10dp"
+        android:paddingTop="8dp"
         android:backgroundTint="@color/color_button_main"
-        android:drawableTop="@drawable/pluscircle"
+        android:drawableTop="@drawable/plus_svg"
         android:text="@string/menu_add"
         android:textSize="10sp"
         app:cornerRadius="30dp" />
@@ -33,7 +34,7 @@
         android:layout_marginEnd="10dp"
         android:visibility="gone"
         android:backgroundTint="@color/color_button_main"
-        android:drawableTop="@drawable/pluscircle"
+        android:drawableTop="@drawable/plus_svg"
         android:text="@string/menu_add"
         android:textSize="10sp"
         app:cornerRadius="30dp" />

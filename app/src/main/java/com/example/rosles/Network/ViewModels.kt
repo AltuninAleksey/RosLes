@@ -11,6 +11,7 @@ import com.example.rosles.RequestClass.PerechetRequest
 import com.example.rosles.RequestClass.RegistrationReqest
 import com.example.rosles.RequestClass.UpdateRequest
 import com.example.rosles.ResponceClass.*
+import retrofit2.Response
 
 
 class ViewModels():BaseViewModel(
@@ -197,8 +198,8 @@ class ViewModels():BaseViewModel(
             processEmptyFieldException(e)
         }
     }
-    fun registration(body: RegistrationReqest)=viewModelScope.safeLaunch {
-        accountsRepository.registration(body)
+    suspend fun registration(body: RegistrationReqest):Response<RegistrationReqest>{
+       return accountsRepository.registration(body)
     }
 
     fun reproduction(context: Context)=viewModelScope.safeLaunch{

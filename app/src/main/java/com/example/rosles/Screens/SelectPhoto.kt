@@ -7,55 +7,46 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.graphics.Color
 import android.location.LocationManager
-import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
 import android.provider.MediaStore
 import android.view.View
 import android.widget.*
-import androidx.appcompat.app.ActionBar
 import androidx.core.app.ActivityCompat
 import androidx.core.view.get
+import com.example.rosles.BaseActivity
 import com.example.rosles.DBCountWood
 import com.example.rosles.R
 import com.example.rosles.databinding.ScreenPhotoBinding
-import java.io.File
+import com.example.rosles.utils.gps.GpsManager
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 
-class SelectPhoto:BaseAppClass() {
-
-
+class SelectPhoto:BaseActivity() {
     private val db = DBCountWood(this, null)
 
-
-    var latitude: Double? = 0.0
-    var longitude: Double? = 0.0
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
     var photobuf:Bitmap?=null
     var id_sample=0
+    var id_vdomost=0
     private val REQUEST_TAKE_PHOTO = 1
     private lateinit var binding: ScreenPhotoBinding
     private lateinit var locationManager: LocationManager
-
+    private val gpsManager = GpsManager(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ScreenPhotoBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        //инциализация навигации
-        supportActionBar!!.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
-        supportActionBar!!.setDisplayShowCustomEnabled(true)
-        supportActionBar!!.setCustomView(R.layout.custom_action_bar)
 
         // проверяем что разрешение получено
-        id_sample=intent.getIntExtra("id_sample",98)
-        setLocation()
+        id_sample=intent.getIntExtra("id_sample",0)
+        id_vdomost=intent.getIntExtra("id_vdomost",0)
 
-        db.getphotoall()
+
+
+//        db.getphotoall()
 
         inittable()
 
@@ -67,6 +58,13 @@ class SelectPhoto:BaseAppClass() {
 
         binding.toolbar.addbutton.setOnClickListener {
             //     getContent.launch("image/*")
+            try {
+                gpsManager.updateLocation()
+            } catch (illegalStateException: IllegalStateException) {
+                Toast.makeText(this, illegalStateException.message, Toast.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
+
             val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             try {
                 startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO)
@@ -75,47 +73,7 @@ class SelectPhoto:BaseAppClass() {
             }
         }
         binding.toolbar.delete.visibility=View.GONE
-
     }
-
-    private fun setLocation() {
-
-        // проверяем что разрешение получено
-        locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-
-        // Проверяем разрешения на использование местоположения
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-                ),
-                1
-            )
-            return
-        }
-
-        // Получаем местоположение пользователя
-        val location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
-
-        if (location == null) {
-            Toast.makeText(this, "Включите GPS", Toast.LENGTH_SHORT).show()
-        } else {
-            latitude = location!!.latitude
-            longitude = location.longitude
-        }
-
-    }
-
-
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -123,8 +81,6 @@ class SelectPhoto:BaseAppClass() {
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
             // Фотка сделана, извлекаем миниатюру картинки
             val thumbnailBitmap = data?.extras?.get("data") as Bitmap
-
-
         }
 
         if (requestCode === 1 && resultCode === RESULT_OK) {
@@ -136,8 +92,9 @@ class SelectPhoto:BaseAppClass() {
 
                     val temp=GPStracker(this)
 
-                    db.writephoto(temp.bitmap_to_base(thumbnailBitmap), id_sample,latitude,longitude,LocalDateTime.now().format(formatter).toString())
-
+                    db.writephoto(temp.bitmap_to_base(thumbnailBitmap), id_sample,gpsManager.latitude,gpsManager.longitude,LocalDateTime.now().format(formatter).toString())
+                    db.Mark_Update_Sample(id_sample)
+                    db.Mark_Update_Listregion(id_vdomost)
                 }
             }
         }
@@ -165,10 +122,10 @@ class SelectPhoto:BaseAppClass() {
             val text4=TextView(this)
             val photo=it.photo
 
-            text1.setText(it.photo.toString().substringAfter('@'))
-            text2.setText(it.latitude.toString())
-            text3.setText(it.longitude.toString())
-            text4.setText(it.date.format(formatter).toString())
+            text1.setText(it.latitude.toString())
+            text2.setText(it.longitude.toString())
+            text3.setText(it.date.format(formatter).toString())
+            text4.setText(it.photo.toString().substringAfter('@'))
 
             val textvalues=listOf(text1, text2, text3, text4)
             textvalues.forEach {
@@ -188,9 +145,9 @@ class SelectPhoto:BaseAppClass() {
 
         binding.toolbar.open.setOnClickListener{
             if(activetableRow!=null){
-                val latitude = activetableRow?.get(1) as TextView
-                val longitude = activetableRow?.get(2) as TextView
-                val date_value = activetableRow?.get(3) as TextView
+                val latitude = activetableRow?.get(0) as TextView
+                val longitude = activetableRow?.get(1) as TextView
+                val date_value = activetableRow?.get(2) as TextView
                 val dialog: Dialog = Dialog(this)
                 dialog.setContentView(R.layout.view_image_dialog)
                 val image = dialog.findViewById<ImageView>(R.id.image_for_photo)

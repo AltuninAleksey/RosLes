@@ -7,11 +7,13 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.MenuItem
+import android.view.MotionEvent
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.lifecycle.coroutineScope
 import com.example.rosles.Adapters.BaseInterface
 import com.example.rosles.BaseActivity
 import com.example.rosles.DBCountWood
@@ -20,9 +22,12 @@ import com.example.rosles.ResponceClass.PerechetWood
 import com.example.rosles.ResponceClass.PodlesokWood
 import com.example.rosles.ResponceClass.ProbaWoodSimple
 import com.example.rosles.databinding.WoodBinding
+import com.example.rosles.setSizeRelativeCurrentWindow
 import com.example.roslesdef.Adapters.WoodAdapter
 import com.example.roslesdef.Models.ItemWood
 import com.example.roslesdef.Models.SpinerItem
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import kotlin.collections.HashMap
@@ -37,6 +42,9 @@ class Wood : BaseActivity("Пробная площадь") {
     var podlesokhash=HashMap<String, PodlesokWood?>()
     var Get_Id_breed_Class:AddPorod?= AddPorod()
 
+    var CountMainPorod=""
+    var activeCountPorod=""
+
     var flaglesActive=false
     var flagpodleslesActive=false
 
@@ -48,14 +56,16 @@ class Wood : BaseActivity("Пробная площадь") {
         binding = WoodBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.title = "Пробная площадь"
-        val id_sample =  intent.getStringExtra("udel").toString().toInt()
+        val id_sample =  intent.getIntExtra("udel",0)
         val id_vdomost = intent.getStringExtra("proba").toString().toInt()
+
 
         invisibleplus()
 
 
         val vedom = db.getVedombyID(id_vdomost)
 
+        binding.proba.text = intent.getStringExtra("numberOfPoroda")
         binding.lesnnich.text = vedom.nameForestly
         binding.district.text = vedom.nameDistrictForestly
         binding.quater.text =   vedom.quarterName
@@ -113,6 +123,7 @@ class Wood : BaseActivity("Пробная площадь") {
         binding.include.open.setOnClickListener {
             val intent=Intent(this, SelectPhoto::class.java)
             intent.putExtra("id_sample",id_sample)
+            intent.putExtra("id_vdomost",id_vdomost)
             startActivity(intent)
         }
 
@@ -121,6 +132,7 @@ class Wood : BaseActivity("Пробная площадь") {
         binding.include.addporod.setOnClickListener {
             val dialog = Dialog(this)
             dialog.setContentView(R.layout.dialog_add_porod)
+            dialog.setSizeRelativeCurrentWindow(0.85, 0.6)
 
             val les: Spinner = dialog.findViewById(R.id.les)
             val poldes = dialog.findViewById<Spinner>(R.id.podles)
@@ -223,6 +235,7 @@ class Wood : BaseActivity("Пробная площадь") {
                 }
             }
             db.updatevalue(id_vdomost)
+            db.Mark_Update_Sample(id_sample)
 //            finish()
             Toast.makeText(this, "Данные записаны", Toast.LENGTH_SHORT)
                 .show()
@@ -255,7 +268,6 @@ class Wood : BaseActivity("Пробная площадь") {
     fun writedata(value_param: String) {
         val value = hashbufWood.get(value_param)
         with(binding) {
-
             value?.iskus?.o2         = iskus02.text.toString().toInt()
             value?.iskus?.o5         = iskus05.text.toString().toInt()
             value?.iskus?.o6         = iskus06.text.toString().toInt()
@@ -263,9 +275,9 @@ class Wood : BaseActivity("Пробная площадь") {
             value?.iskus?.o15        = iskus15.text.toString().toInt()
             value?.iskus?.type       = 1
             value?.iskus?.id_breed   = Get_Id_breed_Class?.getidbreed(value_param,db)!!
-            value?.iskus?.maxHeight  = maksHeightIskus.text.toString().toFloatOrNull()
-            value?.iskus?.AVGHEight  = AvgHeightIskus.text.toString().toFloatOrNull()
-            value?.iskus?.AVGdiametr = AvgDiametrIskus.text.toString().toFloatOrNull()
+            value?.iskus?.maxHeight  = maksHeightIskus.text.toString().toFloatOrNull() ?: 0.0f
+            value?.iskus?.AVGHEight  = AvgHeightIskus.text.toString().toFloatOrNull() ?: 0.0f
+            value?.iskus?.AVGdiametr = AvgDiametrIskus.text.toString().toFloatOrNull() ?: 0.0f
 
             value?.estes?.o2         = estes02.text.toString().toInt()
             value?.estes?.o5         = estes05.text.toString().toInt()
@@ -274,9 +286,9 @@ class Wood : BaseActivity("Пробная площадь") {
             value?.estes?.o15        = estes15.text.toString().toInt()
             value?.estes?.type       = 2
             value?.estes?.id_breed   = Get_Id_breed_Class?.getidbreed(value_param,db)!!
-            value?.estes?.maxHeight  = maksHeightestes.text.toString().toFloatOrNull()
-            value?.estes?.AVGHEight  = AvgHeightestes.text.toString().toFloatOrNull()
-            value?.estes?.AVGdiametr = AvgDiametrestes.text.toString().toFloatOrNull()
+            value?.estes?.maxHeight  = maksHeightestes.text.toString().toFloatOrNull() ?: 0.0f
+            value?.estes?.AVGHEight  = AvgHeightestes.text.toString().toFloatOrNull() ?: 0.0f
+            value?.estes?.AVGdiametr = AvgDiametrestes.text.toString().toFloatOrNull() ?: 0.0f
 
             value?.estestvenn?.o2         = estestvennoe02.text.toString().toInt()
             value?.estestvenn?.o5         = estestvennoe05.text.toString().toInt()
@@ -285,9 +297,9 @@ class Wood : BaseActivity("Пробная площадь") {
             value?.estestvenn?.o15        = estestvennoe15.text.toString().toInt()
             value?.estestvenn?.type       = 3
             value?.estestvenn?.id_breed   = Get_Id_breed_Class?.getidbreed(value_param,db)!!
-            value?.estestvenn?.maxHeight  = maksHeightestestvennoe.text.toString().toFloatOrNull()
-            value?.estestvenn?.AVGHEight  = AvgHeightestestvennoe.text.toString().toFloatOrNull()
-            value?.estestvenn?.AVGdiametr = AvgDiametrestestvennoe.text.toString().toFloatOrNull()
+            value?.estestvenn?.maxHeight  = maksHeightestestvennoe.text.toString().toFloatOrNull() ?: 0.0f
+            value?.estestvenn?.AVGHEight  = AvgHeightestestvennoe.text.toString().toFloatOrNull() ?: 0.0f
+            value?.estestvenn?.AVGdiametr = AvgDiametrestestvennoe.text.toString().toFloatOrNull() ?: 0.0f
         }
     }
     //запись данных в хеш таблицу подлеска
@@ -340,14 +352,18 @@ class Wood : BaseActivity("Пробная площадь") {
 
     fun initrecycler(a: MutableList<ItemWood>, podles: MutableList<ItemWood>) {
         val adapter = WoodAdapter(a, object : BaseInterface {
+
             override fun onClick(itemView: Any) {
+                activeCountPorod=itemView.toString()
                 writedata(vidWood)
                 vidWood = itemView.toString()
                 initdata(vidWood)
                 visibleplus()
             }
-            override fun onClickButton() {
-                binding.valuewood.text=binding.asd.text
+            override fun onClickButton(itemView: Any) {
+                CountMainPorod=itemView.toString()
+                GetCountWood(itemView.toString())
+                //binding.valuewood.text=binding.asd.text
             }
 
         })
@@ -361,12 +377,18 @@ class Wood : BaseActivity("Пробная площадь") {
                 initdatapodles(vidWoodpodles)
                 visibleplus()
             }
-            override fun onClickButton() {}
+            override fun onClickButton(itemView: Any) {}
         })
         binding.WoodRecyclerpodles.adapter = adapterpodles
     }
 
+    var flagActiveMultiPlus = false
+    var flagActiveMultiMinus = false
+    @SuppressLint("ClickableViewAccessibility")
     fun onClickCell(view: View) {
+        if (flagActiveMultiPlus || flagActiveMultiMinus) {
+            return@onClickCell
+        }
         if (bufview == null) {
             bufview = view
             bufview?.setBackgroundResource(R.drawable.rounded_active)
@@ -380,71 +402,100 @@ class Wood : BaseActivity("Пробная площадь") {
         var buffertext: TextView = findViewById(view.id)
         var value = buffertext.text.toString().toInt()
 
-        binding.buttonPlus.setOnClickListener() {
-            buffertext = findViewById(view.id)
-            value = buffertext.text.toString().toInt()
-            value++
-            buffertext.text = value.toString()
-            initasd()
+        binding.buttonPlus.setOnTouchListener { _, event ->
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                flagActiveMultiPlus = true
+                buffertext = findViewById(view.id)
+                value = buffertext.text.toString().toInt()
+                lifecycle.coroutineScope.launch {
+                    while (flagActiveMultiPlus) {
+                        value++
+                        buffertext.text = value.toString()
+                        initasd()
+                        GetCountWood(CountMainPorod)
+                        delay(100)
+                    }
+                }
+            } else if (event.getAction() == MotionEvent.ACTION_UP ||
+                event.getAction() == MotionEvent.ACTION_CANCEL) {
+                flagActiveMultiPlus = false
+            }
+            true
         }
-        binding.buttonMinus.setOnClickListener() {
 
-            buffertext = findViewById(view.id)
-            value = buffertext.text.toString().toInt()
-            value--
-            if (value <= 0)
-                value = 0
-            buffertext.text = value.toString()
-            initasd()
+
+        binding.buttonMinus.setOnTouchListener { _, event ->
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                flagActiveMultiMinus = true
+                buffertext = findViewById(view.id)
+                value = buffertext.text.toString().toInt()
+                lifecycle.coroutineScope.launch {
+                    while (flagActiveMultiMinus) {
+                        value--
+                        if (value <= 0)
+                            value = 0
+                        buffertext.text = value.toString()
+                        initasd()
+                        GetCountWood(CountMainPorod)
+                        delay(100)
+                    }
+                }
+            } else if (event.getAction() == MotionEvent.ACTION_UP ||
+                event.getAction() == MotionEvent.ACTION_CANCEL) {
+                flagActiveMultiMinus = false
+            }
+            true
         }
-
 
         val textChangedListenerIskus = object: TextWatcher{
             override fun afterTextChanged(p0: Editable?) {}
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                binding.AvgHeightIskus.text=
-                    binding.maksHeightIskus.text.toString().toFloatOrNull()?.let {
-                        avgHeight(binding.iskus02.text.toString().toFloat(),
-                            binding.iskus05.text.toString().toFloat(),
-                            binding.iskus06.text.toString().toFloat(),
-                            binding.iskus11.text.toString().toFloat(),
-                            binding.iskus15.text.toString().toFloat(),
-                            it
-                        ).toString()
-                    }
+                val bufAvg: Float = binding.maksHeightIskus.text.toString().toFloatOrNull()?.let {
+                    avgHeight(binding.iskus02.text.toString().toFloat(),
+                        binding.iskus05.text.toString().toFloat(),
+                        binding.iskus06.text.toString().toFloat(),
+                        binding.iskus11.text.toString().toFloat(),
+                        binding.iskus15.text.toString().toFloat(),
+                        it
+                    )
+                } ?: 0.0f
+
+                binding.AvgHeightIskus.text = if (bufAvg.isNaN()) "0.0" else bufAvg.toString()
             }
         }
         val textChangedListenerEstes = object: TextWatcher{
             override fun afterTextChanged(p0: Editable?) {}
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                binding.AvgHeightestes.text=
-                    binding.maksHeightestes.text.toString().toFloatOrNull()?.let {
-                        avgHeight(binding.iskus02.text.toString().toFloat(),
-                            binding.estes05.text.toString().toFloat(),
-                            binding.estes06.text.toString().toFloat(),
-                            binding.estes11.text.toString().toFloat(),
-                            binding.estes15.text.toString().toFloat(),
-                            it
-                        ).toString()
-                    }
+                val bufAvg: Float = binding.maksHeightestes.text.toString().toFloatOrNull()?.let {
+                    avgHeight(binding.iskus02.text.toString().toFloat(),
+                        binding.estes05.text.toString().toFloat(),
+                        binding.estes06.text.toString().toFloat(),
+                        binding.estes11.text.toString().toFloat(),
+                        binding.estes15.text.toString().toFloat(),
+                        it
+                    )
+                } ?: 0.0f
+
+                binding.AvgHeightestes.text = if (bufAvg.isNaN()) "0.0" else bufAvg.toString()
             }
         }
         val textChangedListenerEstestvennoe = object: TextWatcher{
             override fun afterTextChanged(p0: Editable?){}
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int){}
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                binding.AvgHeightestestvennoe.text=
-                    binding.maksHeightestestvennoe.text.toString().toFloatOrNull()?.let {
-                        avgHeight(binding.iskus02.text.toString().toFloat(),
-                            binding.estestvennoe05.text.toString().toFloat(),
-                            binding.estestvennoe06.text.toString().toFloat(),
-                            binding.estestvennoe11.text.toString().toFloat(),
-                            binding.estestvennoe15.text.toString().toFloat(),
-                            it
-                        ).toString()
-                    }
+                val bufAvg: Float = binding.maksHeightestestvennoe.text.toString().toFloatOrNull()?.let {
+                    avgHeight(binding.iskus02.text.toString().toFloat(),
+                        binding.estestvennoe05.text.toString().toFloat(),
+                        binding.estestvennoe06.text.toString().toFloat(),
+                        binding.estestvennoe11.text.toString().toFloat(),
+                        binding.estestvennoe15.text.toString().toFloat(),
+                        it
+                    )
+                } ?: 0.0f
+
+                binding.AvgHeightestestvennoe.text = if (bufAvg.isNaN()) "0.0" else bufAvg.toString()
             }
         }
 
@@ -470,38 +521,61 @@ class Wood : BaseActivity("Пробная площадь") {
         binding.maksHeightestestvennoe.addTextChangedListener(textChangedListenerEstestvennoe)
 
 
-
-
     }
 
-     fun avgHeight(value1:Float,value2:Float,value3:Float,value4:Float,value5:Float,valuemax:Float):Float?{
+     fun avgHeight(value1:Float,value2:Float,value3:Float,value4:Float,value5:Float,valuemax:Float):Float{
         val sum=value1+value2+value3+value4+value5
-
-         val df = DecimalFormat("#.#")
-         df.roundingMode = RoundingMode.DOWN
 
          val result=((value1*0.1+value2*0.35+value3*0.8+value4*1.3+((valuemax+1.51)/2*value5))/sum).toFloat()
 
-        return  df.format(result).toFloatOrNull()
+        return  String.format("%.2f", result).replace(',', '.').toFloat()
+
+    }
+    fun GetCountWood(value: String){
+        if (activeCountPorod==value){
+            writedata(value)
+        }
+        val buf = hashbufWood.get(value)
+        if (buf == null)
+            return
+        val temp=
+        buf.iskus!!.o2!!.toInt()+
+        buf.iskus!!.o5!!.toInt()+
+        buf.iskus!!.o6!!.toInt()+
+        buf.iskus!!.o11!!.toInt()+
+        buf.iskus!!.o15!!.toInt()+
+        buf.estes!!.o2!!.toInt()+
+        buf.estes!!.o5!!.toInt()+
+        buf.estes!!.o6!!.toInt()+
+        buf.estes!!.o11!!.toInt()+
+        buf.estes!!.o15!!.toInt()+
+        buf.estestvenn!!.o2!!.toInt()+
+        buf.estestvenn!!.o5!!.toInt()+
+        buf.estestvenn!!.o6!!.toInt()+
+        buf.estestvenn!!.o11!!.toInt()+
+        buf.estestvenn!!.o15!!.toInt()
+
+        binding.valuewood.text=temp.toString()
 
     }
     fun initasd(){
         with(binding){
-            val value:Int?=iskus02.text.toString().toInt()+
-                      iskus05.text.toString().toInt()+
-                      iskus06.text.toString().toInt()+
-                      iskus11.text.toString().toInt()+
-                      iskus15.text.toString().toInt()+
-                      estes02.text.toString().toInt()+
-                      estes05.text.toString().toInt()+
-                      estes06.text.toString().toInt()+
-                      estes11.text.toString().toInt()+
-                      estes15.text.toString().toInt()+
-                      estestvennoe02.text.toString().toInt()+
-                      estestvennoe05.text.toString().toInt()+
-                      estestvennoe06.text.toString().toInt()+
-                      estestvennoe11.text.toString().toInt()+
-                      estestvennoe15.text.toString().toInt()
+            val value:Int?=
+                          iskus02.text.toString().toInt()+
+                          iskus05.text.toString().toInt()+
+                          iskus06.text.toString().toInt()+
+                          iskus11.text.toString().toInt()+
+                          iskus15.text.toString().toInt()+
+                          estes02.text.toString().toInt()+
+                          estes05.text.toString().toInt()+
+                          estes06.text.toString().toInt()+
+                          estes11.text.toString().toInt()+
+                          estes15.text.toString().toInt()+
+                          estestvennoe02.text.toString().toInt()+
+                          estestvennoe05.text.toString().toInt()+
+                          estestvennoe06.text.toString().toInt()+
+                          estestvennoe11.text.toString().toInt()+
+                          estestvennoe15.text.toString().toInt()
             asd.text="0"
             asd.text=value?.toString()
 

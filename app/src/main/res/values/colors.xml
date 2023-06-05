@@ -20,6 +20,8 @@
     <color name="activecolumn">#00EDCA</color>
     <color name="noactivecolumn">#DADADA</color>
     <color name="red_color">#FF0707</color>
+    <color name="selected_Green">#177164</color>
+    <color name="unselected_Gray">#D0D0D0</color>
 
 
 

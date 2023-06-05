@@ -1,9 +1,13 @@
 package com.example.rosles.Screens
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.Location
+import android.location.LocationManager
 import android.os.Bundle
-import android.util.Log
+import android.location.LocationListener
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -17,14 +21,13 @@ import androidx.core.app.ActivityCompat
 import com.example.rosles.Network.ViewModels
 import com.example.rosles.R
 import com.example.rosles.databinding.GpsBinding
+import com.example.rosles.utils.gps.GpsManager
 
 
 class gps_activity:AppCompatActivity() {
 
     val viewModel by viewModels<ViewModels>()
-
     private lateinit var binding: GpsBinding
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = GpsBinding.inflate(layoutInflater)
@@ -37,17 +40,16 @@ class gps_activity:AppCompatActivity() {
         binding.toolbar.open.visibility=View.GONE
         binding.toolbar.save.visibility=View.GONE
 
-        var gpStracker=GPStracker(this)
-        ActivityCompat.requestPermissions(
-            this,
-            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-            123
-        ) // запрос разрешение на использовние геопозиции
+        val gpsManager: GpsManager = GpsManager(this)
 
-        var i=0
+        var i = 0
         binding.toolbar.addbutton.setOnClickListener {
-
-            var location=gpStracker.location
+            try {
+                gpsManager.updateLocation()
+            } catch (illegalStateException: IllegalStateException) {
+                Toast.makeText(this, illegalStateException.message, Toast.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
 
             var tableRow = TableRow(this)
             var text1=TextView(this)
@@ -65,13 +67,10 @@ class gps_activity:AppCompatActivity() {
             text3.setTextColor(-0x1000000)
             checkBox.setTextColor(-0x1000000)
 
-
-
-
             text1.setText(i.toString())
-            text2.setText(location.latitude.toString())
-            text3.setText(location.longitude.toString())
 
+            text2.setText(gpsManager.longitude.toString())
+            text3.setText(gpsManager.latitude.toString())
 
             tableRow.addView(text1)
             tableRow.addView(text2)
@@ -80,8 +79,6 @@ class gps_activity:AppCompatActivity() {
             binding.tblLayout.addView(tableRow)
             i++
         }
-
-
 
     }
 
@@ -102,8 +99,4 @@ class gps_activity:AppCompatActivity() {
         }
         return true
     }
-
-
-
-
 }

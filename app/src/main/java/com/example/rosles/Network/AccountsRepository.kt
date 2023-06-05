@@ -8,6 +8,7 @@ import com.example.rosles.ResponceClass.*
 import com.squareup.moshi.Moshi
 import okhttp3.ResponseBody
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.http.GET
 
@@ -28,7 +29,7 @@ interface AccountsSource {
 
     suspend fun reproduction(): ReproductionResp
     suspend fun perechet(perechetRequest: PerechetRequest): BaseResp
-    suspend fun registration(registrationReqest: RegistrationReqest): BaseResp
+    suspend fun registration(registrationReqest: RegistrationReqest): Response<RegistrationReqest>
     suspend fun getrequestsubjectRF(): SubjectResp
     suspend fun forestlubyid(id:Int): ForestlyResp
     suspend fun districtbyID(id:Int): DistrictResp
@@ -77,7 +78,7 @@ class AccountsRepository( private val accountsSource: AccountsSource) {
 
     suspend fun perechet(perechetRequest: PerechetRequest): BaseResp =  accountsSource.perechet(perechetRequest)
 
-    suspend fun registration (registrationReqest: RegistrationReqest):BaseResp = accountsSource.registration(registrationReqest)
+    suspend fun registration (registrationReqest: RegistrationReqest): Response<RegistrationReqest> = accountsSource.registration(registrationReqest)
 
     suspend fun getprofile(): getUserResp =  accountsSource.getprofile()
 

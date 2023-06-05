@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.MenuItem
 import android.view.View
 import android.widget.*
@@ -12,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.rosles.DBCountWood
 import com.example.rosles.R
 import com.example.rosles.databinding.AddProbBinding
+import com.example.rosles.setSizeRelativeCurrentWindow
 
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -70,12 +73,7 @@ class AddSample : AppCompatActivity() {
             true
         })
         popup.show()
-
     }
-
-
-
-
     fun InitClick() {
         binding.buttonAuto.setOnClickListener {
             val sPref = getSharedPreferences("PreferencesName", MODE_PRIVATE)
@@ -106,18 +104,30 @@ class AddSample : AppCompatActivity() {
             )
             db.Mark_Update_Listregion(id_region)
             Toast.makeText(this, "Данные добавлены", Toast.LENGTH_LONG).show()
-
             finish()
         }
         binding.date.setOnClickListener {
             initDatePicker()
         }
+        val summlistener = object: TextWatcher {
+            override fun afterTextChanged(p0: Editable?) {}
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+                val a = if (binding.vudel.text.toString().trim().length == 0) 0 else binding.vudel.text.toString().toInt()
+                val b = if (binding.idCvartal.text.toString().trim().length == 0) 0 else binding.idCvartal.text.toString().toInt()
+                binding.samplearea.setText((a*b).toString())
+            }
+        }
+        binding.vudel.addTextChangedListener(summlistener)
+        binding.idCvartal.addTextChangedListener(summlistener)
     }
 
     @SuppressLint("SetTextI18n")
     fun initDatePicker() {
         val dialog = Dialog(this)
         dialog.setContentView(R.layout.dialog_datepicker)
+        dialog.setSizeRelativeCurrentWindow(0.85, 0.6)
 
         val mInfoTextView = dialog.findViewById<TextView>(R.id.textView)
         val mDatePicker = dialog.findViewById<DatePicker>(R.id.datePicker)

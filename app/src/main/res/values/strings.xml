@@ -12,5 +12,6 @@
     <string name="menu_save"> </string>
     <string name="menu_gps"> </string>
     <string name="menu_photo_point"> </string>
+    <string name="mapbox_access_token">pk.eyJ1IjoidmxhZGlzc3NsYXYiLCJhIjoiY2xpZzJpZHltMWFtaDNncDdwbHA5NHBxcCJ9.UV0c72mQ_m5TNxxKaq8P0Q</string>
 </resources>
 

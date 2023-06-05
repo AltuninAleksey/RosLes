@@ -59,18 +59,18 @@ public class GPStracker implements LocationListener {
         }
     }
 
-    public Location getLocation(){
+    public synchronized Location getLocation(){
 
         // проверяем что разрешение получено
         if(ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
-            Toast.makeText(context,"Разрешение не предоставлено",Toast.LENGTH_LONG).show();
+            Toast.makeText(context,"Разрешение на GPS не предоставлено",Toast.LENGTH_LONG).show();
             return null;
         }
         LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE); //подключаем менеджер локаций
         boolean isGPSEnabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
         // проверяем что GPS включен
         if(isGPSEnabled){
-            lm.requestLocationUpdates(LocationManager.GPS_PROVIDER,6000, 10, this);
+            lm.requestLocationUpdates(LocationManager.GPS_PROVIDER,0, 0, this);
             Location l = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             return l;
         }else {
@@ -78,6 +78,7 @@ public class GPStracker implements LocationListener {
         }
         return null;
     }
+
 
     @Override
     public void onLocationChanged(Location location) {

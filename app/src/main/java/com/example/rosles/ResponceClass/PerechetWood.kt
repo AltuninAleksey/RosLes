@@ -3,9 +3,9 @@ package com.example.rosles.ResponceClass
 import java.util.*
 
 
-data class probaWOODD(var data: HashMap<String, PerechetWood>)
+data class probaWOODD(var data: HashMap<String, PerechetWood>) : BaseResponceInterface
 
-data class ProbaWoodSimple(var iskus:PerechetWood?,var estes:PerechetWood?,var estestvenn:PerechetWood?)
+data class ProbaWoodSimple(var iskus:PerechetWood?,var estes:PerechetWood?,var estestvenn:PerechetWood?) : BaseResponceInterface
 
 data class PerechetWood(
     var namewood: String,
@@ -24,5 +24,5 @@ data class PerechetWood(
 )
 
 
-data class PodlesokWood(var value:Int?,var avgHeightpodles:Float?=0f,var id:Int?,var idbreed_under:Int?=0)
+data class PodlesokWood(var value:Int?,var avgHeightpodles:Float?=0f,var id:Int?,var idbreed_under:Int?=0) : BaseResponceInterface
 

@@ -6,13 +6,20 @@ import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
+import android.util.Log
 import android.view.View
 import android.view.Window
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.example.rosles.Network.ViewModels
+import androidx.lifecycle.viewModelScope
+import com.example.rosles.Network.*
 import com.example.rosles.RequestClass.AuthRequest
+import com.example.rosles.ResponceClass.AuthReSponce
+import com.example.rosles.ResponceClass.BaseResponceInterface
 import com.example.rosles.databinding.AuthorizationActivityBinding
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 
 class Authorization: AppCompatActivity() {
@@ -36,16 +43,35 @@ class Authorization: AppCompatActivity() {
             }else{
                 binding.passeror.visibility=View.GONE
             }
-            viewModel.get_user(
-                AuthRequest(
-                    binding.login.editUser.text.toString(),
-                    binding.pass.editUser.text.toString()
-                )
-            )
-            viewModel.user.observe(this) {
-                saveText(it.id, it.FIO)
-                startActivity(Intent(this, Dashboard::class.java))
-            }
+
+            SafeRequest(viewModel).request(object : SafeRequest.Protection{
+
+                override suspend fun makeRequest(): BaseResponceInterface {
+                    val user = SourceProviderHolder.sourcesProvider.getAccountsSource().get_user(
+                        AuthRequest(
+                            binding.login.editUser.text.toString(),
+                            binding.pass.editUser.text.toString()
+                        ))
+                    return user
+                }
+
+                override fun ifSuccess(responce: BaseResponceInterface?) {
+                    if (responce != null && responce is AuthReSponce)
+                        saveText(responce.id, responce.FIO)
+                    Toast.makeText(this@Authorization, "Вы авторизовались", Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(this@Authorization, Dashboard::class.java))
+                }
+
+                override fun ifConnectionException() {
+                    Toast.makeText(this@Authorization, "Нет подключения к интернету", Toast.LENGTH_SHORT).show()
+                }
+
+                override fun ifAuthException() {
+                    Toast.makeText(this@Authorization, "Не верный логин или пароль", Toast.LENGTH_SHORT).show()
+                }
+
+            })
+
         }
 
 

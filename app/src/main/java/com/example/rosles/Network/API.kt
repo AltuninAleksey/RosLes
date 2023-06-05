@@ -8,6 +8,7 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.*
 
 
@@ -21,7 +22,7 @@ interface API {
     suspend fun reproduction(): ReproductionResp
 
     @POST("registration")
-    suspend fun registration(@Body body: RegistrationReqest): BaseResp
+    suspend fun registration(@Body body: RegistrationReqest): Response<RegistrationReqest>
 
     @GET("responsesqlite")
     suspend fun getbd():BaseResp

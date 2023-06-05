@@ -1,6 +1,6 @@
 package com.example.rosles.ResponceClass
 
-data class RESPONCE(val list :List<ClassWood>)
+data class RESPONCE(val list :List<ClassWood>): BaseResponceInterface
 
 data class ClassWood(
     val id :Int=0,
@@ -12,8 +12,8 @@ data class ClassWood(
     var value06 :String,
     var value11 :String,
     var value15 :String,
-)
+) : BaseResponceInterface
 data class Reproduction(
     val id :String,
     var REPRODUCTIONNAME :String
-)
+) : BaseResponceInterface

@@ -324,7 +324,7 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         val cursor: Cursor = database.rawQuery("select * from djangoForest_listregion where id='$id'",null)
         cursor.moveToFirst()
         val buf=cursor.getInt(cursor.getColumnIndex("mark_update"))
-        if(cursor.getInt(cursor.getColumnIndex("mark_update")) == 0){
+        if(cursor.getInt(cursor.getColumnIndex("mark_update")) <= 1){
             database.execSQL(
                 "update djangoForest_listregion set mark_update = 1 where id = $id"
             )
@@ -336,7 +336,7 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         val database: SQLiteDatabase = this.writableDatabase
         val cursor: Cursor = database.rawQuery("select * from djangoForest_sample where id='$id'",null)
         cursor.moveToFirst()
-        if(cursor.getInt(cursor.getColumnIndex("mark_update")) <= 0){
+        if(cursor.getInt(cursor.getColumnIndex("mark_update")) <= 1){
             database.execSQL(
                 "update djangoForest_sample set mark_update = 1 where id = $id"
             )
@@ -354,7 +354,7 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         val cursor: Cursor =
             database.rawQuery("select * from djangoForest_list where id='$id'", null)
         cursor.moveToFirst()
-        if (cursor.getInt(cursor.getColumnIndex("mark_update")) <= 0) {
+        if (cursor.getInt(cursor.getColumnIndex("mark_update")) <= 1) {
             database.execSQL(
                 "update djangoForest_list set mark_update = 1 where id = $id"
             )
@@ -367,6 +367,20 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
             "update djangoForest_listregion set mark_update = 0 where id = $id"
         )
     }
+
+    fun Synck_Update_All(){
+        val database: SQLiteDatabase = this.writableDatabase
+        database.execSQL(
+            "update djangoForest_listregion set mark_update = 0 where mark_update > 0"
+        )
+        database.execSQL(
+            "update djangoForest_sample set mark_update = 0 where mark_update > 0"
+        )
+        database.execSQL(
+            "update djangoForest_list set mark_update = 0 where mark_update > 0"
+        )
+    }
+
 
     @SuppressLint("Range")
     fun readbyporoda(): List<Poroda> {
@@ -962,7 +976,7 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         db.execSQL(
             """ update djangoForest_list set to0_2 = $o2, from0_21To0_5 = $o5, from0_6To1_0 = $o6, from1_1to1_5 = $o11, from1_5 = $o15, 
                     avg_diameter = $AVGdiametr, avg_height = $AVGHEight, count_of_plants = 0,
-                    max_height = $maxHeight where id = $id_prob"""
+                    max_height = $maxHeight, mark_update=1 where id = $id_prob"""
         )
         db.close()
     }
@@ -974,8 +988,8 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         var id_undergrowth_id :Int?=value?.idbreed_under
 
         db.execSQL(
-            """INSERT INTO djangoForest_list( id_sample_id, count_of_plants, id_undergrowth_id, avg_height_undergrowth )
-                |VALUES ( $id_sample_id, $count_of_plants,$id_undergrowth_id,$avg_height_undergrowth );""".trimMargin())
+            """INSERT INTO djangoForest_list( id_sample_id, count_of_plants, id_undergrowth_id, avg_height_undergrowth,mark_update )
+                |VALUES ( $id_sample_id, $count_of_plants,$id_undergrowth_id,$avg_height_undergrowth,2 );""".trimMargin())
 
     }
 
@@ -987,7 +1001,7 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         var id :Int?=value?.id
 
         db.execSQL(
-            """UPDATE djangoForest_list SET count_of_plants = $count_of_plants , avg_height_undergrowth = $avg_height_undergrowth WHERE id = $id""".trimMargin())
+            """UPDATE djangoForest_list SET count_of_plants = $count_of_plants , avg_height_undergrowth = $avg_height_undergrowth,mark_update=1 WHERE id = $id""".trimMargin())
 
     }
     fun writephoto(photo: String,id_sample:Int,latitude:Double?,longitude:Double?,date:String){
@@ -1010,7 +1024,8 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         val a= mutableListOf<Photo>()
         for (i in 1..cursor.getCount()) {
             var phototemp=cursor.getString(cursor.getColumnIndex("photo"))
-            val bmp:Bitmap?=null
+            val temp=GPStracker(context)
+            val bmp=temp.base_to_bitmap(phototemp)
             val photosample=cursor.getInt(cursor.getColumnIndex("id_sample_id"))
             val latitude=cursor.getFloat(cursor.getColumnIndex("latitude"))
             val longitude=cursor.getFloat(cursor.getColumnIndex("longitude"))
@@ -1024,17 +1039,16 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     }
 
     @SuppressLint("Recycle", "Range")
-    fun getphotoall():List<Photo>{
+    fun getphotoall(id_sample_id:Int):List<Photo>{
         val db = this.readableDatabase
         val cursor = db.rawQuery(
-            """SELECT * FROM djangoForest_photopoint """.trimMargin(),null)
+            """SELECT * FROM djangoForest_photopoint where id_sample_id=$id_sample_id """.trimMargin(),null)
         cursor.moveToFirst()
         val a= mutableListOf<Photo>()
         for (i in 1..cursor.getCount()) {
             val phototemp=cursor.getString(cursor.getColumnIndex("photo"))
             var bmp:Bitmap?=null
             val temp=GPStracker(context)
-
             bmp=temp.base_to_bitmap(phototemp)
             val photosample=cursor.getInt(cursor.getColumnIndex("id_sample_id"))
             val latitude=cursor.getFloat(cursor.getColumnIndex("latitude"))
