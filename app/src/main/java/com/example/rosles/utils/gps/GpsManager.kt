@@ -7,13 +7,16 @@ import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import kotlinx.coroutines.delay
 
-class GpsManager (private val activityCompat: AppCompatActivity) {
+class GpsManager (private val activityCompat: AppCompatActivity, private val looper: Looper) {
     public var longitude: Double = 0.0
     public var latitude: Double = 0.0
+    val handler: Handler = Handler(looper)
 
     public fun updateLocation() {
         // проверяем что разрешение получено
@@ -58,12 +61,14 @@ class GpsManager (private val activityCompat: AppCompatActivity) {
         }
 
         // Запрашиваем обновления местоположения с использованием LocationListener
-        locationManager.requestLocationUpdates(
-            LocationManager.GPS_PROVIDER,
-            0,
-            0f,
-            locationListener
-        )
+        handler.post {
+            locationManager.requestLocationUpdates(
+                LocationManager.GPS_PROVIDER,
+                0,
+                0f,
+                locationListener
+            )
+        }
 
 
         // Получаем последнее известное местоположение

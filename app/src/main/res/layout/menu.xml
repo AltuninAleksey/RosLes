@@ -69,10 +69,10 @@
         android:layout_width="0dp"
         android:layout_height="@dimen/custom_size_button_menu"
         android:layout_marginEnd="10dp"
-        android:paddingTop="10dp"
+        android:paddingTop="7dp"
         android:layout_weight="1"
         android:backgroundTint="@color/color_button_main"
-        android:drawableTop="@drawable/minus"
+        android:drawableTop="@drawable/minus_svg"
         android:text="@string/menu_delete"
         android:textSize="10sp"
         app:cornerRadius="30dp" />

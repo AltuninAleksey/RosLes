@@ -12,5 +12,6 @@
     <string name="menu_add_porod">Добавить породу</string>
     <string name="menu_save">Сохранить</string>
     <string name="menu_gps">GPS-точка</string>
+    <string name="menu_share">Выгрузить</string>
     <string name="menu_photo_point">Фото-точка</string>
 </resources>

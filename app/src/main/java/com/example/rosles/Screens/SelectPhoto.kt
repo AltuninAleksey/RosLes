@@ -9,6 +9,7 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.location.LocationManager
 import android.os.Bundle
+import android.os.Looper
 import android.provider.MediaStore
 import android.view.View
 import android.widget.*
@@ -33,7 +34,7 @@ class SelectPhoto:BaseActivity() {
     private val REQUEST_TAKE_PHOTO = 1
     private lateinit var binding: ScreenPhotoBinding
     private lateinit var locationManager: LocationManager
-    private val gpsManager = GpsManager(this)
+    private val gpsManager = GpsManager(this, Looper.getMainLooper())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

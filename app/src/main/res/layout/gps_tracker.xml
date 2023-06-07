@@ -112,7 +112,7 @@
 
     <include
         android:id="@+id/toolbar"
-        layout="@layout/menu"
+        layout="@layout/menu_gps"
         android:layout_width="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_height="wrap_content" />

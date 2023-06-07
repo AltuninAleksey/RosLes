@@ -8,6 +8,7 @@ import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
 import android.location.LocationListener
+import android.os.Looper
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -40,7 +41,7 @@ class gps_activity:AppCompatActivity() {
         binding.toolbar.open.visibility=View.GONE
         binding.toolbar.save.visibility=View.GONE
 
-        val gpsManager: GpsManager = GpsManager(this)
+        val gpsManager: GpsManager = GpsManager(this, Looper.getMainLooper())
 
         var i = 0
         binding.toolbar.addbutton.setOnClickListener {

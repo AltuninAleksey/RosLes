@@ -3,6 +3,7 @@ package com.example.rosles.Screens
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Looper
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -15,6 +16,7 @@ import androidx.core.content.FileProvider
 import com.example.rosles.Network.ViewModels
 import com.example.rosles.R
 import com.example.rosles.databinding.GpsTrackerBinding
+import com.example.rosles.utils.gps.GpsManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -25,6 +27,8 @@ import org.simpleframework.xml.Root
 import org.simpleframework.xml.Serializer
 import org.simpleframework.xml.core.Persister
 import java.io.File
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class GpxTrack : AppCompatActivity() {
@@ -34,12 +38,13 @@ class GpxTrack : AppCompatActivity() {
     private lateinit var binding: GpsTrackerBinding
     private var activetableRow: TableRow? = null
     private var activetableNameFile: String? = null
+    private var counter: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         Toast.makeText(this, "В РАЗРАБОТКЕ", Toast.LENGTH_SHORT).show()
-        finish()
+        //finish()
 
         binding = GpsTrackerBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -47,20 +52,18 @@ class GpxTrack : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title="GPS"
 
-        binding.toolbar.reload.visibility= View.GONE
-        binding.toolbar.open.visibility= View.GONE
-        binding.toolbar.save.visibility= View.GONE
-
-        var gpStracker = GPStracker(this)
+        var gpsTracker = GpsManager(this, Looper.getMainLooper())
 
         initTable()
 
         binding.toolbar.addbutton.setOnClickListener {
 
-            // Имя файла, который вы хотите поделиться
+        }
+
+        binding.toolbar.share.setOnClickListener {
             if (activetableNameFile == null)
                 return@setOnClickListener
-            val file = File(getExternalFilesDir(null), activetableNameFile)
+            val file = File(getExternalFilesDir(null), activetableNameFile!!)
 
             val uri = FileProvider.getUriForFile(this, "com.example.fileprovider", file)
 
@@ -75,20 +78,21 @@ class GpxTrack : AppCompatActivity() {
 
         val listWaypoint = arrayListOf<Waypoint>()
         binding.buttonStart.setOnClickListener {
+            counter++
             if (SaveState.gpsCoroutine == null || SaveState.gpsCoroutine?.isCompleted == true) {
                 SaveState.gpsCoroutine = CoroutineScope(Dispatchers.IO).launch {
                     println("---------------------------gpsCoroutine--------------------- START")
                     var i = 0
-                    val location = gpStracker.location
+                    gpsTracker.updateLocation()
 
                     while (true) {
                         delay(2000)
                         i++
                         println("---------------------------gpsCoroutine--------------------- WORK $i \n" +
-                                "longitude=${location.longitude}, latitude=${location.latitude}")
+                                "longitude=${gpsTracker.longitude}, latitude=${gpsTracker.latitude}")
                         val waypoint = Waypoint()
-                        waypoint.lon = location.longitude
-                        waypoint.lat = location.latitude
+                        waypoint.lon = gpsTracker.longitude
+                        waypoint.lat = gpsTracker.latitude
                         listWaypoint.add(waypoint)
                     }
                 }
@@ -102,15 +106,16 @@ class GpxTrack : AppCompatActivity() {
             println("---------------------------gpsCoroutine--------------------- STOP")
             SaveState.gpsCoroutine?.cancel()
             SaveState.gpsCoroutine = null
-            savePointsAsGpx(this, listWaypoint, "WAY3.gpx")
+            savePointsAsGpx(this, listWaypoint, "AAY${counter}.gpx")
             binding.tblLayout.removeAllViews()
             initTable()
         }
 
         binding.toolbar.delete.setOnClickListener {
-            if (activetableNameFile == null) return@setOnClickListener
+            if (activetableNameFile == null)
+                return@setOnClickListener
             val directory = getExternalFilesDir(null)
-            val fileToDelete = File(directory, activetableNameFile)
+            val fileToDelete = File(directory, activetableNameFile!!)
             if (fileToDelete.exists()) {
                 val deleted = fileToDelete.delete()
             }
@@ -127,9 +132,10 @@ class GpxTrack : AppCompatActivity() {
         activetableNameFile = null
         val storageDir = this.getExternalFilesDir(null)
         val fileList = mutableListOf<File>()
-        storageDir?.let {
-            if (it.isDirectory) {
-                val files = it.listFiles()
+        val dateFormat = SimpleDateFormat("dd-MM-yy/HH:mm", Locale.getDefault())
+        storageDir?.let {dir ->
+            if (dir.isDirectory) {
+                val files = dir.listFiles()?.sortedByDescending { it.lastModified() }
                 if (files != null) {
                     fileList.addAll(files)
                 }
@@ -141,7 +147,7 @@ class GpxTrack : AppCompatActivity() {
             var tableRow = TableRow(this)
             val valuesOfRow: List<String> = mutableListOf(
                 index++.toString(),
-                "data",
+                dateFormat.format(el.lastModified()),
                 el.name
             )
 
