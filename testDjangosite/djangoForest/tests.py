@@ -245,5 +245,24 @@ class QuarterTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
 
-class ListRegionTestCase(APITestCase):
-    pass
+# class ListRegionTestCase(APITestCase):
+# 
+#     def setUp(self):
+#         obj_quarter = Quarter.objects.create(id = 5,quarter_name = 'test')
+#         obj_profile = Profile.objects.create(id = 7, FIO = "test test test", phoneNumber = 333)
+#
+#     def test_get_list_region(self):
+#         response = self.client.get(DEF_URL + "listregion")
+#         self.assertEqual(response.status_code, status.HTTP_200_OK)
+#
+#     def test_post_valid(self):
+#         response = self.client.post(DEF_URL + "listregion", data={"date": "2022-10-29",
+#             "sample_region": 12.6,
+#             "soil_lot": "21.001",
+#             "mark_del": 0,
+#             "mark_update": 0,
+#             "number_region": "32",
+#             "id_quarter": 5,
+#             "id_profile": 7})
+#         print(response.data)
+#         self.assertEqual(response.status_code, status.HTTP_200_OK)

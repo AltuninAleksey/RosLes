@@ -18,14 +18,18 @@ from django.urls import path, include, re_path
 from djangoForest.views import *
 from django.views.static import serve
 from django.conf.urls.static import static
+from django.conf import settings
+from django.contrib.auth.views import LogoutView
 
 from testDjangosite import settings
 
 urlpatterns = [
     re_path(r'^media/(?P<path>.*)$', serve,{'document_root': settings.MEDIA_ROOT}),
     re_path(r'^static/(?P<path>.*)$', serve,{'document_root': settings.STATIC_ROOT}),
+    path('logout', LogoutView.as_view()),
     path('getsamplefromlistregion', GetSampleFromListRegionId.as_view()),
     path('responsesqlite', SendResponseSQLite.as_view()),
+    path('createlistregionbydescreg', CreateListRegionByDescRegion.as_view()),
     path('admin/', admin.site.urls),
     path('undergrowth', UndergrowthView.as_view()),
     path('undergrowth/<int:pk>', UndergrowthView.as_view()),

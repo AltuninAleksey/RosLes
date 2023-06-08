@@ -207,7 +207,10 @@ class ListRegionView(generics.ListCreateAPIView):
 
     def post(self, request):
         serializer = ListRegionSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
+        if not serializer.is_valid():
+            return Response({"error": status.HTTP_400_BAD_REQUEST,
+                             "error_text": serializer.errors[next(iter(serializer.errors))][0]},
+                            status=status.HTTP_400_BAD_REQUEST)
         serializer.save()
         region = ListRegion.objects.get(id=serializer.data['id'])
         field = FieldCard(id_list_region = region)
@@ -903,10 +906,7 @@ class CreateSampleAndOther(ListAPIView):
         #     # serializer_gps.save()
         # serializer_list_region.is_valid(raise_exception=True)
         # serializer_list_region.save()
-        return Response({'sample': serializer.data,
-                         # 'list_region': serializer_list_region.data,
-                         "list": serializer_list.data,
-                         "gps": serializer_gps.data})
+        return Response({"code": status.HTTP_201_CREATED}, status=status.HTTP_201_CREATED)
 
     def put(self, request, *args, **kwargs):
         i = 0
@@ -946,10 +946,7 @@ class CreateSampleAndOther(ListAPIView):
             serializer_gps = GPSSerializer(data="")
             serializer_gps.is_valid(raise_exception=False)
 
-        return Response({"sample": serializer.data,
-                         # "list_region": serializer_list_region.data,
-                         "list": serializer_list.data,
-                         "gps": serializer_gps.data})
+        return Response({"code":status.HTTP_200_OK}, status=status.HTTP_200_OK)
 
 
 class GetForestlyBySubjectRFId(viewsets.ViewSet):
@@ -1331,6 +1328,26 @@ class FieldCardFilter(ListAPIView):
         return Response({"data": ser2.data})
 
 
+class CreateListRegionByDescRegion(ListAPIView):
+
+    def post(self, request, *args, **kwargs):
+        list_serializer = ListRegionSerializer(data=request.data)
+        if not list_serializer.is_valid():
+            return Response({"error": status.HTTP_400_BAD_REQUEST,
+                             "error_text": list_serializer.errors[next(iter(list_serializer.errors))][0]},
+                            status=status.HTTP_400_BAD_REQUEST)
+        list_serializer.save()
+        request.data.update({"id_list_region": list_serializer.data['id']})
+        desc_serializer = DescriptionRegionSerializer(data=request.data)
+        fieldcard_serializer = FieldCardSerializer(data=request.data)
+        desc_serializer.is_valid()
+        fieldcard_serializer.is_valid()
+        desc_serializer.save()
+        fieldcard_serializer.save()
+        return Response({"code": status.HTTP_201_CREATED}, status=status.HTTP_201_CREATED)
+
+
+
 # class testviews(ListAPIView):
 #     print("BOOMBOX")
 #     # file_patj = str()
@@ -1347,8 +1364,6 @@ class FieldCardFilter(ListAPIView):
     #     print(sheetX['Порода'][i])
     #     print('====')
 #         WorkingBreeds.objects.create(name_breeds = i)
-
-
 
 
 class ForestViewSet(viewsets.ModelViewSet):
