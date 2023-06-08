@@ -72,7 +72,19 @@ class sync() {
         }
 
         Thread.sleep(1000)
+        delete_values(db,viewModels)
+    }
+    fun delete_values(db: DBCountWood,viewModels: ViewModels){
+        val listregion= db.get_delete_listregion()
+        val sample= db.get_delete_sample()
 
+        listregion.forEach{
+            viewModels.delete_listregion(it)
+        }
+        sample.forEach{
+            viewModels.delete_sample(it)
+        }
+        db.delete_all()
     }
 
     fun sendphoto(db: DBCountWood,id:Int,context: Context,viewModels: ViewModels){

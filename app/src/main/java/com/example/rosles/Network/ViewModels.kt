@@ -184,6 +184,14 @@ class ViewModels():BaseViewModel(
         uploadbd.postValue(accountsRepository.getbd())
     }
 
+   fun delete_listregion(id:Int)=viewModelScope.safeLaunch {
+       accountsRepository.delete_listregion(id)
+   }
+    fun delete_sample(id:Int)=viewModelScope.safeLaunch {
+        accountsRepository.delete_sample(id)
+    }
+
+
     fun get_user(body:AuthRequest)=viewModelScope.safeLaunch {
         try {
             user.postValue(accountsRepository.get_user(body))

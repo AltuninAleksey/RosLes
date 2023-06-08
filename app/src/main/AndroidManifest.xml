@@ -57,7 +57,6 @@
         <activity android:name="com.example.rosles.Screens.gps_activity"/>
         <activity android:name="com.example.rosles.Screens.SelectPhoto"/>
         <activity android:name="com.example.rosles.Screens.lisq_square"/>
-        <activity android:name="com.example.rosles.Screens.Sample"/>
         <activity android:name="com.example.rosles.Screens.create_user"/>
         <activity android:name="com.example.rosles.Screens.AddListregion"/>
         <activity android:name="com.example.rosles.Screens.ChangeListregion"/>
