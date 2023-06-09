@@ -136,6 +136,14 @@ class RetrofitAccountsSource(
         accountsApi.getbreed()
     }
 
+    override suspend fun delete_listregion(id: Int): ResponseBody =wrapRetrofitExceptions{
+        delay(1000)
+        accountsApi.delete_listregion(id)
+    }
+    override suspend fun delete_sample(id: Int): ResponseBody =wrapRetrofitExceptions{
+        delay(1000)
+        accountsApi.delete_sample(id)
+    }
 
 
     override fun getCurrentToken(): String? {

@@ -1,6 +1,7 @@
 package com.example.rosles.Screens
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
@@ -14,6 +15,7 @@ import com.example.rosles.BaseActivity
 import com.example.rosles.DBCountWood
 import com.example.rosles.R
 import com.example.rosles.databinding.ListSquareBinding
+import com.example.rosles.setSizeRelativeCurrentWindow
 
 class lisq_square : BaseActivity("Список пробных площадей") {
 
@@ -122,7 +124,7 @@ class lisq_square : BaseActivity("Список пробных площадей")
         binding.toolbar.save.setOnClickListener{
             val intent = Intent(this, ChangeSample::class.java)
             intent.putExtra("id_sample", id_sample.toString())
-            intent.putExtra("id_vdomost", bufer_quater_id)
+            intent.putExtra("id_vdomost", id_vdomost.toString())
             startActivity(intent)
         }
         binding.toolbar.addbutton.setOnClickListener {
@@ -147,6 +149,30 @@ class lisq_square : BaseActivity("Список пробных площадей")
                 startActivity(intent)
             }
 
+        }
+
+        binding.toolbar.delete.setOnClickListener {
+            val bufer = activetableRow?.get(0)
+            if (bufer != null) {
+                val textView = bufer as TextView
+                val dialog: Dialog = Dialog(this)
+                dialog.setContentView(R.layout.dialog_delete)
+                dialog.setSizeRelativeCurrentWindow(0.85, 0.6)
+
+                val close = dialog.findViewById<Button>(R.id.close)
+                val delete = dialog.findViewById<Button>(R.id.delete)
+                dialog.show()
+
+                close.setOnClickListener {
+                    dialog.dismiss()
+                    onRestart()
+                }
+                delete.setOnClickListener {
+                    db.delete_sample(id_sample)
+                    dialog.dismiss()
+                    onRestart()
+                }
+            }
         }
     }
 

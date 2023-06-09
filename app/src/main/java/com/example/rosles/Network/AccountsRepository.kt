@@ -46,6 +46,10 @@ interface AccountsSource {
 
     suspend fun putLIST(body: LIST_REQEST): ResponseBody
 
+    suspend fun delete_listregion(id: Int): ResponseBody
+
+    suspend fun delete_sample(id: Int): ResponseBody
+
 
     //suspend fun roleRequst(): responceRole
 
@@ -97,6 +101,10 @@ class AccountsRepository( private val accountsSource: AccountsSource) {
     suspend fun upload(body: UpdateRequest):BaseResp=accountsSource.upload(body)
 
     suspend fun getbd():BaseResp=accountsSource.getbd()
+
+    suspend fun delete_listregion(id: Int):ResponseBody=accountsSource.delete_listregion(id)
+
+    suspend fun delete_sample(id: Int):ResponseBody=accountsSource.delete_sample(id)
 
 
 

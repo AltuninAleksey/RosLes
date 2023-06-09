@@ -103,4 +103,10 @@ interface API {
 
     @GET("breed")
     suspend fun getbreed(): BreedResp
+
+    @DELETE("listregion/{id}")
+    suspend fun delete_listregion(@Path("id") id: Int): ResponseBody
+
+    @DELETE("sample/{id}")
+    suspend fun delete_sample(@Path("id") id: Int): ResponseBody
 }

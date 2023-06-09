@@ -11,7 +11,6 @@ import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import com.example.rosles.DBCountWood
 import com.example.rosles.R
-import com.example.rosles.Screens.Sample.Companion.id_region
 import com.example.rosles.databinding.AddProbBinding
 import com.example.rosles.setSizeRelativeCurrentWindow
 import java.time.format.DateTimeFormatter
