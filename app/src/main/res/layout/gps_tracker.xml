@@ -96,7 +96,7 @@
         android:layout_height="0dp"
         app:layout_constraintVertical_bias="0.0"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/toolbar"
+        app:layout_constraintBottom_toTopOf="@+id/warn_recording"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/first_colum">
 
@@ -109,6 +109,19 @@
 
         </TableLayout>
     </ScrollView>
+
+    <TextView
+        android:id="@+id/warn_recording"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:text="Идёт запись в файл ''"
+        android:textSize="@dimen/custom_size_text_medium"
+        android:gravity="center"
+        android:textColor="@color/red_color"
+        app:layout_constraintBottom_toTopOf="@id/toolbar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <include
         android:id="@+id/toolbar"

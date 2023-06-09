@@ -1,135 +1,246 @@
 package com.example.rosles.Screens
 
-import android.content.Context
+import android.animation.ObjectAnimator
+import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.os.Looper
-import android.view.Menu
-import android.view.MenuItem
+
 import android.view.View
 import android.widget.TableRow
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
+import com.example.rosles.BaseActivity
 import com.example.rosles.Network.ViewModels
 import com.example.rosles.R
+import com.example.rosles.databinding.DialogAddFileGpxBinding
 import com.example.rosles.databinding.GpsTrackerBinding
+import com.example.rosles.setSizeRelativeCurrentWindow
 import com.example.rosles.utils.gps.GpsManager
+import com.example.rosles.utils.gps.simpleframework.ParseGps
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.simpleframework.xml.Element
-import org.simpleframework.xml.ElementList
-import org.simpleframework.xml.Root
-import org.simpleframework.xml.Serializer
-import org.simpleframework.xml.core.Persister
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
 
-class GpxTrack : AppCompatActivity() {
+class GpxTrack: BaseActivity("GPS Трекер") {
 
     val viewModel by viewModels<ViewModels>()
-
     private lateinit var binding: GpsTrackerBinding
+    private lateinit var blinkingAnimatorOfWarn: ObjectAnimator
+    private lateinit var dialogCreateFile: Dialog
     private var activetableRow: TableRow? = null
     private var activetableNameFile: String? = null
-    private var counter: Int = 0
+    private val gpsTracker = GpsManager(this, Looper.getMainLooper())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        Toast.makeText(this, "В РАЗРАБОТКЕ", Toast.LENGTH_SHORT).show()
-        //finish()
-
         binding = GpsTrackerBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title="GPS"
-
-        var gpsTracker = GpsManager(this, Looper.getMainLooper())
-
         initTable()
+        initAnimation()
+        initDialog()
 
         binding.toolbar.addbutton.setOnClickListener {
-
+            dialogCreateFile.show()
         }
-
+        binding.toolbar.delete.setOnClickListener {
+            deleteActiveFile()
+        }
         binding.toolbar.share.setOnClickListener {
-            if (activetableNameFile == null)
-                return@setOnClickListener
-            val file = File(getExternalFilesDir(null), activetableNameFile!!)
-
-            val uri = FileProvider.getUriForFile(this, "com.example.fileprovider", file)
-
-            val shareIntent = Intent(Intent.ACTION_SEND)
-            shareIntent.type = "text/plain"
-            shareIntent.putExtra(Intent.EXTRA_STREAM, uri)
-
-            shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-
-            startActivity(Intent.createChooser(shareIntent, "Поделиться файлом"))
+            shareActiveFile()
+        }
+        binding.toolbar.showTrack.setOnClickListener {
+            warn("В РАЗРАБОТКЕ")
         }
 
-        val listWaypoint = arrayListOf<Waypoint>()
         binding.buttonStart.setOnClickListener {
-            counter++
-            if (SaveState.gpsCoroutine == null || SaveState.gpsCoroutine?.isCompleted == true) {
-                SaveState.gpsCoroutine = CoroutineScope(Dispatchers.IO).launch {
-                    println("---------------------------gpsCoroutine--------------------- START")
-                    var i = 0
-                    gpsTracker.updateLocation()
+            if (activetableNameFile == null) {
+                warn("Вы не выбрали файл для записи")
+                return@setOnClickListener
+            }
+            startRecordingIfNotActiveRecord()
+        }
 
-                    while (true) {
-                        delay(2000)
-                        i++
-                        println("---------------------------gpsCoroutine--------------------- WORK $i \n" +
-                                "longitude=${gpsTracker.longitude}, latitude=${gpsTracker.latitude}")
-                        val waypoint = Waypoint()
-                        waypoint.lon = gpsTracker.longitude
-                        waypoint.lat = gpsTracker.latitude
-                        listWaypoint.add(waypoint)
-                    }
+        binding.buttonPause.setOnClickListener {
+            if (SaveState.recordingFileName != null) {
+                if (SaveState.isPauseRecord) {
+                    continueRecord()
+                } else {
+                    pauseRecord()
                 }
             }
         }
 
-        binding.buttonPause.setOnClickListener {
-        }
-
         binding.buttonStop.setOnClickListener {
-            println("---------------------------gpsCoroutine--------------------- STOP")
-            SaveState.gpsCoroutine?.cancel()
-            SaveState.gpsCoroutine = null
-            savePointsAsGpx(this, listWaypoint, "AAY${counter}.gpx")
-            binding.tblLayout.removeAllViews()
-            initTable()
+            if (!SaveState.recordingFileName.isNullOrEmpty()) {
+                stopRecording()
+            }
         }
 
-        binding.toolbar.delete.setOnClickListener {
-            if (activetableNameFile == null)
-                return@setOnClickListener
-            val directory = getExternalFilesDir(null)
-            val fileToDelete = File(directory, activetableNameFile!!)
-            if (fileToDelete.exists()) {
-                val deleted = fileToDelete.delete()
-            }
-            activetableRow = null
-            activetableNameFile = null
+    }
 
-            binding.tblLayout.removeAllViews()
-            initTable()
+    private fun continueRecord() {
+        SaveState.isPauseRecord = false
+        showWarnRecordToFile()
+        if (!saveUpdateLocation()) {
+            return
+        }
+        startRecordTrackInList()
+    }
+
+    private fun pauseRecord() {
+        SaveState.isPauseRecord = true
+        showWarnPauseRecordToFile()
+        closeGpsCoroutine()
+    }
+
+    private fun showWarnRecordToFile() {
+        binding.warnRecording.text = "Идёт запись в файл '${SaveState.recordingFileName}'"
+        binding.warnRecording.visibility = View.VISIBLE
+        binding.buttonPause.text = "Пауза"
+        blinkingAnimatorOfWarn.start()
+    }
+
+    private fun showWarnPauseRecordToFile() {
+        binding.warnRecording.text = "Пауза записи в файл '${SaveState.recordingFileName}'"
+        binding.warnRecording.visibility = View.VISIBLE
+        blinkingAnimatorOfWarn.cancel()
+        binding.buttonPause.text = "Продолжить"
+        binding.warnRecording.alpha = 1.0f
+    }
+
+    private fun unShowWarnRecordToFile() {
+        binding.warnRecording.visibility = View.GONE
+        blinkingAnimatorOfWarn.cancel()
+    }
+
+    private fun startRecordTrackInList() {
+        if (SaveState.gpsCoroutine == null || SaveState.gpsCoroutine?.isCompleted == true) {
+            SaveState.gpsCoroutine = CoroutineScope(Dispatchers.IO).launch {
+                println("---------------------------gpsCoroutine--------------------- START")
+                var i = 0
+
+                gpsTracker.updateLocation()
+
+                while (true) {
+                    delay(2000)
+                    println("---------------------------gpsCoroutine--------------------- WORK ${i++} \n" +
+                            "longitude=${gpsTracker.longitude}, latitude=${gpsTracker.latitude}")
+                    val waypoint = ParseGps.Waypoint()
+                    waypoint.lon = gpsTracker.longitude
+                    waypoint.lat = gpsTracker.latitude
+                    SaveState.listWaypoint.add(waypoint)
+                }
+            }
+        }
+    }
+
+    private fun startRecordingIfNotActiveRecord() {
+        if (SaveState.recordingFileName == null) {
+            SaveState.listWaypoint.clear()
+            SaveState.recordingFileName = activetableNameFile
+            ParseGps.loadGpxFile(this, SaveState.recordingFileName!!)?.waypoints?.forEach {
+                SaveState.listWaypoint.add(it)
+            }
+            if (!saveUpdateLocation()) {
+                return
+            }
+            startRecordTrackInList()
+            showWarnRecordToFile()
+        } else {
+            warn("Запись уже идёт")
+        }
+    }
+
+    private fun stopRecording() {
+        println("---------------------------gpsCoroutine--------------------- STOP")
+        ParseGps.savePointsAsGpx(this, SaveState.recordingFileName!!, SaveState.listWaypoint)
+        SaveState.recordingFileName = null
+        binding.buttonPause.text = "Пауза"
+        updateTable()
+        closeGpsCoroutine()
+        unShowWarnRecordToFile()
+        warn("Запись успешно сохранена")
+    }
+    private fun shareActiveFile() {
+        if (!isActivetableRowAndNameFileNotNull())
+            return
+        val file = File(getExternalFilesDir(null), activetableNameFile!!)
+        val uri = FileProvider.getUriForFile(this, "com.example.fileprovider", file)
+        val shareIntent = Intent(Intent.ACTION_SEND)
+
+        shareIntent.type = "text/plain"
+        shareIntent.putExtra(Intent.EXTRA_STREAM, uri)
+        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+
+        startActivity(Intent.createChooser(shareIntent, "Поделиться файлом"))
+    }
+
+    private fun deleteActiveFile(){
+        if (!isActivetableRowAndNameFileNotNull())
+            return
+        if (activetableNameFile.equals(SaveState.recordingFileName)) {
+            warn("Нельзя удалить файл в который идёт запись")
+            return
+        }
+
+        val fileToDelete = File(getExternalFilesDir(null), activetableNameFile!!)
+        if (fileToDelete.exists()) {
+            fileToDelete.delete()
+        }
+        activetableRowAndNameFileToNull()
+        updateTable()
+    }
+
+    private fun initAnimation() {
+        blinkingAnimatorOfWarn = createBlinkingAnimator(binding.warnRecording)
+        if (SaveState.recordingFileName != null) {
+            if (SaveState.isPauseRecord) {
+                showWarnPauseRecordToFile()
+                binding.buttonPause.text = "Продолжить"
+            } else {
+                showWarnRecordToFile()
+                binding.buttonPause.text = "Пауза"
+            }
+        }
+    }
+
+    private fun initDialog() {
+        dialogCreateFile = Dialog(this)
+        val bindingDialog: DialogAddFileGpxBinding = DialogAddFileGpxBinding.inflate(layoutInflater)
+
+        dialogCreateFile.setContentView(bindingDialog.root)
+        dialogCreateFile.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialogCreateFile.setSizeRelativeCurrentWindow(0.8, 0.4)
+        dialogCreateFile.setCancelable(true)
+
+        bindingDialog.createFile.setOnClickListener {
+            createFileWithCheck(bindingDialog.nameFile.text.toString())
+        }
+    }
+
+    private fun createFileWithCheck(nameNewFile: String) {
+        if (validateString(nameNewFile)) {
+            ParseGps.savePointsAsGpx(this, nameNewFile + ".gpx")
+            updateTable()
+            dialogCreateFile.cancel()
+        } else {
+            warn("Не корректное имя файла. Разрашены только английские буквы, цифры и символ '_'")
         }
     }
 
     private fun initTable() {
-        activetableRow = null
-        activetableNameFile = null
+        activetableRowAndNameFileToNull()
         val storageDir = this.getExternalFilesDir(null)
         val fileList = mutableListOf<File>()
         val dateFormat = SimpleDateFormat("dd-MM-yy/HH:mm", Locale.getDefault())
@@ -168,63 +279,52 @@ class GpxTrack : AppCompatActivity() {
 
             }
             binding.tblLayout.addView(tableRow)
-
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(com.example.rosles.R.menu.menu, menu)
-        return true
+    private fun updateTable() {
+        binding.tblLayout.removeAllViews()
+        initTable()
     }
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
-            android.R.id.home->finish()
-            R.id.main->{startActivity(Intent(this, Dashboard::class.java))}
-            R.id.itemperechet->{startActivity(Intent(this, MainActivity::class.java))}
-            R.id.itemgps->{startActivity(Intent(this, gps_activity::class.java))
-                finish()}
-            R.id.profile->{startActivity(Intent(this, profile::class.java))
-                finish()}
 
+    private fun activetableRowAndNameFileToNull() {
+        activetableRow = null
+        activetableNameFile = null
+    }
+
+    private fun isActivetableRowAndNameFileNotNull() =
+        activetableNameFile != null || activetableRow != null
+
+
+    private fun createBlinkingAnimator(textView: TextView): ObjectAnimator {
+        val animator = ObjectAnimator.ofFloat(textView, "alpha", 1.0f, 0.0f)
+        animator.duration = 500
+        animator.repeatCount = ObjectAnimator.INFINITE
+        animator.repeatMode = ObjectAnimator.REVERSE
+        return animator
+    }
+
+    private fun closeGpsCoroutine() {
+        SaveState.gpsCoroutine?.cancel()
+        SaveState.gpsCoroutine = null
+    }
+
+    private fun saveUpdateLocation(): Boolean {
+        try {
+            gpsTracker.updateLocation()
+        }  catch (illegalStateException: IllegalStateException) {
+            warn(illegalStateException.message ?: "")
+            return false
         }
         return true
     }
-}
 
-// Класс для представления точки в формате GPX
-@Root(name = "gpx")
-class GpxFile {
-    @field:ElementList(entry = "wpt", inline = true)
-    var waypoints: List<Waypoint>? = null
-}
-
-class Waypoint {
-    @field:Element
-    var lat: Double = 0.0
-
-    @field:Element
-    var lon: Double = 0.0
-
-    @field:Element(required = false)
-    var name: String? = null
-
-    @field:Element(required = false)
-    var desc: String? = null
-}
-
-fun savePointsAsGpx(context: Context, points: List<Waypoint>, fileName: String) {
-    val gpxFile = GpxFile()
-    val storageDir = context.getExternalFilesDir(null)
-    gpxFile.waypoints = points
-
-    val serializer: Serializer = Persister()
-    val file = File(storageDir, fileName)
-
-    try {
-        serializer.write(gpxFile, file)
-        println("GPX" + " GPX file saved successfully.")
-    } catch (e: Exception) {
-        e.printStackTrace()
-        println("GPX" + " Error saving GPX file.")
+    fun validateString(input: String): Boolean {
+        val pattern = "^[a-zA-Z0-9_]+$".toRegex()
+        return input.matches(pattern)
+    }
+    private fun warn(textWarn: String) {
+        Toast.makeText(this, textWarn, Toast.LENGTH_SHORT).show()
     }
 }
+
