@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.MenuItem
 import android.view.View
 import android.widget.*
@@ -115,6 +117,18 @@ class ChangeSample:AppCompatActivity() {
         binding.date.setOnClickListener {
             initDatePicker()
         }
+        val summlistener = object: TextWatcher {
+            override fun afterTextChanged(p0: Editable?) {}
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+                val a = if (binding.vudel.text.toString().trim().length == 0) 0 else binding.vudel.text.toString().toInt()
+                val b = if (binding.idCvartal.text.toString().trim().length == 0) 0 else binding.idCvartal.text.toString().toInt()
+                binding.samplearea.setText((a*b).toString())
+            }
+        }
+        binding.vudel.addTextChangedListener(summlistener)
+        binding.idCvartal.addTextChangedListener(summlistener)
     }
 
     @SuppressLint("SetTextI18n")
