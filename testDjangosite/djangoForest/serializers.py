@@ -547,6 +547,7 @@ class GetSampleListDataSerializer(serializers.Serializer):
     id_profile = serializers.CharField(source='id_profile.id')
     profile = serializers.CharField(source='id_profile.FIO')
     soil_lot = serializers.CharField()
+    number_region = serializers.CharField(source='id_list_region.number_region')
 
 
 class GetAllSampleListDataSerializer(serializers.Serializer):

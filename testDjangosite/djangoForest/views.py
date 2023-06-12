@@ -1070,8 +1070,8 @@ class PhotoPointView(APIView):
     def get(self, *args, **kwargs):
         if kwargs:
             lst = PhotoPoint.objects.filter(id_sample=kwargs['pk']).values("id", "photo", "date")
-            if len(lst) == 0: return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
-                                              status=status.HTTP_404_NOT_FOUND)
+            # if len(lst) == 0: return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
+            #                                   status=status.HTTP_404_NOT_FOUND)
             return Response(lst)
             from testDjangosite.settings import MEDIA_ROOT
             import os
@@ -1370,7 +1370,6 @@ class CreateListRegionByDescRegion(ListAPIView):
             return Response({"error": status.HTTP_400_BAD_REQUEST,
                              "error_text": fieldcard_serializer.errors[next(iter(fieldcard_serializer.errors))][0]},
                             status=status.HTTP_400_BAD_REQUEST)
-        fieldcard_serializer.is_valid()
         desc_serializer.save()
         fieldcard_serializer.save()
         return Response({"code": status.HTTP_201_CREATED}, status=status.HTTP_201_CREATED)

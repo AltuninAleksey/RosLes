@@ -121,11 +121,20 @@ REST_FRAMEWORK = {
 #         'NAME': 'rosLes',
 #         'USER': 'PythonUser',
 #         'PASSWORD': 'PPythonUserassword',
-#         'HOST': '90.156.208.88',
-#         'PORT': '3306',
+#         # 'HOST': '90.156.208.88',
+#         # 'PORT': '3306',
 #     }
 # }
-
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'db_name',
+#         'USER': 'db_user',
+#         'PASSWORD': 'db_user_password',
+#         'HOST': '',
+#         'PORT': '5432',
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
