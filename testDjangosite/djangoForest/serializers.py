@@ -387,6 +387,7 @@ class GetListRegionSerializer(serializers.Serializer):
 
 
 class ListRegionSerializer(serializers.ModelSerializer):
+    id_profile = serializers.CharField(required=False)
     class Meta:
         model = ListRegion
         fields = "__all__"
