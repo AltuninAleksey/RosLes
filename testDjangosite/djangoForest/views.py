@@ -267,7 +267,7 @@ class ListRegionViewUpdate(ListView):
             return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
                             status=status.HTTP_404_NOT_FOUND)
 
-        serealizer = ListRegionSerializer(data=request.data, instance=instance)
+        serealizer = ListRegionUpdateSerializer(data=request.data, instance=instance)
         serealizer.is_valid(raise_exception=True)
         serealizer.save()
         return Response({"code": status.HTTP_200_OK})
