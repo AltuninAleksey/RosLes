@@ -861,16 +861,10 @@ class GetAllListRegionData(viewsets.ViewSet):
         lst = ListRegion.objects.all()
         return JsonResponse({'data': GetAllListRegionDataSerializer(lst, many=True).data}, safe=False)
 
-
+# id undergrowth = 0
 class CreateSampleAndOther(ListAPIView):
 
     def post(self, request, **kwargs):
-        # serializer_list_region = ListRegionSerializer(data=request.data['sample'])
-        # serializer_list_region.is_valid(raise_exception=True)
-        # serializer_list_region.save()
-        # request.data['sample'].update({'id_list_region': serializer_list_region.data['id']})
-        # serializer_undergrowth = UndergrowthSerializer()
-        # serializer_photopoint = PhotoPointSerializer()
         serializer = SampleSerializer(data=request.data['sample'])
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -898,26 +892,16 @@ class CreateSampleAndOther(ListAPIView):
         else:
             serializer_gps = GPSSerializer(data="")
             serializer_gps.is_valid(raise_exception=False)
-        if len(request.data['profile_data']) != 0:
-            for k in request.data['profile_data']:
-                serializer_profile = ProfileSerializer(data=k)
-                if not serializer_profile.is_valid():
-                    return Response({"error + profile": status.HTTP_400_BAD_REQUEST,
-                                     "error_text": serializer_profile.errors[next(iter(serializer_profile.errors))][0]},
-                                    status=status.HTTP_400_BAD_REQUEST)
-        # if len(request.data['photopoint']) != 0:
-        #     pass
-        # if len(request.data['undergrowth']) != 0:
-        #     # for k in range(len(request.data['undergrowth'])):
-        #     serializer_undergrowth = UndergrowthSerializer(data=request.data['undergrowth'], many=True)
-        #     # serializer_gps.save()
-        # serializer_list_region.is_valid(raise_exception=True)
-        # serializer_list_region.save()
+        # if len(request.data['profile_data']) != 0:
+        #     for k in request.data['profile_data']:
+        #         serializer_profile = ProfileSerializer(data=k)
+        #         if not serializer_profile.is_valid():
+        #             return Response({"error + profile": status.HTTP_400_BAD_REQUEST,
+        #                              "error_text": serializer_profile.errors[next(iter(serializer_profile.errors))][0]},
+        #                             status=status.HTTP_400_BAD_REQUEST)
         return Response({"code": status.HTTP_201_CREATED}, status=status.HTTP_201_CREATED)
 
     def put(self, request, *args, **kwargs):
-        i = 0
-        j = 0
         try:
             instance = Sample.objects.get(pk=request.data['sample']['id'])
         except:
@@ -925,49 +909,50 @@ class CreateSampleAndOther(ListAPIView):
         serializer = SampleSerializer(data=request.data['sample'], instance=instance)
         serializer.is_valid(raise_exception=True)
         serializer.save()
+        id_sample = serializer.data['id']
         if len(request.data['list_data']) != 0:
-            while i < len(request.data['list_data']):
+            for i in request.data['list_data']:
                 try:
-                    instance_list = List.objects.get(pk=request.data['list_data'][i]['id'])
-                    serializer_list = ListSerializer(data=request.data['list_data'][i], instance=instance_list)
+                    instance_list = List.objects.get(pk=i['id'])
+                    serializer_list = ListSerializer(data=i, instance=instance_list)
                 except:
-                    serializer_list = ListSerializer(data=request.data['list_data'][i])
-                # serializer_list = ListSerializer(data=request.data['list_data'][i], instance=instance_list)
-                serializer_list.is_valid(raise_exception=True)
+                    serializer_list = ListSerializer(data=i)
+                serializer_list.is_valid()
                 serializer_list.save()
-                i += 1
         if len(request.data['gps_data']) != 0:
-            while j < len(request.data['gps_data']):
+            for j in request.data['gps_data']:
                 try:
-                    instance_gps = GPS.objects.get(pk=request.data['gps_data'][j]['id'])
-                    serializer_gps = GPSSerializer(data=request.data['gps_data'][j], instance=instance_gps)
+                    instance_gps = GPS.objects.get(pk=j['id'])
+                    serializer_gps = GPSSerializer(data=j, instance=instance_gps)
                 except:
-                    serializer_gps = GPSSerializer(data=request.data['gps_data'][j])
-                serializer_gps.is_valid(raise_exception=True)
+                    serializer_gps = GPSSerializer(data=j)
+                serializer_gps.is_valid()
                 serializer_gps.save()
-                j += 1
-
-        if len(request.data['profile_data']) != 0:
-            for k in request.data['profile_data']:
-                profile_instance = Profile.objects.get(pk=k['id'])
-                serializer_profile = ProfileSerializer(data=k, instance=profile_instance)
-                if not serializer_profile.is_valid():
-                    return Response({"error + profile": status.HTTP_400_BAD_REQUEST,
-                                     "error_text": serializer_profile.errors[next(iter(serializer_profile.errors))][0]},
-                                    status=status.HTTP_400_BAD_REQUEST)
-                serializer_profile.save()
-        # if len(request.data['photopoint']) != 0:
-        #     for z in request.data['photopoint']:
-        #         try:
-        #             photo_instance = PhotoPoint.objects.get(pk=z['id'])
-        #             serializer_photo = PhotoPointSerializer(data=z, instance=photo_instance)
-        #         except:
-        #             serializer_photo = PhotoPointSerializer(data=z)
-        #         if not serializer_photo.is_valid():
-        #             return Response({"error": status.HTTP_400_BAD_REQUEST,
-        #                              "error_text": serializer_photo.errors[next(iter(serializer_photo.errors))][0]},
+        # изменить профиль
+        # if len(request.data['profile_data']) != 0:
+        #     for k in request.data['profile_data']:
+        #         profile_instance = Profile.objects.get(pk=k['id'])
+        #         serializer_profile = ProfileSerializer(data=k, instance=profile_instance)
+        #         if not serializer_profile.is_valid():
+        #             return Response({"error + profile": status.HTTP_400_BAD_REQUEST,
+        #                              "error_text": serializer_profile.errors[next(iter(serializer_profile.errors))][0]},
         #                             status=status.HTTP_400_BAD_REQUEST)
+        #         serializer_profile.save()
+        if len(request.data['non_null_list_data']) != 0:
+            for non in request.data['non_null_list_data']:
+                non.update({"id_sample": f"{id_sample}"})
+                try:
+                    instance_list = List.objects.get(pk=non['id'])
+                    serializer_list_non = ListSerializer(data=non, instance=instance_list)
 
+                except:
+                    serializer_list_non = ListSerializer(data=non)
+                if not serializer_list_non.is_valid():
+                    return Response({"error": status.HTTP_400_BAD_REQUEST,
+                                     "error_text": serializer_list_non.errors[next(iter(serializer_list_non.errors))][0]},
+                                    status=status.HTTP_400_BAD_REQUEST)
+
+                serializer_list_non.save()
         return Response({"code":status.HTTP_200_OK}, status=status.HTTP_200_OK)
 
 
@@ -1305,16 +1290,33 @@ class GetFieldCard(ListAPIView):
         lst = FieldCard.objects.all()
         return Response({"get": FieldCardSerializer(lst, many=True).data})
 
+
+    def post(self, request, *args, **kwargs):
+        serializer = FieldCardSerializer(data = request.data)
+        if not serializer.is_valid():
+            return Response({"error": status.HTTP_400_BAD_REQUEST,
+                             "error_text": serializer.errors[next(iter(serializer.errors))][0]},
+                            status=status.HTTP_400_BAD_REQUEST)
+        serializer.save()
+        return Response({"code": status.HTTP_201_CREATED}, status= status.HTTP_201_CREATED)
+
+
     def put(self, request, *args, **kwargs):
         try:
             instance = FieldCard.objects.get(pk=kwargs['pk'])
-
         except:
             return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
                             status=status.HTTP_404_NOT_FOUND)
-
+        try:
+            instance_region = ListRegion.objects.get(id=request.data['id_list_region'])
+        except:
+            return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid list region id"},
+                            status=status.HTTP_404_NOT_FOUND)
+        ser_listregion = ListRegionUpdateNonMarkDel(data=request.data, instance=instance_region)
+        ser_listregion.is_valid(raise_exception=True)
+        ser_listregion.save()
         serealizer = FieldCardSerializer(data=request.data, instance=instance)
-        serealizer.is_valid(raise_exception=True)
+        serealizer.is_valid()
         serealizer.save()
         return Response({'code': status.HTTP_200_OK}, status=status.HTTP_200_OK)
 

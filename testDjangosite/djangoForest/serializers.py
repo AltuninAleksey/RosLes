@@ -117,6 +117,7 @@ class ListSerializer(serializers.ModelSerializer):
         return instance
 
 
+
 class GPSSerializer(serializers.ModelSerializer):
     class Meta:
         model = GPS
@@ -675,6 +676,7 @@ class FieldCardSerializer(serializers.ModelSerializer):
     sample_region = serializers.FloatField(source="id_list_region.sample_region", read_only=True)
     date = serializers.DateField(source="id_list_region.date", read_only=True)
     number_region = serializers.CharField(source="id_list_region.number_region", read_only=True)
+
     class Meta:
         model = FieldCard
         fields = '__all__'
