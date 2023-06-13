@@ -88,7 +88,6 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class ListSerializer(serializers.ModelSerializer):
-    id_type_of_reproduction = serializers.CharField(required=False)
 
     class Meta:
         model = List
