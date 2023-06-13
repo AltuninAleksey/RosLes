@@ -944,7 +944,6 @@ class CreateSampleAndOther(ListAPIView):
                 try:
                     instance_list = List.objects.get(pk=non['id'])
                     serializer_list_non = ListSerializer(data=non, instance=instance_list)
-
                 except:
                     serializer_list_non = ListSerializer(data=non)
                 if not serializer_list_non.is_valid():
@@ -1313,10 +1312,16 @@ class GetFieldCard(ListAPIView):
             return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid list region id"},
                             status=status.HTTP_404_NOT_FOUND)
         ser_listregion = ListRegionUpdateNonMarkDel(data=request.data, instance=instance_region)
-        ser_listregion.is_valid(raise_exception=True)
+        if not ser_listregion.is_valid():
+            return Response({"error": status.HTTP_400_BAD_REQUEST,
+                             "error_text": ser_listregion.errors[next(iter(ser_listregion.errors))][0]},
+                            status=status.HTTP_400_BAD_REQUEST)
         ser_listregion.save()
         serealizer = FieldCardSerializer(data=request.data, instance=instance)
-        serealizer.is_valid()
+        if not serealizer.is_valid():
+            return Response({"error": status.HTTP_400_BAD_REQUEST,
+                             "error_text": serealizer.errors[next(iter(serealizer.errors))][0]},
+                            status=status.HTTP_400_BAD_REQUEST)
         serealizer.save()
         return Response({'code': status.HTTP_200_OK}, status=status.HTTP_200_OK)
 
