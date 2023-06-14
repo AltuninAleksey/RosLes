@@ -267,6 +267,9 @@ class GpxTrack: BaseActivity("GPS Трекер") {
 
         var index = 1
         for (el in fileList) {
+            if (!el.name.endsWith(".gpx")) {
+                continue
+            }
             val tableRow = TableRow(this)
             val valuesOfRow: List<String> = mutableListOf(
                 index++.toString(),
