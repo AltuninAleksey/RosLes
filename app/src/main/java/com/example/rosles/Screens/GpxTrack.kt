@@ -29,6 +29,8 @@ import kotlinx.coroutines.launch
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.Map
 
 
 class GpxTrack: BaseActivity("GPS Трекер") {
@@ -61,6 +63,16 @@ class GpxTrack: BaseActivity("GPS Трекер") {
         }
         binding.toolbar.showTrack.setOnClickListener {
             warn("В РАЗРАБОТКЕ")
+            if (activetableNameFile == null) {
+                return@setOnClickListener
+            }
+            val intent = Intent(this, MapTrack::class.java)
+            val listOfTrack: ArrayList<ParseGps.Waypoint> = arrayListOf<ParseGps.Waypoint>()
+            ParseGps.loadGpxFile(this, activetableNameFile!!)?.waypoints?.forEach {
+                listOfTrack.add(it)
+            }
+            intent.putExtra("listOfTrack", listOfTrack)
+            startActivity(intent)
         }
 
         binding.buttonStart.setOnClickListener {
@@ -255,7 +267,7 @@ class GpxTrack: BaseActivity("GPS Трекер") {
 
         var index = 1
         for (el in fileList) {
-            var tableRow = TableRow(this)
+            val tableRow = TableRow(this)
             val valuesOfRow: List<String> = mutableListOf(
                 index++.toString(),
                 dateFormat.format(el.lastModified()),

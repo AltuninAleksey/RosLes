@@ -62,6 +62,7 @@
         <activity android:name="com.example.rosles.Screens.ChangeListregion"/>
         <activity android:name="com.example.rosles.Screens.ChangeSample"/>
         <activity android:name="com.example.rosles.Screens.GpxTrack"/>
+        <activity android:name="com.example.rosles.Screens.MapTrack"/>
 
         <provider
             android:name="androidx.core.content.FileProvider"
