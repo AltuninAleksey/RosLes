@@ -8,15 +8,16 @@ import org.simpleframework.xml.Serializer
 import org.simpleframework.xml.core.Persister
 import java.io.File
 import java.io.FileOutputStream
+import java.io.Serializable
 
 class ParseGps {
     @Root(name = "gpx")
-    class GpxFile {
+    class GpxFile: Serializable {
         @field:ElementList(entry = "wpt", inline = true)
         var waypoints: List<Waypoint>? = null
     }
 
-    public class Waypoint {
+    public class Waypoint: Serializable {
         @field:Element
         var lat: Double = 0.0
 
