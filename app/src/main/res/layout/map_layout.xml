@@ -9,4 +9,43 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:backgroundTint="@color/color_switch_main"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="parent">
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            style="@style/Widget.AppCompat.CompoundButton.Switch"
+            android:id="@+id/switch_lines"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Паузы"
+            app:thumbTint="@color/white"
+            app:switchPadding="10dp"
+            android:textColor="@color/white"
+            android:padding="10dp"
+            android:paddingTop="10dp"
+            android:gravity="center|top"
+            android:textSize="@dimen/custom_size_text_medium"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+    </androidx.cardview.widget.CardView>
+
+
+
+    <ImageView
+        android:id="@+id/settings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="15dp"
+        android:text="rerer"
+        android:src="@drawable/icbaselinesettings_un"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
