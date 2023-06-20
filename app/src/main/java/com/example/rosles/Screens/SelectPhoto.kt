@@ -45,7 +45,7 @@ class SelectPhoto:BaseActivity() {
         id_sample=intent.getIntExtra("id_sample",0)
         id_vdomost=intent.getIntExtra("id_vdomost",0)
 
-
+        gpsManager.init()
 
 //        db.getphotoall()
 

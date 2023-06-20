@@ -30,7 +30,6 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.collections.Map
 
 
 class GpxTrack: BaseActivity("GPS Трекер") {
@@ -51,6 +50,7 @@ class GpxTrack: BaseActivity("GPS Трекер") {
         initTable()
         initAnimation()
         initDialog()
+        gpsTracker.init()
 
         binding.toolbar.addbutton.setOnClickListener {
             dialogCreateFile.show()
@@ -62,7 +62,6 @@ class GpxTrack: BaseActivity("GPS Трекер") {
             shareActiveFile()
         }
         binding.toolbar.showTrack.setOnClickListener {
-            warn("В РАЗРАБОТКЕ")
             if (activetableNameFile == null) {
                 return@setOnClickListener
             }
@@ -102,11 +101,11 @@ class GpxTrack: BaseActivity("GPS Трекер") {
     }
 
     private fun continueRecord() {
-        SaveState.isPauseRecord = false
-        showWarnRecordToFile()
         if (!saveUpdateLocation()) {
             return
         }
+        SaveState.isPauseRecord = false
+        showWarnRecordToFile()
         startRecordTrackInList()
     }
 
@@ -142,10 +141,9 @@ class GpxTrack: BaseActivity("GPS Трекер") {
                 println("---------------------------gpsCoroutine--------------------- START")
                 var i = 0
 
-                gpsTracker.updateLocation()
-
                 while (true) {
-                    delay(2000)
+                    delay(5000)
+                    gpsTracker.updateLocation()
                     println("---------------------------gpsCoroutine--------------------- WORK ${i++} \n" +
                             "longitude=${gpsTracker.longitude}, latitude=${gpsTracker.latitude}")
                     val waypoint = ParseGps.Waypoint()
@@ -158,14 +156,14 @@ class GpxTrack: BaseActivity("GPS Трекер") {
     }
 
     private fun startRecordingIfNotActiveRecord() {
+        if (!saveUpdateLocation()) {
+            return
+        }
         if (SaveState.recordingFileName == null) {
             SaveState.listWaypoint.clear()
             SaveState.recordingFileName = activetableNameFile
             ParseGps.loadGpxFile(this, SaveState.recordingFileName!!)?.waypoints?.forEach {
                 SaveState.listWaypoint.add(it)
-            }
-            if (!saveUpdateLocation()) {
-                return
             }
             startRecordTrackInList()
             showWarnRecordToFile()

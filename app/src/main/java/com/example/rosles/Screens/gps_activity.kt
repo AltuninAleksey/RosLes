@@ -42,6 +42,7 @@ class gps_activity:AppCompatActivity() {
         binding.toolbar.save.visibility=View.GONE
 
         val gpsManager: GpsManager = GpsManager(this, Looper.getMainLooper())
+        gpsManager.init()
 
         var i = 0
         binding.toolbar.addbutton.setOnClickListener {
