@@ -544,11 +544,12 @@ class SchemaMixingBreeds(models.Model):
 
 
 class PlotCoeff(models.Model):
-    ratio_composition = models.CharField(max_length="100")
+    ratio_composition = models.CharField(max_length=100)
     breed = models.ForeignKey("Breed", on_delete=models.CASCADE)
     age = models.IntegerField()
     avg_diameter = models.FloatField()
     count_plants = models.IntegerField()
+    id_field_card = models.ForeignKey("FieldCard", on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = "Коэфф. участка"
