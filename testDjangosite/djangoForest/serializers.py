@@ -825,3 +825,10 @@ class EconomySerializer(serializers.ModelSerializer):
     class Meta:
         model = Economy
         fields = "__all__"
+
+
+class PlotCoeffSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = PlotCoeff
+        fields = "__all__"

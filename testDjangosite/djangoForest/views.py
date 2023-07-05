@@ -1057,20 +1057,6 @@ class PhotoPointView(APIView):
             # if len(lst) == 0: return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
             #                                   status=status.HTTP_404_NOT_FOUND)
             return Response(lst)
-            from testDjangosite.settings import MEDIA_ROOT
-            import os
-            # lst = PhotoPoint.objects.filter(pk=kwargs['pk']).values("photo")
-            # if len(lst) == 0:
-            #     return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
-            #                     status=status.HTTP_404_NOT_FOUND)
-            # return Response(lst)
-            # file_path = os.path.join(MEDIA_ROOT, lst['photo'])
-            # print(file_path)
-            # if os.path.isfile(file_path):
-            # response = FileResponse(open(file_path, 'rb'))
-            # response['Content-Disposition'] = 'attachment; filename=' + lst['photo'].split('/')[-1]
-            # response['X-Sendfile'] = file_path
-            # return response
         return Response(PhotoPointSer(PhotoPoint.objects.all(), many=True).data)
 
 
@@ -1394,6 +1380,20 @@ class CreateListRegionByDescRegion(ListAPIView):
         desc_serializer.save()
         fieldcard_serializer.save()
         return Response({"code": status.HTTP_201_CREATED}, status=status.HTTP_201_CREATED)
+
+
+class PlotCoeff(ListAPIView):
+
+    def get(self, request, *args, **kwargs):
+        if kwargs:
+            try:
+                lst = PlotCoeff.objects.get(id=kwargs['pk'])
+                return Response({"get": PlotCoeffSerializer(lst).data}, status = status.HTTP_200_OK )
+            except:
+                return Response({"code": status.HTTP_400_BAD_REQUEST, "error_text": "invalid PlotCoeff"},
+                                status=status.HTTP_400_BAD_REQUEST)
+        lst = PlotCoeff.objects.all()
+        Response({"get": PlotCoeffSerializer(lst, many=True).data}, status=status.HTTP_200_OK)
 
 
 

@@ -542,4 +542,14 @@ class FieldCard(models.Model):
 class SchemaMixingBreeds(models.Model):
     name_schema = models.CharField(max_length=300)
 
-#
+
+class PlotCoeff(models.Model):
+    ratio_composition = models.CharField(max_length="100")
+    breed = models.ForeignKey("Breed", on_delete=models.CASCADE)
+    age = models.IntegerField()
+    avg_diameter = models.FloatField()
+    count_plants = models.IntegerField()
+
+    class Meta:
+        verbose_name = "Коэфф. участка"
+        verbose_name_plural = "Коэфф. участка"
