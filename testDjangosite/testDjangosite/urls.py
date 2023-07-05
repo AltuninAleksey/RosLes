@@ -113,7 +113,7 @@ urlpatterns = [
     path('quarter/<int:pk>', QuarterView.as_view()),
     path('plotcoeff', PlotCoeffViews.as_view()),
     path('plotcoeff/<int:pk>', PlotCoeffViews.as_view()),
-    path('plotcoeff/fieldcard/<int:id_field_card>', PlotCoeffViews.as_view()),
+    path('plotcoeff/fieldcard/<int:id_field_card>', PlotCoeffByFieldCardId.as_view()),
     path('erp/', include('erp.urls')),
     path('general_docs/', include('general_docs.urls')),
 ]

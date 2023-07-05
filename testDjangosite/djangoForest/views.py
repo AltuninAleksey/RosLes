@@ -1390,11 +1390,29 @@ class PlotCoeffViews(ListAPIView):
                 lst = PlotCoeff.objects.get(id=kwargs['pk'])
                 return Response({"get": PlotCoeffSerializer(lst).data}, status = status.HTTP_200_OK )
             except:
-                return Response({"code": status.HTTP_400_BAD_REQUEST, "error_text": "invalid PlotCoeff"},
+                return Response({"code": status.HTTP_400_BAD_REQUEST, "error_text": "invalid PlotCoeff id"},
                                 status=status.HTTP_400_BAD_REQUEST)
         lst = PlotCoeff.objects.all()
-        Response({"get": PlotCoeffSerializer(lst, many=True).data}, status=status.HTTP_200_OK)
+        return Response({"get": PlotCoeffSerializer(lst, many=True).data}, status=status.HTTP_200_OK)
 
+    def post(self, request):
+        if request.data['id'] != 0:
+            # pk = request.data['id']
+            return self.put(request, pk = request.data['id'])
+        serializer = PlotCoeffSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response({"error": status.HTTP_400_BAD_REQUEST,
+                             "error_text": serializer.errors[next(iter(serializer.errors))][0]},
+                            status=status.HTTP_400_BAD_REQUEST)
+        serializer.save()
+        return Response({"code": status.HTTP_201_CREATED}, status=status.HTTP_201_CREATED)
+
+    def put(self, request, **kwargs):
+        instance = PlotCoeff.objects.get(id = kwargs['pk'])
+        serializer = PlotCoeffSerializer(data=request.data, instance=instance)
+        serializer.is_valid()
+        serializer.save()
+        return Response({"code": status.HTTP_200_OK }, status=status.HTTP_200_OK)
 
 class PlotCoeffByFieldCardId(ListAPIView):
 
