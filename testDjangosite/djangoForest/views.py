@@ -1397,7 +1397,6 @@ class PlotCoeffViews(ListAPIView):
 
     def post(self, request):
         if request.data['id'] != 0:
-            # pk = request.data['id']
             return self.put(request, pk = request.data['id'])
         serializer = PlotCoeffSerializer(data=request.data)
         if not serializer.is_valid():
