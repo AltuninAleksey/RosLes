@@ -1396,20 +1396,30 @@ class PlotCoeffViews(ListAPIView):
         return Response({"get": PlotCoeffSerializer(lst, many=True).data}, status=status.HTTP_200_OK)
 
     def post(self, request):
-        if request.data['id'] != 0:
-            return self.put(request, pk = request.data['id'])
-        serializer = PlotCoeffSerializer(data=request.data)
-        if not serializer.is_valid():
-            return Response({"error": status.HTTP_400_BAD_REQUEST,
-                             "error_text": serializer.errors[next(iter(serializer.errors))][0]},
-                            status=status.HTTP_400_BAD_REQUEST)
-        serializer.save()
+        for i in request.data:
+            if i['id'] != 0:
+                self.put(i, pk = i['id'])
+                continue
+            serializer = PlotCoeffSerializer(data=i)
+            if not serializer.is_valid():
+                return Response({"error": status.HTTP_400_BAD_REQUEST,
+                                 "error_text": serializer.errors[next(iter(serializer.errors))][0]},
+                                status=status.HTTP_400_BAD_REQUEST)
+            serializer.save()
         return Response({"code": status.HTTP_201_CREATED}, status=status.HTTP_201_CREATED)
 
     def put(self, request, **kwargs):
         instance = PlotCoeff.objects.get(id = kwargs['pk'])
-        serializer = PlotCoeffSerializer(data=request.data, instance=instance)
-        serializer.is_valid()
+        if type(request) is dict:
+            serializer = PlotCoeffSerializer(data=request, instance=instance)
+        else:
+            serializer = PlotCoeffSerializer(data=request.data, instance=instance)
+        if not serializer.is_valid():
+            print({"error": status.HTTP_400_BAD_REQUEST,
+                             "error_text": serializer.errors[next(iter(serializer.errors))][0]})
+            return Response({"error": status.HTTP_400_BAD_REQUEST,
+                             "error_text": serializer.errors[next(iter(serializer.errors))][0]},
+                            status=status.HTTP_400_BAD_REQUEST)
         serializer.save()
         return Response({"code": status.HTTP_200_OK }, status=status.HTTP_200_OK)
 

@@ -828,6 +828,9 @@ class EconomySerializer(serializers.ModelSerializer):
 
 
 class PlotCoeffSerializer(serializers.ModelSerializer):
+    def __init__(self, *args, **kwargs):
+        many = kwargs.pop('many', True)
+        super(PlotCoeffSerializer, self).__init__(many=many, *args, **kwargs)
 
     class Meta:
         model = PlotCoeff
