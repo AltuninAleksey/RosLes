@@ -1417,11 +1417,15 @@ class PlotCoeffByFieldCardId(ListAPIView):
 
     def get(self, request, *args, **kwargs):
         try:
-            lst = PlotCoeff.objects.get(id_field_card = kwargs['id_field_card'])
-            return Response({"get": PlotCoeffSerializer(lst).data}, status=status.HTTP_200_OK)
+            lst = PlotCoeff.objects.filter(id_field_card = kwargs['id_field_card'])
+            return Response({"get": PlotCoeffSerializer(lst, many=True).data}, status=status.HTTP_200_OK)
         except:
             return Response({"error": status.HTTP_404_NOT_FOUND, "error_text": "invalid FieldCard id"},
                             status=status.HTTP_404_NOT_FOUND)
+
+
+class PlotCoeffCalculateInList(ListAPIView):
+    pass
 
 
 # class testviews(ListAPIView):

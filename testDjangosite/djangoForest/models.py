@@ -113,6 +113,9 @@ class List(models.Model):
     def __str__(self):
         return f'{self.to0_2}, {self.from0_21To0_5},\n {self.from0_6To1_0}, {self.from1_1to1_5}, {self.from1_5}'
 
+    # def save(self, *args, **kwargs):
+    #     self.ratio_composition = self.count_of_plants
+
 
 class GPS(models.Model):
     id_sample = models.ForeignKey('Sample', on_delete=models.CASCADE, verbose_name='Проба', null=True)
@@ -548,6 +551,7 @@ class PlotCoeff(models.Model):
     breed = models.ForeignKey("Breed", on_delete=models.CASCADE)
     age = models.IntegerField()
     avg_diameter = models.FloatField()
+    avg_height = models.FloatField()
     count_plants = models.IntegerField()
     id_field_card = models.ForeignKey("FieldCard", on_delete=models.CASCADE)
 
