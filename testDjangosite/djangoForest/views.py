@@ -1438,6 +1438,14 @@ class PlotCoeffCalculateInList(ListAPIView):
     pass
 
 
+class FormingDocxView(ListAPIView):
+
+    def post(self, request, *args, **kwargs):
+        from staticpy import forming_docx
+        file_path = forming_docx.forming_docx_fieldcard(request.data)
+        return Response(file_path)
+
+
 # class testviews(ListAPIView):
 #     print("BOOMBOX")
 #     # file_patj = str()

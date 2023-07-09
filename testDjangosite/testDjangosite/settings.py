@@ -120,10 +120,10 @@ REST_FRAMEWORK = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql',
 #         'NAME': 'rosLes',
-#         'USER': 'PythonUser',
+#         'USER': 'postgres',
 #         'PASSWORD': 'PPythonUserassword',
-#         # 'HOST': '90.156.208.88',
-#         # 'PORT': '3306',
+#         'HOST': '127.0.0.1',
+#         'PORT': '5432',
 #     }
 # }
 # DATABASES = {
