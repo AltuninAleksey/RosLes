@@ -1297,7 +1297,7 @@ class GetFieldCard(ListAPIView):
                             status=status.HTTP_400_BAD_REQUEST)
         desc_serializer.save()
         fieldcard_serializer.save()
-        return Response({"code": status.HTTP_201_CREATED}, status= status.HTTP_201_CREATED)
+        return Response({"id": fieldcard_serializer.data['id']}, status= status.HTTP_201_CREATED)
 
 
     def put(self, request, *args, **kwargs):
