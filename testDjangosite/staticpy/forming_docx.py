@@ -8,6 +8,6 @@ import uuid
 def forming_docx_fieldcard(context: dict):
     doc = DocxTemplate("D:\\pythonProject\\Pavel\\RosLes\\testDjangosite\\fieldcard.docx")
     doc.render(context)
-    filepath = f"{BASE_DIR}\\docx_files\\fieldcard_{context['id']}.docx"
+    filepath = f"{BASE_DIR}\\docx_files\\fieldcards\\fieldcard_{context['id']}.docx"
     doc.save(filepath)
-    return filepath
+    return [filepath, context['id']]

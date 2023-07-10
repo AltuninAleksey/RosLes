@@ -558,3 +558,8 @@ class PlotCoeff(models.Model):
     class Meta:
         verbose_name = "Коэфф. участка"
         verbose_name_plural = "Коэфф. участка"
+
+
+class FieldCardDocx(models.Model):
+    id_field_card = models.ForeignKey("FieldCard", on_delete=models.CASCADE)
+    path_docx = models.CharField(max_length=500)
