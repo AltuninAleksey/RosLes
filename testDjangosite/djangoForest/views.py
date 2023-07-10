@@ -1423,6 +1423,7 @@ class PlotCoeffViews(ListAPIView):
         serializer.save()
         return Response({"code": status.HTTP_200_OK }, status=status.HTTP_200_OK)
 
+
 class PlotCoeffByFieldCardId(ListAPIView):
 
     def get(self, request, *args, **kwargs):
@@ -1434,8 +1435,11 @@ class PlotCoeffByFieldCardId(ListAPIView):
                             status=status.HTTP_404_NOT_FOUND)
 
 
-class PlotCoeffCalculateInList(ListAPIView):
-    pass
+class RatioCompositionCalculateInList(ListAPIView):
+
+
+    def post(self, request, *args, **kwargs):
+        pass
 
 
 class FormingDocxView(ListAPIView):

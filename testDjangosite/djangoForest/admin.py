@@ -19,30 +19,9 @@ class DescriptionRegionAdmin(admin.ModelAdmin):
     search_fields = '__all__'
 
 class FieldCardAdmin(admin.ModelAdmin):
-    list_display = ('id', 'id_list_region', "id_purpose_of_forests", "id_forest_protection_category", "protected_areas_of_forests",
-            "rent_area", "id_category_of_forest_fund_lands", "id_method_of_reforestation", "time_of_reforestation",
-            "id_type_forest_growing_conditions", "point7year", "point7date", "point7number", "point7agreed",
-            "point7_natural_composition", "point7_natural_composition2", "square_one_sample_area", "count_sample_area",
-            "breed_composition", "id_economy", "completeness", "stock", "id_point7_table2_sapling", "conclusion",
-            "plot_farm_referring_land", "recomendation", "plot_features", "site_survey", "in_front", "date_and_time"
-            )
-
-    list_display_links = (
-    'id', 'id_list_region', "id_purpose_of_forests", "id_forest_protection_category", "protected_areas_of_forests",
-    "rent_area", "id_category_of_forest_fund_lands", "id_method_of_reforestation", "time_of_reforestation",
-    "id_type_forest_growing_conditions", "point7year", "point7date", "point7number", "point7agreed",
-    "point7_natural_composition", "point7_natural_composition2", "square_one_sample_area", "count_sample_area",
-    "breed_composition", "id_economy", "completeness", "stock", "id_point7_table2_sapling", "conclusion",
-    "plot_farm_referring_land", "recomendation", "plot_features", "site_survey", "in_front", "date_and_time"
-    )
-
-    search_fields = ('id', 'id_list_region', "id_purpose_of_forests", "id_forest_protection_category", "protected_areas_of_forests",
-            "rent_area", "id_category_of_forest_fund_lands", "id_method_of_reforestation", "time_of_reforestation",
-            "id_type_forest_growing_conditions", "point7year", "point7date", "point7number", "point7agreed",
-            "point7_natural_composition", "point7_natural_composition2", "square_one_sample_area", "count_sample_area",
-            "breed_composition", "id_economy", "completeness", "stock", "id_point7_table2_sapling", "conclusion",
-            "plot_farm_referring_land", "recomendation", "plot_features", "site_survey", "in_front", "date_and_time"
-            )
+    list_display = '__all__'
+    list_display_links = '__all__'
+    search_fields = '__all__'
 
 class UserAdmin(admin.ModelAdmin):
     list = ('id', 'email')
@@ -221,7 +200,7 @@ class TrackingAdmin(admin.ModelAdmin):
 
 admin.site.register(PlotCoeff)
 admin.site.register(DescriptionRegion)
-admin.site.register(FieldCard, FieldCardAdmin)
+admin.site.register(FieldCard)
 admin.site.register(Users, UserAdmin)
 admin.site.register(Track, TrackingAdmin)
 admin.site.register(PhotoPoint, PhotoPointAdmin)

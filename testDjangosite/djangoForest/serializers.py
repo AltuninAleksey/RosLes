@@ -742,6 +742,7 @@ class FieldCardSerializer(serializers.ModelSerializer):
         instance.site_survey = validated_data.get("site_survey")
         instance.in_front = validated_data.get("in_front")
         instance.date_and_time = validated_data.get("date_and_time")
+        instance.id_economy_sapling = validated_data.get("id_economy_sapling")
         instance.save()
         return instance
 
