@@ -719,11 +719,13 @@ class Point7TableSaplingView(ListAPIView):
 
     def get(self, request, *args, **kwargs):
         if kwargs:
+            from staticpy.calculate_ratio_composition import calculate_coeff
             try:
                 lst = List.objects.filter(id_sample__id_list_region=kwargs["pk"]).values(
-                    "age", "ratio_composition", "avg_height", "avg_diameter", "count_of_plants", "id_breed")
+                    "age", "avg_height", "avg_diameter", "count_of_plants", "id_breed")
                 # print(lst)
-                return Response(lst)
+                print(calculate_coeff(lst))
+                return Response(calculate_coeff(lst))
                 # return Response({"get": Point7TableSaplingSerializer(point7Table2Sapling.objects.get(id=kwargs["pk"])).data})
             except:
                 return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
@@ -1439,7 +1441,8 @@ class RatioCompositionCalculateInList(ListAPIView):
 
 
     def post(self, request, *args, **kwargs):
-        pass
+        from staticpy.calculate_ratio_composition import calculate_coeff
+        return Response(calculate_coeff(request.data))
 
 
 class FormingDocxView(ListAPIView):

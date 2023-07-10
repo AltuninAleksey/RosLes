@@ -743,6 +743,8 @@ class FieldCardSerializer(serializers.ModelSerializer):
         instance.in_front = validated_data.get("in_front")
         instance.date_and_time = validated_data.get("date_and_time")
         instance.id_economy_sapling = validated_data.get("id_economy_sapling")
+        instance.point7_completeness = validated_data.get("point7_completeness")
+        instance.point7_stock = validated_data.get("point7_stock")
         instance.save()
         return instance
 

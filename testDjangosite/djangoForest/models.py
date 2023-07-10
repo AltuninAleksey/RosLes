@@ -430,7 +430,7 @@ class ForestAreas(models.Model):
 
 
 class point7Table(models.Model):
-    ratio_composition = models.IntegerField()
+    ratio_composition = models.CharField(max_length=100)
     id_list_region_breed = models.ForeignKey("List", on_delete=models.CASCADE, verbose_name="Порода", default=89)
     age = models.IntegerField()
     avg_height = models.IntegerField()
@@ -439,7 +439,7 @@ class point7Table(models.Model):
 
 
 class point7Table2Sapling(models.Model):
-    ratio_composition = models.IntegerField()
+    ratio_composition = models.CharField(max_length=100)
     id_list_region_breed = models.ForeignKey("List", on_delete=models.CASCADE, verbose_name="Порода", default=89)
     age = models.IntegerField()
     avg_height = models.IntegerField()
