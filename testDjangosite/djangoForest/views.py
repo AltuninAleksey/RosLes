@@ -1454,7 +1454,6 @@ class FormingDocxView(ListAPIView):
         #                      "error_text": serializer.errors[next(iter(serializer.errors))][0]},
         #                     status=status.HTTP_400_BAD_REQUEST)
         # serializer.save()
-
         return Response(path_docx)
 
 
