@@ -21,3 +21,22 @@ function setDataInTableThree() {
     }
     table_3.innerHTML = newHtml;
 }
+
+function addGps() {
+    var latitudeAdd = document.getElementById("latitude-add");
+    var longitudeAdd = document.getElementById("longitude-add");
+
+    var newGps = {
+        id_sample : APP.documentData.id,
+        latitude : latitudeAdd.value,
+        longitude : longitudeAdd.value,
+        flag_center : 0
+    }
+
+    latitudeAdd.value = "";
+    longitudeAdd.value = "";
+
+    APP.dataTable_3.push(newGps);
+    setDataInTableThree();
+    closeAddForm("form-add-gps");
+}

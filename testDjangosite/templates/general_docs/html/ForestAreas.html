@@ -1,56 +1,35 @@
-{% extends 'erp/html/base.html' %}
-{% block body %}
-{% block container %}
-    <div class="container">
-        {% block header %}
-        <div class="header">
-            <ul class="nav">
-                <li><a onclick="getRecalculationOnTrialAreaPage()">Документы</a></li>
-                <li><a href="general_books">Общие справочники</a></li>
-                <li><a href="gmvl">Справочники ГМВЛ</a></li>
-                <li><h1 class="hed">Справочная система РОСЛЕСОЗАЩИТЫ</h1></li>
-            </ul>
-        </div>
-        {% endblock header %}
-
-        {% block con %}
-        <div class="con">
-            <input type="checkbox" id="nav-toggle" hidden>
-            {% block menu %}
-            <div class="menu">
-                <label for="nav-toggle" class="nav-toggle" onclick></label>
-                <ul class="navigat">
-                    {% for m in menu %}
-                    <li id="li"><a id="a" href="{{ m.url_name}} ">{{m.title}}</a></li>
-                    {% endfor %}
-                </ul>
-            </div>
-            {% endblock menu %}
-            {% block content %}
-            <div class="content">
-                <h1 id="h1">Хозяйство</h1>
-                {% block table %}
-                    <table>
-                        <th>id в базе</th>
-                        <th>Наименование</th>
-                        <th>Состав лесных районов</th>
-                        <th>Комментарий</th>
-                        {% for item in queryset %}
-                        <tr>
-                            <td>{{ item.pk }}</td>
-                            <td>{{ item.name_forest_areas }}</td>
-                            <td>{{ item.composition_of_forest_areas }}</td>
-                            <td>{{ item.comm }}</td>
-                        {% endfor %}
-                        </tr>
-                    </table>
-                    {% endblock table %}
+{% extends 'general_docs/html/general_base.html' %}
+{% load static %}
+    {% block title %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Лесные районы</title>
+    <link rel="stylesheet" href="{% static 'css/styleSubjectRF.css' %}">
+    {% endblock %}
+    {% block body %}
+    {% block container %}
+        <div class="container">
+                {% block content %}
+                <div class="content">
+                    <h1 id="h1">Лесные районы</h1>
+                    {% block table %}
+                        <table>
+                            <th>Наименование</th>
+                            <th>Состав лесных районов</th>
+                            <th>Комментарий</th>
+                            {% for item in queryset %}
+                            <tr>
+                                <td>{{ item.name_forest_areas }}</td>
+                                <td>{{ item.composition_of_forest_areas }}</td>
+                                <td>{{ item.comm }}</td>
+                            {% endfor %}
+                            </tr>
+                        </table>
+                        {% endblock table %}
+                    </div>
                 </div>
-            </div>
-            {% endblock content %}
+                {% endblock content %}
         </div>
-        {% endblock con %}
-    </div>
-{% endblock %}
-    </div>
-{% endblock %}
+    {% endblock %}
+    {% endblock %}

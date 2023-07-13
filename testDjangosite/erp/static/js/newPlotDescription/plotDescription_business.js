@@ -1,23 +1,13 @@
 APP = {
-    idView: "plotDescription"
+    idView: "newPlotDescription"
 }
 
-function PlotDescriptionBusiness() {}
+function NewPlotDescriptionBusiness() {}
 
-PlotDescriptionBusiness.getPlotDescriptionDataById = async function(id) {
+NewPlotDescriptionBusiness.createPlotDescription = async function(data) {
     var requestData = await axios({
-      method: 'get',
-      url: urlGlobal + "/descriptionregion/" + id,
-      responseType: 'json'
-    });
-
-    return requestData.data.DescriptionRegion;
-}
-
-PlotDescriptionBusiness.setPlotDescriptionDataById = async function(id, data) {
-    var requestData = await axios({
-      method: 'put',
-      url: urlGlobal + "/descriptionregion/" + id,
+      method: 'post',
+      url: urlGlobal + "/createlistregionbydescreg",
       data: data,
       responseType: 'json'
     });

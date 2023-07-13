@@ -49,6 +49,8 @@ urlpatterns = [
     path('documents/recalculatingDetail', views.getRecalculatingDetail),
     path('documents/plotDescription', views.getPlotDescription),
     path('documents/printFieldCard', views.getPrintFieldCard),
+    path('documents/newPlotDescription', views.getNewPlotDescription),
+    path('documents/newFieldCard', views.getNewFieldCard)
 
 ]
 

@@ -29,6 +29,9 @@
 
 .gps h3 {
     margin-left: 15px;
+    font-size: 1.17em;
+    font-weight: bold;
+    color: black;
 }
 
 .gps button{
@@ -44,6 +47,20 @@
     padding-left: 5px;
     justify-content: flex-start !important;
     margin-left: -10px;
+    margin-top: 15px;
+    justify-content: space-between;
+    max-width: 400px;
+}
+
+.gps .content{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    margin-top: -20px!important;
+    margin-left: 0px!important;
+    margin-right: 0px!important;
 }
 
 .gps .longitude-add {

@@ -24,3 +24,12 @@ StatementRecalculationsBusinessDetail.getSampleByIdListRegion = async function(i
 
     return requestData.data.data;
 }
+
+StatementRecalculationsBusinessDetail.getUpdateSample = async function(id, data) {
+    var requestData = await axios({
+        method: 'put',
+        url: urlGlobal + "/listregion/update/" + id,
+        data: data,
+        responseType: 'json'
+    });
+}

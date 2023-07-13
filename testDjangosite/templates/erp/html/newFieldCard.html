@@ -14,17 +14,15 @@
     <script src="{% static 'js/global.js' %}"></script>
     <script src="{% static 'js/common/commonFunction.js' %}"></script>
     <script src="{% static 'js/common/common_business.js' %}"></script>
-    <script src="{% static 'js/printFieldCard/printFieldCard_business.js' %}" defer></script>
-    <script src="{% static 'js/printFieldCard/header_construct_view.js' %}" defer></script>
-    <script src="{% static 'js/printFieldCard/characteristicMolodniac_construct_view.js' %}" defer></script>
-    <script src="{% static 'js/printFieldCard/characteristic_construct_view.js' %}" defer></script>
-    <script src="{% static 'js/printFieldCard/resultNaturObs_construct_view.js' %}" defer></script>
-    <script src="{% static 'js/printFieldCard/printFieldCard_construct_view.js' %}" defer></script>
+    <script src="{% static 'js/newPrintFieldCard/printFieldCard_business.js' %}" defer></script>
+    <script src="{% static 'js/newPrintFieldCard/header_construct_view.js' %}" defer></script>
+    <script src="{% static 'js/newPrintFieldCard/characteristicMolodniac_construct_view.js' %}" defer></script>
+    <script src="{% static 'js/newPrintFieldCard/characteristic_construct_view.js' %}" defer></script>
+    <script src="{% static 'js/newPrintFieldCard/resultNaturObs_construct_view.js' %}" defer></script>
+    <script src="{% static 'js/newPrintFieldCard/printFieldCard_construct_view.js' %}" defer></script>
     {% endblock %}
 </head>
 <body style="margin:0 !important">
-    <input id="idDocument" type="hidden" name="idDocument" value={{idDocument}}>
-    <input id="idParent" type="hidden" name="idParent" value={{idParent}}>
     <header style="margin:0 !important">
         <div class="hiv">
             <div class="hid">
@@ -103,12 +101,12 @@
                         </svg>
                     <p class="p">Перечетная ведомость</p>
                 </div>
-                <div class="back butmenu pdf" onclick="generateDocx()">
+                <div class="back butmenu pdf" onclick="generatePDF()">
                     <svg width="22" height="22"  fill="none" xmlns="http://www.w3.org/2000/svg" style="margin: 4px 4px 2px 15px;">
                         <path d="M7.5 19H5C3.89543 19 3 18.1046 3 17V3C3 1.89543 3.89543 1 5 1H15.6716C16.202 1 16.7107 1.21071 17.0858 1.58579L20.4142 4.91421C20.7893 5.28929 21 5.79799 21 6.32843V17C21 18.1046 20.1046 19 19 19H16.5M7.5 19H12H16.5M7.5 19V15C7.5 13.8954 8.39543 13 9.5 13H14.5C15.6046 13 16.5 13.8954 16.5 15V19" stroke="#177164" stroke-linejoin="round"/>
                         <line x1="0.5" y1="-0.5" x2="9.5" y2="-0.5" transform="matrix(-1 0 0 1 17 8)" stroke="#177164" stroke-linecap="round"/>
                         </svg>
-                    <p class="p">Сохранить в Word</p>
+                    <p class="p">Сохранить в PDF</p>
                 </div>
             </div>
             <div class="submenu">
@@ -157,7 +155,7 @@
                         по Акту отнесения земель, предназначенных для лесовосстановления, к землям, на которых расположены леса от
                         <input type="date" name="point7date" id="point7date" style="width: 200px"> № <input type="text" name="point7number" id="point7number" style="width: 150px"> утвержденному
                         <input type="text" name="point7agreed" id="point7agreed" style="width: 98%"> породный состав <input type="text" name="point7_natural_composition" id="point7_natural_composition" style="width: 270px">,
-                        <select type="text" name="economy_sapling" id="economy" style="width: 270px"></select> хозяйство, полнота(сомкнутость крон)
+                        <select type="text" name="economy" id="economy" style="width: 270px"></select>  хозяйство, полнота(сомкнутость крон)
                         <input type="text" name="completeness" id="completeness" style="width: 200px">, запас <input type="text" name="stock" id="stock" style="width: 200px"> м3/га</p>
                 </form>
             </div>
@@ -212,6 +210,9 @@
                     <th>Средний диаметр, см</th>
                     <th>Количество учтенных древесных растений, шт/га</th>
                     <tbody id="id_point7_table2_sapling">
+                        <tr>
+                            <td><input type="text" name="" id="" style="width: 100%"></td>
+                        </tr>
                     </tbody>
                 </table>
             </div>

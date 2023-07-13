@@ -345,3 +345,34 @@ td input{
     min-width: 1280px;
    
 }
+.pdf{
+    width: 180px;
+}
+#p30{
+    margin-left: 30px;
+}
+
+.add-red-button-outside {
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 35px;
+}
+
+.add-red-button {
+    background-color: red;
+    color: white;
+    font-size: 45px;
+    padding: 10px;
+    width: 20px;
+    border-radius: 80px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 900;
+    cursor: pointer;
+}
+
+.add-red-button:hover {
+    background-color: #40E0D0;
+}

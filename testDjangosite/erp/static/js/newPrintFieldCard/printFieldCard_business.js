@@ -1,28 +1,18 @@
 APP = {
-    idView: "printFieldCard"
+    idView: "newPrintFieldCard"
 }
 
 function PrintFieldCardBusiness() {}
 
-PrintFieldCardBusiness.getPrintFieldCardDataById = async function(id) {
+PrintFieldCardBusiness.getCreatePrintFieldCard = async function(data) {
     var requestData = await axios({
-      method: 'get',
-      url: urlGlobal + "/fieldcard/" + id,
-      responseType: 'json'
-    });
-
-    return requestData.data.FieldCard;
-}
-
-PrintFieldCardBusiness.getUpdatePrintFieldCard = async function(id, data) {
-    var requestData = await axios({
-      method: 'put',
-      url: urlGlobal + "/fieldcard/" + id,
+      method: 'post',
+      url: urlGlobal + "/fieldcard",
       data: data,
       responseType: 'json'
     });
 
-    return requestData.data.FieldCard;
+    return requestData.data;
 }
 
 PrintFieldCardBusiness.getUpdatePoint7Table = async function(data) {
@@ -33,7 +23,6 @@ PrintFieldCardBusiness.getUpdatePoint7Table = async function(data) {
       responseType: 'json'
     });
 }
-
 
 PrintFieldCardBusiness.getPurposeforestDataById = async function(id) {
     var requestData = await axios({
@@ -105,7 +94,7 @@ PrintFieldCardBusiness.getAllEconomy = async function() {
     return requestData.data.get;
 }
 
-PrintFieldCardBusiness.getPoint7TableByIdOld = async function(id) {
+PrintFieldCardBusiness.getPoint7TableById = async function(id) {
     var requestData = await axios({
       method: 'get',
       url: urlGlobal + "/point7table/" + id,
@@ -113,16 +102,6 @@ PrintFieldCardBusiness.getPoint7TableByIdOld = async function(id) {
     });
 
     return requestData.data;
-}
-
-PrintFieldCardBusiness.getPoint7TableById = async function(id) {
-    var requestData = await axios({
-      method: 'get',
-      url: urlGlobal + "/plotcoeff/fieldcard/" + id,
-      responseType: 'json'
-    });
-
-    return requestData.data.get;
 }
 
 PrintFieldCardBusiness.getGpsByListRegionId = async function(id) {
@@ -144,20 +123,6 @@ PrintFieldCardBusiness.getPoint7Table2SaplingById = async function(id) {
 
     return requestData.data;
 }
-
-PrintFieldCardBusiness.generateDocx = async function(data) {
-    var requestData = await axios({
-      method: 'post',
-      url: urlGlobal + "/formdocx",
-      data: data,
-      responseType: 'json'
-    });
-
-    console.log(requestData);
-}
-
-
-
 
 function generatePDF() {
     const element = document.getElementById('invoice');

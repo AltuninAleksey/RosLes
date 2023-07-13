@@ -418,3 +418,11 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .photo-td3 {
     width: 25%;
 }
+
+.display-none {
+    display: none;
+}
+
+.overflowHiddenImportant {
+    overflow: hidden !important;
+}

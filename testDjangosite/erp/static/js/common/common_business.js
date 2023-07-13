@@ -1,5 +1,13 @@
 function CommonBusiness() {}
 
+CommonBusiness.getLogout = async function() {
+    requestData = await axios({
+        method: 'get',
+        url: urlGlobal + "/logout",
+        responseType: 'json'
+    });
+}
+
 CommonBusiness.getAllForest = async function() {
     requestData = await axios({
         method: 'get',
@@ -74,3 +82,15 @@ CommonBusiness.getAllTypeReproduction = async function() {
 
     return requestData.data.get;
 }
+
+CommonBusiness.getAllMethodofreforestation = async function() {
+    var requestData = await axios({
+        method: 'get',
+        url: urlGlobal + "/methodofreforestation",
+        responseType: 'json'
+    });
+
+    return requestData.data.get;
+}
+
+CommonBusiness.getLogout();

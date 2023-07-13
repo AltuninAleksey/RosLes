@@ -9,3 +9,23 @@ function setDataInTableTwo() {
     }
     table_2.innerHTML = newHtml;
 }
+
+function addState() {
+    var stateName = document.getElementById("stateName");
+    var FIO = "";
+
+    for(var i = 0; i < APP.states.length; i++) {
+        if(APP.states[i].id == stateName.value) {
+            FIO = APP.states[i].FIO;
+        }
+    }
+
+    var newState = {
+        id : stateName.value,
+        FIO : FIO
+    };
+
+    APP.dataTable_2.push(newState);
+    setDataInTableTwo();
+    closeAddForm("form-add-state");
+}

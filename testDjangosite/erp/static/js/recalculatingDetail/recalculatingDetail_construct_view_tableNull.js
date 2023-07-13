@@ -14,3 +14,27 @@ function setDataInTableNull() {
     }
     table_0.innerHTML = newHtml;
 }
+
+function addUndefground() {
+    var breedName_undeground = document.getElementById("breedName-undeground");
+    var count_add = document.getElementById("count-add");
+    var avg_h_add = document.getElementById("avg-h-add");
+
+    var newUndefground = {
+        id_sample : APP.documentData.id,
+        avg_height: avg_h_add.value,
+        count_of_plants: count_add.value,
+        id_breed: breedName_undeground.value,
+        id_type_of_reproduction : Number(APP.active_type_reproduction),
+        id_undergrowth : 0
+    }
+
+    count_add.value = "";
+    avg_h_add.value = "";
+
+    APP.dataTable_0.push(newUndefground);
+    setDataInTableNull();
+    closeAddForm("form-add-undeground");
+
+
+}

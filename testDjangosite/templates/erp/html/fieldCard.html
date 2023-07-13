@@ -29,30 +29,30 @@
                         </svg>
                     <a><h3>Перечетная ведомость</h3></a>
                 </div>
-                <div class="point cursorPointer" onclick="getDescriptionListLand()">
+                <div class="point cursorPointer" onclick="getFieldCard()">
                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M13.7218 8.1308L10.5768 11.2012M1 19L2.61578 14.2673C2.81491 13.6841 2.74608 13.0523 2.52328 12.4773C1.43423 9.66657 2.04257 6.37784 4.35189 4.12326C6.60048 1.92796 13.1645 1.22622 16.729 1.00446C18.0273 0.923692 19.0782 1.94964 18.9954 3.2172C18.7683 6.69721 18.0495 13.1056 15.8009 15.3009C13.6825 17.3691 10.6728 18.0399 7.96733 17.3159C6.57914 16.9445 6.4141 15.2653 7.4319 14.2716L9.00437 12.7364M10.5768 11.2012V7.5M10.5768 11.2012L9.00437 12.7364M9.00437 12.7364H12.5" stroke="#40E0D0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
                     <a><h3>Полевые карточки</h3></a>
                 </div>
-                <div class="point cursorPointer">
+                <div class="point cursorPointer" onclick="getGeneralDoc()">
                     <svg width="24" height="22" viewBox="0 0 24 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <rect x="4" y="5.10345" width="16" height="3.51724" rx="1" stroke="#40E0D0" stroke-width="2" stroke-linejoin="round"/>
                         <rect x="4" y="13.3793" width="16" height="3.51724" rx="1" stroke="#40E0D0" stroke-width="2" stroke-linejoin="round"/>
                         <path d="M17 6.75519H18.5" stroke="#40E0D0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         <path d="M17 15.1552H18.5" stroke="#40E0D0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
-                    <a href=""><h3>Справочники</h3></a>
+                    <a ><h3>Справочники</h3></a>
                 </div>
             </div>
         </div>
         <div class="hiv2">
             <div class="hid2" style="margin-left: 30px;">
-                <div class="point cursorPointer" onclick="getDescriptionListLand()">
-                    <a><h3 style="color: black;">Описание участков</h3></a>
-                </div>
                 <div class="point cursorPointer" onclick="">
                     <a class="activeLink"><h3  style="color: black;">Список полевых карточек</h3></a>
+                </div>
+                <div class="point cursorPointer" onclick="getDescriptionListLand()">
+                    <a><h3 style="color: black;">Описание участков</h3></a>
                 </div>
             </div>
         </div>
@@ -69,7 +69,7 @@
             </svg>
             <p class="p">Применить фильтры</p>
         </div>
-        <div class="butmenuadd" style="justify-content: flex-start; display: none;">
+        <div class="butmenuadd" style="justify-content: flex-start;" onclick="getNewFieldCard()">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin: 7px 10px 7px 15px;">
                 <circle cx="8" cy="8" r="8" fill="#177164"/>
                 <path d="M7.40002 8.60005V12.2H8.60002V8.60005H12.2V7.40005H8.60002V3.80005H7.40002V7.40005H3.79999V8.60005H7.40002Z" fill="white"/>

@@ -14,13 +14,11 @@
     <script src="{% static 'js/global.js' %}"></script>
     <script src="{% static 'js/common/commonFunction.js' %}"></script>
     <script src="{% static 'js/common/common_business.js' %}"></script>
-    <script src="{% static 'js/plotDescription/plotDescription_business.js' %}" defer></script>
-    <script src="{% static 'js/plotDescription/plotDescription_construct_view.js' %}" defer></script>
+    <script src="{% static 'js/newPlotDescription/plotDescription_business.js' %}" defer></script>
+    <script src="{% static 'js/newPlotDescription/plotDescription_construct_view.js' %}" defer></script>
     {% endblock %}
 </head>
 <body style="margin:0 !important">
-    <input id="idDocument" type="hidden" name="idDocument" value={{idDocument}}>
-    <input id="idParent" type="hidden" name="idParent" value={{idParent}}>
     <header style="margin:0 !important">
         <div class="hiv">
             <div class="hid">
@@ -80,19 +78,6 @@
                         <path d="M4 6H3C1.89543 6 1 6.89543 1 8V14C1 15.1046 1.89543 16 3 16H5M4 6V3C4 1.89543 4.89543 1 6 1H14C15.1046 1 16 1.89543 16 3V6M4 6H16M16 6H17C18.1046 6 19 6.89543 19 8V14C19 15.1046 18.1046 16 17 16H15M5 16V15C5 13.8954 5.89543 13 7 13H13C14.1046 13 15 13.8954 15 15V16M5 16V17C5 18.1046 5.89543 19 7 19H13C14.1046 19 15 18.1046 15 17V16" stroke="#177164" stroke-linejoin="round"/>
                         </svg>
                     <p class="p">Печать</p>
-                </div>
-                <div class="back butmenu task" id="printFieldCard">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin: 4px 4px 2px 15px;">
-                        <path d="M3 5V17C3 18.1046 3.89543 19 5 19H9.5M3 5V3C3 1.89543 3.89543 1 5 1H19C20.1046 1 21 1.89543 21 3V5M3 5H9.5M21 5V17C21 18.1046 20.1046 19 19 19H9.5M21 5H12H9.5M9.5 5V19" stroke="#177164" stroke-linejoin="round"/>
-                        </svg>
-                    <p class="p">Полевая карточка</p>
-                </div>
-                <div class="back butmenu task1" id="statementRecalculationsDetail">
-                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin: 4px 10px 7px 15px;">
-                        <path d="M5 2.5L3.9022 1.50135C2.83122 0.430362 1 1.18888 1 2.70348V17.2999C1 18.2389 1.76115 19 2.70007 19H17.2965C18.8111 19 19.5696 17.1688 18.4987 16.0978L17.8945 15.4936M5 2.5L3.5 3.5M5 2.5L7.76759 5.36674M7.76759 5.36674L6.34542 6.87775M7.76759 5.36674L11.1019 8.70102M11.1019 8.70102L9.77825 10.0808M11.1019 8.70102L14.3881 11.9872M14.3881 11.9872L13.113 13.3824M14.3881 11.9872L17.8945 15.4936M17.8945 15.4936L16.4968 16.7825" stroke="#177164" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M4.69867 16H9.29993C9.92238 16 10.2341 15.2474 9.79396 14.8073L5.1927 10.206C4.75256 9.7659 4 10.0776 4 10.7001V15.3013C4 15.6872 4.3128 16 4.69867 16Z" stroke="#177164" stroke-linejoin="round"/>
-                        </svg>
-                    <p class="p">Перечетная ведомость</p>
                 </div>
                 <div class="back butmenu pdf" onclick="generatePDF()">
                     <svg width="22" height="22"  fill="none" xmlns="http://www.w3.org/2000/svg" style="margin: 4px 4px 2px 15px;">

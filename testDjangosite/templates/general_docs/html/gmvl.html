@@ -1,39 +1,83 @@
-{% extends 'erp/html/base.html' %}
-{% block body %}
-{% block container %}
-    <div class="container">
-        {% block header %}
-        <div class="header">
-            <ul class="nav">
-                <li><a onclick="getRecalculationOnTrialAreaPage()">Документы</a></li>
-                <li><a href="general_books">Общие справочники</a></li>
-                <li><a href="gmvl">Справочники ГМВЛ</a></li>
-                <li><h1 class="hed">Справочная система РОСЛЕСОЗАЩИТЫ</h1></li>
-            </ul>
-        </div>
-        {% endblock header %}
-
-        {% block con %}
-        <div class="con">
-            <input type="checkbox" id="nav-toggle" hidden>
-            {% block menu %}
-            <div class="menu">
-                <label for="nav-toggle" class="nav-toggle" onclick></label>
-                <ul class="navigat">
-                    {% for m in menu %}
-                    <li id="li"><a id="a" href="{{ m.url_name}} ">{{m.title}}</a></li>
-                    {% endfor %}
-                </ul>
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    {% block title %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Справочники ГМВЛ</title>
+    <link rel="stylesheet" href="{% static 'css/stylegeneral_books.css' %}">
+    <script src="{% static 'js/global.js' %}"></script>
+    {% endblock %}
+</head>
+<body style="margin:0 !important">
+    <header style="margin:0 !important">
+        <div class="hiv">
+            <div class="hid">
+                <img src="{% static 'img/Logo @img.svg' %}" alt="">
+                <div class="point" onclick="getStatementRecalculations()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M7 4.5L5.9022 3.50135C4.83122 2.43036 3 3.18888 3 4.70348V19.2999C3 20.2389 3.76115 21 4.70007
+                        21H19.2965C20.8111 21 21.5696 19.1688 20.4987 18.0978L19.8945 17.4936M7 4.5L5.5 5.5M7 4.5L9.76759
+                        7.36674M9.76759 7.36674L8.34542 8.87775M9.76759 7.36674L13.1019 10.701M13.1019 10.701L11.7783
+                        12.0808M13.1019 10.701L16.3881 13.9872M16.3881 13.9872L15.113 15.3824M16.3881 13.9872L19.8945
+                        17.4936M19.8945 17.4936L18.4968 18.7825" stroke="#40E0D0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M6.69867 18H11.2999C11.9224 18 12.2341 17.2474 11.794 16.8073L7.1927 12.206C6.75256
+                        11.7659 6 12.0776 6 12.7001V17.3013C6 17.6872 6.3128 18 6.69867 18Z" stroke="#40E0D0" stroke-width="2" stroke-linejoin="round"/>
+                        </svg>
+                    <a ><h3>Перечетная ведомость</h3></a>
+                </div>
+                <div class="point" onclick="getDescriptionListLand()">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M13.7218 8.1308L10.5768 11.2012M1 19L2.61578 14.2673C2.81491 13.6841 2.74608 13.0523 2.52328
+                        12.4773C1.43423 9.66657 2.04257 6.37784 4.35189 4.12326C6.60048 1.92796 13.1645 1.22622 16.729
+                        1.00446C18.0273 0.923692 19.0782 1.94964 18.9954 3.2172C18.7683 6.69721 18.0495 13.1056 15.8009
+                        15.3009C13.6825 17.3691 10.6728 18.0399 7.96733 17.3159C6.57914 16.9445 6.4141 15.2653 7.4319
+                        14.2716L9.00437 12.7364M10.5768 11.2012V7.5M10.5768 11.2012L9.00437 12.7364M9.00437
+                        12.7364H12.5" stroke="#40E0D0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    <a ><h3>Полевые карточки</h3></a>
+                </div>
+                <div class="point">
+                    <svg width="24" height="22" viewBox="0 0 24 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="4" y="5.10345" width="16" height="3.51724" rx="1" stroke="#40E0D0" stroke-width="2" stroke-linejoin="round"/>
+                        <rect x="4" y="13.3793" width="16" height="3.51724" rx="1" stroke="#40E0D0" stroke-width="2" stroke-linejoin="round"/>
+                        <path d="M17 6.75519H18.5" stroke="#40E0D0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M17 15.1552H18.5" stroke="#40E0D0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    <a href=""><h3>Справочники</h3></a>
+                </div>
             </div>
-            {% endblock menu %}
-            {% block content %}
-            <div class="content">
-
-            </div>
-            {% endblock content %}
         </div>
-        {% endblock con %}
+        <div class="hiv2">
+            <div class="hid2">
+                <div class="point">
+                    <a href="general_books" ><h3 class="black">Общие справочники</h3></a>
+                </div>
+                <div class="point">
+                    <a href="gmvl"><h3  class="black">Справочники ГМВЛ</h3></a>
+                </div>
+                <div class="point">
+                    <a href=""><h3  class="black">Администрирование</h3></a>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="content">
+        <ul>
+            <li><a href="post"><h3 class="black">Должности</h3></a></li>
+            <li><a href="role"><h3 class="black">Роль</h3></a></li>
+            <li><a href="branches"><h3 class="black">Филиалы</h3></a></li>
+            <li><a href="profile"><h3 class="black">Сотрудники</h3></a></li>
+            <li><a href="working_breeds"><h3 class="black">Рабочие породы</h3></a></li>
+            <li><a href="gps"><h3 class="black">GPS точки</h3></a></li>
+            <li><a href="breed"><h3 class="black">Порода</h3></a></li>
+            <li><a href="list"><h3 class="black">Перечет</h3></a></li>
+            <li><a href="type_of_reproduction"><h3 class="black">Вид воспроизводства</h3></a></li>
+            <li><a href="listregion"><h3 class="black">Перечетная ведомость участка</h3></a></li>
+            <li><a href="sample"><h3 class="black">Перечет на пробной площади</h3></a></li>
+        </ul>
     </div>
-{% endblock %}
-    </div>
-{% endblock %}
+</body>
+</html>

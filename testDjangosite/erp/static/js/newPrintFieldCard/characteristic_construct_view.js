@@ -6,11 +6,7 @@ async function setDataInCharacteristic() {
     let newHtml = "";
 
     for(var i = 0; i < APP.allPurpose.length; i++) {
-        if(APP.allPurpose[i].id == APP.documentData.id_purpose_of_forests) {
-            newHtml = newHtml + "<option selected value=\"" + APP.allPurpose[i].id + "\">" + APP.allPurpose[i].name_purpose + "</option>";
-        } else {
             newHtml = newHtml + "<option value=\"" + APP.allPurpose[i].id + "\">" + APP.allPurpose[i].name_purpose + "</option>";
-        }
     }
     purpose_of_forests.innerHTML = newHtml;
 
@@ -20,16 +16,12 @@ async function setDataInCharacteristic() {
     newHtml = "";
 
     for(var i = 0; i < APP.allForestProtectionCategory.length; i++) {
-        if(APP.allForestProtectionCategory[i].id == APP.documentData.id_forest_protection_category) {
-            newHtml = newHtml + "<option selected value=\"" + APP.allForestProtectionCategory[i].id + "\">" + APP.allForestProtectionCategory[i].name_forest_protection_category + "</option>";
-        } else {
             newHtml = newHtml + "<option value=\"" + APP.allForestProtectionCategory[i].id + "\">" + APP.allForestProtectionCategory[i].name_forest_protection_category + "</option>";
-        }
     }
     forest_protection_category.innerHTML = newHtml;
 
 
-    document.getElementById("protected_areas_of_forests").value = APP.documentData.protected_areas_of_forests;
+    document.getElementById("protected_areas_of_forests").value = "";
 
 
     let rent_area = document.getElementById("rent_area");
@@ -50,11 +42,7 @@ async function setDataInCharacteristic() {
     newHtml = "";
 
     for(var i = 0; i < APP.allCategoryOfForestFundLands.length; i++) {
-        if(APP.allCategoryOfForestFundLands[i].id == APP.documentData.id_category_of_forest_fund_lands) {
-            newHtml = newHtml + "<option selected value=\"" + APP.allCategoryOfForestFundLands[i].id + "\">" + APP.allCategoryOfForestFundLands[i].name_category + "</option>";
-        } else {
             newHtml = newHtml + "<option value=\"" + APP.allCategoryOfForestFundLands[i].id + "\">" + APP.allCategoryOfForestFundLands[i].name_category + "</option>";
-        }
     }
     category_of_forest_fund_lands.innerHTML = newHtml;
 
@@ -64,16 +52,12 @@ async function setDataInCharacteristic() {
     newHtml = "";
 
     for(var i = 0; i < APP.allMethodOfReforestation.length; i++) {
-        if(APP.allMethodOfReforestation[i].id == APP.documentData.id_method_of_reforestation) {
-            newHtml = newHtml + "<option selected value=\"" + APP.allMethodOfReforestation[i].id + "\">" + APP.allMethodOfReforestation[i].name_of_method + "</option>";
-        } else {
             newHtml = newHtml + "<option value=\"" + APP.allMethodOfReforestation[i].id + "\">" + APP.allMethodOfReforestation[i].name_of_method + "</option>";
-        }
     }
     method_of_reforestation.innerHTML = newHtml;
 
 
-    document.getElementById("time_of_reforestation").value = APP.documentData.time_of_reforestation;
+    document.getElementById("time_of_reforestation").value = "";
 
 
     APP.allTypeForestGrowingConditions = await PrintFieldCardBusiness.getAllTypeForestGrowingConditions();
@@ -81,40 +65,28 @@ async function setDataInCharacteristic() {
     newHtml = "";
 
     for(var i = 0; i < APP.allTypeForestGrowingConditions.length; i++) {
-        if(APP.allTypeForestGrowingConditions[i].id == APP.documentData.id_type_forest_growing_conditions) {
-            newHtml = newHtml + "<option selected value=\"" + APP.allTypeForestGrowingConditions[i].id + "\">" + APP.allTypeForestGrowingConditions[i].subtypes_of_humidity + "</option>";
-        } else {
             newHtml = newHtml + "<option value=\"" + APP.allTypeForestGrowingConditions[i].id + "\">" + APP.allTypeForestGrowingConditions[i].subtypes_of_humidity + "</option>";
-        }
     }
     type_forest_growing_conditions.innerHTML = newHtml;
 
 
-    document.getElementById("forest_type").value = APP.documentData.forest_type;
-    document.getElementById("point7year").value = APP.documentData.point7year;
-    document.getElementById("point7date").value = APP.documentData.point7date;
-    document.getElementById("point7number").value = APP.documentData.point7number;
-    document.getElementById("point7agreed").value = APP.documentData.point7agreed;
-    document.getElementById("point7_natural_composition").value = APP.documentData.point7_natural_composition;
-
+    document.getElementById("forest_type").value = "";
+    document.getElementById("point7year").value = "";
+    document.getElementById("point7date").value = "";
+    document.getElementById("point7number").value = "";
+    document.getElementById("point7agreed").value = "";
+    document.getElementById("point7_natural_composition").value = "";
     let economy = document.getElementById("economy");
     newHtml = "";
 
     for(var i = 0; i < APP.allEconomy.length; i++) {
-        if(APP.allEconomy[i].id == APP.documentData.id_economy) {
-            newHtml = newHtml + "<option selected value=\"" + APP.allEconomy[i].id + "\">" + APP.allEconomy[i].name_economy + "</option>";
-        } else {
-            newHtml = newHtml + "<option value=\"" + APP.allEconomy[i].id + "\">" + APP.allEconomy[i].name_economy + "</option>";
-        }
+        newHtml = newHtml + "<option value=\"" + APP.allEconomy[i].id + "\">" + APP.allEconomy[i].name_economy + "</option>";
     }
     economy.innerHTML = newHtml;
+    document.getElementById("completeness").value = "";
+    document.getElementById("stock").value = "";
 
-    document.getElementById("completeness").value = APP.documentData.point7_completeness;
-    document.getElementById("stock").value = APP.documentData.point7_stock;
-
-    APP.point7Table = await PrintFieldCardBusiness.getPoint7TableByIdOld(APP.documentData.id_list_region);
-    APP.point7Table = await PrintFieldCardBusiness.getPoint7TableById(APP.documentData.id);
-    //APP.point7Table = [];
+    APP.point7Table = [];
     APP.countLinePoint7Table = APP.point7Table.length;
     let point7Table = document.getElementById("id_point7_table");
     newHtml = "";

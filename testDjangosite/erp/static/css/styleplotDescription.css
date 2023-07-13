@@ -238,4 +238,8 @@ textarea {
     width: 100%;
     height: 80px;
     resize: none; /* Запрещаем изменять размер */
-} 
+}
+
+.pdf{
+    width: 180px;
+}

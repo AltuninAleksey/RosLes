@@ -175,3 +175,27 @@ async function setQuarterStatement() {
 
     quarterStatementNode.innerHTML = newHtml;
 }
+
+async function saveData() {
+
+    let id = document.querySelector("#idDocument").value;
+    let numberStatementNode = document.querySelector("#numberStatement").value;
+    let dateStatementNode = document.querySelector("#dateStatement").value;
+    let soilLotStatementNode = document.querySelector("#soilLotStatement").value;
+    let sampleRegionStatementNode = document.querySelector("#sampleRegionStatement").value;
+    let quarterStatement = document.querySelector("#quarterStatement").value;
+
+    var data = {
+       date: dateStatementNode,
+        sample_region: sampleRegionStatementNode,
+        soil_lot: soilLotStatementNode,
+        mark_del: APP.documentData.mark_del? 1:0,
+        mark_update: APP.documentData.mark_update? 1:0,
+        number_region: numberStatementNode,
+        id_quarter: quarterStatement
+    };
+
+    await StatementRecalculationsBusinessDetail.getUpdateSample(id, data);
+
+    getStatementRecalculationsDetail(id);
+}

@@ -73,3 +73,39 @@ function setDataInTableOne(switchButton) {
 
     table_1.innerHTML = newHtml;
 }
+
+function addProba() {
+    var breedName_proba = document.getElementById("breedName-proba");
+    var proba_021_05 = document.getElementById("proba-0.21-0.5");
+    var proba_11_15 = document.getElementById("proba-1.1-1.5");
+    var proba_02 = document.getElementById("proba-0.2");
+    var proba_06_10 = document.getElementById("proba-0.6-1.0");
+    var proba_15 = document.getElementById("proba-1.5");
+    var proba_maxheig = document.getElementById("proba-maxheig");
+    var proba_main = document.getElementById("proba-main");
+    var proba_avg_d = document.getElementById("proba-avg-d");
+    var proba_avg_h = document.getElementById("proba-avg-h");
+    var proba_all_count = document.getElementById("proba-all-count");
+
+
+    var newData = {
+        id : "",
+        id_breed : breedName_proba.value,
+        id_sample : APP.documentData.id,
+        id_type_of_reproduction : Number(APP.active_type_reproduction),
+        to0_2 : Number(proba_02.value),
+        from0_21To0_5 : Number(proba_021_05.value),
+        from0_6To1_0 : Number(proba_06_10.value),
+        from1_1to1_5 : Number(proba_11_15.value),
+        from1_5 : Number(proba_15.value),
+        max_height : Number(proba_maxheig.value),
+        main: proba_main.checked? 1: 0,
+        avg_diameter: Number(proba_avg_d.value),
+        avg_height: Number(proba_avg_h.value),
+        count_of_plants: Number(proba_all_count.value)
+    };
+
+    APP.dataTable_1.push(newData);
+    setDataInTableOne(APP.active_type_reproduction);
+    closeAddForm("form-add-proba");
+}

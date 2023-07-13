@@ -425,6 +425,11 @@ def getRecalculatingDetail(request):
 
 def getPlotDescription(request):
     return render(request, 'erp/html/plotDescription.html', {'idDocument': request.GET.get('id'), 'idParent': request.GET.get('idParent')})
+def getNewPlotDescription(request):
+    return render(request, 'erp/html/newPlotDescription.html')
 
 def getPrintFieldCard(request):
     return render(request, 'erp/html/printFieldCard.html', {'idDocument': request.GET.get('id'), 'idParent': request.GET.get('idParent')})
+
+def getNewFieldCard(request):
+    return render(request, 'erp/html/newFieldCard.html')

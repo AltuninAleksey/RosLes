@@ -78,13 +78,13 @@ async function setDataInPage() {
     let typeReproduction = document.getElementById("typeReproduction");
     let newHtml = "";
 
-    APP.typeReproduction = await CommonBusiness.getAllTypeReproduction();
+    APP.typeReproduction = await CommonBusiness.getAllMethodofreforestation();
 
     for(var i = 0; i < APP.typeReproduction.length; i++) {
         if(APP.typeReproduction[i].id = APP.documentData.id_method_of_reforestation) {
-            newHtml = newHtml + "<option selected value=\"" + APP.typeReproduction[i].id + "\">" + APP.typeReproduction[i].name_reproduction + "</option>";
+            newHtml = newHtml + "<option selected value=\"" + APP.typeReproduction[i].id + "\">" + APP.typeReproduction[i].name_of_method + "</option>";
         } else {
-            newHtml = newHtml + "<option value=\"" + APP.typeReproduction[i].id + "\">" + APP.typeReproduction[i].name_reproduction + "</option>";
+            newHtml = newHtml + "<option value=\"" + APP.typeReproduction[i].id + "\">" + APP.typeReproduction[i].name_of_method + "</option>";
         }
     }
 

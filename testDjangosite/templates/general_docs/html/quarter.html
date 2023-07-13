@@ -1,57 +1,36 @@
-{% extends 'erp/html/base.html' %}
-{% block body %}
-{% block container %}
-    <div class="container">
-        {% block header %}
-        <div class="header">
-            <ul class="nav">
-                <li><a onclick="getRecalculationOnTrialAreaPage()">Документы</a></li>
-                <li><a href="general_books">Общие справочники</a></li>
-                <li><a href="gmvl">Справочники ГМВЛ</a></li>
-                <li><h1 class="hed">Справочная система РОСЛЕСОЗАЩИТЫ</h1></li>
-            </ul>
-        </div>
-        {% endblock header %}
-
-        {% block con %}
-        <div class="con">
-            <input type="checkbox" id="nav-toggle" hidden>
-            {% block menu %}
-            <div class="menu">
-                <label for="nav-toggle" class="nav-toggle" onclick></label>
-                <ul class="navigat">
-                    {% for m in menu %}
-                    <li id="li"><a id="a" href="{{ m.url_name}} ">{{m.title}}</a></li>
-                    {% endfor %}
-                </ul>
+{% extends 'general_docs/html/general_base.html' %}
+{% load static %}
+    {% block title %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Квартал</title>
+    <link rel="stylesheet" href="{% static 'css/styleSubjectRF.css' %}">
+    {% endblock %}
+    {% block body %}
+        {% block container %}
+            <div class="container">
+                    {% block content %}
+                    <div class="content">
+                        <h1 id="h1">Квартал</h1>
+                        {% block table %}
+                        <table>
+                            <th>Наименование</th>
+                            <th>Участковое лесничество</th>
+                            <th>Лесничество</th>
+                            <th>Субъект РФ</th>
+                            {% for item in queryset %}
+                            <tr>
+                                <td>{{item.quarter_name}}</td>
+                                <td>{{ item.id_district_forestly }}</td>
+                                <td> {{ item.id_district_forestly.id_forestly}}</td>
+                                <td> {{item.id_district_forestly.id_forestly.id_subject_rf }}</td>
+                                {% endfor %}
+                            </tr>
+                        </table>
+                        {% endblock table %}
+                    </div>
+                    {% endblock content %}
             </div>
-            {% endblock menu %}
-            {% block content %}
-            <div class="content">
-                <h1 id="h1">Квартал</h1>
-                {% block table %}
-                <table>
-                    <th>id в базе</th>
-                    <th>Наименование</th>
-                    <th>Участковое лесничество</th>
-                    <th>Лесничество</th>
-                    <th>Субъект РФ</th>
-                    {% for item in queryset %}
-                    <tr>
-                        <td>{{ item.pk }}</td>
-                        <td>{{item.quarter_name}}</td>
-                        <td>{{ item.id_district_forestly }}</td>
-                        <td> {{ item.id_district_forestly.id_forestly}}</td>
-                        <td> {{item.id_district_forestly.id_forestly.id_subject_rf }}</td>
-                        {% endfor %}
-                    </tr>
-                </table>
-                {% endblock table %}
-            </div>
-            {% endblock content %}
-        </div>
-        {% endblock con %}
-    </div>
-{% endblock %}
-    </div>
+        {% endblock %}
 {% endblock %}

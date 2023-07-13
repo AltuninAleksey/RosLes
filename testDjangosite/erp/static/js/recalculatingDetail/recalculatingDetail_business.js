@@ -43,3 +43,14 @@ RecalculatingDetailBusiness.getPhotoPoint = async function(id) {
 
     return requestData.data;
 }
+
+RecalculatingDetailBusiness.getUpdateSampleandother = async function(data) {
+    requestData = await axios({
+        method: 'put',
+        url: urlGlobal + "/sampleandother",
+        data: data,
+        responseType: 'json'
+    });
+
+    return requestData.data;
+}
