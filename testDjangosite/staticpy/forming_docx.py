@@ -6,7 +6,7 @@ import uuid
 # две новых таблицы для хранения ссылок на полевую карточку и описание участка
 
 def forming_docx_fieldcard(context: dict):
-    doc = DocxTemplate("D:\\pythonProject\\Pavel\\RosLes\\testDjangosite\\fieldcard.docx")
+    doc = DocxTemplate(f"{BASE_DIR}\\fieldcard.docx")
     doc.render(context)
     filepath = f"{BASE_DIR}\\docx_files\\fieldcards\\fieldcard_{context['id']}.docx"
     doc.save(filepath)
