@@ -11,7 +11,7 @@ def forming_docx_fieldcard(context: dict):
     filepath = f"{BASE_DIR}\\docx_files\\fieldcards\\fieldcard_{context['id']}.docx"
     doc.save(filepath)
 
-    return [filepath, context['id']]
+    return filepath
 
 
 def forming_docx_desc_regiom(context: dict):
