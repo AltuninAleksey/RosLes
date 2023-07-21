@@ -6,9 +6,7 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
-import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
+import android.os.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 
@@ -71,21 +69,41 @@ class GpsManager (private val activityCompat: AppCompatActivity, private val loo
     }
 
     private fun checkAndRequestLocationPermission() {
+        val permissionToRequest = mutableListOf<String>()
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            if (ActivityCompat.checkSelfPermission(
+                    activityCompat,
+                    Manifest.permission.ACCESS_BACKGROUND_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                permissionToRequest.add(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
+            }
+        }
+
+        // Проверяем разрешение на точное местоположение
         if (ActivityCompat.checkSelfPermission(
                 activityCompat,
-                Manifest.permission.ACCESS_FINE_LOCATION,
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            permissionToRequest.add(Manifest.permission.ACCESS_FINE_LOCATION)
+        }
+
+        // Проверяем разрешение на грубое местоположение
+        if (ActivityCompat.checkSelfPermission(
                 activityCompat,
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
+            permissionToRequest.add(Manifest.permission.ACCESS_COARSE_LOCATION)
+        }
+
+        // Если есть разрешения для запроса, выполняем запрос
+        if (permissionToRequest.isNotEmpty()) {
             ActivityCompat.requestPermissions(
                 activityCompat,
-                arrayOf(
-                    Manifest.permission.ACCESS_BACKGROUND_LOCATION,
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-                ),
+                permissionToRequest.toTypedArray(),
                 1
             )
             throw IllegalStateException("Разрешение на GPS не предоставлено")

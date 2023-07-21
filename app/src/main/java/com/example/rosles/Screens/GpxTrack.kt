@@ -22,10 +22,7 @@ import com.example.rosles.databinding.GpsTrackerBinding
 import com.example.rosles.setSizeRelativeCurrentWindow
 import com.example.rosles.utils.gps.GpsManager
 import com.example.rosles.utils.gps.simpleframework.ParseGps
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import com.example.rosles.utils.services.GpsForegroundService
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -51,6 +48,8 @@ class GpxTrack: BaseActivity("GPS Трекер") {
         initAnimation()
         initDialog()
         gpsTracker.init()
+        SaveState.saveGpsManager = gpsTracker
+        restartShowWarn()
 
         binding.toolbar.addbutton.setOnClickListener {
             dialogCreateFile.show()
@@ -60,18 +59,6 @@ class GpxTrack: BaseActivity("GPS Трекер") {
         }
         binding.toolbar.share.setOnClickListener {
             shareActiveFile()
-        }
-        binding.toolbar.showTrack.setOnClickListener {
-            if (activetableNameFile == null) {
-                return@setOnClickListener
-            }
-            val intent = Intent(this, MapTrack::class.java)
-            val listOfTrack: ArrayList<ParseGps.Waypoint> = arrayListOf<ParseGps.Waypoint>()
-            ParseGps.loadGpxFile(this, activetableNameFile!!)?.waypoints?.forEach {
-                listOfTrack.add(it)
-            }
-            intent.putExtra("listOfTrack", listOfTrack)
-            startActivity(intent)
         }
 
         binding.buttonStart.setOnClickListener {
@@ -98,6 +85,39 @@ class GpxTrack: BaseActivity("GPS Трекер") {
             }
         }
 
+        binding.toolbar.showTrack.setOnClickListener {
+            if (activetableNameFile == null) {
+                return@setOnClickListener
+            }
+            val intent = Intent(this, MapTrack::class.java)
+            val listOfTrack: ArrayList<ParseGps.Waypoint> = arrayListOf<ParseGps.Waypoint>()
+            ParseGps.loadGpxFile(this, activetableNameFile!!)?.waypoints?.forEach {
+                listOfTrack.add(it)
+            }
+            intent.putExtra("listOfTrack", listOfTrack)
+            startActivity(intent)
+        }
+    }
+
+    override fun onPause() {
+        println("[----DEBUG----]: onPause (GpxTrack)")
+        SaveState.saveState(this)
+        super.onPause()
+    }
+
+    private fun restartShowWarn() {
+        println("[----DEBUG----]: restartShowWarn (GpxTrack)")
+        SaveState.loadState(this)
+        if (SaveState.recordingFileName != null) {
+            if (SaveState.isPauseRecord) {
+                ParseGps.loadGpxFile(this, SaveState.recordingFileName!!)?.waypoints?.forEach {
+                    SaveState.listWaypoint.add(it)
+                }
+                showWarnPauseRecordToFile()
+            } else {
+                showWarnRecordToFile()
+            }
+        }
     }
 
     private fun continueRecord() {
@@ -111,6 +131,9 @@ class GpxTrack: BaseActivity("GPS Трекер") {
 
     private fun pauseRecord() {
         SaveState.isPauseRecord = true
+        if(SaveState.listWaypoint.size > 0) {
+            ParseGps.savePointsAsGpx(this, SaveState.recordingFileName!!, SaveState.listWaypoint)
+        }
         showWarnPauseRecordToFile()
         closeGpsCoroutine()
     }
@@ -137,20 +160,9 @@ class GpxTrack: BaseActivity("GPS Трекер") {
 
     private fun startRecordTrackInList() {
         if (SaveState.gpsCoroutine == null || SaveState.gpsCoroutine?.isCompleted == true) {
-            SaveState.gpsCoroutine = CoroutineScope(Dispatchers.IO).launch {
-                println("---------------------------gpsCoroutine--------------------- START")
-                var i = 0
-
-                while (true) {
-                    delay(5000)
-                    gpsTracker.updateLocation()
-                    println("---------------------------gpsCoroutine--------------------- WORK ${i++} \n" +
-                            "longitude=${gpsTracker.longitude}, latitude=${gpsTracker.latitude}")
-                    val waypoint = ParseGps.Waypoint()
-                    waypoint.lon = gpsTracker.longitude
-                    waypoint.lat = gpsTracker.latitude
-                    SaveState.listWaypoint.add(waypoint)
-                }
+            Intent(this, GpsForegroundService::class.java).also {
+                startForegroundService(it)
+                SaveState.saveIntentService = it
             }
         }
     }
@@ -174,7 +186,9 @@ class GpxTrack: BaseActivity("GPS Трекер") {
 
     private fun stopRecording() {
         println("---------------------------gpsCoroutine--------------------- STOP")
-        ParseGps.savePointsAsGpx(this, SaveState.recordingFileName!!, SaveState.listWaypoint)
+        if(SaveState.listWaypoint.size > 0) {
+            ParseGps.savePointsAsGpx(this, SaveState.recordingFileName!!, SaveState.listWaypoint)
+        }
         SaveState.recordingFileName = null
         binding.buttonPause.text = "Пауза"
         updateTable()
@@ -320,6 +334,9 @@ class GpxTrack: BaseActivity("GPS Трекер") {
     private fun closeGpsCoroutine() {
         SaveState.gpsCoroutine?.cancel()
         SaveState.gpsCoroutine = null
+        SaveState.saveIntentService?.let {
+            stopService(it)
+        }
     }
 
     private fun saveUpdateLocation(): Boolean {

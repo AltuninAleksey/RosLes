@@ -8,6 +8,9 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.FLAG_GRANT_READ_URI_PERMISSION" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
 
     <application
@@ -19,11 +22,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:forceDarkAllowed="false"
-        
-
         android:theme="@style/Theme.Rosles"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+
+        <service
+            android:exported="false"
+            android:name="com.example.rosles.utils.services.GpsForegroundService"/>
+
         <activity
             android:name=".Screens.MainActivity"
             android:exported="false">
