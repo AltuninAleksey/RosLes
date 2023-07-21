@@ -24,24 +24,17 @@ class GpsForegroundService: Service() {
 
     override fun onCreate() {
         super.onCreate()
-        println("[----DEBUG----]: onCreate (GpsForegroundService)")
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        println("[----DEBUG----]: onStartCommand (GpsForegroundService)")
 
         createChannel()
         sendNotificationForStartForeground()
 
         SaveState.gpsCoroutine = CoroutineScope(Dispatchers.IO).launch {
-            println("---------------------------gpsCoroutine--------------------- START")
-            var i = 0
-
             while (true) {
                 delay(5000)
                 saveGpsManager?.updateLocation()
-                println("---------------------------gpsCoroutine--------------------- WORK ${i++} \n" +
-                        "longitude=${saveGpsManager?.longitude}, latitude=${saveGpsManager?.latitude}")
                 val waypoint = ParseGps.Waypoint()
                 waypoint.lon = saveGpsManager!!.longitude
                 waypoint.lat = saveGpsManager!!.latitude
