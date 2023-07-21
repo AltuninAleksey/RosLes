@@ -55,7 +55,7 @@ class Dashboard: BaseActivity() {
         val menu=view.findViewById<ImageView>(R.id.burger)
         title.setText("Главная")
         back.setOnClickListener{
-
+            File("/data/data/com.example.rosles/databases/userdb.db").delete()
             val ed = sPref.edit()
             ed.putString("id", "")
             ed.putString("FIO", "")
