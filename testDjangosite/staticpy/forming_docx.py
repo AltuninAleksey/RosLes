@@ -8,7 +8,7 @@ import uuid
 def forming_docx_fieldcard(context: dict):
     doc = DocxTemplate(f"{BASE_DIR}\\fieldcard.docx")
     doc.render(context)
-    filepath = f"{BASE_DIR}\\docx_files\\fieldcards\\fieldcard_{context['id']}.docx"
+    filepath = f"{BASE_DIR}\\media\\docx_files\\fieldcards\\fieldcard_{context['id']}.docx"
     doc.save(filepath)
 
     return filepath
