@@ -1447,15 +1447,18 @@ class FormingDocxView(ListAPIView):
 
     def post(self, request, *args, **kwargs):
         from staticpy import forming_docx
+
         path_docx = forming_docx.forming_docx_fieldcard(request.data)
-        # serializer = FieldCardDocxSerializer(data={"path_docx": path_docx, "id_field_card": id_field_card})
-        # if serializer.is_valid():
-        #     return Response({"error": status.HTTP_400_BAD_REQUEST,
-        #                      "error_text": serializer.errors[next(iter(serializer.errors))][0]},
-        #                     status=status.HTTP_400_BAD_REQUEST)
-        # serializer.save()
         return Response({"document": path_docx})
 
+
+class FormingDocxViewDescRegion(ListAPIView):
+
+    def post(self, request, *args, **kwargs):
+        from staticpy import forming_docx
+
+        path_docx = forming_docx.forming_docx_desc_region(request.data)
+        return Response({"document": path_docx})
 
 # class testviews(ListAPIView):
 #     print("BOOMBOX")
