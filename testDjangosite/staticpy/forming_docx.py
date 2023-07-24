@@ -10,9 +10,12 @@ def forming_docx_fieldcard(context: dict):
     doc.render(context)
     filepath = f"{BASE_DIR}\\media\\docx_files\\fieldcards\\fieldcard_{context['id']}.docx"
     doc.save(filepath)
-    print(filepath.split("testDjangosite"))
     return filepath.split("testDjangosite")[1]
 
 
-def forming_docx_desc_regiom(context: dict):
-    pass
+def forming_docx_desc_region(context: dict):
+    doc = DocxTemplate(f"{BASE_DIR}\\desc_region.docx")
+    doc.render(context)
+    filepath = f"{BASE_DIR}\\media\\docx_files\\desc_region\\desc_region_{context['id']}.docx"
+    doc.save(filepath)
+    return filepath.split("testDjangosite")[1]
