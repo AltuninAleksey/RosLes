@@ -1,4 +1,5 @@
 from testDjangosite.settings import BASE_DIR
+import os
 from docxtpl import DocxTemplate
 import uuid
 # название включает себя fieldcard_{id}
@@ -6,7 +7,7 @@ import uuid
 # две новых таблицы для хранения ссылок на полевую карточку и описание участка
 
 def forming_docx_fieldcard(context: dict):
-    doc = DocxTemplate(f"{BASE_DIR}\\fieldcard.docx")
+    doc = DocxTemplate(f"{BASE_DIR}\\media\\fieldcard.docx")
     doc.render(context)
     filepath = f"{BASE_DIR}\\media\\docx_files\\fieldcards\\fieldcard_{context['id']}.docx"
     doc.save(filepath)
@@ -14,7 +15,7 @@ def forming_docx_fieldcard(context: dict):
 
 
 def forming_docx_desc_region(context: dict):
-    doc = DocxTemplate(f"{BASE_DIR}\\desc_region.docx")
+    doc = DocxTemplate(f"{BASE_DIR}\\media\\desc_region.docx")
     doc.render(context)
     filepath = f"{BASE_DIR}\\media\\docx_files\\desc_region\\desc_region_{context['id']}.docx"
     doc.save(filepath)
