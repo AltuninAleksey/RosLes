@@ -115,10 +115,13 @@ urlpatterns = [
     path('plotcoeff/<int:pk>', PlotCoeffViews.as_view()),
     path('plotcoeff/fieldcard/<int:id_field_card>', PlotCoeffByFieldCardId.as_view()),
     path('formdocx', FormingDocxView.as_view()),
+    path('formdocxdesc', FormingDocxViewDescRegion.as_view()),
     path('calculateratio', RatioCompositionCalculateInList.as_view()),
     path('erp/', include('erp.urls')),
     path('general_docs/', include('general_docs.urls')),
+
 ]
+
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
