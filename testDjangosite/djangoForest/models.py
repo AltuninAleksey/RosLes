@@ -560,6 +560,37 @@ class PlotCoeff(models.Model):
         verbose_name_plural = "Коэфф. участка"
 
 
-class FieldCardDocx(models.Model):
-    id_field_card = models.ForeignKey("FieldCard", on_delete=models.CASCADE)
-    path_docx = models.CharField(max_length=500)
+class FederalDistricts(models.Model):
+    name_federal = models.CharField(max_length=250)
+
+    class Meta:
+        verbose_name = "Федеральные округа"
+        verbose_name_plural = 'Федеральные округа'
+
+
+class MethodForestRestoration(models.Model):
+    name_method = models.CharField(max_length=400)
+
+
+    class Meta:
+        verbose_name = "Метод лесовосстановления"
+        verbose_name_plural = "Метод лесовосстановления"
+
+
+class ForestCareActivities(models.Model):
+    name_activities = models.CharField(max_length=100)
+
+
+    class Meta:
+        verbose_name = "Мероприятия по уходу за лесами"
+        verbose_name_plural = "Мероприятия по уходу за лесами"
+
+
+class Recommendation(models.Model):
+    name_recommendation = models.CharField(max_length=100)
+
+    class Meta:
+        verbose_name = "Рекомендации по результатам натурных обследований"
+        verbose_name_plural = "Рекомендации по результатам натурных обследований"
+
+        
