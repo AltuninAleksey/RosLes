@@ -840,8 +840,3 @@ class PlotCoeffSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class FieldCardDocxSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = FieldCardDocx
-        fields = "__all__"
