@@ -1465,17 +1465,12 @@ class FormingDocxViewDescRegion(ListAPIView):
 #     # file_patj = str()
 # #     # print(BASE_DIR / 'test.xlsx' )
 #     import pandas as pd
-#     excel = pd.ExcelFile(rf"{BASE_DIR / 'test.xlsx'}")
+#     excel = pd.ExcelFile(rf"{BASE_DIR / 'Субъекты РФ.xlsx'}")
 #     sheetX = excel.parse(0)
-#     print(sheetX)
-#     column1 = sheetX['Порода'][3]
-#     # print(sheetX['Порода'][3])
-#     # print(sheetX['Порода'])
+#     column1 = sheetX['Наименование'][3]
 #     ser = WorkingBreedsSerializer
-    # for i in sheetX:
-    #     print(sheetX['Порода'][i])
-    #     print('====')
-#         WorkingBreeds.objects.create(name_breeds = i)
+#     for i in sheetX['Наименование']:
+#         SubjectRF.objects.create(name_subject_RF = i)
 
 
 class ForestViewSet(viewsets.ModelViewSet):
