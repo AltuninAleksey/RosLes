@@ -8,6 +8,11 @@ class TodoAdmin(admin.ModelAdmin):
     list_display_links = ('id', 'name', 'age')
     search_fields = ('id', 'name', 'age')
 
+class FederalDistrictsAdmin(admin.ModelAdmin):
+    list_display = '__all__'
+    list_display_links = '__all__'
+    search_fields = '__all__'
+
 class PlotCoeffAdmin(admin.ModelAdmin):
     list_display = '__all__'
     list_display_links = '__all__'
@@ -198,6 +203,7 @@ class TrackingAdmin(admin.ModelAdmin):
     search_fields = ('id', 'id_profile', 'data', 'map')
 
 
+admin.site.register(FederalDistricts)
 admin.site.register(PlotCoeff)
 admin.site.register(DescriptionRegion)
 admin.site.register(FieldCard)
