@@ -6,8 +6,6 @@
     android:layout_height="match_parent"
     android:background="#ECECEC">
 
-
-
     <TableLayout
         android:id="@+id/tbl_layoutHight"
         android:layout_width="fill_parent"
@@ -439,9 +437,9 @@
                 android:layout_weight="1"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:maxLines="2"
+                android:maxLines="3"
                 android:ellipsize="end"
-                android:text="Макс&#10; высота"
+                android:text="Макс высота&#10;(м)"
                 android:textColor="#ffff"
                 android:textSize="@dimen/custom_size_table" />
 
@@ -450,9 +448,9 @@
                 android:layout_weight="1"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:maxLines="2"
+                android:maxLines="3"
                 android:ellipsize="end"
-                android:text="Сред&#10; высота"
+                android:text="Сред&#10; высота &#10;(м)"
                 android:textColor="#ffff"
                 android:textSize="@dimen/custom_size_table" />
 
@@ -461,9 +459,9 @@
                 android:layout_weight="1.2"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:maxLines="2"
+                android:maxLines="3"
                 android:ellipsize="end"
-                android:text="Сред&#10; диаметр"
+                android:text="Сред&#10; диаметр &#10;(м)"
                 android:textColor="#ffff"
                 android:textSize="@dimen/custom_size_table" />
 
