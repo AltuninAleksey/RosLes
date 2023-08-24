@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
@@ -42,7 +43,7 @@ class Wood : BaseActivity("Пробная площадь") {
     var podlesokhash=HashMap<String, PodlesokWood?>()
     var Get_Id_breed_Class:AddPorod?= AddPorod()
 
-    var CountMainPorod=""
+    var CountMainPorod= mutableListOf<String>()
     var activeCountPorod=""
 
     var flaglesActive=false
@@ -360,9 +361,17 @@ class Wood : BaseActivity("Пробная площадь") {
                 initdata(vidWood)
                 visibleplus()
             }
-            override fun onClickButton(itemView: Any) {
-                CountMainPorod=itemView.toString()
-                GetCountWood(itemView.toString())
+            override fun onClickButton(itemView: TextView) {
+
+
+                if (itemView.textColors.defaultColor == -65536){
+                    CountMainPorod.add(itemView.text.toString())
+                    GetCountWood(itemView.text.toString())
+                }else{
+                    CountMainPorod.remove(itemView.text.toString())
+                    GetCountWoodMinus(itemView.text.toString())
+                }
+
                 //binding.valuewood.text=binding.asd.text
             }
 
@@ -377,7 +386,7 @@ class Wood : BaseActivity("Пробная площадь") {
                 initdatapodles(vidWoodpodles)
                 visibleplus()
             }
-            override fun onClickButton(itemView: Any) {}
+            override fun onClickButton(itemView: TextView) {}
         })
         binding.WoodRecyclerpodles.adapter = adapterpodles
     }
@@ -412,7 +421,12 @@ class Wood : BaseActivity("Пробная площадь") {
                         value++
                         buffertext.text = value.toString()
                         initasd()
-                        GetCountWood(CountMainPorod)
+                        CountMainPorod.forEach(){
+                            if (it==activeCountPorod){
+                                binding.valuewood.text =(binding.valuewood.text.toString().toInt()+1).toString()
+                                return@forEach
+                            }
+                        }
                         delay(100)
                     }
                 }
@@ -422,7 +436,6 @@ class Wood : BaseActivity("Пробная площадь") {
             }
             true
         }
-
 
         binding.buttonMinus.setOnTouchListener { _, event ->
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -436,7 +449,12 @@ class Wood : BaseActivity("Пробная площадь") {
                             value = 0
                         buffertext.text = value.toString()
                         initasd()
-                        GetCountWood(CountMainPorod)
+                        CountMainPorod.forEach(){
+                            if (it==activeCountPorod){
+                                binding.valuewood.text =(binding.valuewood.text.toString().toInt()-1).toString()
+                                return@forEach
+                            }
+                        }
                         delay(100)
                     }
                 }
@@ -519,18 +537,41 @@ class Wood : BaseActivity("Пробная площадь") {
         binding.estestvennoe11.addTextChangedListener(textChangedListenerEstestvennoe)
         binding.estestvennoe15.addTextChangedListener(textChangedListenerEstestvennoe)
         binding.maksHeightestestvennoe.addTextChangedListener(textChangedListenerEstestvennoe)
-
-
     }
 
      fun avgHeight(value1:Float,value2:Float,value3:Float,value4:Float,value5:Float,valuemax:Float):Float{
-        val sum=value1+value2+value3+value4+value5
-
+         val sum=value1+value2+value3+value4+value5
          val result=((value1*0.1+value2*0.35+value3*0.8+value4*1.3+((valuemax+1.51)/2*value5))/sum).toFloat()
-
-        return  String.format("%.2f", result).replace(',', '.').toFloat()
-
+         return  String.format("%.2f", result).replace(',', '.').toFloat()
     }
+    fun GetCountWoodMinus(value: String){
+        if (activeCountPorod==value){
+            writedata(value)
+        }
+        val buf = hashbufWood.get(value)
+        if (buf == null)
+            return
+        val temp :Int=
+            buf.iskus!!.o2!!.toInt()+
+                    buf.iskus!!.o5!!.toInt()+
+                    buf.iskus!!.o6!!.toInt()+
+                    buf.iskus!!.o11!!.toInt()+
+                    buf.iskus!!.o15!!.toInt()+
+                    buf.estes!!.o2!!.toInt()+
+                    buf.estes!!.o5!!.toInt()+
+                    buf.estes!!.o6!!.toInt()+
+                    buf.estes!!.o11!!.toInt()+
+                    buf.estes!!.o15!!.toInt()+
+                    buf.estestvenn!!.o2!!.toInt()+
+                    buf.estestvenn!!.o5!!.toInt()+
+                    buf.estestvenn!!.o6!!.toInt()+
+                    buf.estestvenn!!.o11!!.toInt()+
+                    buf.estestvenn!!.o15!!.toInt()
+
+        binding.valuewood.text =(binding.valuewood.text.toString().toInt()- temp).toString()
+    }
+
+
     fun GetCountWood(value: String){
         if (activeCountPorod==value){
             writedata(value)
@@ -538,7 +579,7 @@ class Wood : BaseActivity("Пробная площадь") {
         val buf = hashbufWood.get(value)
         if (buf == null)
             return
-        val temp=
+        val temp :Int=
         buf.iskus!!.o2!!.toInt()+
         buf.iskus!!.o5!!.toInt()+
         buf.iskus!!.o6!!.toInt()+
@@ -555,7 +596,9 @@ class Wood : BaseActivity("Пробная площадь") {
         buf.estestvenn!!.o11!!.toInt()+
         buf.estestvenn!!.o15!!.toInt()
 
-        binding.valuewood.text=temp.toString()
+        binding.valuewood.text.toString().toInt()
+        temp
+        binding.valuewood.text =(binding.valuewood.text.toString().toInt()+ temp).toString()
 
     }
     fun initasd(){
@@ -578,6 +621,12 @@ class Wood : BaseActivity("Пробная площадь") {
                           estestvennoe15.text.toString().toInt()
             asd.text="0"
             asd.text=value?.toString()
+
+            if(asd.text.toString().toInt()==150){
+
+                Toast.makeText(this@Wood,"150 деревьев набрано на пробной площади",
+                    Toast.LENGTH_SHORT).show()
+            }
 
         }
 

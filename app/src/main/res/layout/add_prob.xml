@@ -63,7 +63,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="15dp"
-        android:text="Площадь\nучастка"
+        android:text="размер \nпробной площади"
         android:textColor="#000000"
         android:textSize="@dimen/custom_size_text"
         app:layout_constraintStart_toStartOf="parent"

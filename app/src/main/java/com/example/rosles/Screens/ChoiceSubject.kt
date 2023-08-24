@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.TextView
 import androidx.core.view.isVisible
 import com.example.rosles.Adapters.BaseInterface
 import com.example.rosles.Adapters.ChoiceSubjectAdapter
@@ -47,7 +48,7 @@ class ChoiceSubject : AppCompatActivity() {
                 start(itemView as Int)
             }
 
-            override fun onClickButton(itemView: Any) {
+            override fun onClickButton(itemView: TextView) {
             }
 
         })

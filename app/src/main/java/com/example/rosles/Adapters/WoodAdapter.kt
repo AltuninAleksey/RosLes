@@ -36,25 +36,21 @@ class WoodAdapter(private val names: List<ItemWood>,val inter:BaseInterface) : R
 
                 if (activebutton!=favoritebutton){
                     activebutton?.setBackgroundResource(R.drawable.rounded)
-                    activebutton?.setTextColor(Color.parseColor("#177164"))
                 }
                 itemWood.setBackgroundResource(R.drawable.rounded_active_button)
-                itemWood.setTextColor(Color.parseColor("#ffffff"))
+
                 activebutton=itemWood
-
-                if(favoritebutton==activebutton){
-                    itemWood.setBackgroundResource(R.drawable.rounded_red)
-                }
-
                 inter.onClick(itemWood.text)
             }
             itemWood.setOnLongClickListener{
-                favoritebutton?.setBackgroundResource(R.drawable.rounded)
-                favoritebutton?.setTextColor(Color.parseColor("#177164"))
-                itemWood.setBackgroundResource(R.drawable.rounded_red)
-                itemWood.setTextColor(Color.parseColor("#ffffff"))
-                favoritebutton=itemWood
-                inter.onClickButton(itemWood.text)
+                if (itemWood.textColors.defaultColor!= -65536){
+                    itemWood?.setTextColor(Color.parseColor("#ff0000"))
+                    inter.onClickButton(itemWood)
+
+                }else{
+                    itemWood?.setTextColor(Color.parseColor("#000000"))
+                    inter.onClickButton(itemWood)
+                }
                 return@setOnLongClickListener true
 
             }

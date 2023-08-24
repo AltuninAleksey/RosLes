@@ -64,7 +64,7 @@ class GpsForegroundService: Service() {
         val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
 
         val notification = notificationEditor.createNotification(
-            R.drawable.location_write,
+            R.drawable.location,//КОСТЫЛЬ ....................................
             "RosLes gps tracking",
             "Идёт запись вашего пути.",
             pendingIntent
