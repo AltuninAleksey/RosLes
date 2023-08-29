@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.Window
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.example.rosles.Adapters.BaseInterface
@@ -46,13 +47,14 @@ class ChoiceCvartal:AppCompatActivity() {
             a.add(quaterList[i].toBaseRespObject())
         }
 
-            var adapter = ChoiceSubjectAdapter(a,object : BaseInterface {
+            var adapter = ChoiceSubjectAdapter(a, object : BaseInterface {
 
                 override fun onClick(itemView: Any) {
                     start(itemView as Int)
                 }
 
-                override fun onClickButton(itemView: Any) {
+                override fun onClickButton(itemView: TextView) {
+                    return
                 }
             })
             if (a.isEmpty()){
