@@ -241,5 +241,9 @@ textarea {
 }
 
 .pdf{
-    width: 180px;
+    width: 200px;
+}
+
+.mandatory_warning {
+    border: 3px solid red !important;
 }

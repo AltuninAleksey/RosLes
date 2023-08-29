@@ -23,6 +23,17 @@ PlotDescriptionBusiness.setPlotDescriptionDataById = async function(id, data) {
     });
 }
 
+PlotDescriptionBusiness.generateDocx = async function(data) {
+    var requestData = await axios({
+      method: 'post',
+      url: urlGlobal + "/formdocxdesc",
+      data: data,
+      responseType: 'json'
+    });
+
+    return requestData.data;
+}
+
 function generatePDF() {
     const element = document.getElementById('invoice');
     const opt = {

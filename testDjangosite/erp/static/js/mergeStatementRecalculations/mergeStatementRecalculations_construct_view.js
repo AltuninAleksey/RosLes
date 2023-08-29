@@ -203,11 +203,14 @@ async function setOptionInSubject() {
 
 async function setOptionInForestly(status) {
     let forestlyNode = document.querySelector("#filter_forestly");
-    let forestly;
+    let districtForestly = [];
 
     if(status == MergeStatementRecalculationsBusiness.TypeData.BYID) {
-        let subjectNode = document.querySelector("#filter_subject_rf");
-        forestly = await CommonBusiness.getForestlyByIdSubjectrf(subjectNode.value);
+        let forestlyNode = document.querySelector("#filter_forestly");
+
+        if(forestlyNode.value != "" && forestlyNode.value != null && forestlyNode.value != undefined) {
+            districtForestly = await CommonBusiness.getDistrictForestlyByIdForestly(forestlyNode.value);
+        }
     } else {
         forestly = APP.forestly;
     }
@@ -255,11 +258,14 @@ async function setOptionInDistrictForestly(status) {
 async function setOptionInQuarter(status) {
 
     let quarterNode = document.querySelector("#filter_quartal");
-    let quarter;
+    let quarter = [];
 
     if(status == MergeStatementRecalculationsBusiness.TypeData.BYID) {
         let districtForestlyNode = document.querySelector("#filter_district_forestly");
-        quarter = await CommonBusiness.getQuarterByIdDistrictForestly(districtForestlyNode.value);
+
+        if(districtForestlyNode.value != "" && districtForestlyNode.value != null && districtForestlyNode.value != undefined) {
+            quarter = await CommonBusiness.getQuarterByIdDistrictForestly(districtForestlyNode.value);
+        }
     } else {
         quarter = APP.quarter;
     }

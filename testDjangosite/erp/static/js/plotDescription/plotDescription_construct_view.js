@@ -200,6 +200,35 @@ async function saveData() {
     let quarter = document.getElementById("quarter").value;
     let regions = document.getElementById("regionRF").value;
 
+    if(Number(year_assignment_land) == NaN || Number(year_assignment_land) <= 1901) {
+        alert("Введите корректное значение года. Год не должен быть меньше 1901!");
+        var item = document.getElementById("year_assignment_land");
+        if(!item.classList.contains("mandatory_warning")) {
+            item.classList.add("mandatory_warning");
+        }
+        return;
+    } else {
+        var item = document.getElementById("year_assignment_land");
+
+        if(item.classList.contains("mandatory_warning")) {
+            item.classList.remove("mandatory_warning");
+        }
+    }
+
+    if(Number(year_format_fond_trees) == NaN || Number(year_format_fond_trees) <= 1901) {
+        alert("Введите корректное значение года. Год не должен быть меньше 1901!");
+        var item = document.getElementById("year_format_fond_trees")
+        if(!item.classList.contains("mandatory_warning")) {
+            item.classList.add("mandatory_warning");
+        }
+        return;
+    } else {
+        var item = document.getElementById("year_format_fond_trees");
+
+        if(item.classList.contains("mandatory_warning")) {
+            item.classList.remove("mandatory_warning");
+        }
+    }
 
     let data = {
         id: APP.documentData.id,
@@ -232,7 +261,48 @@ async function saveData() {
     let idDocument = document.getElementById("idDocument").value;
     let idParent = document.getElementById("idParent").value;
 
+    if(!CommonFunction.checkMandatoryData()) {
+        alert("Заполните все обязательные поля!");
+        return;
+    }
+
     await PlotDescriptionBusiness.setPlotDescriptionDataById(idDocument, data);
 
     getPlotDescription(idDocument, idParent);
+}
+
+
+async function generateDocx() {
+
+    let data = {
+        id: APP.documentData.id,
+        name_quarter: document.getElementById("quarter").options[document.getElementById("quarter").selectedIndex].text,
+        district_forestly: document.getElementById("ucLesName").options[document.getElementById("ucLesName").selectedIndex].text,
+        forestly: document.getElementById("lesName").options[document.getElementById("lesName").selectedIndex].text,
+        id_subject_rf: document.getElementById("regionRF").options[document.getElementById("regionRF").selectedIndex].text,
+        soil_lot: document.getElementById("soil_lot").value,
+        sample_region: document.getElementById("sample_region").value,
+        date: APP.documentData.date,
+        number_region: document.getElementById("number_region").value,
+        year_assignment_land: document.getElementById("year_assignment_land").value,
+        year_format_fond_trees: document.getElementById("year_format_fond_trees").value,
+        inf_restore_forest: document.getElementById("inf_restore_forest").value,
+        breed_structure_sapling_act_land: document.getElementById("breed_structure_sapling_act_land").value,
+        economy_act_land: document.getElementById("economy_act_land").value,
+        change_breed_and_structure_sapling: document.getElementById("change_breed_and_structure_sapling").value,
+        results_surtvey: document.getElementById("results_surtvey").value,
+        recommendation: document.getElementById("recommendation").value,
+        count_plants: APP.documentData.count_plants,
+        preservation_breed: APP.documentData.preservation_breed,
+        farm_according_data_survey: document.getElementById("farm_according_data_survey").value,
+        breed_composition_sapling_data_surver: document.getElementById("breed_composition_sapling_data_surver").value,
+        method_of_reforestation: document.getElementById("typeReproduction").options[document.getElementById("typeReproduction").selectedIndex].text
+    }
+
+    var urlFile = await PlotDescriptionBusiness.generateDocx(data);
+    urlFile = urlFile.document;
+
+    urlFile = urlGlobal + urlFile;
+
+    window.open(urlFile, '_blank').focus();
 }

@@ -153,7 +153,7 @@ PrintFieldCardBusiness.generateDocx = async function(data) {
       responseType: 'json'
     });
 
-    console.log(requestData);
+    return requestData.data;
 }
 
 

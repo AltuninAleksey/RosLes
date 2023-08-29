@@ -50,3 +50,27 @@ CommonFunction.getBreedsName = function(breeds, id_breed) {
 
     return "";
 }
+
+CommonFunction.checkMandatoryData = function() {
+
+    var flag = true;
+
+    var mandatoryElement = document.getElementsByClassName('mandatory');
+    for (var i = 0; i < mandatoryElement.length; ++i) {
+        var item = mandatoryElement[i];
+
+        if(item.value == "" || item.value == null || item.value == undefined) {
+            if(!item.classList.contains("mandatory_warning")) {
+                item.classList.add("mandatory_warning");
+            }
+
+            flag = false;
+        } else {
+            if(item.classList.contains("mandatory_warning")) {
+                item.classList.remove("mandatory_warning");
+            }
+        }
+    }
+
+    return flag;
+}

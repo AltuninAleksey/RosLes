@@ -150,6 +150,37 @@ async function saveData() {
     let quarter = document.getElementById("quarter").value;
     let regions = document.getElementById("regionRF").value;
 
+    if(Number(year_assignment_land) == NaN || Number(year_assignment_land) <= 1901) {
+        alert("Введите корректное значение года. Год не должен быть меньше 1901!");
+        var item = document.getElementById("year_assignment_land");
+        if(!item.classList.contains("mandatory_warning")) {
+            item.classList.add("mandatory_warning");
+        }
+        return;
+    } else {
+        var item = document.getElementById("year_assignment_land");
+
+        if(item.classList.contains("mandatory_warning")) {
+            item.classList.remove("mandatory_warning");
+        }
+    }
+
+    if(Number(year_format_fond_trees) == NaN || Number(year_format_fond_trees) <= 1901) {
+        alert("Введите корректное значение года. Год не должен быть меньше 1901!");
+        var item = document.getElementById("year_format_fond_trees")
+        if(!item.classList.contains("mandatory_warning")) {
+            item.classList.add("mandatory_warning");
+        }
+        return;
+    } else {
+        var item = document.getElementById("year_format_fond_trees");
+
+        if(item.classList.contains("mandatory_warning")) {
+            item.classList.remove("mandatory_warning");
+        }
+    }
+
+
 
     var nowDate = new Date();
     var date = nowDate.getFullYear()+'-'+(nowDate.getMonth()+1)+'-'+nowDate.getDate();
@@ -178,6 +209,11 @@ async function saveData() {
         preservation_breed: null,
         id_schema_mixing_breeds: null
 
+    }
+
+    if(!CommonFunction.checkMandatoryData()) {
+        alert("Заполните все обязательные поля!");
+        return;
     }
 
     await NewPlotDescriptionBusiness.createPlotDescription(data);

@@ -94,65 +94,65 @@
                         </svg>
                     <p class="p">Перечетная ведомость</p>
                 </div>
-                <div class="back butmenu pdf" onclick="generatePDF()">
+                <div class="back butmenu pdf" onclick="generateDocx()">
                     <svg width="22" height="22"  fill="none" xmlns="http://www.w3.org/2000/svg" style="margin: 4px 4px 2px 15px;">
                         <path d="M7.5 19H5C3.89543 19 3 18.1046 3 17V3C3 1.89543 3.89543 1 5 1H15.6716C16.202 1 16.7107 1.21071 17.0858 1.58579L20.4142 4.91421C20.7893 5.28929 21 5.79799 21 6.32843V17C21 18.1046 20.1046 19 19 19H16.5M7.5 19H12H16.5M7.5 19V15C7.5 13.8954 8.39543 13 9.5 13H14.5C15.6046 13 16.5 13.8954 16.5 15V19" stroke="#177164" stroke-linejoin="round"/>
                         <line x1="0.5" y1="-0.5" x2="9.5" y2="-0.5" transform="matrix(-1 0 0 1 17 8)" stroke="#177164" stroke-linecap="round"/>
                         </svg>
-                    <p class="p">Сохранить в PDF</p>
+                    <p class="p">Скачать документ</p>
                 </div>
             </div>
             <div class="submenu">
                 <form action="" class="rerect r1">
-                    <p>Номер участка: <input type="text" name="" id="number_region" style="width: 90px"></p>
+                    <p>Номер участка: <input class="mandatory" type="text" name="" id="number_region" style="width: 90px"></p>
                 </form>
                 <form action="" class="text">
                     <p>Способ лесовосстановления: (искусственный, комбинированный, естественный
                         вследствие мер содействия лесовосстановлению, естественный вследствие природных процессов):</p>
-                    <select name="typeReproduction" id="typeReproduction" style="width: 100% !important;">
+                    <select class="mandatory" name="typeReproduction" id="typeReproduction" style="width: 100% !important;">
                     </select>
                 </form>
                 <form action="" class="rerect r1">
-                    <p style="display: flex;width: 520px;justify-content: space-between;align-items: center;">Год отнесения к землям, на которых расположены леса: <input type="text" name="" id="year_assignment_land" style="width: 90px"></p>
+                    <p style="display: flex;width: 520px;justify-content: space-between;align-items: center;">Год отнесения к землям, на которых расположены леса: <input class="mandatory" type="text" name="" id="year_assignment_land" style="width: 90px"></p>
                 </form>
                 <form action="" class="text">
                     <p>Местонахождения участка:</p>
                 </form>
                  <form action="" class="rerect n1">
-                    <p>Субъект РФ: <select name="sub" id="regionRF">
+                    <p>Субъект РФ: <select class="mandatory" name="sub" id="regionRF">
                     </select></p>
-                    <p>Лесничество: <select name="les" id="lesName">
+                    <p>Лесничество: <select class="mandatory" name="les" id="lesName">
                     </select></p>
-                    <p>Участковое лесничество: <select name="ucles" id="ucLesName">
+                    <p>Участковое лесничество: <select class="mandatory" name="ucles" id="ucLesName">
                     </select></p>
                 </form>
                 <form action="" class="rerect n1 n2">
-                    <p>Квартал: <select name="quarter" id="quarter" style="width: 115px;">
+                    <p>Квартал: <select class="mandatory" name="quarter" id="quarter" style="width: 115px;">
                     </select></p>
-                    <p>Выдел: <input type="text" name="soil_lot" id="soil_lot" style="width: 95px"></p>
-                    <p>Площадь участка: <input type="text" name="sample_region" id="sample_region" style="width: 100px"></p>
+                    <p>Выдел: <input class="mandatory" type="text" name="soil_lot" id="soil_lot" style="width: 95px"></p>
+                    <p>Площадь участка: <input class="mandatory" type="text" name="sample_region" id="sample_region" style="width: 100px"></p>
                 </form>
                 <form action="" class="text">
                     <p>Год образования категории фонда лесовосстановления (вырубки, гари)</p>
-                    <input type="text" id="year_format_fond_trees" value="">
+                    <input class="mandatory" type="text" id="year_format_fond_trees" value="">
                     <p>данные о проведенных мероприятиях по уходу за лесами на участке (вид и год проведения)</p>
-                    <input type="text" id="inf_restore_forest" value="">
+                    <input class="mandatory" type="text" id="inf_restore_forest" value="">
                 </form>
                 <form action="" class="rerect r2">
                     <p>Породный состав молодняка по Акту отнесения земель, предназначенных для лесовосстановления,
-                        к землям, на которых, расположены леса <input type="text" id="breed_structure_sapling_act_land"></p>
-                    <p>хозяйство по Акту отнесения земель <input type="text" id="economy_act_land"></p>
-                    <p>Породный состав молодняка по данным натурного обследования <input type="text" name="breed_composition_sapling_data_surver" id="breed_composition_sapling_data_surver"></p>
-                    <p>хозяйство по данным натурного обследования <input type="text" name="farm_according_data_survey" id="farm_according_data_survey"></p>
+                        к землям, на которых, расположены леса <input class="mandatory" type="text" id="breed_structure_sapling_act_land"></p>
+                    <p>хозяйство по Акту отнесения земель <input class="mandatory" type="text" id="economy_act_land"></p>
+                    <p>Породный состав молодняка по данным натурного обследования <input class="mandatory" type="text" name="breed_composition_sapling_data_surver" id="breed_composition_sapling_data_surver"></p>
+                    <p>хозяйство по данным натурного обследования <input class="mandatory" type="text" name="farm_according_data_survey" id="farm_according_data_survey"></p>
                 </form>
                 <form action="" class="text tx1">
                     <p>Изменение породного и качественного состава молодняка после отнесения участка к
                         землям, на которых расположены леса на момент натурного обследования лесного участка</p>
-                    <textarea name="" id="change_breed_and_structure_sapling" cols="30" rows="10"></textarea>
+                    <textarea class="mandatory" name="" id="change_breed_and_structure_sapling" cols="30" rows="10"></textarea>
                     <p>Вывод по результатам обследования</p>
-                    <textarea name="" id="results_surtvey" cols="30" rows="10"></textarea>
+                    <textarea class="mandatory" name="" id="results_surtvey" cols="30" rows="10"></textarea>
                     <p>Рекомендации</p>
-                    <textarea name="" id="recommendation" cols="30" rows="10"></textarea>
+                    <textarea class="mandatory" name="" id="recommendation" cols="30" rows="10"></textarea>
                 </form>
             </div>
         </div>

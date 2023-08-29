@@ -106,6 +106,22 @@ async function saveFieldCard() {
     var quarter = document.getElementById("quarter");
 
 
+    if(Number(document.getElementById("point7year").value) == NaN || Number(document.getElementById("point7year").value) <= 1901) {
+        alert("Введите корректное значение года. Год не должен быть меньше 1901!");
+        var item = document.getElementById("point7year");
+        if(!item.classList.contains("mandatory_warning")) {
+            item.classList.add("mandatory_warning");
+        }
+        return;
+    } else {
+        var item = document.getElementById("point7year");
+
+        if(item.classList.contains("mandatory_warning")) {
+            item.classList.remove("mandatory_warning");
+        }
+    }
+
+
     data = {
         id: idDocument,
         breed_composition: document.getElementById("breed_composition").value,
@@ -152,6 +168,10 @@ async function saveFieldCard() {
         time_of_reforestation: document.getElementById("time_of_reforestation").value
     };
 
+    if(!CommonFunction.checkMandatoryData()) {
+        alert("Заполните все обязательные поля!");
+        return;
+    }
 
     await PrintFieldCardBusiness.getUpdatePrintFieldCard(idDocument, data);
 
@@ -264,6 +284,11 @@ async function generateDocx() {
         in_front: document.getElementById("in_front").value
     }
 
-    await PrintFieldCardBusiness.generateDocx(data);
+    var urlFile = await PrintFieldCardBusiness.generateDocx(data);
+    urlFile = urlFile.document;
+
+    urlFile = urlGlobal + urlFile;
+
+    window.open(urlFile, '_blank').focus();
 
 }

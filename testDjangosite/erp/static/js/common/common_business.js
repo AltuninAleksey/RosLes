@@ -54,6 +54,10 @@ CommonBusiness.getDistrictForestlyByIdForestly = async function(id) {
 
 CommonBusiness.getQuarterByIdDistrictForestly = async function(id) {
 
+    if(id == "") {
+        return [];
+    }
+
     var requestData = await axios({
         method: 'get',
         url: urlGlobal + "/getquarterbydistrictid/" + id,

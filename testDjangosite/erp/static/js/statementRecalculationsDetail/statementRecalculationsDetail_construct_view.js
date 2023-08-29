@@ -138,7 +138,11 @@ async function setForestly() {
 
 async function setDistriotForestlyStatement() {
     let idForestly = document.querySelector("#forestlyStatement").value;
-    APP.distriotForestly = await CommonBusiness.getDistrictForestlyByIdForestly(idForestly);
+    APP.distriotForestly = [];
+
+    if(idForestly != "" && idForestly != null && idForestly != undefined) {
+        APP.distriotForestly = await CommonBusiness.getDistrictForestlyByIdForestly(idForestly);
+    }
 
     let newHtml = "";
 
@@ -159,7 +163,11 @@ async function setDistriotForestlyStatement() {
 
 async function setQuarterStatement() {
     let idDistrictForestly = document.querySelector("#distriotForestlyStatement").value;
-    APP.quarters = await CommonBusiness.getQuarterByIdDistrictForestly(idDistrictForestly);
+    APP.quarters = [];
+
+    if(idDistrictForestly != "" && idDistrictForestly != null && idDistrictForestly != undefined) {
+        APP.quarters = await CommonBusiness.getQuarterByIdDistrictForestly(idDistrictForestly);
+    }
 
     let newHtml = "";
 

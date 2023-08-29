@@ -108,26 +108,26 @@
                         <path d="M7.5 19H5C3.89543 19 3 18.1046 3 17V3C3 1.89543 3.89543 1 5 1H15.6716C16.202 1 16.7107 1.21071 17.0858 1.58579L20.4142 4.91421C20.7893 5.28929 21 5.79799 21 6.32843V17C21 18.1046 20.1046 19 19 19H16.5M7.5 19H12H16.5M7.5 19V15C7.5 13.8954 8.39543 13 9.5 13H14.5C15.6046 13 16.5 13.8954 16.5 15V19" stroke="#177164" stroke-linejoin="round"/>
                         <line x1="0.5" y1="-0.5" x2="9.5" y2="-0.5" transform="matrix(-1 0 0 1 17 8)" stroke="#177164" stroke-linecap="round"/>
                         </svg>
-                    <p class="p">Сохранить в Word</p>
+                    <p class="p">Скачать документ</p>
                 </div>
             </div>
             <div class="submenu">
                 <form action="" class="rerect r">
-                    <p>Номер участка: <input type="text" name="number_region" id="number_region" style="width: 90px"></p>
+                    <p>Номер участка: <input class="mandatory" type="text" name="number_region" id="number_region" style="width: 90px"></p>
                 </form>
                  <form action="" class="rerect n1">
-                    <p>Субъект РФ: <select name="regionRF" id="regionRF">
+                    <p>Субъект РФ: <select class="mandatory" name="regionRF" id="regionRF">
                     </select></p>
-                    <p>Лесничество: <select name="les" id="lesName">
+                    <p>Лесничество: <select class="mandatory" name="les" id="lesName">
                     </select></p>
-                    <p>Участковое лесничество: <select name="ucles" id="ucLesName">
+                    <p>Участковое лесничество: <select class="mandatory" name="ucles" id="ucLesName">
                     </select></p>
                 </form>
                 <form action="" class="rerect n1 n2">
-                    <p>Квартал: <select name="quarter" id="quarter" style="width: 115px;">
+                    <p>Квартал: <select class="mandatory" name="quarter" id="quarter" style="width: 115px;">
                     </select></p>
-                    <p>Выдел: <input type="text" name="soil_lot" id="soil_lot" style="width: 95px"></p>
-                    <p>Площадь участка: <input type="text" name="sample_region" id="sample_region" style="width: 100px"></p>
+                    <p>Выдел: <input class="mandatory" type="text" name="soil_lot" id="soil_lot" style="width: 95px"></p>
+                    <p>Площадь участка: <input class="mandatory" type="text" name="sample_region" id="sample_region" style="width: 100px"></p>
                 </form>
                 <h1 class="heading">Характеристики участка</h1>
                 <form action="" class="rerect r2 formcheck">
@@ -137,28 +137,28 @@
                         <p>особо защитные участки лесов </p>
                     </div>
                     <div>
-                        <select type="text" id="purpose_of_forests" name="purpose_of_forests"></select>
-                        <select type="text" id="forest_protection_category" name="forest_protection_category"></select>
-                        <input type="text" id="protected_areas_of_forests" name="protected_areas_of_forests">
+                        <select class="mandatory" type="text" id="purpose_of_forests" name="purpose_of_forests"></select>
+                        <select class="mandatory" type="text" id="forest_protection_category" name="forest_protection_category"></select>
+                        <input class="mandatory" type="text" id="protected_areas_of_forests" name="protected_areas_of_forests">
                     </div>
                 </form>
                 <form action="" class="rerect r1">
-                    <p>Участок находится в аренде (постоянном бессрочном пользовании) <select type="text" name="rent_area" id="rent_area" style="width: 90px"></select></p>
-                    <p>Категория земель лесного фонда, на которой восстановлено лесное насаждение <select type="text" name="category_of_forest_fund_lands" id="category_of_forest_fund_lands" style="width: 160px"></select></p>
-                    <p>Способ лесовосстановления <select type="text" name="method_of_reforestation" id="method_of_reforestation" style="width: 530px"></select></p>
-                    <p>Срок проведения лесовосстановления (лесоразведения), месяц, год <input type="text" name="time_of_reforestation" id="time_of_reforestation" style="width: 160px"></p>
+                    <p>Участок находится в аренде (постоянном бессрочном пользовании) <select class="mandatory" type="text" name="rent_area" id="rent_area" style="width: 90px"></select></p>
+                    <p>Категория земель лесного фонда, на которой восстановлено лесное насаждение <select class="mandatory" type="text" name="category_of_forest_fund_lands" id="category_of_forest_fund_lands" style="width: 160px"></select></p>
+                    <p>Способ лесовосстановления <select class="mandatory" type="text" name="method_of_reforestation" id="method_of_reforestation" style="width: 530px"></select></p>
+                    <p>Срок проведения лесовосстановления (лесоразведения), месяц, год <input class="mandatory" type="text" name="time_of_reforestation" id="time_of_reforestation" style="width: 160px"></p>
                 </form>
                 <form action="" class="rerect r3">
-                    <p>Тип лесорастительных условий <select type="text" name="type_forest_growing_conditions" id="type_forest_growing_conditions" style="width: 150px"></select></p>
-                    <p>Тип леса <input type="text" name="forest_type" id="forest_type" style="width: 100px"></p>
+                    <p>Тип лесорастительных условий <select class="mandatory" type="text" name="type_forest_growing_conditions" id="type_forest_growing_conditions" style="width: 150px"></select></p>
+                    <p>Тип леса <input class="mandatory" type="text" name="forest_type" id="forest_type" style="width: 100px"></p>
                 </form>
                 <form action="" class="text tx1">
-                    <p>В <input type="text" name="point7year" id="point7year" style="width: 150px"> году участок отнесен к землям, на которых расположены леса,
+                    <p>В <input class="mandatory" type="text" name="point7year" id="point7year" style="width: 150px"> году участок отнесен к землям, на которых расположены леса,
                         по Акту отнесения земель, предназначенных для лесовосстановления, к землям, на которых расположены леса от
-                        <input type="date" name="point7date" id="point7date" style="width: 200px"> № <input type="text" name="point7number" id="point7number" style="width: 150px"> утвержденному
-                        <input type="text" name="point7agreed" id="point7agreed" style="width: 98%"> породный состав <input type="text" name="point7_natural_composition" id="point7_natural_composition" style="width: 270px">,
-                        <select type="text" name="economy_sapling" id="economy" style="width: 270px"></select> хозяйство, полнота(сомкнутость крон)
-                        <input type="text" name="completeness" id="completeness" style="width: 200px">, запас <input type="text" name="stock" id="stock" style="width: 200px"> м3/га</p>
+                        <input class="mandatory" type="date" name="point7date" id="point7date" style="width: 200px"> № <input class="mandatory" type="text" name="point7number" id="point7number" style="width: 150px"> утвержденному
+                        <input class="mandatory" type="text" name="point7agreed" id="point7agreed" style="width: 98%"> породный состав <input class="mandatory" type="text" name="point7_natural_composition" id="point7_natural_composition" style="width: 270px">,
+                        <select class="mandatory" type="text" name="economy_sapling" id="economy" style="width: 270px"></select> хозяйство, полнота(сомкнутость крон)
+                        <input class="mandatory" type="text" name="completeness" id="completeness" style="width: 200px">, запас <input tclass="mandatory" ype="text" name="stock" id="stock" style="width: 200px"> м3/га</p>
                 </form>
             </div>
             <div class="add-red-button-outside">
@@ -181,8 +181,8 @@
             <h1 class="heading head1">Закладка пробных площадей</h1>
             <div class="submenu">
                 <form action="" class="rerect r2">
-                    <p>Площадь 1 пробной площади <input type="text" name="square_one_sample_area" id="square_one_sample_area" style="width: 90px"> кв.м</p>
-                    <p>Количество пробных площадей <input type="text" name="count_sample_area" id="count_sample_area" style="width: 90px"> шт</p>
+                    <p>Площадь 1 пробной площади <input class="mandatory" type="text" name="square_one_sample_area" id="square_one_sample_area" style="width: 90px"> кв.м</p>
+                    <p>Количество пробных площадей <input class="mandatory" type="text" name="count_sample_area" id="count_sample_area" style="width: 90px"> шт</p>
                 </form>
             </div>
             <div class="content">
@@ -199,8 +199,8 @@
             <h1 class="heading head">Характеристика молодняка: </h1>
             <div class="submenu">
                 <form action="" class="text tx1">
-                    <p>Породный состав <input type="text" name="breed_composition" id="breed_composition" style="width: 270px">, <select type="text" name="economy_sapling" id="economy_sapling" style="width: 270px"></select> хозяйство,
-                    полнота(сомкнутость крон) <input type="text" name="completeness2" id="completeness2" style="width: 170px"> , запас <input type="text" name="stock2" id="stock2" style="width: 170px"> м3/га</p>
+                    <p>Породный состав <input class="mandatory" type="text" name="breed_composition" id="breed_composition" style="width: 270px">, <select class="mandatory" type="text" name="economy_sapling" id="economy_sapling" style="width: 270px"></select> хозяйство,
+                    полнота(сомкнутость крон) <input class="mandatory" type="text" name="completeness2" id="completeness2" style="width: 170px"> , запас <input class="mandatory" type="text" name="stock2" id="stock2" style="width: 170px"> м3/га</p>
                 </form>
             </div>
             <div class="content">
@@ -222,7 +222,7 @@
                         к землям, на которых расположены леса, указанным в Правилах
                         лесовосстановления,
                         <p>утвержденных приказом Минприроды России от 25.03.2019 №188 (с изменениями) или лесохозяйственном регламенте лесничества:</p>
-                        <input type="text" name="conclusion" id="conclusion" style="width: 98%"></p>
+                        <input class="mandatory" type="text" name="conclusion" id="conclusion" style="width: 98%"></p>
 
                     <p>Участок хозяйству при отнесении к землям, на которых расположены леса, указанному в Акте отнесения земель,
                         предназначенных для лесовосстановления, к землям,
@@ -232,17 +232,17 @@
                     <p>В случае несоответствия участка критериям и требованиям к молоднякам, площади которых подлежат отнесению к землям, на которых
                         расположены леса, <p>указанным в Правилах лесовосстановления, утвержденных приказом Минприроды России от</p>  <p>25.03.2019 №188 (с изменениями)
                             или лесохозяйственном регламенте лесничества, указать категорию земель фонда, к которой относится участок</p>
-                        <input type="text" name="plot_farm_referring_land" id="plot_farm_referring_land" style="width: 98%"></p>
+                        <input class="mandatory" type="text" name="plot_farm_referring_land" id="plot_farm_referring_land" style="width: 98%"></p>
                     <p>Рекомендации</p>
-                        <input type="text" name="recomendation" id="recomendation" style="width: 98%">
+                        <input class="mandatory" type="text" name="recomendation" id="recomendation" style="width: 98%">
                     <p>Особенности участка</p>
-                        <input type="text" name="plot_features" id="plot_features" style="width: 98%">
+                        <input class="mandatory" type="text" name="plot_features" id="plot_features" style="width: 98%">
                     <p>Обследование провел
-                        <input type="text" name="site_survey" id="site_survey" style="width: 69%"></p>
+                        <input class="mandatory" type="text" name="site_survey" id="site_survey" style="width: 69%"></p>
                     <p>В присутствии
-                        <input type="text" name="in_front" id="in_front" style="width: 72%"></p>
+                        <input class="mandatory" type="text" name="in_front" id="in_front" style="width: 72%"></p>
                     <p>Дата и время натурного обследования
-                        <input type="datetime-local" name="date_and_time" id="date_and_time" style="width: 63%"></p>
+                        <input class="mandatory" type="datetime-local" name="date_and_time" id="date_and_time" style="width: 63%"></p>
                 </form>
             </div>
         </div>

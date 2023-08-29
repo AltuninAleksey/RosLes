@@ -346,7 +346,7 @@ td input{
    
 }
 .pdf{
-    width: 180px;
+    width: 200px;
 }
 #p30{
     margin-left: 30px;
@@ -375,4 +375,8 @@ td input{
 
 .add-red-button:hover {
     background-color: #40E0D0;
+}
+
+.mandatory_warning {
+    border: 3px solid red !important;
 }
