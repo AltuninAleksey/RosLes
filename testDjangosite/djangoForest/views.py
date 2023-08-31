@@ -1131,9 +1131,10 @@ class GetAllEqualListRegion(ListAPIView):
                 local_queryset.append(queryset)
         return Response({"query": local_queryset})
 
-
+# добавить soil_lot  в фильтры в описание участка и полевые карточки тоже
 class ListRegionFilters(ListAPIView):
     """
+
     Фильтры перечетной ведомости участка
 
     """
@@ -1159,6 +1160,9 @@ class ListRegionFilters(ListAPIView):
         if request.data['bDateSec']:
             requestDateSec = request.data['dateSec']
             ser2 = ser2.filter(date__lte = requestDateSec)
+        if request.data['bSoil_lot']:
+            requestSoil_lot = request.data['soil_lot']
+            ser2 = ser2.filter(soil_lot = requestSoil_lot)
         ser2 = ListRegionSerializerId(ser2, many=True)
         return Response({"data":ser2.data})
 
@@ -1252,6 +1256,9 @@ class DescriptionRegionFilter(ListAPIView):
         if request.data['bDateSec']:
             requestDateSec = request.data['dateSec']
             ser2 = ser2.filter(id_list_region__date__lte=requestDateSec)
+        if request.data['bSoil_lot']:
+            requestSoil_lot = request.data['soil_lot']
+            ser2 = ser2.filter(id_list_region__soil_lot = requestSoil_lot)
         ser2 = DescriptionRegionSerializer(ser2, many=True)
         return Response({"data": ser2.data})
 
@@ -1355,6 +1362,9 @@ class FieldCardFilter(ListAPIView):
         if request.data['bDateSec']:
             requestDateSec = request.data['dateSec']
             ser2 = ser2.filter(id_list_region__date__lte=requestDateSec)
+        if request.data['bSoil_lot']:
+            requestSoil_lot = request.data['soil_lot']
+            ser2 = ser2.filter(id_list_region__soil_lot = requestSoil_lot)
         ser2 = FieldCardSerializer(ser2, many=True)
         return Response({"data": ser2.data})
 
@@ -1465,12 +1475,10 @@ class FormingDocxViewDescRegion(ListAPIView):
 #     # file_patj = str()
 # #     # print(BASE_DIR / 'test.xlsx' )
 #     import pandas as pd
-#     excel = pd.ExcelFile(rf"{BASE_DIR / 'Субъекты РФ.xlsx'}")
+#     excel = pd.ExcelFile(rf"{BASE_DIR / 'Федеральные округа.xlsx'}")
 #     sheetX = excel.parse(0)
-#     column1 = sheetX['Наименование'][3]
-#     ser = WorkingBreedsSerializer
-#     for i in sheetX['Наименование']:
-#         SubjectRF.objects.create(name_subject_RF = i)
+#     for i in sheetX['Федеральные округа']:
+#         FederalDistricts.objects.create(name_federal = i)
 
 
 class ForestViewSet(viewsets.ModelViewSet):

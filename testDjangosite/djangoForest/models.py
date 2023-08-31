@@ -567,6 +567,9 @@ class FederalDistricts(models.Model):
         verbose_name = "Федеральные округа"
         verbose_name_plural = 'Федеральные округа'
 
+    def __str__(self):
+        return self.name_federal
+
 
 class MethodForestRestoration(models.Model):
     name_method = models.CharField(max_length=400)
