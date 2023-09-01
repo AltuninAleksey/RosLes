@@ -572,13 +572,15 @@ class FederalDistricts(models.Model):
 
 
 class MethodForestRestoration(models.Model):
-    name_method = models.CharField(max_length=400)
+    name_method = models.CharField(max_length=600)
 
 
     class Meta:
         verbose_name = "Метод лесовосстановления"
         verbose_name_plural = "Метод лесовосстановления"
 
+    def __str__(self):
+        return self.name_method
 
 class ForestCareActivities(models.Model):
     name_activities = models.CharField(max_length=100)
@@ -588,6 +590,9 @@ class ForestCareActivities(models.Model):
         verbose_name = "Мероприятия по уходу за лесами"
         verbose_name_plural = "Мероприятия по уходу за лесами"
 
+    def __str__(self):
+        return self.name_activities
+
 
 class Recommendation(models.Model):
     name_recommendation = models.CharField(max_length=100)
@@ -596,4 +601,16 @@ class Recommendation(models.Model):
         verbose_name = "Рекомендации по результатам натурных обследований"
         verbose_name_plural = "Рекомендации по результатам натурных обследований"
 
-        
+    def __str__(self):
+        return self.name_recommendation
+
+
+class ForestDistricts(models.Model):
+    name_forest_district = models.CharField(max_length=300)
+
+    class Meta:
+        verbose_name = "Лесные районы РФ"
+        verbose_name_plural = "Лесные районы РФ"
+
+    def __str__(self):
+        return self.name_forest_district

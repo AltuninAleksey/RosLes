@@ -237,6 +237,7 @@ class ListRegionView(generics.ListCreateAPIView):
                 serealizer.is_valid(raise_exception=True)
                 serealizer.save()
             elif request.data['data'][i]['mark_update'] == 2:
+                print(request.data['data'][i])
                 serializer = ListRegionSerializer(data=request.data['data'][i])
                 serializer.is_valid(raise_exception=True)
                 serializer.save()
@@ -305,7 +306,6 @@ class SampleView(generics.ListCreateAPIView):
 
     def put(self, request, *args, **kwargs):
         if kwargs:
-            print(123)
             try:
                 instance = Sample.objects.get(pk=kwargs['pk'])
                 serealizer = SampleSerializer(data=request.data, instance=instance)
@@ -1475,10 +1475,15 @@ class FormingDocxViewDescRegion(ListAPIView):
 #     # file_patj = str()
 # #     # print(BASE_DIR / 'test.xlsx' )
 #     import pandas as pd
-#     excel = pd.ExcelFile(rf"{BASE_DIR / 'Федеральные округа.xlsx'}")
+#     excel = pd.ExcelFile(rf"{BASE_DIR / 'Лесные районы РФ.xlsx'}")
 #     sheetX = excel.parse(0)
-#     for i in sheetX['Федеральные округа']:
-#         FederalDistricts.objects.create(name_federal = i)
+#
+#     print(sheetX)
+#     # # sheetX = excel.parse()
+#     for i in sheetX['Леса']:
+#         print(1)
+#         print(i)
+#         ForestDistricts.objects.create(name_forest_district = i)
 
 
 class ForestViewSet(viewsets.ModelViewSet):
