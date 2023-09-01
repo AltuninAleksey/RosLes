@@ -200,7 +200,7 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     @SuppressLint("Range")
     fun getLISTREGION():List<LISTREGION_DATA>{
         val database: SQLiteDatabase = this.writableDatabase
-        val cursor: Cursor = database.rawQuery("select * from djangoForest_listregion where mark_update = 1",null)
+        val cursor: Cursor = database.rawQuery("select * from djangoForest_listregion where mark_update >= 1",null)
         cursor.moveToFirst()
         val listregionrequest=mutableListOf<LISTREGION_DATA>()
         for (i in 1..cursor.getCount()) {
