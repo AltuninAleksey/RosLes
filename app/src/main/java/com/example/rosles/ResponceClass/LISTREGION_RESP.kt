@@ -8,7 +8,7 @@ data class LISTREGION_DATA(
     val id: Int,
     val date: String,
     val sample_region: Float?,
-    val soil_lot: String,
+    var soil_lot: String = "0",
     val mark_del: Int?,
     val mark_update: Int?,
     val id_quarter: Int,

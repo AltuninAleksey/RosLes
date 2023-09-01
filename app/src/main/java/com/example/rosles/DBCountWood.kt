@@ -208,13 +208,16 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
                 cursor.getString(cursor.getColumnIndex("id")).toInt(),
                 cursor.getString(cursor.getColumnIndex("date")).toString(),
                 cursor.getString(cursor.getColumnIndex("sample_region")).toFloatOrNull()?:0.0f,
-                cursor.getString(cursor.getColumnIndex("soil_lot")).toString()?:"0",
+                cursor.getString(cursor.getColumnIndex("soil_lot")).toString(),
                0,
                 cursor.getInt(cursor.getColumnIndex("mark_update")),
                 cursor.getInt(cursor.getColumnIndex("id_quarter_id")),
                 cursor.getInt(cursor.getColumnIndex("id_profile")),
                 cursor.getString(cursor.getColumnIndex("number_region"))
             )
+            if (data.soil_lot==""){
+                data.soil_lot="0"
+            }
             listregionrequest.add(data)
 
 //            val id=cursor.getString(cursor.getColumnIndex("id")).toInt()
