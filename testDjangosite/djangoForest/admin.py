@@ -8,6 +8,31 @@ class TodoAdmin(admin.ModelAdmin):
     list_display_links = ('id', 'name', 'age')
     search_fields = ('id', 'name', 'age')
 
+
+class ForestDistrictsAdmin(admin.ModelAdmin):
+    list_display = '__all__'
+    list_display_links = '__all__'
+    search_fields = '__all__'
+
+
+class RecommendationAdmin(admin.ModelAdmin):
+    list_display = '__all__'
+    list_display_links = '__all__'
+    search_fields = '__all__'
+
+
+class ForestCareActivitiesAdmin(admin.ModelAdmin):
+    list_display = '__all__'
+    list_display_links = '__all__'
+    search_fields = '__all__'
+
+
+class MethodForestRestorationAdmin(admin.ModelAdmin):
+    list_display = '__all__'
+    list_display_links = '__all__'
+    search_fields = '__all__'
+
+
 class FederalDistrictsAdmin(admin.ModelAdmin):
     list_display = '__all__'
     list_display_links = '__all__'
@@ -202,7 +227,10 @@ class TrackingAdmin(admin.ModelAdmin):
     list_display_links = ('id', 'id_profile', 'data', 'map')
     search_fields = ('id', 'id_profile', 'data', 'map')
 
-
+admin.site.register(MethodForestRestoration)
+admin.site.register(ForestCareActivities)
+admin.site.register(Recommendation)
+admin.site.register(ForestDistricts)
 admin.site.register(FederalDistricts)
 admin.site.register(PlotCoeff)
 admin.site.register(DescriptionRegion)
