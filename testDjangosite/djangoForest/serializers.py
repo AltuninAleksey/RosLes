@@ -745,6 +745,7 @@ class FieldCardSerializer(serializers.ModelSerializer):
         instance.id_economy_sapling = validated_data.get("id_economy_sapling")
         instance.point7_completeness = validated_data.get("point7_completeness")
         instance.point7_stock = validated_data.get("point7_stock")
+        instance.number = validated_data.get("number")
         instance.save()
         return instance
 
