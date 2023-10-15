@@ -277,12 +277,32 @@ class ForestFormingByDefault(models.Model):
         verbose_name = "Лесообразующие породы по умолчанию"
 
 
+class GenericNameBreed(models.Model):
+    name_generic = models.CharField(max_length = 150, verbose_name = 'Родовое название породы')
+
+    class Meta:
+        verbose_name = 'Родовое название породы'
+        verbose_name_plural = 'Родовые названия пород'
+
+
+class LifeForm(models.Model):
+    name_life = models.CharField(max_length=100, verbose_name="Наименование жизненной формы")
+
+    class Meta:
+        verbose_name = 'Жизненная форма'
+        verbose_name_plural = 'Жизненные формы'
+
+
 class Breed(models.Model):
     name_breed = models.CharField(max_length=350, verbose_name='Наименование породы')
     is_pine = models.BooleanField(null=True, default=0, verbose_name="Хвойное")
     is_foliar = models.BooleanField(null=True, default=0, verbose_name="Лиственное")
     ShortName = models.CharField(max_length=10, verbose_name='Сокр.', null = True)
-
+    latin_name = models.CharField(max_length=100, verbose_name='Латинское наименование', null=True)
+    life_form = models.ForeignKey('LifeForm', on_delete=models.CASCADE, verbose_name='Жизненна форма', null=True)
+    generic_name = models.ForeignKey('GenericNameBreed', on_delete=models.CASCADE,
+                                     verbose_name='Родовое название породы',
+                                     null=True)
     def __str__(self):
         return self.name_breed
 
@@ -536,6 +556,7 @@ class FieldCard(models.Model):
     in_front = models.CharField(max_length=300, verbose_name="В присуствии", null=True)
     date_and_time = models.DateTimeField(verbose_name="Дата и время обследования", null=True)
     number_order = models.IntegerField(u"Номер приказа")
+    lands_other = models.CharField(max_length=200, null=True)
 
 
     class Meta:
