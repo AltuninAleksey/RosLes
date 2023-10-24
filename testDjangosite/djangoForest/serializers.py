@@ -63,13 +63,11 @@ class UserSerializer(serializers.ModelSerializer):
             "password": {"error_messages": {'blank': "Поле password не может быть пустым"}}
         }
     def create(self, validated_data):
-        return Users.objects.create(email = validated_data['email'],
-                                    password = make_password(validated_data['password'], "pbkdf2_sha256")
-                                    )
+        return Users.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
         instance.email = validated_data.get("email")
-        instance.password = make_password(validated_data.get("password"), "pbkdf2_sha256")
+        instance.password = validated_data.get("password"), "pbkdf2_sha256"
         instance.save()
 
 

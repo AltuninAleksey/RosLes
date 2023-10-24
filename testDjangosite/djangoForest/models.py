@@ -1,5 +1,8 @@
 from django.db import models
 import datetime
+from .manager import AccountManager
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.contrib.auth.hashers import make_password
 
 
 YEAR_CHOICES = [(r,r) for r in range(1900, datetime.date.today().year+1)]
@@ -30,12 +33,33 @@ class UndergrowthByDefault(models.Model):
         verbose_name = 'Подлесок по умолчанию'
         verbose_name_plural = 'Подлесок по умолчанию'
 
-class Users(models.Model):
-    email = models.EmailField(unique=True)
-    password = models.CharField(max_length=300)
 
-    def __str__(self):
-        return self.id
+class Users(AbstractBaseUser, PermissionsMixin):
+    email = models.EmailField(unique=True)
+    password = models.CharField(max_length=128)
+    is_active = models.BooleanField(default=True)
+    is_staff = None
+    is_admin = None
+    is_superuser = None
+    last_login = None
+
+    USERNAME_FIELD = 'email'
+    objects = AccountManager()
+
+    # При сохранении хэшируем пароль
+    def save(self, *args, **kwargs):
+        self.password = make_password(self.password)
+        super(Users, self).save(*args, **kwargs)
+
+    def has_perm(self, perm, obj=None):
+        return True
+
+    def has_module_perms(self, app_label):
+        return True
+
+    def __unicode__(self):
+        return self.login
+
 
     class Meta:
         verbose_name = 'Пользователи'
@@ -297,12 +321,15 @@ class Breed(models.Model):
     name_breed = models.CharField(max_length=350, verbose_name='Наименование породы')
     is_pine = models.BooleanField(null=True, default=0, verbose_name="Хвойное")
     is_foliar = models.BooleanField(null=True, default=0, verbose_name="Лиственное")
-    ShortName = models.CharField(max_length=10, verbose_name='Сокр.', null = True)
-    latin_name = models.CharField(max_length=100, verbose_name='Латинское наименование', null=True)
+    short_name = models.CharField(max_length=50, verbose_name='Сокр.', null = True)
+    latin_name = models.CharField(max_length=300, verbose_name='Латинское наименование', null=True)
     life_form = models.ForeignKey('LifeForm', on_delete=models.CASCADE, verbose_name='Жизненна форма', null=True)
     generic_name = models.ForeignKey('GenericNameBreed', on_delete=models.CASCADE,
                                      verbose_name='Родовое название породы',
                                      null=True)
+    economy = models.ForeignKey('Economy', on_delete=models.CASCADE,
+                                verbose_name='Хозяйство', null=True)
+    evergreen = models.IntegerField(verbose_name= 'Вечнозеленость', null=True)
     def __str__(self):
         return self.name_breed
 

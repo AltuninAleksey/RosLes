@@ -20,6 +20,8 @@ from django.views.static import serve
 from django.conf.urls.static import static
 from django.conf import settings
 from django.contrib.auth.views import LogoutView
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+
 
 from testDjangosite import settings
 
@@ -28,6 +30,8 @@ urlpatterns = [
     re_path(r'^static/(?P<path>.*)$', serve,{'document_root': settings.STATIC_ROOT}),
     # path('exel', testviews.as_view()),
     path('logout', LogoutView.as_view()),
+    path('v2/login', TokenObtainPairView.as_view()),
+    path('v2/refresh', TokenRefreshView.as_view()),
     path('getsamplefromlistregion', GetSampleFromListRegionId.as_view()),
     path('responsesqlite', SendResponseSQLite.as_view()),
     path('createlistregionbydescreg', CreateListRegionByDescRegion.as_view()),
