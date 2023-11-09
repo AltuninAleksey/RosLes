@@ -17,7 +17,7 @@ class AccountManager(BaseUserManager):
     # Переопределим создание superuser`a. Т.к. если мы будем создавать его через create_user
     # то получится что мы хэшируем пароль superuser`a два раза, т.к. по дефолту он хэшируется автоматически.
     def create_superuser(self, email, password=None, **extra_fields):
-        return Users.objects.create(email=email, password=password, is_superuser=True)
+        return Users.objects.create(email=email, password=password, is_superuser=True, is_staff = True)
 
 
 YEAR_CHOICES = [(r,r) for r in range(1900, datetime.date.today().year+1)]
@@ -54,7 +54,8 @@ class Users(AbstractBaseUser, PermissionsMixin):
     password = models.CharField(max_length=128)
     is_active = models.BooleanField(default=True)
     subject_rf = models.ForeignKey("SubjectRF", on_delete=models.CASCADE, null = True)
-    is_staff = None
+    is_staff = models.BooleanField(default=False)
+    # is_staff = None
     is_admin = None
     last_login = None
 
