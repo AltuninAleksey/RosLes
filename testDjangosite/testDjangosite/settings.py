@@ -29,7 +29,7 @@ print(BASE_DIR)
 SECRET_KEY = 'django-insecure-e3jq*c1(yxlmcs*&89)m_+tc*x)dykr^=mcbmq=(qznwackn#f'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 SECURE_CROSS_ORIGIN_OPENER_POLICY=None
 SESSION_COOKIE_SECURE=False

@@ -8,7 +8,7 @@ from django.contrib.auth.hashers import make_password
 YEAR_CHOICES = [(r,r) for r in range(1900, datetime.date.today().year+1)]
 
 
-
+# Урочище ссылается на квартал.
 
 class Table(models.Model):
     name = models.CharField(max_length=300)
@@ -33,11 +33,12 @@ class UndergrowthByDefault(models.Model):
         verbose_name = 'Подлесок по умолчанию'
         verbose_name_plural = 'Подлесок по умолчанию'
 
-
+# в регистрацию добавить субъект
 class Users(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=128)
     is_active = models.BooleanField(default=True)
+    subject_rf = models.ForeignKey("SubjectRF", on_delete=models.CASCADE, null = True)
     is_staff = None
     is_admin = None
     is_superuser = None

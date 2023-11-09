@@ -60,14 +60,16 @@ class UserSerializer(serializers.ModelSerializer):
         fields = '__all__'
         extra_kwargs = {
             "email": {"error_messages": {'blank': "Поле email не может быть пустым"}},
-            "password": {"error_messages": {'blank': "Поле password не может быть пустым"}}
+            "password": {"error_messages": {'blank': "Поле password не может быть пустым"}},
+            "subject_rf_id": {"error_messages": {'bkank': "Поле subject_rf не может быть пустым"}},
         }
+
     def create(self, validated_data):
         return Users.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
         instance.email = validated_data.get("email")
-        instance.password = validated_data.get("password"), "pbkdf2_sha256"
+        instance.password = validated_data.get("password")
         instance.save()
 
 
