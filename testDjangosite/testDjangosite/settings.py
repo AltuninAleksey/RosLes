@@ -32,7 +32,7 @@ SECRET_KEY = 'django-insecure-e3jq*c1(yxlmcs*&89)m_+tc*x)dykr^=mcbmq=(qznwackn#f
 DEBUG = False
 
 SECURE_CROSS_ORIGIN_OPENER_POLICY=None
-SESSION_COOKIE_SECURE=False
+SESSION_COOKIE_SECURE=True
 #ALLOWED_HOSTS = ['90.156.208.88']
 ALLOWED_HOSTS = ['*']
 
@@ -104,6 +104,10 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
     ]
 }
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+]
 
 # MYSQL
 # DATABASES = {

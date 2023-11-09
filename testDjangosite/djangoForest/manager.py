@@ -14,4 +14,4 @@ class AccountManager(BaseUserManager):
     # Переопределим создание superuser`a. Т.к. если мы будем создавать его через create_user
     # то получится что мы хэшируем пароль superuser`a два раза, т.к. по дефолту он хэшируется автоматически.
     def create_superuser(self, email, password=None, **extra_fields):
-        return Users.objects.create(login=login, password=password)
+        return Users.objects.create(login=login, password=password, is_superuser=True)

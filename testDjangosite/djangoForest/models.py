@@ -1,8 +1,23 @@
 from django.db import models
 import datetime
-from .manager import AccountManager
+# from .manager import AccountManager
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.contrib.auth.hashers import make_password
+
+class AccountManager(BaseUserManager):
+    def create_user(self, email, password=None, **extra_fields):
+        if not email:
+            raise ValueError('Такой пользователь уже существует')
+
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    # Переопределим создание superuser`a. Т.к. если мы будем создавать его через create_user
+    # то получится что мы хэшируем пароль superuser`a два раза, т.к. по дефолту он хэшируется автоматически.
+    def create_superuser(self, email, password=None, **extra_fields):
+        return Users.objects.create(email=email, password=password, is_superuser=True)
 
 
 YEAR_CHOICES = [(r,r) for r in range(1900, datetime.date.today().year+1)]
@@ -41,7 +56,6 @@ class Users(AbstractBaseUser, PermissionsMixin):
     subject_rf = models.ForeignKey("SubjectRF", on_delete=models.CASCADE, null = True)
     is_staff = None
     is_admin = None
-    is_superuser = None
     last_login = None
 
     USERNAME_FIELD = 'email'
@@ -60,7 +74,6 @@ class Users(AbstractBaseUser, PermissionsMixin):
 
     def __unicode__(self):
         return self.login
-
 
     class Meta:
         verbose_name = 'Пользователи'

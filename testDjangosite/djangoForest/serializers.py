@@ -69,7 +69,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         instance.email = validated_data.get("email")
-        instance.password = validated_data.get("password")
+        instance.password = validated_data.get("password"), "pbkdf2_sha256"
         instance.save()
 
 
