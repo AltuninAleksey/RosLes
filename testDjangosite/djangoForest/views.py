@@ -1301,6 +1301,7 @@ class GetFieldCard(ListAPIView):
                              "error_text": desc_serializer.errors[next(iter(desc_serializer.errors))][0]},
                             status=status.HTTP_400_BAD_REQUEST)
         if not fieldcard_serializer.is_valid():
+            print(fieldcard_serializer.errors)
             return Response({"error_fieldcard": status.HTTP_400_BAD_REQUEST,
                              "error_text": fieldcard_serializer.errors[next(iter(fieldcard_serializer.errors))][0]},
                             status=status.HTTP_400_BAD_REQUEST)
