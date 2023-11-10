@@ -597,7 +597,7 @@ class FieldCard(models.Model):
     site_survey = models.CharField(max_length=300, verbose_name="Обследование провел", null=True)
     in_front = models.CharField(max_length=300, verbose_name="В присуствии", null=True)
     date_and_time = models.DateTimeField(verbose_name="Дата и время обследования", null=True)
-    number_order = models.IntegerField(u"Номер приказа")
+    number_order = models.IntegerField(u"Номер приказа", null=True)
     lands_other = models.CharField(max_length=200, null=True)
 
 
