@@ -433,3 +433,5 @@ def getPrintFieldCard(request):
 
 def getNewFieldCard(request):
     return render(request, 'erp/html/newFieldCard.html')
+def getAvtorization(request):
+    return render(request, 'erp/html/avtorization.html')

@@ -362,6 +362,24 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     width: 100%;
 }
 
+.recalculation_input {
+    cursor: pointer;
+    width: 100%;
+    padding-top: 5px;
+    border: none;
+    padding-bottom: 5px;
+    height: 25px;
+}
+
+.recalculation_select {
+    margin: 0;
+    height: auto;
+    cursor: pointer;
+    padding-top: 5px;
+    border: none;
+    padding-bottom: 5px;
+}
+
 .conpodles1_td_1 {
     width: 13%;
 }

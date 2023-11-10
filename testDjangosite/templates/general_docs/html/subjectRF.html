@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Субьеткы РФ</title>
     <link rel="stylesheet" href="{% static 'css/styleSubjectRF.css' %}">
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="{% static 'js/subjectRF.js' %}" defer></script>
     {% endblock %}
         {% block body %}
             {% block container %}
@@ -14,13 +16,17 @@
                     <div class="content">
                             <h1 id="h1">Субъекты РФ</h1>
                             {% block table %}
-                                <table>
-                                    <th>Наименование субъекта РФ</th>
+                                <table >
+                                    <thead>
+                                        <th>Наименование субъекта РФ</th>
+                                    </thead>
+                                    <tbody id="myTable">
                                     {% for item in queryset %}
                                     <tr>
                                         <td>{{item.name_subject_RF}}</td>
-                                         {% endfor %}
+                                        {% endfor %}
                                     </tr>
+                                    </tbody>
                                 </table>
                              {% endblock table %}
                     </div>

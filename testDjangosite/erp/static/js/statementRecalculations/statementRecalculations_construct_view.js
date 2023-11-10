@@ -1,4 +1,8 @@
 
+// data.sort(function(a, b) { return a.date > b.date? 1 : -1; });
+// data.sort(function(a, b) { return a.date > b.date? -1 : 1; });
+
+
 buildStatementRecalculationsTbody();
 
 async function buildStatementRecalculationsTbody() {
@@ -9,6 +13,9 @@ async function buildStatementRecalculationsTbody() {
     APP.forestly = allForestData.forestly;
     APP.district_forestly = allForestData.district_forestly;
     APP.quarter = allForestData.quarter;
+
+    APP.dataTable = data;
+    APP.sortOrderTable1 = 0;
 
     updateDataInStatementRecalculationsTbody(data);
 
@@ -39,6 +46,23 @@ function updateDataInStatementRecalculationsTbody(data) {
                         </tr> \n`;
     }
     tableBody.innerHTML = newHtml;
+}
+
+function sortByDate() {
+    if(APP.sortOrderTable1 != 1) {
+        APP.dataTable.sort(function(a, b) { return a.date > b.date? -1 : 1; });
+        APP.sortOrderTable1 = 1;
+
+        document.querySelector("#sortDateForTable1").innerHTML = "&#8593;";
+    } else {
+        APP.dataTable.sort(function(a, b) { return a.date > b.date? 1 : -1; });
+        APP.sortOrderTable1 = -1;
+
+        document.querySelector("#sortDateForTable1").innerHTML = "&#8595;";
+    }
+
+    updateDataInStatementRecalculationsTbody(APP.dataTable);
+
 }
 
 async function setEventForElementsFilter() {
@@ -137,6 +161,20 @@ async function setEventForElementsFilter() {
             } else {
                 document
                     .querySelector("#filter_date_end")
+                    .setAttribute("readonly", "on");
+            }
+        });
+
+    document
+        .querySelector("#checkbox_filter_soil_lot")
+        .addEventListener('click', (e)=>{
+            if(e.target.checked) {
+                document
+                    .querySelector("#filter_soil_lot")
+                    .removeAttribute("readonly");
+            } else {
+                document
+                    .querySelector("#filter_soil_lot")
                     .setAttribute("readonly", "on");
             }
         });
@@ -261,12 +299,15 @@ async function searchByFilter() {
     let dateStartNode = document.querySelector("#filter_date_start");
     let checkboxFilterDateEnd = document.querySelector("#checkbox_filter_date_end");
     let dateEndNode = document.querySelector("#filter_date_end");
+    let checkboxFilterSoilLot = document.querySelector("#checkbox_filter_soil_lot");
+    let soilLot = document.querySelector("#filter_soil_lot");
 
     let data;
 
     if(checkboxFilterSubjectRFNode.checked || checkboxFilterForestlyNode.checked
     || checkboxFilterDistrictForestlyNode.checked || checkboxFilterQuartalNode.checked
-    || checkboxFilterDateStartNode.checked || checkboxFilterDateEnd.checked) {
+    || checkboxFilterDateStartNode.checked || checkboxFilterDateEnd.checked
+    || checkboxFilterSoilLot.checked) {
 
         let responseData = {
             bSubjectrf: checkboxFilterSubjectRFNode.checked,
@@ -280,7 +321,9 @@ async function searchByFilter() {
             bDate: checkboxFilterDateStartNode.checked,
             date: dateStartNode.value,
             bDateSec: checkboxFilterDateEnd.checked,
-            dateSec: dateEndNode.value
+            dateSec: dateEndNode.value,
+            bSoil_lot: checkboxFilterSoilLot.checked,
+            soil_lot: soilLot.value
         };
 
 

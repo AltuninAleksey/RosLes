@@ -9,6 +9,9 @@ async function buildFieldCardTbody() {
     APP.district_forestly = allForestData.district_forestly;
     APP.quarter = allForestData.quarter;
 
+    APP.dataTable = data;
+    APP.sortOrderTable1 = 0;
+
     updateDataInFieldCardTbody(data);
 
     setEventForElementsFilter();
@@ -28,7 +31,7 @@ function updateDataInFieldCardTbody(data) {
         let strGetFieldCardDetail = "getPrintFieldCard(" + data[i].id + ",0)";
 
         newHtml = newHtml + `<tr class="cursorPointer" onClick=${strGetFieldCardDetail}>
-                            <td class="textAlignCenter td1">${data[i].date_and_time}</td>
+                            <td class="textAlignCenter td1">${data[i].date}</td>
                             <td class="textAlignCenter td8">${data[i].id}</td>
                             <td class="td2">${data[i].subjectrf}</td>
                             <td class="td3">${data[i].forestly}</td>
@@ -39,6 +42,23 @@ function updateDataInFieldCardTbody(data) {
                         </tr> \n`;
     }
     tableBody.innerHTML = newHtml;
+}
+
+function sortByDate() {
+    if(APP.sortOrderTable1 != 1) {
+        APP.dataTable.sort(function(a, b) { return a.date > b.date? -1 : 1; });
+        APP.sortOrderTable1 = 1;
+
+        document.querySelector("#sortDateForTable1").innerHTML = "&#8593;";
+    } else {
+        APP.dataTable.sort(function(a, b) { return a.date > b.date? 1 : -1; });
+        APP.sortOrderTable1 = -1;
+
+        document.querySelector("#sortDateForTable1").innerHTML = "&#8595;";
+    }
+
+    updateDataInFieldCardTbody(APP.dataTable);
+
 }
 
 async function setEventForElementsFilter() {
@@ -137,6 +157,20 @@ async function setEventForElementsFilter() {
             } else {
                 document
                     .querySelector("#filter_date_end")
+                    .setAttribute("readonly", "on");
+            }
+        });
+
+    document
+        .querySelector("#checkbox_filter_soil_lot")
+        .addEventListener('click', (e)=>{
+            if(e.target.checked) {
+                document
+                    .querySelector("#filter_soil_lot")
+                    .removeAttribute("readonly");
+            } else {
+                document
+                    .querySelector("#filter_soil_lot")
                     .setAttribute("readonly", "on");
             }
         });
@@ -261,12 +295,15 @@ async function searchByFilter() {
     let dateStartNode = document.querySelector("#filter_date_start");
     let checkboxFilterDateEnd = document.querySelector("#checkbox_filter_date_end");
     let dateEndNode = document.querySelector("#filter_date_end");
+    let checkboxFilterSoilLot = document.querySelector("#checkbox_filter_soil_lot");
+    let soilLot = document.querySelector("#filter_soil_lot");
 
     let data;
 
     if(checkboxFilterSubjectRFNode.checked || checkboxFilterForestlyNode.checked
     || checkboxFilterDistrictForestlyNode.checked || checkboxFilterQuartalNode.checked
-    || checkboxFilterDateStartNode.checked || checkboxFilterDateEnd.checked) {
+    || checkboxFilterDateStartNode.checked || checkboxFilterDateEnd.checked
+    || checkboxFilterSoilLot.checked) {
 
         let responseData = {
             bSubjectrf: checkboxFilterSubjectRFNode.checked,
@@ -280,7 +317,9 @@ async function searchByFilter() {
             bDate: checkboxFilterDateStartNode.checked,
             date: dateStartNode.value,
             bDateSec: checkboxFilterDateEnd.checked,
-            dateSec: dateEndNode.value
+            dateSec: dateEndNode.value,
+            bSoil_lot: checkboxFilterSoilLot.checked,
+            soil_lot: soilLot.value
         };
 
 

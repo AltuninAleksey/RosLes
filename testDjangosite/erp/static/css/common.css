@@ -5,3 +5,7 @@
 .cursorPointer {
     cursor: pointer;
 }
+
+.positionRelative {
+    position: relative;
+}

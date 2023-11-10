@@ -47,31 +47,48 @@ function setDataInTableOne(switchButton) {
             if(Number(APP.dataTable_1[i].id_type_of_reproduction) == switchButton) {
 
                 var name_breed = CommonFunction.getBreedsName(APP.breeds, APP.dataTable_1[i].id_breed);
-                var main;
 
+                var htmlMain = "<select class=\"recalculation_select\" style=\"width: 60%;\" onChange=\"updateRecalculating(" + i + ", " + "'main'" + ", this.value);\">";
                 if(APP.dataTable_1[i].main == 0) {
-                    main = "Нет";
+                    htmlMain += "<option selected value=\"0\">Нет</option>";
+                    htmlMain += "<option value=\"1\">Да</option>";
                 } else {
-                    main = "Да";
+                    htmlMain += "<option selected value=\"1\">Да</option>";
+                    htmlMain += "<option value=\"0\">Нет</option>";
                 }
+                htmlMain += "</select>";
+
+                APP.dataTable_1[i].to0_2 = APP.dataTable_1[i].to0_2 == null? 0: APP.dataTable_1[i].to0_2;
+                APP.dataTable_1[i].from0_6To1_0 = APP.dataTable_1[i].from0_6To1_0 == null? 0: APP.dataTable_1[i].from0_6To1_0;
+                APP.dataTable_1[i].from0_21To0_5 = APP.dataTable_1[i].from0_21To0_5 == null? 0: APP.dataTable_1[i].from0_21To0_5;
+                APP.dataTable_1[i].from1_1to1_5 = APP.dataTable_1[i].from1_1to1_5 == null? 0: APP.dataTable_1[i].from1_1to1_5;
+                APP.dataTable_1[i].from1_5 = APP.dataTable_1[i].from1_5 == null? 0: APP.dataTable_1[i].from1_5;
+                APP.dataTable_1[i].max_height = APP.dataTable_1[i].max_height == null? 0: APP.dataTable_1[i].max_height;
+                APP.dataTable_1[i].avg_height = APP.dataTable_1[i].avg_height == null? 0: APP.dataTable_1[i].avg_height;
+                APP.dataTable_1[i].avg_diameter = APP.dataTable_1[i].avg_diameter == null? 0: APP.dataTable_1[i].avg_diameter;
+                APP.dataTable_1[i].count_of_plants = APP.dataTable_1[i].count_of_plants == null? 0: APP.dataTable_1[i].count_of_plants;
 
                 newHtml = newHtml + "<tr>" +
                                         "<td class=\"conpodles1_td_1\">" + name_breed + "</td> " +
-                                        "<td class=\"conpodles1_td_2\">" + main + "</td> " +
-                                        "<td class=\"conpodles1_td_3\">" + APP.dataTable_1[i].to0_2 + "</td> " +
-                                        "<td class=\"conpodles1_td_3\">" + APP.dataTable_1[i].from0_21To0_5 + "</td> " +
-                                        "<td class=\"conpodles1_td_3\">" + APP.dataTable_1[i].from0_6To1_0 + "</td> " +
-                                        "<td class=\"conpodles1_td_3\">" + APP.dataTable_1[i].from1_1to1_5 + "</td> " +
-                                        "<td class=\"conpodles1_td_3\">" + APP.dataTable_1[i].from1_5 + "</td> " +
-                                        "<td class=\"conpodles1_td_4\">" + APP.dataTable_1[i].max_height + "</td> " +
-                                        "<td class=\"conpodles1_td_4\">" + APP.dataTable_1[i].avg_height  + "</td> " +
-                                        "<td class=\"conpodles1_td_5\">" + APP.dataTable_1[i].avg_diameter  + "</td> " +
-                                        "<td class=\"conpodles1_td_5\">" + APP.dataTable_1[i].count_of_plants  + "</td>" +
+                                        "<td class=\"conpodles1_td_2\">" + htmlMain + "</td> " +
+                                        "<td class=\"conpodles1_td_3\"><input class=\"recalculation_input\" onChange=\"updateRecalculating(" + i + ", " + "'to0_2'" + ", this.value);\" type=\"text\" value=\"" + APP.dataTable_1[i].to0_2 + "\"></td> " +
+                                        "<td class=\"conpodles1_td_3\"><input class=\"recalculation_input\" onChange=\"updateRecalculating(" + i + ", " + "'from0_21To0_5'" + ", this.value);\" type=\"text\" value=\"" + APP.dataTable_1[i].from0_21To0_5 + "\"></td> " +
+                                        "<td class=\"conpodles1_td_3\"><input class=\"recalculation_input\" onChange=\"updateRecalculating(" + i + ", " + "'from0_6To1_0'" + ", this.value);\" type=\"text\" value=\"" + APP.dataTable_1[i].from0_6To1_0 + "\"></td> " +
+                                        "<td class=\"conpodles1_td_3\"><input class=\"recalculation_input\" onChange=\"updateRecalculating(" + i + ", " + "'from1_1to1_5'" + ", this.value);\" type=\"text\" value=\"" + APP.dataTable_1[i].from1_1to1_5 + "\"></td> " +
+                                        "<td class=\"conpodles1_td_3\"><input class=\"recalculation_input\" onChange=\"updateRecalculating(" + i + ", " + "'from1_5'" + ", this.value);\" type=\"text\" value=\"" + APP.dataTable_1[i].from1_5 + "\"></td> " +
+                                        "<td class=\"conpodles1_td_4\"><input class=\"recalculation_input\" onChange=\"updateRecalculating(" + i + ", " + "'max_height'" + ", this.value);\" type=\"text\" value=\"" + APP.dataTable_1[i].max_height + "\"></td> " +
+                                        "<td class=\"conpodles1_td_4\"><input class=\"recalculation_input\" onChange=\"updateRecalculating(" + i + ", " + "'avg_height'" + ", this.value);\" type=\"text\" value=\"" + APP.dataTable_1[i].avg_height + "\"></td> " +
+                                        "<td class=\"conpodles1_td_5\"><input class=\"recalculation_input\" onChange=\"updateRecalculating(" + i + ", " + "'avg_diameter'" + ", this.value);\" type=\"text\" value=\"" + APP.dataTable_1[i].avg_diameter + "\"></td> " +
+                                        "<td class=\"conpodles1_td_5\"><input class=\"recalculation_input\" onChange=\"updateRecalculating(" + i + ", " + "'count_of_plants'" + ", this.value);\" type=\"text\" value=\"" + APP.dataTable_1[i].count_of_plants  + "\"></td>" +
                                     "</tr>";
             }
     }
 
     table_1.innerHTML = newHtml;
+}
+
+function updateRecalculating(index, element, val) {
+    APP.dataTable_1[index][element] = Number(val);
 }
 
 function addProba() {

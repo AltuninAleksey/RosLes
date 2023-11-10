@@ -1,0 +1,30 @@
+{% extends 'general_docs/html/general_base.html' %}
+{% load static %}
+    {% block title %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Федеральные округа</title>
+    <link rel="stylesheet" href="{% static 'css/styleSubjectRF.css' %}">
+    {% endblock %}
+    {% block body %}
+    {% block container %}
+        <div class="container">
+                {% block content %}
+                <div class="content">
+                    <h1 id="h1">Федеральные округа</h1>
+                    {% block table %}
+                        <table>
+                            <th>Наименование</th>
+                            {% for item in queryset %}
+                            <tr>
+                                <td>{{ item.name_federal }}</td>
+                            {% endfor %}
+                            </tr>
+                        </table>
+                        {% endblock table %}
+                </div>
+                {% endblock content %}
+        </div>
+    {% endblock %}
+    {% endblock %}

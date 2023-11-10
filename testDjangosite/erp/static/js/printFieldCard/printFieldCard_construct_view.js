@@ -44,6 +44,61 @@ function setEventListenerForObjects() {
         addNewLineInPoint7();
     });
 
+    let plot_farm = document.getElementById('plot_farm_referring_land').disabled = true;
+    var conclusion = document.getElementById('conclusion');
+
+    conclusion.onchange = function() {
+       var accord = document.getElementById("conclusion").value;
+       if (accord == "Соответствует") {
+        document.getElementById('plot_farm_referring_land').disabled = true;
+       } else {
+        document.getElementById('plot_farm_referring_land').disabled = false;
+       }
+    }
+
+    var completeness = document.getElementById('completeness');
+    completeness.onchange = function() {
+        if(Number(completeness.value) > 1) {
+            completeness.value = 1;
+        }
+
+        if(Number(completeness.value) < 0) {
+            completeness.value = 0;
+        }
+    }
+
+    var completeness2 = document.getElementById('completeness2');
+    completeness2.onchange = function() {
+        if(Number(completeness2.value) > 1) {
+            completeness2.value = 1;
+        }
+
+        if(Number(completeness2.value) < 0) {
+            completeness2.value = 0;
+        }
+    }
+
+    var number_order = document.getElementById('number_order');
+    number_order.onchange = function() {
+        var number_order_2 = document.getElementById('number_order_2');
+
+        number_order_2.innerHTML = number_order.options[number_order.selectedIndex].text
+    }
+
+    let category_of_forest_fund_lands_other = document.getElementById('category_of_forest_fund_lands_other').style.display = 'none';
+    var category_of_forest_fund_lands = document.getElementById('category_of_forest_fund_lands');
+
+    category_of_forest_fund_lands.onchange = function() {
+       var accord = document.getElementById("category_of_forest_fund_lands").value;
+       if (accord === "6") {
+        document.getElementById('category_of_forest_fund_lands_other').style.display = 'block';
+        document.getElementById('r1').style.height='240px';
+       } else {
+        document.getElementById('category_of_forest_fund_lands_other').style.display = 'none';
+        document.getElementById('r1').style.height='200px';
+       }
+     }
+
 }
 
 async function openPage() {
@@ -51,7 +106,7 @@ async function openPage() {
 
     var allForestData = await CommonBusiness.getAllForest();
 
-    APP.subjectrf = allForestData.subjectrf;
+    APP.subjectrf = allForestData.subjectrf.sort(function(a, b) { return a.name_subject_RF > b.name_subject_RF? 1 : -1; });
     APP.forestly = allForestData.forestly;
     APP.district_forestly = allForestData.district_forestly;
     APP.quarter = allForestData.quarter;
@@ -85,12 +140,17 @@ async function setConclusion() {
     document.getElementById("point7date2").value = APP.documentData.point7date;
     document.getElementById("point7number2").value = APP.documentData.point7number;
     document.getElementById("point7agreed2").value = APP.documentData.point7agreed;
+    document.getElementById("number_order").value = APP.documentData.number_order;
     document.getElementById("plot_farm_referring_land").value = APP.documentData.plot_farm_referring_land;
     document.getElementById("recomendation").value = APP.documentData.recomendation;
     document.getElementById("plot_features").value = APP.documentData.plot_features;
     document.getElementById("site_survey").value = APP.documentData.site_survey;
     document.getElementById("in_front").value = APP.documentData.in_front;
     document.getElementById("date_and_time").value = APP.documentData.date_and_time.substring(0, APP.documentData.date_and_time.length-4);;
+
+    var number_order = document.getElementById('number_order');
+    var number_order_2 = document.getElementById('number_order_2');
+    number_order_2.innerHTML = number_order.options[number_order.selectedIndex].text;
 
 }
 
@@ -165,7 +225,9 @@ async function saveFieldCard() {
         soil_lot: document.getElementById("soil_lot").value,
         square_one_sample_area: document.getElementById("square_one_sample_area").value,
         stock: document.getElementById("stock2").value,
-        time_of_reforestation: document.getElementById("time_of_reforestation").value
+        time_of_reforestation: document.getElementById("time_of_reforestation").value,
+        number_order: document.getElementById("number_order").value,
+        lands_other: (document.getElementById("lands_other").value == "") ? null : document.getElementById("lands_other").value
     };
 
     if(!CommonFunction.checkMandatoryData()) {
@@ -281,7 +343,9 @@ async function generateDocx() {
         recomendation: document.getElementById("recomendation").value,
         plot_features: document.getElementById("plot_features").value,
         site_survey: document.getElementById("site_survey").value,
-        in_front: document.getElementById("in_front").value
+        in_front: document.getElementById("in_front").value,
+        lands_other:  (document.getElementById("category_of_forest_fund_lands").value == 6) ? document.getElementById("lands_other").value : null,
+        number_order: document.getElementById("number_order").options[number_order.selectedIndex].text
     }
 
     var urlFile = await PrintFieldCardBusiness.generateDocx(data);

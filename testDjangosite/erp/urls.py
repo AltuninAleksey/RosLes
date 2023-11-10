@@ -50,7 +50,8 @@ urlpatterns = [
     path('documents/plotDescription', views.getPlotDescription),
     path('documents/printFieldCard', views.getPrintFieldCard),
     path('documents/newPlotDescription', views.getNewPlotDescription),
-    path('documents/newFieldCard', views.getNewFieldCard)
+    path('documents/newFieldCard', views.getNewFieldCard),
+    path('documents/avtorization', views.getAvtorization)
 
 ]
 

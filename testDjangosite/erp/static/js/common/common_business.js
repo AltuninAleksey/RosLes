@@ -26,7 +26,7 @@ CommonBusiness.getAllSubjectrf = async function() {
         responseType: 'json'
     });
 
-    return requestData.data.get;
+    return requestData.data.get.sort(function(a, b) { return a.name_subject_RF > b.name_subject_RF? 1 : -1; });
 }
 
 CommonBusiness.getForestlyByIdSubjectrf = async function(id) {

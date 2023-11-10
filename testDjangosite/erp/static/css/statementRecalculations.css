@@ -84,7 +84,7 @@ h3{
     height: 50px;
     color: #177164;
 }
-.form select{
+.form select, .form input{
     border: 2px solid #177164;
     color: #177164;
     border-radius: 3px;
@@ -229,4 +229,21 @@ td {
     width: 216px;
     color: #000000;
     margin-right: 0px;
+}
+
+.sortDateArrow {
+    display: flex;
+    position: absolute;
+    top: -1px;
+    right: 15px;
+    font-size: 24px;
+    margin: 0;
+    height: 100%;
+    align-items: center;
+}
+
+.block_quartal_and_soil_lot {
+    display: flex;
+    justify-content: space-between;
+    padding-right: 20px;
 }

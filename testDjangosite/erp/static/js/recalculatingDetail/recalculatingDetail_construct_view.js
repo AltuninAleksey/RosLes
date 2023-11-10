@@ -50,7 +50,7 @@ async function openPage() {
 
     var allForestData = await CommonBusiness.getAllForest();
 
-    APP.subjectrf = allForestData.subjectrf;
+    APP.subjectrf = allForestData.subjectrf.sort(function(a, b) { return a.name_subject_RF > b.name_subject_RF? 1 : -1; });
     APP.forestly = allForestData.forestly;
     APP.district_forestly = allForestData.district_forestly;
     APP.quarter = allForestData.quarter;

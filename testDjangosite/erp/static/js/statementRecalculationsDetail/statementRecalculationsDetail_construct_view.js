@@ -15,6 +15,8 @@ async function openPage() {
     APP.subjects = await CommonBusiness.getAllSubjectrf();
     APP.sampleList = await StatementRecalculationsBusinessDetail.getSampleByIdListRegion(idDocument);
 
+    APP.sortOrderTable1 = 0;
+
     await setDetailDataIdPage();
 
     setEvent();
@@ -96,6 +98,25 @@ async function setSampleList() {
 
     sampleListTbodyNode.innerHTML = newHtml;
 }
+
+
+function sortByDate() {
+    if(APP.sortOrderTable1 != 1) {
+        APP.sampleList.sort(function(a, b) { return a.date > b.date? -1 : 1; });
+        APP.sortOrderTable1 = 1;
+
+        document.querySelector("#sortDateForTable1").innerHTML = "&#8593;";
+    } else {
+        APP.sampleList.sort(function(a, b) { return a.date > b.date? 1 : -1; });
+        APP.sortOrderTable1 = -1;
+
+        document.querySelector("#sortDateForTable1").innerHTML = "&#8595;";
+    }
+
+    setSampleList();
+
+}
+
 
 async function setSubjectsRF() {
     let subjectStatementNode = document.querySelector("#subjectStatement");

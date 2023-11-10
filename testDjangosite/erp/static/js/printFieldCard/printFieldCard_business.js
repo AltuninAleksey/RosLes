@@ -157,6 +157,28 @@ PrintFieldCardBusiness.generateDocx = async function(data) {
 }
 
 
+PrintFieldCardBusiness.getStatementRecalculationsDetailDataById = async function(id) {
+    var requestData = await axios({
+      method: 'get',
+      url: urlGlobal + "/listregion/" + id,
+      responseType: 'json'
+    });
+
+    return requestData.data;
+}
+
+PrintFieldCardBusiness.getSampleByIdListRegion = async function(id) {
+    var requestData = await axios({
+        method: 'post',
+        url: urlGlobal + "/getsamplefromlistregion",
+        data: {id: id},
+        responseType: 'json'
+    });
+
+    return requestData.data.data;
+}
+
+
 
 
 function generatePDF() {

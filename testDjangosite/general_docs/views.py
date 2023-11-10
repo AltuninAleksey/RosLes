@@ -378,3 +378,54 @@ class SampleView(FormView):
     def get_queryset(self):
         queryset = Sample.objects.all()
         return queryset
+
+class djangoForest_federaldistrictsView(ListView):
+    template_name = 'general_docs/html/djangoForest_federaldistricts.html'
+    queryset = FederalDistricts.objects.all()
+
+    def get_queryset(self):
+        return FederalDistricts.objects.all()
+
+    def get(self, request):
+        return render(request, self.template_name, {'menu': menu, 'queryset': self.get_queryset()})
+
+
+class djangoForest_forestcareactivitiesView(ListView):
+    template_name = 'general_docs/html/djangoForest_forestcareactivities.html'
+    queryset = ForestCareActivities.objects.all()
+
+    def get_queryset(self):
+        return ForestCareActivities.objects.all()
+
+    def get(self, request):
+        return render(request, self.template_name, {'menu': menu, 'queryset': self.get_queryset()})
+
+class djangoForest_methodforestrestorationView(ListView):
+    template_name = 'general_docs/html/djangoForest_methodforestrestoration.html'
+    queryset = MethodForestRestoration.objects.all()
+
+    def get_queryset(self):
+        return MethodForestRestoration.objects.all()
+
+    def get(self, request):
+        return render(request, self.template_name, {'menu': menu, 'queryset': self.get_queryset()})
+
+class djangoForest_recommendationView(ListView):
+    template_name = 'general_docs/html/djangoForest_recommendation.html'
+    queryset = Recommendation.objects.all()
+
+    def get_queryset(self):
+        return Recommendation.objects.all()
+
+    def get(self, request):
+        return render(request, self.template_name, {'menu': menu, 'queryset': self.get_queryset()})
+
+class djangoForest_ForestDistrictsView(ListView):
+    template_name = 'general_docs/html/djangoForest_ForestDistricts.html'
+    queryset = ForestDistricts.objects.all()
+
+    def get_queryset(self):
+        return ForestDistricts.objects.all()
+
+    def get(self, request):
+        return render(request, self.template_name, {'menu': menu, 'queryset': self.get_queryset()})

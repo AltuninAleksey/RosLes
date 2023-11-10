@@ -142,9 +142,10 @@
                         <input class="mandatory" type="text" id="protected_areas_of_forests" name="protected_areas_of_forests">
                     </div>
                 </form>
-                <form action="" class="rerect r1">
+                <form id="r1" action="" class="rerect r1">
                     <p>Участок находится в аренде (постоянном бессрочном пользовании) <select class="mandatory" type="text" name="rent_area" id="rent_area" style="width: 90px"></select></p>
                     <p>Категория земель лесного фонда, на которой восстановлено лесное насаждение <select class="mandatory" type="text" name="category_of_forest_fund_lands" id="category_of_forest_fund_lands" style="width: 160px"></select></p>
+                    <p id="category_of_forest_fund_lands_other"  style="margin-bottom: -5px; display: block"><input id="lands_other" type="text" style="width: 760px"></p>
                     <p>Способ лесовосстановления <select class="mandatory" type="text" name="method_of_reforestation" id="method_of_reforestation" style="width: 530px"></select></p>
                     <p>Срок проведения лесовосстановления (лесоразведения), месяц, год <input class="mandatory" type="text" name="time_of_reforestation" id="time_of_reforestation" style="width: 160px"></p>
                 </form>
@@ -221,8 +222,18 @@
                     <p>Участок критериям и требованиям к молоднякам, площади которых подлежат отнесению
                         к землям, на которых расположены леса, указанным в Правилах
                         лесовосстановления,
-                        <p>утвержденных приказом Минприроды России от 25.03.2019 №188 (с изменениями) или лесохозяйственном регламенте лесничества:</p>
-                        <input class="mandatory" type="text" name="conclusion" id="conclusion" style="width: 98%"></p>
+                        <p>утвержденных приказом Минприроды России от
+                        <select class="mandatory"  name="pricaz" id="number_order" style="width: 140px">
+                            <option value="188" selected="selected">25.03.2019 №188</option>
+                            <option value="1014">04.12.2020 №1014</option>
+                            <option value="1024">29.12.2021 №1024</option>
+                        </select>
+                        (с изменениями) или лесохозяйственном регламенте лесничества:</p>
+                        <select class="mandatory" id="conclusion" name="conclusion" style="width: 140px">
+                            <option value="Соответствует" selected="selected">Соответствует</option>
+                            <option value="Не соответствует">Не соответствует</option>
+                        </select>
+                    </p>
 
                     <p>Участок хозяйству при отнесении к землям, на которых расположены леса, указанному в Акте отнесения земель,
                         предназначенных для лесовосстановления, к землям,
@@ -230,9 +241,9 @@
                         <input readonly type="text" name="point7agreed2" id="point7agreed2" style="width: 98%"></p>
 
                     <p>В случае несоответствия участка критериям и требованиям к молоднякам, площади которых подлежат отнесению к землям, на которых
-                        расположены леса, <p>указанным в Правилах лесовосстановления, утвержденных приказом Минприроды России от</p>  <p>25.03.2019 №188 (с изменениями)
-                            или лесохозяйственном регламенте лесничества, указать категорию земель фонда, к которой относится участок</p>
-                        <input class="mandatory" type="text" name="plot_farm_referring_land" id="plot_farm_referring_land" style="width: 98%"></p>
+                        расположены леса, <p style="margin: -3px 0 1px" >указанным в Правилах лесовосстановления, утвержденных приказом Минприроды России от
+                        <span id="number_order_2">25.03.2019 №188</span> (с изменениями) </p> <p> или лесохозяйственном регламенте лесничества, указать категорию земель фонда, к которой относится участок</p>
+                        <input type="text" name="plot_farm_referring_land" id="plot_farm_referring_land" style="width: 98%"></p>
                     <p>Рекомендации</p>
                         <input class="mandatory" type="text" name="recomendation" id="recomendation" style="width: 98%">
                     <p>Особенности участка</p>

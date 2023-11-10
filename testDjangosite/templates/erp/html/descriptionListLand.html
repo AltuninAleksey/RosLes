@@ -104,12 +104,18 @@
             </label>
         </p>
 
-        <p>Квартал: <input type="checkbox" id="checkbox_filter_quartal" name="scales">
-            <label for="filter_quartal">
-                <select disabled name="sub" id="filter_quartal">
-                </select>
-            </label>
-        </p>
+        <div class="block_quartal_and_soil_lot">
+            <p>Квартал: <input type="checkbox" id="checkbox_filter_quartal" name="scales">
+                <label for="filter_quartal">
+                    <select disabled name="sub" id="filter_quartal">
+                        <option hidden disabled selected value=""></option>
+                    </select>
+                </label>
+            </p>
+
+            <p>Выдел: <input type="checkbox" id="checkbox_filter_soil_lot" name="scales">
+             <label for="filter_soil_lot"><input readonly type="text" id="filter_soil_lot" name=""></label> </p>
+        </div>
 
         <p>Окончание периода: <input type="checkbox" id="checkbox_filter_date_end" name="scales">
              <label for="filter_date_end"><input readonly type="date" id="filter_date_end" name=""></label> </p>
@@ -118,7 +124,7 @@
         <div class="content_table">
             <table>
                 <thead>
-                    <th class="textAlignCenter td1">Дата</th>
+                    <th class="textAlignCenter td1 positionRelative" onclick="sortByDate()">Дата <p id="sortDateForTable1" class="sortDateArrow">&#8595;</p></th>
                     <th class="td8">Номер</th>
                     <th class="td2">Субьект РФ</th>
                     <th class="td3">Лесничество</th>

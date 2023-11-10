@@ -26,6 +26,17 @@ function addGps() {
     var latitudeAdd = document.getElementById("latitude-add");
     var longitudeAdd = document.getElementById("longitude-add");
 
+    var strLatitudeAdd = latitudeAdd.value.toString();
+    var strLongitudeAdd = longitudeAdd.value.toString();
+
+    if(isNaN(Number(latitudeAdd.value)) || isNaN(Number(latitudeAdd.value))
+        || strLatitudeAdd[strLatitudeAdd.length - 6] != '.' || strLongitudeAdd[strLongitudeAdd.length - 6] != '.') {
+
+        alert("Неправильный формат координат. Необходимый формат: dd.xxxxx");
+
+        return;
+    }
+
     var newGps = {
         id_sample : APP.documentData.id,
         latitude : latitudeAdd.value,

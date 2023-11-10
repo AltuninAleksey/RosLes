@@ -58,6 +58,17 @@ async function setDataInCharacteristic() {
     }
     category_of_forest_fund_lands.innerHTML = newHtml;
 
+    document.getElementById("lands_other").value = APP.documentData.lands_other;
+
+    if (category_of_forest_fund_lands.value === "6") {
+        document.getElementById('category_of_forest_fund_lands_other').style.display = 'block';
+        document.getElementById('r1').style.height='240px';
+    } else {
+        document.getElementById('category_of_forest_fund_lands_other').style.display = 'none';
+        document.getElementById('r1').style.height='200px';
+    }
+
+
 
     APP.allMethodOfReforestation = await PrintFieldCardBusiness.getAllMethodOfReforestation();
     let method_of_reforestation = document.getElementById("method_of_reforestation");
@@ -82,9 +93,9 @@ async function setDataInCharacteristic() {
 
     for(var i = 0; i < APP.allTypeForestGrowingConditions.length; i++) {
         if(APP.allTypeForestGrowingConditions[i].id == APP.documentData.id_type_forest_growing_conditions) {
-            newHtml = newHtml + "<option selected value=\"" + APP.allTypeForestGrowingConditions[i].id + "\">" + APP.allTypeForestGrowingConditions[i].subtypes_of_humidity + "</option>";
+            newHtml = newHtml + "<option selected value=\"" + APP.allTypeForestGrowingConditions[i].id + "\">" + APP.allTypeForestGrowingConditions[i].type_forest_growing_conditions + "</option>";
         } else {
-            newHtml = newHtml + "<option value=\"" + APP.allTypeForestGrowingConditions[i].id + "\">" + APP.allTypeForestGrowingConditions[i].subtypes_of_humidity + "</option>";
+            newHtml = newHtml + "<option value=\"" + APP.allTypeForestGrowingConditions[i].id + "\">" + APP.allTypeForestGrowingConditions[i].type_forest_growing_conditions + "</option>";
         }
     }
     type_forest_growing_conditions.innerHTML = newHtml;

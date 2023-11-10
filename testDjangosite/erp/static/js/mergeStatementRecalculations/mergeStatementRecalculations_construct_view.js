@@ -11,9 +11,29 @@ async function buildStatementRecalculationsTbody() {
     APP.district_forestly = allForestData.district_forestly;
     APP.quarter = allForestData.quarter;
 
+    APP.dataTable = data;
+    APP.sortOrderTable1 = 0;
+
     updateDataInStatementRecalculationsTbody(data);
 
     setEventForElementsFilter();
+}
+
+function sortByDate() {
+    if(APP.sortOrderTable1 != 1) {
+        APP.dataTable.sort(function(a, b) { return a.date > b.date? -1 : 1; });
+        APP.sortOrderTable1 = 1;
+
+        document.querySelector("#sortDateForTable1").innerHTML = "&#8593;";
+    } else {
+        APP.dataTable.sort(function(a, b) { return a.date > b.date? 1 : -1; });
+        APP.sortOrderTable1 = -1;
+
+        document.querySelector("#sortDateForTable1").innerHTML = "&#8595;";
+    }
+
+    updateDataInStatementRecalculationsTbody(APP.dataTable);
+
 }
 
 function updateDataInStatementRecalculationsTbody(data) {
@@ -175,6 +195,21 @@ async function setEventForElementsFilter() {
             }
         });
 
+
+    document
+        .querySelector("#checkbox_filter_soil_lot")
+        .addEventListener('click', (e)=>{
+            if(e.target.checked) {
+                document
+                    .querySelector("#filter_soil_lot")
+                    .removeAttribute("readonly");
+            } else {
+                document
+                    .querySelector("#filter_soil_lot")
+                    .setAttribute("readonly", "on");
+            }
+        });
+
     document
         .querySelector("#but_filtr")
         .addEventListener('click', async (e)=>{
@@ -203,14 +238,11 @@ async function setOptionInSubject() {
 
 async function setOptionInForestly(status) {
     let forestlyNode = document.querySelector("#filter_forestly");
-    let districtForestly = [];
+    let forestly;
 
     if(status == MergeStatementRecalculationsBusiness.TypeData.BYID) {
-        let forestlyNode = document.querySelector("#filter_forestly");
-
-        if(forestlyNode.value != "" && forestlyNode.value != null && forestlyNode.value != undefined) {
-            districtForestly = await CommonBusiness.getDistrictForestlyByIdForestly(forestlyNode.value);
-        }
+        let subjectNode = document.querySelector("#filter_subject_rf");
+        forestly = await CommonBusiness.getForestlyByIdSubjectrf(subjectNode.value);
     } else {
         forestly = APP.forestly;
     }
@@ -231,11 +263,15 @@ async function setOptionInForestly(status) {
 
 async function setOptionInDistrictForestly(status) {
     let districtForestlyNode = document.querySelector("#filter_district_forestly");
-    let districtForestly;
+    let districtForestly = [];
 
     if(status == MergeStatementRecalculationsBusiness.TypeData.BYID) {
         let forestlyNode = document.querySelector("#filter_forestly");
-        districtForestly = await CommonBusiness.getDistrictForestlyByIdForestly(forestlyNode.value);
+
+        if(forestlyNode.value != "" && forestlyNode.value != null && forestlyNode.value != undefined) {
+            districtForestly = await CommonBusiness.getDistrictForestlyByIdForestly(forestlyNode.value);
+        }
+
     } else {
         districtForestly = APP.district_forestly;
     }
@@ -295,12 +331,15 @@ async function searchByFilter() {
     let dateStartNode = document.querySelector("#filter_date_start");
     let checkboxFilterDateEnd = document.querySelector("#checkbox_filter_date_end");
     let dateEndNode = document.querySelector("#filter_date_end");
+    let checkboxFilterSoilLot = document.querySelector("#checkbox_filter_soil_lot");
+    let soilLot = document.querySelector("#filter_soil_lot");
 
     let data;
 
     if(checkboxFilterSubjectRFNode.checked || checkboxFilterForestlyNode.checked
     || checkboxFilterDistrictForestlyNode.checked || checkboxFilterQuartalNode.checked
-    || checkboxFilterDateStartNode.checked || checkboxFilterDateEnd.checked) {
+    || checkboxFilterDateStartNode.checked || checkboxFilterDateEnd.checked
+    || checkboxFilterSoilLot.checked) {
 
         let responseData = {
             bSubjectrf: checkboxFilterSubjectRFNode.checked,
@@ -314,7 +353,9 @@ async function searchByFilter() {
             bDate: checkboxFilterDateStartNode.checked,
             date: dateStartNode.value,
             bDateSec: checkboxFilterDateEnd.checked,
-            dateSec: dateEndNode.value
+            dateSec: dateEndNode.value,
+            bSoil_lot: checkboxFilterSoilLot.checked,
+            soil_lot: soilLot.value
         };
 
 

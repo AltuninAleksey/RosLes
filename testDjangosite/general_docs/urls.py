@@ -33,5 +33,11 @@ urlpatterns = [
     path('AccordanceNoneAccordanceEconomy', AccordanceNoneAccordanceEconomyView.as_view()),
     path('CategoryGroundLFInNoneAccordance', CategoryGroundLFInNoneAccordanceView.as_view()),
     path('ForestAreas', ForestAreasView.as_view()),
+    path('djangoForest_federaldistricts', djangoForest_federaldistrictsView.as_view()),
+    path('djangoForest_forestcareactivities', djangoForest_forestcareactivitiesView.as_view()),
+    path('djangoForest_methodforestrestoration', djangoForest_methodforestrestorationView.as_view()),
+    path('djangoForest_recommendation', djangoForest_recommendationView.as_view()),
+    path('djangoForest_ForestDistricts', djangoForest_ForestDistrictsView.as_view()),
+
 ]
 

@@ -65,7 +65,7 @@ async function setDataInCharacteristic() {
     newHtml = "";
 
     for(var i = 0; i < APP.allTypeForestGrowingConditions.length; i++) {
-            newHtml = newHtml + "<option value=\"" + APP.allTypeForestGrowingConditions[i].id + "\">" + APP.allTypeForestGrowingConditions[i].subtypes_of_humidity + "</option>";
+            newHtml = newHtml + "<option value=\"" + APP.allTypeForestGrowingConditions[i].id + "\">" + APP.allTypeForestGrowingConditions[i].type_forest_growing_conditions + "</option>";
     }
     type_forest_growing_conditions.innerHTML = newHtml;
 
