@@ -54,6 +54,7 @@ class Users(AbstractBaseUser, PermissionsMixin):
     password = models.CharField(max_length=128)
     is_active = models.BooleanField(default=True)
     subject_rf = models.ForeignKey("SubjectRF", on_delete=models.CASCADE, null = True)
+    is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     # is_staff = None
     is_admin = None
