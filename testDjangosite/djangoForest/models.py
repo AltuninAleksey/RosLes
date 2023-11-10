@@ -591,14 +591,15 @@ class FieldCard(models.Model):
                                                  on_delete=models.CASCADE,
                                                  verbose_name="Таблица 2 молодняк", null=True)
     conclusion = models.CharField(max_length=500, verbose_name="Заключение", null=True)
-    plot_farm_referring_land = models.CharField(max_length=500, verbose_name="Участок хозяйству при отнесении к землям", null=True)
+    plot_farm_referring_land = models.CharField(max_length=500, verbose_name="Участок хозяйству при отнесении к землям",
+                                                null=True, blank=True)
     recomendation = models.CharField(max_length=300, verbose_name="Рекомендации", null=True)
     plot_features = models.CharField(max_length=500, verbose_name="Особенности участка", null=True)
     site_survey = models.CharField(max_length=300, verbose_name="Обследование провел", null=True)
     in_front = models.CharField(max_length=300, verbose_name="В присуствии", null=True)
     date_and_time = models.DateTimeField(verbose_name="Дата и время обследования", null=True)
     number_order = models.IntegerField(u"Номер приказа", null=True)
-    lands_other = models.CharField(max_length=200, null=True)
+    lands_other = models.CharField(max_length=200, null=True, blank=True)
 
 
     class Meta:
