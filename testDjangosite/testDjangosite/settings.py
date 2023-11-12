@@ -31,16 +31,19 @@ SECRET_KEY = 'django-insecure-e3jq*c1(yxlmcs*&89)m_+tc*x)dykr^=mcbmq=(qznwackn#f
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-SECURE_CROSS_ORIGIN_OPENER_POLICY=None
-SESSION_COOKIE_SECURE=True
+# SECURE_CROSS_ORIGIN_OPENER_POLICY=False
+# SESSION_COOKIE_SECURE=False
+# CORS_ORIGIN_ALLOW_ALL = True
 #ALLOWED_HOSTS = ['90.156.208.88']
 ALLOWED_HOSTS = ['*']
+# CORS_ORIGIN_ALLOW_ALL = True
 
 
 # Application definition
 
 INSTALLED_APPS = [
     'rest_framework',
+    'rest_framework_simplejwt',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -100,9 +103,9 @@ WSGI_APPLICATION = 'testDjangosite.wsgi.application'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-        'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-    ]
+        'rest_framework.authentication.BasicAuthentication',
+    ],
 }
 
 AUTHENTICATION_BACKENDS = [
@@ -213,7 +216,7 @@ MEDIA_URL = '/media/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(days=5),
+    "ACCESS_TOKEN_LIFETIME": timedelta(hours=12),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=10),
     "ROTATE_REFRESH_TOKENS": False,
     "BLACKLIST_AFTER_ROTATION": False,
@@ -241,7 +244,7 @@ SIMPLE_JWT = {
     "JTI_CLAIM": "jti",
 
     "SLIDING_TOKEN_REFRESH_EXP_CLAIM": "refresh_exp",
-    "SLIDING_TOKEN_LIFETIME": timedelta(days=5),
+    "SLIDING_TOKEN_LIFETIME": timedelta(hours=12),
     "SLIDING_TOKEN_REFRESH_LIFETIME": timedelta(days=10),
 
     "TOKEN_OBTAIN_SERIALIZER": "rest_framework_simplejwt.serializers.TokenObtainPairSerializer",
