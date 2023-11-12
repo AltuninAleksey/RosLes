@@ -12,6 +12,7 @@ from rest_framework.response import Response
 from rest_framework import viewsets, permissions
 from rest_framework.authtoken.models import Token
 from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.hashers import make_password, check_password
 
 from testDjangosite.settings import BASE_DIR
@@ -28,6 +29,12 @@ class TestAPIView(generics.ListAPIView):
         lst = Profile.objects.all()
         return Response({'': ProfileSerializer(lst, many=True).data})
 
+
+class VerifyTokenView(APIView):
+    permission_classes = [IsAuthenticated, ]
+
+    def get(self, request, **kwargs):
+        return Response({"code": status.HTTP_200_OK}, status = status.HTTP_200_OK)
 
 class ProfileView(generics.ListCreateAPIView):
     def get(self, request, **kwargs):

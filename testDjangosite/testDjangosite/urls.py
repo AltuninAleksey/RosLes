@@ -20,7 +20,7 @@ from django.views.static import serve
 from django.conf.urls.static import static
 from django.conf import settings
 from django.contrib.auth.views import LogoutView
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
 
 
 from testDjangosite import settings
@@ -32,6 +32,8 @@ urlpatterns = [
     path('logout', LogoutView.as_view()),
     path('v2/login', TokenObtainPairView.as_view()),
     path('v2/refresh', TokenRefreshView.as_view()),
+    path('v2/verify', TokenVerifyView.as_view(), name='token_verify'),
+    path('v2/verify_token', VerifyTokenView.as_view()),
     path('getsamplefromlistregion', GetSampleFromListRegionId.as_view()),
     path('responsesqlite', SendResponseSQLite.as_view()),
     path('createlistregionbydescreg', CreateListRegionByDescRegion.as_view()),
