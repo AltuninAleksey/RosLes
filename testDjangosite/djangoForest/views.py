@@ -88,6 +88,7 @@ class ListView(generics.ListCreateAPIView):
         return Response({'post': serializer.data})
 
     def put(self, request, *args, **kwargs):
+        ids_dict = {}
         if kwargs:
             try:
                 instance = List.objects.get(pk=kwargs['pk'])
@@ -100,10 +101,12 @@ class ListView(generics.ListCreateAPIView):
 
         for i in range(len(request.data['data'])):
             if request.data['data'][i]['mark_update'] == 1:
-                instance = List.objects.get(id=request.data['data'][i]["id"])
-                serealizer = ListSerializer(data=request.data["data"][i], instance=instance)
-                serealizer.is_valid(raise_exception=True)
-                serealizer.save()
+                if List.objects.filter(id=request.data['data'][i]["id"]).exists():
+                    instance = List.objects.get(id=request.data['data'][i]["id"])
+                    serealizer = ListSerializer(data=request.data["data"][i], instance=instance)
+                    serealizer.is_valid(raise_exception=True)
+                    serealizer.save()
+                    ids_dict.update({request.data['data'][i]['id']: serealizer.data['id']})
             elif request.data['data'][i]['mark_update'] == 2:
                 serializer = ListSerializer(data=request.data['data'][i])
                 serializer.is_valid(raise_exception=True)
@@ -111,7 +114,9 @@ class ListView(generics.ListCreateAPIView):
                 lst = List.objects.get(id=serializer.data['id'])
                 lst.mark_update = 0
                 lst.save()
-        return Response({"put": status.HTTP_200_OK})
+                ids_dict.update({request.data['data'][i]['id']: serializer.data['id']})
+        # return Response({"put": status.HTTP_200_OK, "ids": ids_dict}, status=status.HTTP_200_OK)
+        return Response({"put": status.HTTP_200_OK}, status=status.HTTP_200_OK)
 
     def delete(self, *args, **kwargs):
         try:
@@ -227,6 +232,7 @@ class ListRegionView(generics.ListCreateAPIView):
         return Response({'code': status.HTTP_201_CREATED})
 
     def put(self, request, *args, **kwargs):
+        ids_dict = {}
         if kwargs:
             try:
                 instance = ListRegion.objects.get(pk=kwargs['pk'])
@@ -239,10 +245,12 @@ class ListRegionView(generics.ListCreateAPIView):
                          status=status.HTTP_404_NOT_FOUND)
         for i in range(len(request.data['data'])):
             if request.data['data'][i]['mark_update'] == 1:
-                instance = ListRegion.objects.get(id=request.data['data'][i]["id"])
-                serealizer = ListRegionSerializer(data=request.data["data"][i], instance=instance)
-                serealizer.is_valid(raise_exception=True)
-                serealizer.save()
+                if ListRegion.objects.filter(id=request.data['data'][i]["id"]).exists():
+                    instance = ListRegion.objects.get(id=request.data['data'][i]["id"])
+                    serealizer = ListRegionSerializer(data=request.data["data"][i], instance=instance)
+                    serealizer.is_valid(raise_exception=False)
+                    serealizer.save()
+                    ids_dict.update({request.data['data'][i]['id']: serealizer.data['id']})
             elif request.data['data'][i]['mark_update'] == 2:
                 print(request.data['data'][i])
                 serializer = ListRegionSerializer(data=request.data['data'][i])
@@ -255,6 +263,8 @@ class ListRegionView(generics.ListCreateAPIView):
                 desc.save()
                 lst.mark_update = 0
                 lst.save()
+                ids_dict.update({request.data['data'][i]['id']: serializer.data['id']})
+        # return Response({"put": status.HTTP_200_OK, "ids": ids_dict}, status=status.HTTP_200_OK)
         return Response({"put": status.HTTP_200_OK}, status=status.HTTP_200_OK)
 
     def delete(self, *args, **kwargs):
@@ -292,7 +302,6 @@ class SampleView(generics.ListCreateAPIView):
     def get_serializer_class(self):
         return SampleSerializer
 
-    
     def get(self, request, **kwargs):
         if kwargs:
             try:
@@ -312,6 +321,7 @@ class SampleView(generics.ListCreateAPIView):
         return Response({'post': status.HTTP_201_CREATED}, status=status.HTTP_201_CREATED)
 
     def put(self, request, *args, **kwargs):
+        ids_dict = {}
         if kwargs:
             try:
                 instance = Sample.objects.get(pk=kwargs['pk'])
@@ -324,10 +334,12 @@ class SampleView(generics.ListCreateAPIView):
 
         for i in range(len(request.data['data'])):
             if request.data['data'][i]['mark_update'] == 1:
-                instance = Sample.objects.get(id=request.data['data'][i]["id"])
-                serealizer = SampleSerializer(data=request.data["data"][i], instance=instance)
-                serealizer.is_valid(raise_exception=True)
-                serealizer.save()
+                if Sample.objects.filter(id=request.data['data'][i]["id"]).exists():
+                    instance = Sample.objects.get(id=request.data['data'][i]["id"])
+                    serealizer = SampleSerializer(data=request.data["data"][i], instance=instance)
+                    serealizer.is_valid(raise_exception=True)
+                    serealizer.save()
+                    ids_dict.update({request.data['data'][i]['id']: serealizer.data['id']})
             elif request.data['data'][i]['mark_update'] == 2:
                 # request.data['data'][i]['mark_update'].update('mark_update: 0')
                 serializer = SampleSerializer(data=request.data['data'][i])
@@ -336,6 +348,8 @@ class SampleView(generics.ListCreateAPIView):
                 lst = Sample.objects.get(id=serializer.data['id'])
                 lst.mark_update = 0
                 lst.save()
+                ids_dict.update({request.data['data'][i]['id']: serializer.data['id']})
+        # return Response({"put": status.HTTP_200_OK, "ids": ids_dict})
         return Response({"put": status.HTTP_200_OK})
 
     def delete(self, *args, **kwargs):
@@ -413,7 +427,6 @@ class WorkingBreedView(generics.ListCreateAPIView):
                             status=status.HTTP_404_NOT_FOUND)
         lst.delete()
         return Response({"code": status.HTTP_200_OK}, status=status.HTTP_200_OK)
-
 
 
 class SubjectRFview(generics.ListCreateAPIView):
@@ -866,7 +879,15 @@ class GetAllSampleListData(viewsets.ViewSet):
 
 class GetAllListRegionData(viewsets.ViewSet):
 
+    permission_classes = [IsAuthenticated, ]
+
     def list(self, request, **kwargs):
+        print(request.user.subject_rf_id)
+        subject_id = request.user.subject_rf_id
+        if subject_id:
+            lst = ListRegion.objects.filter(
+                id_quarter_id__id_district_forestly_id__id_forestly_id__id_subject_rf_id = subject_id)
+            return JsonResponse({'data': GetAllListRegionDataSerializer(lst, many=True).data}, safe=False)
         lst = ListRegion.objects.all()
         return JsonResponse({'data': GetAllListRegionDataSerializer(lst, many=True).data}, safe=False)
 
@@ -1201,7 +1222,9 @@ class GetSampleFromListRegionId(ListAPIView):
 
 class GetAllDescriptionRegion(ListAPIView):
 
-    def get(self, *args, **kwargs):
+    permission_classes = [IsAuthenticated, ]
+
+    def get(self, request, *args, **kwargs):
         if kwargs:
             DescriptionRegionSerializer().validate_pk(kwargs['pk'])
             lst = DescriptionRegionSerializer(DescriptionRegion.objects.get(id=kwargs['pk'])).data
@@ -1213,9 +1236,13 @@ class GetAllDescriptionRegion(ListAPIView):
             return Response({
                 "DescriptionRegion":
                     lst})
+        subject_id = request.user.subject_rf_id
+        if subject_id:
+            lst = DescriptionRegion.objects.filter(
+                id_list_region__id_quarter_id__id_district_forestly_id__id_forestly_id__id_subject_rf_id=subject_id)
+            return Response({"get": DescriptionRegionSerializer(lst, many=True).data})
         lst = DescriptionRegion.objects.all()
         return Response({"get": DescriptionRegionSerializer(lst, many=True).data})
-
 
     def put(self, request, *args, **kwargs):
         try:
@@ -1272,11 +1299,13 @@ class DescriptionRegionFilter(ListAPIView):
 
 class GetFieldCard(ListAPIView):
 
-    '''
+    """
     GET all & get one
-    '''
+    """
 
-    def get(self, *args, **kwargs):
+    permission_classes = [IsAuthenticated, ]
+
+    def get(self, request, *args, **kwargs):
         if kwargs:
             FieldCardSerializer().validate_pk(kwargs['pk'])
             lst = FieldCardSerializer(FieldCard.objects.get(id=kwargs['pk'])).data
@@ -1288,9 +1317,13 @@ class GetFieldCard(ListAPIView):
             return Response({
                 "FieldCard":
                     lst })
+        subject_id = request.user.subject_rf_id
+        if subject_id:
+            lst = FieldCard.objects.filter(
+                id_list_region__id_quarter_id__id_district_forestly_id__id_forestly_id__id_subject_rf_id = subject_id)
+            return Response({"get": FieldCardSerializer(lst, many=True).data})
         lst = FieldCard.objects.all()
         return Response({"get": FieldCardSerializer(lst, many=True).data})
-
 
     def post(self, request, *args, **kwargs):
         list_serializer = ListRegionSerializer(data=request.data)
@@ -1316,7 +1349,6 @@ class GetFieldCard(ListAPIView):
         fieldcard_serializer.save()
         return Response({"id": fieldcard_serializer.data['id']}, status= status.HTTP_201_CREATED)
 
-
     def put(self, request, *args, **kwargs):
         try:
             instance = FieldCard.objects.get(pk=kwargs['pk'])
@@ -1341,7 +1373,6 @@ class GetFieldCard(ListAPIView):
                             status=status.HTTP_400_BAD_REQUEST)
         serealizer.save()
         return Response({'code': status.HTTP_200_OK}, status=status.HTTP_200_OK)
-
 
 
 class FieldCardFilter(ListAPIView):
