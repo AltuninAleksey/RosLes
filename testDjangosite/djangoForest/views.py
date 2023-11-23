@@ -1501,6 +1501,16 @@ class FormingDocxView(ListAPIView):
         return Response({"document": path_docx})
 
 
+class AboutUserView(ListAPIView):
+    permissions_classes = [IsAuthenticated, ]
+
+    def get(self, request, *args, **kwargs):
+        user_id = request.user.id
+        print(user_id)
+        user = Profile.objects.get(id_user = user_id)
+        print(user)
+        return Response({"data": AboutUserDataSerializer(user).data})
+
 class FormingDocxViewDescRegion(ListAPIView):
 
     def post(self, request, *args, **kwargs):

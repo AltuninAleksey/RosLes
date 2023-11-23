@@ -37,7 +37,6 @@ class ProfileSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
-
     def validate(self, data):
 
         if data['FIO']:
@@ -83,10 +82,6 @@ class UserSerializer(serializers.ModelSerializer):
         #         raise serializers.ValidationError({"error_text": "password не должен быть пустым"})
         # return data
 
-
-
-
-
 class ListSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -116,7 +111,6 @@ class ListSerializer(serializers.ModelSerializer):
         instance.mark_update = 0
         instance.save()
         return instance
-
 
 
 class GPSSerializer(serializers.ModelSerializer):
@@ -181,6 +175,11 @@ class SampleSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+class AboutUserDataSerializer(serializers.Serializer):
+    id_user = serializers.CharField(source="id_user.id")
+    FIO = serializers.CharField()
+    id_subject_rf = serializers.CharField(source="id_user.subject_rf.id")
+    name_subject_rf = serializers.CharField(source="id_user.subject_rf.name_subject_RF")
 
 class SampleSerializerId(serializers.Serializer):
     id = serializers.IntegerField()
@@ -196,7 +195,6 @@ class SampleSerializerId(serializers.Serializer):
     square = serializers.FloatField()
     soil_lot = serializers.CharField()
     number_region = serializers.CharField(max_length=100, source='id_list_region.number_region')
-
 
 
 class PostSerializer(serializers.ModelSerializer):

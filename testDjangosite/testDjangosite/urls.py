@@ -34,6 +34,7 @@ urlpatterns = [
     path('v2/refresh', TokenRefreshView.as_view()),
     path('v2/verify', TokenVerifyView.as_view(), name='token_verify'),
     path('v2/verify_token', VerifyTokenView.as_view()),
+    path('aboutuser', AboutUserView.as_view()),
     path('getsamplefromlistregion', GetSampleFromListRegionId.as_view()),
     path('responsesqlite', SendResponseSQLite.as_view()),
     path('createlistregionbydescreg', CreateListRegionByDescRegion.as_view()),
