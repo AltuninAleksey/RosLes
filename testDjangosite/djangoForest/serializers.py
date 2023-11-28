@@ -176,6 +176,7 @@ class SampleSerializer(serializers.ModelSerializer):
         return instance
 
 class AboutUserDataSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
     id_user = serializers.CharField(source="id_user.id")
     FIO = serializers.CharField()
     id_subject_rf = serializers.CharField(source="id_user.subject_rf.id")
