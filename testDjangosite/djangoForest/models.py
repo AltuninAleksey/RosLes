@@ -527,7 +527,7 @@ class DescriptionRegion(models.Model):
     breed_structure_sapling_act_land = models.CharField(max_length=500,
                                                         verbose_name="Породный состав молодняка по Акту отнесения земель", null=True)
     economy_act_land = models.CharField(max_length=500,
-                                        verbose_name="Хозяйство по Акту отнесения земель")
+                                        verbose_name="Хозяйство по Акту отнесения земель", null=True)
     change_breed_and_structure_sapling = models.CharField(max_length=500, null=True,
                                                           verbose_name="Изменение породного и качественного состава молодняка")
     results_surtvey = models.CharField(max_length=600, null=True, verbose_name="Вывод по результатам обследования")
