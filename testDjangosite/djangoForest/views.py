@@ -115,8 +115,8 @@ class ListView(generics.ListCreateAPIView):
                 lst.mark_update = 0
                 lst.save()
                 ids_dict.update({request.data['data'][i]['id']: serializer.data['id']})
-        # return Response({"put": status.HTTP_200_OK, "ids": ids_dict}, status=status.HTTP_200_OK)
-        return Response({"put": status.HTTP_200_OK}, status=status.HTTP_200_OK)
+        return Response({"put": status.HTTP_200_OK, "ids": ids_dict}, status=status.HTTP_200_OK)
+        # return Response({"put": status.HTTP_200_OK}, status=status.HTTP_200_OK)
 
     def delete(self, *args, **kwargs):
         try:
@@ -264,8 +264,8 @@ class ListRegionView(generics.ListCreateAPIView):
                 lst.mark_update = 0
                 lst.save()
                 ids_dict.update({request.data['data'][i]['id']: serializer.data['id']})
-        # return Response({"put": status.HTTP_200_OK, "ids": ids_dict}, status=status.HTTP_200_OK)
-        return Response({"put": status.HTTP_200_OK}, status=status.HTTP_200_OK)
+        return Response({"put": status.HTTP_200_OK, "ids": ids_dict}, status=status.HTTP_200_OK)
+        # return Response({"put": status.HTTP_200_OK}, status=status.HTTP_200_OK)
 
     def delete(self, *args, **kwargs):
         try:
@@ -349,8 +349,8 @@ class SampleView(generics.ListCreateAPIView):
                 lst.mark_update = 0
                 lst.save()
                 ids_dict.update({request.data['data'][i]['id']: serializer.data['id']})
-        # return Response({"put": status.HTTP_200_OK, "ids": ids_dict})
-        return Response({"put": status.HTTP_200_OK})
+        return Response({"put": status.HTTP_200_OK, "ids": ids_dict})
+        # return Response({"put": status.HTTP_200_OK})
 
     def delete(self, *args, **kwargs):
         try:
@@ -1328,6 +1328,7 @@ class GetFieldCard(ListAPIView):
     def post(self, request, *args, **kwargs):
         list_serializer = ListRegionSerializer(data=request.data)
         if not list_serializer.is_valid():
+            print(list_serializer.errors)
             return Response({"error_list_region": status.HTTP_400_BAD_REQUEST,
                              "error_text": list_serializer.errors[next(iter(list_serializer.errors))][0]},
                             status=status.HTTP_400_BAD_REQUEST)
@@ -1413,6 +1414,7 @@ class CreateListRegionByDescRegion(ListAPIView):
     def post(self, request, *args, **kwargs):
         list_serializer = ListRegionSerializer(data=request.data)
         if not list_serializer.is_valid():
+            print(desc_serializer.errors)
             return Response({"error": status.HTTP_400_BAD_REQUEST,
                              "error_text": list_serializer.errors[next(iter(list_serializer.errors))][0]},
                             status=status.HTTP_400_BAD_REQUEST)
@@ -1421,10 +1423,12 @@ class CreateListRegionByDescRegion(ListAPIView):
         desc_serializer = DescriptionRegionSerializer(data=request.data)
         fieldcard_serializer = FieldCardSerializer(data=request.data)
         if not desc_serializer.is_valid():
+            print(desc_serializer.errors)
             return Response({"error": status.HTTP_400_BAD_REQUEST,
                              "error_text": desc_serializer.errors[next(iter(desc_serializer.errors))][0]},
                             status=status.HTTP_400_BAD_REQUEST)
         if not fieldcard_serializer.is_valid():
+            print(desc_serializer.errors)
             return Response({"error": status.HTTP_400_BAD_REQUEST,
                              "error_text": fieldcard_serializer.errors[next(iter(fieldcard_serializer.errors))][0]},
                             status=status.HTTP_400_BAD_REQUEST)
@@ -1505,9 +1509,8 @@ class AboutUserView(ListAPIView):
     permissions_classes = [IsAuthenticated, ]
 
     def get(self, request, *args, **kwargs):
-        user_id = request.user.id
-        print(user_id)
-        user = Profile.objects.get(id_user = user_id)
+        user_id = request.user.pk
+        user = Profile.objects.get(id_user_id=user_id)
         print(user)
         return Response({"data": AboutUserDataSerializer(user).data})
 
