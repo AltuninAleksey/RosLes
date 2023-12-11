@@ -10,7 +10,6 @@ import android.graphics.Bitmap
 import com.example.rosles.Models.*
 import com.example.rosles.ResponceClass.*
 import com.example.rosles.Screens.GPStracker
-import com.example.roslesdef.Models.ItemWood
 import com.example.roslesdef.Models.SpinerItem
 import java.util.*
 
@@ -21,50 +20,54 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     var gpStracker= GPStracker(context)
     override fun onCreate(db: SQLiteDatabase) {
 
-      db.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_breed" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name_breed" varchar(350) NOT NULL, "is_foliar" bool NULL, "is_pine" bool NULL, "ShortName" varchar(10) NULL);""")
-      db.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_districtforestly" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name_district_forestly" varchar(500) NOT NULL, "id_forestly_id" bigint NULL REFERENCES "djangoForest_forestly" ("id") DEFERRABLE INITIALLY DEFERRED);""")
-      db.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_forestformingbydefault" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "id_breed_id" bigint NOT NULL REFERENCES "djangoForest_breed" ("id") DEFERRABLE INITIALLY DEFERRED, "id_profile_id" bigint NOT NULL REFERENCES "djangoForest_profile" ("id") DEFERRABLE INITIALLY DEFERRED);""")
-      db.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_forestly" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name_forestly" varchar(500) NOT NULL, "id_subject_rf_id" bigint NULL REFERENCES "djangoForest_subjectrf" ("id") DEFERRABLE INITIALLY DEFERRED);""")
-      db.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_gps" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "latitude" real NOT NULL, "longitude" real NOT NULL, "flag_center" integer NOT NULL, "id_sample_id" bigint NULL REFERENCES "djangoForest_sample" ("id") DEFERRABLE INITIALLY DEFERRED);""")
-      db.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_list" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "to0_2" integer NULL, "from0_21To0_5" integer NULL, "from0_6To1_0" integer NULL, "from1_1to1_5" integer NULL, "from1_5" integer NULL, "max_height" real NULL, "id_breed_id" bigint NULL REFERENCES "djangoForest_breed" ("id") DEFERRABLE INITIALLY DEFERRED, "id_sample_id" bigint NULL REFERENCES "djangoForest_sample" ("id") ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED, "id_type_of_reproduction_id" bigint NULL REFERENCES "djangoForest_reproduction" ("id") DEFERRABLE INITIALLY DEFERRED, "avg_diameter" real NULL, "avg_height" real NULL, "count_of_plants" integer NULL, "id_undergrowth_id" bigint NULL REFERENCES "djangoForest_undergrowth" ("id") DEFERRABLE INITIALLY DEFERRED, "main" bool NULL, "avg_height_undergrowth" real NULL, mark_update INTEGER);""")
-      db.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_listregion" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "date" date NOT NULL, "sample_region" real NOT NULL, "soil_lot" varchar(300) NOT NULL, "id_quarter_id" bigint NULL REFERENCES "djangoForest_quarter" ("id") DEFERRABLE INITIALLY DEFERRED, "mark_del" integer NULL, "mark_update" integer NULL,  "id_profile" integer, "number_region" varchar);""")
-      db.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_photopoint" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "photo" BLOB,"latitude" real,"longitude" real,"date" date NOT NULL, "id_sample_id" bigint NULL REFERENCES "djangoForest_sample" ("id") DEFERRABLE INITIALLY DEFERRED);""")
-      db.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_profile" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "FIO" varchar(255) NOT NULL, "phoneNumber" varchar(30) NOT NULL, "id_branches_id" bigint NULL REFERENCES "djangoForest_branches" ("id") DEFERRABLE INITIALLY DEFERRED, "id_post_id" bigint NULL REFERENCES "djangoForest_post" ("id") DEFERRABLE INITIALLY DEFERRED, "id_role_id" bigint NULL REFERENCES "djangoForest_role" ("id") DEFERRABLE INITIALLY DEFERRED, "id_user_id" bigint NULL REFERENCES "djangoForest_users" ("id") DEFERRABLE INITIALLY DEFERRED);""")
-      db.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_quarter" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "quarter_name" varchar(50) NOT NULL, "id_district_forestly_id" bigint NULL REFERENCES "djangoForest_districtforestly" ("id") DEFERRABLE INITIALLY DEFERRED);""")
-      db.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_reproduction" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name_reproduction" varchar(500) NOT NULL);""")
-      db.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_role" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name_role" varchar(300) NOT NULL);""")
-      db.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_sample" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "date" date NULL, "sample_area" real NOT NULL, "id_list_region_id" bigint NULL REFERENCES "djangoForest_listregion" ("id") ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED, "id_profile_id" bigint NULL REFERENCES "djangoForest_profile" ("id") DEFERRABLE INITIALLY DEFERRED, "id_quarter_id" bigint NULL REFERENCES "djangoForest_quarter" ("id") DEFERRABLE INITIALLY DEFERRED, "soil_lot" varchar(300) NOT NULL, "lenght" real NULL, "square" real NULL, "width" real NULL,mark_update INTEGER);""")
-      db.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_subjectrf" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name_subject_RF" varchar(255) NOT NULL);""")
-      db.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_table" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name" varchar(300) NOT NULL, "age" integer NOT NULL);""")
-      db.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_track" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "data" date NOT NULL, "map" varchar(1) NOT NULL, "id_profile_id" bigint NOT NULL REFERENCES "djangoForest_profile" ("id") DEFERRABLE INITIALLY DEFERRED);""")
-      db.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_undergrowth" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name" varchar(350) NOT NULL);""")
-      db.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_undergrowthbydefault" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "id_profile_id" bigint NOT NULL REFERENCES "djangoForest_profile" ("id") DEFERRABLE INITIALLY DEFERRED, "id_undergrowth_id" bigint NOT NULL REFERENCES "djangoForest_undergrowth" ("id") DEFERRABLE INITIALLY DEFERRED);""")
-      db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_districtforestly_id_forestly_id_8d57b4f6" ON "djangoForest_districtforestly" ("id_forestly_id");""")
-      db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_forestformingbydefault_id_breed_id_4a07abd1" ON "djangoForest_forestformingbydefault" ("id_breed_id");""")
-      db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_forestformingbydefault_id_profile_id_1a43bad2" ON "djangoForest_forestformingbydefault" ("id_profile_id");""")
-      db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_forestly_id_subject_rf_id_db160798" ON "djangoForest_forestly" ("id_subject_rf_id");""")
-      db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_gps_id_sample_id_6877d75e" ON "djangoForest_gps" ("id_sample_id");""")
-      db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_list_id_breed_id_818099fb" ON "djangoForest_list" ("id_breed_id");""")
-      db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_list_id_sample_id_a446b4c9" ON "djangoForest_list" ("id_sample_id");""")
-      db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_list_id_type_of_reproduction_id_3f515d72" ON "djangoForest_list" ("id_type_of_reproduction_id");""")
-      db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_list_id_undergrowth_id_02d0f36b" ON "djangoForest_list" ("id_undergrowth_id");""")
-      db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_listregion_id_quarter_id_cd3b2ab8" ON "djangoForest_listregion" ("id_quarter_id");""")
-      db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_photopoint_id_sample_id_9a160505" ON "djangoForest_photopoint" ("id_sample_id");""")
-      db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_profile_id_branches_id_ecc09e8c" ON "djangoForest_profile" ("id_branches_id");""")
-      db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_profile_id_post_id_3ebc259a" ON "djangoForest_profile" ("id_post_id");""")
-      db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_profile_id_role_id_a92c9632" ON "djangoForest_profile" ("id_role_id");""")
-      db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_profile_id_user_id_a5391657" ON "djangoForest_profile" ("id_user_id");""")
-      db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_quarter_id_district_forestly_id_71afc36f" ON "djangoForest_quarter" ("id_district_forestly_id");""")
-      db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_sample_id_list_region_id_d4ea853d" ON "djangoForest_sample" ("id_list_region_id");""")
-      db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_sample_id_profile_id_326ca965" ON "djangoForest_sample" ("id_profile_id");""")
-      db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_sample_id_quarter_id_eb7f4fa2" ON "djangoForest_sample" ("id_quarter_id");""")
-      db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_track_id_profile_id_07b234ed" ON "djangoForest_track" ("id_profile_id");""")
-      db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_undergrowthbydefault_id_profile_id_23b572fe" ON "djangoForest_undergrowthbydefault" ("id_profile_id");""")
-      db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_undergrowthbydefault_id_undergrowth_id_b789efb4" ON "djangoForest_undergrowthbydefault" ("id_undergrowth_id");""")
+        db.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_breed" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name_breed" varchar(350) NOT NULL, "is_foliar" bool NULL, "is_pine" bool NULL, "ShortName" varchar(10) NULL);""")
+        db.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_districtforestly" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name_district_forestly" varchar(500) NOT NULL, "id_forestly_id" bigint NULL REFERENCES "djangoForest_forestly" ("id") DEFERRABLE INITIALLY DEFERRED);""")
+        db.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_forestformingbydefault" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "id_breed_id" bigint NOT NULL REFERENCES "djangoForest_breed" ("id") DEFERRABLE INITIALLY DEFERRED, "id_profile_id" bigint NOT NULL REFERENCES "djangoForest_profile" ("id") DEFERRABLE INITIALLY DEFERRED);""")
+        db.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_forestly" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name_forestly" varchar(500) NOT NULL, "id_subject_rf_id" bigint NULL REFERENCES "djangoForest_subjectrf" ("id") DEFERRABLE INITIALLY DEFERRED);""")
+        db.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_gps" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "latitude" real NOT NULL, "longitude" real NOT NULL, "flag_center" integer NOT NULL, "id_sample_id" bigint NULL REFERENCES "djangoForest_sample" ("id") DEFERRABLE INITIALLY DEFERRED);""")
+        db.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_list" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "to0_2" integer NULL, "from0_21To0_5" integer NULL, "from0_6To1_0" integer NULL, "from1_1to1_5" integer NULL, "from1_5" integer NULL, "max_height" real NULL, "id_breed_id" bigint NULL REFERENCES "djangoForest_breed" ("id") DEFERRABLE INITIALLY DEFERRED, "id_sample_id" bigint NULL REFERENCES "djangoForest_sample" ("id") ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED, "id_type_of_reproduction_id" bigint NULL REFERENCES "djangoForest_reproduction" ("id") DEFERRABLE INITIALLY DEFERRED, "avg_diameter" real NULL, "avg_height" real NULL, "count_of_plants" integer NULL, "id_undergrowth_id" bigint NULL REFERENCES "djangoForest_undergrowth" ("id") DEFERRABLE INITIALLY DEFERRED, "main" bool NULL, "avg_height_undergrowth" real NULL, mark_update INTEGER);""")
+        db.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_listregion" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "date" date NOT NULL, "sample_region" real NOT NULL, "soil_lot" varchar(300) NOT NULL, "id_quarter_id" bigint NULL REFERENCES "djangoForest_quarter" ("id") DEFERRABLE INITIALLY DEFERRED, "mark_del" integer NULL, "mark_update" integer NULL,  "id_profile" integer, "number_region" varchar);""")
+        db.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_photopoint" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "photo" BLOB,"latitude" real,"longitude" real,"date" date NOT NULL, "id_sample_id" bigint NULL REFERENCES "djangoForest_sample" ("id") DEFERRABLE INITIALLY DEFERRED);""")
+        db.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_profile" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "FIO" varchar(255) NOT NULL, "phoneNumber" varchar(30) NOT NULL, "id_branches_id" bigint NULL REFERENCES "djangoForest_branches" ("id") DEFERRABLE INITIALLY DEFERRED, "id_post_id" bigint NULL REFERENCES "djangoForest_post" ("id") DEFERRABLE INITIALLY DEFERRED, "id_role_id" bigint NULL REFERENCES "djangoForest_role" ("id") DEFERRABLE INITIALLY DEFERRED, "id_user_id" bigint NULL REFERENCES "djangoForest_users" ("id") DEFERRABLE INITIALLY DEFERRED);""")
+        db.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_quarter" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "quarter_name" varchar(50) NOT NULL, "id_district_forestly_id" bigint NULL REFERENCES "djangoForest_districtforestly" ("id") DEFERRABLE INITIALLY DEFERRED);""")
+        db.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_reproduction" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name_reproduction" varchar(500) NOT NULL);""")
+        db.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_role" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name_role" varchar(300) NOT NULL);""")
+        db.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_sample" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "date" date NULL, "sample_area" real NOT NULL, "id_list_region_id" bigint NULL REFERENCES "djangoForest_listregion" ("id") ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED, "id_profile_id" bigint NULL REFERENCES "djangoForest_profile" ("id") DEFERRABLE INITIALLY DEFERRED, "id_quarter_id" bigint NULL REFERENCES "djangoForest_quarter" ("id") DEFERRABLE INITIALLY DEFERRED, "soil_lot" varchar(300) NOT NULL, "lenght" real NULL, "square" real NULL, "width" real NULL,mark_update INTEGER);""")
+        db.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_subjectrf" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name_subject_RF" varchar(255) NOT NULL);""")
+        db.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_table" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name" varchar(300) NOT NULL, "age" integer NOT NULL);""")
+        db.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_track" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "data" date NOT NULL, "map" varchar(1) NOT NULL, "id_profile_id" bigint NOT NULL REFERENCES "djangoForest_profile" ("id") DEFERRABLE INITIALLY DEFERRED);""")
+        db.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_undergrowth" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name" varchar(350) NOT NULL);""")
+        db.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_undergrowthbydefault" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "id_profile_id" bigint NOT NULL REFERENCES "djangoForest_profile" ("id") DEFERRABLE INITIALLY DEFERRED, "id_undergrowth_id" bigint NOT NULL REFERENCES "djangoForest_undergrowth" ("id") DEFERRABLE INITIALLY DEFERRED);""")
+        db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_districtforestly_id_forestly_id_8d57b4f6" ON "djangoForest_districtforestly" ("id_forestly_id");""")
+        db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_forestformingbydefault_id_breed_id_4a07abd1" ON "djangoForest_forestformingbydefault" ("id_breed_id");""")
+        db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_forestformingbydefault_id_profile_id_1a43bad2" ON "djangoForest_forestformingbydefault" ("id_profile_id");""")
+        db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_forestly_id_subject_rf_id_db160798" ON "djangoForest_forestly" ("id_subject_rf_id");""")
+        db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_gps_id_sample_id_6877d75e" ON "djangoForest_gps" ("id_sample_id");""")
+        db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_list_id_breed_id_818099fb" ON "djangoForest_list" ("id_breed_id");""")
+        db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_list_id_sample_id_a446b4c9" ON "djangoForest_list" ("id_sample_id");""")
+        db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_list_id_type_of_reproduction_id_3f515d72" ON "djangoForest_list" ("id_type_of_reproduction_id");""")
+        db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_list_id_undergrowth_id_02d0f36b" ON "djangoForest_list" ("id_undergrowth_id");""")
+        db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_listregion_id_quarter_id_cd3b2ab8" ON "djangoForest_listregion" ("id_quarter_id");""")
+        db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_photopoint_id_sample_id_9a160505" ON "djangoForest_photopoint" ("id_sample_id");""")
+        db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_profile_id_branches_id_ecc09e8c" ON "djangoForest_profile" ("id_branches_id");""")
+        db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_profile_id_post_id_3ebc259a" ON "djangoForest_profile" ("id_post_id");""")
+        db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_profile_id_role_id_a92c9632" ON "djangoForest_profile" ("id_role_id");""")
+        db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_profile_id_user_id_a5391657" ON "djangoForest_profile" ("id_user_id");""")
+        db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_quarter_id_district_forestly_id_71afc36f" ON "djangoForest_quarter" ("id_district_forestly_id");""")
+        db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_sample_id_list_region_id_d4ea853d" ON "djangoForest_sample" ("id_list_region_id");""")
+        db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_sample_id_profile_id_326ca965" ON "djangoForest_sample" ("id_profile_id");""")
+        db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_sample_id_quarter_id_eb7f4fa2" ON "djangoForest_sample" ("id_quarter_id");""")
+        db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_track_id_profile_id_07b234ed" ON "djangoForest_track" ("id_profile_id");""")
+        db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_undergrowthbydefault_id_profile_id_23b572fe" ON "djangoForest_undergrowthbydefault" ("id_profile_id");""")
+        db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_undergrowthbydefault_id_undergrowth_id_b789efb4" ON "djangoForest_undergrowthbydefault" ("id_undergrowth_id");""")
 
 
 
         db.execSQL("""CREATE TABLE IF NOT EXISTS "delte_value" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name_table" varchar(350) NOT NULL, "id_value" integer NULL );""")
+    }
+
+    override fun onUpgrade(p0: SQLiteDatabase?, p1: Int, p2: Int) {
+
     }
 
 
@@ -200,7 +203,11 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     @SuppressLint("Range")
     fun getLISTREGION():List<LISTREGION_DATA>{
         val database: SQLiteDatabase = this.writableDatabase
-        val cursor: Cursor = database.rawQuery("select * from djangoForest_listregion where mark_update = 1",null)
+
+
+
+
+        val cursor: Cursor = database.rawQuery("select * from djangoForest_listregion where mark_update =  2 OR mark_update = 1 ",null)
         cursor.moveToFirst()
         val listregionrequest=mutableListOf<LISTREGION_DATA>()
         for (i in 1..cursor.getCount()) {
@@ -846,11 +853,6 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     }
 
 
-    override fun onUpgrade(db: SQLiteDatabase, p1: Int, p2: Int) {
-        // this method is to check if table already exists
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME)
-        onCreate(db)
-    }
 
     fun addReproduction(reproduction_name: String) {
         val db = this.writableDatabase
@@ -1138,7 +1140,7 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     fun delete_all(){
         val db = this.readableDatabase
 
-        db.execSQL( "DELETE  FROM delte_value  ")
+        db.execSQL( "DELETE   FROM delte_value  ")
         db.close()
     }
 
