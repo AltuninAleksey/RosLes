@@ -336,6 +336,7 @@ class SampleView(generics.ListCreateAPIView):
             if request.data['data'][i]['mark_update'] == 1:
                 if Sample.objects.filter(id=request.data['data'][i]["id"]).exists():
                     instance = Sample.objects.get(id=request.data['data'][i]["id"])
+                    print(instance)
                     serealizer = SampleSerializer(data=request.data["data"][i], instance=instance)
                     serealizer.is_valid(raise_exception=True)
                     serealizer.save()
@@ -1511,7 +1512,7 @@ class AboutUserView(ListAPIView):
     def get(self, request, *args, **kwargs):
         user_id = request.user.pk
         user = Profile.objects.get(id_user_id=user_id)
-        print(user)
+        AboutUserDataSerializer(user).data['FIO'].encode('utf-8')
         return Response({"data": AboutUserDataSerializer(user).data})
 
 class FormingDocxViewDescRegion(ListAPIView):
