@@ -1541,3 +1541,24 @@ class FormingDocxViewDescRegion(ListAPIView):
 
 class ForestViewSet(viewsets.ModelViewSet):
     pass
+
+
+# class TestView(APIView):
+#     from openpyxl import load_workbook
+#
+#     wb = load_workbook('test.xlsx')
+#     list_of_forestly = []
+#     # print(wb.get_sheet_names())
+#     sheet = wb.get_sheet_by_name('СЗФО')
+#     forestly = Forestly.objects.get("Архангельская область")
+#     print(forestly)
+#     # for i in range(3, 29):
+#     #     print(sheet.cell(row=i, column=2).value)
+#     i = 3
+#     while sheet.cell(row=i, column=1).value == 'Архангельская область':
+#         if sheet.cell(row=i, column=2).value not in list_of_forestly:
+#             list_of_forestly.append(sheet.cell(row=i, column=2).value)
+#         i += 1
+#
+#
+#     print(list_of_forestly)
