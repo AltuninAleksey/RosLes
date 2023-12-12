@@ -115,7 +115,7 @@ class ListView(generics.ListCreateAPIView):
                 lst.mark_update = 0
                 lst.save()
                 ids_dict.update({request.data['data'][i]['id']: serializer.data['id']})
-        return Response({"put": status.HTTP_200_OK, "ids": ids_dict}, status=status.HTTP_200_OK)
+        return Response({"put": status.HTTP_200_OK, "ids": [ids_dict]}, status=status.HTTP_200_OK)
         # return Response({"put": status.HTTP_200_OK}, status=status.HTTP_200_OK)
 
     def delete(self, *args, **kwargs):
@@ -264,7 +264,7 @@ class ListRegionView(generics.ListCreateAPIView):
                 lst.mark_update = 0
                 lst.save()
                 ids_dict.update({request.data['data'][i]['id']: serializer.data['id']})
-        return Response({"put": status.HTTP_200_OK, "ids": ids_dict}, status=status.HTTP_200_OK)
+        return Response({"put": status.HTTP_200_OK, "ids": [ids_dict]}, status=status.HTTP_200_OK)
         # return Response({"put": status.HTTP_200_OK}, status=status.HTTP_200_OK)
 
     def delete(self, *args, **kwargs):
@@ -350,7 +350,7 @@ class SampleView(generics.ListCreateAPIView):
                 lst.mark_update = 0
                 lst.save()
                 ids_dict.update({request.data['data'][i]['id']: serializer.data['id']})
-        return Response({"put": status.HTTP_200_OK, "ids": ids_dict})
+        return Response({"put": status.HTTP_200_OK, "ids": [ids_dict]})
         # return Response({"put": status.HTTP_200_OK})
 
     def delete(self, *args, **kwargs):
@@ -1550,15 +1550,23 @@ class ForestViewSet(viewsets.ModelViewSet):
 #     list_of_forestly = []
 #     # print(wb.get_sheet_names())
 #     sheet = wb.get_sheet_by_name('СЗФО')
-#     forestly = Forestly.objects.get("Архангельская область")
+#     forestly = SubjectRF.objects.get(name_subject_RF = "Архангельская область")
 #     print(forestly)
 #     # for i in range(3, 29):
 #     #     print(sheet.cell(row=i, column=2).value)
 #     i = 3
+#     # while sheet.cell(row=i, column=1).value == 'Архангельская область':
+#     #     if sheet.cell(row=i, column=2).value not in list_of_forestly:
+#     #         list_of_forestly.append(sheet.cell(row=i, column=2).value)
+#     #         Forestly.objects.create(
+#     #             name_forestly = sheet.cell(row=i, column=2).value,
+#     #         id_subject_rf = forestly)
+#     #     i += 1
 #     while sheet.cell(row=i, column=1).value == 'Архангельская область':
 #         if sheet.cell(row=i, column=2).value not in list_of_forestly:
 #             list_of_forestly.append(sheet.cell(row=i, column=2).value)
+#             Forestly.objects.create(
+#                 name_forestly = sheet.cell(row=i, column=2).value,
+#             id_subject_rf = forestly)
 #         i += 1
-#
-#
 #     print(list_of_forestly)
