@@ -88,7 +88,8 @@ class ListView(generics.ListCreateAPIView):
         return Response({'post': serializer.data})
 
     def put(self, request, *args, **kwargs):
-        ids_dict = {}
+        # ids_dict = {}
+        ids_dict = []
         if kwargs:
             try:
                 instance = List.objects.get(pk=kwargs['pk'])
@@ -106,7 +107,8 @@ class ListView(generics.ListCreateAPIView):
                     serealizer = ListSerializer(data=request.data["data"][i], instance=instance)
                     serealizer.is_valid(raise_exception=True)
                     serealizer.save()
-                    ids_dict.update({request.data['data'][i]['id']: serealizer.data['id']})
+                    # ids_dict.update({request.data['data'][i]['id']: serealizer.data['id']})
+                    ids_dict.append({"obj": {"last": request.data['data'][i]['id'], "new": serealizer.data['id']}})
             elif request.data['data'][i]['mark_update'] == 2:
                 serializer = ListSerializer(data=request.data['data'][i])
                 serializer.is_valid(raise_exception=True)
@@ -114,8 +116,9 @@ class ListView(generics.ListCreateAPIView):
                 lst = List.objects.get(id=serializer.data['id'])
                 lst.mark_update = 0
                 lst.save()
-                ids_dict.update({request.data['data'][i]['id']: serializer.data['id']})
-        return Response({"put": status.HTTP_200_OK, "ids": [ids_dict]}, status=status.HTTP_200_OK)
+                # ids_dict.update({request.data['data'][i]['id']: serializer.data['id']})
+                ids_dict.append({"obj": {"last": request.data['data'][i]['id'], "new": serializer.data['id']}})
+        return Response({"put": status.HTTP_200_OK, "ids": ids_dict}, status=status.HTTP_200_OK)
         # return Response({"put": status.HTTP_200_OK}, status=status.HTTP_200_OK)
 
     def delete(self, *args, **kwargs):
@@ -232,7 +235,8 @@ class ListRegionView(generics.ListCreateAPIView):
         return Response({'code': status.HTTP_201_CREATED})
 
     def put(self, request, *args, **kwargs):
-        ids_dict = {}
+        # ids_dict = {}
+        ids_dict = []
         if kwargs:
             try:
                 instance = ListRegion.objects.get(pk=kwargs['pk'])
@@ -250,7 +254,8 @@ class ListRegionView(generics.ListCreateAPIView):
                     serealizer = ListRegionSerializer(data=request.data["data"][i], instance=instance)
                     serealizer.is_valid(raise_exception=False)
                     serealizer.save()
-                    ids_dict.update({request.data['data'][i]['id']: serealizer.data['id']})
+                    # ids_dict.update({request.data['data'][i]['id']: serealizer.data['id']})
+                    ids_dict.append({"obj": {"last": request.data['data'][i]['id'], "new": serealizer.data['id']}})
             elif request.data['data'][i]['mark_update'] == 2:
                 print(request.data['data'][i])
                 serializer = ListRegionSerializer(data=request.data['data'][i])
@@ -263,8 +268,9 @@ class ListRegionView(generics.ListCreateAPIView):
                 desc.save()
                 lst.mark_update = 0
                 lst.save()
-                ids_dict.update({request.data['data'][i]['id']: serializer.data['id']})
-        return Response({"put": status.HTTP_200_OK, "ids": [ids_dict]}, status=status.HTTP_200_OK)
+                # ids_dict.update({request.data['data'][i]['id']: serializer.data['id']})
+                ids_dict.append({"obj": {"last": request.data['data'][i]['id'], "new": serializer.data['id']}})
+        return Response({"put": status.HTTP_200_OK, "ids": ids_dict}, status=status.HTTP_200_OK)
         # return Response({"put": status.HTTP_200_OK}, status=status.HTTP_200_OK)
 
     def delete(self, *args, **kwargs):
@@ -321,7 +327,8 @@ class SampleView(generics.ListCreateAPIView):
         return Response({'post': status.HTTP_201_CREATED}, status=status.HTTP_201_CREATED)
 
     def put(self, request, *args, **kwargs):
-        ids_dict = {}
+        # ids_dict = {}
+        ids_dict = []
         if kwargs:
             try:
                 instance = Sample.objects.get(pk=kwargs['pk'])
@@ -340,7 +347,8 @@ class SampleView(generics.ListCreateAPIView):
                     serealizer = SampleSerializer(data=request.data["data"][i], instance=instance)
                     serealizer.is_valid(raise_exception=True)
                     serealizer.save()
-                    ids_dict.update({request.data['data'][i]['id']: serealizer.data['id']})
+                    # ids_dict.update({request.data['data'][i]['id']: serealizer.data['id']})
+                    ids_dict.append({"obj": {"last": request.data['data'][i]['id'], "new": serealizer.data['id']}})
             elif request.data['data'][i]['mark_update'] == 2:
                 # request.data['data'][i]['mark_update'].update('mark_update: 0')
                 serializer = SampleSerializer(data=request.data['data'][i])
@@ -349,8 +357,9 @@ class SampleView(generics.ListCreateAPIView):
                 lst = Sample.objects.get(id=serializer.data['id'])
                 lst.mark_update = 0
                 lst.save()
-                ids_dict.update({request.data['data'][i]['id']: serializer.data['id']})
-        return Response({"put": status.HTTP_200_OK, "ids": [ids_dict]})
+                # ids_dict.update({request.data['data'][i]['id']: serializer.data['id']})
+                ids_dict.append({"obj": {"last": request.data['data'][i]['id'], "new": serializer.data['id']}})
+        return Response({"put": status.HTTP_200_OK, "ids": ids_dict})
         # return Response({"put": status.HTTP_200_OK})
 
     def delete(self, *args, **kwargs):
@@ -1550,11 +1559,21 @@ class ForestViewSet(viewsets.ModelViewSet):
 #     list_of_forestly = []
 #     # print(wb.get_sheet_names())
 #     sheet = wb.get_sheet_by_name('СЗФО')
-#     forestly = SubjectRF.objects.get(name_subject_RF = "Архангельская область")
+#     forestly = SubjectRF.objects.get(name_subject_RF = "Республика Карелия")
 #     print(forestly)
 #     # for i in range(3, 29):
 #     #     print(sheet.cell(row=i, column=2).value)
-#     i = 3
+#     # i = 3
+#     i = 1776
+#     # 1045
+#     while sheet.cell(row=i, column=1).value == 'Республика Карелия':
+#         if sheet.cell(row=i, column=2).value not in list_of_forestly:
+#             list_of_forestly.append(sheet.cell(row=i, column=2).value)
+#             Forestly.objects.create(
+#                 name_forestly = sheet.cell(row=i, column=2).value,
+#             id_subject_rf = forestly)
+#         i += 1
+#     print(i)
 #     # while sheet.cell(row=i, column=1).value == 'Архангельская область':
 #     #     if sheet.cell(row=i, column=2).value not in list_of_forestly:
 #     #         list_of_forestly.append(sheet.cell(row=i, column=2).value)
@@ -1562,11 +1581,4 @@ class ForestViewSet(viewsets.ModelViewSet):
 #     #             name_forestly = sheet.cell(row=i, column=2).value,
 #     #         id_subject_rf = forestly)
 #     #     i += 1
-#     while sheet.cell(row=i, column=1).value == 'Архангельская область':
-#         if sheet.cell(row=i, column=2).value not in list_of_forestly:
-#             list_of_forestly.append(sheet.cell(row=i, column=2).value)
-#             Forestly.objects.create(
-#                 name_forestly = sheet.cell(row=i, column=2).value,
-#             id_subject_rf = forestly)
-#         i += 1
 #     print(list_of_forestly)
