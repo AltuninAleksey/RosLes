@@ -700,11 +700,17 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         database.close()
         return favoriteLesList
     }
+    @SuppressLint("Range")
     fun updatevalue(id: Int){
         val database: SQLiteDatabase = this.writableDatabase
-        database.execSQL(
-            "update djangoForest_listregion set mark_update = 1 where id = $id"
-        )
+        val cursor: Cursor = database.rawQuery("select * from djangoForest_listregion where id='$id'",null)
+        cursor.moveToFirst()
+        if(cursor.getInt(cursor.getColumnIndex("mark_update")) <= 1){
+            database.execSQL(
+                "update djangoForest_listregion set mark_update = 1 where id = $id"
+            )
+        }
+
 
     }
     @SuppressLint("Range")

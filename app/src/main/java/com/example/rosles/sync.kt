@@ -15,6 +15,7 @@ import com.example.rosles.ResponceClass.LIST_DATA
 import com.example.rosles.ResponceClass.LIST_REQEST
 import com.example.rosles.ResponceClass.SAMPLE_DATA
 import com.example.rosles.ResponceClass.SAMPLE_REQEST
+import com.example.rosles.ResponceClass.text
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -62,18 +63,39 @@ class sync() {
 
         }
 
+//костыльный синглтон для получения ответа от сервера переделать на ретурн или клбек
+    object temp{
+        var temp_object:text?=null
+    }
+
 
     suspend fun load(viewModels: ViewModels, db: DBCountWood, context: AppCompatActivity){
 
 
-        val listregion=db.getLISTREGION()
+        var listregion=db.getLISTREGION()
         viewModels.putLISTREGION(LISTREGION_REQUEST(listregion))
+        delay(1000)
+        if (temp.temp_object!=null){
+             temp.temp_object!!.text.ids.forEach { temp->
+                temp.obj.last
+                listregion.forEach{
+                    if (it.id== temp.obj.last){
+                        it.id=temp.obj.new
+                    }
+                }
+            }
+        }
+
+        listregion.forEach {
+            it.id
+        }
+
         delay(1000)
         var sample = mutableListOf<SAMPLE_DATA>()
         var list:ArrayList<LIST_DATA> = arrayListOf()
-
-
-
+//
+//
+//
         listregion.forEach{
             viewModels.putSAMPLE(SAMPLE_REQEST( db.getSAMPLEbyID_Listregion(it.id)))
             db.getSAMPLEbyID_Listregion(it.id).forEach{
@@ -81,11 +103,11 @@ class sync() {
             }
         }
 
-        delay(1000)
-        sample.forEach{
-            sendphoto(db,it.id,context,viewModels)
-            viewModels.putLIST(LIST_REQEST(db.getLIST(it.id)))
-        }
+       delay(1000)
+       sample.forEach{
+           sendphoto(db,it.id,context,viewModels)
+           viewModels.putLIST(LIST_REQEST(db.getLIST(it.id)))
+       }
 
 
         val filePath = "/data/data/com.example.rosles/databases/userdb.db"

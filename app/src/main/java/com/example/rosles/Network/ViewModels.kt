@@ -11,7 +11,12 @@ import com.example.rosles.RequestClass.PerechetRequest
 import com.example.rosles.RequestClass.RegistrationReqest
 import com.example.rosles.RequestClass.UpdateRequest
 import com.example.rosles.ResponceClass.*
+import com.example.rosles.sync
+import com.google.gson.Gson
+import org.json.JSONArray
+import org.json.JSONObject
 import retrofit2.Response
+import kotlin.math.log
 
 
 class ViewModels():BaseViewModel(
@@ -229,9 +234,31 @@ class ViewModels():BaseViewModel(
         }
     }
 
-     fun putLISTREGION(body:LISTREGION_REQUEST)=viewModelScope.safeLaunch{
-        accountsRepository.putLISTREGION(body)
-    }
+         fun putLISTREGION(body:LISTREGION_REQUEST)=viewModelScope.safeLaunch{
+            var asd=accountsRepository.putLISTREGION(body)
+
+
+             //простыня кода нужная для сериализации ответа
+            var temp=asd.source().buffer.toString()
+
+            var bufer=temp.toCharArray()
+
+             bufer.set(0,'{')
+             bufer.set(bufer.size-1,'}')
+
+             var temp2=""
+             bufer.forEach {
+                 temp2+=it
+             }
+
+             val gson = Gson()
+             val book = gson.fromJson(temp2, text::class.java)
+
+
+             //отправка в синглтон
+              sync.temp.temp_object=book
+        }
+
 
     fun putSAMPLE(body:SAMPLE_REQEST)=viewModelScope.safeLaunch{
         accountsRepository.putSAMPLE(body)

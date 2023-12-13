@@ -205,7 +205,7 @@ class Wood : BaseActivity("Пробная площадь") {
 
             }
         }
-        //сохранение их хэш таблицы в базу данных
+        //сохранение из хэш таблицы в базу данных
         binding.include.save.setOnClickListener {
             writedata(vidWood)
             writedatapodles(vidWoodpodles)
