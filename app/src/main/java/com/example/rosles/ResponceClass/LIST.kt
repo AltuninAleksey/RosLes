@@ -20,7 +20,7 @@ data class LIST_DATA(
     val id_sample: Int,
     val id_breed: Int,
     val id_type_of_reproduction: Int,
-    val id_undergrowth: Int,
+    val id_undergrowth: Int?,
     val mark_update: Int
 
 ) : BaseResponceInterface

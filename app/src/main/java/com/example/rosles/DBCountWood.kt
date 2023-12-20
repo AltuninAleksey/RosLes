@@ -7,6 +7,7 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.graphics.Bitmap
+import androidx.core.database.getIntOrNull
 import com.example.rosles.Models.*
 import com.example.rosles.ResponceClass.*
 import com.example.rosles.Screens.GPStracker
@@ -141,7 +142,7 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
 
 
 
-    fun writeLIST(id:Int,to0_2:Int, from0_21To0_5:Int, from0_6To1_0:Int, from1_1to1_5:Int, from1_5:Int, max_height:Float?, id_breed_id:Int, id_sample_id:Int, id_type_of_reproduction_id:Int, avg_diameter:Float?, avg_height:Float?, count_of_plants:Int?, id_undergrowth_id:Int, main:Int?, avg_height_undergrowth:Float?){
+    fun writeLIST(id:Int,to0_2:Int, from0_21To0_5:Int, from0_6To1_0:Int, from1_1to1_5:Int, from1_5:Int, max_height:Float?, id_breed_id:Int, id_sample_id:Int, id_type_of_reproduction_id:Int, avg_diameter:Float?, avg_height:Float?, count_of_plants:Int?, id_undergrowth_id:Int?, main:Int?, avg_height_undergrowth:Float?){
         val database: SQLiteDatabase = this.writableDatabase
         database.execSQL(
             "INSERT INTO djangoForest_list (id,to0_2, from0_21To0_5, from0_6To1_0, from1_1to1_5, from1_5, max_height, id_breed_id, id_sample_id, id_type_of_reproduction_id, avg_diameter, avg_height, count_of_plants, id_undergrowth_id, main, avg_height_undergrowth)" +
@@ -319,7 +320,7 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
                 cursor.getInt(cursor.getColumnIndex("id_sample_id")).toInt(),
                 cursor.getInt(cursor.getColumnIndex("id_breed_id")).toInt(),
                 cursor.getInt(cursor.getColumnIndex("id_type_of_reproduction_id")).toInt() ,
-                cursor.getInt(cursor.getColumnIndex("id_undergrowth_id")).toInt(),
+                cursor.getIntOrNull(cursor.getColumnIndex("id_undergrowth_id")),
                 cursor.getInt(cursor.getColumnIndex("mark_update"))
             )
             listregionrequest.add(data)
