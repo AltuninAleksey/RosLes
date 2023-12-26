@@ -1,6 +1,9 @@
 package com.example.rosles.Network
 
 import android.content.Context
+import com.chuckerteam.chucker.api.ChuckerInterceptor
+import com.example.rosles.Screens.Authorization
+import com.example.rosles.Screens.MainActivity
 import com.google.gson.GsonBuilder
 import com.squareup.moshi.Moshi
 import okhttp3.Interceptor
@@ -25,7 +28,7 @@ interface SourcesProvider {
 
 object Singletons {
 
-    private lateinit var appContext: Context
+    lateinit var appContext: Context
 
     private val sourcesProvider: SourcesProvider by lazy {
         SourceProviderHolder.sourcesProvider
@@ -91,6 +94,7 @@ object SourceProviderHolder {
     private fun createOkHttpClient(): OkHttpClient {
         return OkHttpClient.Builder()
             //.addInterceptor(createAuthorizationInterceptor(Singletons.appSettings))
+           // .addInterceptor(ChuckerInterceptor())
             .addInterceptor(createLoggingInterceptor())
             .build()
     }

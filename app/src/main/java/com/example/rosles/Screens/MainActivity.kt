@@ -15,6 +15,7 @@ import androidx.core.view.get
 import com.example.rosles.BaseActivity
 import com.example.rosles.DBCountWood
 import com.example.rosles.Models.Poroda
+import com.example.rosles.Network.Singletons
 import com.example.rosles.Network.ViewModels
 import com.example.rosles.R
 import com.example.rosles.databinding.ActivityMainBinding
@@ -32,6 +33,7 @@ class MainActivity : BaseActivity("Перечетные ведомости") {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        Singletons.init(MainActivity())
         //инциализация навигации
 
         RecyclerviewInit()

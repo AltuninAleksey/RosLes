@@ -25,10 +25,12 @@ import kotlinx.coroutines.runBlocking
 class Authorization: AppCompatActivity() {
     private lateinit var binding: AuthorizationActivityBinding
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val viewModel by viewModels<ViewModels>() // Q
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
+
         CheckUser()
         binding = AuthorizationActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
