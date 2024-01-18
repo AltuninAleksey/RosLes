@@ -1011,6 +1011,20 @@ class GetDistrictForestlyByForestlyId(viewsets.ViewSet):
         return JsonResponse({'data': GetDistrictForestlyByForestlyIdSerializer(lst, many=True).data}, safe=False)
 
 
+class GetDistrictForestlyByArrayForestlyIds(ListAPIView):
+
+    def get(self, request, **kwargs):
+
+        data = []
+        for i in request.data['data']:
+            d_forestly = GetDistrictForestlyByForestlyIdSerializer(
+                DistrictForestly.objects.filter(id_forestly = i['id']), many=True).data
+            print(d_forestly)
+            data.append({"district_forestly_data": d_forestly})
+            # data.append(d_forestly)
+        return Response({"data": data}, status=status.HTTP_200_OK)
+
+
 class GetQuarterByDistrictId(viewsets.ViewSet):
     def list(self, request, **kwargs):
         pk = kwargs.get('pk')
@@ -1019,6 +1033,16 @@ class GetQuarterByDistrictId(viewsets.ViewSet):
         return JsonResponse({'data': GetQuarterByDistrictForestlyIdSerializer(lst, many=True).data}, safe=False)
 
 
+class GetQuarterByArrayDistrictIds(ListAPIView):
+
+    def get(self, request, **kwargs):
+        data = []
+        for i in request.data['data']:
+            quarter = GetQuarterByDistrictForestlyIdSerializer(
+                Quarter.objects.filter(id_district_forestly=i['id']), many=True).data
+            print(quarter)
+            data.append({"quarter": quarter})
+        return Response({"data": data}, status=status.HTTP_200_OK)
 
 
 class UnionListRegions(generics.ListCreateAPIView):
@@ -1532,53 +1556,11 @@ class FormingDocxViewDescRegion(ListAPIView):
         path_docx = forming_docx.forming_docx_desc_region(request.data)
         return Response({"document": path_docx})
 
-# class testviews(ListAPIView):
-#     print("BOOMBOX")
-#     # file_patj = str()
-# #     # print(BASE_DIR / 'test.xlsx' )
-#     import pandas as pd
-#     excel = pd.ExcelFile(rf"{BASE_DIR / 'Лесные районы РФ.xlsx'}")
-#     sheetX = excel.parse(0)
-#
-#     print(sheetX)
-#     # # sheetX = excel.parse()
-#     for i in sheetX['Леса']:
-#         print(1)
-#         print(i)
-#         ForestDistricts.objects.create(name_forest_district = i)
+
+
 
 
 class ForestViewSet(viewsets.ModelViewSet):
     pass
 
-
-# class TestView(APIView):
-#     from openpyxl import load_workbook
 #
-#     wb = load_workbook('test.xlsx')
-#     list_of_forestly = []
-#     # print(wb.get_sheet_names())
-#     sheet = wb.get_sheet_by_name('СЗФО')
-#     forestly = SubjectRF.objects.get(name_subject_RF = "Республика Карелия")
-#     print(forestly)
-#     # for i in range(3, 29):
-#     #     print(sheet.cell(row=i, column=2).value)
-#     # i = 3
-#     i = 1776
-#     # 1045
-#     while sheet.cell(row=i, column=1).value == 'Республика Карелия':
-#         if sheet.cell(row=i, column=2).value not in list_of_forestly:
-#             list_of_forestly.append(sheet.cell(row=i, column=2).value)
-#             Forestly.objects.create(
-#                 name_forestly = sheet.cell(row=i, column=2).value,
-#             id_subject_rf = forestly)
-#         i += 1
-#     print(i)
-#     # while sheet.cell(row=i, column=1).value == 'Архангельская область':
-#     #     if sheet.cell(row=i, column=2).value not in list_of_forestly:
-#     #         list_of_forestly.append(sheet.cell(row=i, column=2).value)
-#     #         Forestly.objects.create(
-#     #             name_forestly = sheet.cell(row=i, column=2).value,
-#     #         id_subject_rf = forestly)
-#     #     i += 1
-#     print(list_of_forestly)

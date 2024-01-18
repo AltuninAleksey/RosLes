@@ -182,6 +182,7 @@ class AboutUserDataSerializer(serializers.Serializer):
     id_subject_rf = serializers.CharField(source="id_user.subject_rf.id")
     name_subject_rf = serializers.CharField(source="id_user.subject_rf.name_subject_RF")
 
+
 class SampleSerializerId(serializers.Serializer):
     id = serializers.IntegerField()
     date = serializers.DateField()
@@ -573,11 +574,13 @@ class GetForestlyBySubjectRFIdSerializer(serializers.Serializer):
 class GetDistrictForestlyByForestlyIdSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     name_district_forestly = serializers.CharField()
+    id_forestly = serializers.CharField(source="id_forestly.id")
 
 
 class GetQuarterByDistrictForestlyIdSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     quarter_name = serializers.CharField()
+    id_district_forestly = serializers.CharField(source="id_district_forestly.id")
 
 
 class GetAllListRegionDataSerializer(serializers.Serializer):
