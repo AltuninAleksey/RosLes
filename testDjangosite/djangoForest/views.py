@@ -1013,7 +1013,7 @@ class GetDistrictForestlyByForestlyId(viewsets.ViewSet):
 
 class GetDistrictForestlyByArrayForestlyIds(ListAPIView):
 
-    def get(self, request, **kwargs):
+    def post(self, request, **kwargs):
 
         data = []
         for i in request.data['data']:
@@ -1035,7 +1035,7 @@ class GetQuarterByDistrictId(viewsets.ViewSet):
 
 class GetQuarterByArrayDistrictIds(ListAPIView):
 
-    def get(self, request, **kwargs):
+    def post(self, request, **kwargs):
         data = []
         for i in request.data['data']:
             quarter = GetQuarterByDistrictForestlyIdSerializer(
