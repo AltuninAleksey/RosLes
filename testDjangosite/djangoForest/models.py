@@ -680,3 +680,15 @@ class ForestDistricts(models.Model):
 
     def __str__(self):
         return self.name_forest_district
+
+
+class Dacha(models.Model):
+    name_side = models.CharField(max_length=300)
+    quarter = models.ForeignKey("Quarter", on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = "Дача/Урочище"
+        verbose_name_plural = "Дача/Урочище"
+
+    def __str__(self):
+        return self.name_side

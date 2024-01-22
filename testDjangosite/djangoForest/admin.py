@@ -227,6 +227,7 @@ class TrackingAdmin(admin.ModelAdmin):
     list_display_links = ('id', 'id_profile', 'data', 'map')
     search_fields = ('id', 'id_profile', 'data', 'map')
 
+
 admin.site.register(MethodForestRestoration)
 admin.site.register(ForestCareActivities)
 admin.site.register(Recommendation)
