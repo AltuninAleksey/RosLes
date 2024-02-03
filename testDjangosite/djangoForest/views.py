@@ -14,6 +14,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.hashers import make_password, check_password
+from django.core.cache import cache
 
 from testDjangosite.settings import BASE_DIR
 from rest_framework.renderers import MultiPartRenderer, JSONRenderer
@@ -616,6 +617,12 @@ class QuarterView(generics.ListCreateAPIView):
             except:
                 return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
                                 status=status.HTTP_404_NOT_FOUND)
+        cache_data = cache.get("all_quarters")
+        if cache_data is None:
+            cache_data = Quarter.objects.all()
+            cache.set("all_quarters", cache_data)
+        else:
+            return Response({'get': QuarterSerializer(cache_data, many=True).data})
         lst = Quarter.objects.all()
         return Response({'get':QuarterSerializer(lst, many=True).data})
 
