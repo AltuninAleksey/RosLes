@@ -618,9 +618,11 @@ class QuarterView(generics.ListCreateAPIView):
                 return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
                                 status=status.HTTP_404_NOT_FOUND)
         cache_data = cache.get("all_quarters")
+        # print(cache_data)
         if cache_data is None:
             cache_data = Quarter.objects.all()
             cache.set("all_quarters", cache_data)
+            print("all_quarters all cached")
         else:
             return Response({'get': QuarterSerializer(cache_data, many=True).data})
         lst = Quarter.objects.all()
