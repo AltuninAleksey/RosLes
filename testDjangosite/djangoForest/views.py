@@ -624,6 +624,7 @@ class QuarterView(generics.ListCreateAPIView):
             cache.set("all_quarters", cache_data)
             print("all_quarters all cached")
         else:
+            print("otdal cache")
             return Response({'get': QuarterSerializer(cache_data, many=True).data})
         lst = Quarter.objects.all()
         return Response({'get':QuarterSerializer(lst, many=True).data})
