@@ -1288,7 +1288,7 @@ class GetAllDescriptionRegion(ListAPIView):
         subject_id = request.user.subject_rf_id
         if subject_id:
             lst = DescriptionRegion.objects.filter(
-                id_list_region__id_quarter_id__id_district_forestly_id__id_forestly_id__id_subject_rf_id=subject_id)
+                id_list_region__id_district_forestly_id__id_forestly_id__id_subject_rf_id=subject_id)
             return Response({"get": DescriptionRegionSerializer(lst, many=True).data})
         lst = DescriptionRegion.objects.all()
         return Response({"get": DescriptionRegionSerializer(lst, many=True).data})
@@ -1369,7 +1369,7 @@ class GetFieldCard(ListAPIView):
         subject_id = request.user.subject_rf_id
         if subject_id:
             lst = FieldCard.objects.filter(
-                id_list_region__id_quarter_id__id_district_forestly_id__id_forestly_id__id_subject_rf_id = subject_id)
+                id_list_region__id_district_forestly_id__id_forestly_id__id_subject_rf_id = subject_id)
             return Response({"get": FieldCardSerializer(lst, many=True).data})
         lst = FieldCard.objects.all()
         return Response({"get": FieldCardSerializer(lst, many=True).data})
