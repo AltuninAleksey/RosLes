@@ -202,8 +202,12 @@ class ListRegionView(generics.ListCreateAPIView):
     def get(self, request, *args, **kwargs):
         if kwargs:
             try:
-                lst = ListRegion.objects.get(pk=kwargs['pk'])
-                ser_lst = ListRegionSerializerId(lst).data
+                if ListRegion.objects.filter(pk=kwargs['pk']).exclude(id_district_forestly = None).exists():
+                    lst = ListRegion.objects.get(pk=kwargs['pk'])
+                    ser_lst = ListRegionSerializerId(lst).data
+                else:
+                    lst = ListRegion.objects.get(pk=kwargs['pk'])
+                ser_lst = ListRegionSerializer(lst).data
                 if FieldCard.objects.filter(id_list_region = kwargs['pk']).exists():
                     lst_field = FieldCard.objects.filter(id_list_region=kwargs['pk']).values("id")
                     ser_lst.update({"id_field_card": lst_field[0]['id']})
