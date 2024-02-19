@@ -904,9 +904,10 @@ class GetAllListRegionData(viewsets.ViewSet):
     def list(self, request, **kwargs):
         print(request.user.subject_rf_id)
         subject_id = request.user.subject_rf_id
+        print(subject_id)
         if subject_id:
             lst = ListRegion.objects.filter(
-                id_quarter_id__id_district_forestly_id__id_forestly_id__id_subject_rf_id = subject_id)
+                id_district_forestly_id__id_forestly_id__id_subject_rf_id = 31)
             return JsonResponse({'data': GetAllListRegionDataSerializer(lst, many=True).data}, safe=False)
         lst = ListRegion.objects.all()
         return JsonResponse({'data': GetAllListRegionDataSerializer(lst, many=True).data}, safe=False)
