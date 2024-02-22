@@ -17,6 +17,8 @@ def non_blank(value):
     return f"Поле {value} не может быть пустым"
 
 class ProfileSerializer(serializers.ModelSerializer):
+    id_subject_rf = serializers.CharField(source="id_user.subject_rf.id", read_only=True)
+
     class Meta:
         model = Profile
         fields = '__all__'
@@ -50,6 +52,11 @@ class ProfileSerializer(serializers.ModelSerializer):
                     raise serializers.ValidationError({"error_text": "Номер телефона должен состоять только из цифр."})
 
         return data
+
+
+class ProfileWithSubjectSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    id_subject_rf = serializers.CharField(source="id_user.subject_rf.id", read_only = True)
 
 
 class UserSerializer(serializers.ModelSerializer):
