@@ -86,9 +86,9 @@ class ListRegionAdmin(admin.ModelAdmin):
 
 
 class SampleAdmin(admin.ModelAdmin):
-    list_display = ('id', 'date', 'sample_area', 'id_profile', 'id_list_region', 'id_quarter', 'soil_lot')
-    list_display_links = ('id', 'date', 'sample_area', 'id_profile', 'id_list_region', 'id_quarter', 'soil_lot')
-    search_fields = ('id', 'date', 'sample_area', 'id_profile', 'id_list_region', 'id_quarter', 'soil_lot')
+    list_display = ('id', 'date', 'sample_area', 'id_profile', 'id_list_region', 'id_district_forestly', 'dacha', 'name_quarter', 'soil_lot')
+    list_display_links = ('id', 'date', 'sample_area', 'id_profile', 'id_list_region', 'id_district_forestly', 'dacha', 'name_quarter', 'soil_lot')
+    search_fields = ('id', 'date', 'sample_area', 'id_profile', 'id_list_region', 'id_district_forestly', 'dacha', 'name_quarter', 'soil_lot')
 
 
 class PostAdmin(admin.ModelAdmin):
