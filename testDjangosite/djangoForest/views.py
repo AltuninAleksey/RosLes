@@ -290,12 +290,12 @@ class ListRegionView(generics.ListCreateAPIView):
 class ListRegionViewUpdate(ListView):
 
     def put(self, request, *args, **kwargs):
-        try:
-            instance = ListRegion.objects.get(pk=kwargs['pk'])
-        except:
-            return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
-                            status=status.HTTP_404_NOT_FOUND)
-
+        # try:
+        #     instance = ListRegion.objects.get(pk=kwargs['pk'])
+        # except:
+        #     return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
+        #                     status=status.HTTP_404_NOT_FOUND)
+        instance = ListRegion.objects.get(pk=kwargs['pk'])
         serealizer = ListRegionUpdateSerializer(data=request.data, instance=instance)
         serealizer.is_valid(raise_exception=True)
         serealizer.save()
