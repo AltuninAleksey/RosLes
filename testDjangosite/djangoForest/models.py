@@ -199,8 +199,12 @@ class Sample(models.Model):
     id_profile = models.ForeignKey('Profile', on_delete=models.CASCADE, verbose_name='Сотрудник ', null=True)
     id_list_region = models.ForeignKey('ListRegion', on_delete=models.CASCADE,
                                        verbose_name='Перечетная ведомость участка', null=True)
-    id_quarter = models.ForeignKey('Quarter', on_delete=models.CASCADE,
-                                   verbose_name='Квартал', null=True)
+    # id_quarter = models.ForeignKey('Quarter', on_delete=models.CASCADE,
+    #                                verbose_name='Квартал', null=True)
+    id_district_forestly = models.ForeignKey('DistrictForestly', on_delete=models.CASCADE,
+                                             verbose_name="Участковое лесничество", default= 6)
+    name_quarter = models.CharField(max_length=300, verbose_name="Наименование квартала", null=True)
+    dacha = models.CharField(max_length=300, verbose_name='Урочище', null=True)
     soil_lot = models.CharField(max_length=300, verbose_name='Выдел', null=True, default=0)
     width = models.FloatField(u'Ширина', null=True, default=0)
     lenght = models.FloatField(u'Длина', null=True, default=0)
