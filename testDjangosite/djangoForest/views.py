@@ -964,6 +964,11 @@ class CreateSampleAndOther(ListAPIView):
         serializer = SampleSerializer(data=request.data['sample'], instance=instance)
         serializer.is_valid(raise_exception=True)
         serializer.save()
+        print(request.data['list_region']['id'])
+        listregion_instance = ListRegion.objects.get(pk=request.data['list_region']['id'])
+        listregion_serializer = ListRegionSerializer(data=request.data['list_region'], instance=listregion_instance)
+        listregion_serializer.is_valid()
+        listregion_serializer.save()
         id_sample = serializer.data['id']
         if len(request.data['list_data']) != 0:
             for i in request.data['list_data']:
@@ -1463,7 +1468,7 @@ class CreateListRegionByDescRegion(ListAPIView):
     def post(self, request, *args, **kwargs):
         list_serializer = ListRegionSerializer(data=request.data)
         if not list_serializer.is_valid():
-            print(desc_serializer.errors)
+            print(list_serializer.errors)
             return Response({"error": status.HTTP_400_BAD_REQUEST,
                              "error_text": list_serializer.errors[next(iter(list_serializer.errors))][0]},
                             status=status.HTTP_400_BAD_REQUEST)
