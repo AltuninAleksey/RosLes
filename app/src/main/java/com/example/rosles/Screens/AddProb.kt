@@ -117,7 +117,7 @@ class AddProb : AppCompatActivity() {
         val mDatePicker = dialog.findViewById<DatePicker>(R.id.datePicker)
 
         val today = Calendar.getInstance()
-
+        mDatePicker.maxDate=today.timeInMillis
         mDatePicker!!.init(
             today[Calendar.YEAR], today[Calendar.MONTH],
             today[Calendar.DAY_OF_MONTH]

@@ -56,6 +56,8 @@ interface API {
     @PUT("list")
     suspend fun putLIST(@Body body:LIST_REQEST):ResponseBody
 
+    @PUT("profile/{id}")
+    suspend fun updateprofileid(@Path("id") id: Int,@Body body:UserResp):ResponseBody
 
 
 
@@ -89,6 +91,11 @@ interface API {
     @GET("profile")
     suspend fun  getprofile(): getUserResp
 
+
+    @GET("profile/{id}")
+    suspend fun  getprofileid(@Path("id") id: Int): temp_data_userresp
+
+
     @GET("subjectRF")
     suspend fun getrequestsubjectRF(): SubjectResp
 
@@ -96,7 +103,7 @@ interface API {
     suspend fun forestlubyid(@Path("id") id: Int): ForestlyResp
 
     @GET("getdistrictbyforestly/{id}")
-    suspend fun districtbyID(@Path("id") id: Int): DistrictResp
+    suspend fun districtbyID(@Path("id") id: Int): DISTRICTFORESTLY_RESP
 
     @GET("getquarterbydistrictid/{id}")
     suspend fun quaterdistrictbyID(@Path("id") id: Int): CvartalResp

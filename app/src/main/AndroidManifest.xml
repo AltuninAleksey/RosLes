@@ -58,10 +58,10 @@
         <activity android:name="com.example.rosles.Screens.SelectPhoto"/>
         <activity android:name="com.example.rosles.Screens.lisq_square"/>
         <activity android:name="com.example.rosles.Screens.create_user"/>
-        <activity android:name="com.example.rosles.Screens.AddListregion"/>
         <activity android:name="com.example.rosles.Screens.ChangeListregion"/>
         <activity android:name="com.example.rosles.Screens.ChangeSample"/>
         <activity android:name="com.example.rosles.Screens.GpxTrack"/>
+        <activity android:name="com.example.rosles.Screens.change_user"/>
 
         <provider
             android:name="androidx.core.content.FileProvider"

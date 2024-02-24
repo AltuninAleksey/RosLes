@@ -43,7 +43,7 @@ class AddVedomost:AppCompatActivity() {
             showpopupmenu(it)
         }
         RecyclerviewInit()
-        InitClick()
+
     }
     fun showpopupmenu (view: View) {
         val popup = PopupMenu(this, view)
@@ -74,26 +74,27 @@ class AddVedomost:AppCompatActivity() {
     @SuppressLint("Range")
     fun RecyclerviewInit() {
         val buf:Int?=intent.getStringExtra("id")?.toInt()
-        val quater = db.getQuaterbyID(buf)
+       // val quater = db.getQuaterbyID(buf)
 
-        binding.idCvartal.text = quater.quarterName
+        binding.idCvartal.text
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         binding.date.text = LocalDateTime.now().format(formatter).toString()
 
-    }
-    fun InitClick() {
+
+
         var sPref = getSharedPreferences("PreferencesName", MODE_PRIVATE);
         var id = sPref.getString("id", "0")!!.toInt()
         binding.buttonAuto.setOnClickListener {
             db.createvedom(
-                binding.date.text.toString(),
+                    binding.date.text.toString(),
                 binding.samplearea.text.toString(),
-                intent.getStringExtra("id")!!.toInt(),
                 binding.vudel.text.toString(),
-                2,
+                buf!!.toInt(),
                 id,
-                "0"
-                )
+                "0",
+                binding.idCvartal.text.toString().toInt(),
+                2)
+
             Toast.makeText(this,"Данные добавлены",Toast.LENGTH_LONG).show()
             startActivity(Intent(this, MainActivity::class.java))
         }
@@ -111,7 +112,10 @@ class AddVedomost:AppCompatActivity() {
         val mInfoTextView = dialog.findViewById<TextView>(R.id.textView)
         val mDatePicker = dialog.findViewById<DatePicker>(R.id.datePicker)
 
+
+
         val today = Calendar.getInstance()
+        mDatePicker.maxDate=today.timeInMillis
 
         mDatePicker!!.init(
             today[Calendar.YEAR], today[Calendar.MONTH],

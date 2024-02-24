@@ -58,8 +58,11 @@ class Authorization: AppCompatActivity() {
                 }
 
                 override fun ifSuccess(responce: BaseResponceInterface?) {
-                    if (responce != null && responce is AuthReSponce)
-                        saveText(responce.id, responce.FIO)
+                    if (responce != null && responce is AuthReSponce){
+
+                        saveText(responce.id, responce.FIO,)
+                    }
+
                     Toast.makeText(this@Authorization, "Вы авторизовались", Toast.LENGTH_SHORT).show()
                     startActivity(Intent(this@Authorization, Dashboard::class.java))
                 }

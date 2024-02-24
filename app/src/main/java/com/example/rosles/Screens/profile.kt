@@ -8,19 +8,27 @@ import android.util.DisplayMetrics
 import android.view.MenuItem
 import android.view.View
 import android.widget.*
+import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.get
+import androidx.lifecycle.lifecycleScope
 import com.example.rosles.BaseActivity
 import com.example.rosles.DBCountWood
+import com.example.rosles.Network.SafeRequest
+import com.example.rosles.Network.SourceProviderHolder
+import com.example.rosles.Network.ViewModels
 import com.example.rosles.R
+import com.example.rosles.ResponceClass.BaseResponceInterface
+import com.example.rosles.ResponceClass.temp_data_userresp
 import com.example.rosles.databinding.ProfileBinding
 import com.example.rosles.setSizeRelativeCurrentWindow
+import kotlinx.coroutines.launch
 
 class profile:BaseActivity("Профиль") {
 
 //    val viewModel by viewModels<ViewModels>()
-
+    val viewModel by viewModels<ViewModels>()
     private lateinit var binding: ProfileBinding
     private val db = DBCountWood(this, null)
 
@@ -55,7 +63,9 @@ class profile:BaseActivity("Профиль") {
     fun initscreen() {
         var sPref = getSharedPreferences("PreferencesName", MODE_PRIVATE);
         var id = sPref.getString("id", "0")!!.toInt()
-        binding.fio.text = sPref.getString("FIO", "")
+        lifecycleScope.launch {
+            binding.fio.setText(checkuser(id))
+        }
         var leftright: Boolean = false
 
         var activetableRow: TableRow? = null
@@ -120,7 +130,7 @@ class profile:BaseActivity("Профиль") {
         }
 
         binding.toolbar.user.setOnClickListener {
-            startActivity(Intent(this, create_user::class.java))
+            startActivity(Intent(this, change_user::class.java))
 
         }
 
@@ -160,6 +170,43 @@ class profile:BaseActivity("Профиль") {
             }
         }
     }
+
+    suspend fun checkuser(id:Int):String{
+
+        var result:String
+        var sPref = getSharedPreferences("PreferencesName", MODE_PRIVATE);
+
+        result= sPref.getString("FIO", "").toString()
+
+
+
+        SafeRequest(viewModel).request(object : SafeRequest.Protection{
+
+            override suspend fun makeRequest(): BaseResponceInterface {
+                val user = SourceProviderHolder.sourcesProvider.getAccountsSource().getprofileid(id)
+                return user
+            }
+
+            override fun ifSuccess(responce: BaseResponceInterface?) {
+                if (responce != null && responce is temp_data_userresp){
+                    result=responce.get.FIO
+
+                    var sPref = getSharedPreferences("PreferencesName", MODE_PRIVATE);
+                    val ed = sPref.edit()
+                    ed.putString("FIO", result.toString())
+                    ed.apply()
+                    binding.fio.setText(result)
+
+                }
+            }
+
+
+
+        })
+        return result
+    }
+
+
 
 
 

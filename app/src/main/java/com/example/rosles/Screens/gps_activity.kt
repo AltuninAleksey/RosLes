@@ -19,6 +19,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.view.size
 import com.example.rosles.Network.ViewModels
 import com.example.rosles.R
 import com.example.rosles.databinding.GpsBinding
@@ -79,6 +80,13 @@ class gps_activity:AppCompatActivity() {
             tableRow.addView(checkBox)
             binding.tblLayout.addView(tableRow)
             i++
+        }
+        binding.toolbar.delete.setOnClickListener {
+            if (binding.tblLayout.size>1){
+                i--
+                binding.tblLayout.removeViewAt(binding.tblLayout.size-1)
+            }
+
         }
 
     }

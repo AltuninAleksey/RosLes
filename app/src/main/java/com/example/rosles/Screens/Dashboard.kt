@@ -5,27 +5,25 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
-import android.widget.PopupMenu
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBar
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.rosles.BaseActivity
 import com.example.rosles.DBCountWood
+import com.example.rosles.Network.SafeRequest
+import com.example.rosles.Network.SourceProviderHolder
 import com.example.rosles.Network.ViewModels
 import com.example.rosles.R
+import com.example.rosles.ResponceClass.BaseResponceInterface
+import com.example.rosles.ResponceClass.temp_data_userresp
 import com.example.rosles.databinding.DashboardBinding
 import com.example.rosles.sync
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.io.File
 
 
 class Dashboard: BaseActivity() {
@@ -51,10 +49,15 @@ class Dashboard: BaseActivity() {
 
 
         val sPref = getSharedPreferences("PreferencesName", MODE_PRIVATE)
+        val id_user=sPref.getString("id","0")!!.toInt()
+
+        checksubjectnumber(id_user)
 
         val view: View = supportActionBar!!.customView
         val title=view.findViewById<TextView>(R.id.text)
         val back=view.findViewById<ImageView>(R.id.back)
+
+        back.setImageResource(R.drawable.baseline_exit_to_app_24)
         val menu=view.findViewById<ImageView>(R.id.burger)
         title.setText("Главная")
         back.setOnClickListener{
@@ -88,14 +91,14 @@ class Dashboard: BaseActivity() {
         }
 
         binding.ALLDOWNLOAD.setOnClickListener{
-            val value=sPref.getString("id","0")!!.toInt()
-            val context=this
+            var id_subject = getSharedPreferences("PreferencesName", MODE_PRIVATE)
+                .getInt("id_subject",0)
             var database = DBCountWood(this, null)
             database.writableDatabase
             lifecycleScope.launch {
-                sync().main1(viewModel,database,context,value)
+                sync().main1(viewModel,database,this@Dashboard,id_user,id_subject)
                 delay(2000)
-                Toast.makeText(context, "Данные обновленны", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@Dashboard, "Данные обновленны", Toast.LENGTH_SHORT).show()
             }
 
             viewModel.uploadbd.observe(this){
@@ -111,16 +114,14 @@ class Dashboard: BaseActivity() {
 
 
         binding.reload.setOnClickListener{
-// ТВАРЬТВАРЬТВАРЬТВАРЬТВАРЬТВАРЬТВАРЬТВАРЬТВАРЬТВАРЬТВАРЬТВАРЬТВАРЬТВАРЬТВАРЬТВАРЬТВАРЬТВАРЬТВАРЬТВАРЬТВАРЬТВАРЬТВАРЬТВАРЬТВАРЬТВАРЬТВАРЬ
-            val context=this
-            val value=sPref.getString("id","0")!!.toInt()
+
             var database = DBCountWood(this, null)
             database.writableDatabase
             lifecycleScope.launch{
-                sync().load(viewModel,db,context)
+                sync().load(viewModel,db,this@Dashboard)
 //                delay(2000)
 //                sync().main1(viewModel,database, context,value)
-                Toast.makeText(context, "Успех", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@Dashboard, "Успех", Toast.LENGTH_SHORT).show()
             }
 
         }
@@ -128,6 +129,40 @@ class Dashboard: BaseActivity() {
         binding.gps.setOnClickListener{
             startActivity(Intent(this, GpxTrack::class.java))
         }
+    }
+
+    fun checksubjectnumber(id:Int){
+        var id_subject = getSharedPreferences("PreferencesName", MODE_PRIVATE)
+            .getInt("id_subject",0)
+
+
+
+        if (id_subject<=0 ){
+            SafeRequest(viewModel).request(object : SafeRequest.Protection{
+
+                override suspend fun makeRequest(): BaseResponceInterface {
+                    val user = SourceProviderHolder.sourcesProvider.getAccountsSource().getprofileid(id)
+                    return user
+                }
+
+                override fun ifSuccess(responce: BaseResponceInterface?) {
+                    if (responce != null && responce is temp_data_userresp){
+                        responce.get.id_subject_rf
+
+                        var sPref = getSharedPreferences("PreferencesName", MODE_PRIVATE);
+                        val ed = sPref.edit()
+                        ed.putInt("id_subject",  responce.get.id_subject_rf!!.toInt()!!)
+                        ed.apply()
+                    }
+                }
+
+
+
+            })
+        }
+
+
+
     }
 
 

@@ -13,5 +13,7 @@ data class LISTREGION_DATA(
     val mark_update: Int?,
     val id_quarter: Int,
     val id_profile: Int?=0,
-    val number_region:String?=null
+    val number_region:String?=null,
+    val id_district_forestly:Int
+
     ) : BaseResponceInterface

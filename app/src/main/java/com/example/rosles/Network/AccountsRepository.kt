@@ -32,13 +32,18 @@ interface AccountsSource {
     suspend fun registration(registrationReqest: RegistrationReqest): Response<RegistrationReqest>
     suspend fun getrequestsubjectRF(): SubjectResp
     suspend fun forestlubyid(id:Int): ForestlyResp
-    suspend fun districtbyID(id:Int): DistrictResp
+    suspend fun districtbyID(id:Int): DISTRICTFORESTLY_RESP
     suspend fun quaterdistrictbyID(id:Int): CvartalResp
     suspend fun getprofile():getUserResp
+
+    suspend fun getprofileid(id:Int):temp_data_userresp
     suspend fun getbreed():BreedResp
     suspend fun getbd():BaseResp
     suspend fun get_user(body:AuthRequest):AuthReSponce
     suspend fun upload(body: UpdateRequest): BaseResp
+
+    suspend fun putprofile(id: Int,body: UserResp): ResponseBody
+
 
     suspend fun putLISTREGION(body: LISTREGION_REQUEST): ResponseBody
 
@@ -71,11 +76,15 @@ class AccountsRepository( private val accountsSource: AccountsSource) {
     suspend fun getSAMPLE():SAMPLE_RESP=accountsSource.getSAMPLE()
     suspend fun getLIST():LIST_RESP=accountsSource.getLIST()
 
+
+
     suspend fun putLISTREGION(body: LISTREGION_REQUEST):ResponseBody = accountsSource.putLISTREGION(body)
 
     suspend fun putSAMPLE(body: SAMPLE_REQEST):ResponseBody = accountsSource.putSAMPLE(body)
 
     suspend fun putLIST(body: LIST_REQEST):ResponseBody = accountsSource.putLIST(body)
+
+    suspend fun putprofile(id:Int,body: UserResp):ResponseBody = accountsSource.putprofile(id,body)
 
 
     suspend fun reproduction(): List<GETReproductionResp> = accountsSource.reproduction().get
@@ -86,11 +95,14 @@ class AccountsRepository( private val accountsSource: AccountsSource) {
 
     suspend fun getprofile(): getUserResp =  accountsSource.getprofile()
 
+
+    suspend fun getprofileid(id: Int): temp_data_userresp =  accountsSource.getprofileid(id)
+
     suspend fun getrequestsubjectRF():SubjectResp=accountsSource.getrequestsubjectRF()
 
     suspend fun forestlubyid(id:Int):ForestlyResp=accountsSource.forestlubyid(id)
 
-    suspend fun districtbyID(id:Int):DistrictResp=accountsSource.districtbyID(id)
+    suspend fun districtbyID(id:Int):DISTRICTFORESTLY_RESP=accountsSource.districtbyID(id)
 
     suspend fun quaterdistrictbyID(id:Int):CvartalResp=accountsSource.quaterdistrictbyID(id)
 

@@ -66,7 +66,7 @@ class ChoiceCvartal:AppCompatActivity() {
     fun start(itemView: Int) {
         var buf=intent.getStringExtra("id_Vedomost")
         if(buf!=null){
-            val intent1 = Intent(this, ChangeVedomost::class.java)
+            val intent1 = Intent(this, ChangeListregion::class.java)
             intent1.putExtra("id",itemView.toString())
             intent1.putExtra("id_Vedomost",buf)
             startActivity(intent1)

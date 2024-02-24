@@ -36,7 +36,21 @@ class MainActivity : BaseActivity("Перечетные ведомости") {
         Singletons.init(MainActivity())
         //инциализация навигации
 
-        RecyclerviewInit()
+        binding.toolbar.addbutton.setOnClickListener {
+            var id_subject = getSharedPreferences("PreferencesName", MODE_PRIVATE)
+                .getInt("id_subject",0)
+            val intent1 = Intent(this, ChoiceLes::class.java)
+            intent1.putExtra("id", id_subject.toString())
+            intent1.putExtra("id_Vedomost", intent.getStringExtra("id_Vedomost"))
+
+            startActivity(intent1)
+            RecyclerviewInit()
+        }
+
+
+
+
+       RecyclerviewInit()
     }
     override fun onRestart() {
         binding.tblLayout.removeAllViews()
@@ -45,7 +59,7 @@ class MainActivity : BaseActivity("Перечетные ведомости") {
     }
     @SuppressLint("Range")
     fun RecyclerviewInit() {
-        val porodaList :List<Poroda> = db.readbyporoda()
+        val porodaList :List<Poroda> =  db.readbyporoda()
         var activetableRow: TableRow? = null
 
         // отсюда вычитаем единицу тк как в противном случае выходим в оут оф баунс(данные не записываются в полном обьеме)
@@ -54,8 +68,8 @@ class MainActivity : BaseActivity("Перечетные ведомости") {
             /* Порядок важен, знацения будут добавляться в колонки таблицы
             * в порядке указанном в valuesOfPoroda */
             val valuesOfPorodaList: List<String> = mutableListOf(
-                porodaList[i].id,
                 porodaList[i].nameForestly,
+                porodaList[i].id,
                 porodaList[i].nameDistrictForestly,
                 porodaList[i].quarterName,
                 porodaList[i].soilLot,
@@ -96,6 +110,8 @@ class MainActivity : BaseActivity("Перечетные ведомости") {
             if (activetableRow != null) {
                 var bufer = activetableRow?.get(0)
                 val textView = bufer as TextView
+                var a = textView.text
+                a
                 val intent = Intent(this, lisq_square::class.java)
                 intent.putExtra("id_Vedomost", textView.text)
                 startActivity(intent)
@@ -138,7 +154,14 @@ class MainActivity : BaseActivity("Перечетные ведомости") {
         }
 
         binding.toolbar.addbutton.setOnClickListener {
-            startActivity(Intent(this, ChoiceSubject::class.java))
+            var id_subject = getSharedPreferences("PreferencesName", MODE_PRIVATE)
+                .getInt("id_subject",0)
+            val intent1 = Intent(this, ChoiceLes::class.java)
+            intent1.putExtra("id", id_subject.toString())
+            intent1.putExtra("id_Vedomost", intent.getStringExtra("id_Vedomost"))
+
+            startActivity(intent1)
+
         }
     }
 

@@ -77,38 +77,26 @@ class ChangeListregion: AppCompatActivity() {
 
     @SuppressLint("Range")
     fun RecyclerviewInit() {
-        val idCvartal:Int?=intent.getStringExtra("id")?.toInt()
+
         val id_Vedomost:Int?=intent.getStringExtra("id_Vedomost")?.toInt()
 
-        var cursor:Cursor
-        var bufcvartalid:String
-        var bufcvartalname:String?
 
-        //квартал
+        val vedom = db.getVedombyID(id_Vedomost!!)
 
-        val vedom = db.getVedombyID(id_Vedomost)
 
-        var bufQuarter_name = vedom.quarterName
         var bufId_quarter_id = vedom.idQuarterId
 
-        binding.idCvartal.text = bufQuarter_name
+        binding.idCvartal.setText(vedom.quarterName)
         binding.vudel.setText(vedom.soilLot)
         binding.samplearea.setText(vedom.sampleRegion)
         binding.date.text = vedom.date
-
-        if (idCvartal!=null){
-            val quater = db.getQuaterbyID(idCvartal)
-
-            bufId_quarter_id = quater.id
-            bufQuarter_name = quater.quarterName
-        }
 
         binding.buttonAuto.setOnClickListener {
             db.UpdateLISTREGION(
                 id_Vedomost!!,
                 binding.date.text.toString(),
                 binding.samplearea.text.toString(),
-                bufId_quarter_id.toInt(),
+                binding.idCvartal.text.toString().toInt(),
                 binding.vudel.text.toString()
             )
             db.Mark_Update_Listregion(id_Vedomost)
@@ -134,7 +122,7 @@ class ChangeListregion: AppCompatActivity() {
         val mDatePicker = dialog.findViewById<DatePicker>(R.id.datePicker)
 
         val today = Calendar.getInstance()
-
+        mDatePicker.maxDate=today.timeInMillis
         mDatePicker!!.init(
             today[Calendar.YEAR], today[Calendar.MONTH],
             today[Calendar.DAY_OF_MONTH]

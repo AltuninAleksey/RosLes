@@ -3,22 +3,15 @@ package com.example.rosles
 import android.content.Context
 import android.content.ContextWrapper
 import android.graphics.Bitmap
-import android.os.Environment
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import com.example.rosles.Network.ViewModels
 import com.example.rosles.RequestClass.UpdateRequest
-import com.example.rosles.ResponceClass.LISTREGION_DATA
 import com.example.rosles.ResponceClass.LISTREGION_REQUEST
-import com.example.rosles.ResponceClass.LIST_DATA
 import com.example.rosles.ResponceClass.LIST_REQEST
 import com.example.rosles.ResponceClass.SAMPLE_DATA
 import com.example.rosles.ResponceClass.SAMPLE_REQEST
 import com.example.rosles.ResponceClass.text
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -32,7 +25,9 @@ class sync() {
 
 
 
-    fun main1( viewModels: ViewModels, db: DBCountWood,  context: AppCompatActivity,value: Int) {
+    fun main1( viewModels: ViewModels, db: DBCountWood,  context: AppCompatActivity,value: Int,id_subject:Int) {
+
+
 
             if(!db.djangoForest_undergrowth())
                 viewModels.getUNDER(db)
@@ -40,17 +35,10 @@ class sync() {
             if(!db.djangoForest_breed())
                 viewModels.getBREED(db)
 
-            if(!db.djangoForest_quarter())
-                viewModels.getQUATER(db)
 
-            if(!db.djangoForest_districtforestly())
-                viewModels.getDISTRICTFORESTLY(db)
+            if(!db.djangoForest_forestly())
+                viewModels.getFORESTLY(db,id_subject)
 
-            if (!db.djangoForest_forestly())
-                viewModels.getFORESTLY(db)
-
-            if (!db.djangoForest_subjectrf())
-                viewModels.getSUBJECTRF(db)
 
             if (!db.djangoForest_listregion())
                 viewModels.getLISTREGION(db, value)
@@ -66,6 +54,8 @@ class sync() {
 //костыльный синглтон для получения ответа от сервера переделать на ретурн или клбек
     object temp{
         var temp_object:text?=null
+
+        var temp_objectsample:text?=null
     }
 
 
@@ -73,11 +63,12 @@ class sync() {
 
 
         var listregion=db.getLISTREGION()
+        val oldlistregion=db.getLISTREGION()
         viewModels.putLISTREGION(LISTREGION_REQUEST(listregion))
-        delay(1000)
+        delay(5000)
         if (temp.temp_object!=null){
              temp.temp_object!!.text.ids.forEach { temp->
-                temp.obj.last
+
                 listregion.forEach{
                     if (it.id== temp.obj.last){
                         it.id=temp.obj.new
@@ -86,28 +77,41 @@ class sync() {
             }
         }
 
-        listregion.forEach {
-            it.id
-        }
 
-        delay(1000)
+        var oldsample = mutableListOf<SAMPLE_DATA>()
         var sample = mutableListOf<SAMPLE_DATA>()
-        var list:ArrayList<LIST_DATA> = arrayListOf()
-//
-//
-//
-        listregion.forEach{
-            viewModels.putSAMPLE(SAMPLE_REQEST( db.getSAMPLEbyID_Listregion(it.id)))
-            db.getSAMPLEbyID_Listregion(it.id).forEach{
+
+        for (i in oldlistregion.indices){
+
+            var sampleData=db.getSAMPLEbyID_Listregion(oldlistregion[i].id,listregion[i].id)
+            var test=db.getSAMPLEbyID_Listregion(oldlistregion[i].id,listregion[i].id)
+            viewModels.putSAMPLE(SAMPLE_REQEST(sampleData ))
+
+            sampleData.forEach{
                 sample.add(it)
+            }
+            test.forEach{
+                oldsample.add(it)
             }
         }
 
-       delay(1000)
-       sample.forEach{
-           sendphoto(db,it.id,context,viewModels)
-           viewModels.putLIST(LIST_REQEST(db.getLIST(it.id)))
-       }
+       delay(5000)
+
+        if (temp.temp_objectsample!=null){
+            temp.temp_objectsample!!.text.ids.forEach { temp->
+
+                sample.forEach{
+                    if (it.id== temp.obj.last){
+                        it.id=temp.obj.new
+                    }
+                }
+            }
+        }
+
+        for (i in oldsample.indices){
+           sendphoto(db,oldsample[i].id,sample[i].id,context,viewModels)
+           viewModels.putLIST(LIST_REQEST(db.getLIST(oldsample[i].id,sample[i].id)))
+        }
 
 
         val filePath = "/data/data/com.example.rosles/databases/userdb.db"
@@ -130,8 +134,8 @@ class sync() {
 
     }
 
-    fun sendphoto(db: DBCountWood,id:Int,context: Context,viewModels: ViewModels){
-        db.getphotoall(id).forEach{
+    fun sendphoto(db: DBCountWood,oldid:Int,id:Int,context: Context,viewModels: ViewModels){
+        db.getphotoall(oldid,id).forEach{
             val wrapper = ContextWrapper(context)
             var file = wrapper.getDir("Images", Context.MODE_PRIVATE)
             file = File(file,"${UUID.randomUUID()}.jpg")

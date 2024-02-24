@@ -71,6 +71,10 @@ class RetrofitAccountsSource(
         delay(1000)
         accountsApi.putLIST(body)
     }
+    override suspend fun putprofile(id:Int,body:UserResp): ResponseBody = wrapRetrofitExceptions  {
+        delay(1000)
+        accountsApi.updateprofileid(id,body)
+    }
 
 
 
@@ -110,7 +114,7 @@ class RetrofitAccountsSource(
         accountsApi.forestlubyid(id)
     }
 
-    override suspend fun districtbyID(id:Int): DistrictResp = wrapRetrofitExceptions {
+    override suspend fun districtbyID(id:Int): DISTRICTFORESTLY_RESP = wrapRetrofitExceptions {
         delay(1000)
         accountsApi.districtbyID(id)
     }
@@ -124,9 +128,14 @@ class RetrofitAccountsSource(
         accountsApi.getprofile()
     }
 
+    override suspend fun getprofileid(id:Int): temp_data_userresp =wrapRetrofitExceptions{
+        delay(1000)
+        accountsApi.getprofileid(id)
+    }
 
 
-     override suspend fun get_user(body:AuthRequest): AuthReSponce =wrapRetrofitExceptions{
+
+    override suspend fun get_user(body:AuthRequest): AuthReSponce =wrapRetrofitExceptions{
         delay(1000)
         accountsApi.get_user(body)
     }

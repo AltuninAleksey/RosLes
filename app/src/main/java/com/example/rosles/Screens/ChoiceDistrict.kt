@@ -67,7 +67,7 @@ class ChoiceDistrict : AppCompatActivity() {
     }
 
     fun start(itemView: Int) {
-        val intent1 = Intent(this, ChoiceCvartal::class.java)
+        val intent1 = Intent(this, AddVedomost::class.java)
         intent1.putExtra("id", itemView.toString())
         intent1.putExtra("id_Vedomost", intent.getStringExtra("id_Vedomost"))
         var a = intent.getStringExtra("id_Vedomost")

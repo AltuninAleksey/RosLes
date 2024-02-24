@@ -5,7 +5,7 @@ data class SAMPLE_RESP(val get:List<SAMPLE_DATA>) : BaseResponceInterface
 data class SAMPLE_REQEST(val data:List<SAMPLE_DATA>) : BaseResponceInterface
 
 data class SAMPLE_DATA(
-    val id: Int,
+    var id: Int,
     val date: String,
     val sample_area:Float?,
     var soil_lot: String,

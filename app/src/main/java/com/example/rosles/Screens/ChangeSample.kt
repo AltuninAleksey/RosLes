@@ -32,11 +32,12 @@ class ChangeSample:AppCompatActivity() {
         supportActionBar!!.setDisplayShowCustomEnabled(true)
         supportActionBar!!.setCustomView(R.layout.custom_action_bar)
 
+        binding.textView2.text="изменить пробную площадь"
         val view: View = supportActionBar!!.customView
         val title=view.findViewById<TextView>(R.id.text)
         val back=view.findViewById<ImageView>(R.id.back)
         val menu=view.findViewById<ImageView>(R.id.burger)
-        title.setText("Добавление перечетной ведомости")
+        title.setText("")
         back.setOnClickListener{
             finish()
         }
@@ -141,7 +142,7 @@ class ChangeSample:AppCompatActivity() {
         val mDatePicker = dialog.findViewById<DatePicker>(R.id.datePicker)
 
         val today = Calendar.getInstance()
-
+        mDatePicker.maxDate=today.timeInMillis
         mDatePicker!!.init(
             today[Calendar.YEAR], today[Calendar.MONTH],
             today[Calendar.DAY_OF_MONTH]

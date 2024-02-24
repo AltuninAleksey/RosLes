@@ -27,19 +27,8 @@ class ViewModels():BaseViewModel(
     private lateinit var accountsSource: AccountsSource
 
     private val _state = MutableLiveData(State())
-    var guide = MutableLiveData<List<GETReproductionResp>>()
     var profile = MutableLiveData<getUserResp>()
-    var subject = MutableLiveData<SubjectResp>()
-    var forestly = MutableLiveData<ForestlyResp>()
-    var district = MutableLiveData<DistrictResp>()
-    var cvartal = MutableLiveData<CvartalResp>()
-    var breed = MutableLiveData<BreedResp>()
-    var user=MutableLiveData<AuthReSponce>()
     var uploadbd=MutableLiveData<BaseResp>()
-
-
-
-
 
 
 
@@ -54,13 +43,10 @@ class ViewModels():BaseViewModel(
         val enableViews: Boolean get() = !signInInProgress
     }
 
-    fun getprofile()=viewModelScope.safeLaunch {
-        try {
-            profile.postValue(accountsRepository?.getprofile() )
-        } catch (e: EmptyFieldException) {
-            processEmptyFieldException(e)
-        }
-    }
+
+
+
+
 
     fun getUNDER(dbCountWood: DBCountWood)=viewModelScope.safeLaunch {
         try {
@@ -80,28 +66,23 @@ class ViewModels():BaseViewModel(
             processEmptyFieldException(e)
         }
     }
-    fun getQUATER(dbCountWood: DBCountWood)=viewModelScope.safeLaunch {
+
+    fun getDISTRICTFORESTLY(dbCountWood: DBCountWood,id: Int)=viewModelScope.safeLaunch {
         try {
-            accountsRepository.getQUATER().get.forEach {
-                dbCountWood.writeQUATER(it.id,it.quarter_name,it.id_district_forestly)
-            }
-        } catch (e: EmptyFieldException) {
-            processEmptyFieldException(e)
-        }
-    }
-    fun getDISTRICTFORESTLY(dbCountWood: DBCountWood)=viewModelScope.safeLaunch {
-        try {
-            accountsRepository.getDISTRICTFORESTLY().get.forEach {
+            accountsRepository.districtbyID(id).data.forEach {
                 dbCountWood.writeDISTRICT(it.id,it.name_district_forestly,it.id_forestly)
             }
         } catch (e: EmptyFieldException) {
             processEmptyFieldException(e)
         }
     }
-    fun getFORESTLY(dbCountWood: DBCountWood)=viewModelScope.safeLaunch {
+    fun getFORESTLY(dbCountWood: DBCountWood,id_Subject:Int)=viewModelScope.safeLaunch {
         try {
-            accountsRepository.getFORESTLY().get.forEach {
-                dbCountWood.writeFORESTLY(it.id,it.name_forestly,it.id_subject_rf)
+            accountsRepository.forestlubyid(id_Subject).data.forEach {
+                dbCountWood.writeFORESTLY(it.id,it.name_forestly,id_Subject)
+
+                getDISTRICTFORESTLY(dbCountWood,it.id)
+
             }
         } catch (e: EmptyFieldException) {
             processEmptyFieldException(e)
@@ -119,7 +100,7 @@ class ViewModels():BaseViewModel(
     fun getLISTREGION(dbCountWood: DBCountWood,pk_profile:Int)=viewModelScope.safeLaunch {
         try {
             accountsRepository.getLISTREGION(pk_profile).get.forEach {
-                dbCountWood.writeLISTREGION(it.id,it.date,it.sample_region,it.id_quarter,it.soil_lot,it.mark_update,it.id_profile,it.number_region)
+                dbCountWood.writeLISTREGION(it.id,it.date,it.sample_region,it.id_quarter,it.soil_lot,it.mark_update,it.id_profile,it.number_region,it.id_district_forestly)
             }
         } catch (e: EmptyFieldException) {
             processEmptyFieldException(e)
@@ -147,46 +128,18 @@ class ViewModels():BaseViewModel(
         }
     }
 
+    fun districtbyID(id:Int,dbCountWood: DBCountWood)=viewModelScope.safeLaunch {
+        try {
+            accountsRepository.districtbyID(id).data.forEach{
 
-    fun getrequestsubjectRF()=viewModelScope.safeLaunch {
-        try {
-            subject.postValue(accountsRepository.getrequestsubjectRF())
-        } catch (e: EmptyFieldException) {
-            processEmptyFieldException(e)
-        }
-    }
-    fun forestlubyid(id:Int)=viewModelScope.safeLaunch {
-        try {
-            forestly.postValue(accountsRepository.forestlubyid(id))
-        } catch (e: EmptyFieldException) {
-            processEmptyFieldException(e)
-        }
-    }
-    fun districtbyID(id:Int)=viewModelScope.safeLaunch {
-        try {
-            district.postValue(accountsRepository.districtbyID(id))
-        } catch (e: EmptyFieldException) {
-            processEmptyFieldException(e)
-        }
-    }
-    fun quaterdistrictbyID(id:Int)=viewModelScope.safeLaunch {
-        try {
-            cvartal.postValue(accountsRepository.quaterdistrictbyID(id))
-        } catch (e: EmptyFieldException) {
-            processEmptyFieldException(e)
-        }
-    }
+                var asd=it.name_district_forestly
+                asd
+                    dbCountWood.writeDISTRICT(it.id,it.name_district_forestly,it.id_forestly)
 
-    fun getbreed()=viewModelScope.safeLaunch {
-        try {
-            breed.postValue(accountsRepository.getbreed())
+            }
         } catch (e: EmptyFieldException) {
             processEmptyFieldException(e)
         }
-    }
-
-    fun getbd()=viewModelScope.safeLaunch {
-        uploadbd.postValue(accountsRepository.getbd())
     }
 
    fun delete_listregion(id:Int)=viewModelScope.safeLaunch {
@@ -196,14 +149,6 @@ class ViewModels():BaseViewModel(
         accountsRepository.delete_sample(id)
     }
 
-
-    fun get_user(body:AuthRequest)=viewModelScope.safeLaunch {
-        try {
-            user.postValue(accountsRepository.get_user(body))
-        } catch (e: Exception) {
-            Log.e("asd",e.toString())
-        }
-    }
     fun upload(body: UpdateRequest)=viewModelScope.safeLaunch {
         try {
             accountsRepository.upload(body)
@@ -215,58 +160,51 @@ class ViewModels():BaseViewModel(
        return accountsRepository.registration(body)
     }
 
-    fun reproduction(context: Context)=viewModelScope.safeLaunch{
+    fun putprofile(id: Int,body: UserResp)=viewModelScope.safeLaunch{
         try {
-            var resp=accountsRepository?.reproduction()
-            //guide.postValue(resp)
-            val db = DBCountWood(context,null)
-            db.addReproduction(resp?.get(0)?.name_reproduction.toString())
-            db.addReproduction(resp?.get(1)?.name_reproduction.toString())
-        } catch (e: EmptyFieldException) {
-            processEmptyFieldException(e)
-        }
-    }
-    fun perechet(perechetRequest: PerechetRequest,context: Context)=viewModelScope.safeLaunch{
-        try {
-            accountsRepository?.perechet(perechetRequest)
+            accountsRepository?.putprofile(id,body)
+
         } catch (e: EmptyFieldException) {
             processEmptyFieldException(e)
         }
     }
 
          fun putLISTREGION(body:LISTREGION_REQUEST)=viewModelScope.safeLaunch{
-            var asd=accountsRepository.putLISTREGION(body)
-
 
              //простыня кода нужная для сериализации ответа
-            var temp=asd.source().buffer.toString()
-
-            var bufer=temp.toCharArray()
-
+             var bufer=accountsRepository.putLISTREGION(body).source().buffer.toString().toCharArray()
              bufer.set(0,'{')
              bufer.set(bufer.size-1,'}')
-
              var temp2=""
              bufer.forEach {
                  temp2+=it
              }
-
-             val gson = Gson()
-             val book = gson.fromJson(temp2, text::class.java)
-
-
+             val book = Gson().fromJson(temp2, text::class.java)
              //отправка в синглтон
               sync.temp.temp_object=book
         }
 
 
     fun putSAMPLE(body:SAMPLE_REQEST)=viewModelScope.safeLaunch{
-        accountsRepository.putSAMPLE(body)
 
+        //простыня кода нужная для сериализации ответа
+        var bufer=accountsRepository.putSAMPLE(body).source().buffer.toString().toCharArray()
+        bufer.set(0,'{')
+        bufer.set(bufer.size-1,'}')
+        var temp2=""
+        bufer.forEach {
+            temp2+=it
+        }
+        val book = Gson().fromJson(temp2, text::class.java)
+        //отправка в синглтон
+        sync.temp.temp_objectsample=book
     }
-    fun putLIST(body:LIST_REQEST)=viewModelScope.safeLaunch{
-        accountsRepository.putLIST(body)
 
+
+    fun putLIST(body:LIST_REQEST)=viewModelScope.safeLaunch{
+
+        body.data.get(0).id
+        accountsRepository.putLIST(body)
     }
 
 
