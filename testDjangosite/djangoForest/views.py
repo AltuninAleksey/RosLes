@@ -1274,6 +1274,13 @@ class GetSampleFromListRegionId(ListAPIView):
         return Response({"data": lst1.data})
 
 
+class GetListBySampleId(ListAPIView):
+
+    def get(self, *args, **kwargs):
+        lst = ListSerializer(List.objects.filter(id_sample = kwargs['pk']), many=True)
+        return Response(lst.data, status=status.HTTP_200_OK)
+
+
 class GetAllDescriptionRegion(ListAPIView):
 
     permission_classes = [IsAuthenticated, ]
