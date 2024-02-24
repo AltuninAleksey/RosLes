@@ -200,6 +200,8 @@ class SampleSerializerId(serializers.Serializer):
     id_district_forestly = serializers.CharField(source='id_list_region.id_district_forestly.id')
     id_forestly = serializers.CharField(source='id_list_region.id_district_forestly.id_forestly.id')
     id_subject_rf = serializers.CharField(source='id_list_region.id_district_forestly.id_forestly.id_subject_rf.id')
+    dacha = serializers.CharField(source='id_list_region.dacha')
+    name_quarter = serializers.CharField(source='id_list_region.name_quarter')
     width = serializers.FloatField()
     lenght = serializers.FloatField()
     square = serializers.FloatField()
