@@ -1233,9 +1233,6 @@ class ListRegionFilters(ListAPIView):
         if request.data['bDistrictForestly']:
             idDistrictForestly = request.data['idDistrictForestly']
             ser2 = ser2.filter(id_quarter__id_district_forestly=idDistrictForestly)
-        if request.data['bQuarter']:
-            idQuarter = request.data['idQuarter']
-            ser2 = ser2.filter(id_quarter = idQuarter)
         if request.data['bDate']:
             requestDate = request.data['date']
             ser2 = ser2.filter(date__gte = requestDate)
@@ -1342,9 +1339,6 @@ class DescriptionRegionFilter(ListAPIView):
         if request.data['bDistrictForestly']:
             idDistrictForestly = request.data['idDistrictForestly']
             ser2 = ser2.filter(id_list_region__id_quarter__id_district_forestly=idDistrictForestly)
-        if request.data['bQuarter']:
-            idQuarter = request.data['idQuarter']
-            ser2 = ser2.filter(id_list_region__id_quarter=idQuarter)
         if request.data['bDate']:
             # requestDate = request.data['date']
             ser2 = ser2.filter(id_list_region__date__gte=request.data['date'])
@@ -1454,9 +1448,6 @@ class FieldCardFilter(ListAPIView):
         if request.data['bDistrictForestly']:
             idDistrictForestly = request.data['idDistrictForestly']
             ser2 = ser2.filter(id_list_region__id_quarter__id_district_forestly=idDistrictForestly)
-        if request.data['bQuarter']:
-            idQuarter = request.data['idQuarter']
-            ser2 = ser2.filter(id_list_region__id_quarter=idQuarter)
         if request.data['bDate']:
             # requestDate = request.data['date']
             ser2 = ser2.filter(id_list_region__date__gte=request.data['date'])
