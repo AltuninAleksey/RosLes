@@ -964,9 +964,9 @@ class CreateSampleAndOther(ListAPIView):
         serializer = SampleSerializer(data=request.data['sample'], instance=instance)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        print(request.data['list_region']['id'])
-        listregion_instance = ListRegion.objects.get(pk=request.data['list_region']['id'])
-        listregion_serializer = ListRegionSerializer(data=request.data['list_region'], instance=listregion_instance)
+        listregion_instance = ListRegion.objects.get(id=request.data['sample']['id_list_region'])
+        # print(request.data['list_region']['id'])
+        listregion_serializer = ListRegionSerializerUpdateBySample(data=request.data['sample'], instance=listregion_instance)
         listregion_serializer.is_valid()
         listregion_serializer.save()
         id_sample = serializer.data['id']

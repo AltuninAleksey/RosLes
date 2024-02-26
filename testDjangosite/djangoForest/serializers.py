@@ -397,6 +397,21 @@ class GetListRegionSerializer(serializers.Serializer):
     subjectrf = serializers.CharField(source='id_quarter.id_district_forestly.id_forestly.id_subject_rf')
     soil_lot = serializers.CharField(max_length=300)
 
+class ListRegionSerializerUpdateBySample(serializers.ModelSerializer):
+    class Meta:
+        model = ListRegion
+        fields = ['id_district_forestly', 'dacha', 'name_quarter', 'sample_region', 'number_region', 'soil_lot']
+
+    def update(self, instance, validated_data):
+        instance.soil_lot = validated_data.get("soil_lot")
+        # instance.id_quarter = validated_data.get("id_quarter")
+        instance.id_district_forestly = validated_data.get("id_district_forestly")
+        instance.dacha = validated_data.get("dacha")
+        instance.name_quarter = validated_data.get("name_quarter")
+        instance.sample_region = validated_data.get("sample_region")
+        instance.number_region = validated_data.get("number_region")
+        instance.save()
+        return instance
 
 class ListRegionSerializer(serializers.ModelSerializer):
     class Meta:
