@@ -400,7 +400,7 @@ class GetListRegionSerializer(serializers.Serializer):
 class ListRegionSerializerUpdateBySample(serializers.ModelSerializer):
     class Meta:
         model = ListRegion
-        fields = ['id_district_forestly', 'dacha', 'name_quarter', 'sample_region', 'number_region', 'soil_lot']
+        fields = ['id_district_forestly', 'dacha', 'name_quarter', 'number_region', 'soil_lot']
 
     def update(self, instance, validated_data):
         instance.soil_lot = validated_data.get("soil_lot")
@@ -408,7 +408,6 @@ class ListRegionSerializerUpdateBySample(serializers.ModelSerializer):
         instance.id_district_forestly = validated_data.get("id_district_forestly")
         instance.dacha = validated_data.get("dacha")
         instance.name_quarter = validated_data.get("name_quarter")
-        instance.sample_region = validated_data.get("sample_region")
         instance.number_region = validated_data.get("number_region")
         instance.save()
         return instance
