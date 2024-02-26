@@ -1028,7 +1028,7 @@ class GetDistrictForestlyByForestlyId(viewsets.ViewSet):
         pk = kwargs.get('pk')
         lst = DistrictForestly.objects.filter(id_forestly=pk)
 
-        return JsonResponse({'data': GetDistrictForestlyByForestlyIdSerializer(lst, many=True).data}, safe=False)
+        return Reponse({'data': GetDistrictForestlyByForestlyIdSerializer(lst, many=True).data})
 
 
 class GetDistrictForestlyByArrayForestlyIds(ListAPIView):
