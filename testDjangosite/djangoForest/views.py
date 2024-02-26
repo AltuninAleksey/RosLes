@@ -1032,6 +1032,8 @@ class GetDistrictForestlyByForestlyId(viewsets.ViewSet):
 
 
 class GetDistrictForestlyByArrayForestlyIds(ListAPIView):
+    queryset = DistrictForestly.objects.all()
+    serializer_class = GetDistrictForestlyByForestlyIdSerializer
 
     def post(self, request, **kwargs):
 
@@ -1039,9 +1041,10 @@ class GetDistrictForestlyByArrayForestlyIds(ListAPIView):
         for i in request.data['data']:
             d_forestly = GetDistrictForestlyByForestlyIdSerializer(
                 DistrictForestly.objects.filter(id_forestly = i['id']), many=True).data
-            print(d_forestly)
+            # print(d_forestly)
             data.append({"district_forestly_data": d_forestly})
             # data.append(d_forestly)
+        # print(data)
         return Response({"data": data}, status=status.HTTP_200_OK)
 
 
