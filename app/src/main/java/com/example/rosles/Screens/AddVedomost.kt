@@ -85,8 +85,13 @@ class AddVedomost:AppCompatActivity() {
         var sPref = getSharedPreferences("PreferencesName", MODE_PRIVATE);
         var id = sPref.getString("id", "0")!!.toInt()
         binding.buttonAuto.setOnClickListener {
+
+            if (  binding.samplearea.text.toString().isNotEmpty()&&
+                binding.vudel.text.toString().isNotEmpty()&&
+                binding.idCvartal.text.toString().isNotEmpty()){
+
             db.createvedom(
-                    binding.date.text.toString(),
+                binding.date.text.toString(),
                 binding.samplearea.text.toString(),
                 binding.vudel.text.toString(),
                 buf!!.toInt(),
@@ -97,6 +102,10 @@ class AddVedomost:AppCompatActivity() {
 
             Toast.makeText(this,"Данные добавлены",Toast.LENGTH_LONG).show()
             startActivity(Intent(this, MainActivity::class.java))
+            }else{
+                Toast.makeText(this,"Заполните поля",Toast.LENGTH_LONG).show()
+            }
+
         }
         binding.date.setOnClickListener {
             initDatePicker()

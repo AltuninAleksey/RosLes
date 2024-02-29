@@ -63,7 +63,7 @@ class sync() {
 
 
         var listregion=db.getLISTREGION()
-        val oldlistregion=db.getLISTREGION()
+        var oldlistregion=db.getLISTREGION()
         viewModels.putLISTREGION(LISTREGION_REQUEST(listregion))
         delay(5000)
         if (temp.temp_object!=null){
@@ -114,25 +114,28 @@ class sync() {
         }
 
 
-        val filePath = "/data/data/com.example.rosles/databases/userdb.db"
-        val file = File(filePath)
+        var filePath = "/data/data/com.example.rosles/databases/userdb.db"
+        var file = File(filePath)
         if (file.exists()) {
+            temp.temp_object=null
+            temp.temp_objectsample=null
             file.delete()
+            delay(5000)
         }
 
     }
-    fun delete_values(db: DBCountWood,viewModels: ViewModels){
-        val listregion= db.get_delete_listregion()
-        val sample= db.get_delete_sample()
-
-        listregion.forEach{
-            viewModels.delete_listregion(it)
-        }
-        sample.forEach{
-            viewModels.delete_sample(it)
-        }
-
-    }
+//    fun delete_values(db: DBCountWood,viewModels: ViewModels){
+//        val listregion= db.get_delete_listregion()
+//        val sample= db.get_delete_sample()
+//
+//        listregion.forEach{
+//            viewModels.delete_listregion(it)
+//        }
+//        sample.forEach{
+//            viewModels.delete_sample(it)
+//        }
+//
+//    }
 
     fun sendphoto(db: DBCountWood,oldid:Int,id:Int,context: Context,viewModels: ViewModels){
         db.getphotoall(oldid,id).forEach{

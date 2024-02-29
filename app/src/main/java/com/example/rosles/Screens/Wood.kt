@@ -118,7 +118,7 @@ class Wood : BaseActivity("Пробная площадь") {
 
         //инициализация меню
         binding.include.user.setOnClickListener {
-            startActivity(Intent(this, gps_activity::class.java))
+            startActivity(Intent(this, gps_activity::class.java).putExtra("id_sample",id_sample))
         }
         binding.include.open.setOnClickListener {
             val intent=Intent(this, SelectPhoto::class.java)

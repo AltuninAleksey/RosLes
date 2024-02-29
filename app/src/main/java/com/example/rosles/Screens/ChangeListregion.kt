@@ -84,7 +84,6 @@ class ChangeListregion: AppCompatActivity() {
         val vedom = db.getVedombyID(id_Vedomost!!)
 
 
-        var bufId_quarter_id = vedom.idQuarterId
 
         binding.idCvartal.setText(vedom.quarterName)
         binding.vudel.setText(vedom.soilLot)
@@ -101,12 +100,6 @@ class ChangeListregion: AppCompatActivity() {
             )
             db.Mark_Update_Listregion(id_Vedomost)
             startActivity(Intent(this, MainActivity::class.java))
-        }
-        binding.idCvartal.setOnClickListener{
-            val intent1=Intent(this, ChoiceSubject::class.java)
-            intent1.putExtra("id_Vedomost",id_Vedomost.toString())
-
-            startActivity(intent1)
         }
         binding.date.setOnClickListener {
             initDatePicker()

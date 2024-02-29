@@ -89,6 +89,12 @@ class AddSample : AppCompatActivity() {
             if ( binding.idCvartal.text.isEmpty()){
                 binding.idCvartal.setText("0")
             }
+            if ( binding.samplearea.text.toString().isNotEmpty()&&
+                binding.vudel.text.toString().isNotEmpty()&&
+                binding.idCvartal.text.toString().isNotEmpty()&&
+                binding.samplearea.text.toString().isNotEmpty()&&
+                binding.vudel.text.toString().isNotEmpty()
+                ){
 
             db.insertintolistsquare(
                 binding.date.text.toString(),
@@ -105,6 +111,11 @@ class AddSample : AppCompatActivity() {
             db.Mark_Update_Listregion(id_region)
             Toast.makeText(this, "Данные добавлены", Toast.LENGTH_LONG).show()
             finish()
+            }else{
+                Toast.makeText(this, "Заполните поля", Toast.LENGTH_LONG).show()
+
+            }
+
         }
         binding.date.setOnClickListener {
             initDatePicker()

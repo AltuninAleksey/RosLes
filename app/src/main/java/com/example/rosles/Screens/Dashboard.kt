@@ -96,14 +96,14 @@ class Dashboard: BaseActivity() {
             var database = DBCountWood(this, null)
             database.writableDatabase
             lifecycleScope.launch {
+                binding.progressBar.visibility=View.VISIBLE
                 sync().main1(viewModel,database,this@Dashboard,id_user,id_subject)
+
                 delay(2000)
                 Toast.makeText(this@Dashboard, "Данные обновленны", Toast.LENGTH_SHORT).show()
+                binding.progressBar.visibility=View.GONE
             }
 
-            viewModel.uploadbd.observe(this){
-                Log.v(it.msg.toString(),"")
-            }
             // загрузка ВСЕХ справочников
 //            val inputBase=File("/data/data/com.example.rosles/databases/userdb.db")
 //            val txtFile = resources.openRawResource(R.raw.db_sqlite3)
@@ -118,10 +118,14 @@ class Dashboard: BaseActivity() {
             var database = DBCountWood(this, null)
             database.writableDatabase
             lifecycleScope.launch{
+                binding.progressBar.visibility=View.VISIBLE
+
                 sync().load(viewModel,db,this@Dashboard)
 //                delay(2000)
 //                sync().main1(viewModel,database, context,value)
                 Toast.makeText(this@Dashboard, "Успех", Toast.LENGTH_SHORT).show()
+                binding.progressBar.visibility=View.GONE
+
             }
 
         }

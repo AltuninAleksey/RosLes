@@ -128,14 +128,14 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
 
     fun writeLISTREGION(
         id:Int,
-        date: String, sample_region: Float?, id_quarter_id: Int, soil_lot: String,
+        date: String, sample_region: Float?, name_quarter: Int, soil_lot: String,
         mark_update: Int?,id_profile: Int?,number_region: String?,id_district_forestly:Int) {
         val db = this.writableDatabase
         //Log.v(date,"")
         db.execSQL(
             "Insert into djangoForest_listregion\n" +
                     "(id,date, sample_region, name_quarter, soil_lot, mark_update,id_profile,number_region,id_district_forestly)  \n" +
-                    "values ('$id','$date', '$sample_region', '$id_quarter_id', '$soil_lot','$mark_update','$id_profile','$number_region',$id_district_forestly)"
+                    "values ('$id','$date', '$sample_region', '$name_quarter', '$soil_lot','$mark_update','$id_profile','$number_region',$id_district_forestly)"
         )
     }
 
@@ -235,6 +235,7 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
             cursor.moveToNext()
         }
         cursor.close()
+        database.close()
         return listregionrequest
     }
     @SuppressLint("Range")
@@ -408,11 +409,11 @@ inner join djangoForest_forestly as forestly on s2.id_forestly_id = forestly.id)
         for (i in 1..cursor.count) {
             val poroda = Poroda(
                 cursor.getString(cursor.getColumnIndex("id")),
+                cursor.getString(cursor.getColumnIndex("name_forestly")),
                 cursor.getString(cursor.getColumnIndex("name_district_forestly")),
                 cursor.getString(cursor.getColumnIndex("name_quarter")),
                 cursor.getString(cursor.getColumnIndex("soil_lot")),
                 cursor.getString(cursor.getColumnIndex("date")),
-                cursor.getString(cursor.getColumnIndex("sample_region")),
                 cursor.getInt(cursor.getColumnIndex("mark_update"))  // Q2
             )
             porodaList.add(poroda)
@@ -1078,6 +1079,41 @@ inner join djangoForest_forestly as forestly on s2.id_forestly_id = forestly.id)
         db.close()
     }
 
+
+    fun Create_Gps_Data(value:GPS_Data){
+        val db = this.writableDatabase
+        //Log.v(date,"")
+        db.execSQL(
+            "Insert into djangoForest_gps\n" +
+                    "(latitude, longitude ,flag_center,id_sample_id) \n" +
+                    "values ('${value.latitude}', '${value.longitude}' ,'${value.flag_center}','${value.id_sample_id}')"
+        )
+        db.close()
+    }
+
+    @SuppressLint("Range")
+    fun GET_Gps_Data(value: Int):List<GPS_Data>{
+        val db = this.readableDatabase
+        val cursor = db.rawQuery(
+            """SELECT * FROM djangoForest_gps where id_sample_id=$value """.trimMargin(),null)
+        cursor.moveToFirst()
+        val a= mutableListOf<GPS_Data>()
+        for (i in 1..cursor.getCount()) {
+            a.add(GPS_Data(
+                    cursor.getInt(cursor.getColumnIndex("id")),
+                    cursor.getDouble(cursor.getColumnIndex("latitude")),
+                    cursor.getDouble(cursor.getColumnIndex("longitude")),
+                    cursor.getString(cursor.getColumnIndex("flag_center")).toBoolean(),
+                    cursor.getInt(cursor.getColumnIndex("id_sample_id"))
+            ))
+            cursor.moveToNext()
+        }
+        cursor.close()
+        return a
+    }
+
+
+
     fun delete_listregion(value:Int){
         val db = this.writableDatabase
         //Log.v(date,"")
@@ -1090,6 +1126,7 @@ inner join djangoForest_forestly as forestly on s2.id_forestly_id = forestly.id)
                     "values ('listregion','$value')")
         db.close()
     }
+
 
     fun delete_sample(value:Int){
         val db = this.writableDatabase

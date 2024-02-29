@@ -68,13 +68,12 @@ class MainActivity : BaseActivity("Перечетные ведомости") {
             /* Порядок важен, знацения будут добавляться в колонки таблицы
             * в порядке указанном в valuesOfPoroda */
             val valuesOfPorodaList: List<String> = mutableListOf(
-                porodaList[i].nameForestly,
                 porodaList[i].id,
+                porodaList[i].nameForestly,
                 porodaList[i].nameDistrictForestly,
                 porodaList[i].quarterName,
                 porodaList[i].soilLot,
-                porodaList[i].date
-            )
+                porodaList[i].date)
             // сборка строки для тоблицы
             for((indexOfvalue, valueOfPoroda) in valuesOfPorodaList.withIndex()) {
                 val text = TextView(this)
