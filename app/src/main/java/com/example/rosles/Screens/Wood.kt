@@ -1,17 +1,13 @@
 package com.example.rosles.Screens
-
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
 import android.widget.*
-import androidx.appcompat.app.ActionBar
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.coroutineScope
 import com.example.rosles.Adapters.BaseInterface
@@ -28,8 +24,6 @@ import com.example.roslesdef.Models.ItemWood
 import com.example.roslesdef.Models.SpinerItem
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.math.RoundingMode
-import java.text.DecimalFormat
 import kotlin.collections.HashMap
 
 class Wood : BaseActivity("Пробная площадь") {
@@ -38,15 +32,14 @@ class Wood : BaseActivity("Пробная площадь") {
     private var bufview: View? = null
     private var vidWood: String = ""
     private var vidWoodpodles: String = ""
-    var hashbufWood=HashMap<String, ProbaWoodSimple?>()
-    var podlesokhash=HashMap<String, PodlesokWood?>()
-    var Get_Id_breed_Class:AddPorod?= AddPorod()
+    private var hashbufWood=HashMap<String, ProbaWoodSimple?>()
+    private var podlesokhash=HashMap<String, PodlesokWood?>()
+    private var Get_Id_breed_Class:AddPorod?= AddPorod()
 
     var CountMainPorod=""
     var activeCountPorod=""
 
-    var flaglesActive=false
-    var flagpodleslesActive=false
+
 
     private val db = DBCountWood(this, null)
 
@@ -100,11 +93,11 @@ class Wood : BaseActivity("Пробная площадь") {
 
         //Инициализация избранных пород
         //переписать ключ hashmap -><int,class>
-        val sPref = getSharedPreferences("PreferencesName", MODE_PRIVATE);
+        val sPref = getSharedPreferences("PreferencesName", MODE_PRIVATE)
         val id_user = sPref.getString("id", "1")!!.toInt()
         val leslist = mutableListOf<ItemWood>()
         val podleslist = mutableListOf<ItemWood>()
-        var favoriteLesList = db.getFavoriteLes(id_user)
+        val favoriteLesList = db.getFavoriteLes(id_user)
 
         for (i in 0..favoriteLesList.size-1) {
             leslist.add(favoriteLesList[i].toItemWood())
@@ -362,7 +355,16 @@ class Wood : BaseActivity("Пробная площадь") {
             }
             override fun onClickButton(itemView: Any) {
                 CountMainPorod=itemView.toString()
+
+                hashbufWood.forEach { t,u->
+                    if (t==itemView.toString()){
+                        u!!.setflagmain()
+                    }
+
+                }
+                var a=hashbufWood
                 GetCountWood(itemView.toString())
+
                 //binding.valuewood.text=binding.asd.text
             }
 
@@ -535,32 +537,42 @@ class Wood : BaseActivity("Пробная площадь") {
         if (activeCountPorod==value){
             writedata(value)
         }
-        val buf = hashbufWood.get(value)
-        if (buf == null)
-            return
-        val temp=
-        buf.iskus!!.o2!!.toInt()+
-        buf.iskus!!.o5!!.toInt()+
-        buf.iskus!!.o6!!.toInt()+
-        buf.iskus!!.o11!!.toInt()+
-        buf.iskus!!.o15!!.toInt()+
-        buf.estes!!.o2!!.toInt()+
-        buf.estes!!.o5!!.toInt()+
-        buf.estes!!.o6!!.toInt()+
-        buf.estes!!.o11!!.toInt()+
-        buf.estes!!.o15!!.toInt()+
-        buf.estestvenn!!.o2!!.toInt()+
-        buf.estestvenn!!.o5!!.toInt()+
-        buf.estestvenn!!.o6!!.toInt()+
-        buf.estestvenn!!.o11!!.toInt()+
-        buf.estestvenn!!.o15!!.toInt()
+        var sum=0
 
-        binding.valuewood.text=temp.toString()
+        hashbufWood.forEach {
+
+       if (it.value!!.flag_main==true){
+
+
+
+        var temp=
+         it.value!!.iskus!!.o2!!.toInt()+
+         it.value!!.iskus!!.o5!!.toInt()+
+         it.value!!.iskus!!.o6!!.toInt()+
+         it.value!!.iskus!!.o11!!.toInt()+
+         it.value!!.iskus!!.o15!!.toInt()+
+         it.value!!.estes!!.o2!!.toInt()+
+         it.value!!.estes!!.o5!!.toInt()+
+         it.value!!.estes!!.o6!!.toInt()+
+         it.value!!.estes!!.o11!!.toInt()+
+         it.value!!.estes!!.o15!!.toInt()+
+         it.value!!.estestvenn!!.o2!!.toInt()+
+         it.value!!.estestvenn!!.o5!!.toInt()+
+         it.value!!.estestvenn!!.o6!!.toInt()+
+         it.value!!.estestvenn!!.o11!!.toInt()+
+         it.value!!.estestvenn!!.o15!!.toInt()
+           sum+=temp
+
+       }
+
+        }
+        binding.valuewood.text=sum.toString()
+
 
     }
     fun initasd(){
         with(binding){
-            val value:Int?=
+            val value:Int=
                           iskus02.text.toString().toInt()+
                           iskus05.text.toString().toInt()+
                           iskus06.text.toString().toInt()+
@@ -577,7 +589,7 @@ class Wood : BaseActivity("Пробная площадь") {
                           estestvennoe11.text.toString().toInt()+
                           estestvennoe15.text.toString().toInt()
             asd.text="0"
-            asd.text=value?.toString()
+            asd.text=value.toString()
 
         }
 

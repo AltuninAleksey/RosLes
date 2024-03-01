@@ -5,7 +5,11 @@ import java.util.*
 
 data class probaWOODD(var data: HashMap<String, PerechetWood>) : BaseResponceInterface
 
-data class ProbaWoodSimple(var iskus:PerechetWood?,var estes:PerechetWood?,var estestvenn:PerechetWood?) : BaseResponceInterface
+data class ProbaWoodSimple(var iskus:PerechetWood?,var estes:PerechetWood?,var estestvenn:PerechetWood?,var flag_main:Boolean=false) : BaseResponceInterface{
+    fun setflagmain(){
+        flag_main = !flag_main
+    }
+}
 
 data class PerechetWood(
     var namewood: String,

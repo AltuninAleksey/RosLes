@@ -37,7 +37,7 @@ class lisq_square : BaseActivity("Список пробных площадей")
         var id_region=0
         fun setregion(value:Int?){
             if(value!=null)
-                id_region=value
+                id_region=136
         }
     }
 

@@ -19,7 +19,7 @@
 
         android:text="Береза"
         android:textAlignment="center"
-        android:textColor="@color/color_button_main"
+        android:textColor="@color/black"
         android:textSize="@dimen/custom_size_table"
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="MissingConstraints" />
