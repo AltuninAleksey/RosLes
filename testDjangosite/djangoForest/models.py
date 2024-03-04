@@ -604,7 +604,7 @@ class FieldCard(models.Model):
     date_and_time = models.DateTimeField(verbose_name="Дата и время обследования", null=True)
     number_order = models.IntegerField(u"Номер приказа", null=True)
     lands_other = models.CharField(max_length=200, null=True, blank=True)
-
+    respond_farm = models.BooleanField(default=False, verbose_name="Соответствует хозяйству.")
 
     class Meta:
         verbose_name = "Полевая карточка"

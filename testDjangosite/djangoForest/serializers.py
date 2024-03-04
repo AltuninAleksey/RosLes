@@ -793,6 +793,7 @@ class FieldCardSerializer(serializers.ModelSerializer):
         instance.point7_stock = validated_data.get("point7_stock")
         instance.number_order = validated_data.get("number_order")
         instance.lands_other = validated_data.get('lands_other')
+        instance.respond_farm = validated_data.get('respond_farm')
         instance.save()
         return instance
 
