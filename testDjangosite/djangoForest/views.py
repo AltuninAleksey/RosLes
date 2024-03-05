@@ -1417,16 +1417,22 @@ class GetFieldCard(ListAPIView):
         try:
             instance_region = ListRegion.objects.get(id=request.data['id_list_region'])
         except:
+
             return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid list region id"},
                             status=status.HTTP_404_NOT_FOUND)
         ser_listregion = ListRegionUpdateNonMarkDel(data=request.data, instance=instance_region)
         if not ser_listregion.is_valid():
+            print({"error": status.HTTP_400_BAD_REQUEST,
+                             "error_text": ser_listregion.errors[next(iter(ser_listregion.errors))][0]})
             return Response({"error": status.HTTP_400_BAD_REQUEST,
                              "error_text": ser_listregion.errors[next(iter(ser_listregion.errors))][0]},
                             status=status.HTTP_400_BAD_REQUEST)
         ser_listregion.save()
         serealizer = FieldCardSerializer(data=request.data, instance=instance)
         if not serealizer.is_valid():
+            print(serealizer.errors)
+            print({"error": status.HTTP_400_BAD_REQUEST,
+                   "error_text": serealizer.errors[next(iter(serealizer.errors))][0]})
             return Response({"error": status.HTTP_400_BAD_REQUEST,
                              "error_text": serealizer.errors[next(iter(serealizer.errors))][0]},
                             status=status.HTTP_400_BAD_REQUEST)

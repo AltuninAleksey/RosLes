@@ -674,7 +674,7 @@ class DescriptionRegionSerializer(serializers.ModelSerializer):
     date = serializers.DateField(source="id_list_region.date", read_only=True)
     # id_list_region = serializers.CharField(source="id_list_region.id")
     number_region = serializers.CharField(source="id_list_region.number_region", read_only=True)
-    dacha = serializers.CharField(source="id_list_region.dacha")
+    dacha = serializers.CharField(source="id_list_region.dacha", read_only = True)
     name_quarter = serializers.CharField(source="id_list_region.name_quarter")
     class Meta:
         model = DescriptionRegion
@@ -740,7 +740,7 @@ class FieldCardSerializer(serializers.ModelSerializer):
     sample_region = serializers.FloatField(source="id_list_region.sample_region", read_only=True)
     date = serializers.DateField(source="id_list_region.date", read_only=True)
     number_region = serializers.CharField(source="id_list_region.number_region", read_only=True)
-    dacha = serializers.CharField(source = "id_list_region.dacha")
+    dacha = serializers.CharField(source = "id_list_region.dacha", read_only = True)
     name_quarter = serializers.CharField(source="id_list_region.name_quarter")
 
     class Meta:
