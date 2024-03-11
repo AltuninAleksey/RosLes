@@ -120,6 +120,12 @@ class ListSerializer(serializers.ModelSerializer):
         return instance
 
 
+class GPSManyCreateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = GPS
+        fields = '__all__'
+
 class GPSSerializer(serializers.ModelSerializer):
     class Meta:
         model = GPS
@@ -156,9 +162,15 @@ class GPSSerializer(serializers.ModelSerializer):
 #         return instance
 
 
+class SampleManyCreateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Sample
+        fields = '__all__'
+
 class SampleSerializer(serializers.ModelSerializer):
     # number_region = serializers.CharField(source='id_list_region.number_region')
-
+    # id = serializers.IntegerField()
 
     class Meta:
         model = Sample
