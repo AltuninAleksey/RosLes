@@ -3,6 +3,8 @@ from .models import *
 # Register your models here.
 
 
+
+
 class TodoAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'age')
     list_display_links = ('id', 'name', 'age')
@@ -228,6 +230,12 @@ class TrackingAdmin(admin.ModelAdmin):
     search_fields = ('id', 'id_profile', 'data', 'map')
 
 
+class CZLAdmin(admin.ModelAdmin):
+    list_display = '__all__'
+    list_display_links = '__all__'
+    search_fields = '__all__'
+
+admin.site.register(CZL)
 admin.site.register(MethodForestRestoration)
 admin.site.register(ForestCareActivities)
 admin.site.register(Recommendation)

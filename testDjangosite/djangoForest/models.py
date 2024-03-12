@@ -695,3 +695,11 @@ class Dacha(models.Model):
 
     def __str__(self):
         return self.name_side
+
+
+class CZL(models.Model):
+    name_czl = models.CharField(max_length=300, verbose_name="Наименование")
+    id_main_subject = models.ForeignKey("SubjectRF", on_delete=models.CASCADE, verbose_name="Главный субъект",
+                                        related_name='main_subject')
+    id_subject = models.ForeignKey("SubjectRF", on_delete=models.CASCADE, verbose_name='Подчиненный субъект',
+                                   related_name='slave_subject', null = True)
