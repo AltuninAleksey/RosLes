@@ -1555,12 +1555,13 @@ class GetFieldCard(ListAPIView):
             return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid list region id"},
                             status=status.HTTP_404_NOT_FOUND)
         ser_listregion = ListRegionUpdateNonMarkDel(data=request.data, instance=instance_region)
-        if len(request.data['gps']) > 0:
-            for i in request.data['gps']:
-                instance_gps = GPS.objects.get(id=i['id'])
-                ser_gps = GPSSerializer(data=i, instance=instance_gps)
-                ser_gps.is_valid()
-                ser_gps.save()
+
+        # if len(request.data['gps']) > 0:
+        #     for i in request.data['gps']:
+        #         instance_gps = GPS.objects.get(id=i['id'])
+        #         ser_gps = GPSSerializer(data=i, instance=instance_gps)
+        #         ser_gps.is_valid()
+        #         ser_gps.save()
         if not ser_listregion.is_valid():
             print({"error": status.HTTP_400_BAD_REQUEST,
                              "error_text": ser_listregion.errors[next(iter(ser_listregion.errors))][0]})
@@ -1568,6 +1569,14 @@ class GetFieldCard(ListAPIView):
                              "error_text": ser_listregion.errors[next(iter(ser_listregion.errors))][0]},
                             status=status.HTTP_400_BAD_REQUEST)
         ser_listregion.save()
+        if len(request.data['gps']) > 0:
+            sample_data = Sample.objects.filter(id_list_region = request.data['id_list_region']).values()[0]
+            for i in request.data['gps']:
+                # print(sample_data['id'])
+                i.update({"id_sample": sample_data['id']})
+                gps_ser = GPSSerializer(data=i)
+                gps_ser.is_valid(raise_exception=True)
+                gps_ser.save()
         serealizer = FieldCardSerializer(data=request.data, instance=instance)
         if not serealizer.is_valid():
             print(serealizer.errors)
