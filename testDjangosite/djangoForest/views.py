@@ -1771,6 +1771,23 @@ class FormingDocxViewDescRegion(ListAPIView):
         return Response({"document": path_docx})
 
 
+class GetForestlyByArraySubjectsIds(ListAPIView):
+    queryset = Forestly.objects.all()
+    # serializer_class = GetDistrictForestlyByForestlyIdSerializer
+
+    def post(self, request, **kwargs):
+
+        data = []
+        for i in request.data['data']:
+            forestly = GetForestlyBySubjectsIdSerializer(
+                Forestly.objects.filter(id_subject_rf = i['id']), many=True).data
+            # print(d_forestly)
+            data.append({"forestly_data": forestly})
+            # data.append(d_forestly)
+        # print(data)
+        return Response({"data": data}, status=status.HTTP_200_OK)
+
+
 class GetCZL(ListAPIView):
     permission_classes = [IsAuthenticated, ]
 

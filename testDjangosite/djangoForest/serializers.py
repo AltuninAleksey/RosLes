@@ -643,6 +643,13 @@ class GetDistrictForestlyByForestlyIdSerializer(serializers.Serializer):
     id_forestly = serializers.CharField(source="id_forestly.id")
 
 
+class GetForestlyBySubjectsIdSerializer(serializers.ModelSerializer):
+    # id = serializers.IntegerField()
+    # name_forestly = serializers.CharField()
+    # id_subject_rf = serializers.CharField(source="id_subject.id")
+    class Meta:
+        model = Forestly
+        fields = '__all__'
 class GetQuarterByDistrictForestlyIdSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     quarter_name = serializers.CharField()
