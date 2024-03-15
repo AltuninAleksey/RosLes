@@ -128,6 +128,7 @@ urlpatterns = [
     path('formdocx', FormingDocxView.as_view()),
     path('formdocxdesc', FormingDocxViewDescRegion.as_view()),
     path('calculateratio', RatioCompositionCalculateInList.as_view()),
+    path('getczl', GetCZL.as_view()),
     path('erp/', include('erp.urls')),
     path('general_docs/', include('general_docs.urls')),
 

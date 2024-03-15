@@ -162,6 +162,24 @@ class GPSSerializer(serializers.ModelSerializer):
 #         return instance
 
 
+class CZLSerializer(serializers.ModelSerializer):
+    name_main_subject = serializers.CharField(source="id_main_subject.name_subject_RF", read_only = True)
+    name_slave_subject = serializers.CharField(source="id_subject.name_subject_RF", read_only = True)
+
+    class Meta:
+        model = CZL
+        fields = '__all__'
+
+
+class CZLSerializerWithOutMain(serializers.ModelSerializer):
+    name_slave_subject = serializers.CharField(source="id_subject.name_subject_RF", read_only=True)
+    id_subject = serializers.CharField()
+
+    class Meta:
+        model = CZL
+        fields = ['name_slave_subject', 'id_subject']
+
+
 class SampleManyCreateSerializer(serializers.ModelSerializer):
 
     class Meta:

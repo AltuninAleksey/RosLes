@@ -15,6 +15,7 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.hashers import make_password, check_password
 from django.core.cache import cache
+from django.db.models import Q
 
 from testDjangosite.settings import BASE_DIR
 from rest_framework.renderers import MultiPartRenderer, JSONRenderer
@@ -1770,10 +1771,22 @@ class FormingDocxViewDescRegion(ListAPIView):
         return Response({"document": path_docx})
 
 
+class GetCZL(ListAPIView):
+    permission_classes = [IsAuthenticated, ]
 
-
+    def get(self, request, *args, **kwargs):
+        profile_data = ProfileSerializer(Profile.objects.get(id_user = request.user.pk)).data['id_subject_rf']
+        czl_data_main = CZLSerializer(CZL.objects.get(Q(id_main_subject = profile_data) | Q(id_subject = profile_data)))
+        czl_objects = CZLSerializerWithOutMain(CZL.objects.filter(id_main_subject = czl_data_main.data['id_main_subject']), many=True)
+        return Response({"name_main_czl": czl_data_main.data['name_czl'],
+                         "id_main_subject": czl_data_main.data['id_main_subject'],
+                         "name_main_subject": czl_data_main.data['name_main_subject'],
+                         "slave_subject": czl_objects.data})
 
 class ForestViewSet(viewsets.ModelViewSet):
     pass
 
 #
+
+
+
