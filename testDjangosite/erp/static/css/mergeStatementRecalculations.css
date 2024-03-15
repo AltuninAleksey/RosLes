@@ -76,7 +76,7 @@ h3{
 }
 .form{
     display: grid;
-    grid-template-columns: 490px 470px 290px ;
+    grid-template-columns: 490px 300px 290px ;
     grid-template-rows: repeat(2, 50px);
     position: absolute;
     margin-top: 10px;
@@ -155,28 +155,64 @@ td {
     border-bottom: 1px solid #D9D9D9;
 }
 
-.td1 {
+.th1 {
     width: 100px;
 }
 
-.td2 {
+.th2 {
     width: 200px;
 }
 
-.td3 {
+.th3 {
     width: 100px;
 }
 
-.td4 {
+.th4 {
     width: 150px;
 }
 
-.td5 {
+.th5 {
     width: 50px;
 }
 
-.td6 {
+.th6 {
+    width: 93px;
+}
+
+.th7 {
+    width: 100px;
+}
+
+.th8 {
     width: 50px;
+}
+
+.th9 {
+    width: 100px;
+}
+
+.td1 {
+    width: 75px;
+}
+
+.td2 {
+    width: 155px;
+}
+
+.td3 {
+    width: 75px;
+}
+
+.td4 {
+    width: 115px;
+}
+
+.td5 {
+    width: 45px;
+}
+
+.td6 {
+    width: 63px;
 }
 
 .td7 {
@@ -184,8 +220,13 @@ td {
 }
 
 .td8 {
-    width: 50px;
+    width: 35px;
 }
+
+.td9 {
+    width: 75px;
+}
+
 
 
 .p{

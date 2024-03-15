@@ -94,17 +94,19 @@
                     <p>Лесничество:</p>
                     <p>Участковое лесничество:</p>
                     <p>Квартал:</p>
+                    <p>Урочище:</p>
                     <p>Выдел:</p>
                     <p>Площать участка:</p>
                 </div>
                 <div>
                     <input id="numberStatement" type="text">
-                    <input id="dateStatement" type="date" readonly>
-                    <select name="sub" id="subjectStatement">
-                        <option hidden disabled selected value=""></option>
-                        <option >Брянская область</option>
-                        <option >калужская область</option>
-                    </select>
+                    <input id="dateStatement" type="date">
+                    <input id="subjectStatement" type="text" readonly>
+<!--                    <select name="sub" id="subjectStatement">-->
+<!--                        <option hidden disabled selected value=""></option>-->
+<!--                        <option >Брянская область</option>-->
+<!--                        <option >калужская область</option>-->
+<!--                    </select>-->
                     <select name="les" id="forestlyStatement">
                         <option hidden disabled selected value=""></option>
                         <option >Брянское</option>
@@ -115,11 +117,8 @@
                         <option >Четдинское</option>
                         <option >Локчимское</option>
                     </select>
-                    <select name="quarter" id="quarterStatement">
-                        <option hidden disabled selected value=""></option>
-                        <option >7</option>
-                        <option >8</option>
-                    </select>
+                    <input id="quarterStatement" type="text">
+                    <input id="dachaStatement" type="text">
                     <input id="soilLotStatement" type="text">
                     <input id="sampleRegionStatement" type="text">
                 </div>
@@ -134,17 +133,17 @@
                 <p class="p">Добавить перечет на пробной площади</p>
             </div>
             <table>
-                <th class="td1 cursorPointer positionRelative" onclick="sortByDate()">Дата <p id="sortDateForTable1" class="sortDateArrow">&#8595;</p></th>
-                <th class="td8">Номер</th>
-                <th class="td2">Субьект РФ</th>
-                <th class="td3">Лесничество</th>
-                <th class="td4">Участковое лесничество</th>
-                <th class="td5">Квартал</th>
-                <th class="td6">Выдел</th>
-                <th class="td7">Площадь</th>
+                <th class="th1 cursorPointer positionRelative" onclick="sortByDate()">Дата <p id="sortDateForTable1" class="sortDateArrow">&#8595;</p></th>
+                <th class="th8">Номер</th>
+                <th class="th2">Субьект РФ</th>
+                <th class="th3">Лесничество</th>
+                <th class="th4">Участковое лесничество</th>
+                <th class="th9">Урочище</th>
+                <th class="textAlignCenter th5">Квартал</th>
+                <th class="textAlignCenter th6">Выдел</th>
             </table>
             <div class="scroll-table-body">
-                <table>
+                <table style="table-layout: fixed;">
                     <tbody id="sampleListTbody">
                     </tbody>
                 </table>

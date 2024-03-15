@@ -26,12 +26,18 @@ function setEventListenerForObjects() {
 
 async function openPage() {
 
-    var allForestData = await CommonBusiness.getAllForest();
+    //var allForestData = await CommonBusiness.getAllForest();
 
-    APP.subjectrf = allForestData.subjectrf.sort(function(a, b) { return a.name_subject_RF > b.name_subject_RF? 1 : -1; });
-    APP.forestly = allForestData.forestly;
-    APP.district_forestly = allForestData.district_forestly;
-    APP.quarter = allForestData.quarter;
+    APP.userData = await CommonBusiness.getUserData();
+
+    APP.subjectrf = await CommonBusiness.getAllSubjectrf();
+    APP.subjectrf = APP.subjectrf.sort(function(a, b) { return a.name_subject_RF > b.name_subject_RF? 1 : -1; });
+
+
+    //APP.subjectrf = allForestData.subjectrf.sort(function(a, b) { return a.name_subject_RF > b.name_subject_RF? 1 : -1; });
+    //APP.forestly = allForestData.forestly;
+    //APP.district_forestly = allForestData.district_forestly;
+    //APP.quarter = allForestData.quarter;
 
     APP.documentData = {}
 
@@ -59,17 +65,21 @@ async function setDataInPage() {
 async function setDataInHeader() {
     drawSelectSubjectRF();
     var regions = document.getElementById("regionRF");
-    changeDataSelectForestly(regions.value);
+    changeDataSelectForestly(Number(APP.userData.id_subject_rf));//regions.value);
 }
 
 function drawSelectSubjectRF() {
     var regions = document.getElementById("regionRF");
-    var newHtml = "";
+    //var newHtml = "";
 
     for(var i = 0; i < APP.subjectrf.length; i++) {
-        newHtml = newHtml + "<option value=\"" + APP.subjectrf[i].id + "\">" + APP.subjectrf[i].name_subject_RF + "</option>";
+        if(APP.subjectrf[i].id == Number(APP.userData.id_subject_rf)) {
+            regions.value = APP.subjectrf[i].name_subject_RF;
+            break;
+        }
+        //newHtml = newHtml + "<option value=\"" + APP.subjectrf[i].id + "\">" + APP.subjectrf[i].name_subject_RF + "</option>";
     }
-    regions.innerHTML = newHtml;
+    //regions.innerHTML = newHtml;
 }
 
 function drawSelectForestly() {
@@ -148,39 +158,7 @@ async function saveData() {
     let ucLesName = document.getElementById("ucLesName").value;
     let lesName = document.getElementById("lesName").value;
     let quarter = document.getElementById("quarter").value;
-    let regions = document.getElementById("regionRF").value;
-
-    if(Number(year_assignment_land) == NaN || Number(year_assignment_land) <= 1901) {
-        alert("Введите корректное значение года. Год не должен быть меньше 1901!");
-        var item = document.getElementById("year_assignment_land");
-        if(!item.classList.contains("mandatory_warning")) {
-            item.classList.add("mandatory_warning");
-        }
-        return;
-    } else {
-        var item = document.getElementById("year_assignment_land");
-
-        if(item.classList.contains("mandatory_warning")) {
-            item.classList.remove("mandatory_warning");
-        }
-    }
-
-    if(Number(year_format_fond_trees) == NaN || Number(year_format_fond_trees) <= 1901) {
-        alert("Введите корректное значение года. Год не должен быть меньше 1901!");
-        var item = document.getElementById("year_format_fond_trees")
-        if(!item.classList.contains("mandatory_warning")) {
-            item.classList.add("mandatory_warning");
-        }
-        return;
-    } else {
-        var item = document.getElementById("year_format_fond_trees");
-
-        if(item.classList.contains("mandatory_warning")) {
-            item.classList.remove("mandatory_warning");
-        }
-    }
-
-
+    let regions = Number(APP.userData.id_subject_rf);//document.getElementById("regionRF").value;
 
     var nowDate = new Date();
     var date = nowDate.getFullYear()+'-'+(nowDate.getMonth()+1)+'-'+nowDate.getDate();
@@ -194,22 +172,94 @@ async function saveData() {
         soil_lot: soil_lot,
         sample_region: sample_region,
         number_region: number_region,
-        year_assignment_land: year_assignment_land,
-        year_format_fond_trees: year_format_fond_trees,
-        inf_restore_forest: inf_restore_forest,
-        breed_structure_sapling_act_land: breed_structure_sapling_act_land,
-        economy_act_land: economy_act_land,
-        change_breed_and_structure_sapling: change_breed_and_structure_sapling,
-        results_surtvey: results_surtvey,
-        recommendation: recommendation,
-        farm_according_data_survey: farm_according_data_survey,
-        breed_composition_sapling_data_surver: breed_composition_sapling_data_surver,
-        id_method_of_reforestation: typeReproduction,
         count_plants: null,
         preservation_breed: null,
-        id_schema_mixing_breeds: null
-
+        id_schema_mixing_breeds: null,
+        dacha: document.getElementById("dacha").value == ""? null : document.getElementById("dacha").value,
+        name_quarter: document.getElementById("quarter").value == ""? null : document.getElementById("quarter").value,
+        gps: [],
+        id_profile: APP.userData.id,
+        width: null,
+        lenght: null,
+        square: null,
+        sample_area: 0
     }
+
+    if(year_assignment_land != null && year_assignment_land != undefined && year_assignment_land != "") {
+        if(Number(year_assignment_land) == NaN || Number(year_assignment_land) <= 1901) {
+            alert("Введите корректное значение года. Год не должен быть меньше 1901!");
+            var item = document.getElementById("year_assignment_land");
+            if(!item.classList.contains("mandatory_warning")) {
+                item.classList.add("mandatory_warning");
+            }
+            return;
+        } else {
+            var item = document.getElementById("year_assignment_land");
+
+            if(item.classList.contains("mandatory_warning")) {
+                item.classList.remove("mandatory_warning");
+            }
+        }
+
+        data.year_assignment_land = year_assignment_land;
+    }
+
+    if(year_format_fond_trees != null && year_format_fond_trees != undefined && year_format_fond_trees != "") {
+        if(Number(year_format_fond_trees) == NaN || Number(year_format_fond_trees) <= 1901) {
+            alert("Введите корректное значение года. Год не должен быть меньше 1901!");
+            var item = document.getElementById("year_format_fond_trees")
+            if(!item.classList.contains("mandatory_warning")) {
+                item.classList.add("mandatory_warning");
+            }
+            return;
+        } else {
+            var item = document.getElementById("year_format_fond_trees");
+
+            if(item.classList.contains("mandatory_warning")) {
+                item.classList.remove("mandatory_warning");
+            }
+        }
+
+        data.year_format_fond_trees = year_format_fond_trees;
+    }
+
+    if(inf_restore_forest != null && inf_restore_forest != undefined && inf_restore_forest != "") {
+        data.inf_restore_forest = inf_restore_forest;
+    }
+
+    if(breed_structure_sapling_act_land != null && breed_structure_sapling_act_land != undefined && breed_structure_sapling_act_land != "") {
+        data.breed_structure_sapling_act_land = breed_structure_sapling_act_land;
+    }
+
+    if(economy_act_land != null && economy_act_land != undefined && economy_act_land != "") {
+        data.economy_act_land = economy_act_land;
+    }
+
+    if(change_breed_and_structure_sapling != null && change_breed_and_structure_sapling != undefined && change_breed_and_structure_sapling != "") {
+        data.change_breed_and_structure_sapling = change_breed_and_structure_sapling;
+    }
+
+    if(results_surtvey != null && results_surtvey != undefined && results_surtvey != "") {
+        data.results_surtvey = results_surtvey;
+    }
+
+    if(recommendation != null && recommendation != undefined && recommendation != "") {
+        data.recommendation = recommendation;
+    }
+
+    if(farm_according_data_survey != null && farm_according_data_survey != undefined && farm_according_data_survey != "") {
+        data.farm_according_data_survey = farm_according_data_survey;
+    }
+
+    if(breed_composition_sapling_data_surver != null && breed_composition_sapling_data_surver != undefined && breed_composition_sapling_data_surver != "") {
+        data.breed_composition_sapling_data_surver = breed_composition_sapling_data_surver;
+    }
+
+    if(typeReproduction != null && typeReproduction != undefined && typeReproduction != "") {
+        data.id_method_of_reforestation = typeReproduction;
+    }
+
+
 
     if(!CommonFunction.checkMandatoryData()) {
         alert("Заполните все обязательные поля!");

@@ -5,21 +5,33 @@ APP = {
 function PrintFieldCardBusiness() {}
 
 PrintFieldCardBusiness.getPrintFieldCardDataById = async function(id) {
+
+    var token = document.cookie.match(/jwttoken=(.+?)(;|$)/)[1];
+
     var requestData = await axios({
       method: 'get',
       url: urlGlobal + "/fieldcard/" + id,
-      responseType: 'json'
+      responseType: 'json',
+      headers: {
+        'Authorization': 'Bearer ' + token
+      }
     });
 
     return requestData.data.FieldCard;
 }
 
 PrintFieldCardBusiness.getUpdatePrintFieldCard = async function(id, data) {
+
+    var token = document.cookie.match(/jwttoken=(.+?)(;|$)/)[1];
+
     var requestData = await axios({
       method: 'put',
       url: urlGlobal + "/fieldcard/" + id,
       data: data,
-      responseType: 'json'
+      responseType: 'json',
+      headers: {
+        'Authorization': 'Bearer ' + token
+      }
     });
 
     return requestData.data.FieldCard;

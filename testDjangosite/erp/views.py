@@ -414,6 +414,9 @@ def getMergeStatementRecalculations(request):
 def getStatementRecalculationsDetail(request):
     return render(request, 'erp/html/statementRecalculationsDetail.html', {'idDocument': request.GET.get('id')})
 
+def getNewStatementRecalculationsDetail(request):
+    return render(request, 'erp/html/newStatementRecalculationsDetail.html')
+
 def getDescriptionListLand(request):
     return render(request, 'erp/html/descriptionListLand.html')
 
@@ -435,3 +438,5 @@ def getNewFieldCard(request):
     return render(request, 'erp/html/newFieldCard.html')
 def getAvtorization(request):
     return render(request, 'erp/html/avtorization.html')
+def getRegestration(request):
+    return render(request, 'erp/html/regestration.html')

@@ -12,10 +12,10 @@ function setEventListenerForObjects() {
         changeDataSelectDistrictForestly(forestlyObject.value);
     });
 
-    var districtForestly = document.getElementById("ucLesName");
-    districtForestly.addEventListener('change',function() {
-        changeDataSelectQuarter(districtForestly.value);
-    });
+//    var districtForestly = document.getElementById("ucLesName");
+//    districtForestly.addEventListener('change',function() {
+//        changeDataSelectQuarter(districtForestly.value);
+//    });
 
     let idParent = document.getElementById("idParent").value;
     var back_event = document.getElementById("back_event");
@@ -44,12 +44,16 @@ function setEventListenerForObjects() {
 async function openPage() {
     let idDocument = document.getElementById("idDocument").value;
 
-    var allForestData = await CommonBusiness.getAllForest();
+    //var allForestData = await CommonBusiness.getAllForest();
 
-    APP.subjectrf = allForestData.subjectrf.sort(function(a, b) { return a.name_subject_RF > b.name_subject_RF? 1 : -1; });
-    APP.forestly = allForestData.forestly;
-    APP.district_forestly = allForestData.district_forestly;
-    APP.quarter = allForestData.quarter;
+    APP.subjectrf = await CommonBusiness.getAllSubjectrf();
+    APP.subjectrf = APP.subjectrf.sort(function(a, b) { return a.name_subject_RF > b.name_subject_RF? 1 : -1; });
+
+
+    //APP.subjectrf = allForestData.subjectrf.sort(function(a, b) { return a.name_subject_RF > b.name_subject_RF? 1 : -1; });
+    //APP.forestly = allForestData.forestly;
+    //APP.district_forestly = allForestData.district_forestly;
+    //APP.quarter = allForestData.quarter;
 
     APP.documentData = await PlotDescriptionBusiness.getPlotDescriptionDataById(idDocument);
 
@@ -64,6 +68,8 @@ async function setDataInPage() {
     document.getElementById("number_region").value = APP.documentData.number_region;
     document.getElementById("sample_region").value = APP.documentData.sample_region;
     document.getElementById("soil_lot").value = APP.documentData.soil_lot;
+    document.getElementById("dacha").value = APP.documentData.dacha;
+    document.getElementById("quarter").value = APP.documentData.name_quarter;
     document.getElementById("year_assignment_land").value = APP.documentData.year_assignment_land;
     document.getElementById("year_format_fond_trees").value = APP.documentData.year_format_fond_trees;
     document.getElementById("inf_restore_forest").value = APP.documentData.inf_restore_forest;
@@ -81,7 +87,7 @@ async function setDataInPage() {
     APP.typeReproduction = await CommonBusiness.getAllMethodofreforestation();
 
     for(var i = 0; i < APP.typeReproduction.length; i++) {
-        if(APP.typeReproduction[i].id = APP.documentData.id_method_of_reforestation) {
+        if(APP.typeReproduction[i].id == APP.documentData.id_method_of_reforestation) {
             newHtml = newHtml + "<option selected value=\"" + APP.typeReproduction[i].id + "\">" + APP.typeReproduction[i].name_of_method + "</option>";
         } else {
             newHtml = newHtml + "<option value=\"" + APP.typeReproduction[i].id + "\">" + APP.typeReproduction[i].name_of_method + "</option>";
@@ -98,16 +104,21 @@ async function setDataInHeader() {
 
 function drawSelectSubjectRF() {
     var regions = document.getElementById("regionRF");
-    var newHtml = "";
+    //var newHtml = "";
 
     for(var i = 0; i < APP.subjectrf.length; i++) {
-        if(APP.subjectrf[i].id == APP.documentData.id_subject_rf) {
-            newHtml = newHtml + "<option selected value=\"" + APP.subjectrf[i].id + "\">" + APP.subjectrf[i].name_subject_RF + "</option>";
-        } else {
-            newHtml = newHtml + "<option value=\"" + APP.subjectrf[i].id + "\">" + APP.subjectrf[i].name_subject_RF + "</option>";
-        }
+          if(APP.subjectrf[i].id == APP.documentData.id_subject_rf) {
+            regions.value = APP.subjectrf[i].name_subject_RF;
+            break;
+          }
+
+//        if(APP.subjectrf[i].id == APP.documentData.id_subject_rf) {
+//            newHtml = newHtml + "<option selected value=\"" + APP.subjectrf[i].id + "\">" + APP.subjectrf[i].name_subject_RF + "</option>";
+//        } else {
+//            newHtml = newHtml + "<option value=\"" + APP.subjectrf[i].id + "\">" + APP.subjectrf[i].name_subject_RF + "</option>";
+//        }
     }
-    regions.innerHTML = newHtml;
+    //regions.innerHTML = newHtml;
 }
 
 function drawSelectForestly() {
@@ -167,7 +178,7 @@ async function changeDataSelectDistrictForestly(id) {
     drawSelectDistrictForestly();
 
     var districtForestly = document.getElementById("ucLesName");
-    changeDataSelectQuarter(districtForestly.value);
+    //changeDataSelectQuarter(districtForestly.value);
 }
 
 async function changeDataSelectQuarter(id) {
@@ -176,7 +187,7 @@ async function changeDataSelectQuarter(id) {
     } else {
         APP.quarter = [];
     }
-    drawSelectQuarter();
+    //drawSelectQuarter();
 }
 
 async function saveData() {
@@ -198,65 +209,100 @@ async function saveData() {
     let ucLesName = document.getElementById("ucLesName").value;
     let lesName = document.getElementById("lesName").value;
     let quarter = document.getElementById("quarter").value;
-    let regions = document.getElementById("regionRF").value;
-
-    if(Number(year_assignment_land) == NaN || Number(year_assignment_land) <= 1901) {
-        alert("Введите корректное значение года. Год не должен быть меньше 1901!");
-        var item = document.getElementById("year_assignment_land");
-        if(!item.classList.contains("mandatory_warning")) {
-            item.classList.add("mandatory_warning");
-        }
-        return;
-    } else {
-        var item = document.getElementById("year_assignment_land");
-
-        if(item.classList.contains("mandatory_warning")) {
-            item.classList.remove("mandatory_warning");
-        }
-    }
-
-    if(Number(year_format_fond_trees) == NaN || Number(year_format_fond_trees) <= 1901) {
-        alert("Введите корректное значение года. Год не должен быть меньше 1901!");
-        var item = document.getElementById("year_format_fond_trees")
-        if(!item.classList.contains("mandatory_warning")) {
-            item.classList.add("mandatory_warning");
-        }
-        return;
-    } else {
-        var item = document.getElementById("year_format_fond_trees");
-
-        if(item.classList.contains("mandatory_warning")) {
-            item.classList.remove("mandatory_warning");
-        }
-    }
+    let regions = APP.documentData.id_subject_rf;//document.getElementById("regionRF").value;
 
     let data = {
         id: APP.documentData.id,
-        breed_composition_sapling_data_surver: breed_composition_sapling_data_surver,
-        breed_structure_sapling_act_land: breed_structure_sapling_act_land,
-        change_breed_and_structure_sapling: change_breed_and_structure_sapling,
-        count_plants: APP.documentData.count_plants,
-        date: APP.documentData.date,
-        economy_act_land: economy_act_land,
-        farm_according_data_survey: farm_according_data_survey,
         id_district_forestly: ucLesName,
         id_field_card: APP.documentData.id_field_card,
         id_forestly: lesName,
         id_list_region: APP.documentData.id_list_region,
-        id_method_of_reforestation: typeReproduction,
-        id_quarter: quarter,
-        id_schema_mixing_breeds: APP.documentData.id_schema_mixing_breeds,
-        id_subject_rf: regions,
-        inf_restore_forest: inf_restore_forest,
-        number_region: number_region,
-        preservation_breed: APP.documentData.preservation_breed,
-        recommendation: recommendation,
-        results_surtvey: results_surtvey,
+        date: APP.documentData.date,
         sample_region: sample_region,
         soil_lot: soil_lot,
-        year_assignment_land: year_assignment_land,
-        year_format_fond_trees: year_format_fond_trees
+        id_subject_rf: regions,
+        dacha: document.getElementById("dacha").value,
+        name_quarter: document.getElementById("quarter").value,
+        count_plants: APP.documentData.count_plants,
+        id_schema_mixing_breeds: APP.documentData.id_schema_mixing_breeds,
+        preservation_breed: APP.documentData.preservation_breed,
+        number_region: number_region
     };
+
+    if(year_assignment_land != null && year_assignment_land != undefined && year_assignment_land != "") {
+        if(Number(year_assignment_land) == NaN || Number(year_assignment_land) <= 1901) {
+            alert("Введите корректное значение года. Год не должен быть меньше 1901!");
+            var item = document.getElementById("year_assignment_land");
+            if(!item.classList.contains("mandatory_warning")) {
+                item.classList.add("mandatory_warning");
+            }
+            return;
+        } else {
+            var item = document.getElementById("year_assignment_land");
+
+            if(item.classList.contains("mandatory_warning")) {
+                item.classList.remove("mandatory_warning");
+            }
+        }
+
+        data.year_assignment_land = year_assignment_land;
+    }
+
+    if(year_format_fond_trees != null && year_format_fond_trees != undefined && year_format_fond_trees != "") {
+        if(Number(year_format_fond_trees) == NaN || Number(year_format_fond_trees) <= 1901) {
+            alert("Введите корректное значение года. Год не должен быть меньше 1901!");
+            var item = document.getElementById("year_format_fond_trees")
+            if(!item.classList.contains("mandatory_warning")) {
+                item.classList.add("mandatory_warning");
+            }
+            return;
+        } else {
+            var item = document.getElementById("year_format_fond_trees");
+
+            if(item.classList.contains("mandatory_warning")) {
+                item.classList.remove("mandatory_warning");
+            }
+        }
+
+        data.year_format_fond_trees = year_format_fond_trees;
+    }
+
+    if(inf_restore_forest != null && inf_restore_forest != undefined && inf_restore_forest != "") {
+        data.inf_restore_forest = inf_restore_forest;
+    }
+
+    if(breed_structure_sapling_act_land != null && breed_structure_sapling_act_land != undefined && breed_structure_sapling_act_land != "") {
+        data.breed_structure_sapling_act_land = breed_structure_sapling_act_land;
+    }
+
+    if(economy_act_land != null && economy_act_land != undefined && economy_act_land != "") {
+        data.economy_act_land = economy_act_land;
+    }
+
+    if(change_breed_and_structure_sapling != null && change_breed_and_structure_sapling != undefined && change_breed_and_structure_sapling != "") {
+        data.change_breed_and_structure_sapling = change_breed_and_structure_sapling;
+    }
+
+    if(results_surtvey != null && results_surtvey != undefined && results_surtvey != "") {
+        data.results_surtvey = results_surtvey;
+    }
+
+    if(recommendation != null && recommendation != undefined && recommendation != "") {
+        data.recommendation = recommendation;
+    }
+
+    if(farm_according_data_survey != null && farm_according_data_survey != undefined && farm_according_data_survey != "") {
+        data.farm_according_data_survey = farm_according_data_survey;
+    }
+
+    if(breed_composition_sapling_data_surver != null && breed_composition_sapling_data_surver != undefined && breed_composition_sapling_data_surver != "") {
+        data.breed_composition_sapling_data_surver = breed_composition_sapling_data_surver;
+    }
+
+    if(typeReproduction != null && typeReproduction != undefined && typeReproduction != "") {
+        data.id_method_of_reforestation = typeReproduction;
+    }
+
 
     let idDocument = document.getElementById("idDocument").value;
     let idParent = document.getElementById("idParent").value;
@@ -276,10 +322,10 @@ async function generateDocx() {
 
     let data = {
         id: APP.documentData.id,
-        name_quarter: document.getElementById("quarter").options[document.getElementById("quarter").selectedIndex].text,
+        name_quarter: document.getElementById("quarter").value,
         district_forestly: document.getElementById("ucLesName").options[document.getElementById("ucLesName").selectedIndex].text,
         forestly: document.getElementById("lesName").options[document.getElementById("lesName").selectedIndex].text,
-        id_subject_rf: document.getElementById("regionRF").options[document.getElementById("regionRF").selectedIndex].text,
+        id_subject_rf: document.getElementById("regionRF").value, //.options[document.getElementById("regionRF").selectedIndex].text,
         soil_lot: document.getElementById("soil_lot").value,
         sample_region: document.getElementById("sample_region").value,
         date: APP.documentData.date,
@@ -296,7 +342,8 @@ async function generateDocx() {
         preservation_breed: APP.documentData.preservation_breed,
         farm_according_data_survey: document.getElementById("farm_according_data_survey").value,
         breed_composition_sapling_data_surver: document.getElementById("breed_composition_sapling_data_surver").value,
-        method_of_reforestation: document.getElementById("typeReproduction").options[document.getElementById("typeReproduction").selectedIndex].text
+        method_of_reforestation: document.getElementById("typeReproduction").options[document.getElementById("typeReproduction").selectedIndex].text,
+        name_dacha: document.getElementById("dacha").value
     }
 
     var urlFile = await PlotDescriptionBusiness.generateDocx(data);

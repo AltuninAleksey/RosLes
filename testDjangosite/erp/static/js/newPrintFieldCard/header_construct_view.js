@@ -1,16 +1,21 @@
 async function setDataInHeader() {
     drawSelectSubjectRF();
-    changeDataSelectForestly(document.getElementById("regionRF").value);
+    changeDataSelectForestly(Number(APP.userData.id_subject_rf));
 }
 
 function drawSelectSubjectRF() {
     var regions = document.getElementById("regionRF");
-    var newHtml = "";
+    //var newHtml = "";
 
     for(var i = 0; i < APP.subjectrf.length; i++) {
-            newHtml = newHtml + "<option value=\"" + APP.subjectrf[i].id + "\">" + APP.subjectrf[i].name_subject_RF + "</option>";
+        if(APP.subjectrf[i].id == Number(APP.userData.id_subject_rf)) {
+            regions.value = APP.subjectrf[i].name_subject_RF;
+            break;
+        }
+
+            //newHtml = newHtml + "<option value=\"" + APP.subjectrf[i].id + "\">" + APP.subjectrf[i].name_subject_RF + "</option>";
     }
-    regions.innerHTML = newHtml;
+    //regions.innerHTML = newHtml;
 }
 
 function drawSelectForestly() {

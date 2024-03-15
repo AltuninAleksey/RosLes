@@ -58,3 +58,24 @@ body{
 .form input{
     width: 300px;
 }
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.avt-reg-button {
+    height: 25px;
+    border: 1px solid white;
+    border-radius: 20px;
+    font-size: 18px;
+    margin-top: 20px;
+    color: black;
+    background-color: white;
+    padding-top: 5px;
+    margin-bottom: 5px;
+}
+
+.avt-reg-button:hover {
+    color: white;
+    background-color: #40E0D0;
+}

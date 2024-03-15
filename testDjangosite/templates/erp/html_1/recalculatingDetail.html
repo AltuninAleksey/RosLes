@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    {% block title %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Перечет</title>
+    <link rel="stylesheet" href="{% static 'css/common.css' %}">
+    <link rel="stylesheet" href="{% static 'css/recalculatingDetail.css' %}">
+    <link rel="stylesheet" href="{% static 'css/add-form-proba.css' %}">
+    <link rel="stylesheet" href="{% static 'css/add-form-state.css' %}">
+    <link rel="stylesheet" href="{% static 'css/add-form-gps.css' %}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.0/axios.js"></script>
+    <script src="{% static 'js/global.js' %}"></script>
+    <script src="{% static 'js/common/commonFunction.js' %}"></script>
+    <script src="{% static 'js/common/common_business.js' %}"></script>
+    <script src="{% static 'js/recalculatingDetail/recalculatingDetail_business.js' %}" defer></script>
+    <script src="{% static 'js/recalculatingDetail/recalculatingDetail_construct_header.js' %}" defer></script>
+    <script src="{% static 'js/recalculatingDetail/recalculatingDetail_construct_view_tableOne.js' %}" defer></script>
+    <script src="{% static 'js/recalculatingDetail/recalculatingDetail_construct_view_tableTwo.js' %}" defer></script>
+    <script src="{% static 'js/recalculatingDetail/recalculatingDetail_construct_view_tableThree.js' %}" defer>
+    </script><script src="{% static 'js/recalculatingDetail/recalculatingDetail_construct_view_tableFour.js' %}" defer></script>
+    </script><script src="{% static 'js/recalculatingDetail/recalculatingDetail_construct_view_tableNull.js' %}" defer></script>
+    <script src="{% static 'js/recalculatingDetail/recalculatingDetail_construct_view.js' %}" defer></script>
+    {% endblock %}
+</head>
+<body id="body" style="margin:0 !important">
+    <input id="idDocument" type="hidden" name="idDocument" value={{idDocument}}>
+    <input id="idParent" type="hidden" name="idParent" value={{idParent}}>
+    <header style="margin:0 !important">
+        <div class="hiv">
+            <div class="hid">
+                <img src="{% static 'img/Logo @img.svg' %}" alt="">
+                <div class="point cursorPointer" onclick="getStatementRecalculations()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M7 4.5L5.9022 3.50135C4.83122 2.43036 3 3.18888 3 4.70348V19.2999C3 20.2389 3.76115 21 4.70007 21H19.2965C20.8111 21 21.5696 19.1688 20.4987 18.0978L19.8945 17.4936M7 4.5L5.5 5.5M7 4.5L9.76759 7.36674M9.76759 7.36674L8.34542 8.87775M9.76759 7.36674L13.1019 10.701M13.1019 10.701L11.7783 12.0808M13.1019 10.701L16.3881 13.9872M16.3881 13.9872L15.113 15.3824M16.3881 13.9872L19.8945 17.4936M19.8945 17.4936L18.4968 18.7825" stroke="#40E0D0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M6.69867 18H11.2999C11.9224 18 12.2341 17.2474 11.794 16.8073L7.1927 12.206C6.75256 11.7659 6 12.0776 6 12.7001V17.3013C6 17.6872 6.3128 18 6.69867 18Z" stroke="#40E0D0" stroke-width="2" stroke-linejoin="round"/>
+                        </svg>
+                    <a><h3>Перечетная ведомость</h3></a>
+                </div>
+                <div class="point cursorPointer" onclick="getFieldCard()">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M13.7218 8.1308L10.5768 11.2012M1 19L2.61578 14.2673C2.81491 13.6841 2.74608 13.0523 2.52328 12.4773C1.43423 9.66657 2.04257 6.37784 4.35189 4.12326C6.60048 1.92796 13.1645 1.22622 16.729 1.00446C18.0273 0.923692 19.0782 1.94964 18.9954 3.2172C18.7683 6.69721 18.0495 13.1056 15.8009 15.3009C13.6825 17.3691 10.6728 18.0399 7.96733 17.3159C6.57914 16.9445 6.4141 15.2653 7.4319 14.2716L9.00437 12.7364M10.5768 11.2012V7.5M10.5768 11.2012L9.00437 12.7364M9.00437 12.7364H12.5" stroke="#40E0D0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    <a><h3>Полевые карточки</h3></a>
+                </div>
+                <div class="point cursorPointer" onclick="getGeneralDoc()">
+                    <svg width="24" height="22" viewBox="0 0 24 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="4" y="5.10345" width="16" height="3.51724" rx="1" stroke="#40E0D0" stroke-width="2" stroke-linejoin="round"/>
+                        <rect x="4" y="13.3793" width="16" height="3.51724" rx="1" stroke="#40E0D0" stroke-width="2" stroke-linejoin="round"/>
+                        <path d="M17 6.75519H18.5" stroke="#40E0D0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M17 15.1552H18.5" stroke="#40E0D0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    <a ><h3>Справочники</h3></a>
+                </div>
+            </div>
+        </div>
+        <div class="hiv2">
+            <div class="hid2 hid2r">
+                <div id="back_event" class="back cursorPointer">
+                    <svg width="18" height="10" viewBox="0 0 18 10" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin: 7px 10px;">
+                        <path d="M0.931396 4.95239L5.9314 0V4H17.9314V6H5.9314V10L0.931396 4.95239Z" fill="#4A4A4A"/>
+                        </svg>
+                </div>
+                <div class="point cursorPointer" onclick="getDescriptionListLand()">
+                    <a class="activeLink"><h3 style="color: black;">Описание участков</h3></a>
+                </div>
+                <div class="point cursorPointer" onclick="getFieldCard()">
+                    <a><h3  style="color: black;">Список полевых карточек</h3></a>
+                </div>
+            </div>
+        </div>
+    </header>
+    <h1 class="heading" id="header_recalculating">Перечет на пробной площади 0000001 от 07.03.2023</h1>
+        <div class="menuform">
+            <div class=" back butmenu" onclick="saveRecalculating()">
+                <svg width="22" height="22"  fill="none" xmlns="http://www.w3.org/2000/svg" style="margin: 4px 4px 2px 15px;">
+                    <path d="M7.5 19H5C3.89543 19 3 18.1046 3 17V3C3 1.89543 3.89543 1 5 1H15.6716C16.202 1 16.7107 1.21071 17.0858 1.58579L20.4142 4.91421C20.7893 5.28929 21 5.79799 21 6.32843V17C21 18.1046 20.1046 19 19 19H16.5M7.5 19H12H16.5M7.5 19V15C7.5 13.8954 8.39543 13 9.5 13H14.5C15.6046 13 16.5 13.8954 16.5 15V19" stroke="#177164" stroke-linejoin="round"/>
+                    <line x1="0.5" y1="-0.5" x2="9.5" y2="-0.5" transform="matrix(-1 0 0 1 17 8)" stroke="#177164" stroke-linecap="round"/>
+                    </svg>
+                <p class="p">Сохранить</p>
+            </div>
+            <div class="back butmenu task" style="display: none;">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin: 7px 10px 7px 15px;">
+                    <circle cx="8" cy="8" r="8" fill="#F03600"/>
+                    <path d="M7.15143 8L4.57568 10.5757L5.42421 11.4243L7.99996 8.84853L10.5757 11.4243L11.4242 10.5757L8.84848 8L11.4242 5.42427L10.5757 4.57574L7.99996 7.15147L5.42423 4.57574L4.5757 5.42427L7.15143 8Z" fill="white"/>
+                    </svg>
+                <p class="p">Удалить перечет</p>
+            </div>
+        </div>
+        <div class="submenu">
+            <form action="" class="rerect">
+                <p>Номер перечета: <input type="text" id="number_recalculation" style="width: 53px" readonly></p>
+                <p>Дата перечета: <input type="date" name="date_recalculation" id="date_recalculation" style="width: 104"></p>
+            </form>
+            <h1 class="heading" style="margin-top: 65px;">Участок</h1>
+             <form action="" class="rerect n1">
+                <p>Номер участка: <input type="text" name="" id="number_region" style="width: 90px"></p>
+                <p>Площадь участка: <input type="text" name="sample_area_recalculation" id="sample_area_recalculation" style="width: 104px"></p>
+                <p>Субъект РФ: <select name="regionRF" id="regionRF">
+                    <option hidden disabled selected value=""></option>
+                    <option >Брянская область</option>
+                    <option >калужская область</option>
+                </select></p>
+                <p>Лесничество: <select name="lesName" id="lesName">
+                    <option hidden disabled selected value=""></option>
+                    <option >Брянское</option>
+                    <option >Локчимское</option>
+                </select></p>
+            </form>
+            <form action="" class="rerect n1 n2">
+                <p>Участковое лесничество: <select name="ucLesName" id="ucLesName">
+                    <option hidden disabled selected value=""></option>
+                    <option >Четдинское</option>
+                    <option >Локчимское</option>
+                </select></p>
+                <p>Квартал: <select name="quarter" id="quarter" style="width: 115px;">
+                    <option hidden disabled selected value=""></option>
+                    <option >7</option>
+                    <option >8</option>
+                </select></p>
+                <p>Выдел: <input type="text" name="soil_lot_recalculating" id="soil_lot_recalculating" style="width: 95px"></p>
+            </form>
+        </div>
+    <div class="content conpodles">
+        <div class="back butmenu podles" style="justify-content: flex-start;" onclick="openAddForm('form-add-undeground')">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin: 7px 10px 7px 15px;">
+                <circle cx="8" cy="8" r="8" fill="#177164"/>
+                <path d="M7.40002 8.60005V12.2H8.60002V8.60005H12.2V7.40005H8.60002V3.80005H7.40002V7.40005H3.79999V8.60005H7.40002Z" fill="white"/>
+                </svg>
+            <p class="p">Добавить подлесок</p>
+        </div>
+        <table>
+            <th class="podles_td_1">Порода</th>
+            <th class="podles_td_2">Количество растений</th>
+            <th class="podles_td_3">Средняя высота</th>
+        </table>
+        <div class="scroll-table-body tbody-podles">
+            <table>
+                <tbody id="table_0">
+                    <tr>
+                        <td class="podles_td_1">y</td>
+                        <td class="podles_td_2">y</td>
+                        <td class="podles_td_3">r</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="hiv2 podles1">
+        <div class="hid2 hid2r">
+            <div onclick="setDataInTableOne(1)" class="point">
+                <a id="switchButton1" class="table_1_switch_button_item border-bottom-color-active"><h3 style="color: #444;">Искусственное</h3></a>
+            </div>
+            <div onclick="setDataInTableOne(2)" class="point">
+                <a id="switchButton2"  class="table_1_switch_button_item border-bottom-color-black" ><h3 style="color: #444;">Естественное семеное</h3></a>
+            </div>
+            <div onclick="setDataInTableOne(3)" class="point">
+                <a id="switchButton3"  class="table_1_switch_button_item border-bottom-color-black"><h3  style="color: #444;">Естественное порослевое</h3></a>
+            </div>
+        </div>
+    </div>
+    <div class="content conpodles1">
+        <div class="back butmenu add" style="justify-content: flex-start;" onclick="openAddForm('form-add-proba')">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin: 7px 10px 7px 15px;">
+                <circle cx="8" cy="8" r="8" fill="#177164"/>
+                <path d="M7.40002 8.60005V12.2H8.60002V8.60005H12.2V7.40005H8.60002V3.80005H7.40002V7.40005H3.79999V8.60005H7.40002Z" fill="white"/>
+                </svg>
+            <p class="p">Добавить лесообразующую породу</p>
+        </div>
+        <table>
+            <th class="conpodles1_td_1">Порода</th>
+            <th class="conpodles1_td_2">Главная порода</th>
+            <th class="conpodles1_td_3">до 0.2</th>
+            <th class="conpodles1_td_3">0.21 - 0.5</th>
+            <th class="conpodles1_td_3">0.6 - 1.0</th>
+            <th class="conpodles1_td_3">1.1 - 1.5</th>
+            <th class="conpodles1_td_3">более 1.5</th>
+            <th class="conpodles1_td_4">max h</th>
+            <th class="conpodles1_td_4">avg h</th>
+            <th class="conpodles1_td_5">Средний диаметр</th>
+            <th class="conpodles1_td_5">Общее количество</th>
+        </table>
+        <div class="scroll-table-body tbody-conpodles1">
+            <table>
+                <tbody id="table_one">
+                    <tr>
+                        <td class="conpodles1_td_1">Сосна</td>
+                        <td class="conpodles1_td_2">-</td>
+                        <td class="conpodles1_td_3">14</td>
+                        <td class="conpodles1_td_3">14</td>
+                        <td class="conpodles1_td_3">14</td>
+                        <td class="conpodles1_td_3">14</td>
+                        <td class="conpodles1_td_3">14</td>
+                        <td class="conpodles1_td_4">14</td>
+                        <td class="conpodles1_td_4">14</td>
+                        <td class="conpodles1_td_5">14</td>
+                        <td class="conpodles1_td_5">14</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="conpodles2">
+        <div class="podlesok1 otstup1">
+            <div class=" conpodles">
+                <div class="back butmenu podles" style="justify-content: flex-start; display: none;" onclick="openAddForm('form-add-state')">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin: 7px 10px 7px 15px;">
+                        <circle cx="8" cy="8" r="8" fill="#177164"/>
+                        <path d="M7.40002 8.60005V12.2H8.60002V8.60005H12.2V7.40005H8.60002V3.80005H7.40002V7.40005H3.79999V8.60005H7.40002Z" fill="white"/>
+                        </svg>
+                    <p class="p">Добавить сотрудника</p>
+                </div>
+                <table>
+                    <th>Сотрудник</th>
+                </table>
+                <div class="scroll-table-body tbody-employee">
+                    <table>
+                        <tbody id="table_2">
+                            <tr>
+                                <td>Петров П. С.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="podlesok1">
+            <div class=" conpodles">
+                <div class="back butmenu podles" style="justify-content: flex-start;" onclick="openAddForm('form-add-gps')">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin: 7px 10px 7px 15px;">
+                        <circle cx="8" cy="8" r="8" fill="#177164"/>
+                        <path d="M7.40002 8.60005V12.2H8.60002V8.60005H12.2V7.40005H8.60002V3.80005H7.40002V7.40005H3.79999V8.60005H7.40002Z" fill="white"/>
+                        </svg>
+                    <p class="p">Добавить GPS-точку</p>
+                </div>
+                <table>
+                    <th class="gps-point-td1">№ точки</th>
+                    <th class="gps-point-td2">Долгота</th>
+                    <th class="gps-point-td2">Широта</th>
+                    <th class="gps-point-td2">Центр</th>
+                </table>
+                <div class="scroll-table-body tbody-gps-point">
+                    <table>
+                        <tbody id="table_3">
+                            <tr>
+                                <td class="gps-point-td1">1</td>
+                                <td class="gps-point-td2">51.68</td>
+                                <td class="gps-point-td2">68.54</td>
+                                <td class="gps-point-td2">
+                                    <input type="checkbox">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="podlesok1 otstup2">
+            <div class=" conpodles">
+                <div class="back butmenu podles" style="justify-content: flex-start; display: none">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin: 7px 10px 7px 15px;">
+                        <circle cx="8" cy="8" r="8" fill="#177164"/>
+                        <path d="M7.40002 8.60005V12.2H8.60002V8.60005H12.2V7.40005H8.60002V3.80005H7.40002V7.40005H3.79999V8.60005H7.40002Z" fill="white"/>
+                        </svg>
+                    <p class="p">Добавить Фото-точку</p>
+                </div>
+                <table>
+                    <th class="photo-td1">№ точки</th>
+                    <th class="photo-td2">Дата/Время</th>
+                    <th class="photo-td3">Фото</th>
+                </table>
+                <div class="scroll-table-body tbody-photo-point">
+                    <table>
+                        <tbody id="table_4">
+                            <tr>
+                                <td class="photo-td1">1</td>
+                                <td class="photo-td2">01.01.2023 09:00</td>
+                                <td class="photo-td3"> <a href="">img_i</a> </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="form-add-undeground" class="addFormfon display-none">
+            <div class="gps" style="width: 450px; height: 200px;">
+                <h3>Добавление Подлеска</h3>
+                <div class="exitFormAddGps" onclick="closeAddForm('form-add-undeground')"></div>
+                <div class="content">
+                    <div class="proba-select" style="margin-left: -5px;">
+                            <form action="">
+                                <select id="breedName-undeground" class="proba-input">
+                                </select>
+                            </form>
+                    </div>
+                    <div class="form1">
+                        <p class="p">Количество растений</p>
+                        <input type="number" id="count-add">
+                    </div>
+                    <div class="form1">
+                        <p class="p">Средняя высота</p>
+                        <input class="longitude-add" type="number" id="avg-h-add">
+                        <button id="buttonAddUndefground">Добавить</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="form-add-proba" class="addFormfon display-none">
+            <div class="proba">
+                <h3>Добавление пробы</h3>
+                <div class="exitFormAddProba" onclick="closeAddForm('form-add-proba')"></div>
+                <div class="proba-content">
+                    <div class="content-item">
+                        <div class="proba-select">
+                            <form action="">
+                                <select id="breedName-proba" class="proba-input">
+                                </select>
+                            </form>
+                        </div>
+                        <div class="proba-form1">
+                            <p>0.21-0.5</p>
+                            <input id="proba-0.21-0.5" type="number" class="proba-input">
+                        </div>
+                        <div class="proba-form1">
+                            <p class="p">1.1-1.5</p>
+                            <input id="proba-1.1-1.5" type="number" class="proba-input">
+                        </div>
+                        <div class="proba-form1">
+                            <p class="p" style="margin-right: -50px;width: 120px;">Главная порода</p>
+                            <input id="proba-main" type="checkbox" class="proba-input">
+                        </div>
+                        <div class="proba-form1">
+                            <p class="p">Средний диаметр</p>
+                            <input id="proba-avg-d" type="number" class="proba-input" style="width: 60px;">
+                        </div>
+                    </div>
+                    <div class="content-item item2">
+                        <div class="proba-form1">
+                            <p class="p1">До 0.2</p>
+                            <input id="proba-0.2" type="number" class="proba-input">
+                        </div>
+                        <div class="proba-form1">
+                            <p class="p2">0.6-1.0</p>
+                            <input id="proba-0.6-1.0" type="number" class="proba-input">
+                        </div>
+                        <div class="proba-form1">
+                            <p>Более 1.5</p>
+                            <input id="proba-1.5" type="number" class="proba-input">
+                        </div>
+                        <div class="proba-form1">
+                            <p class="p" style="margin-right: 48px;">Avg h</p>
+                            <input id="proba-avg-h" type="number" class="proba-input">
+                        </div>
+                        <div class="proba-form1">
+                            <p class="p">Общее количество</p>
+                            <input id="proba-all-count" type="number" class="proba-input" style="width: 70px;">
+                        </div>
+                    </div>
+                    <div class="maxheig">
+                        <p>Максимальная высота</p>
+                        <input id="proba-maxheig" type="number" class="proba-input">
+                        <button id="buttonAddProba">Добавить</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="form-add-state" class="addFormfon display-none">
+            <div class="state">
+                <h3>Добавление сотрудника</h3>
+                <div class="exitFormAddState" onclick="closeAddForm('form-add-state')"></div>
+                <div class="state-content">
+                    <div class="form1">
+                        <select id="stateName" class="state-input">
+                        </select>
+                    </div>
+                    <button id="buttonAddState">Добавить</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="form-add-gps" class="addFormfon display-none">
+            <div class="gps">
+                <h3>Добавление GPS-точки</h3>
+                <div class="exitFormAddGps" onclick="closeAddForm('form-add-gps')"></div>
+                <div class="content">
+                    <div class="form1">
+                        <p class="p">Долгота</p>
+                        <input type="number" id="latitude-add">
+                    </div>
+                    <div class="form1">
+                        <p class="p">Широта</p>
+                        <input class="longitude-add" type="number" id="longitude-add">
+                        <button id="buttonAddGps">Добавить</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

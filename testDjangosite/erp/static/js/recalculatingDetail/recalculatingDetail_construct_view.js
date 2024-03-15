@@ -43,19 +43,24 @@ function setEventListenerForObjects() {
             addUndefground();
     });
 
+
+
+
 }
 
 async function openPage() {
     let idDocument = document.getElementById("idDocument").value;
 
-    var allForestData = await CommonBusiness.getAllForest();
+    //var allForestData = await CommonBusiness.getAllForest();
 
-    APP.subjectrf = allForestData.subjectrf.sort(function(a, b) { return a.name_subject_RF > b.name_subject_RF? 1 : -1; });
-    APP.forestly = allForestData.forestly;
-    APP.district_forestly = allForestData.district_forestly;
-    APP.quarter = allForestData.quarter;
+    APP.subjectrf = await CommonBusiness.getAllSubjectrf();
+    APP.subjectrf = APP.subjectrf.sort(function(a, b) { return a.name_subject_RF > b.name_subject_RF? 1 : -1; });
+    //APP.forestly = allForestData.forestly;
+    //APP.district_forestly = allForestData.district_forestly;
+    //APP.quarter = allForestData.quarter;
 
     APP.breeds = await CommonBusiness.getAllBreeds();
+    APP.undergrowth = await CommonBusiness.getAllUndergrowth();
 
     APP.documentData = await RecalculatingDetailBusiness.getRecalculatingDetailDataById(idDocument);
     let listData = await RecalculatingDetailBusiness.getListData(idDocument);
@@ -87,6 +92,12 @@ function setDataFormAddProba() {
     }
 
     breedName_proba.innerHTML = newHtml;
+
+    newHtml = "";
+    for(var i = 0; i < APP.undergrowth.length; i++) {
+        newHtml = newHtml + "<option value=\"" + APP.undergrowth[i].id + "\">" + APP.undergrowth[i].name + "</option>";
+    }
+
     breedName_undeground.innerHTML = newHtml;
 }
 
@@ -130,7 +141,7 @@ function closeAddForm(id) {
         var proba_main = document.getElementById("proba-main");
         var proba_avg_d = document.getElementById("proba-avg-d");
         var proba_avg_h = document.getElementById("proba-avg-h");
-        var proba_all_count = document.getElementById("proba-all-count");
+        //var proba_all_count = document.getElementById("proba-all-count");
 
         proba_021_05.value = "";
         proba_11_15.value = "";
@@ -141,7 +152,7 @@ function closeAddForm(id) {
         proba_main.checked = false;
         proba_avg_d.value = "";
         proba_avg_h.value = "";
-        proba_all_count.value = "";
+        //proba_all_count.value = "";
     }
 
 }
@@ -164,7 +175,8 @@ async function saveRecalculating() {
             id_district_forestly: ucLesNameForm.value,
             id_forestly: lesNameForm.value,
             id_profile: APP.documentData.id_profile,
-            id_quarter: quarterForm.value,
+            name_quarter: quarterForm.value,
+            dacha: document.getElementById("dacha").value,
             sample_area: document.getElementById("sample_area_recalculation").value,
             soil_lot: document.getElementById("soil_lot_recalculating").value,
             number_region: document.getElementById("number_region").value

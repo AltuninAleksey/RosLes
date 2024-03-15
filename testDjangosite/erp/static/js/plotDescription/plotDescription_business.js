@@ -5,21 +5,33 @@ APP = {
 function PlotDescriptionBusiness() {}
 
 PlotDescriptionBusiness.getPlotDescriptionDataById = async function(id) {
+
+    var token = document.cookie.match(/jwttoken=(.+?)(;|$)/)[1];
+
     var requestData = await axios({
       method: 'get',
       url: urlGlobal + "/descriptionregion/" + id,
-      responseType: 'json'
+      responseType: 'json',
+      headers: {
+        'Authorization': 'Bearer ' + token
+      }
     });
 
     return requestData.data.DescriptionRegion;
 }
 
 PlotDescriptionBusiness.setPlotDescriptionDataById = async function(id, data) {
+
+    var token = document.cookie.match(/jwttoken=(.+?)(;|$)/)[1];
+
     var requestData = await axios({
       method: 'put',
       url: urlGlobal + "/descriptionregion/" + id,
       data: data,
-      responseType: 'json'
+      responseType: 'json',
+      headers: {
+        'Authorization': 'Bearer ' + token
+      }
     });
 }
 

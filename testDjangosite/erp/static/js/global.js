@@ -1,5 +1,14 @@
 let urlGlobal = "http://127.0.0.1:8000";
 //let urlGlobal = "http://90.156.208.88:8093";
+//let urlGlobal = "http://92.50.227.100:58493";
+
+function getAvtorization() {
+    window.location.href = urlGlobal + "/erp/avtorization";
+}
+
+function getRegestration() {
+    window.location.href = urlGlobal + "/erp/regestration";
+}
 
 function getRecalculationOnTrialAreaPage() {
     window.location.href = urlGlobal + "/erp/documents/recalculationOnTrialArea";
@@ -15,6 +24,10 @@ function getGeneralDoc() {
 
 function getStatementRecalculations() {
     window.location.href = urlGlobal + "/erp/documents/statementRecalculations";
+}
+
+function getNewStatementRecalculations() {
+    window.location.href = urlGlobal + "/erp/documents/newStatementRecalculationsDetail";
 }
 
 function getMergeStatementRecalculations() {

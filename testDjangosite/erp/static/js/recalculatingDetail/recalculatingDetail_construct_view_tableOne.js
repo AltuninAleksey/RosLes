@@ -79,7 +79,7 @@ function setDataInTableOne(switchButton) {
                                         "<td class=\"conpodles1_td_4\"><input class=\"recalculation_input\" onChange=\"updateRecalculating(" + i + ", " + "'max_height'" + ", this.value);\" type=\"text\" value=\"" + APP.dataTable_1[i].max_height + "\"></td> " +
                                         "<td class=\"conpodles1_td_4\"><input class=\"recalculation_input\" onChange=\"updateRecalculating(" + i + ", " + "'avg_height'" + ", this.value);\" type=\"text\" value=\"" + APP.dataTable_1[i].avg_height + "\"></td> " +
                                         "<td class=\"conpodles1_td_5\"><input class=\"recalculation_input\" onChange=\"updateRecalculating(" + i + ", " + "'avg_diameter'" + ", this.value);\" type=\"text\" value=\"" + APP.dataTable_1[i].avg_diameter + "\"></td> " +
-                                        "<td class=\"conpodles1_td_5\"><input class=\"recalculation_input\" onChange=\"updateRecalculating(" + i + ", " + "'count_of_plants'" + ", this.value);\" type=\"text\" value=\"" + APP.dataTable_1[i].count_of_plants  + "\"></td>" +
+                                        "<td class=\"conpodles1_td_5\"><input id = \"conpodles1_td_5_" + i +"\" class=\"recalculation_input\" onChange=\"updateRecalculating(" + i + ", " + "'count_of_plants'" + ", this.value);\" type=\"text\" value=\"" + APP.dataTable_1[i].count_of_plants  + "\"></td>" +
                                     "</tr>";
             }
     }
@@ -89,6 +89,19 @@ function setDataInTableOne(switchButton) {
 
 function updateRecalculating(index, element, val) {
     APP.dataTable_1[index][element] = Number(val);
+
+    if(element == "to0_2" ||
+        element == "from0_21To0_5" ||
+        element == "from0_6To1_0" ||
+        element == "from1_1to1_5" ||
+        element == "from1_5") {
+
+        APP.dataTable_1[index]["count_of_plants"] = APP.dataTable_1[index]["to0_2"] +
+            APP.dataTable_1[index]["from0_21To0_5"] + APP.dataTable_1[index]["from0_6To1_0"] +
+            APP.dataTable_1[index]["from1_1to1_5"] + APP.dataTable_1[index]["from1_5"];
+
+        document.getElementById("conpodles1_td_5_"+index).value = APP.dataTable_1[index]["count_of_plants"];
+     }
 }
 
 function addProba() {
@@ -102,7 +115,7 @@ function addProba() {
     var proba_main = document.getElementById("proba-main");
     var proba_avg_d = document.getElementById("proba-avg-d");
     var proba_avg_h = document.getElementById("proba-avg-h");
-    var proba_all_count = document.getElementById("proba-all-count");
+    var proba_all_count =  Number(proba_021_05.value) + Number(proba_11_15.value) + Number(proba_02.value) + Number(proba_06_10.value) + Number(proba_15.value); //document.getElementById("proba-all-count");
 
 
     var newData = {
@@ -119,7 +132,7 @@ function addProba() {
         main: proba_main.checked? 1: 0,
         avg_diameter: Number(proba_avg_d.value),
         avg_height: Number(proba_avg_h.value),
-        count_of_plants: Number(proba_all_count.value)
+        count_of_plants: Number(proba_all_count)
     };
 
     APP.dataTable_1.push(newData);

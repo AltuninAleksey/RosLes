@@ -5,10 +5,16 @@ APP = {
 function FieldCardBusiness() {}
 
 FieldCardBusiness.getAllFieldCardList = async function() {
+
+    var token = document.cookie.match(/jwttoken=(.+?)(;|$)/)[1];
+
     var requestData = await axios({
       method: 'get',
       url: urlGlobal + "/fieldcard",
-      responseType: 'json'
+      responseType: 'json',
+      headers: {
+        'Authorization': 'Bearer ' + token
+      }
     });
 
     return requestData.data.get;

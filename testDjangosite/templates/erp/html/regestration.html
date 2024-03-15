@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    {% block title %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация пользователя</title>
+    <link rel="stylesheet" href="{% static 'css/regestration.css' %}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.0/axios.js"></script>
+    <script src="{% static 'js/global.js' %}"></script>
+    <script src="{% static 'js/registration/regestration.js' %}" defer></script>
+    {% endblock %}
+</head>
+<body>
+    <div class="login-page">
+        <h2>Регистрация</h2>
+        <form class="login-form">
+            <p class="form"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" style="margin: 4px 0 -12px 0;" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"></path>
+                <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path>
+             </svg> <input id="fio" type="text" placeholder="FIO"/></p>
+
+             <p class="form"><svg width="24px" height="24px" viewBox="0 0 24 24" style="margin: 4px 0 -12px 0;" fill="none" 
+                xmlns="http://www.w3.org/2000/svg" stroke="#bc1a1a">
+                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                <g id="SVGRepo_iconCarrier">
+                <path d="M4 9.00005L10.2 13.65C11.2667 14.45 12.7333 14.45 13.8 13.65L20 9" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> 
+                <path d="M3 9.17681C3 8.45047 3.39378 7.78123 4.02871 7.42849L11.0287 3.5396C11.6328 3.20402 12.3672 3.20402 12.9713 3.5396L19.9713 7.42849C20.6062 7.78123 21 8.45047 21 9.17681V17C21 18.1046 20.1046 19 19 19H5C3.89543 19 3 18.1046 3 17V9.17681Z" stroke="#ffffff" stroke-width="2" stroke-linecap="round"></path></g></svg>
+                <input id="email" type="text" placeholder="Email address"/></p>
+
+            <p class="form password">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-lock" width="24" height="24" viewBox="0 0 24 24" style="margin: 4px 0 -12px 0;" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                <path d="M5 13a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-6z"></path>
+                <path d="M11 16a1 1 0 1 0 2 0a1 1 0 0 0 -2 0"></path>
+                <path d="M8 11v-4a4 4 0 1 1 8 0v4"></path>
+             </svg> <input type="password" id="password-input" placeholder="Password" name="password">
+             <a href="#" class="password-control" onclick="return show_hide_password(this);"></a></p>
+
+             <p class="form"><svg width="24px" height="24px" viewBox="0 0 15 19" style="margin: 4px 0 -12px 0;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
+                class="si-glyph si-glyph-phone-number" fill="#ffffff"><g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                <g id="SVGRepo_iconCarrier"> <title>129</title> <defs> </defs> 
+                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"> <g fill="#ffffff"> <g>
+                <path d="M15.924,3.779 C15.924,-0.037 9.787,0.09 7.637,0.09 C5.485,0.09 0.038,0.136 0.038,3.953 L3.947,3.953 C3.947,3.926 3.951,2.759 3.951,2.996 C3.951,2.558 4.43,1.969 5.504,1.969 L10.517,1.969 C11.563,1.969 12.054,2.558 12.054,2.996 L12.054,2.996 C12.054,3.15 12.062,3.923 12.062,3.953 L15.922,3.953 C15.922,3.94 15.924,3.791 15.924,3.779 L15.924,3.779 Z" class="si-glyph-fill"> </path> 
+                <path d="M4.987,9.338 C4.987,9.679 4.701,9.955 4.349,9.955 L3.652,9.955 C3.299,9.955 3.013,9.679 3.013,9.338 L3.013,8.662 C3.013,8.321 3.299,8.045 3.652,8.045 L4.349,8.045 C4.701,8.045 4.987,8.321 4.987,8.662 L4.987,9.338 L4.987,9.338 Z" class="si-glyph-fill"> </path> <path d="M12.975,9.345 C12.975,9.698 12.69,9.983 12.336,9.983 L11.64,9.983 C11.287,9.983 11.002,9.698 11.002,9.345 L11.002,8.648 C11.002,8.295 11.287,8.01 11.64,8.01 L12.336,8.01 C12.69,8.01 12.975,8.295 12.975,8.648 L12.975,9.345 L12.975,9.345 Z" class="si-glyph-fill"> </path> 
+                <path d="M8.986,9.349 C8.986,9.702 8.701,9.987 8.348,9.987 L7.65,9.987 C7.298,9.987 7.013,9.702 7.013,9.349 L7.013,8.652 C7.013,8.299 7.298,8.014 7.65,8.014 L8.348,8.014 C8.701,8.014 8.986,8.299 8.986,8.652 L8.986,9.349 L8.986,9.349 Z" class="si-glyph-fill"> </path> <path d="M4.962,12.336 C4.962,12.689 4.681,12.974 4.334,12.974 L3.648,12.974 C3.3,12.974 3.019,12.689 3.019,12.336 L3.019,11.639 C3.019,11.285 3.3,11 3.648,11 L4.334,11 C4.681,11 4.962,11.285 4.962,11.639 L4.962,12.336 L4.962,12.336 Z" class="si-glyph-fill"> </path> 
+                <path d="M12.943,12.346 C12.943,12.694 12.668,12.974 12.326,12.974 L11.65,12.974 C11.308,12.974 11.033,12.694 11.033,12.346 L11.033,11.66 C11.033,11.311 11.308,11.031 11.65,11.031 L12.326,11.031 C12.668,11.031 12.943,11.311 12.943,11.66 L12.943,12.346 L12.943,12.346 Z" class="si-glyph-fill"> </path> <path d="M8.982,12.346 C8.982,12.694 8.698,12.974 8.345,12.974 L7.648,12.974 C7.295,12.974 7.01,12.694 7.01,12.346 L7.01,11.66 C7.01,11.311 7.295,11.031 7.648,11.031 L8.345,11.031 C8.698,11.031 8.982,11.311 8.982,11.66 L8.982,12.346 L8.982,12.346 Z" class="si-glyph-fill"> </path> 
+                <path d="M4.993,15.347 C4.993,15.689 4.707,15.965 4.355,15.965 L3.658,15.965 C3.305,15.965 3.019,15.689 3.019,15.347 L3.019,14.671 C3.019,14.33 3.305,14.054 3.658,14.054 L4.355,14.054 C4.707,14.054 4.993,14.33 4.993,14.671 L4.993,15.347 L4.993,15.347 Z" class="si-glyph-fill"> </path> <path d="M12.975,15.357 C12.975,15.711 12.69,15.996 12.336,15.996 L11.64,15.996 C11.287,15.996 11.002,15.711 11.002,15.357 L11.002,14.66 C11.002,14.307 11.287,14.022 11.64,14.022 L12.336,14.022 C12.69,14.022 12.975,14.307 12.975,14.66 L12.975,15.357 L12.975,15.357 Z" class="si-glyph-fill"> </path> 
+                <path d="M8.982,15.357 C8.982,15.711 8.703,15.996 8.355,15.996 L7.669,15.996 C7.321,15.996 7.042,15.711 7.042,15.357 L7.042,14.66 C7.042,14.307 7.321,14.022 7.669,14.022 L8.355,14.022 C8.703,14.022 8.982,14.307 8.982,14.66 L8.982,15.357 L8.982,15.357 Z" class="si-glyph-fill"> </path> </g> 
+                <path d="M0.992,5.973 L3.039,5.973 C3.039,5.973 3.746,6.201 3.926,5 L0.067,5 C0.234,6.113 0.992,5.973 0.992,5.973 L0.992,5.973 Z" class="si-glyph-fill"> </path> 
+                <path d="M12.115,5 C12.324,6.053 13.078,5.973 13.078,5.973 L14.969,5.973 C14.969,5.973 15.727,5.984 15.912,5 L12.115,5 L12.115,5 Z" class="si-glyph-fill"> </path> </g> </g> </g></svg>
+                <input type="tel" placeholder="8хххххххххх" maxlength="14" pattern = "8 [0-9]{3} [0-9]{3} [0-9]{4}" id="phone"/>
+            </p>
+             <p style="margin-top: 0px;">Укажите свой субъект</p>
+             <select name="sub" id="subjectStatement" placeholder="password">
+            </select>
+            <p class="avt-reg-button cursor-pointer" onclick="getStartRegistration()">Зарегистрироваться</p>
+			<p class="cursor-pointer" style="font-size: 15px;" onclick="getAvtorization()">Авторизация</p>
+        </form>
+    </div>
+</body>
+</html>

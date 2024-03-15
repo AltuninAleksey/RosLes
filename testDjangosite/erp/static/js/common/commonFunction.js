@@ -51,6 +51,17 @@ CommonFunction.getBreedsName = function(breeds, id_breed) {
     return "";
 }
 
+CommonFunction.getUndergrowthsName = function(undergrowth, id_undergrowth) {
+    for(var j = 0; j < undergrowth.length; j++) {
+        if(undergrowth[j].id == id_undergrowth) {
+            return undergrowth[j].name;
+        }
+    }
+
+    return "";
+}
+
+
 CommonFunction.checkMandatoryData = function() {
 
     var flag = true;

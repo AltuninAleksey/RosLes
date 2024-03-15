@@ -99,11 +99,14 @@
              <form action="" class="rerect n1">
                 <p>Номер участка: <input type="text" name="" id="number_region" style="width: 90px"></p>
                 <p>Площадь участка: <input type="text" name="sample_area_recalculation" id="sample_area_recalculation" style="width: 104px"></p>
-                <p>Субъект РФ: <select name="regionRF" id="regionRF">
-                    <option hidden disabled selected value=""></option>
-                    <option >Брянская область</option>
-                    <option >калужская область</option>
-                </select></p>
+                <p style="width: 400px;">Субъект РФ:
+                    <input style="width: 300px;" id="regionRF" type="text" readonly>
+<!--                    <select name="regionRF" id="regionRF">-->
+<!--                        <option hidden disabled selected value=""></option>-->
+<!--                        <option >Брянская область</option>-->
+<!--                        <option >калужская область</option>-->
+<!--                    </select>-->
+                </p>
                 <p>Лесничество: <select name="lesName" id="lesName">
                     <option hidden disabled selected value=""></option>
                     <option >Брянское</option>
@@ -116,12 +119,14 @@
                     <option >Четдинское</option>
                     <option >Локчимское</option>
                 </select></p>
-                <p>Квартал: <select name="quarter" id="quarter" style="width: 115px;">
-                    <option hidden disabled selected value=""></option>
-                    <option >7</option>
-                    <option >8</option>
-                </select></p>
-                <p>Выдел: <input type="text" name="soil_lot_recalculating" id="soil_lot_recalculating" style="width: 95px"></p>
+<!--                <p>Квартал: <select name="quarter" id="quarter" style="width: 115px;">-->
+<!--                    <option hidden disabled selected value=""></option>-->
+<!--                    <option >7</option>-->
+<!--                    <option >8</option>-->
+<!--                </select></p>-->
+                <p>Урочище: <input class="mandatory" type="text" name="soil_lot" id="dacha" style="width: 260px"></p>
+                <p>Квартал: <input class="mandatory" type="text" name="soil_lot" id="quarter" style="width: 95px; margin-left: 5px;"></p>
+                <p>Выдел: <input type="text" name="soil_lot_recalculating" id="soil_lot_recalculating" style="width: 95px; margin-left: 5px;"></p>
             </form>
         </div>
     <div class="content conpodles">
@@ -356,10 +361,10 @@
                             <p class="p" style="margin-right: 48px;">Avg h</p>
                             <input id="proba-avg-h" type="number" class="proba-input">
                         </div>
-                        <div class="proba-form1">
+                        <!--<div class="proba-form1">
                             <p class="p">Общее количество</p>
                             <input id="proba-all-count" type="number" class="proba-input" style="width: 70px;">
-                        </div>
+                        </div> -->
                     </div>
                     <div class="maxheig">
                         <p>Максимальная высота</p>

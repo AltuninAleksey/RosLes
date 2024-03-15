@@ -4,12 +4,53 @@ setEventForButtons();
 
 async function buildStatementRecalculationsTbody() {
     var data = await MergeStatementRecalculationsBusiness.getAllStatementList();
-    var allForestData = await CommonBusiness.getAllForest();
+    //var allForestData = await CommonBusiness.getAllForest();
 
-    APP.subjectrf = allForestData.subjectrf;
-    APP.forestly = allForestData.forestly;
-    APP.district_forestly = allForestData.district_forestly;
-    APP.quarter = allForestData.quarter;
+    APP.userData = await CommonBusiness.getUserData();
+
+    APP.subjectrf = await CommonBusiness.getAllSubjectrf();
+    APP.forestly =  await CommonBusiness.getForestlyByIdSubjectrf(Number(APP.userData.id_subject_rf)); //allForestData.forestly;
+
+    APP.district_forestly = [];
+    var arrayIdForestly = [];
+    for(var i = 0; i < APP.forestly.length; i++) {
+        arrayIdForestly.push({
+            "id": APP.forestly[String(i)].id
+        });
+    }
+
+    var dataForDistrictForestlyByArrayIdForestly = {
+        "data": arrayIdForestly
+    };
+    var buff_district_forestly = await CommonBusiness.getDistrictForestlyByArrayIdForestly(dataForDistrictForestlyByArrayIdForestly);
+    for(var i = 0; i < buff_district_forestly.length; i++) {
+        for(var j = 0; j < buff_district_forestly[i].district_forestly_data.length; j++) {
+            APP.district_forestly.push(buff_district_forestly[i].district_forestly_data[j]);
+        }
+    }
+
+
+    //APP.quarter = [];
+    var arrayIdDistrictForestly = [];
+    for(var i = 0; i < APP.district_forestly.length; i++) {
+        arrayIdDistrictForestly.push({
+            "id": APP.district_forestly[String(i)].id
+        });
+    }
+
+//    var dataForQuarterByArrayIdDistrictForestly = {
+//        "data": arrayIdDistrictForestly
+//    };
+//    var buff_quarter = await CommonBusiness.getQuarterByArrayIdDistrictForestly(dataForQuarterByArrayIdDistrictForestly);
+//    for(var i = 0; i < buff_quarter.length; i++) {
+//        for(var j = 0; j < buff_quarter[i].quarter.length; j++) {
+//            APP.quarter.push(buff_quarter[i].quarter[j]);
+//        }
+//    }
+
+    //APP.forestly = allForestData.forestly;
+    //APP.district_forestly = allForestData.district_forestly;
+    //APP.quarter = allForestData.quarter;
 
     APP.dataTable = data;
     APP.sortOrderTable1 = 0;
@@ -47,20 +88,20 @@ function updateDataInStatementRecalculationsTbody(data) {
         data[i].subjectrf = CommonFunction.getSubjectNameByQuarterId(APP.subjectrf, data[i].id_subject_rf);
         data[i].forestly = CommonFunction.getForestlyNameByQuarterId(APP.forestly, data[i].id_forestly);
         data[i].district_forestly = CommonFunction.getDistrictForestlyNameByQuarterId(APP.district_forestly, data[i].id_district_forestly);
-        data[i].quarter = CommonFunction.getQuarterNameByQuarterId(APP.quarter, data[i].id_quarter);
+        //data[i].quarter = CommonFunction.getQuarterNameByQuarterId(APP.quarter, data[i].id_quarter);
 
         let id = "statement_" + data[i].id;
 
-        newHtml = newHtml + "<div>" + '<tr id="' + id + '" class="cursorPointer" onClick="addOrRemoveActiveItemTr(' + data[i].id + ')">' +
+        newHtml = newHtml + '<tr id="' + id + '" class="cursorPointer" onClick="addOrRemoveActiveItemTr(' + data[i].id + ')">' +
                             `<td class="textAlignCenter td1">${data[i].date}</td>
                             <td class="textAlignCenter td8">${data[i].id}</td>
                             <td class="td2">${data[i].subjectrf}</td>
                             <td class="td3">${data[i].forestly}</td>
                             <td class="td4">${data[i].district_forestly}</td>
-                            <td class="textAlignCenter td5">${data[i].quarter}</td>
+                            <td class="td9">${data[i].dacha == null? "" : data[i].dacha}</td>
+                            <td class="textAlignCenter td5">${data[i].name_quarter == null? "" : data[i].name_quarter}</td>
                             <td class="textAlignCenter td6">${data[i].soil_lot}</td>
-                            <td class="textAlignCenter td7">${data[i].sample_region}</td>
-                        </tr> \n` + "</div>";
+                        </tr> \n`;
     }
     tableBody.innerHTML = newHtml;
 }
@@ -99,21 +140,21 @@ async function setEventForElementsFilter() {
 
     await setOptionInSubject();
 
-    document
-        .querySelector("#checkbox_filter_subject_rf")
-        .addEventListener('click', async (e)=>{
-            let subjectNode = document.querySelector("#filter_subject_rf");
-            if(e.target.checked) {
-                subjectNode.removeAttribute("disabled")
-                subjectNode.addEventListener('change', async (e)=>{
-                    await setOptionInForestly(MergeStatementRecalculationsBusiness.TypeData.BYID);
-                });
-                await setOptionInForestly(MergeStatementRecalculationsBusiness.TypeData.BYID);
-            } else {
-                subjectNode.setAttribute("disabled", "on");
-                await setOptionInForestly(MergeStatementRecalculationsBusiness.TypeData.ALL);
-            }
-        });
+//    document
+//        .querySelector("#checkbox_filter_subject_rf")
+//        .addEventListener('click', async (e)=>{
+//            let subjectNode = document.querySelector("#filter_subject_rf");
+//            if(e.target.checked) {
+//                subjectNode.removeAttribute("disabled")
+//                subjectNode.addEventListener('change', async (e)=>{
+//                    await setOptionInForestly(MergeStatementRecalculationsBusiness.TypeData.BYID);
+//                });
+//                await setOptionInForestly(MergeStatementRecalculationsBusiness.TypeData.BYID);
+//            } else {
+//                subjectNode.setAttribute("disabled", "on");
+//                await setOptionInForestly(MergeStatementRecalculationsBusiness.TypeData.ALL);
+//            }
+//        });
 
     await setOptionInForestly(MergeStatementRecalculationsBusiness.TypeData.ALL);
 
@@ -142,30 +183,30 @@ async function setEventForElementsFilter() {
             if(e.target.checked) {
                 districtForestly.removeAttribute("disabled");
                 districtForestly.addEventListener('change', async (e)=>{
-                    await setOptionInQuarter(MergeStatementRecalculationsBusiness.TypeData.BYID);
+                    //await setOptionInQuarter(MergeStatementRecalculationsBusiness.TypeData.BYID);
                 });
-                await setOptionInQuarter(MergeStatementRecalculationsBusiness.TypeData.BYID);
+                //await setOptionInQuarter(MergeStatementRecalculationsBusiness.TypeData.BYID);
             } else {
                 districtForestly.setAttribute("disabled", "on");
-                await setOptionInQuarter(MergeStatementRecalculationsBusiness.TypeData.ALL);
+                //await setOptionInQuarter(MergeStatementRecalculationsBusiness.TypeData.ALL);
             }
         });
 
-    await setOptionInQuarter(MergeStatementRecalculationsBusiness.TypeData.ALL);
+    //await setOptionInQuarter(MergeStatementRecalculationsBusiness.TypeData.ALL);
 
-    document
-        .querySelector("#checkbox_filter_quartal")
-        .addEventListener('click', (e)=>{
-            if(e.target.checked) {
-                document
-                    .querySelector("#filter_quartal")
-                    .removeAttribute("disabled");
-            } else {
-                document
-                    .querySelector("#filter_quartal")
-                    .setAttribute("disabled", "on");
-            }
-        });
+//    document
+//        .querySelector("#checkbox_filter_quartal")
+//        .addEventListener('click', (e)=>{
+//            if(e.target.checked) {
+//                document
+//                    .querySelector("#filter_quartal")
+//                    .removeAttribute("disabled");
+//            } else {
+//                document
+//                    .querySelector("#filter_quartal")
+//                    .setAttribute("disabled", "on");
+//            }
+//        });
 
     document
         .querySelector("#checkbox_filter_date_start")
@@ -288,7 +329,7 @@ async function setOptionInDistrictForestly(status) {
 
     districtForestlyNode.innerHTML = newHtml;
 
-    await setOptionInQuarter(MergeStatementRecalculationsBusiness.TypeData.BYID);
+    //await setOptionInQuarter(MergeStatementRecalculationsBusiness.TypeData.BYID);
 }
 
 async function setOptionInQuarter(status) {
@@ -319,8 +360,8 @@ async function setOptionInQuarter(status) {
 
 async function searchByFilter() {
 
-    let checkboxFilterSubjectRFNode = document.querySelector("#checkbox_filter_subject_rf");
-    let subjectRFNode = document.querySelector("#filter_subject_rf");
+    //let checkboxFilterSubjectRFNode = document.querySelector("#checkbox_filter_subject_rf");
+    //let subjectRFNode = document.querySelector("#filter_subject_rf");
     let checkboxFilterForestlyNode = document.querySelector("#checkbox_filter_forestly");
     let forestlyNode = document.querySelector("#filter_forestly");
     let checkboxFilterDistrictForestlyNode = document.querySelector("#checkbox_filter_district_forestly");
@@ -336,14 +377,14 @@ async function searchByFilter() {
 
     let data;
 
-    if(checkboxFilterSubjectRFNode.checked || checkboxFilterForestlyNode.checked
+    if(checkboxFilterForestlyNode.checked
     || checkboxFilterDistrictForestlyNode.checked || checkboxFilterQuartalNode.checked
     || checkboxFilterDateStartNode.checked || checkboxFilterDateEnd.checked
     || checkboxFilterSoilLot.checked) {
 
         let responseData = {
-            bSubjectrf: checkboxFilterSubjectRFNode.checked,
-            idSubjectrf: subjectRFNode.value,
+            bSubjectrf: true,
+            idSubjectrf: Number(APP.userData.id_subject_rf),
             bForestly: checkboxFilterForestlyNode.checked,
             idForestly: forestlyNode.value,
             bDistrictForestly: checkboxFilterDistrictForestlyNode.checked,
@@ -359,14 +400,14 @@ async function searchByFilter() {
         };
 
 
-        data = await MergeStatementRecalculationsBusiness.getCreateRecalculationDetailData(responseData);
+        APP.dataTable = await MergeStatementRecalculationsBusiness.getCreateRecalculationDetailData(responseData);
     } else {
 
-        data = await MergeStatementRecalculationsBusiness.getAllStatementList();
+        APP.dataTable = await MergeStatementRecalculationsBusiness.getAllStatementList();
     }
 
 
-    updateDataInStatementRecalculationsTbody(data);
+    updateDataInStatementRecalculationsTbody(APP.dataTable);
 }
 
 function addOrRemoveActiveItemTr(id) {

@@ -140,7 +140,7 @@ td {
 }
 .n2{
     height: 50px;
-    grid-template-columns: 430px 190px 160px 240px;
+    grid-template-columns: 430px 350px 180px 180px;
 }
 input[type="text" i] {
     padding: 0px 0px;

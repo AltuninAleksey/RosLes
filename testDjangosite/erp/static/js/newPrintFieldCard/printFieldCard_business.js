@@ -5,11 +5,17 @@ APP = {
 function PrintFieldCardBusiness() {}
 
 PrintFieldCardBusiness.getCreatePrintFieldCard = async function(data) {
+
+    var token = document.cookie.match(/jwttoken=(.+?)(;|$)/)[1];
+
     var requestData = await axios({
       method: 'post',
       url: urlGlobal + "/fieldcard",
       data: data,
-      responseType: 'json'
+      responseType: 'json',
+      headers: {
+        'Authorization': 'Bearer ' + token
+      }
     });
 
     return requestData.data;

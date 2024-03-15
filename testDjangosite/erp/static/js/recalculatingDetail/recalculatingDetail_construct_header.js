@@ -6,6 +6,8 @@ async function setDataInHeader() {
     document.getElementById("date_recalculation").value = APP.documentData.date;
     document.getElementById("sample_area_recalculation").value = APP.documentData.sample_area;
     document.getElementById("soil_lot_recalculating").value = APP.documentData.soil_lot;
+    document.getElementById("quarter").value = APP.documentData.name_quarter;
+    document.getElementById("dacha").value = APP.documentData.dacha;
 
     drawSelectSubjectRF();
     changeDataSelectForestly(APP.documentData.id_subjectrf);
@@ -14,16 +16,21 @@ async function setDataInHeader() {
 
 function drawSelectSubjectRF() {
     var regions = document.getElementById("regionRF");
-    var newHtml = "";
+    //var newHtml = "";
 
     for(var i = 0; i < APP.subjectrf.length; i++) {
-        if(APP.subjectrf[i].id == APP.documentData.id_subjectrf) {
-            newHtml = newHtml + "<option selected value=\"" + APP.subjectrf[i].id + "\">" + APP.subjectrf[i].name_subject_RF + "</option>";
-        } else {
-            newHtml = newHtml + "<option value=\"" + APP.subjectrf[i].id + "\">" + APP.subjectrf[i].name_subject_RF + "</option>";
-        }
+          if(APP.subjectrf[i].id == APP.documentData.id_subjectrf) {
+            regions.value = APP.subjectrf[i].name_subject_RF;
+            break;
+          }
+
+//        if(APP.subjectrf[i].id == APP.documentData.id_subjectrf) {
+//            newHtml = newHtml + "<option selected value=\"" + APP.subjectrf[i].id + "\">" + APP.subjectrf[i].name_subject_RF + "</option>";
+//        } else {
+//            newHtml = newHtml + "<option value=\"" + APP.subjectrf[i].id + "\">" + APP.subjectrf[i].name_subject_RF + "</option>";
+//        }
     }
-    regions.innerHTML = newHtml;
+    //regions.innerHTML = newHtml;
 }
 
 function drawSelectForestly() {
@@ -83,7 +90,7 @@ async function changeDataSelectDistrictForestly(id) {
     drawSelectDistrictForestly();
 
     var districtForestly = document.getElementById("ucLesName");
-    changeDataSelectQuarter(districtForestly.value);
+    //changeDataSelectQuarter(districtForestly.value);
 }
 
 async function changeDataSelectQuarter(id) {

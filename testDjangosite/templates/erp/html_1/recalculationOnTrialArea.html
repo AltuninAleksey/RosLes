@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    {% block title %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/navigation.css' %}">
+    <link rel="stylesheet" href="{% static 'css/recalculationOnTrialArea.css' %}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.0/axios.js"></script>
+    <script src="{% static 'js/global.js' %}"></script>
+    <script src="{% static 'js/recalculationOnTrialArea.js' %}"></script>
+    <title>Перечет на пробной площади</title>
+    {% endblock %}
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <ul class="nav">
+                <li><a onclick="getRecalculationOnTrialAreaPage()">Документы</a></li>
+                <li><a onclick="getGeneralDoc()">Справочники</a></li>
+            </ul>
+          </div>
+        <div class="con">
+            <input type="checkbox" id="nav-toggle" hidden>
+            <div class="menu">
+                <label for="nav-toggle" class="nav-toggle" onclick></label>
+                <ul class="navigat">
+                    <li><a onclick="getRecalculationOnTrialAreaPage()">Перечет на пробной площади</a></li>
+                    <li><a onclick="getListRegions()">Перечетная ведомость</a></li>
+                </ul>
+            </div>
+            <div class="content">
+                <div class="con-header">
+                    <p>Перечет на пробной площади</p>
+                </div>
+                <div class="con-activebutton">
+                    <button onclick="getRecalculationOnTrialAreaDetailNew()">Создать</button>
+                </div>
+                <div class="con-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="td1">Дата</th>
+                                <th class="td3">Судьект РФ</th>
+                                <th class="td4">Лесничество</th>
+                                <th class="td5">Участковое лесничество</th>
+                                <th class="td6">Квартал</th>
+                                <th class="td7">Выдел</th>
+                                <th class="td8">Площать пробы</th>
+                                <th class="td9">id в цен.</th>
+                            </tr>
+                        </thead>
+                    </table>	
+                    <div class="scroll-table-body">
+                        <table>
+                            <tbody id="tbodyRecalculationOnTrialArea">
+
+                            </tbody>
+                        </table>
+                    </div>	
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

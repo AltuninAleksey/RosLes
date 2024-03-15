@@ -4,12 +4,12 @@ async function openPage() {
 
     let idDocument = document.querySelector("#idDocument").value;
 
-    var allForestData = await CommonBusiness.getAllForest();
+    //var allForestData = await CommonBusiness.getAllForest();
 
-    APP.subjectrf = allForestData.subjectrf;
-    APP.forestly = allForestData.forestly;
-    APP.district_forestly = allForestData.district_forestly;
-    APP.quarter = allForestData.quarter;
+    //APP.subjectrf = allForestData.subjectrf;
+    //APP.forestly = allForestData.forestly;
+    //APP.district_forestly = allForestData.district_forestly;
+    //APP.quarter = allForestData.quarter;
 
     APP.documentData = await StatementRecalculationsBusinessDetail.getStatementRecalculationsDetailDataById(idDocument);
     APP.subjects = await CommonBusiness.getAllSubjectrf();
@@ -30,6 +30,8 @@ async function setDetailDataIdPage() {
     let dateStatementNode = document.querySelector("#dateStatement");
     let soilLotStatementNode = document.querySelector("#soilLotStatement");
     let sampleRegionStatementNode = document.querySelector("#sampleRegionStatement");
+    let quarterStatementNode = document.querySelector("#quarterStatement");
+    let dachaStatementNode = document.querySelector("#dachaStatement");
 
     numberStatementInHeaderNode.innerHTML = APP.documentData.number_region;
     daterStatementInHeaderNode.innerHTML = APP.documentData.date;
@@ -37,6 +39,8 @@ async function setDetailDataIdPage() {
     dateStatementNode.value = APP.documentData.date;
     soilLotStatementNode.value = APP.documentData.soil_lot;
     sampleRegionStatementNode.value = APP.documentData.sample_region;
+    quarterStatementNode.value = APP.documentData.name_quarter;
+    dachaStatementNode.value = APP.documentData.dacha;
 
     await setSubjectsRF();
     await setSampleList();
@@ -56,11 +60,11 @@ async function setEvent() {
                 await setDistriotForestlyStatement();
         });
 
-    document
-        .querySelector("#distriotForestlyStatement")
-        .addEventListener('change', async (e)=>{
-                await setQuarterStatement();
-        });
+//    document
+//        .querySelector("#distriotForestlyStatement")
+//        .addEventListener('change', async (e)=>{
+//                await setQuarterStatement();
+//        });
 
     document
         .getElementById("plotDescription")
@@ -87,12 +91,12 @@ async function setSampleList() {
         newHtml += `<tr class="cursorPointer" onClick=${strGetRecalculatingDetail}>
                         <td class="td1">${APP.sampleList[i].date}</td>
                         <td class="td8">${APP.sampleList[i].id}</td>
-                        <td class="td2">${CommonFunction.getSubjectNameByQuarterId(APP.subjectrf, APP.sampleList[i].id_subject_rf)}</td>
+                        <td class="td2">${CommonFunction.getSubjectNameByQuarterId(APP.subjects, APP.sampleList[i].id_subject_rf)}</td>
                         <td class="td3">${CommonFunction.getForestlyNameByQuarterId(APP.forestly, APP.sampleList[i].id_forestly)}</td>
                         <td class="td4">${CommonFunction.getDistrictForestlyNameByQuarterId(APP.district_forestly, APP.sampleList[i].id_district_forestly)}</td>
-                        <td class="td5">${CommonFunction.getQuarterNameByQuarterId(APP.quarter, APP.sampleList[i].id_quarter)}</td>
-                        <td class="td6">${APP.sampleList[i].soil_lot}</td>
-                        <td class="td7">${APP.sampleList[i].sample_area}</td>
+                        <td class="td9">${APP.sampleList[i].dacha == null? "" : APP.sampleList[i].dacha}</td>
+                        <td class="textAlignCenter td5">${APP.sampleList[i].name_quarter == null? "":APP.sampleList[i].name_quarter}</td>
+                        <td class="textAlignCenter td6">${APP.sampleList[i].soil_lot}</td>
                     </tr>`;
     }
 
@@ -124,11 +128,15 @@ async function setSubjectsRF() {
     let newHtml = "";
 
     for(let i = 0; i < APP.subjects.length; i++) {
-        if(APP.subjects[i].id == APP.documentData.id_subject_rf) {
-            newHtml += '<option selected value="' + APP.subjects[i].id + '">' + APP.subjects[i].name_subject_RF + '</option>';
-        } else {
-            newHtml += '<option value="' + APP.subjects[i].id + '">' + APP.subjects[i].name_subject_RF + '</option>';
-        }
+          if(APP.subjects[i].id == APP.documentData.id_subject_rf) {
+            subjectStatementNode.value = APP.subjects[i].name_subject_RF;
+            break;
+          }
+//        if(APP.subjects[i].id == APP.documentData.id_subject_rf) {
+//            newHtml += '<option selected value="' + APP.subjects[i].id + '">' + APP.subjects[i].name_subject_RF + '</option>';
+//        } else {
+//            newHtml += '<option value="' + APP.subjects[i].id + '">' + APP.subjects[i].name_subject_RF + '</option>';
+//        }
     }
 
     subjectStatementNode.innerHTML = newHtml;
@@ -137,7 +145,7 @@ async function setSubjectsRF() {
 }
 
 async function setForestly() {
-    let idSubject = document.querySelector("#subjectStatement").value;
+    let idSubject = APP.documentData.id_subject_rf;//document.querySelector("#subjectStatement").value;
     APP.forestly = await CommonBusiness.getForestlyByIdSubjectrf(idSubject);
 
     let newHtml = "";
@@ -159,27 +167,27 @@ async function setForestly() {
 
 async function setDistriotForestlyStatement() {
     let idForestly = document.querySelector("#forestlyStatement").value;
-    APP.distriotForestly = [];
+    APP.district_forestly = [];
 
     if(idForestly != "" && idForestly != null && idForestly != undefined) {
-        APP.distriotForestly = await CommonBusiness.getDistrictForestlyByIdForestly(idForestly);
+        APP.district_forestly = await CommonBusiness.getDistrictForestlyByIdForestly(idForestly);
     }
 
     let newHtml = "";
 
     let distriotForestlyNode = document.querySelector("#distriotForestlyStatement");
 
-    for(let i = 0; i < APP.distriotForestly.length; i++) {
-        if(APP.distriotForestly[i].id == APP.documentData.id_distriot_forestly) {
-            newHtml += '<option selected value="' + APP.distriotForestly[i].id + '">' + APP.distriotForestly[i].name_district_forestly + '</option>';
+    for(let i = 0; i < APP.district_forestly.length; i++) {
+        if(APP.district_forestly[i].id == APP.documentData.id_district_forestly) {
+            newHtml += '<option selected value="' + APP.district_forestly[i].id + '">' + APP.district_forestly[i].name_district_forestly + '</option>';
         } else {
-            newHtml += '<option value="' + APP.distriotForestly[i].id + '">' + APP.distriotForestly[i].name_district_forestly + '</option>';
+            newHtml += '<option value="' + APP.district_forestly[i].id + '">' + APP.district_forestly[i].name_district_forestly + '</option>';
         }
     }
 
     distriotForestlyNode.innerHTML = newHtml;
 
-    await setQuarterStatement();
+    //await setQuarterStatement();
 }
 
 async function setQuarterStatement() {
@@ -213,15 +221,21 @@ async function saveData() {
     let soilLotStatementNode = document.querySelector("#soilLotStatement").value;
     let sampleRegionStatementNode = document.querySelector("#sampleRegionStatement").value;
     let quarterStatement = document.querySelector("#quarterStatement").value;
+    let dachaStatement = document.querySelector("#dachaStatement").value;
+    let distriotForestlyStatement = document.querySelector("#distriotForestlyStatement").value;
 
     var data = {
-       date: dateStatementNode,
+        date: dateStatementNode,
+        id: id,
         sample_region: sampleRegionStatementNode,
-        soil_lot: soilLotStatementNode,
         mark_del: APP.documentData.mark_del? 1:0,
         mark_update: APP.documentData.mark_update? 1:0,
         number_region: numberStatementNode,
-        id_quarter: quarterStatement
+        name_quarter: quarterStatement == ""? null : quarterStatement,
+        dacha: dachaStatement == ""? null : dachaStatement,
+        id_district_forestly: distriotForestlyStatement,
+        soil_lot: soilLotStatementNode
+
     };
 
     await StatementRecalculationsBusinessDetail.getUpdateSample(id, data);

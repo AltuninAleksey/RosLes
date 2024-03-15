@@ -1,0 +1,106 @@
+body{
+    /*вариант 3*/
+    background: -webkit-linear-gradient(90deg, #103c35,#0e584d,#0a291c);/* Chrome 10-25, Safari 5.1-6 */                         
+    background: linear-gradient(90deg, #103c35,#0e584d,#0a291c);/* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */                                                
+} 
+.login-page {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    border-radius: 20px;
+    width: 400px;
+    height: 465px;
+    background: rgba(23, 113, 100, 0.5);
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: white;
+}
+.login-form{
+    display: grid;
+    margin-left: 30px;
+    grid-template-columns: 340px;
+    margin-bottom: 2px;
+    margin-top: 10px;
+}
+.login-form input {
+    height: 30px;
+    border: none;
+    border-bottom: 1px solid white;
+    background-color: transparent;
+    color: inherit;
+    outline: none;
+    margin-bottom: 30px;
+    font-size: 16px;
+}
+::placeholder { 
+    color:white;
+ }
+.login-form button{
+    height: 30px;
+    border: 1px solid white;
+    border-radius: 20px;
+    font-size: 16px;
+    margin-top: 20px;
+}
+.login-form button:active{
+    cursor: pointer;
+    background-color: #40E0D0;
+    border: 1px solid #40E0D0;
+}
+.login-form button:hover{
+    cursor: pointer;
+    background-color: #40E0D0;
+    border: 1px solid #40E0D0;
+}
+.form{
+    height: 30px;
+}
+.form input{
+    width: 300px;
+}
+.password {
+	position: relative;
+}
+.password-control {
+	position: absolute;
+	top: 11px;
+	right: 6px;
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	background: url(../img/view.svg) 0 0 no-repeat;
+}
+.password-control.view {
+	background: url(../img/no-view.svg) 0 0 no-repeat;
+}
+select{
+    border-radius: 4px;
+    height: 30px;
+    border: 1px solid white;
+    color: white;
+    background-color: transparent;
+}
+option{
+    color: black;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.avt-reg-button {
+    height: 25px;
+    border: 1px solid white;
+    border-radius: 20px;
+    font-size: 18px;
+    margin-top: 20px;
+    color: black;
+    background-color: white;
+    padding-top: 5px;
+    margin-bottom: -5px;
+}
+
+.avt-reg-button:hover {
+    color: white;
+    background-color: #40E0D0;
+}

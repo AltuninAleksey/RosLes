@@ -5,10 +5,16 @@ APP = {
 function StatementRecalculationsBusiness() {}
 
 StatementRecalculationsBusiness.getAllStatementList = async function() {
+
+    var token = document.cookie.match(/jwttoken=(.+?)(;|$)/)[1];
+
     var requestData = await axios({
       method: 'get',
       url: urlGlobal + "/getalllistregion",
-      responseType: 'json'
+      responseType: 'json',
+      headers: {
+        'Authorization': 'Bearer ' + token
+      }
     });
 
     return requestData.data.data;

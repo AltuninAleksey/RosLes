@@ -8,16 +8,26 @@ async function getAvtorization() {
         password: password.value
     }
 
-    await sartAvtorization(data);
+    var token = await sartAvtorization(data);
+
+    document.cookie = "jwttoken=" + token;
+
+    getStatementRecalculations();
 }
 
 async function sartAvtorization(data) {
-    var requestData = await axios({
-        method: 'post',
-        url: urlGlobal + "/v2/login",
-        data: data,
-        responseType: 'json'
-    });
 
-    console.log(requestData);
+    try {
+        var requestData = await axios({
+            method: 'post',
+            url: urlGlobal + "/v2/login",
+            data: data,
+            responseType: 'json'
+        });
+    }
+    catch(e) {
+        alert("Введен неверный логин или пароль!");
+    }
+
+    return requestData.data.access;
 }

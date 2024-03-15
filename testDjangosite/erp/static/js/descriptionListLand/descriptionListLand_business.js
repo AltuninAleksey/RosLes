@@ -5,10 +5,16 @@ APP = {
 function DescriptionListLandBusiness() {}
 
 DescriptionListLandBusiness.getAllDescriptionLandList = async function() {
+
+    var token = document.cookie.match(/jwttoken=(.+?)(;|$)/)[1];
+
     var requestData = await axios({
       method: 'get',
       url: urlGlobal + "/descriptionregion",
-      responseType: 'json'
+      responseType: 'json',
+      headers: {
+        'Authorization': 'Bearer ' + token
+      }
     });
 
     return requestData.data.get;

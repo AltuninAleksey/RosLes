@@ -195,7 +195,7 @@ class ListRegion(models.Model):
 
 class Sample(models.Model):
     date = models.DateField(u'Дата пробы', null=True)
-    sample_area = models.FloatField(verbose_name='Площадь пробы, га', null = True)
+    sample_area = models.FloatField(verbose_name='Площадь пробы, га', null=True)
     id_profile = models.ForeignKey('Profile', on_delete=models.CASCADE, verbose_name='Сотрудник ', null=True)
     id_list_region = models.ForeignKey('ListRegion', on_delete=models.CASCADE,
                                        verbose_name='Перечетная ведомость участка', null=True)

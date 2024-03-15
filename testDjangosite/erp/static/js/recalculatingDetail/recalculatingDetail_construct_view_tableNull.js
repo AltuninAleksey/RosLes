@@ -4,10 +4,10 @@ function setDataInTableNull() {
 
     for(var i = 0; i < APP.dataTable_0.length; i++) {
 
-        var name_breed = CommonFunction.getBreedsName(APP.breeds, APP.dataTable_0[i].id_breed);
+        var name_undergrowth = CommonFunction.getUndergrowthsName(APP.undergrowth, APP.dataTable_0[i].id_undergrowth);
 
         newHtml = newHtml + `<tr>
-            <td class="podles_td_1">${name_breed}</td>
+            <td class="podles_td_1">${name_undergrowth}</td>
             <td class="podles_td_2">${APP.dataTable_0[i].count_of_plants}</td>
             <td class="podles_td_3">${APP.dataTable_0[i].avg_height}</td>
         </tr>`;
@@ -24,9 +24,9 @@ function addUndefground() {
         id_sample : APP.documentData.id,
         avg_height: avg_h_add.value,
         count_of_plants: count_add.value,
-        id_breed: breedName_undeground.value,
+        id_breed: null,
         id_type_of_reproduction : Number(APP.active_type_reproduction),
-        id_undergrowth : 0
+        id_undergrowth : breedName_undeground.value
     }
 
     count_add.value = "";

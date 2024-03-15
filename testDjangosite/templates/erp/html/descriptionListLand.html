@@ -79,7 +79,7 @@
     </div>
 
     <form id="form_filter" action="" class="form">
-        <p>Субьект РФ: <input type="checkbox" id="checkbox_filter_subject_rf" name="scales">
+        <p style="display: none">Субьект РФ: <input type="checkbox" id="checkbox_filter_subject_rf" name="scales">
             <label for="filter_subject_rf">
                 <select disabled name="sub" id="filter_subject_rf" style="width: 300px">
                 </select>
@@ -97,6 +97,9 @@
         <p>Начало периода: <input type="checkbox" id="checkbox_filter_date_start" name="scales" >
             <label for="filter_date_start"><input readonly type="date" id="filter_date_start" name=""></label> </p>
 
+        <p>Выдел: <input type="checkbox" id="checkbox_filter_soil_lot" name="scales">
+             <label for="filter_soil_lot"><input readonly type="text" id="filter_soil_lot" name=""></label> </p>
+
         <p>Участкове лесничество: <input type="checkbox" id="checkbox_filter_district_forestly" name="scales">
             <label for="filter_district_forestly">
                 <select disabled name="sub" id="filter_district_forestly" style="width: 280px">
@@ -104,38 +107,37 @@
             </label>
         </p>
 
-        <div class="block_quartal_and_soil_lot">
-            <p>Квартал: <input type="checkbox" id="checkbox_filter_quartal" name="scales">
-                <label for="filter_quartal">
-                    <select disabled name="sub" id="filter_quartal">
-                        <option hidden disabled selected value=""></option>
-                    </select>
-                </label>
-            </p>
-
-            <p>Выдел: <input type="checkbox" id="checkbox_filter_soil_lot" name="scales">
-             <label for="filter_soil_lot"><input readonly type="text" id="filter_soil_lot" name=""></label> </p>
-        </div>
+<!--        <div class="block_quartal_and_soil_lot">-->
+<!--        </div>-->
 
         <p>Окончание периода: <input type="checkbox" id="checkbox_filter_date_end" name="scales">
              <label for="filter_date_end"><input readonly type="date" id="filter_date_end" name=""></label> </p>
+
+        <p style="display: none">Квартал: <input type="checkbox" id="checkbox_filter_quartal" name="scales">
+            <label for="filter_quartal">
+                <select disabled name="sub" id="filter_quartal">
+                    <option hidden disabled selected value=""></option>
+                </select>
+            </label>
+        </p>
+
     </form>
     <div class="content">
         <div class="content_table">
             <table>
                 <thead>
-                    <th class="textAlignCenter td1 positionRelative" onclick="sortByDate()">Дата <p id="sortDateForTable1" class="sortDateArrow">&#8595;</p></th>
-                    <th class="td8">Номер</th>
-                    <th class="td2">Субьект РФ</th>
-                    <th class="td3">Лесничество</th>
-                    <th class="td4">Участковое лесничество</th>
-                    <th class="textAlignCenter td5">Квартал</th>
-                    <th class="textAlignCenter td6">Выдел</th>
-                    <th class="textAlignCenter td7">Площадь участка</th>
+                    <th class="textAlignCenter th1 positionRelative" onclick="sortByDate()">Дата <p id="sortDateForTable1" class="sortDateArrow">&#8595;</p></th>
+                    <th class="th8">Номер</th>
+                    <th class="th2">Субьект РФ</th>
+                    <th class="th3">Лесничество</th>
+                    <th class="th4">Участковое лесничество</th>
+                    <th class="th9">Урочище</th>
+                    <th class="textAlignCenter th5">Квартал</th>
+                    <th class="textAlignCenter th6">Выдел</th>
                 </thead>
             </table>
             <div class="scroll-table-body">
-                <table>
+                <table style="table-layout: fixed;">
                     <tbody id="descriptionLand_tbody">
                     </tbody>
                 </table>

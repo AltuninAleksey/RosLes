@@ -48,7 +48,7 @@
         </div>
         <div class="hiv2">
             <div class="hid2">
-                <div class="point cursorPointer" onclick="getStatementRecalculations()">
+                <div class="point cursorPointer" onclick="getNewStatementRecalculationsDetail()">
                     <a class="activeLink"><h3 style="color: black;">Список перечетных ведомостей</h3></a>
                 </div>
                 <div class="point cursorPointer" onclick="getMergeStatementRecalculations()">
@@ -69,7 +69,7 @@
             </svg>
             <p class="p">Применить фильтры</p>
         </div>
-        <div class="butmenuadd" style="justify-content: flex-start;display: none;">
+        <div class="butmenuadd" style="justify-content: flex-start;" onclick="getNewStatementRecalculations()">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin: 7px 10px 7px 15px;">
                 <circle cx="8" cy="8" r="8" fill="#177164"/>
                 <path d="M7.40002 8.60005V12.2H8.60002V8.60005H12.2V7.40005H8.60002V3.80005H7.40002V7.40005H3.79999V8.60005H7.40002Z" fill="white"/>
@@ -79,7 +79,7 @@
     </div>
 
     <form id="form_filter" action="" class="form">
-        <p>Субьект РФ: <input type="checkbox" id="checkbox_filter_subject_rf" name="scales">
+        <p style="display: none">Субьект РФ: <input type="checkbox" id="checkbox_filter_subject_rf" name="scales">
             <label for="filter_subject_rf">
                 <select disabled name="sub" id="filter_subject_rf" style="width: 300px">
                     <option hidden disabled selected value=""></option>
@@ -99,6 +99,9 @@
         <p>Начало периода: <input type="checkbox" id="checkbox_filter_date_start" name="scales" >
             <label for="filter_date_start"><input readonly type="date" id="filter_date_start" name=""></label> </p>
 
+        <p>Выдел: <input type="checkbox" id="checkbox_filter_soil_lot" name="scales">
+            <label for="filter_soil_lot"><input readonly type="text" id="filter_soil_lot" name=""></label> </p>
+
         <p>Участкове лесничество: <input type="checkbox" id="checkbox_filter_district_forestly" name="scales">
             <label for="filter_district_forestly">
                 <select disabled name="sub" id="filter_district_forestly" style="width: 280px">
@@ -107,38 +110,39 @@
             </label>
         </p>
 
-        <div class="block_quartal_and_soil_lot">
-            <p>Квартал: <input type="checkbox" id="checkbox_filter_quartal" name="scales">
-                <label for="filter_quartal">
-                    <select disabled name="sub" id="filter_quartal">
-                        <option hidden disabled selected value=""></option>
-                    </select>
-                </label>
-            </p>
-
-            <p>Выдел: <input type="checkbox" id="checkbox_filter_soil_lot" name="scales">
-             <label for="filter_soil_lot"><input readonly type="text" id="filter_soil_lot" name=""></label> </p>
-        </div>
-
         <p>Окончание периода: <input type="checkbox" id="checkbox_filter_date_end" name="scales">
              <label for="filter_date_end"><input readonly type="date" id="filter_date_end" name=""></label> </p>
+
+        <p style="display: none">Квартал: <input type="checkbox" id="checkbox_filter_quartal" name="scales">
+            <label for="filter_quartal">
+                <select disabled name="sub" id="filter_quartal">
+                    <option hidden disabled selected value=""></option>
+                </select>
+            </label>
+        </p>
+
+<!--        <div class="block_quartal_and_soil_lot">-->
+<!--            -->
+<!--        </div>-->
+
+
     </form>
     <div class="content">
         <div class="content_table">
             <table>
                 <thead>
-                    <th class="textAlignCenter td1 cursorPointer positionRelative" onclick="sortByDate()">Дата <p id="sortDateForTable1" class="sortDateArrow">&#8595;</p></th>
-                    <th class="td8">Номер</th>
-                    <th class="td2">Субьект РФ</th>
-                    <th class="td3">Лесничество</th>
-                    <th class="td4">Участковое лесничество</th>
-                    <th class="textAlignCenter td5">Квартал</th>
-                    <th class="textAlignCenter td6">Выдел</th>
-                    <th class="textAlignCenter td7">Площадь участка</th>
+                    <th class="textAlignCenter th1 cursorPointer positionRelative" onclick="sortByDate()">Дата <p id="sortDateForTable1" class="sortDateArrow">&#8595;</p></th>
+                    <th class="th8">Номер</th>
+                    <th class="th2">Субьект РФ</th>
+                    <th class="th3">Лесничество</th>
+                    <th class="th4">Участковое лесничество</th>
+                    <th class="th9">Урочище</th>
+                    <th class="textAlignCenter th5">Квартал</th>
+                    <th class="textAlignCenter th6">Выдел</th>
                 </thead>
             </table>
             <div class="scroll-table-body">
-                <table>
+                <table style="table-layout: fixed;">
                     <tbody id="statementRecalculations_tbody">
                     </tbody>
                 </table>

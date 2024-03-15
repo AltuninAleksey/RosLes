@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    {% block title %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Описание участка</title>
+    <link rel="stylesheet" href="{% static 'css/common.css' %}">
+    <link rel="stylesheet" href="{% static 'css/styleplotDescription.css' %}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.0/axios.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.js"></script>
+    <script src="{% static 'js/global.js' %}"></script>
+    <script src="{% static 'js/common/commonFunction.js' %}"></script>
+    <script src="{% static 'js/common/common_business.js' %}"></script>
+    <script src="{% static 'js/newPlotDescription/plotDescription_business.js' %}" defer></script>
+    <script src="{% static 'js/newPlotDescription/plotDescription_construct_view.js' %}" defer></script>
+    {% endblock %}
+</head>
+<body style="margin:0 !important">
+    <header style="margin:0 !important">
+        <div class="hiv">
+            <div class="hid">
+                <img src="{% static 'img/Logo @img.svg' %}" alt="">
+                <div class="point cursorPointer" onclick="getStatementRecalculations()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M7 4.5L5.9022 3.50135C4.83122 2.43036 3 3.18888 3 4.70348V19.2999C3 20.2389 3.76115 21 4.70007 21H19.2965C20.8111 21 21.5696 19.1688 20.4987 18.0978L19.8945 17.4936M7 4.5L5.5 5.5M7 4.5L9.76759 7.36674M9.76759 7.36674L8.34542 8.87775M9.76759 7.36674L13.1019 10.701M13.1019 10.701L11.7783 12.0808M13.1019 10.701L16.3881 13.9872M16.3881 13.9872L15.113 15.3824M16.3881 13.9872L19.8945 17.4936M19.8945 17.4936L18.4968 18.7825" stroke="#40E0D0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M6.69867 18H11.2999C11.9224 18 12.2341 17.2474 11.794 16.8073L7.1927 12.206C6.75256 11.7659 6 12.0776 6 12.7001V17.3013C6 17.6872 6.3128 18 6.69867 18Z" stroke="#40E0D0" stroke-width="2" stroke-linejoin="round"/>
+                        </svg>
+                    <a><h3>Перечетная ведомость</h3></a>
+                </div>
+                <div class="point cursorPointer" onclick="getFieldCard()">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M13.7218 8.1308L10.5768 11.2012M1 19L2.61578 14.2673C2.81491 13.6841 2.74608 13.0523 2.52328 12.4773C1.43423 9.66657 2.04257 6.37784 4.35189 4.12326C6.60048 1.92796 13.1645 1.22622 16.729 1.00446C18.0273 0.923692 19.0782 1.94964 18.9954 3.2172C18.7683 6.69721 18.0495 13.1056 15.8009 15.3009C13.6825 17.3691 10.6728 18.0399 7.96733 17.3159C6.57914 16.9445 6.4141 15.2653 7.4319 14.2716L9.00437 12.7364M10.5768 11.2012V7.5M10.5768 11.2012L9.00437 12.7364M9.00437 12.7364H12.5" stroke="#40E0D0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    <a><h3>Полевые карточки</h3></a>
+                </div>
+                <div class="point cursorPointer" onclick="getGeneralDoc()">
+                    <svg width="24" height="22" viewBox="0 0 24 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="4" y="5.10345" width="16" height="3.51724" rx="1" stroke="#40E0D0" stroke-width="2" stroke-linejoin="round"/>
+                        <rect x="4" y="13.3793" width="16" height="3.51724" rx="1" stroke="#40E0D0" stroke-width="2" stroke-linejoin="round"/>
+                        <path d="M17 6.75519H18.5" stroke="#40E0D0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M17 15.1552H18.5" stroke="#40E0D0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    <a  ><h3>Справочники</h3></a>
+                </div>
+            </div>
+        </div>
+        <div class="hiv2">
+            <div class="hid2 hid2r">
+                <div class="back" id="back_event">
+                    <svg width="18" height="10" viewBox="0 0 18 10" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin: 7px 10px;">
+                        <path d="M0.931396 4.95239L5.9314 0V4H17.9314V6H5.9314V10L0.931396 4.95239Z" fill="#4A4A4A"/>
+                        </svg>
+                </div>
+                <div class="point"  onclick="getStatementRecalculations()">
+                    <a ><h3 style="color: #444;">Список перечетных ведомостей</h3></a>
+                </div>
+                <div class="point" onclick="getMergeStatementRecalculations()">
+                    <a ><h3  style="color: #444;">Объединить перечетные ведомости</h3></a>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div id="invoice">
+        <h1 class="heading" id="header"> </h1>
+            <div class="menuform" id="ignor">
+                <div class="back butmenu" onclick="saveData()">
+                    <svg width="22" height="22"  fill="none" xmlns="http://www.w3.org/2000/svg" style="margin: 4px 4px 2px 15px;">
+                        <path d="M7.5 19H5C3.89543 19 3 18.1046 3 17V3C3 1.89543 3.89543 1 5 1H15.6716C16.202 1 16.7107 1.21071 17.0858 1.58579L20.4142 4.91421C20.7893 5.28929 21 5.79799 21 6.32843V17C21 18.1046 20.1046 19 19 19H16.5M7.5 19H12H16.5M7.5 19V15C7.5 13.8954 8.39543 13 9.5 13H14.5C15.6046 13 16.5 13.8954 16.5 15V19" stroke="#177164" stroke-linejoin="round"/>
+                        <line x1="0.5" y1="-0.5" x2="9.5" y2="-0.5" transform="matrix(-1 0 0 1 17 8)" stroke="#177164" stroke-linecap="round"/>
+                        </svg>
+                    <p class="p">Сохранить</p>
+                </div>
+                <div class="back butmenu task2" style="display:none;">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin: 4px 4px 2px 15px;">
+                        <path d="M4 6H3C1.89543 6 1 6.89543 1 8V14C1 15.1046 1.89543 16 3 16H5M4 6V3C4 1.89543 4.89543 1 6 1H14C15.1046 1 16 1.89543 16 3V6M4 6H16M16 6H17C18.1046 6 19 6.89543 19 8V14C19 15.1046 18.1046 16 17 16H15M5 16V15C5 13.8954 5.89543 13 7 13H13C14.1046 13 15 13.8954 15 15V16M5 16V17C5 18.1046 5.89543 19 7 19H13C14.1046 19 15 18.1046 15 17V16" stroke="#177164" stroke-linejoin="round"/>
+                        </svg>
+                    <p class="p">Печать</p>
+                </div>
+                <div class="back butmenu pdf" onclick="generatePDF()" style="display:none;">
+                    <svg width="22" height="22"  fill="none" xmlns="http://www.w3.org/2000/svg" style="margin: 4px 4px 2px 15px;">
+                        <path d="M7.5 19H5C3.89543 19 3 18.1046 3 17V3C3 1.89543 3.89543 1 5 1H15.6716C16.202 1 16.7107 1.21071 17.0858 1.58579L20.4142 4.91421C20.7893 5.28929 21 5.79799 21 6.32843V17C21 18.1046 20.1046 19 19 19H16.5M7.5 19H12H16.5M7.5 19V15C7.5 13.8954 8.39543 13 9.5 13H14.5C15.6046 13 16.5 13.8954 16.5 15V19" stroke="#177164" stroke-linejoin="round"/>
+                        <line x1="0.5" y1="-0.5" x2="9.5" y2="-0.5" transform="matrix(-1 0 0 1 17 8)" stroke="#177164" stroke-linecap="round"/>
+                        </svg>
+                    <p class="p">Сохранить в PDF</p>
+                </div>
+            </div>
+            <div class="submenu">
+                <form action="" class="rerect r1">
+                    <p>Номер участка: <input class="mandatory" type="text" name="" id="number_region" style="width: 90px"></p>
+                </form>
+                <form action="" class="text">
+                    <p>Способ лесовосстановления: (искусственный, комбинированный, естественный
+                        вследствие мер содействия лесовосстановлению, естественный вследствие природных процессов):</p>
+                    <select class="mandatory" name="typeReproduction" id="typeReproduction" style="width: 100% !important;">
+                    </select>
+                </form>
+                <form action="" class="rerect r1">
+                    <p style="display: flex;width: 520px;justify-content: space-between;align-items: center;">Год отнесения к землям, на которых расположены леса: <input class="mandatory" type="text" name="" id="year_assignment_land" style="width: 90px"></p>
+                </form>
+                <form action="" class="text">
+                    <p>Местонахождения участка:</p>
+                </form>
+                 <form action="" class="rerect n1">
+                    <p>Субъект РФ: <select class="mandatory" name="sub" id="regionRF">
+                    </select></p>
+                    <p>Лесничество: <select class="mandatory" name="les" id="lesName">
+                    </select></p>
+                    <p>Участковое лесничество: <select class="mandatory" name="ucles" id="ucLesName">
+                    </select></p>
+                </form>
+                <form action="" class="rerect n1 n2">
+                    <p>Квартал: <select class="mandatory" name="quarter" id="quarter" style="width: 115px;">
+                    </select></p>
+                    <p>Выдел: <input class="mandatory" type="text" name="soil_lot" id="soil_lot" style="width: 95px"></p>
+                    <p>Площадь участка: <input class="mandatory" type="text" name="sample_region" id="sample_region" style="width: 100px"></p>
+                </form>
+                <form action="" class="text">
+                    <p>Год образования категории фонда лесовосстановления (вырубки, гари)</p>
+                    <input class="mandatory" type="text" id="year_format_fond_trees" value="">
+                    <p>данные о проведенных мероприятиях по уходу за лесами на участке (вид и год проведения)</p>
+                    <input class="mandatory" type="text" id="inf_restore_forest" value="">
+                </form>
+                <form action="" class="rerect r2">
+                    <p>Породный состав молодняка по Акту отнесения земель, предназначенных для лесовосстановления,
+                        к землям, на которых, расположены леса <input class="mandatory" type="text" id="breed_structure_sapling_act_land"></p>
+                    <p>хозяйство по Акту отнесения земель <input class="mandatory" type="text" id="economy_act_land"></p>
+                    <p>Породный состав молодняка по данным натурного обследования <input class="mandatory" type="text" name="breed_composition_sapling_data_surver" id="breed_composition_sapling_data_surver"></p>
+                    <p>хозяйство по данным натурного обследования <input class="mandatory" type="text" name="farm_according_data_survey" id="farm_according_data_survey"></p>
+                </form>
+                <form action="" class="text tx1">
+                    <p>Изменение породного и качественного состава молодняка после отнесения участка к
+                        землям, на которых расположены леса на момент натурного обследования лесного участка</p>
+                    <textarea class="mandatory" name="" id="change_breed_and_structure_sapling" cols="30" rows="10"></textarea>
+                    <p>Вывод по результатам обследования</p>
+                    <textarea class="mandatory" name="" id="results_surtvey" cols="30" rows="10"></textarea>
+                    <p>Рекомендации</p>
+                    <textarea class="mandatory" name="" id="recommendation" cols="30" rows="10"></textarea>
+                </form>
+            </div>
+        </div>
+</body>
+</html>
