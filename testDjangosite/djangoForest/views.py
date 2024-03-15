@@ -237,8 +237,13 @@ class ListRegionView(generics.ListCreateAPIView):
         field.save()
         desc = DescriptionRegion(id_list_region = region)
         desc.save()
-        sample = Sample(id_list_region = region)
-        sample.save()
+        request.data.update({"id_list_region": serializer.data['id']})
+        sample_ser = SampleSerializer(data=request.data)
+        sample_ser.is_valid()
+        sample_ser.save()
+        # sample = Sample(id_list_region = region, soil_lot = request.data['soil_lot'],
+        #                 date = request.data['date'], id_profile = request.data['id_profile'])
+        # sample.save()
         return Response({'code': status.HTTP_201_CREATED})
 
     def put(self, request, *args, **kwargs):
