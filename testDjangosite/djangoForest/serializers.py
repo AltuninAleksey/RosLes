@@ -173,7 +173,7 @@ class CZLSerializer(serializers.ModelSerializer):
 
 class CZLSerializerWithOutMain(serializers.ModelSerializer):
     name_slave_subject = serializers.CharField(source="id_subject.name_subject_RF", read_only=True)
-    id_subject = serializers.CharField()
+    id_subject = serializers.CharField(source='id_subject.id')
 
     class Meta:
         model = CZL
