@@ -237,6 +237,8 @@ class ListRegionView(generics.ListCreateAPIView):
         field.save()
         desc = DescriptionRegion(id_list_region = region)
         desc.save()
+        sample = Sample(id_list_region = region)
+        sample.save()
         return Response({'code': status.HTTP_201_CREATED})
 
     def put(self, request, *args, **kwargs):
