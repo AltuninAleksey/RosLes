@@ -1433,7 +1433,7 @@ class GetAllDescriptionRegion(ListAPIView):
                              "error_text": ser_listregion.errors[next(iter(ser_listregion.errors))][0]},
                             status=status.HTTP_400_BAD_REQUEST)
         ser_listregion.save()
-        serealizer = DescriptionRegion(data=request.data, instance=instance)
+        serealizer = DescriptionRegionSerializer(data=request.data, instance=instance)
         if not serealizer.is_valid():
             print(serealizer.errors)
             print({"error": status.HTTP_400_BAD_REQUEST,
