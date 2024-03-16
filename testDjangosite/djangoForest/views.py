@@ -1330,16 +1330,16 @@ class GetAllDescriptionRegion(ListAPIView):
             data = []
             lst = DescriptionRegion.objects.filter(
                 id_list_region__id_district_forestly_id__id_forestly_id__id_subject_rf_id=subject_id)
-            data.append(DescriptionRegionSerializer(lst, many=True).data)
             czl_data_main = CZLSerializer(
                 CZL.objects.get(Q(id_main_subject=subject_id) | Q(id_subject=subject_id))).data
             czl_objects = CZL.objects.filter(id_main_subject=czl_data_main['id_main_subject']).values("id_subject", "id_main_subject")
-            data.append(DescriptionRegion(lst, many=True).data)
+            data.append(DescriptionRegionSerializer(lst, many=True).data)
             for k in czl_objects:
                 if k.get("id_main_subject") != subject_id:
                     lst = DescriptionRegion.objects.filter(
                         id_list_region__id_district_forestly_id__id_forestly_id__id_subject_rf_id=k.get("id_main_subject"))
-                    data.append(DescriptionRegion(lst, many=True).data)
+                    print(f"lst: {len(lst)}")
+                    data.append(DescriptionRegionSerializer(lst, many=True).data)
                 break
             if len(czl_objects):
                 for i in czl_objects:
@@ -1851,6 +1851,12 @@ class GetCZL(ListAPIView):
                          "id_main_subject": czl_data_main.data['id_main_subject'],
                          "name_main_subject": czl_data_main.data['name_main_subject'],
                          "slave_subject": czl_objects.data})
+
+
+class CZLMobileView(ListAPIView):
+
+    def get(self, request, *args, **kwargs):
+        return Response({"data": CZLSerializerMobile(CZL.objects.all(), many=True).data})
 
 class ForestViewSet(viewsets.ModelViewSet):
     pass
