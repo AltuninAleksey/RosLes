@@ -921,12 +921,19 @@ class GetAllListRegionData(viewsets.ViewSet):
             lst = ListRegion.objects.filter(
                 id_district_forestly_id__id_forestly_id__id_subject_rf_id = subject_id)
             czl_data_main = CZLSerializer(CZL.objects.get(Q(id_main_subject=subject_id) | Q(id_subject=subject_id))).data
-            czl_objects = CZL.objects.filter(id_main_subject = czl_data_main['id_main_subject']).values("id_subject")
+            czl_objects = CZL.objects.filter(id_main_subject = czl_data_main['id_main_subject']).values("id_subject", "id_main_subject")
             data.append(GetAllListRegionDataSerializer(lst, many=True).data)
+            for k in czl_objects:
+                if k.get("id_main_subject") != subject_id:
+                    lst = ListRegion.objects.filter(
+                        id_district_forestly_id__id_forestly_id__id_subject_rf_id=k.get('id_main_subject'))
+                    data.append(GetAllListRegionDataSerializer(lst, many=True).data)
+                break
             if len(czl_objects):
+                print(czl_objects)
                 for i in czl_objects:
-                    print(f"czl subject {i.get('id_subject')}")
                     if i.get('id_subject') != subject_id:
+                        print(f"id subject{i.get('id_subject')} и {subject_id}")
                         lst = ListRegion.objects.filter(
                             id_district_forestly_id__id_forestly_id__id_subject_rf_id=i.get('id_subject'))
                         data.append(GetAllListRegionDataSerializer(lst, many=True).data)
@@ -1326,15 +1333,21 @@ class GetAllDescriptionRegion(ListAPIView):
             data.append(DescriptionRegionSerializer(lst, many=True).data)
             czl_data_main = CZLSerializer(
                 CZL.objects.get(Q(id_main_subject=subject_id) | Q(id_subject=subject_id))).data
-            czl_objects = CZL.objects.filter(id_main_subject=czl_data_main['id_main_subject']).values("id_subject")
-            data.append(FieldCardSerializer(lst, many=True).data)
+            czl_objects = CZL.objects.filter(id_main_subject=czl_data_main['id_main_subject']).values("id_subject", "id_main_subject")
+            data.append(DescriptionRegion(lst, many=True).data)
+            for k in czl_objects:
+                if k.get("id_main_subject") != subject_id:
+                    lst = DescriptionRegion.objects.filter(
+                        id_list_region__id_district_forestly_id__id_forestly_id__id_subject_rf_id=k.get("id_main_subject"))
+                    data.append(DescriptionRegion(lst, many=True).data)
+                break
             if len(czl_objects):
                 for i in czl_objects:
                     print(f"czl subject {i.get('id_subject')}")
                     if i.get('id_subject') != subject_id:
                         lst = DescriptionRegion.objects.filter(
                             id_list_region__id_district_forestly_id__id_forestly_id__id_subject_rf_id=i.get('id_subject'))
-                        data.append(GetAllListRegionDataSerializer(lst, many=True).data)
+                        data.append(DescriptionRegionSerializer(lst, many=True).data)
             return Response({"get": data})
         lst = DescriptionRegion.objects.all()
         return Response({"get": DescriptionRegionSerializer(lst, many=True).data})
@@ -1516,15 +1529,21 @@ class GetFieldCard(ListAPIView):
             lst = FieldCard.objects.filter(
                 id_list_region__id_district_forestly_id__id_forestly_id__id_subject_rf_id = subject_id)
             czl_data_main = CZLSerializer(CZL.objects.get(Q(id_main_subject=subject_id) | Q(id_subject=subject_id))).data
-            czl_objects = CZL.objects.filter(id_main_subject = czl_data_main['id_main_subject']).values("id_subject")
+            czl_objects = CZL.objects.filter(id_main_subject = czl_data_main['id_main_subject']).values("id_subject", "id_main_subject")
             data.append(FieldCardSerializer(lst, many=True).data)
+            for k in czl_objects:
+                if k.get("id_main_subject") != subject_id:
+                    lst = FieldCard.objects.filter(
+                        id_list_region__id_district_forestly_id__id_forestly_id__id_subject_rf_id=k.get("id_main_subject"))
+                    data.append(FieldCardSerializer(lst, many=True).data)
+                break
             if len(czl_objects):
                 for i in czl_objects:
                     print(f"czl subject {i.get('id_subject')}")
                     if i.get('id_subject') != subject_id:
                         lst = FieldCard.objects.filter(
                             id_list_region__id_district_forestly_id__id_forestly_id__id_subject_rf_id=i.get('id_subject'))
-                        data.append(GetAllListRegionDataSerializer(lst, many=True).data)
+                        data.append(FieldCardSerializer(lst, many=True).data)
             return Response({"get": data})
         lst = FieldCard.objects.all()
         return Response({"get": FieldCardSerializer(lst, many=True).data})
