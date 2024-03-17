@@ -1858,6 +1858,23 @@ class CZLMobileView(ListAPIView):
     def get(self, request, *args, **kwargs):
         return Response({"data": CZLSerializerMobile(CZL.objects.all(), many=True).data})
 
+
+class GetCZLByProfile(ListAPIView):
+    def get(self, request, *args, **kwargs):
+        if kwargs:
+            print(kwargs['pk'])
+            if not Profile.objects.filter(id=kwargs['pk']).exists():
+                return Response({"error": f"user with id {kwargs['pk']} not exists"})
+            profile_data = ProfileSerializer(Profile.objects.get(id_user=kwargs['pk'])).data['id_subject_rf']
+            czl_data_main = CZLSerializer(CZL.objects.get(Q(id_main_subject=profile_data) | Q(id_subject=profile_data)))
+            czl_objects = CZLSerializerWithOutMain(
+                CZL.objects.filter(id_main_subject=czl_data_main.data['id_main_subject']), many=True)
+            return Response({"name_main_czl": czl_data_main.data['name_czl'],
+                             "id_main_subject": czl_data_main.data['id_main_subject'],
+                             "name_main_subject": czl_data_main.data['name_main_subject'],
+                             "slave_subject": czl_objects.data})
+        return Response({"error": "not found id"})
+
 class ForestViewSet(viewsets.ModelViewSet):
     pass
 
