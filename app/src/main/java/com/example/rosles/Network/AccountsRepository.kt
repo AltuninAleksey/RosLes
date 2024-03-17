@@ -21,7 +21,7 @@ interface AccountsSource {
     suspend fun getQUATER():QUATER_RESP
     suspend fun getDISTRICTFORESTLY():DISTRICTFORESTLY_RESP
     suspend fun getFORESTLY():FORESTLY_RESP
-    suspend fun getSUBJECTRF():SUBJECTRF_RESP
+    suspend fun getSUBJECTRF(value: Int):SUBJECTRF_RESP
     suspend fun getLISTREGION(pk_profile:Int):LISTREGION_RESP
     suspend fun getSAMPLE():SAMPLE_RESP
     suspend fun getLIST():LIST_RESP
@@ -71,7 +71,7 @@ class AccountsRepository( private val accountsSource: AccountsSource) {
     suspend fun getQUATER():QUATER_RESP=accountsSource.getQUATER()
     suspend fun getDISTRICTFORESTLY():DISTRICTFORESTLY_RESP=accountsSource.getDISTRICTFORESTLY()
     suspend fun getFORESTLY():FORESTLY_RESP=accountsSource.getFORESTLY()
-    suspend fun getSUBJECTRF():SUBJECTRF_RESP=accountsSource.getSUBJECTRF()
+    suspend fun getSUBJECTRF(value: Int):SUBJECTRF_RESP=accountsSource.getSUBJECTRF(value)
     suspend fun getLISTREGION(pk_profile:Int):LISTREGION_RESP=accountsSource.getLISTREGION(pk_profile)
     suspend fun getSAMPLE():SAMPLE_RESP=accountsSource.getSAMPLE()
     suspend fun getLIST():LIST_RESP=accountsSource.getLIST()

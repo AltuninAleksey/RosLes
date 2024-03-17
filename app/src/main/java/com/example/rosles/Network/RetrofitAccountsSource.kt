@@ -37,9 +37,9 @@ class RetrofitAccountsSource(
         accountsApi.getFORESTLY()
     }
 
-    override suspend fun getSUBJECTRF(): SUBJECTRF_RESP= wrapRetrofitExceptions  {
+    override suspend fun getSUBJECTRF(value: Int): SUBJECTRF_RESP= wrapRetrofitExceptions  {
         delay(1000)
-        accountsApi.getSUBJECTRF()
+        accountsApi.getSUBJECTRF(value)
     }
 
     override suspend fun getLISTREGION(pk_profile:Int): LISTREGION_RESP= wrapRetrofitExceptions  {

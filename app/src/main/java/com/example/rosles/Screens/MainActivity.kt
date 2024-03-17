@@ -39,7 +39,7 @@ class MainActivity : BaseActivity("Перечетные ведомости") {
         binding.toolbar.addbutton.setOnClickListener {
             var id_subject = getSharedPreferences("PreferencesName", MODE_PRIVATE)
                 .getInt("id_subject",0)
-            val intent1 = Intent(this, ChoiceLes::class.java)
+            val intent1 = Intent(this, ChoiceSubject::class.java)
             intent1.putExtra("id", id_subject.toString())
             intent1.putExtra("id_Vedomost", intent.getStringExtra("id_Vedomost"))
 
@@ -150,17 +150,6 @@ class MainActivity : BaseActivity("Перечетные ведомости") {
                 intent.putExtra("id_Vedomost", textView.text)
                 startActivity(intent)
             }
-        }
-
-        binding.toolbar.addbutton.setOnClickListener {
-            var id_subject = getSharedPreferences("PreferencesName", MODE_PRIVATE)
-                .getInt("id_subject",0)
-            val intent1 = Intent(this, ChoiceLes::class.java)
-            intent1.putExtra("id", id_subject.toString())
-            intent1.putExtra("id_Vedomost", intent.getStringExtra("id_Vedomost"))
-
-            startActivity(intent1)
-
         }
     }
 

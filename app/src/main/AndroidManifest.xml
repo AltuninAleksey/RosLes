@@ -23,13 +23,7 @@
         android:theme="@style/Theme.Rosles"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-        <activity
-            android:name=".Screens.MainActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
+
         <activity
             android:name=".Screens.Authorization"
             android:exported="true">
@@ -45,6 +39,7 @@
         </activity>
         <activity android:name="com.example.rosles.Screens.Wood" android:windowSoftInputMode="adjustPan"/>
         <activity android:name="com.example.rosles.Screens.ChoiceSubject"/>
+        <activity android:name="com.example.rosles.Screens.MainActivity"/>
         <activity android:name="com.example.rosles.Screens.profile"/>
         <activity android:name="com.example.rosles.Screens.AddPorod"/>
         <activity android:name="com.example.rosles.Screens.settings"/>

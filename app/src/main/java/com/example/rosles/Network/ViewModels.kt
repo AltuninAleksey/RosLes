@@ -88,10 +88,12 @@ class ViewModels():BaseViewModel(
             processEmptyFieldException(e)
         }
     }
-    fun getSUBJECTRF(dbCountWood: DBCountWood)=viewModelScope.safeLaunch {
+    fun getSUBJECTRF(dbCountWood: DBCountWood, value: Int)=viewModelScope.safeLaunch {
         try {
-            accountsRepository.getSUBJECTRF().get.forEach {
-                dbCountWood.writeSUBJECTRF(it.id,it.name_subject_RF)
+            //value for id
+
+            accountsRepository.getSUBJECTRF(value).slave_subject.forEach {
+                dbCountWood.writeSUBJECTRF(it.id_subject,it.name_slave_subject)
             }
         } catch (e: EmptyFieldException) {
             processEmptyFieldException(e)
