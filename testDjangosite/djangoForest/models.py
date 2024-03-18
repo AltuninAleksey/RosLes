@@ -380,7 +380,7 @@ class PurposeOfForests(models.Model):
 
 
 class ForestProtectionCategory(models.Model):
-    name_forest_protection_category = models.CharField(max_length=350, verbose_name='Наименование')
+    name_forest_protection_category = models.CharField(max_length=500, verbose_name='Наименование')
 
     def __str__(self):
         return self.name_forest_protection_category
