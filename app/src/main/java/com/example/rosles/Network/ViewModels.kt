@@ -91,10 +91,17 @@ class ViewModels():BaseViewModel(
     fun getSUBJECTRF(dbCountWood: DBCountWood, value: Int)=viewModelScope.safeLaunch {
         try {
             //value for id
+            val data= accountsRepository.getSUBJECTRF(value)
 
-            accountsRepository.getSUBJECTRF(value).slave_subject.forEach {
+            dbCountWood.writeSUBJECTRF(data.id_main_subject,data.name_main_subject)
+            getFORESTLY(dbCountWood,data.id_main_subject)
+            data.slave_subject.forEach {
                 dbCountWood.writeSUBJECTRF(it.id_subject,it.name_slave_subject)
+                getFORESTLY(dbCountWood,it.id_subject)
             }
+
+
+
         } catch (e: EmptyFieldException) {
             processEmptyFieldException(e)
         }
