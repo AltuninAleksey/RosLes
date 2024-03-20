@@ -1848,14 +1848,14 @@ class GetCZL(ListAPIView):
 
     def get(self, request, *args, **kwargs):
         import json
-        if request.user.subject_rf_id == 27:
+        if request.user.subject_rf_id == 27 or request.user.subject_rf_id == 183:
             czl_data_main = CZLSerializer(CZL.objects.get(id_main_subject = request.user.subject_rf_id))
             # czl_filter = CZL.objects.filter(id_main_subject = 27)
             # print(czl_filter)
             czl_objects = CZLSerializerWithOutMain(CZL.objects.filter(id_subject__isnull = False), many = True)
             czl_object_dict = [dict(item) for item in czl_objects.data]
             # print(czl_object_dict)
-            data_null = CZLSerializerWithMain(CZL.objects.filter(~Q(id_main_subject = 27), id_subject__isnull=True), many = True).data
+            data_null = CZLSerializerWithMain(CZL.objects.filter(~Q(id_main_subject = request.user.subject_rf_id), id_subject__isnull=True), many = True).data
             dict_null = [dict(item) for item in data_null]
             new_list = czl_object_dict + dict_null
             return Response({"name_main_czl": czl_data_main.data['name_czl'],
