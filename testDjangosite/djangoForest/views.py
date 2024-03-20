@@ -916,6 +916,7 @@ class GetAllListRegionData(viewsets.ViewSet):
     def list(self, request, **kwargs):
         # print(request.user.subject_rf_id)
         subject_id = request.user.subject_rf_id
+        print(subject_id)
         if subject_id:
             data = []
             if not ListRegion.objects.filter(
@@ -924,9 +925,13 @@ class GetAllListRegionData(viewsets.ViewSet):
             lst = ListRegion.objects.filter(
                 id_district_forestly__isnull=False,
                 id_district_forestly_id__id_forestly_id__id_subject_rf_id = subject_id)
-            czl_data_main = CZLSerializer(CZL.objects.get(Q(id_main_subject=subject_id) | Q(id_subject=subject_id))).data
-            czl_objects = CZL.objects.filter(id_main_subject = czl_data_main['id_main_subject']).values("id_subject", "id_main_subject")
+            # czl_data_main = CZLSerializer(CZL.objects.get(Q(id_main_subject=subject_id) | Q(id_subject=subject_id))).data
+            # czl_objects = CZL.objects.filter(id_main_subject = czl_data_main['id_main_subject']).values("id_subject", "id_main_subject")
             data.append(GetAllListRegionDataSerializer(lst, many=True).data)
+            czl_data_main = CZLSerializer(
+                CZL.objects.filter(Q(id_main_subject=subject_id) | Q(id_subject=subject_id)), many=True)
+            czl_main_id = czl_data_main.data[0].get("id_main_subject")
+            czl_objects = CZL.objects.filter(id_main_subject=czl_main_id).values("id_subject", "id_main_subject")
             for k in czl_objects:
                 if k.get("id_main_subject") != subject_id:
                     lst = ListRegion.objects.filter(
