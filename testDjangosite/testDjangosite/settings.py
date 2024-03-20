@@ -149,27 +149,38 @@ CASHES = {
 # }
 #
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'rosles',
+        'USER': 'roslesuser',
+        'PASSWORD': 'f83hb53',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
+}
+
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql',
 #         'NAME': 'rosles',
 #         'USER': 'roslesuser',
 #         'PASSWORD': 'f83hb53',
-#         'HOST': 'localhost',
+#         'HOST': '92.50.227.100',
+#         'PORT': '58677',
+#     }
+# }
+#
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'rosles',
+#         'USER': 'roslesuser',
+#         'PASSWORD': 'roslesuser',
+#         'HOST': '90.156.208.88',
 #         'PORT': '5432',
 #     }
 # }
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'rosles',
-        'USER': 'roslesuser',
-        'PASSWORD': 'roslesuser',
-        'HOST': '90.156.208.88',
-        'PORT': '5432',
-    }
-}
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql',

@@ -36,7 +36,7 @@
                         </svg>
                     <a><h3>Полевые карточки</h3></a>
                 </div>
-                <div class="point cursorPointer" onclick="getGeneralDoc()">
+                <div style="display: none;" class="point cursorPointer" onclick="getGeneralDoc()">
                     <svg width="24" height="22" viewBox="0 0 24 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <rect x="4" y="5.10345" width="16" height="3.51724" rx="1" stroke="#40E0D0" stroke-width="2" stroke-linejoin="round"/>
                         <rect x="4" y="13.3793" width="16" height="3.51724" rx="1" stroke="#40E0D0" stroke-width="2" stroke-linejoin="round"/>
@@ -106,9 +106,9 @@
                 </form>
                  <form action="" class="rerect n1">
                     <p style="width: 400px;">Субъект РФ:
-                        <input style="width: 280px;" id="regionRF" type="text" readonly>
-<!--                        <select class="mandatory" name="regionRF" id="regionRF">-->
-<!--                        </select>-->
+<!--                        <input style="width: 280px;" id="regionRF" type="text" readonly>-->
+                        <select class="mandatory" name="regionRF" id="regionRF">
+                        </select>
                     </p>
                     <p>Лесничество: <select class="mandatory" name="les" id="lesName">
                     </select></p>
@@ -141,8 +141,33 @@
                     <p>Вывод по результатам обследования</p>
                     <textarea name="" id="results_surtvey" cols="30" rows="10"></textarea>
                     <p>Рекомендации</p>
-                    <textarea  name="" id="recommendation" cols="30" rows="10"></textarea>
+                    <select name="recommendation" id="recommendation" style="width: 550px;">
+                        <option value="Отсутствует">Отсутствует</option>
+                        <option value="Актуализация данных государственного лесного реестра">
+                            Актуализация данных государственного лесного реестра</option>
+                        <option value="Проведение ухода за лесами (осветление)">
+                            Проведение ухода за лесами (осветление) </option>
+                        <option value="Проведение ухода за лесами (прочистка)">
+                            Проведение ухода за лесами (прочистка)</option>
+                        <option value="Внесение критериев и требований к молоднякам, площади которых подлежат отнесению
+                        к землям, на которых расположены леса, в лесохозяйственный регламент лесничества ">
+                            внесение критериев и требований к молоднякам, площади которых подлежат отнесению к землям,
+                            на которых расположены леса, в лесохозяйственный регламент лесничества </option>
+                    </select>
+<!--                    <textarea  name="" id="recommendation" cols="30" rows="10"></textarea>-->
                 </form>
+            </div>
+        </div>
+        <div id="m1" class="modal-all" >
+            <div id="m1i" class="modal">
+              Сохранение прошло успешно
+              <svg fill="#000000" width="64px" height="64px" viewBox="0 0 24 24" id="check-mark-circle"
+              xmlns="http://www.w3.org/2000/svg" class="icon line"><g id="SVGRepo_bgCarrier"
+              stroke-width="0"></g>
+              <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+              <g id="SVGRepo_iconCarrier"><path id="primary"
+                d="M12,21h0a9,9,0,0,1-9-9H3a9,9,0,0,1,9-9h0a9,9,0,0,1,9,9h0A9,9,0,0,1,12,21ZM8,11.5l3,3,5-5"
+                style="fill: none; stroke: #FFFFFF; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.5;"></path></g></svg>
             </div>
         </div>
 </body>

@@ -12,7 +12,26 @@ async function openPage() {
     //APP.quarter = allForestData.quarter;
 
     APP.documentData = await StatementRecalculationsBusinessDetail.getStatementRecalculationsDetailDataById(idDocument);
-    APP.subjects = await CommonBusiness.getAllSubjectrf();
+    //APP.subjects = await CommonBusiness.getAllSubjectrf();
+
+    var czl = await CommonBusiness.getCZL();
+    APP.subjects = [];
+
+    var item_subject = {
+        id: czl.id_main_subject,
+        name_subject_RF: czl.name_main_subject
+    }
+    APP.subjects.push(item_subject);
+
+    for(var i = 0; i < czl.slave_subject.length; i++) {
+        var item_subject = {
+            id: czl.slave_subject[i].id_subject,
+            name_subject_RF: czl.slave_subject[i].name_slave_subject
+        }
+
+        APP.subjects.push(item_subject);
+    }
+
     APP.sampleList = await StatementRecalculationsBusinessDetail.getSampleByIdListRegion(idDocument);
 
     APP.sortOrderTable1 = 0;
@@ -128,15 +147,15 @@ async function setSubjectsRF() {
     let newHtml = "";
 
     for(let i = 0; i < APP.subjects.length; i++) {
-          if(APP.subjects[i].id == APP.documentData.id_subject_rf) {
-            subjectStatementNode.value = APP.subjects[i].name_subject_RF;
-            break;
-          }
-//        if(APP.subjects[i].id == APP.documentData.id_subject_rf) {
-//            newHtml += '<option selected value="' + APP.subjects[i].id + '">' + APP.subjects[i].name_subject_RF + '</option>';
-//        } else {
-//            newHtml += '<option value="' + APP.subjects[i].id + '">' + APP.subjects[i].name_subject_RF + '</option>';
-//        }
+//          if(APP.subjects[i].id == APP.documentData.id_subject_rf) {
+//            subjectStatementNode.value = APP.subjects[i].name_subject_RF;
+//            break;
+//          }
+        if(APP.subjects[i].id == APP.documentData.id_subject_rf) {
+            newHtml += '<option selected value="' + APP.subjects[i].id + '">' + APP.subjects[i].name_subject_RF + '</option>';
+        } else {
+            newHtml += '<option value="' + APP.subjects[i].id + '">' + APP.subjects[i].name_subject_RF + '</option>';
+        }
     }
 
     subjectStatementNode.innerHTML = newHtml;
@@ -145,7 +164,7 @@ async function setSubjectsRF() {
 }
 
 async function setForestly() {
-    let idSubject = APP.documentData.id_subject_rf;//document.querySelector("#subjectStatement").value;
+    let idSubject = document.querySelector("#subjectStatement").value;
     APP.forestly = await CommonBusiness.getForestlyByIdSubjectrf(idSubject);
 
     let newHtml = "";
@@ -240,5 +259,25 @@ async function saveData() {
 
     await StatementRecalculationsBusinessDetail.getUpdateSample(id, data);
 
+    ShowModal('m1');
+}
+
+function ShowModal(elId) {
+    var modalAll = document.getElementById(elId);
+    modalAll.style.display = "flex";
+    document.body.style.overflow = 'hidden'
+
+    setTimeout(function() {
+      HideModal(modalAll);
+    }, 1500);
+}
+
+function HideModal(ell) {
+    if (ell.classList.contains('modal-all')) {
+      ell.style.display = "none";
+    }
+    document.body.style.overflow = '';
+
+    let id = document.querySelector("#idDocument").value;
     getStatementRecalculationsDetail(id);
 }

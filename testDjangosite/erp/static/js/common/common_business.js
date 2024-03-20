@@ -67,6 +67,17 @@ CommonBusiness.getQuarterByIdDistrictForestly = async function(id) {
     return requestData.data.data;
 }
 
+CommonBusiness.getForestlyByArrayIdSubjectrf = async function(data) {
+
+    var requestData = await axios({
+        method: 'post',
+        data: data,
+        url: urlGlobal + "/byarray/getforestlybysubject",
+        responseType: 'json'
+    });
+
+    return requestData.data.data;
+}
 
 CommonBusiness.getDistrictForestlyByArrayIdForestly = async function(data) {
 
@@ -148,6 +159,22 @@ CommonBusiness.getUserData = async function() {
     });
 
     return requestData.data.data;
+}
+
+CommonBusiness.getCZL = async function() {
+
+    var token = document.cookie.match(/jwttoken=(.+?)(;|$)/)[1];
+
+    var requestData = await axios({
+        method: 'get',
+        url: urlGlobal + "/getczl",
+        responseType: 'json',
+        headers: {
+            'Authorization': 'Bearer ' + token
+        }
+    });
+
+    return requestData.data;
 }
 
 

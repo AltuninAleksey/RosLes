@@ -142,13 +142,32 @@ async function openPage() {
 
     APP.userData = await CommonBusiness.getUserData();
 
-    APP.subjectrf = await CommonBusiness.getAllSubjectrf();
-    APP.subjectrf = APP.subjectrf.sort(function(a, b) { return a.name_subject_RF > b.name_subject_RF? 1 : -1; });
+    //APP.subjectrf = await CommonBusiness.getAllSubjectrf();
+    //APP.subjectrf = APP.subjectrf.sort(function(a, b) { return a.name_subject_RF > b.name_subject_RF? 1 : -1; });
 
     //APP.subjectrf = allForestData.subjectrf.sort(function(a, b) { return a.name_subject_RF > b.name_subject_RF? 1 : -1; });
     //APP.forestly = allForestData.forestly;
     //APP.district_forestly = allForestData.district_forestly;
     //APP.quarter = allForestData.quarter;
+
+    var czl = await CommonBusiness.getCZL();
+    APP.subjectrf = [];
+
+    var item_subject = {
+        id: czl.id_main_subject,
+        name_subject_RF: czl.name_main_subject
+    }
+    APP.subjectrf.push(item_subject);
+
+    for(var i = 0; i < czl.slave_subject.length; i++) {
+        var item_subject = {
+            id: czl.slave_subject[i].id_subject,
+            name_subject_RF: czl.slave_subject[i].name_slave_subject
+        }
+
+        APP.subjectrf.push(item_subject);
+    }
+
 
     APP.documentData = await PrintFieldCardBusiness.getPrintFieldCardDataById(idDocument);
 
@@ -460,7 +479,28 @@ async function saveFieldCard() {
 
     await PrintFieldCardBusiness.getUpdatePoint7Table(point7Date);
 
-    getPrintFieldCard(idDocument, idParent)
+    ShowModal('m1');
+}
+
+function ShowModal(elId) {
+    var modalAll = document.getElementById(elId);
+    modalAll.style.display = "flex";
+    document.body.style.overflow = 'hidden'
+
+    setTimeout(function() {
+      HideModal(modalAll);
+    }, 1500);
+}
+
+function HideModal(ell) {
+    if (ell.classList.contains('modal-all')) {
+      ell.style.display = "none";
+    }
+    document.body.style.overflow = '';
+
+    let idDocument = document.getElementById("idDocument").value;
+    let idParent = document.getElementById("idParent").value;
+    getPrintFieldCard(idDocument, idParent);
 }
 
 async function generateDocx() {
@@ -518,7 +558,7 @@ async function generateDocx() {
     var data = {
         id: Number(document.getElementById("idDocument").value),
         number_region: document.getElementById("number_region").value,
-        subject_rf: CommonFunction.getSubjectNameByQuarterId(APP.subjectrf, APP.documentData.id_subject_rf), //document.getElementById("regionRF").value),
+        subject_rf: CommonFunction.getSubjectNameByQuarterId(APP.subjectrf, document.getElementById("regionRF").value),
         forestly: CommonFunction.getForestlyNameByQuarterId(APP.forestly, document.getElementById("lesName").value),
         district_forestly: CommonFunction.getDistrictForestlyNameByQuarterId(APP.district_forestly, document.getElementById("ucLesName").value),
         name_quarter: document.getElementById("quarter").value,
@@ -573,7 +613,6 @@ async function generateDocx() {
     urlFile = urlGlobal + urlFile;
 
     window.open(urlFile, '_blank').focus();
-
 }
 
 function checkData(data) {

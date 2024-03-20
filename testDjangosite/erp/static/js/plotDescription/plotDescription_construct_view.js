@@ -46,14 +46,32 @@ async function openPage() {
 
     //var allForestData = await CommonBusiness.getAllForest();
 
-    APP.subjectrf = await CommonBusiness.getAllSubjectrf();
-    APP.subjectrf = APP.subjectrf.sort(function(a, b) { return a.name_subject_RF > b.name_subject_RF? 1 : -1; });
+    //APP.subjectrf = await CommonBusiness.getAllSubjectrf();
+    //APP.subjectrf = APP.subjectrf.sort(function(a, b) { return a.name_subject_RF > b.name_subject_RF? 1 : -1; });
 
 
     //APP.subjectrf = allForestData.subjectrf.sort(function(a, b) { return a.name_subject_RF > b.name_subject_RF? 1 : -1; });
     //APP.forestly = allForestData.forestly;
     //APP.district_forestly = allForestData.district_forestly;
     //APP.quarter = allForestData.quarter;
+
+    var czl = await CommonBusiness.getCZL();
+    APP.subjectrf = [];
+
+    var item_subject = {
+        id: czl.id_main_subject,
+        name_subject_RF: czl.name_main_subject
+    }
+    APP.subjectrf.push(item_subject);
+
+    for(var i = 0; i < czl.slave_subject.length; i++) {
+        var item_subject = {
+            id: czl.slave_subject[i].id_subject,
+            name_subject_RF: czl.slave_subject[i].name_slave_subject
+        }
+
+        APP.subjectrf.push(item_subject);
+    }
 
     APP.documentData = await PlotDescriptionBusiness.getPlotDescriptionDataById(idDocument);
 
@@ -104,21 +122,21 @@ async function setDataInHeader() {
 
 function drawSelectSubjectRF() {
     var regions = document.getElementById("regionRF");
-    //var newHtml = "";
+    var newHtml = "";
 
     for(var i = 0; i < APP.subjectrf.length; i++) {
-          if(APP.subjectrf[i].id == APP.documentData.id_subject_rf) {
-            regions.value = APP.subjectrf[i].name_subject_RF;
-            break;
-          }
+//          if(APP.subjectrf[i].id == APP.documentData.id_subject_rf) {
+//            regions.value = APP.subjectrf[i].name_subject_RF;
+//            break;
+//          }
 
-//        if(APP.subjectrf[i].id == APP.documentData.id_subject_rf) {
-//            newHtml = newHtml + "<option selected value=\"" + APP.subjectrf[i].id + "\">" + APP.subjectrf[i].name_subject_RF + "</option>";
-//        } else {
-//            newHtml = newHtml + "<option value=\"" + APP.subjectrf[i].id + "\">" + APP.subjectrf[i].name_subject_RF + "</option>";
-//        }
+        if(APP.subjectrf[i].id == APP.documentData.id_subject_rf) {
+            newHtml = newHtml + "<option selected value=\"" + APP.subjectrf[i].id + "\">" + APP.subjectrf[i].name_subject_RF + "</option>";
+        } else {
+            newHtml = newHtml + "<option value=\"" + APP.subjectrf[i].id + "\">" + APP.subjectrf[i].name_subject_RF + "</option>";
+        }
     }
-    //regions.innerHTML = newHtml;
+    regions.innerHTML = newHtml;
 }
 
 function drawSelectForestly() {
@@ -209,7 +227,7 @@ async function saveData() {
     let ucLesName = document.getElementById("ucLesName").value;
     let lesName = document.getElementById("lesName").value;
     let quarter = document.getElementById("quarter").value;
-    let regions = APP.documentData.id_subject_rf;//document.getElementById("regionRF").value;
+    let regions = document.getElementById("regionRF").value;
 
     let data = {
         id: APP.documentData.id,
@@ -221,12 +239,13 @@ async function saveData() {
         sample_region: sample_region,
         soil_lot: soil_lot,
         id_subject_rf: regions,
-        dacha: document.getElementById("dacha").value,
+        dacha: document.getElementById("dacha").value == "" ? null : document.getElementById("dacha").value,
         name_quarter: document.getElementById("quarter").value,
         count_plants: APP.documentData.count_plants,
         id_schema_mixing_breeds: APP.documentData.id_schema_mixing_breeds,
         preservation_breed: APP.documentData.preservation_breed,
-        number_region: number_region
+        number_region: number_region,
+        gps: []
     };
 
     if(year_assignment_land != null && year_assignment_land != undefined && year_assignment_land != "") {
@@ -314,6 +333,27 @@ async function saveData() {
 
     await PlotDescriptionBusiness.setPlotDescriptionDataById(idDocument, data);
 
+    ShowModal('m1');
+}
+
+function ShowModal(elId) {
+    var modalAll = document.getElementById(elId);
+    modalAll.style.display = "flex";
+    document.body.style.overflow = 'hidden'
+
+    setTimeout(function() {
+      HideModal(modalAll);
+    }, 1500);
+}
+
+function HideModal(ell) {
+    if (ell.classList.contains('modal-all')) {
+      ell.style.display = "none";
+    }
+    document.body.style.overflow = '';
+
+    let idDocument = document.getElementById("idDocument").value;
+    let idParent = document.getElementById("idParent").value;
     getPlotDescription(idDocument, idParent);
 }
 
@@ -325,7 +365,7 @@ async function generateDocx() {
         name_quarter: document.getElementById("quarter").value,
         district_forestly: document.getElementById("ucLesName").options[document.getElementById("ucLesName").selectedIndex].text,
         forestly: document.getElementById("lesName").options[document.getElementById("lesName").selectedIndex].text,
-        id_subject_rf: document.getElementById("regionRF").value, //.options[document.getElementById("regionRF").selectedIndex].text,
+        id_subject_rf: CommonFunction.getSubjectNameByQuarterId(APP.subjectrf, document.getElementById("regionRF").value),
         soil_lot: document.getElementById("soil_lot").value,
         sample_region: document.getElementById("sample_region").value,
         date: APP.documentData.date,

@@ -150,13 +150,32 @@ async function openPage() {
 
     APP.userData = await CommonBusiness.getUserData();
 
-    APP.subjectrf = await CommonBusiness.getAllSubjectrf();
-    APP.subjectrf = APP.subjectrf.sort(function(a, b) { return a.name_subject_RF > b.name_subject_RF? 1 : -1; });
+    //APP.subjectrf = await CommonBusiness.getAllSubjectrf();
+    //APP.subjectrf = APP.subjectrf.sort(function(a, b) { return a.name_subject_RF > b.name_subject_RF? 1 : -1; });
 
     //APP.subjectrf = allForestData.subjectrf.sort(function(a, b) { return a.name_subject_RF > b.name_subject_RF? 1 : -1; });
     //APP.forestly = allForestData.forestly;
     //APP.district_forestly = allForestData.district_forestly;
     //APP.quarter = allForestData.quarter;
+
+    var czl = await CommonBusiness.getCZL();
+    APP.subjectrf = [];
+
+    var item_subject = {
+        id: czl.id_main_subject,
+        name_subject_RF: czl.name_main_subject
+    }
+    APP.subjectrf.push(item_subject);
+
+    for(var i = 0; i < czl.slave_subject.length; i++) {
+        var item_subject = {
+            id: czl.slave_subject[i].id_subject,
+            name_subject_RF: czl.slave_subject[i].name_slave_subject
+        }
+
+        APP.subjectrf.push(item_subject);
+    }
+
 
     APP.documentData = {};
 
@@ -191,7 +210,6 @@ async function setConclusion() {
     document.getElementById("point7agreed2").value = "";
     document.getElementById("number_order").value = "188";
     document.getElementById("plot_farm_referring_land").value = "";
-    document.getElementById("recomendation").value = "";
     document.getElementById("plot_features").value = "";
     document.getElementById("site_survey").value = "";
     document.getElementById("in_front").value = "";
@@ -432,8 +450,29 @@ async function saveFieldCard() {
 
     await PrintFieldCardBusiness.getUpdatePoint7Table(point7Date);
 
+    ShowModal('m1');
+}
+
+function ShowModal(elId) {
+    var modalAll = document.getElementById(elId);
+    modalAll.style.display = "flex";
+    document.body.style.overflow = 'hidden'
+
+    setTimeout(function() {
+      HideModal(modalAll);
+    }, 1500);
+}
+
+function HideModal(ell) {
+    if (ell.classList.contains('modal-all')) {
+      ell.style.display = "none";
+    }
+    document.body.style.overflow = '';
+
     getFieldCard();
 }
+
+
 
 function checkData(data) {
     return  data != undefined && data != null && data != "";

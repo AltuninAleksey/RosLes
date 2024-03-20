@@ -35,7 +35,7 @@
                         </svg>
                     <a><h3>Полевые карточки</h3></a>
                 </div>
-                <div class="point cursorPointer" onclick="getGeneralDoc()">
+                <div style="display: none;" class="point cursorPointer" onclick="getGeneralDoc()">
                     <svg width="24" height="22" viewBox="0 0 24 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <rect x="4" y="5.10345" width="16" height="3.51724" rx="1" stroke="#40E0D0" stroke-width="2" stroke-linejoin="round"/>
                         <rect x="4" y="13.3793" width="16" height="3.51724" rx="1" stroke="#40E0D0" stroke-width="2" stroke-linejoin="round"/>
@@ -86,7 +86,7 @@
     </div>
 
     <form id="form_filter" action="" class="form">
-        <p style="display: none">Субьект РФ: <input type="checkbox" id="checkbox_filter_subject_rf" name="scales">
+        <p >Субьект РФ: <input type="checkbox" id="checkbox_filter_subject_rf" name="scales">
             <label for="filter_subject_rf">
                 <select disabled name="sub" id="filter_subject_rf" style="width: 300px">
                     <option hidden disabled selected value=""></option>
@@ -97,7 +97,7 @@
 
         <p>Лесничество: <input type="checkbox" id="checkbox_filter_forestly" name="scales">
             <label for="filter_forestly">
-                <select disabled name="sub" id="filter_forestly" style="width: 330px">
+                <select disabled name="sub" id="filter_forestly" style="width: 230px">
                     <option hidden disabled selected value=""></option>
                 </select>
             </label>
@@ -111,7 +111,7 @@
 
         <p>Участкове лесничество: <input type="checkbox" id="checkbox_filter_district_forestly" name="scales">
             <label for="filter_district_forestly">
-                <select disabled name="sub" id="filter_district_forestly" style="width: 280px">
+                <select disabled name="sub" id="filter_district_forestly" style="width: 230px">
                     <option hidden disabled selected value=""></option>
                 </select>
             </label>

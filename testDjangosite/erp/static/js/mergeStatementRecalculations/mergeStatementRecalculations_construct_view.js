@@ -3,13 +3,71 @@ buildStatementRecalculationsTbody();
 setEventForButtons();
 
 async function buildStatementRecalculationsTbody() {
-    var data = await MergeStatementRecalculationsBusiness.getAllStatementList();
+    var dataResponse = await MergeStatementRecalculationsBusiness.getAllStatementList();
+    var data = [];
+    for(var i = 0; i < dataResponse.length; i++) {
+        for(var j = 0; j < dataResponse[i].length; j++) {
+            data.push(dataResponse[i][j]);
+        }
+    }
+
     //var allForestData = await CommonBusiness.getAllForest();
 
     APP.userData = await CommonBusiness.getUserData();
 
-    APP.subjectrf = await CommonBusiness.getAllSubjectrf();
-    APP.forestly =  await CommonBusiness.getForestlyByIdSubjectrf(Number(APP.userData.id_subject_rf)); //allForestData.forestly;
+    //APP.subjectrf = await CommonBusiness.getAllSubjectrf();
+    //APP.forestly =  await CommonBusiness.getForestlyByIdSubjectrf(Number(APP.userData.id_subject_rf)); //allForestData.forestly;
+
+    var czl = await CommonBusiness.getCZL();
+    APP.subjectrf = [];
+    var arrayIdSubject = [];
+
+    arrayIdSubject.push({
+        "id": czl.id_main_subject
+    })
+    var item_subject = {
+        id: czl.id_main_subject,
+        name_subject_RF: czl.name_main_subject
+    }
+    APP.subjectrf.push(item_subject);
+
+    for(var i = 0; i < czl.slave_subject.length; i++) {
+        var item_subject = {
+            id: czl.slave_subject[i].id_subject,
+            name_subject_RF: czl.slave_subject[i].name_slave_subject
+        }
+
+        arrayIdSubject.push({
+            "id": Number(czl.slave_subject[i].id_subject)
+        })
+
+        APP.subjectrf.push(item_subject);
+    }
+
+    var dataForForestlyByArrayIdSubjectrf = {
+        "data": arrayIdSubject
+    };
+
+    if(APP.userData.id_subject_rf == '183' || APP.userData.id_subject_rf == '27') {
+        dataForForestlyByArrayIdSubjectrf = {
+            "data": [{
+                "id": 183
+            },
+            {
+                "id": 27
+            }]
+        };
+    }
+
+    var buffer_forestly = await CommonBusiness.getForestlyByArrayIdSubjectrf(dataForForestlyByArrayIdSubjectrf);
+    APP.forestly = [];
+
+    for(var i = 0; i < buffer_forestly.length; i++) {
+        for(var j = 0; j < buffer_forestly[i].forestly_data.length; j++) {
+            APP.forestly.push(buffer_forestly[i].forestly_data[j]);
+        }
+    }
+
 
     APP.district_forestly = [];
     var arrayIdForestly = [];
@@ -140,21 +198,21 @@ async function setEventForElementsFilter() {
 
     await setOptionInSubject();
 
-//    document
-//        .querySelector("#checkbox_filter_subject_rf")
-//        .addEventListener('click', async (e)=>{
-//            let subjectNode = document.querySelector("#filter_subject_rf");
-//            if(e.target.checked) {
-//                subjectNode.removeAttribute("disabled")
-//                subjectNode.addEventListener('change', async (e)=>{
-//                    await setOptionInForestly(MergeStatementRecalculationsBusiness.TypeData.BYID);
-//                });
-//                await setOptionInForestly(MergeStatementRecalculationsBusiness.TypeData.BYID);
-//            } else {
-//                subjectNode.setAttribute("disabled", "on");
-//                await setOptionInForestly(MergeStatementRecalculationsBusiness.TypeData.ALL);
-//            }
-//        });
+    document
+        .querySelector("#checkbox_filter_subject_rf")
+        .addEventListener('click', async (e)=>{
+            let subjectNode = document.querySelector("#filter_subject_rf");
+            if(e.target.checked) {
+                subjectNode.removeAttribute("disabled")
+                subjectNode.addEventListener('change', async (e)=>{
+                    await setOptionInForestly(MergeStatementRecalculationsBusiness.TypeData.BYID);
+                });
+                await setOptionInForestly(MergeStatementRecalculationsBusiness.TypeData.BYID);
+            } else {
+                subjectNode.setAttribute("disabled", "on");
+                await setOptionInForestly(MergeStatementRecalculationsBusiness.TypeData.ALL);
+            }
+        });
 
     await setOptionInForestly(MergeStatementRecalculationsBusiness.TypeData.ALL);
 
@@ -259,16 +317,16 @@ async function setEventForElementsFilter() {
 }
 
 async function setOptionInSubject() {
-    let subjects = await CommonBusiness.getAllSubjectrf();
+    //let subjects = await CommonBusiness.getAllSubjectrf();
     let subjectNode = document.querySelector("#filter_subject_rf");
 
     let newHtml = "";
 
-    for(var i = 0; i < subjects.length; i++) {
+    for(var i = 0; i < APP.subjectrf.length; i++) {
         if(i == 0) {
-            newHtml = newHtml + "<option selected value=\"" + subjects[i].id + "\">" + subjects[i].name_subject_RF + "</option>";
+            newHtml = newHtml + "<option selected value=\"" + APP.subjectrf[i].id + "\">" + APP.subjectrf[i].name_subject_RF + "</option>";
         } else {
-            newHtml = newHtml + "<option value=\"" + subjects[i].id + "\">" + subjects[i].name_subject_RF + "</option>";
+            newHtml = newHtml + "<option value=\"" + APP.subjectrf[i].id + "\">" + APP.subjectrf[i].name_subject_RF + "</option>";
         }
     }
 
@@ -360,8 +418,8 @@ async function setOptionInQuarter(status) {
 
 async function searchByFilter() {
 
-    //let checkboxFilterSubjectRFNode = document.querySelector("#checkbox_filter_subject_rf");
-    //let subjectRFNode = document.querySelector("#filter_subject_rf");
+    let checkboxFilterSubjectRFNode = document.querySelector("#checkbox_filter_subject_rf");
+    let subjectRFNode = document.querySelector("#filter_subject_rf");
     let checkboxFilterForestlyNode = document.querySelector("#checkbox_filter_forestly");
     let forestlyNode = document.querySelector("#filter_forestly");
     let checkboxFilterDistrictForestlyNode = document.querySelector("#checkbox_filter_district_forestly");
@@ -377,20 +435,20 @@ async function searchByFilter() {
 
     let data;
 
-    if(checkboxFilterForestlyNode.checked
-    || checkboxFilterDistrictForestlyNode.checked || checkboxFilterQuartalNode.checked
+    if(checkboxFilterSubjectRFNode.checked || checkboxFilterForestlyNode.checked
+    || checkboxFilterDistrictForestlyNode.checked //|| checkboxFilterQuartalNode.checked
     || checkboxFilterDateStartNode.checked || checkboxFilterDateEnd.checked
     || checkboxFilterSoilLot.checked) {
 
         let responseData = {
-            bSubjectrf: true,
-            idSubjectrf: Number(APP.userData.id_subject_rf),
+            bSubjectrf: checkboxFilterSubjectRFNode.checked,
+            idSubjectrf: Number(subjectRFNode.value),
             bForestly: checkboxFilterForestlyNode.checked,
             idForestly: forestlyNode.value,
             bDistrictForestly: checkboxFilterDistrictForestlyNode.checked,
             idDistrictForestly: districtForestlyNode.value,
-            bQuarter: checkboxFilterQuartalNode.checked,
-            idQuarter: quartalNode.value,
+//            bQuarter: checkboxFilterQuartalNode.checked,
+//            idQuarter: quartalNode.value,
             bDate: checkboxFilterDateStartNode.checked,
             date: dateStartNode.value,
             bDateSec: checkboxFilterDateEnd.checked,
@@ -403,7 +461,16 @@ async function searchByFilter() {
         APP.dataTable = await MergeStatementRecalculationsBusiness.getCreateRecalculationDetailData(responseData);
     } else {
 
-        APP.dataTable = await MergeStatementRecalculationsBusiness.getAllStatementList();
+        var dataResponse = await MergeStatementRecalculationsBusiness.getAllStatementList();
+        var data2 = [];
+        for(var i = 0; i < dataResponse.length; i++) {
+            for(var j = 0; j < dataResponse[i].length; j++) {
+                data2.push(dataResponse[i][j]);
+            }
+        }
+
+        APP.dataTable = data2;
+
     }
 
 

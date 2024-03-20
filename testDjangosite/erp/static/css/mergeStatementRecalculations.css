@@ -76,7 +76,7 @@ h3{
 }
 .form{
     display: grid;
-    grid-template-columns: 490px 300px 290px ;
+    grid-template-columns: 430px 430px 290px ;
     grid-template-rows: repeat(2, 50px);
     position: absolute;
     margin-top: 10px;

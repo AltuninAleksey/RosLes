@@ -5,20 +5,21 @@ async function setDataInHeader() {
 
 function drawSelectSubjectRF() {
     var regions = document.getElementById("regionRF");
-    //var newHtml = "";
+    var newHtml = "";
 
     for(var i = 0; i < APP.subjectrf.length; i++) {
-        if(APP.subjectrf[i].id == APP.documentData.id_subject_rf) {
-            regions.value = APP.subjectrf[i].name_subject_RF;
-            break;
-        }
 //        if(APP.subjectrf[i].id == APP.documentData.id_subject_rf) {
-//            newHtml = newHtml + "<option selected value=\"" + APP.subjectrf[i].id + "\">" + APP.subjectrf[i].name_subject_RF + "</option>";
-//        } else {
-//            newHtml = newHtml + "<option value=\"" + APP.subjectrf[i].id + "\">" + APP.subjectrf[i].name_subject_RF + "</option>";
+//            regions.value = APP.subjectrf[i].name_subject_RF;
+//            break;
 //        }
+
+        if(APP.subjectrf[i].id == APP.documentData.id_subject_rf) {
+            newHtml = newHtml + "<option selected value=\"" + APP.subjectrf[i].id + "\">" + APP.subjectrf[i].name_subject_RF + "</option>";
+        } else {
+            newHtml = newHtml + "<option value=\"" + APP.subjectrf[i].id + "\">" + APP.subjectrf[i].name_subject_RF + "</option>";
+        }
     }
-    //regions.innerHTML = newHtml;
+    regions.innerHTML = newHtml;
 }
 
 function drawSelectForestly() {

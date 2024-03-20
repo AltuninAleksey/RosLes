@@ -30,14 +30,34 @@ async function openPage() {
 
     APP.userData = await CommonBusiness.getUserData();
 
-    APP.subjectrf = await CommonBusiness.getAllSubjectrf();
-    APP.subjectrf = APP.subjectrf.sort(function(a, b) { return a.name_subject_RF > b.name_subject_RF? 1 : -1; });
+    //APP.subjectrf = await CommonBusiness.getAllSubjectrf();
+    //APP.subjectrf = APP.subjectrf.sort(function(a, b) { return a.name_subject_RF > b.name_subject_RF? 1 : -1; });
 
 
     //APP.subjectrf = allForestData.subjectrf.sort(function(a, b) { return a.name_subject_RF > b.name_subject_RF? 1 : -1; });
     //APP.forestly = allForestData.forestly;
     //APP.district_forestly = allForestData.district_forestly;
     //APP.quarter = allForestData.quarter;
+
+    var czl = await CommonBusiness.getCZL();
+    APP.subjectrf = [];
+
+    var item_subject = {
+        id: czl.id_main_subject,
+        name_subject_RF: czl.name_main_subject
+    }
+    APP.subjectrf.push(item_subject);
+
+    for(var i = 0; i < czl.slave_subject.length; i++) {
+        var item_subject = {
+            id: czl.slave_subject[i].id_subject,
+            name_subject_RF: czl.slave_subject[i].name_slave_subject
+        }
+
+        APP.subjectrf.push(item_subject);
+    }
+
+
 
     APP.documentData = {}
 
@@ -65,21 +85,21 @@ async function setDataInPage() {
 async function setDataInHeader() {
     drawSelectSubjectRF();
     var regions = document.getElementById("regionRF");
-    changeDataSelectForestly(Number(APP.userData.id_subject_rf));//regions.value);
+    changeDataSelectForestly(regions.value);
 }
 
 function drawSelectSubjectRF() {
     var regions = document.getElementById("regionRF");
-    //var newHtml = "";
+    var newHtml = "";
 
     for(var i = 0; i < APP.subjectrf.length; i++) {
-        if(APP.subjectrf[i].id == Number(APP.userData.id_subject_rf)) {
-            regions.value = APP.subjectrf[i].name_subject_RF;
-            break;
-        }
-        //newHtml = newHtml + "<option value=\"" + APP.subjectrf[i].id + "\">" + APP.subjectrf[i].name_subject_RF + "</option>";
+//        if(APP.subjectrf[i].id == Number(APP.userData.id_subject_rf)) {
+//            regions.value = APP.subjectrf[i].name_subject_RF;
+//            break;
+//        }
+        newHtml = newHtml + "<option value=\"" + APP.subjectrf[i].id + "\">" + APP.subjectrf[i].name_subject_RF + "</option>";
     }
-    //regions.innerHTML = newHtml;
+    regions.innerHTML = newHtml;
 }
 
 function drawSelectForestly() {
@@ -102,13 +122,13 @@ function drawSelectDistrictForestly() {
     ucLesName.innerHTML = newHtml;
 }
 
-function drawSelectQuarter() {
-    var newHtml = "";
-    for(var j = 0; j < APP.quarter.length; j++) {
-        newHtml = newHtml + "<option value=\"" + APP.quarter[j].id + "\">" + APP.quarter[j].quarter_name + "</option>";
-    }
-    document.getElementById("quarter").innerHTML = newHtml;
-}
+//function drawSelectQuarter() {
+//    var newHtml = "";
+//    for(var j = 0; j < APP.quarter.length; j++) {
+//        newHtml = newHtml + "<option value=\"" + APP.quarter[j].id + "\">" + APP.quarter[j].quarter_name + "</option>";
+//    }
+//    document.getElementById("quarter").innerHTML = newHtml;
+//}
 
 async function changeDataSelectForestly(id) {
     APP.forestly = await getForestlyByIdSubjectrf(id);
@@ -136,7 +156,7 @@ async function changeDataSelectQuarter(id) {
     } else {
         APP.quarter = [];
     }
-    drawSelectQuarter();
+    //drawSelectQuarter();
 }
 
 async function saveData() {
@@ -267,6 +287,25 @@ async function saveData() {
     }
 
     await NewPlotDescriptionBusiness.createPlotDescription(data);
+
+    ShowModal('m1');
+}
+
+function ShowModal(elId) {
+    var modalAll = document.getElementById(elId);
+    modalAll.style.display = "flex";
+    document.body.style.overflow = 'hidden'
+
+    setTimeout(function() {
+      HideModal(modalAll);
+    }, 1500);
+}
+
+function HideModal(ell) {
+    if (ell.classList.contains('modal-all')) {
+      ell.style.display = "none";
+    }
+    document.body.style.overflow = '';
 
     getDescriptionListLand();
 }

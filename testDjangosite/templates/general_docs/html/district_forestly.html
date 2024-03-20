@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Участковое лесничество</title>
     <link rel="stylesheet" href="{% static 'css/styleSubjectRF.css' %}">
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="{% static 'js/sortOne.js' %}" defer></script>
     {% endblock %}
     {% block body %}
         {% block container %}
@@ -14,10 +16,13 @@
                     <div class="content">
                         <h1 id="h1">Участковое лесничество</h1>
                         {% block table %}
-                        <table>
-                            <th>Участковое лесничество</th>
-                            <th>Лесничество</th>
-                            <th>Субъект РФ</th>
+                        <table id="myTable">
+                            <thead>
+                                <th>Участковое лесничество</th>
+                                <th>Лесничество</th>
+                                <th>Субъект РФ</th>
+                            </thead>
+                            <tbody>
                             {% for item in queryset %}
                             <tr>
                                 <td>{{item.name_district_forestly}}</td>
@@ -25,6 +30,7 @@
                                 <td>{{item.id_forestly.id_subject_rf }}</td>
                                 {% endfor %}
                             </tr>
+                            </tbody>
                         </table>
                         {% endblock table %}
                     </div>
