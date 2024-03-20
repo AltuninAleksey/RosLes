@@ -1884,6 +1884,7 @@ class GetCZLByProfile(ListAPIView):
     def get(self, request, *args, **kwargs):
         if kwargs:
             profile_data = ProfileSerializer(Profile.objects.get(id=kwargs['pk'])).data['id_subject_rf']
+            print(profile_data)
             # print(Profile.objects.filter(id=kwargs['pk']).values())
             # print(Users.objects.filter(id=39).values())
             if profile_data == '27' or profile_data == '183':
