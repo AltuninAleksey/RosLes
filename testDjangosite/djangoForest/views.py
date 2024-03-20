@@ -1844,13 +1844,31 @@ class GetCZL(ListAPIView):
     permission_classes = [IsAuthenticated, ]
 
     def get(self, request, *args, **kwargs):
-        profile_data = ProfileSerializer(Profile.objects.get(id_user = request.user.pk)).data['id_subject_rf']
-        czl_data_main = CZLSerializer(CZL.objects.get(Q(id_main_subject = profile_data) | Q(id_subject = profile_data)))
-        czl_objects = CZLSerializerWithOutMain(CZL.objects.filter(id_main_subject = czl_data_main.data['id_main_subject']), many=True)
-        return Response({"name_main_czl": czl_data_main.data['name_czl'],
-                         "id_main_subject": czl_data_main.data['id_main_subject'],
-                         "name_main_subject": czl_data_main.data['name_main_subject'],
+        import json
+        if request.user.subject_rf_id == 27:
+            czl_data_main = CZLSerializer(CZL.objects.get(id_main_subject = request.user.subject_rf_id))
+            # czl_filter = CZL.objects.filter(id_main_subject = 27)
+            # print(czl_filter)
+            czl_objects = CZLSerializerWithOutMain(CZL.objects.filter(id_subject__isnull = False), many = True)
+            czl_object_dict = [dict(item) for item in czl_objects.data]
+            # print(czl_object_dict)
+            data_null = CZLSerializerWithMain(CZL.objects.filter(~Q(id_main_subject = 27), id_subject__isnull=True), many = True).data
+            dict_null = [dict(item) for item in data_null]
+            new_list = czl_object_dict + dict_null
+            return Response({"name_main_czl": czl_data_main.data['name_czl'],
+                             "id_main_subject": czl_data_main.data['id_main_subject'],
+                             "name_main_subject": czl_data_main.data['name_main_subject'],
+                             "slave_subject": new_list})
+        else:
+            profile_data = ProfileSerializer(Profile.objects.get(id_user = request.user.pk)).data['id_subject_rf']
+            czl_data_main = CZLSerializer(CZL.objects.filter(Q(id_main_subject = profile_data) | Q(id_subject = profile_data)), many = True)
+            czl_main_id = czl_data_main.data[0].get("id_main_subject")
+            czl_objects = CZLSerializerWithOutMain(CZL.objects.filter(id_main_subject = czl_main_id), many=True)
+        return Response({"name_main_czl": czl_data_main.data[0]['name_czl'],
+                         "id_main_subject": czl_data_main.data[0]['id_main_subject'],
+                         "name_main_subject": czl_data_main.data[0]['name_main_subject'],
                          "slave_subject": czl_objects.data})
+        # return Response("asd")
 
 
 class CZLMobileView(ListAPIView):
@@ -1862,16 +1880,29 @@ class CZLMobileView(ListAPIView):
 class GetCZLByProfile(ListAPIView):
     def get(self, request, *args, **kwargs):
         if kwargs:
-            print(kwargs['pk'])
-            if not Profile.objects.filter(id=kwargs['pk']).exists():
-                return Response({"error": f"user with id {kwargs['pk']} not exists"})
-            profile_data = ProfileSerializer(Profile.objects.get(id_user=kwargs['pk'])).data['id_subject_rf']
-            czl_data_main = CZLSerializer(CZL.objects.get(Q(id_main_subject=profile_data) | Q(id_subject=profile_data)))
-            czl_objects = CZLSerializerWithOutMain(
-                CZL.objects.filter(id_main_subject=czl_data_main.data['id_main_subject']), many=True)
-            return Response({"name_main_czl": czl_data_main.data['name_czl'],
-                             "id_main_subject": czl_data_main.data['id_main_subject'],
-                             "name_main_subject": czl_data_main.data['name_main_subject'],
+            profile_data = ProfileSerializer(Profile.objects.get(id=kwargs['pk'])).data['id_subject_rf']
+            # print(Profile.objects.filter(id=kwargs['pk']).values())
+            # print(Users.objects.filter(id=39).values())
+            if profile_data == '27':
+                czl_data_main = CZLSerializer(CZL.objects.get(id_main_subject=kwargs['pk']))
+                czl_objects = CZLSerializerWithOutMain(CZL.objects.filter(id_subject__isnull=False), many=True)
+                czl_object_dict = [dict(item) for item in czl_objects.data]
+                data_null = CZLSerializerWithMain(CZL.objects.filter(~Q(id_main_subject = 27), id_subject__isnull=True), many=True).data
+                dict_null = [dict(item) for item in data_null]
+                new_list = czl_object_dict + dict_null
+                return Response({"name_main_czl": czl_data_main.data['name_czl'],
+                                 "id_main_subject": czl_data_main.data['id_main_subject'],
+                                 "name_main_subject": czl_data_main.data['name_main_subject'],
+                                 "slave_subject": new_list})
+            else:
+                profile_data = ProfileSerializer(Profile.objects.get(id=kwargs['pk'])).data['id_subject_rf']
+                czl_data_main = CZLSerializer(
+                    CZL.objects.filter(Q(id_main_subject=profile_data) | Q(id_subject=profile_data)), many=True)
+                czl_main_id = czl_data_main.data[0].get("id_main_subject")
+                czl_objects = CZLSerializerWithOutMain(CZL.objects.filter(id_main_subject=czl_main_id), many=True)
+            return Response({"name_main_czl": czl_data_main.data[0]['name_czl'],
+                             "id_main_subject": czl_data_main.data[0]['id_main_subject'],
+                             "name_main_subject": czl_data_main.data[0]['name_main_subject'],
                              "slave_subject": czl_objects.data})
         return Response({"error": "not found id"})
 

@@ -161,6 +161,12 @@ class GPSSerializer(serializers.ModelSerializer):
 #         instance.save()
 #         return instance
 
+# class CZLSerializerForMoscow(serializers.ModelSerializer):
+#
+
+class CZLSerializerWithMain(serializers.Serializer):
+    name_slave_subject = serializers.CharField(source='id_main_subject.name_subject_RF')
+    id_subject = serializers.CharField(source='id_main_subject.id')
 
 class CZLSerializerMobile(serializers.ModelSerializer):
 
@@ -179,7 +185,7 @@ class CZLSerializer(serializers.ModelSerializer):
 
 class CZLSerializerWithOutMain(serializers.ModelSerializer):
     name_slave_subject = serializers.CharField(source="id_subject.name_subject_RF", read_only=True)
-    id_subject = serializers.CharField(source='id_subject.id')
+    id_subject = serializers.CharField(source='id_subject.id', read_only = True, allow_null = True)
 
     class Meta:
         model = CZL
