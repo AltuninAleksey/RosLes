@@ -1894,10 +1894,8 @@ class GetCZLByProfile(ListAPIView):
         if kwargs:
             profile_data = ProfileSerializer(Profile.objects.get(id=kwargs['pk'])).data['id_subject_rf']
             print(profile_data)
-            # print(Profile.objects.filter(id=kwargs['pk']).values())
-            # print(Users.objects.filter(id=39).values())
             if profile_data == '27' or profile_data == '183':
-                czl_data_main = CZLSerializer(CZL.objects.get(id_main_subject=kwargs['pk']))
+                czl_data_main = CZLSerializer(CZL.objects.get(id_main_subject=int(profile_data)))
                 czl_objects = CZLSerializerWithOutMain(CZL.objects.filter(id_subject__isnull=False), many=True)
                 czl_object_dict = [dict(item) for item in czl_objects.data]
                 data_null = CZLSerializerWithMain(CZL.objects.filter(~Q(id_main_subject = int(profile_data)), id_subject__isnull=True), many=True).data
