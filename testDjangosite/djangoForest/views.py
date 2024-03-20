@@ -922,6 +922,7 @@ class GetAllListRegionData(viewsets.ViewSet):
                 id_district_forestly_id__id_forestly_id__id_subject_rf_id = subject_id).exists():
                 return Response({"data": []})
             lst = ListRegion.objects.filter(
+                ~Q(id_district_forestly__isnull=True),
                 id_district_forestly_id__id_forestly_id__id_subject_rf_id = subject_id)
             czl_data_main = CZLSerializer(CZL.objects.get(Q(id_main_subject=subject_id) | Q(id_subject=subject_id))).data
             czl_objects = CZL.objects.filter(id_main_subject = czl_data_main['id_main_subject']).values("id_subject", "id_main_subject")
