@@ -676,8 +676,8 @@ class GetAllListRegionDataSerializer(serializers.Serializer):
     name_quarter = serializers.CharField()
     dacha = serializers.CharField()
     id_district_forestly = serializers.IntegerField(source="id_district_forestly.id", allow_null = True)
-    id_forestly = serializers.IntegerField(source="id_district_forestly.id_forestly.id")
-    id_subject_rf = serializers.IntegerField(source="id_district_forestly.id_forestly.id_subject_rf.id")
+    id_forestly = serializers.IntegerField(source="id_district_forestly.id_forestly.id", allow_null = True)
+    id_subject_rf = serializers.IntegerField(source="id_district_forestly.id_forestly.id_subject_rf.id", allow_null = True)
     mark_del = serializers.BooleanField()
     soil_lot = serializers.CharField()
 
