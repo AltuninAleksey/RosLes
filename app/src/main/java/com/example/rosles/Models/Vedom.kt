@@ -7,5 +7,6 @@ data class Vedom(
     val soilLot: String,
     val date: String,
     val sampleRegion: String,
-    val idQuarterId: String
+    val idQuarterId: String,
+    val dacha:String
 ) : Modeldb

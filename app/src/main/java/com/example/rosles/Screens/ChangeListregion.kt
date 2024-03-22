@@ -33,6 +33,8 @@ class ChangeListregion: AppCompatActivity() {
         supportActionBar!!.setDisplayShowCustomEnabled(true)
         supportActionBar!!.setCustomView(R.layout.custom_action_bar)
 
+        binding.linearDacha.visibility=View.VISIBLE
+
         val view: View = supportActionBar!!.customView
         val title=view.findViewById<TextView>(R.id.text)
         val back=view.findViewById<ImageView>(R.id.back)
@@ -89,6 +91,7 @@ class ChangeListregion: AppCompatActivity() {
         binding.vudel.setText(vedom.soilLot)
         binding.samplearea.setText(vedom.sampleRegion)
         binding.date.text = vedom.date
+        binding.dacha.setText(vedom.dacha)
 
         binding.buttonAuto.setOnClickListener {
             db.UpdateLISTREGION(
@@ -96,7 +99,8 @@ class ChangeListregion: AppCompatActivity() {
                 binding.date.text.toString(),
                 binding.samplearea.text.toString(),
                 binding.idCvartal.text.toString().toInt(),
-                binding.vudel.text.toString()
+                binding.vudel.text.toString(),
+                binding.dacha.text.toString()
             )
             db.Mark_Update_Listregion(id_Vedomost)
             startActivity(Intent(this, MainActivity::class.java))

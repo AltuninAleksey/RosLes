@@ -31,6 +31,8 @@ class AddVedomost:AppCompatActivity() {
         supportActionBar!!.setDisplayShowCustomEnabled(true)
         supportActionBar!!.setCustomView(R.layout.custom_action_bar)
 
+        binding.linearDacha.visibility=View.VISIBLE
+
         val view: View = supportActionBar!!.customView
         val title=view.findViewById<TextView>(R.id.text)
         val back=view.findViewById<ImageView>(R.id.back)
@@ -88,7 +90,8 @@ class AddVedomost:AppCompatActivity() {
 
             if (  binding.samplearea.text.toString().isNotEmpty()&&
                 binding.vudel.text.toString().isNotEmpty()&&
-                binding.idCvartal.text.toString().isNotEmpty()){
+                binding.idCvartal.text.toString().isNotEmpty()&&
+                binding.dacha.text.toString().isNotEmpty()){
 
             db.createvedom(
                 binding.date.text.toString(),
@@ -98,7 +101,8 @@ class AddVedomost:AppCompatActivity() {
                 id,
                 "0",
                 binding.idCvartal.text.toString().toInt(),
-                2)
+                2,
+                binding.dacha.text.toString())
 
             Toast.makeText(this,"Данные добавлены",Toast.LENGTH_LONG).show()
             startActivity(Intent(this, MainActivity::class.java))

@@ -129,13 +129,13 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     fun writeLISTREGION(
         id:Int,
         date: String, sample_region: Float?, name_quarter: Int, soil_lot: String,
-        mark_update: Int?,id_profile: Int?,number_region: String?,id_district_forestly:Int) {
+        mark_update: Int?,id_profile: Int?,number_region: String?,id_district_forestly:Int,dacha: String?) {
         val db = this.writableDatabase
         //Log.v(date,"")
         db.execSQL(
             "Insert into djangoForest_listregion\n" +
-                    "(id,date, sample_region, name_quarter, soil_lot, mark_update,id_profile,number_region,id_district_forestly)  \n" +
-                    "values ('$id','$date', '$sample_region', '$name_quarter', '$soil_lot','$mark_update','$id_profile','$number_region',$id_district_forestly)"
+                    "(id,date, sample_region, name_quarter, soil_lot, mark_update,id_profile,number_region,id_district_forestly,dacha)  \n" +
+                    "values ('$id','$date', '$sample_region', '$name_quarter', '$soil_lot','$mark_update','$id_profile','$number_region',$id_district_forestly,'$dacha')"
         )
     }
 
@@ -219,7 +219,8 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
                 cursor.getInt(cursor.getColumnIndex("name_quarter")),
                 cursor.getInt(cursor.getColumnIndex("id_profile")),
                 cursor.getString(cursor.getColumnIndex("number_region")),
-                cursor.getInt(cursor.getColumnIndex("id_district_forestly"))
+                cursor.getInt(cursor.getColumnIndex("id_district_forestly")),
+                cursor.getString(cursor.getColumnIndex("dacha"))
 
             )
             listregionrequest.add(data)
@@ -551,7 +552,7 @@ inner join djangoForest_forestly as forestly on s2.id_forestly_id = forestly.id)
     fun getVedombyID(id: Int?): Vedom {
         val database: SQLiteDatabase = this.writableDatabase
         val cursor: Cursor = database.rawQuery(
-            "select listregion.id, listregion.sample_region, listregion.soil_lot, forestly.name_forestly, district.name_district_forestly, listregion.name_quarter, listregion.date from djangoForest_listregion as listregion\n" +
+            "select listregion.id, listregion.sample_region, listregion.soil_lot, forestly.name_forestly, district.name_district_forestly, listregion.name_quarter, listregion.date,listregion.dacha from djangoForest_listregion as listregion\n" +
                     "join djangoForest_districtforestly as district on listregion.id_district_forestly = district.id\n" +
                     "join djangoForest_forestly as forestly on district.id_forestly_id = forestly.id WHERE listregion.id = $id",
             null
@@ -564,7 +565,8 @@ inner join djangoForest_forestly as forestly on s2.id_forestly_id = forestly.id)
             cursor.getString(cursor.getColumnIndex("soil_lot")),
             cursor.getString(cursor.getColumnIndex("date")),
             cursor.getString(cursor.getColumnIndex("sample_region")),
-            cursor.getString(cursor.getColumnIndex("name_quarter"))
+            cursor.getString(cursor.getColumnIndex("name_quarter")),
+            cursor.getString(cursor.getColumnIndex("dacha"))?:""
         )
 
         cursor.close()
@@ -752,11 +754,12 @@ inner join djangoForest_forestly as forestly on s2.id_forestly_id = forestly.id)
         date: String,
         sample_region: String,
         id_quarter_id: Int,
-        soil_lot: String
+        soil_lot: String,
+        dacha:String
     ) {
         val db = this.writableDatabase
         //Log.v(date,"")
-        db.execSQL("Update djangoForest_listregion set date = '$date', sample_region = '$sample_region', name_quarter = $id_quarter_id, soil_lot = '$soil_lot'  where id = $id")
+        db.execSQL("Update djangoForest_listregion set date = '$date', sample_region = '$sample_region', name_quarter = $id_quarter_id, soil_lot = '$soil_lot', dacha = '$dacha'  where id = $id")
         db.close()
     }
 
@@ -1068,13 +1071,13 @@ inner join djangoForest_forestly as forestly on s2.id_forestly_id = forestly.id)
         return a
     }
 
-    fun createvedom(date: String, sample_region: String,soil_lot: String,id_district_forestly:Int,id_profile: Int,number_region: String, name_quarter: Int, mark_update:Int) {
+    fun createvedom(date: String, sample_region: String,soil_lot: String,id_district_forestly:Int,id_profile: Int,number_region: String, name_quarter: Int, mark_update:Int,dacha:String) {
         val db = this.writableDatabase
         //Log.v(date,"")
         db.execSQL(
             "Insert into djangoForest_listregion\n" +
-                    "(date, sample_region ,soil_lot,id_district_forestly,id_profile,number_region, name_quarter, mark_update) \n" +
-                    "values ('$date', $sample_region ,$soil_lot,$id_district_forestly,$id_profile,$number_region, $name_quarter, $mark_update)"
+                    "(date, sample_region ,soil_lot,id_district_forestly,id_profile,number_region, name_quarter, mark_update,dacha) \n" +
+                    "values ('$date', $sample_region ,$soil_lot,$id_district_forestly,$id_profile,$number_region, $name_quarter, $mark_update,$dacha)"
         )
         db.close()
     }
