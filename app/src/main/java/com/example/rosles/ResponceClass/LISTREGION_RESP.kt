@@ -11,7 +11,7 @@ data class LISTREGION_DATA(
     val soil_lot: String,
     val mark_del: Int?,
     val mark_update: Int?,
-    val name_quarter: Int,
+    val name_quarter: String,
     val id_profile: Int?=0,
     val number_region:String?=null,
     val id_district_forestly:Int,

@@ -128,7 +128,7 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
 
     fun writeLISTREGION(
         id:Int,
-        date: String, sample_region: Float?, name_quarter: Int, soil_lot: String,
+        date: String, sample_region: Float?, name_quarter: String, soil_lot: String,
         mark_update: Int?,id_profile: Int?,number_region: String?,id_district_forestly:Int,dacha: String?) {
         val db = this.writableDatabase
         //Log.v(date,"")
@@ -158,9 +158,13 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     }
     fun writeSAMPLE(id:Int,date:String, sample_area:Float?, id_list_region_id:Int, id_profile_id:Int, id_quarter_id:Int, soil_lot:String, lenght:Int?, square:Int?, width:Int?){
         val database: SQLiteDatabase = this.writableDatabase
+        var buf=0f
+        if (sample_area!=null){
+            buf=sample_area
+        }
         database.execSQL(
             "INSERT INTO djangoForest_sample (id,date, sample_area, id_list_region_id, id_profile_id, id_quarter_id, soil_lot, lenght, square, width) " +
-                    "VALUES ('$id','$date', $sample_area, $id_list_region_id, $id_profile_id, $id_quarter_id, '$soil_lot', $lenght, $square, $width)"
+                    "VALUES ('$id','$date', $buf, $id_list_region_id, $id_profile_id, $id_quarter_id, '$soil_lot', $lenght, $square, $width)"
         )
 
     }
@@ -216,7 +220,7 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
                 cursor.getString(cursor.getColumnIndex("soil_lot")).toString(),
                0,
                 cursor.getInt(cursor.getColumnIndex("mark_update")),
-                cursor.getInt(cursor.getColumnIndex("name_quarter")),
+                cursor.getString(cursor.getColumnIndex("name_quarter")),
                 cursor.getInt(cursor.getColumnIndex("id_profile")),
                 cursor.getString(cursor.getColumnIndex("number_region")),
                 cursor.getInt(cursor.getColumnIndex("id_district_forestly")),
