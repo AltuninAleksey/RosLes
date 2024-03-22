@@ -66,7 +66,7 @@ class sync() {
         var listregion=db.getLISTREGION()
         var oldlistregion=db.getLISTREGION()
         viewModels.putLISTREGION(LISTREGION_REQUEST(listregion))
-        delay(5000)
+        delay(10000)
         if (temp.temp_object!=null){
              temp.temp_object!!.text.ids.forEach { temp->
 
@@ -96,7 +96,7 @@ class sync() {
             }
         }
 
-       delay(5000)
+        delay(10000)
 
         if (temp.temp_objectsample!=null){
             temp.temp_objectsample!!.text.ids.forEach { temp->

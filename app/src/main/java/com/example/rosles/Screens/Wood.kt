@@ -59,10 +59,10 @@ class Wood : BaseActivity("Пробная площадь") {
         val vedom = db.getVedombyID(id_vdomost)
 
         binding.proba.text = intent.getStringExtra("numberOfPoroda")
-        binding.lesnnich.text = vedom.nameForestly
-        binding.district.text = vedom.nameDistrictForestly
-        binding.quater.text =   vedom.quarterName
-        binding.vudel.text =    vedom.soilLot
+        binding.lesnnich.text = vedom?.nameForestly
+        binding.district.text = vedom?.nameDistrictForestly
+        binding.quater.text =   vedom?.quarterName
+        binding.vudel.text =    vedom?.soilLot
 
         binding.needvaluewood.text=intent.getStringExtra("valuewood")
         // хранение перечета В hashmap

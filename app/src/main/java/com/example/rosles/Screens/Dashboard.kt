@@ -24,6 +24,7 @@ import com.example.rosles.databinding.DashboardBinding
 import com.example.rosles.sync
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.io.File
 
 
 class Dashboard: BaseActivity() {
@@ -66,6 +67,14 @@ class Dashboard: BaseActivity() {
             ed.putString("id", "")
             ed.putString("FIO", "")
             ed.apply()
+            var filePath = "/data/data/com.example.rosles/databases/userdb.db"
+            var file = File(filePath)
+            if (file.exists()) {
+                sync.temp.temp_object=null
+                sync.temp.temp_objectsample=null
+                file.delete()
+            }
+
             startActivity(Intent(this, Authorization::class.java))
             finish()
         }

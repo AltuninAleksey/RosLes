@@ -87,11 +87,11 @@ class ChangeListregion: AppCompatActivity() {
 
 
 
-        binding.idCvartal.setText(vedom.quarterName)
-        binding.vudel.setText(vedom.soilLot)
-        binding.samplearea.setText(vedom.sampleRegion)
-        binding.date.text = vedom.date
-        binding.dacha.setText(vedom.dacha)
+        binding.idCvartal.setText(vedom?.quarterName)
+        binding.vudel.setText(vedom?.soilLot)
+        binding.samplearea.setText(vedom?.sampleRegion)
+        binding.date.text = vedom?.date
+        binding.dacha.setText(vedom?.dacha)
 
         binding.buttonAuto.setOnClickListener {
             db.UpdateLISTREGION(

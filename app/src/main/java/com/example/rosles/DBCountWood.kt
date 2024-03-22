@@ -553,7 +553,7 @@ inner join djangoForest_forestly as forestly on s2.id_forestly_id = forestly.id)
     }
 
     @SuppressLint("Range")
-    fun getVedombyID(id: Int?): Vedom {
+    fun getVedombyID(id: Int?): Vedom? {
         val database: SQLiteDatabase = this.writableDatabase
         val cursor: Cursor = database.rawQuery(
             "select listregion.id, listregion.sample_region, listregion.soil_lot, forestly.name_forestly, district.name_district_forestly, listregion.name_quarter, listregion.date,listregion.dacha from djangoForest_listregion as listregion\n" +
@@ -1075,13 +1075,13 @@ inner join djangoForest_forestly as forestly on s2.id_forestly_id = forestly.id)
         return a
     }
 
-    fun createvedom(date: String, sample_region: String,soil_lot: String,id_district_forestly:Int,id_profile: Int,number_region: String, name_quarter: Int, mark_update:Int,dacha:String) {
+    fun createvedom(date: String, sample_region: String,soil_lot: String,id_district_forestly:Int,id_profile: Int,number_region: String, name_quarter: Int, mark_update:Int,dacha:String?) {
         val db = this.writableDatabase
         //Log.v(date,"")
         db.execSQL(
             "Insert into djangoForest_listregion\n" +
                     "(date, sample_region ,soil_lot,id_district_forestly,id_profile,number_region, name_quarter, mark_update,dacha) \n" +
-                    "values ('$date', $sample_region ,$soil_lot,$id_district_forestly,$id_profile,$number_region, $name_quarter, $mark_update,$dacha)"
+                    "values ('$date', $sample_region ,$soil_lot,$id_district_forestly,$id_profile,$number_region, $name_quarter, $mark_update,'$dacha')"
         )
         db.close()
     }

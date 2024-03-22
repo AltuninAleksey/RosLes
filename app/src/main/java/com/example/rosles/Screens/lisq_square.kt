@@ -37,7 +37,7 @@ class lisq_square : BaseActivity("Список пробных площадей")
         var id_region=0
         fun setregion(value:Int?){
             if(value!=null)
-                id_region=136
+                id_region=value
         }
     }
 
@@ -53,15 +53,15 @@ class lisq_square : BaseActivity("Список пробных площадей")
         id_vdomost = id_region
 
         val vedom = db.getVedombyID(id_vdomost!!.toInt())
-        binding.lesnnich.text = vedom.nameForestly
-        binding.district.text = vedom.nameDistrictForestly
-        binding.quater.text =   vedom.quarterName
-        binding.vudel.text =    vedom.soilLot
-        binding.date.text =     vedom.date
-        binding.square.text =   vedom.sampleRegion
+        binding.lesnnich.text = vedom?.nameForestly
+        binding.district.text = vedom?.nameDistrictForestly
+        binding.quater.text =   vedom?.quarterName
+        binding.vudel.text =    vedom?.soilLot
+        binding.date.text =     vedom?.date
+        binding.square.text =   vedom?.sampleRegion
         binding.resultprob.text =
-            vedom.sampleRegion.toFloatOrNull()?.let { valueprob(it).toString() }
-        val bufer_quater_id = vedom.idQuarterId
+            vedom?.sampleRegion?.toFloatOrNull()?.let { valueprob(it).toString() }
+        val bufer_quater_id = vedom?.idQuarterId
 
 
         val squareList = db.getlistsquare(id_vdomost!!.toInt())
