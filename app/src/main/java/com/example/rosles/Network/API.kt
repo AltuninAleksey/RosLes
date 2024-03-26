@@ -95,6 +95,8 @@ interface API {
     @GET("profile/{id}")
     suspend fun  getprofileid(@Path("id") id: Int): temp_data_userresp
 
+    @POST("gps")
+    suspend fun sendgps(@Body post: GPS_Data_Send): BaseResp
 
     @GET("subjectRF")
     suspend fun getrequestsubjectRF(): SubjectResp

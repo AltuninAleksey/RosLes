@@ -52,7 +52,7 @@ class gps_activity:AppCompatActivity() {
         val gpsManager: GpsManager = GpsManager(this, Looper.getMainLooper())
 
 
-
+        gpsManager.init()
 
         inittable(id_sample)
 
@@ -99,8 +99,9 @@ class gps_activity:AppCompatActivity() {
             }
 
         }
-
-        binding.toolbar.save.setOnClickListener {
+        binding.toolbar.saveButton.visibility=View.VISIBLE
+        binding.toolbar.save.visibility=View.GONE
+        binding.toolbar.saveButton.setOnClickListener {
 
 
 
@@ -113,7 +114,8 @@ class gps_activity:AppCompatActivity() {
                             (temp.get(1) as TextView).text.toString().toDouble(),//latitude
                             (temp.get(2) as TextView).text.toString().toDouble(),//longitude
                             (temp.get(3) as CheckBox).isChecked ,//center
-                            id_sample
+                            id_sample,
+                            2
                     )
                 )
             }
@@ -121,6 +123,8 @@ class gps_activity:AppCompatActivity() {
                 db.Create_Gps_Data(it)
             }
 
+            Toast.makeText(this,"Данные сохранены",Toast.LENGTH_SHORT).show()
+            finish()
         }
 
 

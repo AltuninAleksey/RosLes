@@ -26,6 +26,7 @@ interface AccountsSource {
     suspend fun getSAMPLE():SAMPLE_RESP
     suspend fun getLIST():LIST_RESP
 
+    suspend fun sendgps(body: GPS_Data_Send):BaseResp
 
     suspend fun reproduction(): ReproductionResp
     suspend fun perechet(perechetRequest: PerechetRequest): BaseResp
@@ -78,6 +79,7 @@ class AccountsRepository( private val accountsSource: AccountsSource) {
 
 
 
+
     suspend fun putLISTREGION(body: LISTREGION_REQUEST):ResponseBody = accountsSource.putLISTREGION(body)
 
     suspend fun putSAMPLE(body: SAMPLE_REQEST):ResponseBody = accountsSource.putSAMPLE(body)
@@ -93,7 +95,11 @@ class AccountsRepository( private val accountsSource: AccountsSource) {
 
     suspend fun registration (registrationReqest: RegistrationReqest): Response<RegistrationReqest> = accountsSource.registration(registrationReqest)
 
-    suspend fun getprofile(): getUserResp =  accountsSource.getprofile()
+
+
+    suspend fun sendgps(body: GPS_Data_Send): BaseResp =  accountsSource.sendgps(body)
+
+
 
 
     suspend fun getprofileid(id: Int): temp_data_userresp =  accountsSource.getprofileid(id)

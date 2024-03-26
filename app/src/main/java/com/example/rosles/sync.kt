@@ -6,6 +6,8 @@ import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import com.example.rosles.Network.ViewModels
 import com.example.rosles.RequestClass.UpdateRequest
+import com.example.rosles.ResponceClass.GPS_Data
+import com.example.rosles.ResponceClass.GPS_Data_Send
 import com.example.rosles.ResponceClass.LISTREGION_REQUEST
 import com.example.rosles.ResponceClass.LIST_REQEST
 import com.example.rosles.ResponceClass.SAMPLE_DATA
@@ -23,11 +25,7 @@ import java.util.UUID
 
 class sync() {
 
-
-
     fun main1( viewModels: ViewModels, db: DBCountWood,  context: AppCompatActivity,value: Int,id_subject:Int) {
-
-
 
             if(!db.djangoForest_undergrowth())
                 viewModels.getUNDER(db)
@@ -113,6 +111,25 @@ class sync() {
            sendphoto(db,oldsample[i].id,sample[i].id,context,viewModels)
            viewModels.putLIST(LIST_REQEST(db.getLIST(oldsample[i].id,sample[i].id)))
         }
+
+
+
+
+        db.SEND_Gps_Data().forEach {
+            var flag=0
+            if (it.flag_center){
+                flag=1
+            }
+            viewModels.sendgps(
+                GPS_Data_Send(
+                    it.latitude,
+                    it.longitude,
+                    flag,
+                    it.id_sample
+            )
+            )
+        }
+
 
 
         var filePath = "/data/data/com.example.rosles/databases/userdb.db"

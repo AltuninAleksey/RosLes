@@ -40,7 +40,7 @@ class SelectPhoto:BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = ScreenPhotoBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        gpsManager.init()
         // проверяем что разрешение получено
         id_sample=intent.getIntExtra("id_sample",0)
         id_vdomost=intent.getIntExtra("id_vdomost",0)

@@ -169,6 +169,9 @@ class ViewModels():BaseViewModel(
        return accountsRepository.registration(body)
     }
 
+
+
+
     fun putprofile(id: Int,body: UserResp)=viewModelScope.safeLaunch{
         try {
             accountsRepository?.putprofile(id,body)
@@ -207,6 +210,9 @@ class ViewModels():BaseViewModel(
         val book = Gson().fromJson(temp2, text::class.java)
         //отправка в синглтон
         sync.temp.temp_objectsample=book
+    }
+    fun sendgps(body:GPS_Data_Send)=viewModelScope.safeLaunch{
+        accountsRepository.sendgps(body)
     }
 
 

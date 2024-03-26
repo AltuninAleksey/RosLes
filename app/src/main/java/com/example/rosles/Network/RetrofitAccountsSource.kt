@@ -133,6 +133,10 @@ class RetrofitAccountsSource(
         accountsApi.getprofileid(id)
     }
 
+    override suspend fun sendgps(body: GPS_Data_Send): BaseResp =wrapRetrofitExceptions{
+        delay(1000)
+        accountsApi.sendgps(body)
+    }
 
 
     override suspend fun get_user(body:AuthRequest): AuthReSponce =wrapRetrofitExceptions{

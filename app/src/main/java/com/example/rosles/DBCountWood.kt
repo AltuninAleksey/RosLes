@@ -25,7 +25,7 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         db.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_districtforestly" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name_district_forestly" varchar(500) NOT NULL, "id_forestly_id" bigint NULL REFERENCES "djangoForest_forestly" ("id") DEFERRABLE INITIALLY DEFERRED);""")
         db.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_forestformingbydefault" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "id_breed_id" bigint NOT NULL REFERENCES "djangoForest_breed" ("id") DEFERRABLE INITIALLY DEFERRED, "id_profile_id" bigint NOT NULL REFERENCES "djangoForest_profile" ("id") DEFERRABLE INITIALLY DEFERRED);""")
         db.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_forestly" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name_forestly" varchar(500) NOT NULL, "id_subject_rf_id" bigint NULL REFERENCES "djangoForest_subjectrf" ("id") DEFERRABLE INITIALLY DEFERRED);""")
-        db.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_gps" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "latitude" real NOT NULL, "longitude" real NOT NULL, "flag_center" integer NOT NULL, "id_sample_id" bigint NULL REFERENCES "djangoForest_sample" ("id") DEFERRABLE INITIALLY DEFERRED);""")
+        db.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_gps" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "latitude" real NOT NULL, "longitude" real NOT NULL, "flag_center" integer NOT NULL, "mark_update" integer , "id_sample_id" bigint NULL REFERENCES "djangoForest_sample" ("id") DEFERRABLE INITIALLY DEFERRED);""")
         db.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_list" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "to0_2" integer NULL, "from0_21To0_5" integer NULL, "from0_6To1_0" integer NULL, "from1_1to1_5" integer NULL, "from1_5" integer NULL, "max_height" real NULL, "id_breed_id" bigint NULL REFERENCES "djangoForest_breed" ("id") DEFERRABLE INITIALLY DEFERRED, "id_sample_id" bigint NULL REFERENCES "djangoForest_sample" ("id") ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED, "id_type_of_reproduction_id" bigint NULL REFERENCES "djangoForest_reproduction" ("id") DEFERRABLE INITIALLY DEFERRED, "avg_diameter" real NULL, "avg_height" real NULL, "count_of_plants" integer NULL, "id_undergrowth_id" bigint NULL REFERENCES "djangoForest_undergrowth" ("id") DEFERRABLE INITIALLY DEFERRED, "main" bool NULL, "avg_height_undergrowth" real NULL, mark_update INTEGER);""")
         db.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_listregion" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "date" date NOT NULL, "sample_region" real NOT NULL, "soil_lot" varchar(300) NOT NULL, "id_district_forestly" bigint NULL REFERENCES "djangoForest_districtforestly" ("id") DEFERRABLE INITIALLY DEFERRED, "mark_del" integer NULL, "mark_update" integer NULL, "id_profile" integer, "number_region" varchar, "name_quarter" varchar, "dacha" varchar);""")
         db.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_photopoint" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "photo" BLOB,"latitude" real,"longitude" real,"date" date NOT NULL, "id_sample_id" bigint NULL REFERENCES "djangoForest_sample" ("id") DEFERRABLE INITIALLY DEFERRED);""")
@@ -1092,8 +1092,8 @@ inner join djangoForest_forestly as forestly on s2.id_forestly_id = forestly.id)
         //Log.v(date,"")
         db.execSQL(
             "Insert into djangoForest_gps\n" +
-                    "(latitude, longitude ,flag_center,id_sample_id) \n" +
-                    "values ('${value.latitude}', '${value.longitude}' ,'${value.flag_center}','${value.id_sample_id}')"
+                    "(latitude, longitude ,flag_center,id_sample_id,mark_update) \n" +
+                    "values ('${value.latitude}', '${value.longitude}' ,'${value.flag_center}','${value.id_sample}','${value.mark_update}')"
         )
         db.close()
     }
@@ -1111,7 +1111,30 @@ inner join djangoForest_forestly as forestly on s2.id_forestly_id = forestly.id)
                     cursor.getDouble(cursor.getColumnIndex("latitude")),
                     cursor.getDouble(cursor.getColumnIndex("longitude")),
                     cursor.getString(cursor.getColumnIndex("flag_center")).toBoolean(),
-                    cursor.getInt(cursor.getColumnIndex("id_sample_id"))
+                    cursor.getInt(cursor.getColumnIndex("id_sample_id")),
+                0
+            ))
+            cursor.moveToNext()
+        }
+        cursor.close()
+        return a
+    }
+
+    @SuppressLint("Range")
+    fun SEND_Gps_Data():List<GPS_Data>{
+        val db = this.readableDatabase
+        val cursor = db.rawQuery(
+            """SELECT * FROM djangoForest_gps where mark_update=2 """.trimMargin(),null)
+        cursor.moveToFirst()
+        val a= mutableListOf<GPS_Data>()
+        for (i in 1..cursor.getCount()) {
+            a.add(GPS_Data(
+                cursor.getInt(cursor.getColumnIndex("id")),
+                cursor.getDouble(cursor.getColumnIndex("latitude")),
+                cursor.getDouble(cursor.getColumnIndex("longitude")),
+                cursor.getString(cursor.getColumnIndex("flag_center")).toBoolean(),
+                cursor.getInt(cursor.getColumnIndex("id_sample_id")),
+                2
             ))
             cursor.moveToNext()
         }
