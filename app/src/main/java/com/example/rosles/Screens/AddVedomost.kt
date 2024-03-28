@@ -90,8 +90,7 @@ class AddVedomost:AppCompatActivity() {
 
             if (  binding.samplearea.text.toString().isNotEmpty()&&
                 binding.vudel.text.toString().isNotEmpty()&&
-                binding.idCvartal.text.toString().isNotEmpty()&&
-                binding.dacha.text.toString().isNotEmpty()){
+                binding.idCvartal.text.toString().isNotEmpty()){
 
             db.createvedom(
                 binding.date.text.toString(),

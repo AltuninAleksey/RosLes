@@ -208,7 +208,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:padding="5dip"
-                android:text=""
+                android:text="0"
                 android:textColor="@color/black"
                 android:textSize="@dimen/custom_size_table" />
 

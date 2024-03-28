@@ -414,6 +414,7 @@ class Wood : BaseActivity("Пробная площадь") {
                         value++
                         buffertext.text = value.toString()
                         initasd()
+                        writedata(activeCountPorod)
                         GetCountWood(CountMainPorod)
                         delay(100)
                     }
@@ -438,6 +439,7 @@ class Wood : BaseActivity("Пробная площадь") {
                             value = 0
                         buffertext.text = value.toString()
                         initasd()
+                        writedata(activeCountPorod)
                         GetCountWood(CountMainPorod)
                         delay(100)
                     }
@@ -534,39 +536,43 @@ class Wood : BaseActivity("Пробная площадь") {
 
     }
     fun GetCountWood(value: String){
+
+
         if (activeCountPorod==value){
             writedata(value)
         }
-        var sum=0
+
+        var all_sum=0
 
         hashbufWood.forEach {
+            var sum=0
+            if (it.value!!.flag_main==true){
+            sum+=
+            it.value!!.iskus!!.o2!!.toInt()+
+            it.value!!.iskus!!.o5!!.toInt()+
+            it.value!!.iskus!!.o6!!.toInt()+
+            it.value!!.iskus!!.o11!!.toInt()+
+            it.value!!.iskus!!.o15!!.toInt()+
+            it.value!!.estes!!.o2!!.toInt()+
+            it.value!!.estes!!.o5!!.toInt()+
+            it.value!!.estes!!.o6!!.toInt()+
+            it.value!!.estes!!.o11!!.toInt()+
+            it.value!!.estes!!.o15!!.toInt()+
+            it.value!!.estestvenn!!.o2!!.toInt()+
+            it.value!!.estestvenn!!.o5!!.toInt()+
+            it.value!!.estestvenn!!.o6!!.toInt()+
+            it.value!!.estestvenn!!.o11!!.toInt()+
+            it.value!!.estestvenn!!.o15!!.toInt()
+           all_sum+=sum
+                binding.valuewood.text=all_sum.toString()
 
-       if (it.value!!.flag_main==true){
-
-
-
-        var temp=
-         it.value!!.iskus!!.o2!!.toInt()+
-         it.value!!.iskus!!.o5!!.toInt()+
-         it.value!!.iskus!!.o6!!.toInt()+
-         it.value!!.iskus!!.o11!!.toInt()+
-         it.value!!.iskus!!.o15!!.toInt()+
-         it.value!!.estes!!.o2!!.toInt()+
-         it.value!!.estes!!.o5!!.toInt()+
-         it.value!!.estes!!.o6!!.toInt()+
-         it.value!!.estes!!.o11!!.toInt()+
-         it.value!!.estes!!.o15!!.toInt()+
-         it.value!!.estestvenn!!.o2!!.toInt()+
-         it.value!!.estestvenn!!.o5!!.toInt()+
-         it.value!!.estestvenn!!.o6!!.toInt()+
-         it.value!!.estestvenn!!.o11!!.toInt()+
-         it.value!!.estestvenn!!.o15!!.toInt()
-           sum+=temp
-
-       }
-
+           }
+            binding.valuewood.text=all_sum.toString()
         }
-        binding.valuewood.text=sum.toString()
+        binding.valuewood.text=all_sum.toString()
+
+
+
 
 
     }
