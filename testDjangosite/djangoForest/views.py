@@ -1332,6 +1332,8 @@ class GetAllDescriptionRegion(ListAPIView):
                 lst.update({"point7_natural_composition": lst_FieldCard['point7_natural_composition']})
                 lst.update({"id_economy": lst_FieldCard['id_economy']})
                 lst.update({"breed_composition": lst_FieldCard['breed_composition']})
+                lst.update({"recomendation": lst_FieldCard['recomendation']})
+                lst.update({"id_economy_sapling": lst_FieldCard['id_economy_sapling']})
             except:
                 lst.update({"id_field_card": ""})
             return Response({
@@ -1426,7 +1428,9 @@ class GetAllDescriptionRegion(ListAPIView):
             breed_composition = request.data['breed_composition'],
             id_economy = request.data['id_economy'],
             point7year = request.data['point7year'],
-            point7_natural_composition = request.data['point7_natural_composition']
+            point7_natural_composition = request.data['point7_natural_composition'],
+            id_economy_sapling = request.data['id_economy_sapling'],
+            recomendation = request.data['recomendation']
         )
         ser_listregion = ListRegionUpdateNonMarkDel(data=request.data, instance=instance_region)
         if len(request.data['gps']) > 0:
