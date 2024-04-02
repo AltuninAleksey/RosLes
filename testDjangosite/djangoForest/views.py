@@ -1770,13 +1770,21 @@ class PlotCoeffViews(ListAPIView):
 class PlotCoeffByFieldCardId(ListAPIView):
 
     def get(self, request, *args, **kwargs):
-        try:
-            lst = PlotCoeff.objects.filter(id_field_card = kwargs['id_field_card'])
-            return Response({"get": PlotCoeffSerializer(lst, many=True).data}, status=status.HTTP_200_OK)
-        except:
-            return Response({"error": status.HTTP_404_NOT_FOUND, "error_text": "invalid FieldCard id"},
-                            status=status.HTTP_404_NOT_FOUND)
-
+        from staticpy.calculate_ratio_version2 import calculate
+        # try:
+        #     lst = PlotCoeff.objects.filter(id_field_card = kwargs['id_field_card'])
+        #     return Response({"get": PlotCoeffSerializer(lst, many=True).data}, status=status.HTTP_200_OK)
+        # except:
+        #     return Response({"error": status.HTTP_404_NOT_FOUND, "error_text": "invalid FieldCard id"},
+        #                     status=status.HTTP_404_NOT_FOUND)
+        if not FieldCard.objects.filter(pk = kwargs['id_field_card']).exists():
+            return Response({"error": "fieldcard not found"}, status=status.HTTP_404_NOT_FOUND)
+        id_list_region = FieldCard.objects.filter(pk=kwargs['id_field_card']).values("id_list_region")
+        # print(id_list_region[0])
+        data = ListSerializer(List.objects.filter(id_sample__id_list_region = id_list_region[0]['id_list_region']), many=True).data
+        print(data)
+        calc_data = calculate(data)
+        return Response(calc_data)
 
 class RatioCompositionCalculateInList(ListAPIView):
 
