@@ -1326,9 +1326,12 @@ class GetAllDescriptionRegion(ListAPIView):
             try:
                 lst_FieldCard = FieldCardSerializer(FieldCard.objects.get(id_list_region = lst['id_list_region'])).data
                 # "point7_natural_composition"
-                lst.update({"point7_natural_composition": lst_FieldCard['point7_natural_composition']})
                 lst.update({"breed_composition": lst_FieldCard['breed_composition']})
                 lst.update({"id_field_card": lst_FieldCard['id']})
+                lst.update({"point7year": lst_FieldCard['point7year']})
+                lst.update({"point7_natural_composition": lst_FieldCard['point7_natural_composition']})
+                lst.update({"id_economy": lst_FieldCard['id_economy']})
+                lst.update({"breed_composition": lst_FieldCard['breed_composition']})
             except:
                 lst.update({"id_field_card": ""})
             return Response({
@@ -1375,11 +1378,6 @@ class GetAllDescriptionRegion(ListAPIView):
         request.data.update({"id_list_region": list_serializer.data['id']})
         sample_serializer = SampleSerializer(data=request.data)
         sample_serializer.is_valid(raise_exception = True)
-        # if not sample_serializer.is_valid():
-        #     print(sample_serializer.errors)
-        #     return Response({"error_sample_serializer": status.HTTP_400_BAD_REQUEST,
-        #                      "error_text": sample_serializer.errors[next(iter(sample_serializer.errors))][0]},
-        #                     status=status.HTTP_400_BAD_REQUEST)
         sample_serializer.save()
         print(sample_serializer.data)
         if len(request.data['gps']) > 0:
@@ -1388,19 +1386,6 @@ class GetAllDescriptionRegion(ListAPIView):
                 gps_ser = GPSSerializer(data=i)
                 gps_ser.is_valid(raise_exception=True)
                 gps_ser.save()
-
-        # data = request.data.get('gps', request.data)
-        # print(data)
-        # many = isinstance(data, list)
-        # gps_serializer = GPSManyCreateSerializer(data=data, many=many)
-        # gps_serializer.is_valid()
-        # gps_serializer.save()
-        # if not gps_serializer.is_valid():
-        #     print(sample_serializer.errors)
-        #     return Response({"error_gps_serializer": status.HTTP_400_BAD_REQUEST,
-        #                      "error_text": gps_serializer.errors[next(iter(gps_serializer.errors))][0]},
-        #                     status=status.HTTP_400_BAD_REQUEST)
-
         desc_serializer = DescriptionRegionSerializerNonEconomyAct(data=request.data)
         fieldcard_serializer = FieldCardSerializerNoneSapling(data=request.data)
         if not desc_serializer.is_valid():
@@ -1429,6 +1414,20 @@ class GetAllDescriptionRegion(ListAPIView):
         except:
             return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid list region id"},
                             status=status.HTTP_404_NOT_FOUND)
+        try:
+            fieldcard = FieldCard.objects.get(pk=request.data['id_field_card'])
+        except:
+            return Response({'error': '404 id_field_card'}, status=status.HTTP_404_NOT_FOUND)
+        # "breed_composition": null,
+        # "id_economy": null,
+        # "point7year": 2023,
+        # "point7_natural_composition": 132,
+        fieldcard = FieldCard.objects.filter(pk=request.data['id_field_card']).update(
+            breed_composition = request.data['breed_composition'],
+            id_economy = request.data['id_economy'],
+            point7year = request.data['point7year'],
+            point7_natural_composition = request.data['point7_natural_composition']
+        )
         ser_listregion = ListRegionUpdateNonMarkDel(data=request.data, instance=instance_region)
         if len(request.data['gps']) > 0:
             for i in request.data['gps']:
@@ -1453,31 +1452,6 @@ class GetAllDescriptionRegion(ListAPIView):
                             status=status.HTTP_400_BAD_REQUEST)
         serealizer.save()
         return Response({'code': status.HTTP_200_OK}, status=status.HTTP_200_OK)
-
-    # def put(self, request, *args, **kwargs):
-    #     try:
-    #         instance = DescriptionRegion.objects.get(pk=kwargs['pk'])
-    #     except:
-    #         return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
-    #                         status=status.HTTP_404_NOT_FOUND)
-    #     try:
-    #         instance_region = ListRegion.objects.get(id=request.data['id_list_region'])
-    #     except:
-    #         return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid list region id"},
-    #                         status=status.HTTP_404_NOT_FOUND)
-    #     if len(request.data['gps']) > 0:
-    #         for i in request.data['gps']:
-    #             instance_gps = GPS.objects.get(id=i['id'])
-    #             ser_gps = GPSSerializer(data=i, instance=instance_gps)
-    #             ser_gps.is_valid()
-    #             ser_gps.save()
-    #     ser_listregion = ListRegionUpdateNonMarkDel(data=request.data, instance=instance_region)
-    #     ser_listregion.is_valid(raise_exception=True)
-    #     ser_listregion.save()
-    #     serealizer = DescriptionRegionSerializer(data=request.data, instance=instance)
-    #     serealizer.is_valid(raise_exception=True)
-    #     serealizer.save()
-    #     return Response({'code': status.HTTP_200_OK}, status=status.HTTP_200_OK)
 
 
 class DescriptionRegionFilter(ListAPIView):
