@@ -19,6 +19,16 @@ NewPlotDescriptionBusiness.createPlotDescription = async function(data) {
     });
 }
 
+NewPlotDescriptionBusiness.getAllEconomy = async function() {
+    var requestData = await axios({
+      method: 'get',
+      url: urlGlobal + "/economy",
+      responseType: 'json'
+    });
+
+    return requestData.data.get;
+}
+
 function generatePDF() {
     const element = document.getElementById('invoice');
     const opt = {

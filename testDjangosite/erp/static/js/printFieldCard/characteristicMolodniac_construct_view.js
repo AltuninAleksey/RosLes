@@ -19,7 +19,7 @@ async function setDataInCharacteristicMolodniac() {
     document.getElementById("stock2").value = APP.documentData.stock;
 
 
-    APP.point7Table2Sapling = await PrintFieldCardBusiness.getPoint7Table2SaplingById(APP.documentData.id_list_region);
+    APP.point7Table2Sapling = await PrintFieldCardBusiness.getPoint7Table2SaplingById(APP.documentData.id);
     let point7Table2Sapling = document.getElementById("id_point7_table2_sapling");
     newHtml = "";
 
@@ -29,7 +29,7 @@ async function setDataInCharacteristicMolodniac() {
         APP.point7Table2Sapling[i].age = (APP.point7Table2Sapling[i].age == null? 0:APP.point7Table2Sapling[i].age);
         APP.point7Table2Sapling[i].avg_height = (APP.point7Table2Sapling[i].avg_height == null? 0:APP.point7Table2Sapling[i].avg_height);
         APP.point7Table2Sapling[i].avg_diameter = (APP.point7Table2Sapling[i].avg_diameter == null? 0:APP.point7Table2Sapling[i].avg_diameter);
-        APP.point7Table2Sapling[i].count_of_plants = (APP.point7Table2Sapling[i].count_of_plants == null? 0:APP.point7Table2Sapling[i].count_of_plants);
+        APP.point7Table2Sapling[i].count_of_plants = (APP.point7Table2Sapling[i].total == null? 0:APP.point7Table2Sapling[i].total);
 
         newHtml += `<tr>
                         <td><input readonly type="text" name="ratio_composition_molodniac${i}" id="ratio_composition_molodniac${i}" style="width: 100%" value="${APP.point7Table2Sapling[i].ratio_composition}"></td>

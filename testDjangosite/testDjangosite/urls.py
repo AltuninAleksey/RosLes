@@ -46,7 +46,7 @@ urlpatterns = [
     path('point7table', Point7TableView.as_view()),
     path('point7table/<int:pk>', Point7TableView.as_view()),
     path('point7sapling', Point7TableSaplingView.as_view()),
-    path('point7sapling/<int:pk>', Point7TableSaplingView.as_view()),
+    path('point7sapling/<int:id_field_card>', Point7TableSaplingView.as_view()),
     path('purposeforest', PurposeOfForestsView.as_view()),
     path('purposeforest/<int:pk>', PurposeOfForestsView.as_view()),
     path('forestprotectioncategory', ForestProtectionCategoryView.as_view()),

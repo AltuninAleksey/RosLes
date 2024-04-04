@@ -30,6 +30,8 @@ async function openPage() {
 
     APP.userData = await CommonBusiness.getUserData();
 
+    APP.allEconomy = await NewPlotDescriptionBusiness.getAllEconomy();
+
     //APP.subjectrf = await CommonBusiness.getAllSubjectrf();
     //APP.subjectrf = APP.subjectrf.sort(function(a, b) { return a.name_subject_RF > b.name_subject_RF? 1 : -1; });
 
@@ -80,6 +82,22 @@ async function setDataInPage() {
     }
 
     typeReproduction.innerHTML = newHtml;
+
+    let economy_act_land = document.getElementById("economy_act_land");
+    newHtml = "";
+
+    for(var i = 0; i < APP.allEconomy.length; i++) {
+        newHtml = newHtml + "<option value=\"" + APP.allEconomy[i].id + "\">" + APP.allEconomy[i].name_economy + "</option>";
+    }
+    economy_act_land.innerHTML = newHtml;
+
+    let farm_according_data_survey = document.getElementById("farm_according_data_survey");
+    newHtml = "";
+
+    for(var i = 0; i < APP.allEconomy.length; i++) {
+        newHtml = newHtml + "<option value=\"" + APP.allEconomy[i].id + "\">" + APP.allEconomy[i].name_economy + "</option>";
+    }
+    farm_according_data_survey.innerHTML = newHtml;
 }
 
 async function setDataInHeader() {
@@ -222,6 +240,7 @@ async function saveData() {
         }
 
         data.year_assignment_land = year_assignment_land;
+        data.point7year = year_assignment_land;
     }
 
     if(year_format_fond_trees != null && year_format_fond_trees != undefined && year_format_fond_trees != "") {
@@ -249,10 +268,12 @@ async function saveData() {
 
     if(breed_structure_sapling_act_land != null && breed_structure_sapling_act_land != undefined && breed_structure_sapling_act_land != "") {
         data.breed_structure_sapling_act_land = breed_structure_sapling_act_land;
+        data.point7_natural_composition = breed_structure_sapling_act_land;
     }
 
     if(economy_act_land != null && economy_act_land != undefined && economy_act_land != "") {
-        data.economy_act_land = economy_act_land;
+        //data.economy_act_land = economy_act_land;
+        data.id_economy = economy_act_land;
     }
 
     if(change_breed_and_structure_sapling != null && change_breed_and_structure_sapling != undefined && change_breed_and_structure_sapling != "") {
@@ -265,14 +286,17 @@ async function saveData() {
 
     if(recommendation != null && recommendation != undefined && recommendation != "") {
         data.recommendation = recommendation;
+        data.recomendation = recommendation;
     }
 
     if(farm_according_data_survey != null && farm_according_data_survey != undefined && farm_according_data_survey != "") {
-        data.farm_according_data_survey = farm_according_data_survey;
+        //data.farm_according_data_survey = farm_according_data_survey;
+        data.id_economy_sapling = farm_according_data_survey;
     }
 
     if(breed_composition_sapling_data_surver != null && breed_composition_sapling_data_surver != undefined && breed_composition_sapling_data_surver != "") {
         data.breed_composition_sapling_data_surver = breed_composition_sapling_data_surver;
+        data.breed_composition = breed_composition_sapling_data_surver;
     }
 
     if(typeReproduction != null && typeReproduction != undefined && typeReproduction != "") {

@@ -194,7 +194,7 @@ async function saveRecalculating() {
             id_forestly: lesNameForm.value,
             id_profile: APP.documentData.id_profile,
             name_quarter: quarterForm.value,
-            dacha: document.getElementById("dacha").value,
+            dacha: document.getElementById("dacha").value == ""? null:document.getElementById("dacha").value,
             sample_area: document.getElementById("sample_area_recalculation").value,
             soil_lot: document.getElementById("soil_lot_recalculating").value,
             number_region: document.getElementById("number_region").value

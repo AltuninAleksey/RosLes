@@ -770,19 +770,31 @@ class Point7TableView(ListAPIView):
 class Point7TableSaplingView(ListAPIView):
 
     def get(self, request, *args, **kwargs):
-        if kwargs:
-            from staticpy.calculate_ratio_composition import calculate_coeff
-            try:
-                lst = List.objects.filter(id_sample__id_list_region=kwargs["pk"]).values(
-                    "age", "avg_height", "avg_diameter", "count_of_plants", "id_breed")
-                # print(lst)
-                print(calculate_coeff(lst))
-                return Response(calculate_coeff(lst))
-                # return Response({"get": Point7TableSaplingSerializer(point7Table2Sapling.objects.get(id=kwargs["pk"])).data})
-            except:
-                return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
-                                status=status.HTTP_404_NOT_FOUND)
-        return Response({"get": Point7TableSaplingSerializer(point7Table2Sapling.objects.all(), many=True).data})
+        from staticpy.calculate_ratio_version2 import calculate
+
+        if not FieldCard.objects.filter(pk = kwargs['id_field_card']).exists():
+            return Response({"error": "fieldcard not found"}, status=status.HTTP_404_NOT_FOUND)
+        id_list_region = FieldCard.objects.filter(pk=kwargs['id_field_card']).values("id_list_region")
+        # print(id_list_region[0])
+        data = ListSerializer(List.objects.filter(id_sample__id_list_region = id_list_region[0]['id_list_region']), many=True).data
+        print(data)
+        calc_data = calculate(data)
+        return Response(calc_data)
+
+    # def get(self, request, *args, **kwargs):
+    #     if kwargs:
+    #         from staticpy.calculate_ratio_composition import calculate_coeff
+    #         try:
+    #             lst = List.objects.filter(id_sample__id_list_region=kwargs["pk"]).values(
+    #                 "age", "avg_height", "avg_diameter", "count_of_plants", "id_breed")
+    #             # print(lst)
+    #             print(calculate_coeff(lst))
+    #             return Response(calculate_coeff(lst))
+    #             # return Response({"get": Point7TableSaplingSerializer(point7Table2Sapling.objects.get(id=kwargs["pk"])).data})
+    #         except:
+    #             return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
+    #                             status=status.HTTP_404_NOT_FOUND)
+    #     return Response({"get": Point7TableSaplingSerializer(point7Table2Sapling.objects.all(), many=True).data})
 
 
 class PurposeOfForestsView(ListAPIView):
@@ -1770,21 +1782,29 @@ class PlotCoeffViews(ListAPIView):
 class PlotCoeffByFieldCardId(ListAPIView):
 
     def get(self, request, *args, **kwargs):
-        from staticpy.calculate_ratio_version2 import calculate
-        # try:
-        #     lst = PlotCoeff.objects.filter(id_field_card = kwargs['id_field_card'])
-        #     return Response({"get": PlotCoeffSerializer(lst, many=True).data}, status=status.HTTP_200_OK)
-        # except:
-        #     return Response({"error": status.HTTP_404_NOT_FOUND, "error_text": "invalid FieldCard id"},
-        #                     status=status.HTTP_404_NOT_FOUND)
-        if not FieldCard.objects.filter(pk = kwargs['id_field_card']).exists():
-            return Response({"error": "fieldcard not found"}, status=status.HTTP_404_NOT_FOUND)
-        id_list_region = FieldCard.objects.filter(pk=kwargs['id_field_card']).values("id_list_region")
-        # print(id_list_region[0])
-        data = ListSerializer(List.objects.filter(id_sample__id_list_region = id_list_region[0]['id_list_region']), many=True).data
-        print(data)
-        calc_data = calculate(data)
-        return Response(calc_data)
+        try:
+            lst = PlotCoeff.objects.filter(id_field_card = kwargs['id_field_card'])
+            return Response({"get": PlotCoeffSerializer(lst, many=True).data}, status=status.HTTP_200_OK)
+        except:
+            return Response({"error": status.HTTP_404_NOT_FOUND, "error_text": "invalid FieldCard id"},
+                            status=status.HTTP_404_NOT_FOUND)
+
+    # def get(self, request, *args, **kwargs):
+    #     from staticpy.calculate_ratio_version2 import calculate
+    #     # try:
+    #     #     lst = PlotCoeff.objects.filter(id_field_card = kwargs['id_field_card'])
+    #     #     return Response({"get": PlotCoeffSerializer(lst, many=True).data}, status=status.HTTP_200_OK)
+    #     # except:
+    #     #     return Response({"error": status.HTTP_404_NOT_FOUND, "error_text": "invalid FieldCard id"},
+    #     #                     status=status.HTTP_404_NOT_FOUND)
+    #     if not FieldCard.objects.filter(pk = kwargs['id_field_card']).exists():
+    #         return Response({"error": "fieldcard not found"}, status=status.HTTP_404_NOT_FOUND)
+    #     id_list_region = FieldCard.objects.filter(pk=kwargs['id_field_card']).values("id_list_region")
+    #     # print(id_list_region[0])
+    #     data = ListSerializer(List.objects.filter(id_sample__id_list_region = id_list_region[0]['id_list_region']), many=True).data
+    #     print(data)
+    #     calc_data = calculate(data)
+    #     return Response(calc_data)
 
 class RatioCompositionCalculateInList(ListAPIView):
 

@@ -46,6 +46,16 @@ PlotDescriptionBusiness.generateDocx = async function(data) {
     return requestData.data;
 }
 
+PlotDescriptionBusiness.getAllEconomy = async function() {
+    var requestData = await axios({
+      method: 'get',
+      url: urlGlobal + "/economy",
+      responseType: 'json'
+    });
+
+    return requestData.data.get;
+}
+
 function generatePDF() {
     const element = document.getElementById('invoice');
     const opt = {

@@ -123,7 +123,7 @@ async function setDataInCharacteristic() {
     document.getElementById("completeness").value = APP.documentData.point7_completeness;
     document.getElementById("stock").value = APP.documentData.point7_stock;
 
-    APP.point7Table = await PrintFieldCardBusiness.getPoint7TableByIdOld(APP.documentData.id_list_region);
+    //APP.point7Table = await PrintFieldCardBusiness.getPoint7TableByIdOld(APP.documentData.id_list_region);
     APP.point7Table = await PrintFieldCardBusiness.getPoint7TableById(APP.documentData.id);
     //APP.point7Table = [];
     APP.countLinePoint7Table = APP.point7Table.length;
