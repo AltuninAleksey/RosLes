@@ -1908,13 +1908,10 @@ class UserProfileUpdateView(generics.UpdateAPIView):
 
     def put(self, request, *args, **kwargs):
         if kwargs['pk']:
-            print(kwargs['pk'])
             if Profile.objects.filter(pk = kwargs['pk']).exists():
-                print("im here boy")
                 instance_profile = Profile.objects.get(pk=kwargs['pk'])
                 serializer = ProfileSerializer(data=request.data, instance=instance_profile)
                 if Users.objects.filter(pk=request.data['id_user']).exists():
-                    print("i was here")
                     users_objects = Users.objects.filter(pk=request.data['id_user']).update(
                         subject_rf=request.data['id_subject_rf'])
                 else:
