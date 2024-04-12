@@ -581,7 +581,7 @@ class FieldCard(models.Model):
     point7_natural_composition = models.CharField(max_length=300, verbose_name="Природный состав", null=True)
     id_economy = models.CharField(max_length=300, verbose_name="Природный состав 2", null=True)
     point7_completeness = models.CharField(max_length=300, verbose_name="Полнота", null=True)
-    point7_stock = models.IntegerField(verbose_name="Запас", null=True)
+    point7_stock = models.FloatField(verbose_name="Запас", null=True)
     id_point7table = models.ForeignKey("point7Table", on_delete=models.CASCADE, default=1, null=True)
     square_one_sample_area = models.FloatField(verbose_name="Площадь 1 пробной площади", null=True)
     count_sample_area = models.IntegerField(verbose_name="Количество пробных площадей", null=True)
@@ -590,7 +590,7 @@ class FieldCard(models.Model):
                                    on_delete=models.CASCADE,
                                    verbose_name="Хозяйство", null=True)
     completeness = models.CharField(max_length=300, verbose_name="Полнота", null=True)
-    stock = models.IntegerField(verbose_name="Запас", null=True)
+    stock = models.FloatField(verbose_name="Запас", null=True)
     id_point7_table2_sapling = models.ForeignKey("point7Table2Sapling",
                                                  on_delete=models.CASCADE,
                                                  verbose_name="Таблица 2 молодняк", null=True)
