@@ -230,6 +230,7 @@ class AboutUserDataSerializer(serializers.Serializer):
     FIO = serializers.CharField()
     id_subject_rf = serializers.CharField(source="id_user.subject_rf.id")
     name_subject_rf = serializers.CharField(source="id_user.subject_rf.name_subject_RF")
+    phoneNumber = serializers.CharField()
 
 
 class SampleSerializerId(serializers.Serializer):
