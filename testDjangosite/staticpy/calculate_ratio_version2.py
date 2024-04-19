@@ -1,3 +1,5 @@
+
+
 def calculate_all_plants_of_breed(id_breed, request):
     total = 0
     count_diameter = 0
@@ -36,13 +38,15 @@ def calculate_all_plants(request):
 def percent_of_breed(return_data, all_plants):
     ratio_composition = 0
     for i in return_data:
-        ratio_composition = round((i['total'] * 100) / all_plants, 0)/100
+        ratio_composition = round((i['count_of_plants'] * 100) / all_plants, 0)/100
         if ratio_composition < 0.1:
             ratio_composition = 0
         i.update({"ratio_composition": ratio_composition})
 
     return return_data
 
+# def form_json_data(request):
+#     return {"id_breed": request['id_breed'], "avg_height": request['avg_height'], "avg_diameter": request['avg_diameter'], "count_of_plants": request['count_of_plants']}
 
 def calculate(data):
     breed_list = []
@@ -51,13 +55,20 @@ def calculate(data):
     for i in data:
         print(i)
         if i['id_breed'] not in breed_list:
-            breed_list.append(i['id_breed'])
-
-    for k in breed_list:
-        return_data.append(calculate_all_plants_of_breed(k, data))
+            return_data.append({
+                'id_breed': i['id_breed'], 'age': i['age'],
+                'count_of_plants': i['count_of_plants'], 'id_sample': i['id_sample'],"avg_height": i['avg_height'], "avg_diameter": i['avg_diameter'], 'id_list': i['id'], })
+    #
+    # for i in data:
+    #     return_data.append(form_json_data(i))
+    # for k in breed_list:
+    #     return_data.append(calculate_all_plants_of_breed(k, data))
+    # for i in data:
+    #     print(i['count_of_plants'])
 
     return_data = percent_of_breed(return_data, all_plants)
     print(breed_list)
     print(all_plants)
 
     return return_data
+
