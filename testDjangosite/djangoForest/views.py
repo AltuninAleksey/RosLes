@@ -776,7 +776,8 @@ class Point7TableSaplingView(ListAPIView):
             return Response({"error": "fieldcard not found"}, status=status.HTTP_404_NOT_FOUND)
         id_list_region = FieldCard.objects.filter(pk=kwargs['id_field_card']).values("id_list_region")
         # print(id_list_region[0])
-        data = ListSerializer(List.objects.filter(id_sample__id_list_region=id_list_region[0]['id_list_region']),
+        data = ListSerializer(List.objects.filter(id_sample__id_list_region=id_list_region[0]['id_list_region'],
+                                                  id_undergrowth = None, count_of_plants__gt = 0),
                               many=True).data
         print(data)
         calc_data = calculate(data)
@@ -1777,6 +1778,14 @@ class PlotCoeffViews(ListAPIView):
         serializer.save()
         return Response({"code": status.HTTP_200_OK }, status=status.HTTP_200_OK)
 
+    def delete(self, *args, **kwargs):
+        try:
+            lst = PlotCoeff.objects.get(id=kwargs['pk'])
+        except:
+            return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
+                            status=status.HTTP_404_NOT_FOUND)
+        lst.delete()
+        return Response({"code": status.HTTP_200_OK}, status=status.HTTP_200_OK)
 
 class PlotCoeffByFieldCardId(ListAPIView):
 
