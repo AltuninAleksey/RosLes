@@ -1968,6 +1968,15 @@ class UserProfileUpdateView(generics.UpdateAPIView):
             return Response({"error": 404, "error_message": "Profile not found"}, status=status.HTTP_404_NOT_FOUND)
         return Response({"error": 400, "error_message": "send me pk"}, status=status.HTTP_400_BAD_REQUEST)
 
+
+class UpdateAgeListView(ListAPIView):
+
+    def put(self, request, *args, **kwargs):
+        for i in request.data['data']:
+            if List.objects.filter(id=i['id']).exists():
+                lst_obj = List.objects.filter(id=i['id']).update(age=i['age'])
+        return Response({"code": 200})
+
 class ForestViewSet(viewsets.ModelViewSet):
     pass
 
