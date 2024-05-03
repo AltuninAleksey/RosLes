@@ -135,6 +135,7 @@ urlpatterns = [
     path('czlbyprofile/<int:pk>', GetCZLByProfile.as_view()),
     path('erp/', include('erp.urls')),
     path('v2/profile/update/<int:pk>', UserProfileUpdateView.as_view()),
+    path('updateage', UpdateAgeListView.as_view()),
     path('general_docs/', include('general_docs.urls')),
 
 ]
