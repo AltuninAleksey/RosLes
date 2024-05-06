@@ -13,6 +13,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.get
+import com.example.rosles.Adapters.BaseInterface
 import com.example.rosles.Adapters.ChoiceVudelAdapter
 import com.example.rosles.BaseActivity
 import com.example.rosles.DBCountWood
@@ -26,11 +27,14 @@ import com.example.rosles.setSizeRelativeCurrentWindow
 
 class MainActivity : BaseActivity("Перечетные ведомости") {
 
-    //в ожидании звездного часа на синхрон
+
     val viewModel by viewModels<ViewModels>()
     private val db = DBCountWood(this, null)
     private lateinit var binding: ActivityMainBinding
     private lateinit var adapter: ChoiceVudelAdapter
+
+    //to navigation next activity
+    var id_vedomost=0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,7 +43,7 @@ class MainActivity : BaseActivity("Перечетные ведомости") {
         setContentView(binding.root)
         Singletons.init(MainActivity())
         //инциализация навигации
-
+        RecyclerviewInit()
         binding.toolbar.addbutton.setOnClickListener {
             var id_subject = getSharedPreferences("PreferencesName", MODE_PRIVATE)
                 .getInt("id_subject",0)
@@ -51,89 +55,37 @@ class MainActivity : BaseActivity("Перечетные ведомости") {
             RecyclerviewInit()
         }
 
-        adapter = ChoiceVudelAdapter().apply {
-            setData(db.readbyporoda())
-        }
-
-        binding.testRecycler!!.adapter=adapter
-
-
-
-
-
-        RecyclerviewInit()
     }
     override fun onRestart() {
-        //binding.tblLayout.removeAllViews()
         RecyclerviewInit()
+        adapter.notifyDataSetChanged()
         super.onRestart()
     }
     @SuppressLint("Range")
     fun RecyclerviewInit() {
-        val porodaList :List<Poroda> =  db.readbyporoda()
-        var activetableRow: TableRow? = null
 
-        // отсюда вычитаем единицу тк как в противном случае выходим в оут оф баунс(данные не записываются в полном обьеме)
-        for (i in 0..porodaList.size-1) {
-            val tableRow = TableRow(this)
-            val date_parse = porodaList[i].date.replace('-','.')
-            /* Порядок важен, знацения будут добавляться в колонки таблицы
-            * в порядке указанном в valuesOfPoroda */
-            val valuesOfPorodaList: List<String> = mutableListOf(
-                porodaList[i].id,
-                porodaList[i].nameForestly,
-                porodaList[i].nameDistrictForestly,
-                porodaList[i].quarterName,
-                porodaList[i].soilLot,
-                date_parse)
-            // сборка строки для тоблицы
-            for((indexOfvalue, valueOfPoroda) in valuesOfPorodaList.withIndex()) {
-
-                val text = TextView(this)
-                text.textAlignment = View.TEXT_ALIGNMENT_CENTER
-                text.setTextColor(-0x1000000)
-                text.setTextSize(TypedValue.COMPLEX_UNIT_SP,12f)
-                text.text = valueOfPoroda
-//                if (indexOfvalue == 1)
-//                    text.visibility = View.GONE
-                tableRow.addView(text, indexOfvalue)
+        adapter = ChoiceVudelAdapter().apply {
+            setData(db.readbyporoda())
+            listener={
+                id_vedomost=it.id.toInt()
             }
-            val img = ImageView(this)
-            if (porodaList[i].markUpdate >= 1){
-                img.setImageResource(R.drawable.reloadred)
-                tableRow.addView(img)
-            }
-
-            tableRow.setOnClickListener {
-                activetableRow?.setBackgroundResource(R.color.color_transporent)
-                tableRow.setBackgroundResource(R.color.color_transporent)
-                activetableRow = tableRow
-                activetableRow!!.setBackgroundResource(R.color.activecolumn)
-            }
-
-            //в table view на 0 элементе находиться тайтл таблицы поэтому к счетчику добавляем единицу
-         //   binding.tblLayout.addView(tableRow, i);
-
-//            val layoutParams = tableRow.layoutParams as TableLayout.LayoutParams
-//            layoutParams.setMargins(0, 10, 0, 10)
-//            tableRow.layoutParams = layoutParams
         }
 
+
+        binding.testRecycler!!.adapter=adapter
+
+
         binding.toolbar.open.setOnClickListener {
-            if (activetableRow != null) {
-                var bufer = activetableRow?.get(0)
-                val textView = bufer as TextView
-                var a = textView.text
-                a
-                val intent = Intent(this, lisq_square::class.java)
-                intent.putExtra("id_Vedomost", textView.text)
-                startActivity(intent)
+            if (id_vedomost != 0) {
+                startActivity(
+                    Intent(this, lisq_square::class.java)
+                        .putExtra("id_Vedomost", id_vedomost))
+
+
             }
         }
         binding.toolbar.delete.setOnClickListener {
-            val bufer = activetableRow?.get(0)
-            if (bufer != null) {
-                val textView = bufer as TextView
+            if (id_vedomost != 0) {
                 val dialog: Dialog = Dialog(this)
                 dialog.setContentView(R.layout.dialog_delete)
                 dialog.setSizeRelativeCurrentWindow(0.85, 0.6)
@@ -147,7 +99,7 @@ class MainActivity : BaseActivity("Перечетные ведомости") {
                     onRestart()
                 }
                 delete.setOnClickListener {
-                    db.delete_listregion(textView.text.toString().toInt())
+                    db.delete_listregion(id_vedomost)
                     dialog.dismiss()
                     onRestart()
                 }
@@ -155,14 +107,12 @@ class MainActivity : BaseActivity("Перечетные ведомости") {
         }
 
         binding.toolbar.save.setOnClickListener() {
-            if (activetableRow != null) {
-                val intent = Intent(this, ChangeListregion::class.java)
+            if (id_vedomost != 0) {
 
-                var bufer = activetableRow?.get(0)
-
-                val textView = bufer as TextView
-                intent.putExtra("id_Vedomost", textView.text)
-                startActivity(intent)
+                startActivity(
+                    Intent(this,
+                        ChangeListregion::class.java)
+                        .putExtra("id_Vedomost", id_vedomost))
             }
         }
     }

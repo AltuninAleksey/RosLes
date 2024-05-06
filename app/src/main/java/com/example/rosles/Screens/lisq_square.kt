@@ -49,7 +49,7 @@ class lisq_square : BaseActivity("Список пробных площадей")
 
     @SuppressLint("Range")
     fun RecyclerviewInit() {
-        setregion(intent.getStringExtra("id_Vedomost")?.toInt())
+        setregion(intent.getIntExtra("id_Vedomost",0))
         id_vdomost = id_region
 
         val vedom = db.getVedombyID(id_vdomost!!.toInt())

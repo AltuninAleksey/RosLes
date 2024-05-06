@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginVertical="10dp"
     android:orientation="vertical">
 
     <LinearLayout
@@ -61,6 +60,7 @@
         </LinearLayout>
 
         <ImageView
+            android:id="@+id/mark_update_item"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -79,7 +79,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:el_duration="500"
-            app:el_expanded="false">
+            app:el_expanded="true">
 
 
             <LinearLayout
@@ -105,7 +105,7 @@
 
                     <TextView
                         android:id="@+id/district_forestly"
-                        android:layout_width="100dp"
+                        android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:textColor="@color/black"
                         android:textAlignment="center"
@@ -139,7 +139,7 @@
 
                     <TextView
                         android:id="@+id/quter"
-                        android:layout_width="100dp"
+                        android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:textColor="@color/black"
                         android:textAlignment="center"
@@ -173,7 +173,7 @@
 
                     <TextView
                         android:id="@+id/vudel"
-                        android:layout_width="100dp"
+                        android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:textColor="@color/black"
                         android:textAlignment="center"
@@ -205,8 +205,8 @@
                     </TextView>
 
                     <TextView
-                        android:id="@+id/date"
-                        android:layout_width="100dp"
+                        android:id="@+id/date_time"
+                        android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:textColor="@color/black"
                         android:textAlignment="center"
@@ -214,6 +214,70 @@
                         android:layout_marginLeft="16dp"
                         android:layout_gravity="center"
                         android:text="2024.02.08">
+                    </TextView>
+                </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="#18161668"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:textAlignment="center"
+                        android:textSize="15sp"
+                        android:paddingVertical="5dp"
+                        android:layout_marginLeft="16dp"
+                        android:text="Площадь \nучастка">
+                    </TextView>
+
+                    <TextView
+                        android:id="@+id/square_vudel"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:textAlignment="center"
+                        android:textSize="15sp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_gravity="center"
+                        android:text="2024.02.08">
+                    </TextView>
+                </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="#18161668"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:textAlignment="center"
+                        android:textSize="15sp"
+                        android:paddingVertical="5dp"
+                        android:layout_marginLeft="16dp"
+                        android:text="урочище">
+                    </TextView>
+
+                    <TextView
+                        android:id="@+id/tract"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:textAlignment="center"
+                        android:textSize="15sp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_gravity="center"
+                        android:text="0">
                     </TextView>
                 </LinearLayout>
 

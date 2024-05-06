@@ -404,7 +404,7 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     fun readbyporoda(): List<Poroda> {
         val database: SQLiteDatabase = this.writableDatabase
         val cursor: Cursor = database.rawQuery(
-            """select listregion.id,listregion.mark_update, s3.name_forestly, s3.name_district_forestly, s3.name_quarter, s3.dacha, s3.soil_lot, s3.sample_region, s3.date
+            """select listregion.id,listregion.mark_update,listregion.dacha,listregion.sample_region, s3.name_forestly, s3.name_district_forestly, s3.name_quarter, s3.dacha, s3.soil_lot, s3.sample_region, s3.date
 from ((djangoForest_listregion as listregion INNER join djangoForest_districtforestly as district on listregion.id_district_forestly = district.id) as s2
 inner join djangoForest_forestly as forestly on s2.id_forestly_id = forestly.id) as s3""",
             null
@@ -419,7 +419,9 @@ inner join djangoForest_forestly as forestly on s2.id_forestly_id = forestly.id)
                 cursor.getString(cursor.getColumnIndex("name_quarter")),
                 cursor.getString(cursor.getColumnIndex("soil_lot")),
                 cursor.getString(cursor.getColumnIndex("date")),
-                cursor.getInt(cursor.getColumnIndex("mark_update"))  // Q2
+                cursor.getInt(cursor.getColumnIndex("mark_update")),
+                cursor.getString(cursor.getColumnIndex("sample_region")),
+                cursor.getString(cursor.getColumnIndex("dacha")) // Q2
             )
             porodaList.add(poroda)
             cursor.moveToNext()

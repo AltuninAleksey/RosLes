@@ -16,6 +16,7 @@ import com.google.gson.Gson
 import org.json.JSONArray
 import org.json.JSONObject
 import retrofit2.Response
+import java.lang.Exception
 import kotlin.math.log
 
 
@@ -93,12 +94,18 @@ class ViewModels():BaseViewModel(
             //value for id
             val data= accountsRepository.getSUBJECTRF(value)
 
-            //dbCountWood.writeSUBJECTRF(data.id_main_subject,data.name_main_subject)
-            //getFORESTLY(dbCountWood,data.id_main_subject)
+
             data.slave_subject.forEach {
                 dbCountWood.writeSUBJECTRF(it.id_subject,it.name_slave_subject)
                 getFORESTLY(dbCountWood,it.id_subject)
             }
+            try {
+                dbCountWood.writeSUBJECTRF(data.id_main_subject,data.name_main_subject)
+                getFORESTLY(dbCountWood,data.id_main_subject)
+            }catch (e:Exception){
+                Log.e("SQL_EXEPT","Repeat data")
+            }
+
 
 
 

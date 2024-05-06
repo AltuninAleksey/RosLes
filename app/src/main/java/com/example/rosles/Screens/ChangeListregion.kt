@@ -11,6 +11,7 @@ import android.widget.DatePicker
 import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import com.example.rosles.DBCountWood
@@ -80,11 +81,10 @@ class ChangeListregion: AppCompatActivity() {
     @SuppressLint("Range")
     fun RecyclerviewInit() {
 
-        val id_Vedomost:Int?=intent.getStringExtra("id_Vedomost")?.toInt()
+        val id_Vedomost:Int=intent.getIntExtra("id_Vedomost",0)
 
 
-        val vedom = db.getVedombyID(id_Vedomost!!)
-
+        val vedom = db.getVedombyID(id_Vedomost)
 
 
         binding.idCvartal.setText(vedom?.quarterName)
@@ -94,16 +94,22 @@ class ChangeListregion: AppCompatActivity() {
         binding.dacha.setText(vedom?.dacha)
 
         binding.buttonAuto.setOnClickListener {
-            db.UpdateLISTREGION(
-                id_Vedomost!!,
-                binding.date.text.toString(),
-                binding.samplearea.text.toString(),
-                binding.idCvartal.text.toString().toInt(),
-                binding.vudel.text.toString(),
-                binding.dacha.text.toString()
-            )
-            db.Mark_Update_Listregion(id_Vedomost)
-            startActivity(Intent(this, MainActivity::class.java))
+            if (binding.date.text.isNotEmpty()&&
+                binding.samplearea.text.isNotEmpty()&&
+                binding.idCvartal.text.isNotEmpty()) {
+                db.UpdateLISTREGION(
+                    id_Vedomost!!,
+                    binding.date.text.toString(),
+                    binding.samplearea.text.toString(),
+                    binding.idCvartal.text.toString().toInt() ?: 0,
+                    binding.vudel.text.toString(),
+                    binding.dacha.text.toString()
+                )
+                db.Mark_Update_Listregion(id_Vedomost)
+                startActivity(Intent(this, MainActivity::class.java))
+            }else{
+                Toast.makeText(this,"Заполните поля",Toast.LENGTH_LONG).show()
+            }
         }
         binding.date.setOnClickListener {
             initDatePicker()

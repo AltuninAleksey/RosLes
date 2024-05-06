@@ -8,7 +8,7 @@ import androidx.viewbinding.ViewBinding
 abstract class BaseAdapter<T, V : ViewBinding> :
     RecyclerView.Adapter<BaseAdapter<T, V>.ViewBindingHolder>() {
 
-    var listener: ((data: T) -> Unit)? = null
+
     var listenerPosition: ((position: Int) -> Unit)? = null
     protected var items = mutableListOf<T>()
     open fun setData(data: List<T>) {
@@ -29,7 +29,7 @@ abstract class BaseAdapter<T, V : ViewBinding> :
             bindViewHolder(this, items[holder.adapterPosition])
             holder.itemView.setOnClickListener {
                 if (holder.adapterPosition != -1) {
-                    listener?.invoke(items[holder.adapterPosition])
+
                     listenerPosition?.invoke(holder.adapterPosition)
                 }
             }
