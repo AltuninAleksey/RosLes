@@ -13,6 +13,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.get
+import com.example.rosles.Adapters.ChoiceVudelAdapter
 import com.example.rosles.BaseActivity
 import com.example.rosles.DBCountWood
 import com.example.rosles.Models.Poroda
@@ -29,6 +30,8 @@ class MainActivity : BaseActivity("Перечетные ведомости") {
     val viewModel by viewModels<ViewModels>()
     private val db = DBCountWood(this, null)
     private lateinit var binding: ActivityMainBinding
+    private lateinit var adapter: ChoiceVudelAdapter
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,13 +51,20 @@ class MainActivity : BaseActivity("Перечетные ведомости") {
             RecyclerviewInit()
         }
 
+        adapter = ChoiceVudelAdapter().apply {
+            setData(db.readbyporoda())
+        }
+
+        binding.testRecycler!!.adapter=adapter
 
 
 
-       RecyclerviewInit()
+
+
+        RecyclerviewInit()
     }
     override fun onRestart() {
-        binding.tblLayout.removeAllViews()
+        //binding.tblLayout.removeAllViews()
         RecyclerviewInit()
         super.onRestart()
     }
@@ -102,11 +112,11 @@ class MainActivity : BaseActivity("Перечетные ведомости") {
             }
 
             //в table view на 0 элементе находиться тайтл таблицы поэтому к счетчику добавляем единицу
-            binding.tblLayout.addView(tableRow, i);
+         //   binding.tblLayout.addView(tableRow, i);
 
-            val layoutParams = tableRow.layoutParams as TableLayout.LayoutParams
-            layoutParams.setMargins(0, 10, 0, 10)
-            tableRow.layoutParams = layoutParams
+//            val layoutParams = tableRow.layoutParams as TableLayout.LayoutParams
+//            layoutParams.setMargins(0, 10, 0, 10)
+//            tableRow.layoutParams = layoutParams
         }
 
         binding.toolbar.open.setOnClickListener {

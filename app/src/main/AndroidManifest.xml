@@ -69,6 +69,7 @@
         <activity android:name="com.example.rosles.Screens.GpxTrack"/>
         <activity android:name="com.example.rosles.Screens.change_user"/>
 
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.example.fileprovider"
