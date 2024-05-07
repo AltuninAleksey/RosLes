@@ -1346,6 +1346,8 @@ class GetAllDescriptionRegion(ListAPIView):
                 lst.update({"breed_composition": lst_FieldCard['breed_composition']})
                 lst.update({"recomendation": lst_FieldCard['recomendation']})
                 lst.update({"id_economy_sapling": lst_FieldCard['id_economy_sapling']})
+                lst.update({"start_at": lst_FieldCard['start_at']})
+                lst.update({"end_at": lst_FieldCard['end_at']})
             except:
                 lst.update({"id_field_card": ""})
             return Response({
@@ -1608,7 +1610,7 @@ class GetFieldCard(ListAPIView):
         try:
             instance = FieldCard.objects.get(pk=kwargs['pk'])
         except:
-            return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
+            return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id fieldcard"},
                             status=status.HTTP_404_NOT_FOUND)
         try:
             instance_region = ListRegion.objects.get(id=request.data['id_list_region'])
