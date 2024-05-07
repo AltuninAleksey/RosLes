@@ -61,7 +61,7 @@ class GpsForegroundService: Service() {
 
     private fun createStartNotification(): Notification {
         val intent = Intent(this, Authorization::class.java)
-        val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_MUTABLE)
 
         val notification = notificationEditor.createNotification(
             R.drawable.location,//КОСТЫЛЬ ....................................
