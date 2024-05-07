@@ -605,6 +605,8 @@ class FieldCard(models.Model):
     number_order = models.IntegerField(u"Номер приказа", null=True)
     lands_other = models.CharField(max_length=200, null=True, blank=True)
     respond_farm = models.BooleanField(default=False, verbose_name="Соответствует хозяйству.")
+    start_at = models.CharField(max_length=200, verbose_name='начиная с')
+    end_at = models.CharField(max_length=200, verbose_name='заканчивая до')
 
     class Meta:
         verbose_name = "Полевая карточка"
