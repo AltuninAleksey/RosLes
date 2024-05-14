@@ -633,6 +633,7 @@ inner join djangoForest_forestly as forestly on s2.id_forestly_id = forestly.id)
         width: String,
         mark_update: Int
     ) {
+
         val db = this.writableDatabase
         db.execSQL(
             "insert into djangoForest_sample (date, sample_area, id_list_region_id, id_profile_id, id_quarter_id, soil_lot,lenght,square,width,mark_update) " +

@@ -32,6 +32,9 @@ class ChangeSample:AppCompatActivity() {
         supportActionBar!!.setDisplayShowCustomEnabled(true)
         supportActionBar!!.setCustomView(R.layout.custom_action_bar)
 
+        binding.quaterName.setText("Длина")
+        binding.vudelName.setText("Ширина")
+
         binding.textView2.text="изменить пробную площадь"
         val view: View = supportActionBar!!.customView
         val title=view.findViewById<TextView>(R.id.text)

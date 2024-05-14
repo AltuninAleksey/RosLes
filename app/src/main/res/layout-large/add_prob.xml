@@ -34,7 +34,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
     <TextView
-        android:id="@+id/textView18"
+        android:id="@+id/quater_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -46,7 +46,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView16" />
 
     <TextView
-        android:id="@+id/textView21"
+        android:id="@+id/vudel_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -55,7 +55,7 @@
         android:textColor="#000000"
         android:textSize="@dimen/custom_size_text"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView18" />
+        app:layout_constraintTop_toBottomOf="@+id/quater_name" />
 
     <TextView
         android:id="@+id/textView23"
@@ -67,7 +67,7 @@
         android:textColor="#000000"
         android:textSize="@dimen/custom_size_text"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView21" />
+        app:layout_constraintTop_toBottomOf="@+id/vudel_name" />
 
     <TextView
         android:id="@+id/date"

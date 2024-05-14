@@ -33,6 +33,9 @@ class AddSample : AppCompatActivity() {
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         binding.date.text = LocalDateTime.now().format(formatter).toString()
 
+        binding.quaterName.setText("Длина")
+        binding.vudelName.setText("Ширина")
+
         //инциализация навигации
         supportActionBar!!.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
         supportActionBar!!.setDisplayShowCustomEnabled(true)
@@ -96,12 +99,13 @@ class AddSample : AppCompatActivity() {
                 binding.vudel.text.toString().isNotEmpty()
                 ){
 
+
             db.insertintolistsquare(
                 binding.date.text.toString(),
                 binding.samplearea.text.toString(),
                 id_region,
                 id_user,
-                intent.getStringExtra("id_quater")!!.toInt(),
+                intent.getIntExtra("id_quater",0),
                 binding.vudel.text.toString(),
                 binding.idCvartal.text.toString(),
                 binding.samplearea.text.toString(),

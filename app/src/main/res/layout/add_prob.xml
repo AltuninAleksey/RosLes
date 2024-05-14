@@ -106,7 +106,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/date" />
 
             <TextView
-                android:id="@+id/textView18"
+                android:id="@+id/quater_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Квартал"
@@ -161,7 +161,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/id_cvartal" />
 
             <TextView
-                android:id="@+id/textView21"
+                android:id="@+id/vudel_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
@@ -170,7 +170,7 @@
                 android:textColor="#80000000"
                 android:textSize="15sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView18" />
+                app:layout_constraintTop_toBottomOf="@+id/quater_name" />
         </LinearLayout>
 
         <ImageView
@@ -220,7 +220,7 @@
                 android:textColor="#80000000"
                 android:textSize="15sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView21" />
+                app:layout_constraintTop_toBottomOf="@+id/vudel_name" />
         </LinearLayout>
 
 
@@ -276,7 +276,7 @@
                 android:textColor="#80000000"
                 android:textSize="15sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView21" />
+                app:layout_constraintTop_toBottomOf="@+id/vudel_name" />
         </LinearLayout>
 
 
