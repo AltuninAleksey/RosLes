@@ -582,7 +582,7 @@ class FieldCard(models.Model):
     id_economy = models.CharField(max_length=300, verbose_name="Природный состав 2", null=True)
     point7_completeness = models.CharField(max_length=300, verbose_name="Полнота", null=True)
     point7_stock = models.FloatField(verbose_name="Запас", null=True)
-    id_point7table = models.ForeignKey("point7Table", on_delete=models.CASCADE, default=1, null=True)
+    id_point7table = models.ForeignKey("point7Table", on_delete=models.CASCADE, default=None, null=True)
     square_one_sample_area = models.FloatField(verbose_name="Площадь 1 пробной площади", null=True)
     count_sample_area = models.IntegerField(verbose_name="Количество пробных площадей", null=True)
     breed_composition = models.CharField(max_length=500, verbose_name="Породный состав", null=True)
