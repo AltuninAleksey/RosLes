@@ -133,6 +133,7 @@ urlpatterns = [
     path('getczl', GetCZL.as_view()),
     path('czl', CZLMobileView.as_view()),
     path('czlbyprofile/<int:pk>', GetCZLByProfile.as_view()),
+    path('czlbyprofile/mobile/<int:pk>', GetCZLByProfileMobile.as_view()),
     path('erp/', include('erp.urls')),
     path('v2/profile/update/<int:pk>', UserProfileUpdateView.as_view()),
     path('updateage', UpdateAgeListView.as_view()),
