@@ -229,6 +229,7 @@ class ListRegionView(generics.ListCreateAPIView):
     def post(self, request):
         serializer = ListRegionSerializer(data=request.data)
         if not serializer.is_valid():
+            print(serializer.errors)
             return Response({"error": status.HTTP_400_BAD_REQUEST,
                              "error_text": serializer.errors[next(iter(serializer.errors))][0]},
                             status=status.HTTP_400_BAD_REQUEST)
@@ -1949,6 +1950,21 @@ class GetCZLByProfile(ListAPIView):
         return Response({"error": "not found id"})
 
 
+class GetCZLByProfileMobile(ListAPIView):
+
+    def get(self, request, *args, **kwargs):
+        if kwargs:
+            profile_data = ProfileSerializer(Profile.objects.get(id=kwargs['pk'])).data['id_subject_rf']
+            czl_data_main = CZLSerializer(
+                CZL.objects.filter(Q(id_main_subject=profile_data) | Q(id_subject=profile_data)), many=True)
+            czl_main_id = czl_data_main.data[0].get("id_main_subject")
+            czl_objects = CZLSerializerWithOutMain(CZL.objects.filter(id_main_subject=czl_main_id), many=True)
+            return Response({"name_main_czl": czl_data_main.data[0]['name_czl'],
+                             "id_main_subject": czl_data_main.data[0]['id_main_subject'],
+                             "name_main_subject": czl_data_main.data[0]['name_main_subject'],
+                             "slave_subject": czl_objects.data})
+        return Response({"error": "not found id"})
+
 class UserProfileUpdateView(generics.UpdateAPIView):
 
     def put(self, request, *args, **kwargs):
@@ -1978,6 +1994,12 @@ class UpdateAgeListView(ListAPIView):
             if List.objects.filter(id=i['id']).exists():
                 lst_obj = List.objects.filter(id=i['id']).update(age=i['age'])
         return Response({"code": 200})
+
+
+class GetAllForestlyBySubjectMobile(ListAPIView):
+
+    def get(self, request, *args, **kwargs):
+        pass
 
 class ForestViewSet(viewsets.ModelViewSet):
     pass
