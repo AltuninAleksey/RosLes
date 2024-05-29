@@ -2001,6 +2001,52 @@ class GetAllForestlyBySubjectMobile(ListAPIView):
     def get(self, request, *args, **kwargs):
         pass
 
+class DeleteAllBySample(ListAPIView):
+
+    def delete(self, request, *args, **kwargs):
+        if request.data['id']:
+            try:
+                sample = Sample.objects.get(id = request.data['id'])
+            except:
+                return Response({"code": 404, "error_text": "not found id"})
+            id_lst = sample.id_list_region.id
+            lst = ListRegion.objects.get(id=id_lst)
+            lst.delete()
+            return Response({"code": 200})
+
+        return Response({"code": 404, "error_text": "dont send id"})
+
+class DeleteAllByFieldCard(ListAPIView):
+
+    def delete(self, request, *args, **kwargs):
+        if request.data['id']:
+            try:
+                field_card = FieldCard.objects.get(id = request.data['id'])
+            except:
+                return Response({"code": 404, "error_text": "not found id"})
+            id_lst = field_card.id_list_region.id
+            lst = ListRegion.objects.get(id=id_lst)
+            lst.delete()
+            return Response({"code": 200})
+
+        return Response({"code": 404, "error_text": "dont send id"})
+
+
+class DeleteAllByDescRegion(ListAPIView):
+
+    def delete(self, request, *args, **kwargs):
+        if request.data['id']:
+            try:
+                desc_reg = DescriptionRegion.objects.get(id=request.data['id'])
+            except:
+                return Response({"code": 404, "error_text": "not found id"})
+            id_lst = desc_reg.id_list_region.id
+            lst = ListRegion.objects.get(id=id_lst)
+            lst.delete()
+            return Response({"code": 200})
+
+        return Response({"code": 404, "error_text": "dont send id"})
+
 class ForestViewSet(viewsets.ModelViewSet):
     pass
 
