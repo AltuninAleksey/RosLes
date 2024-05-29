@@ -6,6 +6,8 @@ def calculate_all_plants_of_breed(id_breed, request):
     count_height = 0
     avg_height = 0
     avg_diameter = 0
+    avg_age = 0
+    count_age = 0
     for i in request:
         if i['id_breed'] == id_breed:
             if type(i['count_of_plants']) == int:
@@ -18,12 +20,17 @@ def calculate_all_plants_of_breed(id_breed, request):
             if i['avg_diameter'] != None:
                 avg_diameter += i['avg_diameter']
                 count_diameter += 1
+            if i['age'] != None:
+                avg_age += i['age']
+                count_age += 1
     if not count_height == 0:
         avg_height = avg_height/count_height
     if not count_diameter == 0:
         avg_diameter = avg_diameter/count_diameter
+    if not count_age == 0:
+        avg_age = avg_age/count_age
 
-    return {"id_breed": id_breed, "total": total, "avg_height": avg_height, "avg_diameter": avg_diameter}
+    return {"id_breed": id_breed, "total": total, "avg_height": avg_height, "avg_diameter": avg_diameter, "avg_age": avg_age}
 
 
 def calculate_all_plants(request):
@@ -58,9 +65,9 @@ def calculate(data):
             return_data.append({
                 'id_breed': i['id_breed'], 'age': i['age'],
                 'count_of_plants': i['count_of_plants'], 'id_sample': i['id_sample'],"avg_height": i['avg_height'], "avg_diameter": i['avg_diameter'], 'id_list': i['id'], })
-    #
+
     # for i in data:
-    #     return_data.append(form_json_data(i))
+        # return_data.append(form_json_data(i))
     # for k in breed_list:
     #     return_data.append(calculate_all_plants_of_breed(k, data))
     # for i in data:
