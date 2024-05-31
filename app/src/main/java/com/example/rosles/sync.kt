@@ -25,7 +25,7 @@ import java.util.UUID
 
 class sync() {
 
-    fun main1( viewModels: ViewModels, db: DBCountWood,  context: AppCompatActivity,value: Int,id_subject:Int) {
+    suspend  fun main1( viewModels: ViewModels, db: DBCountWood,  context: AppCompatActivity,value: Int,block:()->Unit) {
 
             if(!db.djangoForest_undergrowth())
                 viewModels.getUNDER(db)
@@ -35,6 +35,7 @@ class sync() {
 
             if (!db.djangoForest_subjectrf())
                 viewModels.getSUBJECTRF(db, value)
+
 
 //            if(!db.djangoForest_forestly())
 //                viewModels.getFORESTLY(db,id_subject)
@@ -46,7 +47,15 @@ class sync() {
                 viewModels.getSAMPLE(db)
 
             if (!db.djangoForest_list())
-                viewModels.getLIST(db)
+                viewModels.getLIST(db){
+                    block()
+                }
+            else{
+                delay(2000)
+                block()
+            }
+
+
 
         }
 

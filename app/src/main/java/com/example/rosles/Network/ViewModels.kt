@@ -132,15 +132,26 @@ class ViewModels():BaseViewModel(
             processEmptyFieldException(e)
         }
     }
-    fun getLIST(dbCountWood: DBCountWood)=viewModelScope.safeLaunch {
+    fun getLIST(dbCountWood: DBCountWood,block:()->Unit)=viewModelScope.safeLaunch {
         try {
+            var size = accountsRepository.getLIST().get.size
+            size
+            var i =0
             accountsRepository.getLIST().get.forEach {
                 dbCountWood.writeLIST(it.id,it.to0_2,it.from0_21To0_5,it.from0_6To1_0,it.from1_1to1_5,
                 it.from1_5,it.max_height,it.id_breed,it.id_sample,it.id_type_of_reproduction,it.avg_diameter,
                 it.avg_height,it.count_of_plants,it.id_undergrowth,it.main,it.avg_height_undergrowth)
+
+                i++
+                if (i==size){
+                    block()
+                }
             }
+
+
         } catch (e: EmptyFieldException) {
             processEmptyFieldException(e)
+            block()
         }
     }
 

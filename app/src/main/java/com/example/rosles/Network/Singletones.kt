@@ -19,6 +19,8 @@ object Const {
      * Use this URL if you launch android app on the emulator while boxes-server
      * is launched locally on 127.0.0.1:12345
      */
+    //dev URl 90.156.208.88:8093/
+    //WORK URL http://92.50.227.100:58493
     const val BASE_URL = "http://92.50.227.100:58493"
 }
 

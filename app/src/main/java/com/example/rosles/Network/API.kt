@@ -38,7 +38,7 @@ interface API {
     suspend fun getDISTRICTFORESTLY():DISTRICTFORESTLY_RESP
     @GET("forestly")
     suspend fun getFORESTLY():FORESTLY_RESP
-    @GET("czlbyprofile/{id}")
+    @GET("czlbyprofile/mobile/{id}")
     suspend fun getSUBJECTRF(@Path("id") value: Int):SUBJECTRF_RESP
     @GET("listregionbyprofile/{id}")
     suspend fun getLISTREGION(@Path("id") pk_profile: Int):LISTREGION_RESP

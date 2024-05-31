@@ -11,6 +11,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBar
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import com.example.rosles.BaseActivity
 import com.example.rosles.DBCountWood
@@ -32,6 +34,8 @@ class Dashboard: BaseActivity() {
     private lateinit var binding: DashboardBinding
     val viewModel by viewModels<ViewModels>()
     private var db = DBCountWood(this, null)
+
+
 
     @SuppressLint("SdCardPath", "SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,15 +64,19 @@ class Dashboard: BaseActivity() {
 
         back.setImageResource(R.drawable.baseline_exit_to_app_24)
         val menu=view.findViewById<ImageView>(R.id.burger)
+        menu.setOnClickListener{
+            showpopupmenu(it)
+        }
         title.setText("Главная")
+
         back.setOnClickListener{
 
             val ed = sPref.edit()
             ed.putString("id", "")
             ed.putString("FIO", "")
             ed.apply()
-            var filePath = "/data/data/com.example.rosles/databases/userdb.db"
-            var file = File(filePath)
+
+            var file = File("/data/data/com.example.rosles/databases/userdb.db")
             if (file.exists()) {
                 sync.temp.temp_object=null
                 sync.temp.temp_objectsample=null
@@ -78,9 +86,7 @@ class Dashboard: BaseActivity() {
             startActivity(Intent(this, Authorization::class.java))
             finish()
         }
-        menu.setOnClickListener{
-            showpopupmenu(it)
-        }
+
 
 
 //        binding.perechet.image.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.keyboard))
@@ -100,24 +106,19 @@ class Dashboard: BaseActivity() {
         }
 
         binding.ALLDOWNLOAD.setOnClickListener{
-            var id_subject = getSharedPreferences("PreferencesName", MODE_PRIVATE)
-                .getInt("id_subject",0)
+            visibleScrool()
             var database = DBCountWood(this, null)
             database.writableDatabase
-            lifecycleScope.launch {
-                visibleScrool()
-                sync().main1(viewModel,database,this@Dashboard,id_user,id_subject)
 
-                delay(2000)
-                Toast.makeText(this@Dashboard, "Данные обновленны", Toast.LENGTH_SHORT).show()
-                invisibleScrool()
+
+            lifecycleScope.launch {
+
+                sync().main1(viewModel,database,this@Dashboard,id_user){
+                    invisibleScrool()
+                }
+
             }
 
-            // загрузка ВСЕХ справочников
-//            val inputBase=File("/data/data/com.example.rosles/databases/userdb.db")
-//            val txtFile = resources.openRawResource(R.raw.db_sqlite3)
-//            GPStracker.copy(txtFile,inputBase)
-//            Toast.makeText(this, "Данные обновленны", Toast.LENGTH_SHORT).show()
         }
 
 
