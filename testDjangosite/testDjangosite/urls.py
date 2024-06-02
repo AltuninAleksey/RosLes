@@ -137,6 +137,9 @@ urlpatterns = [
     path('erp/', include('erp.urls')),
     path('v2/profile/update/<int:pk>', UserProfileUpdateView.as_view()),
     path('updateage', UpdateAgeListView.as_view()),
+    path('deleteallbysample', DeleteAllBySample.as_view()),
+    path('deleteallbyfieldcard', DeleteAllByFieldCard.as_view()),
+    path('deleteallbydescregion', DeleteAllByDescRegion.as_view()),
     path('general_docs/', include('general_docs.urls')),
 
 ]
