@@ -20,6 +20,7 @@ import com.example.rosles.ResponceClass.ProbaWoodSimple
 import com.example.rosles.databinding.WoodBinding
 import com.example.rosles.setSizeRelativeCurrentWindow
 import com.example.roslesdef.Adapters.WoodAdapter
+import com.example.roslesdef.Adapters.WoodAdapterPodles
 import com.example.roslesdef.Models.ItemWood
 import com.example.roslesdef.Models.SpinerItem
 import kotlinx.coroutines.delay
@@ -380,7 +381,7 @@ class Wood : BaseActivity("Пробная площадь") {
         })
         binding.WoodRecycler.adapter = adapter
 
-        val adapterpodles = WoodAdapter(podles, object : BaseInterface {
+        val adapterpodles = WoodAdapterPodles(podles, object : BaseInterface {
             override fun onClick(itemView: Any) {
                 //UpdateTable(vidWood)
                 writedatapodles(vidWoodpodles)
