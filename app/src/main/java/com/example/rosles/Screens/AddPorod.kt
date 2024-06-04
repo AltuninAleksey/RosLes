@@ -1,17 +1,27 @@
 package com.example.rosles.Screens
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.Recycler
+import com.example.rosles.Adapters.BaseInterface
+import com.example.rosles.Adapters.ChoiceSubjectAdapter
 import com.example.rosles.BaseActivity
 import com.example.rosles.DBCountWood
 import com.example.rosles.R
+import com.example.rosles.ResponceClass.BaseRespObject
 import com.example.rosles.databinding.AddPorodBinding
+import com.example.rosles.databinding.AddPorodScreenBinding
+import com.example.rosles.setSizeRelativeCurrentWindow
+import com.example.roslesdef.Adapters.ForestAdapter
 import com.example.roslesdef.Models.SpinerItem
 import java.util.*
 import kotlin.collections.HashMap
@@ -19,12 +29,12 @@ import kotlin.collections.HashMap
 
 class AddPorod : BaseActivity("Добавление") {
 
-    private lateinit var binding: AddPorodBinding
+    private lateinit var binding: AddPorodScreenBinding
     private val db = DBCountWood(this, null)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = AddPorodBinding.inflate(layoutInflater)
+        binding = AddPorodScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initActivity()
     }
@@ -37,37 +47,28 @@ class AddPorod : BaseActivity("Добавление") {
         val countries= db.getallporodArray()
         val countries1= db.getallpodlesArray()
 
-        val arrayAdapter =
-            ArrayAdapter(this, android.R.layout.simple_spinner_item,countries )
-        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-
-        val arrayAdapter1 =
-            ArrayAdapter(this, android.R.layout.simple_spinner_item, countries1)
-        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        binding.les.adapter = arrayAdapter
-        binding.podles.adapter = arrayAdapter1
 
         val hash = db.gethashFavoriteLes(id)
-
         val hashpodles = db.gethashFavoritepodLes(id)
 
-        binding.buttonAuto.setOnClickListener {
+        var les_data:List<SpinerItem>? =null
+        var podles_data:List<SpinerItem>? =null
 
-            val valueles= binding.les.selectedItem as SpinerItem
 
+
+        fun addles(valueles:SpinerItem){
             var flag=true
-                hash.forEach { t, u ->
+            hash.forEach { t, u ->
                 if (u == valueles.name) {
                     flag=false
-                    Toast.makeText(this, "Такая порода уже существует", Toast.LENGTH_SHORT).show()
                 }
 
             }
             if (flag && valueles.name!="не добавлять"){
                 db.addlesporod(id, valueles.id)
             }
-
-            val valuepodles= binding.podles.selectedItem as SpinerItem
+        }
+        fun addpodles(valuepodles:SpinerItem){
             var flagpodles = true
 
             hashpodles.forEach { t, u ->
@@ -79,10 +80,87 @@ class AddPorod : BaseActivity("Добавление") {
             if (flagpodles && valuepodles.id!=0 ){
                 db.addpodlesporod(id, valuepodles.id)
             }
+        }
+
+
+
+
+        binding.les.setOnClickListener {
+            var dialog = Dialog(this)
+            dialog.setContentView(R.layout.dialog_add_forest)
+            dialog.setSizeRelativeCurrentWindow(1.0, 0.9)
+            var recycler_dialog = dialog.findViewById<RecyclerView>(R.id.ForestRecycler)
+            val button = dialog.findViewById<Button>(R.id.button_add)
+
+
+            var adapterles = ForestAdapter(countries)
+
+            recycler_dialog.adapter=adapterles
+
+            button.setOnClickListener {
+
+                les_data= adapterles.getArraydata()
+                binding.les.setText("")
+
+                les_data?.forEach{
+                    if (it.check){
+                        binding.les.append(it.name+" ")
+                    }
+                }
+                dialog.dismiss()
+            }
+            dialog.show()
+        }
+
+
+        binding.podles.setOnClickListener {
+            var dialog = Dialog(this)
+            dialog.setContentView(R.layout.dialog_add_forest)
+            dialog.setSizeRelativeCurrentWindow(1.0, 0.9)
+            var recycler_dialog = dialog.findViewById<RecyclerView>(R.id.ForestRecycler)
+            val button = dialog.findViewById<Button>(R.id.button_add)
+
+
+            var adapterpodles = ForestAdapter(countries1)
+
+            recycler_dialog.adapter=adapterpodles
+
+            button.setOnClickListener {
+                podles_data=adapterpodles.getArraydata()
+                binding.podles.setText("")
+
+                podles_data?.forEach{
+                    if (it.check){
+                        binding.podles.append(it.name+" ")
+                    }
+                    dialog.dismiss()
+                }
+
+            }
+            dialog.show()
+        }
+
+
+
+        binding.buttonAuto.setOnClickListener {
+
+            les_data?.forEach{
+                if (it.check){
+                    addles(it)
+                }
+            }
+            podles_data?.forEach{
+                if (it.check){
+                    addpodles(it)
+                }
+            }
             finish()
         }
 
+
     }
+
+
 
     @SuppressLint("Range")
     fun getidbreed(value: String?,dbCountWood: DBCountWood):Int?{
