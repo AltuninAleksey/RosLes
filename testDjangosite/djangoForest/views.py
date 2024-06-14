@@ -771,7 +771,7 @@ class Point7TableView(ListAPIView):
 class Point7TableSaplingView(ListAPIView):
 
     def get(self, request, *args, **kwargs):
-        from staticpy.calculate_ratio_version2 import calculate
+        from staticpy.calculate_ratio_version3 import calculate
 
         if not FieldCard.objects.filter(pk=kwargs['id_field_card']).exists():
             return Response({"error": "fieldcard not found"}, status=status.HTTP_404_NOT_FOUND)
@@ -1349,6 +1349,7 @@ class GetAllDescriptionRegion(ListAPIView):
                 lst.update({"id_economy_sapling": lst_FieldCard['id_economy_sapling']})
                 lst.update({"start_at": lst_FieldCard['start_at']})
                 lst.update({"end_at": lst_FieldCard['end_at']})
+                lst.update({"id_method_of_reforestation": lst_FieldCard['id_method_of_reforestation']})
             except:
                 lst.update({"id_field_card": ""})
             return Response({
@@ -1445,7 +1446,8 @@ class GetAllDescriptionRegion(ListAPIView):
             point7year = request.data['point7year'],
             point7_natural_composition = request.data['point7_natural_composition'],
             id_economy_sapling = request.data['id_economy_sapling'],
-            recomendation = request.data['recomendation']
+            recomendation = request.data['recomendation'],
+            id_method_of_reforestation = request.data['id_method_of_reforestation']
         )
         ser_listregion = ListRegionUpdateNonMarkDel(data=request.data, instance=instance_region)
         if len(request.data['gps']) > 0:

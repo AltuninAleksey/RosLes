@@ -518,9 +518,9 @@ class DescriptionRegion(models.Model):
                                        on_delete=models.CASCADE,
                                        verbose_name="Перечетная ведомость участка", null=True)
     # MethodOfReforestation
-    id_method_of_reforestation = models.ForeignKey("MethodOfReforestation",
-                                                   on_delete=models.CASCADE, verbose_name="Способ лесовосстановления",
-                                                   null=True)
+    # id_method_of_reforestation = models.ForeignKey("MethodOfReforestation",
+    #                                                on_delete=models.CASCADE, verbose_name="Способ лесовосстановления",
+    #                                                null=True)
     year_assignment_land = models.IntegerField(choices=YEAR_CHOICES, default=datetime.datetime.now().year,
                                             verbose_name="Год отнесения к землям", null=True)
     year_format_fond_trees = models.IntegerField(choices=YEAR_CHOICES, default=datetime.datetime.now().year,
@@ -611,6 +611,9 @@ class FieldCard(models.Model):
     class Meta:
         verbose_name = "Полевая карточка"
         verbose_name_plural = "Полевая карточка"
+
+    def calculate_count_of_sample(self):
+        return Sample.objects.filter(id_list_region = self.id_list_region).count()
 
 
 class SchemaMixingBreeds(models.Model):
