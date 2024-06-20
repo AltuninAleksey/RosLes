@@ -771,7 +771,7 @@ class Point7TableView(ListAPIView):
 class Point7TableSaplingView(ListAPIView):
 
     def get(self, request, *args, **kwargs):
-        from staticpy.calculate_ratio_version3 import calculate
+        from staticpy.calculate_ratio_version4 import calculate
 
         if not FieldCard.objects.filter(pk=kwargs['id_field_card']).exists():
             return Response({"error": "fieldcard not found"}, status=status.HTTP_404_NOT_FOUND)
@@ -2052,7 +2052,11 @@ class DeleteAllByDescRegion(ListAPIView):
 class ForestViewSet(viewsets.ModelViewSet):
     pass
 
-#
 
+
+class CreateSampleByListRegionId(ListAPIView):
+
+    def post(self, request, *args, **kwargs):
+        pass
 
 
