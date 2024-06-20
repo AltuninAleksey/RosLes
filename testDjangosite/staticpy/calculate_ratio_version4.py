@@ -34,7 +34,7 @@ def calculate_all_plants_of_breed(id_breed, request):
     if not count_diameter == 0:
         avg_diameter = avg_diameter/count_diameter
     if not count_age == 0:
-        avg_age = avg_age/count_age
+        avg_age = round(avg_age/count_age)
     if all_plants != 0:
         ratio_composition = round(((total*100)/all_plants)/10)
     if avg_height_total != 0:
