@@ -338,7 +338,7 @@ class SampleView(generics.ListCreateAPIView):
         serializer = SampleSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response({'post': status.HTTP_201_CREATED}, status=status.HTTP_201_CREATED)
+        return Response({'post': status.HTTP_201_CREATED, 'id': serializer.data['id']}, status=status.HTTP_201_CREATED)
 
     def put(self, request, *args, **kwargs):
         # ids_dict = {}
