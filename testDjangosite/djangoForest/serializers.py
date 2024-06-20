@@ -114,6 +114,7 @@ class ListSerializer(serializers.ModelSerializer):
         instance.count_of_plants = validated_data.get("count_of_plants")
         instance.avg_height = validated_data.get("avg_height")
         instance.avg_height_undergrowth = validated_data.get("avg_height_undergrowth")
+        instance.age = validated_data.get("age")
         instance.main = validated_data.get("main")
         instance.mark_update = 0
         instance.save()
