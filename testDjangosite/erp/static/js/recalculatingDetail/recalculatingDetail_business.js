@@ -54,3 +54,13 @@ RecalculatingDetailBusiness.getUpdateSampleandother = async function(data) {
 
     return requestData.data;
 }
+
+RecalculatingDetailBusiness.deleteListById = async function(id) {
+    var requestData = await axios({
+      method: 'delete',
+      url: urlGlobal + "/list/" + id,
+      responseType: 'json'
+    });
+
+    return requestData.data.get;
+}

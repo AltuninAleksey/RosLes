@@ -31,6 +31,14 @@ StatementRecalculationsBusiness.getStatementListByFilter = async function(data) 
     return requestData.data.data;
 }
 
+StatementRecalculationsBusiness.deleteStatementRecalculationById = async function(id) {
+    var requestData = await axios({
+        method: 'delete',
+        url: urlGlobal + "/listregion/" + id,
+        responseType: 'json'
+    });
+}
+
 StatementRecalculationsBusiness.TypeData = {
     ALL: 0,
     BYID: 1

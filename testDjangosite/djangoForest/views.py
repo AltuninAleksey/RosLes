@@ -955,7 +955,6 @@ class GetAllListRegionData(viewsets.ViewSet):
                 print(czl_objects)
                 for i in czl_objects:
                     if i.get('id_subject') != subject_id:
-                        print(f"id subject{i.get('id_subject')} и {subject_id}")
                         lst = ListRegion.objects.filter(
                             id_district_forestly_id__id_forestly_id__id_subject_rf_id=i.get('id_subject'))
                         data.append(GetAllListRegionDataSerializer(lst, many=True).data)

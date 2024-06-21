@@ -122,7 +122,7 @@ td {
     height: 50px;
     margin-left: 30px;
     grid-template-columns: 180px 205px 270px;
-    grid-column-gap: 55px;
+    grid-column-gap: 35px;
     margin-bottom: -30px;
 }
 .rerect input{
@@ -133,7 +133,7 @@ td {
 .n1{
     height: 50px;
     margin-bottom: 5px;
-    grid-template-columns: 205px 235px 350px 350px;
+    grid-template-columns: 205px 320px 350px 350px;
 }
 .n1 select{
     height: 30px;

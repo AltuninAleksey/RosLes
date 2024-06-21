@@ -138,6 +138,10 @@ function setEventListenerForObjects() {
 async function openPage() {
     let idDocument = document.getElementById("idDocument").value;
 
+    APP.delIdGpsPoint = [];
+    APP.delIdList = [];
+    APP.delIdPoint7 = [];
+
     //var allForestData = await CommonBusiness.getAllForest();
 
     APP.userData = await CommonBusiness.getUserData();
@@ -175,6 +179,7 @@ async function openPage() {
     APP.allEconomy = await PrintFieldCardBusiness.getAllEconomy();
 
     await setDataInPage();
+    setDataInProfile();
 }
 
 async function setDataInPage() {
@@ -203,15 +208,26 @@ async function setConclusion() {
     document.getElementById("point7agreed2").value = APP.documentData.point7agreed;
     document.getElementById("number_order").value = APP.documentData.number_order == null? "188" : APP.documentData.number_order;
     document.getElementById("plot_farm_referring_land").value = APP.documentData.plot_farm_referring_land;
-    document.getElementById("recomendation").value = APP.documentData.recomendation;
+    document.getElementById("recomendation").value = APP.documentData.recomendation == null? "Отсутствует": APP.documentData.recomendation;
     document.getElementById("plot_features").value = APP.documentData.plot_features;
     document.getElementById("site_survey").value = APP.documentData.site_survey;
     document.getElementById("in_front").value = APP.documentData.in_front;
     if(APP.documentData.date_and_time != null) {
-        document.getElementById("date_and_time").value = APP.documentData.date_and_time.substring(0, APP.documentData.date_and_time.length-4);;
+        document.getElementById("date_and_time").value = APP.documentData.date_and_time.substring(0, 10);
     } else {
         document.getElementById("date_and_time").value = "";
     }
+    if(APP.documentData.start_at != null) {
+        document.getElementById("start_at").value = APP.documentData.start_at;
+    } else {
+        document.getElementById("start_at").value = "";
+    }
+    if(APP.documentData.end_at != null) {
+        document.getElementById("end_at").value = APP.documentData.end_at;
+    } else {
+        document.getElementById("end_at").value = "";
+    }
+
 
 
     var number_order = document.getElementById('number_order');
@@ -345,6 +361,14 @@ async function saveFieldCard() {
         data.date_and_time = document.getElementById("date_and_time").value == ""? APP.documentData.date_and_time:document.getElementById("date_and_time").value;
     }
 
+    if(checkData(document.getElementById("start_at").value == ""? APP.documentData.start_at:document.getElementById("start_at").value)) {
+        data.start_at = document.getElementById("start_at").value == ""? APP.documentData.start_at:document.getElementById("start_at").value;
+    }
+
+    if(checkData(document.getElementById("end_at").value == ""? APP.documentData.end_at:document.getElementById("end_at").value)) {
+        data.end_at = document.getElementById("end_at").value == ""? APP.documentData.end_at:document.getElementById("end_at").value;
+    }
+
     if(checkData(document.getElementById("forest_type").value == ""? null: document.getElementById("forest_type").value)) {
         data.forest_type = document.getElementById("forest_type").value == ""? null: document.getElementById("forest_type").value;
     }
@@ -453,7 +477,7 @@ async function saveFieldCard() {
 
 
     if(!CommonFunction.checkMandatoryData()) {
-        alert("Заполните все обязательные поля!");
+        ShowModal('m1', 'Заполните все обязательные поля!', '/static/img/exclamation-circle.svg')
         return;
     }
 
@@ -465,11 +489,11 @@ async function saveFieldCard() {
 
         var itemData = {
             id: Number(document.getElementById("idLine"+i).value),
-            ratio_composition: document.getElementById("ratio_composition"+i).value,
-            age: document.getElementById("age"+i).value,
-            avg_diameter: document.getElementById("avg_diameter"+i).value,
-            avg_height: document.getElementById("avg_height"+i).value,
-            count_plants: document.getElementById("count_of_plants"+i).value,
+            ratio_composition: document.getElementById("ratio_composition"+i).value == ""? "0":document.getElementById("ratio_composition"+i).value,
+            age: document.getElementById("age"+i).value == ""? "0":document.getElementById("age"+i).value,
+            avg_diameter: document.getElementById("avg_diameter"+i).value == ""? "0":document.getElementById("avg_diameter"+i).value,
+            avg_height: document.getElementById("avg_height"+i).value == ""? "0":document.getElementById("avg_height"+i).value,
+            count_plants: document.getElementById("count_of_plants"+i).value == ""? "0":document.getElementById("count_of_plants"+i).value,
             breed: document.getElementById("id_breed"+i).value,
             id_field_card: APP.documentData.id
         }
@@ -479,28 +503,43 @@ async function saveFieldCard() {
 
     await PrintFieldCardBusiness.getUpdatePoint7Table(point7Date);
 
-    ShowModal('m1');
-}
+//    var point7Table2SaplingData = [];
+//
+//    for(var i = 0; i < APP.point7Table2Sapling.length; i++) {
+//        var itemData = {
+//            id: Number(document.getElementById("id_list"+i).value),
+//            age: Number(document.getElementById("age_molodniac"+i).value)
+//        }
+//
+//        point7Table2SaplingData.push(itemData)
+//    }
+//
+//    var point7Table2SaplingRequestData = {
+//        data: point7Table2SaplingData
+//    }
+//
+//    await PrintFieldCardBusiness.updateAgeMolodniac(point7Table2SaplingRequestData);
 
-function ShowModal(elId) {
-    var modalAll = document.getElementById(elId);
-    modalAll.style.display = "flex";
-    document.body.style.overflow = 'hidden'
+
+    for(var i = 0; i < APP.delIdList.length; i++) {
+        await PrintFieldCardBusiness.deletePoint7Table2Sapling(APP.delIdList[i]);
+    }
+
+    for(var i = 0; i < APP.delIdGpsPoint.length; i++) {
+        await PrintFieldCardBusiness.deleteGpsPoint(APP.delIdGpsPoint[i]);
+    }
+
+    for(var i = 0; i < APP.delIdPoint7.length; i++) {
+        await PrintFieldCardBusiness.deletePoint7Table(APP.delIdPoint7[i]);
+    }
+
+    ShowModal('m1', 'Сохранение прошло успешно', '/static/img/check-circle-fill.svg')
 
     setTimeout(function() {
-      HideModal(modalAll);
-    }, 1500);
-}
-
-function HideModal(ell) {
-    if (ell.classList.contains('modal-all')) {
-      ell.style.display = "none";
-    }
-    document.body.style.overflow = '';
-
-    let idDocument = document.getElementById("idDocument").value;
-    let idParent = document.getElementById("idParent").value;
-    getPrintFieldCard(idDocument, idParent);
+        let idDocument = document.getElementById("idDocument").value;
+        let idParent = document.getElementById("idParent").value;
+        getPrintFieldCard(idDocument, idParent);
+      }, 3000);
 }
 
 async function generateDocx() {
@@ -542,11 +581,11 @@ async function generateDocx() {
         for(var i = 0; i < APP.point7Table2Sapling.length; i++) {
 
             var itemData = {
-                ratio: APP.point7Table2Sapling[i].ratio_composition,
-                age: APP.point7Table2Sapling[i].age,
+                ratio_composition: APP.point7Table2Sapling[i].ratio_composition,
+                age: APP.point7Table2Sapling[i].avg_age,
                 diameter: APP.point7Table2Sapling[i].avg_diameter,
                 avg_height: APP.point7Table2Sapling[i].avg_height,
-                count_plants: APP.point7Table2Sapling[i].count_of_plants,
+                count_of_plants: APP.point7Table2Sapling[i].total,
                 breed: CommonFunction.getBreedsName(APP.breeds, APP.point7Table2Sapling[i].id_breed)
             }
 
@@ -591,7 +630,9 @@ async function generateDocx() {
         stock_sapling: document.getElementById("stock2").value,
         saplings: saplings,
         conclusion: document.getElementById("conclusion").value,
-        date_and_time:  document.getElementById("date_and_time").value == ""? APP.documentData.date_and_time:document.getElementById("date_and_time").value,
+        date_and_time:  document.getElementById("date_and_time").value == "" || document.getElementById("date_and_time").value == null ? "":document.getElementById("date_and_time").value,
+        start_at:  document.getElementById("start_at").value == "" || document.getElementById("start_at").value == null? "":document.getElementById("start_at").value,
+        end_at:  document.getElementById("end_at").value == "" || document.getElementById("end_at").value == null? "":document.getElementById("end_at").value,
         recomendation: document.getElementById("recomendation").value,
         plot_features: document.getElementById("plot_features").value,
         site_survey: document.getElementById("site_survey").value,

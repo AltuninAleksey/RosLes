@@ -2,6 +2,8 @@ openPage();
 
 async function openPage() {
 
+    APP.deleteIdSample = [];
+
     let idDocument = document.querySelector("#idDocument").value;
 
     //var allForestData = await CommonBusiness.getAllForest();
@@ -10,6 +12,8 @@ async function openPage() {
     //APP.forestly = allForestData.forestly;
     //APP.district_forestly = allForestData.district_forestly;
     //APP.quarter = allForestData.quarter;
+
+    APP.userData = await CommonBusiness.getUserData();
 
     APP.documentData = await StatementRecalculationsBusinessDetail.getStatementRecalculationsDetailDataById(idDocument);
     //APP.subjects = await CommonBusiness.getAllSubjectrf();
@@ -39,6 +43,7 @@ async function openPage() {
     await setDetailDataIdPage();
 
     setEvent();
+    setDataInProfile();
 }
 
 async function setDetailDataIdPage() {
@@ -115,13 +120,37 @@ async function setSampleList() {
                         <td class="td4">${CommonFunction.getDistrictForestlyNameByQuarterId(APP.district_forestly, APP.sampleList[i].id_district_forestly)}</td>
                         <td class="td9">${APP.sampleList[i].dacha == null? "" : APP.sampleList[i].dacha}</td>
                         <td class="textAlignCenter td5">${APP.sampleList[i].name_quarter == null? "":APP.sampleList[i].name_quarter}</td>
-                        <td class="textAlignCenter td6">${APP.sampleList[i].soil_lot}</td>
-                    </tr>`;
+                        <td class="textAlignCenter td6">${APP.sampleList[i].soil_lot}</td>` +
+                        "<td style=\"width: 1%;\">" +
+                            "<svg onclick=\"event.stopPropagation();deleteNewLineInSampleList(" + APP.sampleList[i].id + ")\" class=\"cursorPointer\" width=\"23px\" height=\"23px\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">" +
+                                "<g id=\"SVGRepo_bgCarrier\" stroke-width=\"0\"></g> " +
+                                "<g id=\"SVGRepo_tracerCarrier\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></g>" +
+                                "<g id=\"SVGRepo_iconCarrier\">" +
+                                    "<path d=\"M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17\" stroke=\"#000000\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path> " +
+                                "</g>" +
+                            "</svg>" +
+                        "</td>" +
+                    `</tr>`;
     }
 
     sampleListTbodyNode.innerHTML = newHtml;
 }
 
+function deleteNewLineInSampleList(del_id) {
+
+    APP.deleteIdSample.push(del_id);
+
+    let oldSampleList = APP.sampleList;
+    APP.sampleList = [];
+
+    for(var i = 0; i < oldSampleList.length; i++) {
+        if(oldSampleList[i].id != del_id) {
+            APP.sampleList.push(oldSampleList[i])
+        }
+    }
+
+    setSampleList();
+}
 
 function sortByDate() {
     if(APP.sortOrderTable1 != 1) {
@@ -232,7 +261,31 @@ async function setQuarterStatement() {
     quarterStatementNode.innerHTML = newHtml;
 }
 
+async function createSample() {
+
+    let data = {
+        date: new Date().toLocaleDateString('en-CA'),
+        sample_area: 0,
+        soil_lot: null,
+        width: 0,
+        lenght: 0,
+        square: 0,
+        id_profile: APP.userData.id,
+        id_list_region: APP.documentData.id,
+        mark_update: 0
+    }
+
+    let result = await StatementRecalculationsBusinessDetail.createSample(data);
+
+    getRecalculatingDetail(result.id, document.querySelector("#idDocument").value);
+}
+
 async function saveData() {
+
+    if(!CommonFunction.checkMandatoryData()) {
+        ShowModal('m1', 'Заполните все обязательные поля!', '/static/img/exclamation-circle.svg')
+        return;
+    }
 
     let id = document.querySelector("#idDocument").value;
     let numberStatementNode = document.querySelector("#numberStatement").value;
@@ -259,25 +312,15 @@ async function saveData() {
 
     await StatementRecalculationsBusinessDetail.getUpdateSample(id, data);
 
-    ShowModal('m1');
-}
+    for(var i = 0; i < APP.deleteIdSample.length; i++) {
+        await StatementRecalculationsBusinessDetail.deleteSample(APP.deleteIdSample[i]);
+    }
 
-function ShowModal(elId) {
-    var modalAll = document.getElementById(elId);
-    modalAll.style.display = "flex";
-    document.body.style.overflow = 'hidden'
+    ShowModal('m1', 'Сохранение прошло успешно', '/static/img/check-circle-fill.svg')
 
     setTimeout(function() {
-      HideModal(modalAll);
-    }, 1500);
+        let id = document.querySelector("#idDocument").value;
+        getStatementRecalculationsDetail(id);
+      }, 3000);
 }
 
-function HideModal(ell) {
-    if (ell.classList.contains('modal-all')) {
-      ell.style.display = "none";
-    }
-    document.body.style.overflow = '';
-
-    let id = document.querySelector("#idDocument").value;
-    getStatementRecalculationsDetail(id);
-}

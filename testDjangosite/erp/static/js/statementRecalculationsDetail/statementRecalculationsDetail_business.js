@@ -33,3 +33,22 @@ StatementRecalculationsBusinessDetail.getUpdateSample = async function(id, data)
         responseType: 'json'
     });
 }
+
+StatementRecalculationsBusinessDetail.createSample = async function(data) {
+    var requestData = await axios({
+        method: 'post',
+        url: urlGlobal + "/sample",
+        data: data,
+        responseType: 'json'
+    });
+
+    return requestData.data;
+}
+
+StatementRecalculationsBusinessDetail.deleteSample = async function(id) {
+    var requestData = await axios({
+        method: 'DELETE',
+        url: urlGlobal + "/sample/" + id,
+        responseType: 'json'
+    });
+}

@@ -46,6 +46,7 @@
     width: 194px;
 }
 .add{
+    height: 33px;
     width: 325px;
     color: #000000;
     margin-right: 0;
@@ -91,6 +92,7 @@
     margin-right: 30px;
 }
 .formcheck{
+    margin-bottom: 120px;
     width: 452px;
     height: 432px;
     margin-top: 36px;

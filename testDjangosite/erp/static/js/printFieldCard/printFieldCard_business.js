@@ -157,6 +157,16 @@ PrintFieldCardBusiness.getPoint7Table2SaplingById = async function(id) {
     return requestData.data;
 }
 
+PrintFieldCardBusiness.updateAgeMolodniac = async function(data) {
+    var requestData = await axios({
+      method: 'put',
+      url: urlGlobal + "/updateage",
+      data: data,
+      responseType: 'json'
+    });
+
+}
+
 PrintFieldCardBusiness.generateDocx = async function(data) {
     var requestData = await axios({
       method: 'post',
@@ -188,6 +198,37 @@ PrintFieldCardBusiness.getSampleByIdListRegion = async function(id) {
     });
 
     return requestData.data.data;
+}
+
+PrintFieldCardBusiness.deleteGpsPoint = async function(id) {
+    var requestData = await axios({
+      method: 'delete',
+      url: urlGlobal + "/gps/" + id,
+      responseType: 'json'
+    });
+
+    return requestData.data.get;
+}
+
+PrintFieldCardBusiness.deletePoint7Table2Sapling = async function(id) {
+    var requestData = await axios({
+      method: 'delete',
+      url: urlGlobal + "/list/" + id,
+      responseType: 'json'
+    });
+
+    return requestData.data.get;
+}
+
+
+PrintFieldCardBusiness.deletePoint7Table = async function(id) {
+    var requestData = await axios({
+      method: 'delete',
+      url: urlGlobal + "/plotcoeff/" + id,
+      responseType: 'json'
+    });
+
+    return requestData.data.get;
 }
 
 

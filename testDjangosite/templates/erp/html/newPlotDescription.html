@@ -16,6 +16,7 @@
     <script src="{% static 'js/common/common_business.js' %}"></script>
     <script src="{% static 'js/newPlotDescription/plotDescription_business.js' %}" defer></script>
     <script src="{% static 'js/newPlotDescription/plotDescription_construct_view.js' %}" defer></script>
+    <script src="{% static 'js/common.js' %}" defer></script>
     {% endblock %}
 </head>
 <body style="margin:0 !important">
@@ -45,6 +46,9 @@
                         </svg>
                     <a  ><h3>Справочники</h3></a>
                 </div>
+            </div>
+            <div class="col-md-3-button-profile">
+                <button class="save-profile" >Профиль</button>
             </div>
         </div>
         <div class="hiv2">
@@ -149,26 +153,36 @@
                             Проведение ухода за лесами (осветление) </option>
                         <option value="Проведение ухода за лесами (прочистка)">
                             Проведение ухода за лесами (прочистка)</option>
-                        <option value="Внесение критериев и требований к молоднякам, площади которых подлежат отнесению
-                        к землям, на которых расположены леса, в лесохозяйственный регламент лесничества ">
+                        <option value="Внесение критериев и требований к молоднякам, площади которых подлежат отнесению к землям, на которых расположены леса, в лесохозяйственный регламент лесничества ">
                             внесение критериев и требований к молоднякам, площади которых подлежат отнесению к землям,
                             на которых расположены леса, в лесохозяйственный регламент лесничества </option>
                     </select>
 <!--                    <textarea  name="" id="recommendation" cols="30" rows="10"></textarea>-->
                 </form>
             </div>
+    </div>
+    <div id="m1" class="modal-all" >
+        <div id="m1i" class="modal">
+          <p class="modal-text">Сохранение прошло успешно</p>
+          <img class="modal-image" src="{% static '/img/check-circle-fill.svg' %}" alt="">
         </div>
-        <div id="m1" class="modal-all" >
-            <div id="m1i" class="modal">
-              Сохранение прошло успешно
-              <svg fill="#000000" width="64px" height="64px" viewBox="0 0 24 24" id="check-mark-circle"
-              xmlns="http://www.w3.org/2000/svg" class="icon line"><g id="SVGRepo_bgCarrier"
-              stroke-width="0"></g>
-              <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-              <g id="SVGRepo_iconCarrier"><path id="primary"
-                d="M12,21h0a9,9,0,0,1-9-9H3a9,9,0,0,1,9-9h0a9,9,0,0,1,9,9h0A9,9,0,0,1,12,21ZM8,11.5l3,3,5-5"
-                style="fill: none; stroke: #FFFFFF; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.5;"></path></g></svg>
+    </div>
+    <div id="m1profile" class="modal-all-profile">
+        <div id="m1i-profile" class="modal-profile">
+            <div class="login-form-profile" >
+                <button class="but-exit" onclick="HideModalProfile(m1profile, event)"><span class="close-btn">&times;</span></button>
+                <h2 id="teg" style="color: black; margin-left: 20px;">Данные пользователя</h2>
+                <p class="form-profile"><input id="profile_fio" type="text" placeholder="FIO"/></p>
+                <p class="form-profile">
+                    <input type="tel" placeholder="8хххххххххх" maxlength="14" pattern = "8 [0-9]{3} [0-9]{3} [0-9]{4}" id="profile_phone"/></p>
+                <select name="sub" id="subjectStatement-profile" placeholder="password">
+                </select>
+                <div class="knopki-profile">
+                  <button class="rem" onclick="saveDataInProfile()">Сохранить</button>
+                  <button class="exit" onclick="getAvtorization()">Выйти</button>
+                </div>
             </div>
         </div>
+    </div>
 </body>
 </html>

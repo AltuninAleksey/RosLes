@@ -15,6 +15,7 @@
     <script src="{% static 'js/common/common_business.js' %}"></script>
     <script src="{% static 'js/mergeStatementRecalculations/mergeStatementRecalculations_business.js' %}" defer></script>
     <script src="{% static 'js/mergeStatementRecalculations/mergeStatementRecalculations_construct_view.js' %}" defer></script>
+    <script src="{% static 'js/common.js' %}" defer></script>
     {% endblock %}
 </head>
 <body style="margin:0 !important">
@@ -44,6 +45,9 @@
                         </svg>
                     <a ><h3>Справочники</h3></a>
                 </div>
+            </div>
+            <div class="col-md-3-button-profile">
+                <button class="save-profile" >Профиль</button>
             </div>
         </div>
         <div class="hiv2">
@@ -154,6 +158,23 @@
                     <tbody id="statementRecalculations_tbody">
                     </tbody>
                 </table>
+            </div>
+        </div>
+    </div>
+    <div id="m1profile" class="modal-all-profile">
+        <div id="m1i-profile" class="modal-profile">
+            <div class="login-form-profile" >
+                <button class="but-exit" onclick="HideModalProfile(m1profile, event)"><span class="close-btn">&times;</span></button>
+                <h2 id="teg" style="color: black; margin-left: 20px;">Данные пользователя</h2>
+                <p class="form-profile"><input id="profile_fio" type="text" placeholder="FIO"/></p>
+                <p class="form-profile">
+                    <input type="tel" placeholder="8хххххххххх" maxlength="14" pattern = "8 [0-9]{3} [0-9]{3} [0-9]{4}" id="profile_phone"/></p>
+                <select name="sub" id="subjectStatement-profile" placeholder="password">
+                </select>
+                <div class="knopki-profile">
+                  <button class="rem" onclick="saveDataInProfile()">Сохранить</button>
+                  <button class="exit" onclick="getAvtorization()">Выйти</button>
+                </div>
             </div>
         </div>
     </div>

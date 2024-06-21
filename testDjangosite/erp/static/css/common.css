@@ -1,3 +1,9 @@
+.mandatory_warning {
+    border: 3px solid red !important;
+}
+
+/*---------------------------*/
+
 .textAlignCenter {
     text-align: center;
 }
@@ -52,6 +58,142 @@
 	height: 140px;
 	color: #FFFFFF;
 	border: 1px solid silver;
+	border-radius: 15px;
+	padding: 15px;
+}
+
+.modal-image {
+	width: 60px;
+	height: 60px;
+	filter: invert(100%);
+}
+/*---------------------------*/
+
+.col-md-3-button-profile {
+    display: flex;
+    justify-content: end;
+    height: 50px;
+}
+
+.save-profile {
+    vertical-align: middle;
+    font: normal 300 20px/19px Roboto;
+    padding: 6.5px 25px;
+    cursor: pointer;
+    height: 35px;
+    margin-top: 10px;
+    margin-right: 10px;
+    background: none;
+    border: none;
+    color: white;
+}
+
+.save-profile:hover{
+    border-bottom: 3px solid #40E0D0;
+}
+
+.modal-all-profile {
+	display: none;
+	background: rgba(20, 20, 20, 0.3);
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	top: 93px;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+	justify-content: end;
+}
+
+.modal-profile {
+	display: flex;
+    justify-content: space-evenly;
+    background: #fff;
+	font: normal 300 20px/19px Roboto;
+	width: 400px;
+	height: 400px;
+	color: #FFFFFF;
+	border: 3px solid #177164;
+    margin-right: 10px;
+    margin-top: 10px;
 	border-radius: 25px;
 	padding: 15px;
+}
+
+.login-form-profile{
+    display: grid;
+    grid-template-columns: 340px;
+    margin-bottom: 2px;
+    margin-top: 10px;
+}
+.login-form-profile input {
+    height: 30px;
+    border: none;
+    border-bottom: 1px solid black;
+    font: normal 500 20px/19px Roboto;
+    background-color: transparent;
+    color: black;
+    outline: none;
+    text-align: start;
+}
+::placeholder {
+    color:black;
+ }
+.rem,
+.exit{
+    height: 30px;
+    border: 1px solid #177164;
+    border-radius: 20px;
+    font-size: 16px;
+    margin-top: 20px;
+}
+.rem:active,
+.exit:active{
+    cursor: pointer;
+    background-color: #40E0D0;
+    border: 1px solid #40E0D0;
+}
+.rem:hover,
+.exit:hover{
+    cursor: pointer;
+    background-color: #40E0D0;
+    border: 1px solid #40E0D0;
+}
+.form-profile{
+    height: 30px;
+}
+.form-profile input{
+    width: 336px;
+}
+.modal-all-profile select{
+    border-radius: 4px;
+    margin-top: 20px;
+    height: 30px;
+    border: 1px solid black;
+    color: black;
+    background-color: transparent;
+    width: 100%;
+}
+.modal-all-profile option{
+    color: black;
+}
+.knopki-profile{
+    display: flex;
+    justify-content: space-between;
+}
+.exit{
+    padding: 0 22px;
+}
+.close-btn {
+    font-size: 30px;
+    font-weight: normal;
+    color: #000;
+    cursor: pointer;
+  }
+.but-exit{
+    position: absolute;
+    top: 20px;
+    right: 25px;
+    background-color: white;
+    border: none;
 }

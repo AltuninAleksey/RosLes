@@ -31,6 +31,17 @@ FieldCardBusiness.getFieldCardListByFilter = async function(data) {
     return requestData.data.data;
 }
 
+FieldCardBusiness.deleteFieldCardById = async function(data) {
+    var requestData = await axios({
+        method: 'delete',
+        url: urlGlobal + "/deleteallbyfieldcard",
+        data: data,
+        responseType: 'json'
+    });
+
+    return requestData.data.data;
+}
+
 FieldCardBusiness.TypeData = {
     ALL: 0,
     BYID: 1

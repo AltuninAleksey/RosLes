@@ -31,6 +31,7 @@ async function openPage() {
     await setDetailDataIdPage();
 
     setEvent();
+    setDataInProfile();
 }
 
 async function setDetailDataIdPage() {
@@ -147,6 +148,11 @@ async function setQuarterStatement() {
 
 async function saveData() {
 
+    if(!CommonFunction.checkMandatoryData()) {
+        ShowModal('m1', 'Заполните все обязательные поля!', '/static/img/exclamation-circle.svg')
+        return;
+    }
+
     let numberStatementNode = document.querySelector("#numberStatement").value;
     let dateStatementNode = document.querySelector("#dateStatement").value;
     let soilLotStatementNode = document.querySelector("#soilLotStatement").value;
@@ -170,24 +176,10 @@ async function saveData() {
 
     await StatementRecalculationsBusinessDetail.getCreateSample(data);
 
-    ShowModal('m1');
-}
-
-function ShowModal(elId) {
-    var modalAll = document.getElementById(elId);
-    modalAll.style.display = "flex";
-    document.body.style.overflow = 'hidden'
+    ShowModal('m1', 'Сохранение прошло успешно', '/static/img/check-circle-fill.svg')
 
     setTimeout(function() {
-      HideModal(modalAll);
-    }, 1500);
-}
+        getStatementRecalculations();
+      }, 3000);
 
-function HideModal(ell) {
-    if (ell.classList.contains('modal-all')) {
-      ell.style.display = "none";
-    }
-    document.body.style.overflow = '';
-
-    getStatementRecalculations();
 }

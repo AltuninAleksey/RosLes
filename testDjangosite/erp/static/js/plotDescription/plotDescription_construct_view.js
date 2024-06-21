@@ -46,6 +46,8 @@ async function openPage() {
 
     APP.allEconomy = await PlotDescriptionBusiness.getAllEconomy();
 
+    APP.userData = await CommonBusiness.getUserData();
+
     //var allForestData = await CommonBusiness.getAllForest();
 
     //APP.subjectrf = await CommonBusiness.getAllSubjectrf();
@@ -78,6 +80,7 @@ async function openPage() {
     APP.documentData = await PlotDescriptionBusiness.getPlotDescriptionDataById(idDocument);
 
     await setDataInPage();
+    setDataInProfile();
 }
 
 async function setDataInPage() {
@@ -97,7 +100,7 @@ async function setDataInPage() {
     document.getElementById("change_breed_and_structure_sapling").value = APP.documentData.change_breed_and_structure_sapling;
     document.getElementById("breed_composition_sapling_data_surver").value = APP.documentData.breed_composition;
     document.getElementById("results_surtvey").value = APP.documentData.results_surtvey;
-    document.getElementById("recommendation").value = APP.documentData.recomendation;
+    document.getElementById("recommendation").value = APP.documentData.recomendation == null? "Отсутствует": APP.documentData.recomendation;
 
     let typeReproduction = document.getElementById("typeReproduction");
     let newHtml = "";
@@ -319,6 +322,8 @@ async function saveData() {
     if(breed_structure_sapling_act_land != null && breed_structure_sapling_act_land != undefined && breed_structure_sapling_act_land != "") {
         data.breed_structure_sapling_act_land = breed_structure_sapling_act_land;
         data.point7_natural_composition = breed_structure_sapling_act_land;
+    } else {
+        data.point7_natural_composition = null;
     }
 
     if(economy_act_land != null && economy_act_land != undefined && economy_act_land != "") {
@@ -347,47 +352,36 @@ async function saveData() {
     if(breed_composition_sapling_data_surver != null && breed_composition_sapling_data_surver != undefined && breed_composition_sapling_data_surver != "") {
         data.breed_composition_sapling_data_surver = breed_composition_sapling_data_surver;
         data.breed_composition = breed_composition_sapling_data_surver;
+    } else {
+        data.breed_composition = null;
     }
 
     if(typeReproduction != null && typeReproduction != undefined && typeReproduction != "") {
         data.id_method_of_reforestation = typeReproduction;
     }
 
+    data.start_at = APP.documentData.start_at;
+    data.end_at = APP.documentData.end_at;
+
 
     let idDocument = document.getElementById("idDocument").value;
     let idParent = document.getElementById("idParent").value;
 
     if(!CommonFunction.checkMandatoryData()) {
-        alert("Заполните все обязательные поля!");
+        ShowModal('m1', 'Заполните все обязательные поля!', '/static/img/exclamation-circle.svg')
         return;
     }
 
     await PlotDescriptionBusiness.setPlotDescriptionDataById(idDocument, data);
 
-    ShowModal('m1');
-}
-
-function ShowModal(elId) {
-    var modalAll = document.getElementById(elId);
-    modalAll.style.display = "flex";
-    document.body.style.overflow = 'hidden'
+    ShowModal('m1', 'Сохранение прошло успешно', '/static/img/check-circle-fill.svg')
 
     setTimeout(function() {
-      HideModal(modalAll);
-    }, 1500);
+        let idDocument = document.getElementById("idDocument").value;
+        let idParent = document.getElementById("idParent").value;
+        getPlotDescription(idDocument, idParent);
+      }, 3000);
 }
-
-function HideModal(ell) {
-    if (ell.classList.contains('modal-all')) {
-      ell.style.display = "none";
-    }
-    document.body.style.overflow = '';
-
-    let idDocument = document.getElementById("idDocument").value;
-    let idParent = document.getElementById("idParent").value;
-    getPlotDescription(idDocument, idParent);
-}
-
 
 async function generateDocx() {
 
@@ -405,13 +399,13 @@ async function generateDocx() {
         year_format_fond_trees: document.getElementById("year_format_fond_trees").value,
         inf_restore_forest: document.getElementById("inf_restore_forest").value,
         breed_structure_sapling_act_land: document.getElementById("breed_structure_sapling_act_land").value,
-        economy_act_land: document.getElementById("economy_act_land").value,
+        economy_act_land: document.getElementById("economy_act_land").options[document.getElementById("economy_act_land").selectedIndex].text,
         change_breed_and_structure_sapling: document.getElementById("change_breed_and_structure_sapling").value,
         results_surtvey: document.getElementById("results_surtvey").value,
         recommendation: document.getElementById("recommendation").value,
         count_plants: APP.documentData.count_plants,
         preservation_breed: APP.documentData.preservation_breed,
-        farm_according_data_survey: document.getElementById("farm_according_data_survey").value,
+        farm_according_data_survey: document.getElementById("farm_according_data_survey").options[document.getElementById("farm_according_data_survey").selectedIndex].text,
         breed_composition_sapling_data_surver: document.getElementById("breed_composition_sapling_data_surver").value,
         method_of_reforestation: document.getElementById("typeReproduction").options[document.getElementById("typeReproduction").selectedIndex].text,
         name_dacha: document.getElementById("dacha").value

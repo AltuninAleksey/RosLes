@@ -51,6 +51,10 @@ function setEventListenerForObjects() {
 async function openPage() {
     let idDocument = document.getElementById("idDocument").value;
 
+    APP.deleteIdTableNull = [];
+    APP.deleteIdTableOne = [];
+
+
     //var allForestData = await CommonBusiness.getAllForest();
 
     //APP.subjectrf = await CommonBusiness.getAllSubjectrf();
@@ -58,6 +62,8 @@ async function openPage() {
     //APP.forestly = allForestData.forestly;
     //APP.district_forestly = allForestData.district_forestly;
     //APP.quarter = allForestData.quarter;
+
+    APP.userData = await CommonBusiness.getUserData();
 
     var czl = await CommonBusiness.getCZL();
     APP.subjectrf = [];
@@ -98,6 +104,7 @@ async function openPage() {
 
     setDataFormAddProba();
 
+    setDataInProfile();
 }
 
 function setDataFormAddProba() {
@@ -176,6 +183,11 @@ function closeAddForm(id) {
 }
 
 async function saveRecalculating() {
+    if(!CommonFunction.checkMandatoryData()) {
+        ShowModal('m1', 'Заполните все обязательные поля!', '/static/img/exclamation-circle.svg')
+        return;
+    }
+
     let idDocument = document.getElementById("idDocument").value;
     let idParent = document.getElementById("idParent").value;
     var regionRFForm = document.getElementById("regionRF");
@@ -207,27 +219,20 @@ async function saveRecalculating() {
 
     await RecalculatingDetailBusiness.getUpdateSampleandother(requestData);
 
-    ShowModal('m1');
+    for(var i = 0; i <  APP.deleteIdTableOne.length; i++) {
+        await RecalculatingDetailBusiness.deleteListById(APP.deleteIdTableOne[i]);
+    }
 
-}
+    for(var i = 0; i <  APP.deleteIdTableNull.length; i++) {
+        await RecalculatingDetailBusiness.deleteListById(APP.deleteIdTableNull[i]);
+    }
 
-function ShowModal(elId) {
-    var modalAll = document.getElementById(elId);
-    modalAll.style.display = "flex";
-    document.body.style.overflow = 'hidden'
+    ShowModal('m1', 'Сохранение прошло успешно', '/static/img/check-circle-fill.svg')
 
     setTimeout(function() {
-      HideModal(modalAll);
-    }, 1500);
-}
+        let idDocument = document.getElementById("idDocument").value;
+        let idParent = document.getElementById("idParent").value;
+        getRecalculatingDetail(idDocument, idParent);
+      }, 3000);
 
-function HideModal(ell) {
-    if (ell.classList.contains('modal-all')) {
-      ell.style.display = "none";
-    }
-    document.body.style.overflow = '';
-
-    let idDocument = document.getElementById("idDocument").value;
-    let idParent = document.getElementById("idParent").value;
-    getRecalculatingDetail(idDocument, idParent);
 }

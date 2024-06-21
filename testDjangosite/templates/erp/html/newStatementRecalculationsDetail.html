@@ -16,6 +16,7 @@
     <script src="{% static 'js/common/common_business.js' %}"></script>
     <script src="{% static 'js/newStatementRecalculationsDetail/newStatementRecalculationsDetail_business.js' %}" defer></script>
     <script src="{% static 'js/newStatementRecalculationsDetail/newStatementRecalculationsDetail_construct_view.js' %}" defer></script>
+    <script src="{% static 'js/common.js' %}" defer></script>
     {% endblock %}
 </head>
 <body style="margin:0 !important">
@@ -46,6 +47,9 @@
                         </svg>
                     <a><h3>Справочники</h3></a>
                 </div>
+            </div>
+            <div class="col-md-3-button-profile">
+                <button class="save-profile" >Профиль</button>
             </div>
         </div>
         <div class="hiv2">
@@ -99,7 +103,7 @@
                     <p>Площать участка:</p>
                 </div>
                 <div>
-                    <input id="numberStatement" type="text">
+                    <input class="mandatory" id="numberStatement" type="text">
                     <input id="dateStatement" type="date">
 <!--                    <input id="subjectStatement" type="text" readonly>-->
                     <select name="sub" id="subjectStatement">
@@ -115,10 +119,10 @@
                         <option >Четдинское</option>
                         <option >Локчимское</option>
                     </select>
-                    <input id="quarterStatement" type="text">
+                    <input class="mandatory" id="quarterStatement" type="text">
                     <input id="dachaStatement" type="text">
-                    <input id="soilLotStatement" type="text">
-                    <input id="sampleRegionStatement" type="text">
+                    <input class="mandatory" id="soilLotStatement" type="text">
+                    <input class="mandatory" id="sampleRegionStatement" type="text">
                 </div>
             </form>
     <div class="content">
@@ -150,14 +154,25 @@
     </div>
     <div id="m1" class="modal-all" >
         <div id="m1i" class="modal">
-          Сохранение прошло успешно
-          <svg fill="#000000" width="64px" height="64px" viewBox="0 0 24 24" id="check-mark-circle"
-          xmlns="http://www.w3.org/2000/svg" class="icon line"><g id="SVGRepo_bgCarrier"
-          stroke-width="0"></g>
-          <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-          <g id="SVGRepo_iconCarrier"><path id="primary"
-            d="M12,21h0a9,9,0,0,1-9-9H3a9,9,0,0,1,9-9h0a9,9,0,0,1,9,9h0A9,9,0,0,1,12,21ZM8,11.5l3,3,5-5"
-            style="fill: none; stroke: #FFFFFF; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.5;"></path></g></svg>
+          <p class="modal-text">Сохранение прошло успешно</p>
+          <img class="modal-image" src="{% static '/img/check-circle-fill.svg' %}" alt="">
+        </div>
+    </div>
+    <div id="m1profile" class="modal-all-profile">
+        <div id="m1i-profile" class="modal-profile">
+            <div class="login-form-profile" >
+                <button class="but-exit" onclick="HideModalProfile(m1profile, event)"><span class="close-btn">&times;</span></button>
+                <h2 id="teg" style="color: black; margin-left: 20px;">Данные пользователя</h2>
+                <p class="form-profile"><input id="profile_fio" type="text" placeholder="FIO"/></p>
+                <p class="form-profile">
+                    <input type="tel" placeholder="8хххххххххх" maxlength="14" pattern = "8 [0-9]{3} [0-9]{3} [0-9]{4}" id="profile_phone"/></p>
+                <select name="sub" id="subjectStatement-profile" placeholder="password">
+                </select>
+                <div class="knopki-profile">
+                  <button class="rem" onclick="saveDataInProfile()">Сохранить</button>
+                  <button class="exit" onclick="getAvtorization()">Выйти</button>
+                </div>
+            </div>
         </div>
     </div>
 </body>

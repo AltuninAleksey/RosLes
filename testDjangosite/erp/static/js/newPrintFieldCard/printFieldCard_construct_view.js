@@ -184,6 +184,7 @@ async function openPage() {
     APP.allEconomy = await PrintFieldCardBusiness.getAllEconomy();
 
     await setDataInPage();
+    setDataInProfile();
 }
 
 async function setDataInPage() {
@@ -214,6 +215,8 @@ async function setConclusion() {
     document.getElementById("site_survey").value = "";
     document.getElementById("in_front").value = "";
     document.getElementById("date_and_time").value = "";
+    document.getElementById("start_at").value = "";
+    document.getElementById("end_at").value = "";
 
     var number_order = document.getElementById('number_order');
     var number_order_2 = document.getElementById('number_order_2');
@@ -314,6 +317,14 @@ async function saveFieldCard() {
 
     if(checkData(document.getElementById("date_and_time").value == ""? APP.documentData.date_and_time:document.getElementById("date_and_time").value)) {
         data.date_and_time = document.getElementById("date_and_time").value == ""? APP.documentData.date_and_time:document.getElementById("date_and_time").value;
+    }
+
+    if(checkData(document.getElementById("start_at").value == ""? APP.documentData.start_at:document.getElementById("start_at").value)) {
+        data.start_at = document.getElementById("start_at").value == ""? APP.documentData.start_at:document.getElementById("start_at").value;
+    }
+
+    if(checkData(document.getElementById("end_at").value == ""? APP.documentData.end_at:document.getElementById("end_at").value)) {
+        data.end_at = document.getElementById("end_at").value == ""? APP.documentData.end_at:document.getElementById("end_at").value;
     }
 
     if(checkData(document.getElementById("forest_type").value == ""? null: document.getElementById("forest_type").value)) {
@@ -424,7 +435,7 @@ async function saveFieldCard() {
 
 
     if(!CommonFunction.checkMandatoryData()) {
-        alert("Заполните все обязательные поля!");
+        ShowModal('m1', 'Заполните все обязательные поля!', '/static/img/exclamation-circle.svg')
         return;
     }
 
@@ -436,11 +447,11 @@ async function saveFieldCard() {
 
         var itemData = {
             id: Number(document.getElementById("idLine"+i).value),
-            ratio_composition: document.getElementById("ratio_composition"+i).value,
-            age: document.getElementById("age"+i).value,
-            avg_diameter: document.getElementById("avg_diameter"+i).value,
-            avg_height: document.getElementById("avg_height"+i).value,
-            count_plants: document.getElementById("count_of_plants"+i).value,
+            ratio_composition: document.getElementById("ratio_composition"+i).value == ""? "0":document.getElementById("ratio_composition"+i).value,
+            age: document.getElementById("age"+i).value == ""? "0":document.getElementById("age"+i).value,
+            avg_diameter: document.getElementById("avg_diameter"+i).value == ""? "0":document.getElementById("avg_diameter"+i).value,
+            avg_height: document.getElementById("avg_height"+i).value == ""? "0":document.getElementById("avg_height"+i).value,
+            count_plants: document.getElementById("count_of_plants"+i).value == ""? "0":document.getElementById("count_of_plants"+i).value,
             breed: document.getElementById("id_breed"+i).value,
             id_field_card: createData.id
         }
@@ -450,28 +461,12 @@ async function saveFieldCard() {
 
     await PrintFieldCardBusiness.getUpdatePoint7Table(point7Date);
 
-    ShowModal('m1');
-}
-
-function ShowModal(elId) {
-    var modalAll = document.getElementById(elId);
-    modalAll.style.display = "flex";
-    document.body.style.overflow = 'hidden'
+    ShowModal('m1', 'Сохранение прошло успешно', '/static/img/check-circle-fill.svg')
 
     setTimeout(function() {
-      HideModal(modalAll);
-    }, 1500);
+        getFieldCard();
+      }, 3000);
 }
-
-function HideModal(ell) {
-    if (ell.classList.contains('modal-all')) {
-      ell.style.display = "none";
-    }
-    document.body.style.overflow = '';
-
-    getFieldCard();
-}
-
 
 
 function checkData(data) {

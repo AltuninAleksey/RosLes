@@ -64,6 +64,7 @@ async function openPage() {
     APP.documentData = {}
 
     await setDataInPage();
+    setDataInProfile();
 }
 
 async function setDataInPage() {
@@ -269,6 +270,8 @@ async function saveData() {
     if(breed_structure_sapling_act_land != null && breed_structure_sapling_act_land != undefined && breed_structure_sapling_act_land != "") {
         data.breed_structure_sapling_act_land = breed_structure_sapling_act_land;
         data.point7_natural_composition = breed_structure_sapling_act_land;
+    } else {
+        data.point7_natural_composition = null;
     }
 
     if(economy_act_land != null && economy_act_land != undefined && economy_act_land != "") {
@@ -297,39 +300,29 @@ async function saveData() {
     if(breed_composition_sapling_data_surver != null && breed_composition_sapling_data_surver != undefined && breed_composition_sapling_data_surver != "") {
         data.breed_composition_sapling_data_surver = breed_composition_sapling_data_surver;
         data.breed_composition = breed_composition_sapling_data_surver;
+    } else {
+        data.breed_composition = null;
     }
 
     if(typeReproduction != null && typeReproduction != undefined && typeReproduction != "") {
         data.id_method_of_reforestation = typeReproduction;
     }
 
+    data.start_at = null;
+    data.end_at = null;
+
 
 
     if(!CommonFunction.checkMandatoryData()) {
-        alert("Заполните все обязательные поля!");
+        ShowModal('m1', 'Заполните все обязательные поля!', '/static/img/exclamation-circle.svg')
         return;
     }
 
     await NewPlotDescriptionBusiness.createPlotDescription(data);
 
-    ShowModal('m1');
-}
-
-function ShowModal(elId) {
-    var modalAll = document.getElementById(elId);
-    modalAll.style.display = "flex";
-    document.body.style.overflow = 'hidden'
+    ShowModal('m1', 'Сохранение прошло успешно', '/static/img/check-circle-fill.svg')
 
     setTimeout(function() {
-      HideModal(modalAll);
-    }, 1500);
-}
-
-function HideModal(ell) {
-    if (ell.classList.contains('modal-all')) {
-      ell.style.display = "none";
-    }
-    document.body.style.overflow = '';
-
-    getDescriptionListLand();
+        getDescriptionListLand();
+      }, 3000);
 }

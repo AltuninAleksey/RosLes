@@ -31,6 +31,17 @@ DescriptionListLandBusiness.getDescriptionLandListByFilter = async function(data
     return requestData.data.data;
 }
 
+DescriptionListLandBusiness.deleteDescriptionLandById = async function(data) {
+    var requestData = await axios({
+        method: 'delete',
+        url: urlGlobal + "/deleteallbydescregion",
+        data: data,
+        responseType: 'json'
+    });
+
+    return requestData.data.data;
+}
+
 DescriptionListLandBusiness.TypeData = {
     ALL: 0,
     BYID: 1

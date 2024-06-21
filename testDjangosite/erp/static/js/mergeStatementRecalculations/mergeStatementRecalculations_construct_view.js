@@ -113,9 +113,12 @@ async function buildStatementRecalculationsTbody() {
     APP.dataTable = data;
     APP.sortOrderTable1 = 0;
 
-    updateDataInStatementRecalculationsTbody(data);
+    sortByDate();
+
+    //updateDataInStatementRecalculationsTbody(data);
 
     setEventForElementsFilter();
+    setDataInProfile();
 }
 
 function sortByDate() {
