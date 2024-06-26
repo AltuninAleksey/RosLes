@@ -96,6 +96,7 @@ class SelectPhoto:BaseActivity() {
                     db.writephoto(temp.bitmap_to_base(thumbnailBitmap), id_sample,gpsManager.latitude,gpsManager.longitude,LocalDateTime.now().format(formatter).toString())
                     db.Mark_Update_Sample(id_sample)
                     db.Mark_Update_Listregion(id_vdomost)
+                    onRestart()
                 }
             }
         }
