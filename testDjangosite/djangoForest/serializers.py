@@ -598,7 +598,7 @@ class GetDocumentListSerializerNonNull(serializers.ModelSerializer):
 
     class Meta:
         model = List
-        fields = ('id', 'count_of_plants', 'avg_height', 'id_undergrowth', 'id_breed')
+        fields = ('id', 'count_of_plants', 'avg_height', 'id_undergrowth', 'id_breed', 'avg_height_undergrowth')
 
 
 class GetGPS(serializers.Serializer):
