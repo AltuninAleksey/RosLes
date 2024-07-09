@@ -627,6 +627,7 @@ class GetSampleListDataSerializer(serializers.Serializer):
     id_profile = serializers.CharField(source='id_profile.id')
     profile = serializers.CharField(source='id_profile.FIO')
     soil_lot = serializers.CharField()
+    square = serializers.FloatField()
     number_region = serializers.CharField(source='id_list_region.number_region')
 
 
@@ -680,6 +681,7 @@ class GetAllListRegionDataSerializer(serializers.Serializer):
     id_district_forestly = serializers.IntegerField(source="id_district_forestly.id", allow_null = True)
     id_forestly = serializers.IntegerField(source="id_district_forestly.id_forestly.id", allow_null = True)
     id_subject_rf = serializers.IntegerField(source="id_district_forestly.id_forestly.id_subject_rf.id", allow_null = True)
+    number_region = serializers.IntegerField()
     mark_del = serializers.BooleanField()
     soil_lot = serializers.CharField()
 
