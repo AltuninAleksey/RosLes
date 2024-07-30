@@ -780,8 +780,15 @@ class Point7TableSaplingView(ListAPIView):
         data = ListSerializer(List.objects.filter(id_sample__id_list_region=id_list_region[0]['id_list_region'],
                                                   id_undergrowth = None, count_of_plants__gt = 0),
                               many=True).data
-        print(data)
-        calc_data = calculate(data)
+        sample_obj = []
+        for id in data:
+            sample_obj.append(id['id_sample'])
+        sample_data = SampleSerializer(Sample.objects.filter(id__in=sample_obj), many=True).data
+        print(sample_data)
+
+        # print(data)
+        # print(data[0])
+        calc_data = calculate(data, sample_data)
         return Response(calc_data)
         # if kwargs:
         #     from staticpy.calculate_ratio_composition import calculate_coeff

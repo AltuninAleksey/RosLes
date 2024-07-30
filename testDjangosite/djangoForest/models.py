@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import F
 import datetime
 # from .manager import AccountManager
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
@@ -191,6 +192,11 @@ class ListRegion(models.Model):
     def __str__(self):
         # return f"{self.date}, {self.soil_lot}"
         return f"{self.id}"
+
+    def save(self, *args, **kwargs):
+        super(ListRegion, self).save(*args, **kwargs)
+        ListRegion.objects.update(number_region = F('id'))
+        # print(self.number_region)
 
 
 class Sample(models.Model):
@@ -607,6 +613,8 @@ class FieldCard(models.Model):
     respond_farm = models.BooleanField(default=False, verbose_name="Соответствует хозяйству.")
     start_at = models.CharField(max_length=200, verbose_name='начиная с', null = True, default=None)
     end_at = models.CharField(max_length=200, verbose_name='заканчивая до', null = True, default=None)
+    details_regulations = models.CharField(max_length=500, verbose_name = 'реквизиты лесохозяйственного регламента',
+                                           null=True, blank=True, default=None)
 
     class Meta:
         verbose_name = "Полевая карточка"
