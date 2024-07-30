@@ -1,4 +1,4 @@
-def calculate_all_plants_of_breed(id_breed, request):
+def calculate_all_plants_of_breed(id_breed, request, square_total):
     all_plants = calculate_all_plants(request)
     total = 0
     count_diameter = 0
@@ -41,7 +41,12 @@ def calculate_all_plants_of_breed(id_breed, request):
         avg_height_total = round(avg_height_total/total)
     if avg_diameter_total != 0:
         avg_diameter_total =round(avg_diameter_total/total)
-    count_of_plants = round((total*10000)/400)
+    if square_total != 0:
+        count_of_plants = round((total*10000)/square_total)
+    else:
+        print(square_total)
+        print("SQUARE 0!")
+        count_of_plants = round((total * 10000) / 400)
     return {"id_breed": id_breed, "total": count_of_plants,
             "avg_height": avg_height_total, "avg_diameter": avg_diameter_total, "avg_age": avg_age,
             "ratio_composition": ratio_composition}
@@ -66,21 +71,30 @@ def percent_of_breed(return_data, all_plants):
 
     return return_data
 
+def calculate_square(square_data):
+    square_total = 0
+    for square in square_data:
+        if square['square'] != None:
+            square_total+= square['square']
+    return square_total
 
-def calculate(data):
+
+def calculate(data, square_data):
+    # print(data)
+    square_total = calculate_square(square_data)
     breed_list = []
     all_plants = calculate_all_plants(data)
     return_data = []
     for i in data:
-        print(i)
+        # print(i)
         if i['id_breed'] not in breed_list:
             breed_list.append(i['id_breed'])
 
     for k in breed_list:
-        return_data.append(calculate_all_plants_of_breed(k, data))
+        return_data.append(calculate_all_plants_of_breed(k, data, square_total))
 
     # return_data = percent_of_breed(return_data, all_plants)
-    print(breed_list)
-    print(all_plants)
+    # print(breed_list)
+    # print(all_plants)
 
     return return_data
