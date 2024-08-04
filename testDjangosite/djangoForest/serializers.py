@@ -850,6 +850,7 @@ class FieldCardSerializer(serializers.ModelSerializer):
         instance.respond_farm = validated_data.get('respond_farm')
         instance.start_at = validated_data.get('start_at')
         instance.end_at = validated_data.get('end_at')
+        instance.details_regulations = validated_data.get('details_regulations')
         instance.save()
         return instance
 
