@@ -124,7 +124,10 @@ class sync() {
 
         for (i in oldsample.indices){
            sendphoto(db,oldsample[i].id,sample[i].id,context,viewModels)
-           viewModels.putLIST(LIST_REQEST(db.getLIST(oldsample[i].id,sample[i].id)))
+
+           viewModels.putLIST(LIST_REQEST(
+               db.getLIST(oldsample[i].id,sample[i].id),sample[i].id
+           ))
         }
 
 
@@ -146,7 +149,7 @@ class sync() {
         }
 
 
-
+//TEST
         var filePath = "/data/data/com.example.rosles/databases/userdb.db"
         var file = File(filePath)
         if (file.exists()) {

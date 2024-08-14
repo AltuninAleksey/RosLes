@@ -68,6 +68,7 @@
         <activity android:name="com.example.rosles.Screens.ChangeSample"/>
         <activity android:name="com.example.rosles.Screens.GpxTrack"/>
         <activity android:name="com.example.rosles.Screens.change_user"/>
+        <activity android:name="com.example.rosles.TestActivity"/>
 
 
         <provider
