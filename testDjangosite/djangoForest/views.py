@@ -104,7 +104,7 @@ class ListView(generics.ListCreateAPIView):
 
         List.objects.filter(id_sample = request.data['id_sample'])
         for i in range(len(request.data['data'])):
-            serializer = ListSerializer(data=request.data['data']['i'])
+            serializer = ListSerializer(data=request.data['data'][i])
             serializer.is_valid(raise_exception=True)
             serializer.save()
             lst = List.objects.get(id=serializer.data['id'])
