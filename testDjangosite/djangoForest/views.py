@@ -102,25 +102,36 @@ class ListView(generics.ListCreateAPIView):
             except:
                 return Response({"Объект с данным id не найден"})
 
+        List.objects.filter(id_sample = request.data['id_sample'])
         for i in range(len(request.data['data'])):
-            if request.data['data'][i]['mark_update'] == 1:
-                if List.objects.filter(id=request.data['data'][i]["id"]).exists():
-                    instance = List.objects.get(id=request.data['data'][i]["id"])
-                    serealizer = ListSerializer(data=request.data["data"][i], instance=instance)
-                    serealizer.is_valid(raise_exception=True)
-                    serealizer.save()
-                    # ids_dict.update({request.data['data'][i]['id']: serealizer.data['id']})
-                    ids_dict.append({"obj": {"last": request.data['data'][i]['id'], "new": serealizer.data['id']}})
-            elif request.data['data'][i]['mark_update'] == 2:
-                serializer = ListSerializer(data=request.data['data'][i])
-                serializer.is_valid(raise_exception=True)
-                serializer.save()
-                lst = List.objects.get(id=serializer.data['id'])
-                lst.mark_update = 0
-                lst.save()
-                # ids_dict.update({request.data['data'][i]['id']: serializer.data['id']})
-                ids_dict.append({"obj": {"last": request.data['data'][i]['id'], "new": serializer.data['id']}})
+            serializer = ListSerializer(data=request.data['data']['i'])
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            lst = List.objects.get(id=serializer.data['id'])
+            lst.mark_update = 0
+            lst.save()
+            ids_dict.append({"obj": {"last": request.data['data'][i]['id'], "new": serializer.data['id']}})
+
         return Response({"put": status.HTTP_200_OK, "ids": ids_dict}, status=status.HTTP_200_OK)
+        # for i in range(len(request.data['data'])):
+        #     if request.data['data'][i]['mark_update'] == 1:
+        #         if List.objects.filter(id=request.data['data'][i]["id"]).exists():
+        #             instance = List.objects.get(id=request.data['data'][i]["id"])
+        #             serealizer = ListSerializer(data=request.data["data"][i], instance=instance)
+        #             serealizer.is_valid(raise_exception=True)
+        #             serealizer.save()
+        #             # ids_dict.update({request.data['data'][i]['id']: serealizer.data['id']})
+        #             ids_dict.append({"obj": {"last": request.data['data'][i]['id'], "new": serealizer.data['id']}})
+        #     elif request.data['data'][i]['mark_update'] == 2:
+        #         serializer = ListSerializer(data=request.data['data'][i])
+        #         serializer.is_valid(raise_exception=True)
+        #         serializer.save()
+        #         lst = List.objects.get(id=serializer.data['id'])
+        #         lst.mark_update = 0
+        #         lst.save()
+        #         # ids_dict.update({request.data['data'][i]['id']: serializer.data['id']})
+        #         ids_dict.append({"obj": {"last": request.data['data'][i]['id'], "new": serializer.data['id']}})
+        # return Response({"put": status.HTTP_200_OK, "ids": ids_dict}, status=status.HTTP_200_OK)
         # return Response({"put": status.HTTP_200_OK}, status=status.HTTP_200_OK)
 
     def delete(self, *args, **kwargs):
