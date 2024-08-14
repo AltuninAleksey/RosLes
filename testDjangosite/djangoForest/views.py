@@ -102,7 +102,8 @@ class ListView(generics.ListCreateAPIView):
             except:
                 return Response({"Объект с данным id не найден"})
 
-        List.objects.filter(id_sample = request.data['id_sample'])
+        List.objects.filter(id_sample = request.data['id_sample']).delete()
+
         for i in range(len(request.data['data'])):
             serializer = ListSerializer(data=request.data['data'][i])
             serializer.is_valid(raise_exception=True)
