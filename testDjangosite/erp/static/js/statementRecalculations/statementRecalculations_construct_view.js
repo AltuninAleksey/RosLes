@@ -139,13 +139,14 @@ function updateDataInStatementRecalculationsTbody(data) {
         let strGetStatementRecalculationsDetail = "getStatementRecalculationsDetail(" + data[i].id  + ")"
         newHtml = newHtml + `<tr class="cursorPointer" onClick=${strGetStatementRecalculationsDetail}>
                             <td class="textAlignCenter td1">${data[i].date}</td>
-                            <td class="textAlignCenter td8">${data[i].id}</td>
+                            <td class="textAlignCenter td8">${data[i].number_region}</td>
                             <td class="td2">${data[i].subjectrf}</td>
                             <td class="td3">${data[i].forestly}</td>
                             <td class="td4">${data[i].district_forestly}</td>
                             <td class="td9">${data[i].dacha == null? "" : data[i].dacha}</td>
                             <td class="textAlignCenter td5">${data[i].name_quarter == null? "" : data[i].name_quarter}</td>
                             <td class="textAlignCenter td6">${data[i].soil_lot}</td>
+                            <td class="textAlignCenter td6">${data[i].sample_region}</td>
                             <td style="width: 10px; text-align: center;"` +  "onClick='event.stopPropagation();deleteStatementRecalculation(" + data[i].id + ");'>" +
                                 `<svg width="23px" height="23px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <g id="SVGRepo_bgCarrier" stroke-width="0"></g>

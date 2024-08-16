@@ -195,7 +195,6 @@ async function saveRecalculating() {
     var ucLesNameForm = document.getElementById("ucLesName");
     var quarterForm = document.getElementById("quarter");
     var soil_lotForm = document.getElementById("soil_lot");
-    var sample_areaForm = document.getElementById("sample_area");
 
     var requestData = {
         sample: {
@@ -207,7 +206,7 @@ async function saveRecalculating() {
             id_profile: APP.documentData.id_profile,
             name_quarter: quarterForm.value,
             dacha: document.getElementById("dacha").value == ""? null:document.getElementById("dacha").value,
-            sample_area: document.getElementById("sample_area_recalculation").value,
+            square: document.getElementById("square_recalculation").value,
             soil_lot: document.getElementById("soil_lot_recalculating").value,
             number_region: document.getElementById("number_region").value
         },

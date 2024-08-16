@@ -114,7 +114,7 @@ async function setSampleList() {
 
         newHtml += `<tr class="cursorPointer" onClick=${strGetRecalculatingDetail}>
                         <td class="td1">${APP.sampleList[i].date}</td>
-                        <td class="td8">${APP.sampleList[i].id}</td>
+                        <td class="td8">${APP.documentData.number_region}/${APP.sampleList[i].id}</td>
                         <td class="td2">${CommonFunction.getSubjectNameByQuarterId(APP.subjects, APP.sampleList[i].id_subject_rf)}</td>
                         <td class="td3">${CommonFunction.getForestlyNameByQuarterId(APP.forestly, APP.sampleList[i].id_forestly)}</td>
                         <td class="td4">${CommonFunction.getDistrictForestlyNameByQuarterId(APP.district_forestly, APP.sampleList[i].id_district_forestly)}</td>

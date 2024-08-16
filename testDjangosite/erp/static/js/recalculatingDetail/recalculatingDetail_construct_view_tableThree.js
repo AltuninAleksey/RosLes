@@ -6,15 +6,15 @@ function setDataInTableThree() {
         if(APP.dataTable_3[i].flag_center == 1) {
             newHtml = newHtml + "<tr>" +
                                     "<td class=\"gps-point-td1\">" + (i+1) + "</td>" +
-                                    "<td class=\"gps-point-td2\">" + APP.dataTable_3[i].latitude + "</td>" +
-                                    "<td class=\"gps-point-td2\">" + APP.dataTable_3[i].longitude + "</td>" +
+                                    "<td class=\"gps-point-td2\">" + Number(APP.dataTable_3[i].latitude).toFixed(6) + "</td>" +
+                                    "<td class=\"gps-point-td2\">" + Number(APP.dataTable_3[i].longitude).toFixed(6) + "</td>" +
                                     "<td class=\"gps-point-td2\"><input onchange=\"changeGps(" + i + ")\" type=\"checkbox\" checked></td>" +
                                 "</tr>";
         } else {
             newHtml = newHtml + "<tr>" +
                                     "<td class=\"gps-point-td1\">" + (i+1) + "</td>" +
-                                    "<td class=\"gps-point-td2\">" + APP.dataTable_3[i].latitude + "</td>" +
-                                    "<td class=\"gps-point-td2\">" + APP.dataTable_3[i].longitude + "</td>" +
+                                    "<td class=\"gps-point-td2\">" + Number(APP.dataTable_3[i].latitude).toFixed(6) + "</td>" +
+                                    "<td class=\"gps-point-td2\">" + Number(APP.dataTable_3[i].longitude).toFixed(6) + "</td>" +
                                     "<td class=\"gps-point-td2\"><input onchange=\"changeGps(" + i + ")\" type=\"checkbox\"></td>" +
                                 "</tr>";
         }

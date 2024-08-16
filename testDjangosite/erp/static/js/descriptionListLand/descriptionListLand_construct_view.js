@@ -135,7 +135,7 @@ function updateDataInDescriptionLandTbody(data) {
 
         newHtml = newHtml + `<tr class="cursorPointer" onClick=${strGetDescriptionLandDetail}>
                             <td class="textAlignCenter td1">${data[i].date}</td>
-                            <td class="textAlignCenter td8">${data[i].id}</td>
+                            <td class="textAlignCenter td8">${data[i].number_region}/${data[i].id}</td>
                             <td class="td2">${data[i].subjectrf}</td>
                             <td class="td3">${data[i].forestly}</td>
                             <td class="td4">${data[i].district_forestly}</td>

@@ -10,7 +10,7 @@ function setDataInTableNull() {
             newHtml = newHtml + `<tr>
                 <td class="podles_td_1">${name_undergrowth}</td>
                 <td class="podles_td_2">${APP.dataTable_0[i].count_of_plants}</td>
-                <td class="podles_td_3">${APP.dataTable_0[i].avg_height}</td>` +
+                <td class="podles_td_3">${APP.dataTable_0[i].avg_height_undergrowth}</td>` +
                 "<td style=\"width: 1%;\">" +
                     "<svg onclick=\"deleteLineInTableNull(" + APP.dataTable_0[i].id + ")\" class=\"cursorPointer\" width=\"23px\" height=\"23px\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">" +
                         "<g id=\"SVGRepo_bgCarrier\" stroke-width=\"0\"></g> " +
@@ -25,7 +25,7 @@ function setDataInTableNull() {
             newHtml = newHtml + `<tr>
                 <td class="podles_td_1">${name_undergrowth}</td>
                 <td class="podles_td_2">${APP.dataTable_0[i].count_of_plants}</td>
-                <td class="podles_td_3">${APP.dataTable_0[i].avg_height}</td>` +
+                <td class="podles_td_3">${APP.dataTable_0[i].avg_height_undergrowth}</td>` +
                 "<td style=\"width: 1%;\">" +
                     "<svg onclick=\"deleteNewLineInTableNull(" + i + ")\" class=\"cursorPointer\" width=\"23px\" height=\"23px\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">" +
                         "<g id=\"SVGRepo_bgCarrier\" stroke-width=\"0\"></g> " +
@@ -50,7 +50,7 @@ function addUndefground() {
     var newUndefground = {
         id: "",
         id_sample : APP.documentData.id,
-        avg_height: avg_h_add.value,
+        avg_height_undergrowth: avg_h_add.value,
         count_of_plants: count_add.value,
         id_breed: null,
         id_type_of_reproduction : Number(APP.active_type_reproduction),

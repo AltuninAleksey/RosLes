@@ -4,7 +4,7 @@ async function setDataInHeader() {
     document.getElementById("header_recalculating").innerHTML = `Перечет на пробной площади ${APP.documentData.id} от ${APP.documentData.date}`
     document.getElementById("number_recalculation").value = APP.documentData.id;
     document.getElementById("date_recalculation").value = APP.documentData.date;
-    document.getElementById("sample_area_recalculation").value = APP.documentData.sample_area;
+    document.getElementById("square_recalculation").value = APP.documentData.square;
     document.getElementById("soil_lot_recalculating").value = APP.documentData.soil_lot;
     document.getElementById("quarter").value = APP.documentData.name_quarter;
     document.getElementById("dacha").value = APP.documentData.dacha;

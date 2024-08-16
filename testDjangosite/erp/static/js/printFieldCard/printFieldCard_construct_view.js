@@ -208,6 +208,7 @@ async function setConclusion() {
     document.getElementById("point7agreed2").value = APP.documentData.point7agreed;
     document.getElementById("number_order").value = APP.documentData.number_order == null? "188" : APP.documentData.number_order;
     document.getElementById("plot_farm_referring_land").value = APP.documentData.plot_farm_referring_land;
+    document.getElementById("details_regulations").value = APP.documentData.details_regulations;
     document.getElementById("recomendation").value = APP.documentData.recomendation == null? "Отсутствует": APP.documentData.recomendation;
     document.getElementById("plot_features").value = APP.documentData.plot_features;
     document.getElementById("site_survey").value = APP.documentData.site_survey;
@@ -446,6 +447,12 @@ async function saveFieldCard() {
         data.protected_areas_of_forests = document.getElementById("protected_areas_of_forests").value;
     }
 
+    if(checkData(document.getElementById("details_regulations").value)) {
+        data.details_regulations = document.getElementById("details_regulations").value;
+    } else {
+        data.details_regulations = null;
+    }
+
     if(checkData(document.getElementById("recomendation").value)) {
         data.recomendation = document.getElementById("recomendation").value;
     }
@@ -640,7 +647,8 @@ async function generateDocx() {
         lands_other:  (document.getElementById("category_of_forest_fund_lands").value == 6) ? document.getElementById("lands_other").value : null,
         number_order: document.getElementById("number_order").options[number_order.selectedIndex] != null? document.getElementById("number_order").options[number_order.selectedIndex].text : "",
         name_dacha: document.getElementById("dacha").value,
-        respond_farm: document.getElementById("respond_farm").value
+        respond_farm: document.getElementById("respond_farm").value,
+        details_regulations: document.getElementById("details_regulations").value
     }
 
     if(!document.getElementById('plot_farm_referring_land').disabled) {

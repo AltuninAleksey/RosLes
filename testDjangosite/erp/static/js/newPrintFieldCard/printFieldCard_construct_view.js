@@ -404,6 +404,12 @@ async function saveFieldCard() {
         data.protected_areas_of_forests = document.getElementById("protected_areas_of_forests").value;
     }
 
+    if(checkData(document.getElementById("details_regulations").value)) {
+        data.details_regulations = document.getElementById("details_regulations").value;
+    } else {
+        data.details_regulations = null;
+    }
+
     if(checkData(document.getElementById("recomendation").value)) {
         data.recomendation = document.getElementById("recomendation").value;
     }
