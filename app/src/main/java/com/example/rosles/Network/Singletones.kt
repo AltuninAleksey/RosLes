@@ -1,7 +1,6 @@
 package com.example.rosles.Network
 
 import android.content.Context
-import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.example.rosles.Screens.Authorization
 import com.example.rosles.Screens.MainActivity
 import com.google.gson.GsonBuilder
@@ -21,7 +20,7 @@ object Const {
      */
     //dev URl 90.156.208.88:8093/
     //WORK URL http://92.50.227.100:58493
-    const val BASE_URL = "http://90.156.208.88:8093/"
+    const val BASE_URL = "http://92.50.227.100:58493"
 }
 
 interface SourcesProvider {
