@@ -237,9 +237,9 @@ class Wood : BaseActivity("Пробная площадь") {
                     db.updatepodles(u)
                 }
             }
-            db.updatevalue(id_vdomost)
+           db.updatevalue(id_vdomost)
             db.Mark_Update_Sample(id_sample)
-//            finish()
+           finish()
             Toast.makeText(this, "Данные записаны", Toast.LENGTH_SHORT)
                 .show()
         }
