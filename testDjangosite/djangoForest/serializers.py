@@ -759,6 +759,7 @@ class DescriptionRegionSerializer(serializers.ModelSerializer):
         instance.farm_according_data_survey = validated_data.get("farm_according_data_survey")
         instance.breed_composition_sapling_data_surver = validated_data.get("breed_composition_sapling_data_surver")
         # instance.id_quarter = validated_data.get("id_quarter")
+        instance.desc_forest_area = validated_data.get("desc_forest_area")
         instance.save()
         return instance
 
