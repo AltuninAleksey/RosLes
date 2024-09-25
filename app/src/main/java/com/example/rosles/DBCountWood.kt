@@ -330,7 +330,7 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
                 cursor.getIntOrNull(cursor.getColumnIndex("id_breed_id")),
                 cursor.getIntOrNull(cursor.getColumnIndex("id_type_of_reproduction_id")),
                 cursor.getIntOrNull(cursor.getColumnIndex("id_undergrowth_id")),
-                cursor.getInt(cursor.getColumnIndex("mark_update"))
+                //cursor.getInt(cursor.getColumnIndex("mark_update"))
             )
             listregionrequest.add(data)
             cursor.moveToNext()

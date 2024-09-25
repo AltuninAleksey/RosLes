@@ -1,7 +1,6 @@
 package com.example.rosles.Network
 
 import android.content.Context
-import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.example.rosles.Screens.Authorization
 import com.example.rosles.Screens.MainActivity
 import com.google.gson.GsonBuilder

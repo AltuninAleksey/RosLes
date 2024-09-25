@@ -2,7 +2,7 @@ package com.example.rosles.ResponceClass
 
 data class LIST_RESP(val get:List<LIST_DATA>) : BaseResponceInterface
 
-data class LIST_REQEST(val data:List<LIST_DATA>) : BaseResponceInterface
+data class LIST_REQEST(val data:List<LIST_DATA>,var id_sample: Int =0) : BaseResponceInterface
 
 data class LIST_DATA(
     val id: Int,
@@ -21,6 +21,4 @@ data class LIST_DATA(
     val id_breed: Int?,
     val id_type_of_reproduction: Int?,
     val id_undergrowth: Int?,
-    val mark_update: Int
-
 ) : BaseResponceInterface

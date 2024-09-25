@@ -22,6 +22,7 @@ import com.example.rosles.Network.ViewModels
 import com.example.rosles.R
 import com.example.rosles.ResponceClass.BaseResponceInterface
 import com.example.rosles.ResponceClass.temp_data_userresp
+import com.example.rosles.TestActivity
 import com.example.rosles.databinding.DashboardBinding
 import com.example.rosles.sync
 import kotlinx.coroutines.delay
@@ -48,6 +49,11 @@ class Dashboard: BaseActivity() {
         setContentView(binding.root)
 
 
+        binding.profile.setOnLongClickListener {
+
+            startActivity(Intent(this, TestActivity::class.java))
+            return@setOnLongClickListener true
+        }
         supportActionBar!!.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
         supportActionBar!!.setDisplayShowCustomEnabled(true)
         supportActionBar!!.setCustomView(R.layout.custom_action_bar)
