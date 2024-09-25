@@ -20,6 +20,8 @@ import com.example.rosles.Network.SafeRequest
 import com.example.rosles.Network.SourceProviderHolder
 import com.example.rosles.Network.ViewModels
 import com.example.rosles.R
+import com.example.rosles.RequestClass.AuthRequest
+import com.example.rosles.ResponceClass.AuthReSponce
 import com.example.rosles.ResponceClass.BaseResponceInterface
 import com.example.rosles.ResponceClass.temp_data_userresp
 import com.example.rosles.TestActivity
@@ -133,16 +135,48 @@ class Dashboard: BaseActivity() {
 
             var database = DBCountWood(this, null)
             database.writableDatabase
-            lifecycleScope.launch{
-                visibleScrool()
 
-                sync().load(viewModel,db,this@Dashboard)
+            visibleScrool()
+
+                SafeRequest(viewModel).request(object : SafeRequest.Protection{
+
+                    override suspend fun makeRequest(): BaseResponceInterface {
+                        val user = SourceProviderHolder.sourcesProvider.getAccountsSource().get_user(
+                            AuthRequest(
+                                "slinchenkovapa@rcfh.rosleshoz.gov.ru",
+                               "cnhfuf1997"
+                            )
+                        )
+                        return user
+                    }
+
+                    override fun ifSuccess(responce: BaseResponceInterface?) {
+                        lifecycleScope.launch {
+                            sync().load(viewModel, db, this@Dashboard)
+                            Toast.makeText(this@Dashboard, "Успех", Toast.LENGTH_SHORT).show()
+                            invisibleScrool()
+                        }
+                    }
+
+                    override fun ifConnectionException() {
+                        Toast.makeText(this@Dashboard, "Нет подключения к интернету", Toast.LENGTH_SHORT).show()
+                        invisibleScrool()
+                    }
+
+                    override fun ifAuthException() {
+
+                    }
+
+                })
+
+
+
+
 //                delay(2000)
 //                sync().main1(viewModel,database, context,value)
-                Toast.makeText(this@Dashboard, "Успех", Toast.LENGTH_SHORT).show()
-                invisibleScrool()
 
-            }
+
+
 
         }
 
