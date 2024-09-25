@@ -7,6 +7,7 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.graphics.Bitmap
+import android.util.Log
 import androidx.core.database.getIntOrNull
 import com.example.rosles.Models.*
 import com.example.rosles.ResponceClass.*
@@ -168,11 +169,14 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         )
 
     }
-    fun writeSUBJECTRF(id:Int,name_subject_RF:String){
+    fun writeSUBJECTRF(id:Int?,name_subject_RF:String?){
         val database: SQLiteDatabase = this.writableDatabase
-        database.execSQL(
-            "INSERT INTO djangoForest_subjectrf (id,name_subject_RF) VALUES ('$id','$name_subject_RF')"
-        )
+        if (name_subject_RF!=null)
+            database.execSQL(
+                "INSERT INTO djangoForest_subjectrf (id,name_subject_RF) VALUES ('$id','$name_subject_RF')"
+            )
+        else
+            Log.e("ERROR_DATABASE", name_subject_RF.toString())
 
     }
     fun writeFORESTLY(id:Int,name_forestly:String,id_subject_rf_id:Int){

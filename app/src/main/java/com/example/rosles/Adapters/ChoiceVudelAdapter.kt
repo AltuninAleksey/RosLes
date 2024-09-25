@@ -52,8 +52,8 @@ class ChoiceVudelAdapter(): BaseAdapter<Poroda, VedomostitemBinding>() {
             }
             data.apply {
                 numberLesnich.setText(data.id)
-                nameLesnich.setText(data.nameDistrictForestly)
-                districtForestly.setText(data.nameForestly)
+                nameLesnich.setText(data.nameForestly)
+                districtForestly.setText(data.nameDistrictForestly)
                 quter.setText(data.quarterName)
                 vudel.setText(data.soilLot)
                 dateTime.setText(data.date)
