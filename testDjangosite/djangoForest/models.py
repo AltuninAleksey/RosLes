@@ -103,6 +103,15 @@ class PhotoPoint(models.Model):
     longitude = models.FloatField(u'Долгота', blank=True, default=0)
     date = models.CharField(u'Дата', null=True, max_length=100)
 
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if self.photo:
+            from staticpy.cordinates import coord
+            coord(self.latitude, self.longitude, self.photo.path)
+
+
+
+
     class Meta:
         verbose_name = 'Фото точка'
         verbose_name_plural = 'Фото точка'
@@ -318,7 +327,7 @@ class ForestFormingByDefault(models.Model):
     id_breed = models.ForeignKey('Breed', on_delete= models.CASCADE, verbose_name='Порода')
 
     def save(self, *args,  **kwargs):
-        if ForestFormingByDefault.objects.get(id_profile_id = self.id_profile, id_breed_id = self.id_breed):
+        if ForestFormingByDefault.objects.get():
             return self
         super(ForestFormingByDefault, self).save(*args, **kwargs)
 
@@ -554,6 +563,9 @@ class DescriptionRegion(models.Model):
     breed_composition_sapling_data_surver = models.CharField(max_length=300,
                                                              verbose_name="Породный состав молодняка по данным натурного обследования",
                                                              null=True)
+    desc_forest_area = models.CharField(max_length=500, verbose_name="Информация о лесном районе",
+                                        null=True,
+                                        default=None)
 
 
 class FieldCard(models.Model):
