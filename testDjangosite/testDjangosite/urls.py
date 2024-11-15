@@ -29,6 +29,7 @@ urlpatterns = [
     re_path(r'^media/(?P<path>.*)$', serve,{'document_root': settings.MEDIA_ROOT}),
     re_path(r'^static/(?P<path>.*)$', serve,{'document_root': settings.STATIC_ROOT}),
     # path('exel', testviews.as_view()),
+    path('form_list_region', ListRegionDocxCreater.as_view()),
     path('logout', LogoutView.as_view()),
     path('v2/login', TokenObtainPairView.as_view()),
     path('v2/refresh', TokenRefreshView.as_view()),
