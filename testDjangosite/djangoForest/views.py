@@ -2068,30 +2068,53 @@ class DeleteAllByFieldCard(ListAPIView):
 class ListRegionDocxCreater(ListAPIView):
 
     def post(self, request, *args, **kwargs):
-        from staticpy.forming_docx import form_docx_listregion
+        # from staticpy.forming_docx import form_docx_listregion, prep_to_form, form_docx_listregion2, prepare_to_docx2
+        from staticpy.form_excel import list_region_excel
         if request.data['id']:
             try:
                 print(request.data['id'])
                 data = ListRegion.objects.get(id=request.data['id'])
             except:
                 return Response({"code": 404, "error_text": "not found id"})
+            # list_reg = ListRegionSerializer(ListRegion.objects.get(id=request.data['id'])).data
+            print("XKLANSFLKASNFALKSFNLANSLFNLAKSFNKLASNFKANSKLFNASKLNFKLA")
+            new_data = {}
+            zxc = ListRegionSerializer(data).data
 
-            new_data = ListRegionSerializer(data).data
             list_data = List.objects.filter(id_sample__id_list_region=request.data['id'])
-            sample_area = Sample.objects.filter(id_list_region=request.data['id']).values("sample_area", "square").get()
+            list_only_breeds = List.objects.filter(id_sample__id_list_region=request.data['id']).values('id_breed').distinct()
+            list_only_breeds_under = List.objects.filter(id_sample__id_list_region=request.data['id']).values(
+                'id_undergrowth').distinct()
+            sample_area = Sample.objects.filter(id_list_region=request.data['id']).values("sample_area", "square").first()
             field_card = FieldCard.objects.filter(id_list_region=request.data['id']).values("square_one_sample_area", "count_sample_area").get()
-            print(new_data)
-            ds_forestly = DistrictForestly.objects.filter(id = new_data['id_district_forestly']).values("name_district_forestly", "id_forestly").get()
+            ds_forestly = DistrictForestly.objects.filter(id = zxc['id_district_forestly']).values("name_district_forestly", "id_forestly").get()
             forestly = Forestly.objects.filter(id = ds_forestly['id_forestly']).values("name_forestly").get()
-            print(sample_area)
+            name_breeds = Breed.objects.filter(id__in = list_only_breeds).values("id", "name_breed")
+            name_breeds_under = Undergrowth.objects.filter(id__in=list_only_breeds_under).values("id", "name")
+            list_only_breeds = List.objects.filter(id_sample__id_list_region=request.data['id']).values(
+                'id_undergrowth').distinct()
 
+            list_res = ListSerializer(list_data, many=True).data
             # print(new_data)
-            new_data.update({"data": ListSerializer(list_data, many=True).data})
+
+            new_data.update({"id":request.data['id']})
+            new_data.update(zxc)
             new_data.update(sample_area)
             new_data.update(forestly)
             new_data.update(ds_forestly)
             new_data.update(field_card)
-            path = form_docx_listregion(new_data)
+            new_data.update({"name_breeds": name_breeds})
+            new_data.update({"name_breeds_under": name_breeds_under})
+            new_data.update({"data": ListSerializer(list_data, many=True).data})
+            # path = form_docx_listregion(new_data, f"{BASE_DIR}/media/list_region/list_region_{470}.docx")
+            # path = prep_to_form(new_data)
+            # path = form_docx_listregion2(new_data)
+            path = list_region_excel(new_data)
+            # try:
+            #     path = prepare_to_docx2(new_data)
+            # except:
+            #     return Response("123")
+            # path = prepare_to_docx2(new_data)
             return Response(path)
             # return Response(new_data)
         return Response({"code": 400, "error_text": "dont send id"})
@@ -2114,7 +2137,36 @@ class DeleteAllByDescRegion(ListAPIView):
 class ForestViewSet(viewsets.ModelViewSet):
     pass
 
+class CreateUndergrowthExcel(ListAPIView):
 
+    def post(self, request, *args, **kwargs):
+        from staticpy.form_excel import undergrowth_excel
+        new_data = {}
+        # print(new_data)
+        list_reg = ListRegionSerializer(ListRegion.objects.get(id=request.data['id'])).data
+        list = List.objects.filter(id_sample__id_list_region = request.data['id'])
+        list_data = ListSerializer(list, many=True).data
+        list_only_breeds = List.objects.filter(id_sample__id_list_region=request.data['id']).values(
+            'id_undergrowth').distinct()
+        name_breeds = Undergrowth.objects.filter(id__in=list_only_breeds).values("id", "name")
+        sample_area = Sample.objects.filter(id_list_region=request.data['id']).values("sample_area", "square").first()
+        field_card = FieldCard.objects.filter(id_list_region=request.data['id']).values("square_one_sample_area",
+                                                                                        "count_sample_area").get()
+        ds_forestly = DistrictForestly.objects.filter(id=list_reg['id_district_forestly']).values(
+            "name_district_forestly", "id_forestly").get()
+        forestly = Forestly.objects.filter(id=ds_forestly['id_forestly']).values("name_forestly").get()
+        new_data.update(sample_area)
+        new_data.update(list_reg)
+        new_data.update(forestly)
+        new_data.update(ds_forestly)
+        new_data.update(field_card)
+        new_data["id_list_region"] = request.data['id']
+        new_data.update({"data": list_data})
+        new_data.update({"name_breeds_under": name_breeds})
+        # list_data["id_list_region"] = 5
+        res = undergrowth_excel(new_data)
+        # print(new_data['id_list_region'])
+        return Response(new_data)
 
 class CreateSampleByListRegionId(ListAPIView):
 
