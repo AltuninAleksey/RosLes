@@ -115,7 +115,7 @@ def undergrowth_excel(sheets, data: dict = None):
 
 
     sheets['A7'].value = "Подлесок"
-    sheets.merge_cells("A6:C6")
+    sheets.merge_cells("A7:C7")
     sheets['A7'].alignment = Alignment(horizontal='center')
     sheets['A8'].value = "Порода"
     sheets['B8'].value = "Количество растений"
