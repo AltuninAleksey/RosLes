@@ -21,8 +21,8 @@ async function setDataInResultNaturObs() {
     for(let i = 0; i < APP.gpsTable.length; i++) {
         newHTML += `<tr>
                         <td><input readonly id="id_sample${i}" type="text" style="width: 100%" value="${APP.gpsTable[i].id_sample}"></td>
-                        <td><input readonly id="latitude${i}" type="text" style="width: 100%" value="${APP.gpsTable[i].latitude}"></td>
-                        <td><input readonly id="longitude${i}" type="text" style="width: 100%" value="${APP.gpsTable[i].longitude}"></td>
+                        <td><input readonly id="latitude${i}" type="text" style="width: 100%" value=` + "\"" + Number(APP.gpsTable[i].latitude).toFixed(6) + "\"" + `></td>
+                        <td><input readonly id="longitude${i}" type="text" style="width: 100%" value=` + "\"" + Number(APP.gpsTable[i].longitude).toFixed(6) + "\"" + `></td>
                         <td style="width: 50px;">
                             <svg onclick="deleteGpsPointInMasterData(${APP.gpsTable[i].id})" class="cursorPointer" width="23px" height="23px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <g id="SVGRepo_bgCarrier" stroke-width="0"></g>

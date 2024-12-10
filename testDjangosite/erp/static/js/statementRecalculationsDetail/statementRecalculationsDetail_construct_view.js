@@ -324,3 +324,19 @@ async function saveData() {
       }, 3000);
 }
 
+async function generateDocx() {
+
+    let id = document.querySelector("#idDocument").value;
+
+    var data = {
+        id: id
+    };
+
+    var urlFile = await StatementRecalculationsBusinessDetail.generateDocx(data);
+    urlFile = urlFile.document;
+
+    urlFile = urlGlobal + urlFile;
+
+    window.open(urlFile, '_blank').focus();
+}
+

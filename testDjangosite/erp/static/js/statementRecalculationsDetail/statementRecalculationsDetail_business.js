@@ -52,3 +52,15 @@ StatementRecalculationsBusinessDetail.deleteSample = async function(id) {
         responseType: 'json'
     });
 }
+
+
+StatementRecalculationsBusinessDetail.generateDocx = async function(data) {
+    var requestData = await axios({
+      method: 'post',
+      url: urlGlobal + "/form_list_region",
+      data: data,
+      responseType: 'json'
+    });
+
+    return requestData.data;
+}

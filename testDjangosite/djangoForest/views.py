@@ -3,7 +3,6 @@ import simplejson
 from django.core.files.images import ImageFile
 from django.db.models import F
 from django.http import JsonResponse, HttpResponse, FileResponse
-from django.utils.datetime_safe import new_date
 from rest_framework import generics, status
 from PIL import Image
 import io
@@ -22,14 +21,13 @@ from testDjangosite.settings import BASE_DIR
 from rest_framework.renderers import MultiPartRenderer, JSONRenderer
 from testDjangosite.settings import MEDIA_URL, MEDIA_ROOT
 from django.core.files import File
-from django.views.decorators.csrf import csrf_exempt
 
 from djangoForest.serializers import *
 from collections import namedtuple
 
 
 class TestAPIView(generics.ListAPIView):
-    def get(self, request, **kwargs):
+    def get(self, request):
         lst = Profile.objects.all()
         return Response({'': ProfileSerializer(lst, many=True).data})
 
@@ -44,7 +42,7 @@ class ProfileView(generics.ListCreateAPIView):
     def get(self, request, **kwargs):
         if kwargs:
             try:
-                lst = Profile.objects.get()
+                lst = Profile.objects.get(pk=kwargs['pk'])
                 return Response({'get': ProfileSerializer(lst).data})
             except:
                 return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
@@ -60,7 +58,7 @@ class ProfileView(generics.ListCreateAPIView):
 
     def put(self, request, *args, **kwargs):
         try:
-            instance = Profile.objects.get()
+            instance = Profile.objects.get(pk=kwargs['pk'])
         except:
             return Response({"error": "Объект с данным id не найден"})
 
@@ -74,7 +72,7 @@ class ListView(generics.ListCreateAPIView):
     def get(self, request, **kwargs):
         if kwargs:
             try:
-                lst = List.objects.get()
+                lst = List.objects.get(pk=kwargs['pk'])
                 return Response({'get': ListSerializer(lst).data})
             except:
                 return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
@@ -96,7 +94,7 @@ class ListView(generics.ListCreateAPIView):
         ids_dict = []
         if kwargs:
             try:
-                instance = List.objects.get()
+                instance = List.objects.get(pk=kwargs['pk'])
                 serealizer = ListSerializer(data=request.data, instance=instance)
                 serealizer.is_valid(raise_exception=True)
                 serealizer.save()
@@ -110,7 +108,7 @@ class ListView(generics.ListCreateAPIView):
             serializer = ListSerializer(data=request.data['data'][i])
             serializer.is_valid(raise_exception=True)
             serializer.save()
-            lst = List.objects.get()
+            lst = List.objects.get(id=serializer.data['id'])
             lst.mark_update = 0
             lst.save()
             ids_dict.append({"obj": {"last": request.data['data'][i]['id'], "new": serializer.data['id']}})
@@ -139,7 +137,7 @@ class ListView(generics.ListCreateAPIView):
 
     def delete(self, *args, **kwargs):
         try:
-            lst = List.objects.get()
+            lst = List.objects.get(id=kwargs['pk'])
         except:
             return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
                             status=status.HTTP_404_NOT_FOUND)
@@ -150,7 +148,7 @@ class GpsView(generics.ListCreateAPIView):
     def get(self, request, **kwargs):
         if kwargs:
             try:
-                lst = GPS.objects.get()
+                lst = GPS.objects.get(pk=kwargs['pk'])
                 return Response({'get': GPSSerializer(lst).data})
             except:
                 return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
@@ -169,7 +167,7 @@ class GpsView(generics.ListCreateAPIView):
 
     def put(self, request, *args, **kwargs):
         try:
-            instance = GPS.objects.get()
+            instance = GPS.objects.get(pk=kwargs['pk'])
         except:
             return Response({"error": "Объект с данным id не найден"})
 
@@ -180,7 +178,7 @@ class GpsView(generics.ListCreateAPIView):
 
     def delete(self, *args, **kwargs):
         try:
-            lst = GPS.objects.get()
+            lst = GPS.objects.get(id = kwargs['pk'])
         except:
             return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
                             status=status.HTTP_404_NOT_FOUND)
@@ -218,10 +216,10 @@ class ListRegionView(generics.ListCreateAPIView):
         if kwargs:
             try:
                 if ListRegion.objects.filter(pk=kwargs['pk']).exclude(id_district_forestly = None).exists():
-                    lst = ListRegion.objects.get()
+                    lst = ListRegion.objects.get(pk=kwargs['pk'])
                     ser_lst = ListRegionSerializerId(lst).data
                 else:
-                    lst = ListRegion.objects.get()
+                    lst = ListRegion.objects.get(pk=kwargs['pk'])
                     ser_lst = ListRegionSerializer(lst).data
                 if FieldCard.objects.filter(id_list_region = kwargs['pk']).exists():
                     lst_field = FieldCard.objects.filter(id_list_region=kwargs['pk']).values("id")
@@ -248,15 +246,12 @@ class ListRegionView(generics.ListCreateAPIView):
                              "error_text": serializer.errors[next(iter(serializer.errors))][0]},
                             status=status.HTTP_400_BAD_REQUEST)
         serializer.save()
-
-        soil_lot = request.data['soil_lot']
-        region = ListRegion.objects.get()
+        region = ListRegion.objects.get(id=serializer.data['id'])
         field = FieldCard(id_list_region = region)
         field.save()
         desc = DescriptionRegion(id_list_region = region)
         desc.save()
         request.data.update({"id_list_region": serializer.data['id']})
-        List.objects.filter(id_sample__id_list_region=request.data['id_list_region']).update(soil_lot=soil_lot)
         sample_ser = SampleSerializer(data=request.data)
         sample_ser.is_valid()
         sample_ser.save()
@@ -270,7 +265,7 @@ class ListRegionView(generics.ListCreateAPIView):
         ids_dict = []
         if kwargs:
             try:
-                instance = ListRegion.objects.get()
+                instance = ListRegion.objects.get(pk=kwargs['pk'])
                 serealizer = ListRegionSerializer(data=request.data, instance=instance)
                 serealizer.is_valid(raise_exception=True)
                 serealizer.save()
@@ -281,7 +276,7 @@ class ListRegionView(generics.ListCreateAPIView):
         for i in range(len(request.data['data'])):
             if request.data['data'][i]['mark_update'] == 1:
                 if ListRegion.objects.filter(id=request.data['data'][i]["id"]).exists():
-                    instance = ListRegion.objects.get()
+                    instance = ListRegion.objects.get(id=request.data['data'][i]["id"])
                     serealizer = ListRegionSerializer(data=request.data["data"][i], instance=instance)
                     serealizer.is_valid(raise_exception=False)
                     serealizer.save()
@@ -292,7 +287,7 @@ class ListRegionView(generics.ListCreateAPIView):
                 serializer = ListRegionSerializer(data=request.data['data'][i])
                 serializer.is_valid(raise_exception=True)
                 serializer.save()
-                lst = ListRegion.objects.get()
+                lst = ListRegion.objects.get(id=serializer.data['id'])
                 field = FieldCard(id_list_region=lst)
                 field.save()
                 desc = DescriptionRegion(id_list_region=lst)
@@ -306,7 +301,7 @@ class ListRegionView(generics.ListCreateAPIView):
 
     def delete(self, *args, **kwargs):
         try:
-            lst = ListRegion.objects.get()
+            lst = ListRegion.objects.get(id=kwargs['pk'])
         except:
             return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
                             status=status.HTTP_404_NOT_FOUND)
@@ -321,7 +316,7 @@ class ListRegionViewUpdate(ListView):
         # except:
         #     return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
         #                     status=status.HTTP_404_NOT_FOUND)
-        instance = ListRegion.objects.get()
+        instance = ListRegion.objects.get(pk=kwargs['pk'])
         serealizer = ListRegionUpdateSerializer(data=request.data, instance=instance)
         serealizer.is_valid(raise_exception=True)
         serealizer.save()
@@ -342,7 +337,7 @@ class SampleView(generics.ListCreateAPIView):
     def get(self, request, **kwargs):
         if kwargs:
             try:
-                lst = Sample.objects.get()
+                lst = Sample.objects.get(pk=kwargs['pk'])
                 return Response({'get': SampleSerializerId(lst).data})
             except:
                 return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
@@ -362,7 +357,7 @@ class SampleView(generics.ListCreateAPIView):
         ids_dict = []
         if kwargs:
             try:
-                instance = Sample.objects.get()
+                instance = Sample.objects.get(pk=kwargs['pk'])
                 serealizer = SampleSerializer(data=request.data, instance=instance)
                 serealizer.is_valid(raise_exception=True)
                 serealizer.save()
@@ -373,7 +368,7 @@ class SampleView(generics.ListCreateAPIView):
         for i in range(len(request.data['data'])):
             if request.data['data'][i]['mark_update'] == 1:
                 if Sample.objects.filter(id=request.data['data'][i]["id"]).exists():
-                    instance = Sample.objects.get()
+                    instance = Sample.objects.get(id=request.data['data'][i]["id"])
                     print(instance)
                     serealizer = SampleSerializer(data=request.data["data"][i], instance=instance)
                     serealizer.is_valid(raise_exception=True)
@@ -385,7 +380,7 @@ class SampleView(generics.ListCreateAPIView):
                 serializer = SampleSerializer(data=request.data['data'][i])
                 serializer.is_valid(raise_exception=True)
                 serializer.save()
-                lst = Sample.objects.get()
+                lst = Sample.objects.get(id=serializer.data['id'])
                 lst.mark_update = 0
                 lst.save()
                 # ids_dict.update({request.data['data'][i]['id']: serializer.data['id']})
@@ -395,7 +390,7 @@ class SampleView(generics.ListCreateAPIView):
 
     def delete(self, *args, **kwargs):
         try:
-            lst = Sample.objects.get()
+            lst = Sample.objects.get(id=kwargs['pk'])
         except:
             return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
                             status=status.HTTP_404_NOT_FOUND)
@@ -406,7 +401,7 @@ class PostView(generics.ListCreateAPIView):
     def get(self, request, **kwargs):
         if kwargs:
             try:
-                lst = Post.objects.get()
+                lst = Post.objects.get(pk=kwargs['pk'])
                 return Response({'get': PostSerializer(lst).data})
             except:
                 return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
@@ -422,7 +417,7 @@ class PostView(generics.ListCreateAPIView):
 
     def put(self, request, *args, **kwargs):
         try:
-            instance = Post.objects.get()
+            instance = Post.objects.get(pk=kwargs['pk'])
         except:
             return Response({"error": "Объект с данным id не найден"})
 
@@ -435,7 +430,7 @@ class WorkingBreedView(generics.ListCreateAPIView):
     def get(self, request, **kwargs):
         if kwargs:
             try:
-                lst = WorkingBreeds.objects.get()
+                lst = WorkingBreeds.objects.get(pk=kwargs['pk'])
                 return Response({'get': WorkingBreedsSerializer(lst).data})
             except:
                 return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
@@ -451,7 +446,7 @@ class WorkingBreedView(generics.ListCreateAPIView):
 
     def put(self, request, *args, **kwargs):
         try:
-            instance = WorkingBreeds.objects.get()
+            instance = WorkingBreeds.objects.get(pk=kwargs['pk'])
         except:
             return Response({"error": "Объект с данным id не найден"})
 
@@ -462,7 +457,7 @@ class WorkingBreedView(generics.ListCreateAPIView):
 
     def delete(self, *args, **kwargs):
         try:
-            lst = WorkingBreeds.objects.get()
+            lst = WorkingBreeds.objects.get(id = kwargs['pk'])
         except:
             return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
                             status=status.HTTP_404_NOT_FOUND)
@@ -474,7 +469,7 @@ class SubjectRFview(generics.ListCreateAPIView):
     def get(self, request, **kwargs):
         if kwargs:
             try:
-                lst = SubjectRF.objects.get()
+                lst = SubjectRF.objects.get(pk=kwargs['pk'])
                 return Response({'get': SubjectRFSerializer(lst).data})
             except:
                 return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
@@ -493,7 +488,7 @@ class SubjectRFview(generics.ListCreateAPIView):
 
     def put(self, request, *args, **kwargs):
         try:
-            instance = SubjectRF.objects.get()
+            instance = SubjectRF.objects.get(pk=kwargs['pk'])
         except:
             return Response({"error": "Объект с данным id не найден"})
 
@@ -510,7 +505,7 @@ class RoleView(generics.ListCreateAPIView):
     def get(self, request, **kwargs):
         if kwargs:
             try:
-                lst = Role.objects.get()
+                lst = Role.objects.get(pk=kwargs['pk'])
                 return Response({'get': RoleSerializer(lst).data})
             except:
                 return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
@@ -526,7 +521,7 @@ class RoleView(generics.ListCreateAPIView):
 
     def put(self, request, *args, **kwargs):
         try:
-            instance = Role.objects.get()
+            instance = Role.objects.get(pk=kwargs['pk'])
         except:
             return Response({"error": "Объект с данным id не найден"})
 
@@ -540,7 +535,7 @@ class ReproductionView(generics.ListCreateAPIView):
     def get(self, request, **kwargs):
         if kwargs:
             try:
-                lst = Reproduction.objects.get()
+                lst = Reproduction.objects.get(pk=kwargs['pk'])
                 return Response({'get': ReproductionSerializer(lst).data})
             except:
                 return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
@@ -556,7 +551,7 @@ class ReproductionView(generics.ListCreateAPIView):
 
     def put(self, request, *args, **kwargs):
         try:
-            instance = Reproduction.objects.get()
+            instance = Reproduction.objects.get(pk=kwargs['pk'])
         except:
             return Response({"error": "Объект с данным id не найден"})
 
@@ -570,7 +565,7 @@ class ForestlyView(generics.ListCreateAPIView):
     def get(self, request, **kwargs):
         if kwargs:
             try:
-                lst = Forestly.objects.get()
+                lst = Forestly.objects.get(pk=kwargs['pk'])
                 return Response({'get': ForestlySerializer(lst).data})
             except:
                 return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
@@ -589,7 +584,7 @@ class ForestlyView(generics.ListCreateAPIView):
 
     def put(self, request, *args, **kwargs):
         try:
-            instance = Forestly.objects.get()
+            instance = Forestly.objects.get(pk=kwargs['pk'])
         except:
             return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
                             status=status.HTTP_404_NOT_FOUND)
@@ -606,7 +601,7 @@ class DistrictForestlyView(generics.ListCreateAPIView):
     def get(self, request, **kwargs):
         if kwargs:
             try:
-                lst = DistrictForestly.objects.get()
+                lst = DistrictForestly.objects.get(pk=kwargs['pk'])
                 return Response({'get': DistrictForestlySerializer(lst).data})
             except:
                 return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
@@ -625,7 +620,7 @@ class DistrictForestlyView(generics.ListCreateAPIView):
 
     def put(self, request, *args, **kwargs):
         try:
-            instance = DistrictForestly.objects.get()
+            instance = DistrictForestly.objects.get(pk=kwargs['pk'])
         except:
             return Response({"error": "Объект с данным id не найден"})
 
@@ -642,7 +637,7 @@ class QuarterView(generics.ListCreateAPIView):
     def get(self, request, **kwargs):
         if kwargs:
             try:
-                lst = Quarter.objects.get()
+                lst = Quarter.objects.get(pk=kwargs['pk'])
                 return Response({'get': QuarterSerializer(lst).data})
             except:
                 return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
@@ -670,7 +665,7 @@ class QuarterView(generics.ListCreateAPIView):
 
     def put(self, request, *args, **kwargs):
         try:
-            instance = Quarter.objects.get()
+            instance = Quarter.objects.get(pk=kwargs['id'])
         except:
             return Response({"error": "Объект с данным id не найден"})
         serealizer = QuarterSerializer(data=request.data, instance=instance)
@@ -684,7 +679,7 @@ class UndergrowthView(APIView):
     def get(self, *args, **kwargs):
         if kwargs:
             try:
-                lst = Undergrowth.objects.get()
+                lst = Undergrowth.objects.get(pk=kwargs['pk'])
                 return Response(UndergrowthSerializer(lst).data)
             except:
                 return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
@@ -702,7 +697,7 @@ class BreedView(generics.ListCreateAPIView):
     def get(self, request, **kwargs):
         if kwargs:
             try:
-                lst = Breed.objects.get()
+                lst = Breed.objects.get(pk=kwargs['pk'])
                 return Response({'get': BreedSerializer(lst).data})
             except:
                 return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
@@ -718,7 +713,7 @@ class BreedView(generics.ListCreateAPIView):
 
     def put(self, request, *args, **kwargs):
         try:
-            instance = Breed.objects.get()
+            instance = Breed.objects.get(pk=kwargs['pk'])
         except:
             return Response({"error": "Объект с данным id не найден"})
         serealizer = BreedSerializer(data=request.data, instance=instance)
@@ -731,7 +726,7 @@ class BranchesView(generics.ListCreateAPIView):
     def get(self, request, **kwargs):
         if kwargs:
             try:
-                lst = Branches.objects.get()
+                lst = Branches.objects.get(pk=kwargs['pk'])
                 return Response({'get': BranchesSerializer(lst).data})
             except:
                 return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
@@ -747,7 +742,7 @@ class BranchesView(generics.ListCreateAPIView):
 
     def put(self, request, *args, **kwargs):
         try:
-            instance = Branches.objects.get()
+            instance = Branches.objects.get(pk=kwargs['pk'])
         except:
             return Response({"error": "Объект с данным id не найден"})
         serealizer = BranchesSerializer(data=request.data, instance=instance)
@@ -761,7 +756,7 @@ class SchemaMixingBreedsView(ListAPIView):
     def get(self, request, *args, **kwargs):
         if kwargs:
             try:
-                return Response({"get": SchemaMixingBreedsSerializer(SchemaMixingBreeds.objects.get()).data})
+                return Response({"get": SchemaMixingBreedsSerializer(SchemaMixingBreeds.objects.get(id=kwargs["pk"])).data})
             except:
                 return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
                                 status=status.HTTP_404_NOT_FOUND)
@@ -827,7 +822,7 @@ class PurposeOfForestsView(ListAPIView):
     def get(self, request, *args, **kwargs):
         if kwargs:
             try:
-                return Response({"get": PurposeOfForestsSerializer(PurposeOfForests.objects.get()).data})
+                return Response({"get": PurposeOfForestsSerializer(PurposeOfForests.objects.get(id=kwargs["pk"])).data})
             except:
                 return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
                                 status=status.HTTP_404_NOT_FOUND)
@@ -840,7 +835,7 @@ class ForestProtectionCategoryView(ListAPIView):
         if kwargs:
             try:
                 return Response({"get": ForestProtectionCategorySerializer(
-                    ForestProtectionCategory.objects.get()).data})
+                    ForestProtectionCategory.objects.get(id=kwargs["pk"])).data})
             except:
                 return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
                                 status=status.HTTP_404_NOT_FOUND)
@@ -854,7 +849,7 @@ class CategoryOfForestFundLandsView(ListAPIView):
         if kwargs:
             try:
                 return Response({"get": CategoryOfForestFundLandsSerializer(
-                    CategoryOfForestFundLands.objects.get()).data})
+                    CategoryOfForestFundLands.objects.get(id=kwargs["pk"])).data})
             except:
                 return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
                                 status=status.HTTP_404_NOT_FOUND)
@@ -868,7 +863,7 @@ class MethodOfReforestationView(ListAPIView):
         if kwargs:
             try:
                 return Response({"get": MethodOfReforestationSerializer(
-                    MethodOfReforestation.objects.get()).data})
+                    MethodOfReforestation.objects.get(id=kwargs["pk"])).data})
             except:
                 return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
                                 status=status.HTTP_404_NOT_FOUND)
@@ -882,7 +877,7 @@ class TypeForestGrowingConditionsView(ListAPIView):
         if kwargs:
             try:
                 return Response({"get": TypeForestGrowingConditionsSerializer(
-                    TypeForestGrowingConditions.objects.get()).data})
+                    TypeForestGrowingConditions.objects.get(id=kwargs["pk"])).data})
             except:
                 return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
                                 status=status.HTTP_404_NOT_FOUND)
@@ -896,7 +891,7 @@ class EconomyView(ListAPIView):
         if kwargs:
             try:
                 return Response({"get": EconomySerializer(
-                    Economy.objects.get()).data})
+                    Economy.objects.get(id=kwargs["pk"])).data})
             except:
                 return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
                                 status=status.HTTP_404_NOT_FOUND)
@@ -1028,13 +1023,13 @@ class CreateSampleAndOther(ListAPIView):
 
     def put(self, request, *args, **kwargs):
         try:
-            instance = Sample.objects.get()
+            instance = Sample.objects.get(pk=request.data['sample']['id'])
         except:
             return Response({"error": "Объект с данным id не найден"})
         serializer = SampleSerializer(data=request.data['sample'], instance=instance)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        listregion_instance = ListRegion.objects.get()
+        listregion_instance = ListRegion.objects.get(id=request.data['sample']['id_list_region'])
         # print(request.data['list_region']['id'])
         listregion_serializer = ListRegionSerializerUpdateBySample(data=request.data['sample'], instance=listregion_instance)
         listregion_serializer.is_valid()
@@ -1043,7 +1038,7 @@ class CreateSampleAndOther(ListAPIView):
         if len(request.data['list_data']) != 0:
             for i in request.data['list_data']:
                 try:
-                    instance_list = List.objects.get()
+                    instance_list = List.objects.get(pk=i['id'])
                     serializer_list = ListSerializer(data=i, instance=instance_list)
                 except:
                     serializer_list = ListSerializer(data=i)
@@ -1052,7 +1047,7 @@ class CreateSampleAndOther(ListAPIView):
         if len(request.data['gps_data']) != 0:
             for j in request.data['gps_data']:
                 try:
-                    instance_gps = GPS.objects.get()
+                    instance_gps = GPS.objects.get(pk=j['id'])
                     serializer_gps = GPSSerializer(data=j, instance=instance_gps)
                 except:
                     serializer_gps = GPSSerializer(data=j)
@@ -1072,7 +1067,7 @@ class CreateSampleAndOther(ListAPIView):
             for non in request.data['non_null_list_data']:
                 non.update({"id_sample": f"{id_sample}"})
                 try:
-                    instance_list = List.objects.get()
+                    instance_list = List.objects.get(pk=non['id'])
                     serializer_list_non = ListSerializer(data=non, instance=instance_list)
                 except:
                     serializer_list_non = ListSerializer(data=non)
@@ -1143,11 +1138,11 @@ class UnionListRegions(generics.ListCreateAPIView):
     def post(self, request, **kwargs):
         for i in request.data['ids']:
             try:
-                listing = ListRegion.objects.get()
+                listing = ListRegion.objects.get(id = i['id'])
             except:
                 continue
             lst = Sample.objects.filter(id_list_region = i['id']).update(id_list_region = request.data['id'])
-            object_region = ListRegion.objects.get()
+            object_region = ListRegion.objects.get(id=i['id'])
             object_region.delete()
         print(request.data['id'])
         lst_sample = Sample.objects.filter(id_list_region = request.data['id'])
@@ -1174,7 +1169,7 @@ class UserRegistration(generics.ListCreateAPIView):
         user_serializer.save()
         serializers.save()
         # # user = Users.objects.get(id = user_serializer.data['id'])
-        lst = Profile.objects.get()
+        lst = Profile.objects.get(id = serializers.data['id'])
         lst.id_user_id = user_serializer.data['id']
         lst.save()
 
@@ -1193,7 +1188,7 @@ class UserAuth(generics.ListCreateAPIView):
         except:
             return Response({ "error" :status.HTTP_401_UNAUTHORIZED}, status=status.HTTP_401_UNAUTHORIZED)
         if check_password(request.data["password"], user["password"]):
-            profile = Profile.objects.filter(id_user_id=user['id']).values('id', 'FIO').get()
+            profile = Profile.objects.filter(id_user_id = user['id']).values('id', 'FIO').get()
             return Response(profile)
         return Response({"error": status.HTTP_401_UNAUTHORIZED}, status=status.HTTP_401_UNAUTHORIZED)
 
@@ -1216,19 +1211,15 @@ class PhotoPointView(APIView):
             return Response(lst)
         return Response(PhotoPointSer(PhotoPoint.objects.all(), many=True).data)
 
+
     def post(self, request, format = None):
-        # from staticpy.cordinates import coord
-        # longitude = request.data.get('longitude')
-        # latitude = request.data.get('latitude')
-        # old_photo = request.data.get('photo')
-        # photo = coord(longitude, latitude, old_photo)
         serializer = PhotoPointSerializer(data=request.data, context=request)
         serializer.is_valid(raise_exception=True)
-        serializer.save(id_sample_id =request.data.get('id_sample'),
-                        photo =request.data.get('photo'),
-                        longitude =request.data.get('longitude'),
-                        latitude =request.data.get('latitude'),
-                        date =request.data.get('date')
+        serializer.save(id_sample_id = request.data.get('id_sample'),
+                        photo = request.data.get('photo'),
+                        longitude = request.data.get('longitude'),
+                        latitude = request.data.get('latitude'),
+                        date = request.data.get('date')
                         )
         return Response({"http": status.HTTP_200_OK}, status=200)
 
@@ -1362,9 +1353,9 @@ class GetAllDescriptionRegion(ListAPIView):
     def get(self, request, *args, **kwargs):
         if kwargs:
             DescriptionRegionSerializer().validate_pk(kwargs['pk'])
-            lst = DescriptionRegionSerializer(DescriptionRegion.objects.get()).data
+            lst = DescriptionRegionSerializer(DescriptionRegion.objects.get(id=kwargs['pk'])).data
             try:
-                lst_FieldCard = FieldCardSerializer(FieldCard.objects.get()).data
+                lst_FieldCard = FieldCardSerializer(FieldCard.objects.get(id_list_region = lst['id_list_region'])).data
                 # "point7_natural_composition"
                 lst.update({"breed_composition": lst_FieldCard['breed_composition']})
                 lst.update({"id_field_card": lst_FieldCard['id']})
@@ -1395,8 +1386,7 @@ class GetAllDescriptionRegion(ListAPIView):
             for k in czl_objects:
                 if k.get("id_main_subject") != subject_id:
                     lst = DescriptionRegion.objects.filter(
-                        id_list_region__id_district_forestly_id__id_forestly_id__id_subject_rf_id=k.get(
-                            "id_main_subject"))
+                        id_list_region__id_district_forestly_id__id_forestly_id__id_subject_rf_id=k.get("id_main_subject"))
                     print(f"lst: {len(lst)}")
                     data.append(DescriptionRegionSerializer(lst, many=True).data)
                 break
@@ -1405,8 +1395,7 @@ class GetAllDescriptionRegion(ListAPIView):
                     print(f"czl subject {i.get('id_subject')}")
                     if i.get('id_subject') != subject_id:
                         lst = DescriptionRegion.objects.filter(
-                            id_list_region__id_district_forestly_id__id_forestly_id__id_subject_rf_id=i.get(
-                                'id_subject'))
+                            id_list_region__id_district_forestly_id__id_forestly_id__id_subject_rf_id=i.get('id_subject'))
                         data.append(DescriptionRegionSerializer(lst, many=True).data)
             return Response({"get": data})
         lst = DescriptionRegion.objects.all()
@@ -1452,17 +1441,17 @@ class GetAllDescriptionRegion(ListAPIView):
 
     def put(self, request, *args, **kwargs):
         try:
-            instance = DescriptionRegion.objects.get()
+            instance = DescriptionRegion.objects.get(pk=kwargs['pk'])
         except:
             return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
                             status=status.HTTP_404_NOT_FOUND)
         try:
-            instance_region = ListRegion.objects.get()
+            instance_region = ListRegion.objects.get(id=request.data['id_list_region'])
         except:
             return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid list region id"},
                             status=status.HTTP_404_NOT_FOUND)
         try:
-            fieldcard = FieldCard.objects.get()
+            fieldcard = FieldCard.objects.get(pk=request.data['id_field_card'])
         except:
             return Response({'error': '404 id_field_card'}, status=status.HTTP_404_NOT_FOUND)
         # "breed_composition": null,
@@ -1481,7 +1470,7 @@ class GetAllDescriptionRegion(ListAPIView):
         ser_listregion = ListRegionUpdateNonMarkDel(data=request.data, instance=instance_region)
         if len(request.data['gps']) > 0:
             for i in request.data['gps']:
-                instance_gps = GPS.objects.get()
+                instance_gps = GPS.objects.get(id=i['id'])
                 ser_gps = GPSSerializer(data=i, instance=instance_gps)
                 ser_gps.is_valid()
                 ser_gps.save()
@@ -1547,9 +1536,9 @@ class GetFieldCard(ListAPIView):
     def get(self, request, *args, **kwargs):
         if kwargs:
             FieldCardSerializer().validate_pk(kwargs['pk'])
-            lst = FieldCardSerializer(FieldCard.objects.get()).data
+            lst = FieldCardSerializer(FieldCard.objects.get(id=kwargs['pk'])).data
             try:
-                lst_desc = DescriptionRegionSerializer(DescriptionRegion.objects.get()).data
+                lst_desc = DescriptionRegionSerializer(DescriptionRegion.objects.get(id_list_region=lst['id_list_region'])).data
                 lst.update({"id_desc": lst_desc['id']})
             except:
                 lst.update({"id_desc": ""})
@@ -1569,8 +1558,7 @@ class GetFieldCard(ListAPIView):
             for k in czl_objects:
                 if k.get("id_main_subject") != subject_id:
                     lst = FieldCard.objects.filter(
-                        id_list_region__id_district_forestly_id__id_forestly_id__id_subject_rf_id=k.get(
-                            "id_main_subject"))
+                        id_list_region__id_district_forestly_id__id_forestly_id__id_subject_rf_id=k.get("id_main_subject"))
                     data.append(FieldCardSerializer(lst, many=True).data)
                 break
             if len(czl_objects):
@@ -1578,8 +1566,7 @@ class GetFieldCard(ListAPIView):
                     print(f"czl subject {i.get('id_subject')}")
                     if i.get('id_subject') != subject_id:
                         lst = FieldCard.objects.filter(
-                            id_list_region__id_district_forestly_id__id_forestly_id__id_subject_rf_id=i.get(
-                                'id_subject'))
+                            id_list_region__id_district_forestly_id__id_forestly_id__id_subject_rf_id=i.get('id_subject'))
                         data.append(FieldCardSerializer(lst, many=True).data)
             return Response({"get": data})
         lst = FieldCard.objects.all()
@@ -1642,12 +1629,12 @@ class GetFieldCard(ListAPIView):
 
     def put(self, request, *args, **kwargs):
         try:
-            instance = FieldCard.objects.get()
+            instance = FieldCard.objects.get(pk=kwargs['pk'])
         except:
             return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id fieldcard"},
                             status=status.HTTP_404_NOT_FOUND)
         try:
-            instance_region = ListRegion.objects.get()
+            instance_region = ListRegion.objects.get(id=request.data['id_list_region'])
         except:
 
             return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid list region id"},
@@ -1780,7 +1767,7 @@ class PlotCoeffViews(ListAPIView):
     def get(self, request, *args, **kwargs):
         if kwargs:
             try:
-                lst = PlotCoeff.objects.get()
+                lst = PlotCoeff.objects.get(id=kwargs['pk'])
                 return Response({"get": PlotCoeffSerializer(lst).data}, status = status.HTTP_200_OK )
             except:
                 return Response({"code": status.HTTP_400_BAD_REQUEST, "error_text": "invalid PlotCoeff id"},
@@ -1802,7 +1789,7 @@ class PlotCoeffViews(ListAPIView):
         return Response({"code": status.HTTP_201_CREATED}, status=status.HTTP_201_CREATED)
 
     def put(self, request, **kwargs):
-        instance = PlotCoeff.objects.get()
+        instance = PlotCoeff.objects.get(id = kwargs['pk'])
         if type(request) is dict:
             serializer = PlotCoeffSerializer(data=request, instance=instance)
         else:
@@ -1816,7 +1803,7 @@ class PlotCoeffViews(ListAPIView):
 
     def delete(self, *args, **kwargs):
         try:
-            lst = PlotCoeff.objects.get()
+            lst = PlotCoeff.objects.get(id=kwargs['pk'])
         except:
             return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
                             status=status.HTTP_404_NOT_FOUND)
@@ -1887,7 +1874,7 @@ class AboutUserView(ListAPIView):
 
     def get(self, request, *args, **kwargs):
         user_id = request.user.pk
-        user = Profile.objects.get(id_user = user_id)
+        user = Profile.objects.get(id_user_id=user_id)
         AboutUserDataSerializer(user).data['FIO'].encode('utf-8')
         return Response({"data": AboutUserDataSerializer(user).data})
 
@@ -1923,7 +1910,7 @@ class GetCZL(ListAPIView):
     def get(self, request, *args, **kwargs):
         import json
         if request.user.subject_rf_id == 27 or request.user.subject_rf_id == 183:
-            czl_data_main = CZLSerializer(CZL.objects.get())
+            czl_data_main = CZLSerializer(CZL.objects.get(id_main_subject = request.user.subject_rf_id))
             # czl_filter = CZL.objects.filter(id_main_subject = 27)
             # print(czl_filter)
             czl_objects = CZLSerializerWithOutMain(CZL.objects.filter(id_subject__isnull = False), many = True)
@@ -1937,7 +1924,7 @@ class GetCZL(ListAPIView):
                              "name_main_subject": czl_data_main.data['name_main_subject'],
                              "slave_subject": new_list})
         else:
-            profile_data = ProfileSerializer(Profile.objects.get()).data['id_subject_rf']
+            profile_data = ProfileSerializer(Profile.objects.get(id_user = request.user.pk)).data['id_subject_rf']
             czl_data_main = CZLSerializer(CZL.objects.filter(Q(id_main_subject = profile_data) | Q(id_subject = profile_data)), many = True)
             czl_main_id = czl_data_main.data[0].get("id_main_subject")
             czl_objects = CZLSerializerWithOutMain(CZL.objects.filter(id_main_subject = czl_main_id), many=True)
@@ -1957,10 +1944,10 @@ class CZLMobileView(ListAPIView):
 class GetCZLByProfile(ListAPIView):
     def get(self, request, *args, **kwargs):
         if kwargs:
-            profile_data = ProfileSerializer(Profile.objects.get()).data['id_subject_rf']
+            profile_data = ProfileSerializer(Profile.objects.get(id=kwargs['pk'])).data['id_subject_rf']
             print(profile_data)
             if profile_data == '27' or profile_data == '183':
-                czl_data_main = CZLSerializer(CZL.objects.get())
+                czl_data_main = CZLSerializer(CZL.objects.get(id_main_subject=int(profile_data)))
                 czl_objects = CZLSerializerWithOutMain(CZL.objects.filter(id_subject__isnull=False), many=True)
                 czl_object_dict = [dict(item) for item in czl_objects.data]
                 data_null = CZLSerializerWithMain(CZL.objects.filter(~Q(id_main_subject = int(profile_data)), id_subject__isnull=True), many=True).data
@@ -1971,7 +1958,7 @@ class GetCZLByProfile(ListAPIView):
                                  "name_main_subject": czl_data_main.data['name_main_subject'],
                                  "slave_subject": new_list})
             else:
-                profile_data = ProfileSerializer(Profile.objects.get()).data['id_subject_rf']
+                profile_data = ProfileSerializer(Profile.objects.get(id=kwargs['pk'])).data['id_subject_rf']
                 czl_data_main = CZLSerializer(
                     CZL.objects.filter(Q(id_main_subject=profile_data) | Q(id_subject=profile_data)), many=True)
                 czl_main_id = czl_data_main.data[0].get("id_main_subject")
@@ -1987,7 +1974,7 @@ class GetCZLByProfileMobile(ListAPIView):
 
     def get(self, request, *args, **kwargs):
         if kwargs:
-            profile_data = ProfileSerializer(Profile.objects.get()).data['id_subject_rf']
+            profile_data = ProfileSerializer(Profile.objects.get(id=kwargs['pk'])).data['id_subject_rf']
             czl_data_main = CZLSerializer(
                 CZL.objects.filter(Q(id_main_subject=profile_data) | Q(id_subject=profile_data)), many=True)
             czl_main_id = czl_data_main.data[0].get("id_main_subject")
@@ -2003,7 +1990,7 @@ class UserProfileUpdateView(generics.UpdateAPIView):
     def put(self, request, *args, **kwargs):
         if kwargs['pk']:
             if Profile.objects.filter(pk = kwargs['pk']).exists():
-                instance_profile = Profile.objects.get()
+                instance_profile = Profile.objects.get(pk=kwargs['pk'])
                 serializer = ProfileSerializer(data=request.data, instance=instance_profile)
                 if Users.objects.filter(pk=request.data['id_user']).exists():
                     users_objects = Users.objects.filter(pk=request.data['id_user']).update(
@@ -2039,11 +2026,11 @@ class DeleteAllBySample(ListAPIView):
     def delete(self, request, *args, **kwargs):
         if request.data['id']:
             try:
-                sample = Sample.objects.get()
+                sample = Sample.objects.get(id = request.data['id'])
             except:
                 return Response({"code": 404, "error_text": "not found id"})
             id_lst = sample.id_list_region.id
-            lst = ListRegion.objects.get()
+            lst = ListRegion.objects.get(id=id_lst)
             lst.delete()
             return Response({"code": 200})
 
@@ -2054,15 +2041,41 @@ class DeleteAllByFieldCard(ListAPIView):
     def delete(self, request, *args, **kwargs):
         if request.data['id']:
             try:
-                field_card = FieldCard.objects.get()
+                field_card = FieldCard.objects.get(id = request.data['id'])
             except:
                 return Response({"code": 404, "error_text": "not found id"})
             id_lst = field_card.id_list_region.id
-            lst = ListRegion.objects.get()
+            lst = ListRegion.objects.get(id=id_lst)
             lst.delete()
             return Response({"code": 200})
 
         return Response({"code": 404, "error_text": "dont send id"})
+
+
+class DeleteAllByDescRegion(ListAPIView):
+
+    def delete(self, request, *args, **kwargs):
+        if request.data['id']:
+            try:
+                desc_reg = DescriptionRegion.objects.get(id=request.data['id'])
+            except:
+                return Response({"code": 404, "error_text": "not found id"})
+            id_lst = desc_reg.id_list_region.id
+            lst = ListRegion.objects.get(id=id_lst)
+            lst.delete()
+            return Response({"code": 200})
+
+        return Response({"code": 404, "error_text": "dont send id"})
+
+class ForestViewSet(viewsets.ModelViewSet):
+    pass
+
+
+
+class CreateSampleByListRegionId(ListAPIView):
+
+    def post(self, request, *args, **kwargs):
+        pass
 
 
 class ListRegionDocxCreater(ListAPIView):
@@ -2115,62 +2128,6 @@ class ListRegionDocxCreater(ListAPIView):
             # except:
             #     return Response("123")
             # path = prepare_to_docx2(new_data)
-            return Response(path)
+            return Response({"document": path})
             # return Response(new_data)
         return Response({"code": 400, "error_text": "dont send id"})
-
-class DeleteAllByDescRegion(ListAPIView):
-
-    def delete(self, request, *args, **kwargs):
-        if request.data['id']:
-            try:
-                desc_reg = DescriptionRegion.objects.get()
-            except:
-                return Response({"code": 404, "error_text": "not found id"})
-            id_lst = desc_reg.id_list_region.id
-            lst = ListRegion.objects.get()
-            lst.delete()
-            return Response({"code": 200})
-
-        return Response({"code": 404, "error_text": "dont send id"})
-
-class ForestViewSet(viewsets.ModelViewSet):
-    pass
-
-class CreateUndergrowthExcel(ListAPIView):
-
-    def post(self, request, *args, **kwargs):
-        from staticpy.form_excel import undergrowth_excel
-        new_data = {}
-        # print(new_data)
-        list_reg = ListRegionSerializer(ListRegion.objects.get(id=request.data['id'])).data
-        list = List.objects.filter(id_sample__id_list_region = request.data['id'])
-        list_data = ListSerializer(list, many=True).data
-        list_only_breeds = List.objects.filter(id_sample__id_list_region=request.data['id']).values(
-            'id_undergrowth').distinct()
-        name_breeds = Undergrowth.objects.filter(id__in=list_only_breeds).values("id", "name")
-        sample_area = Sample.objects.filter(id_list_region=request.data['id']).values("sample_area", "square").first()
-        field_card = FieldCard.objects.filter(id_list_region=request.data['id']).values("square_one_sample_area",
-                                                                                        "count_sample_area").get()
-        ds_forestly = DistrictForestly.objects.filter(id=list_reg['id_district_forestly']).values(
-            "name_district_forestly", "id_forestly").get()
-        forestly = Forestly.objects.filter(id=ds_forestly['id_forestly']).values("name_forestly").get()
-        new_data.update(sample_area)
-        new_data.update(list_reg)
-        new_data.update(forestly)
-        new_data.update(ds_forestly)
-        new_data.update(field_card)
-        new_data["id_list_region"] = request.data['id']
-        new_data.update({"data": list_data})
-        new_data.update({"name_breeds_under": name_breeds})
-        # list_data["id_list_region"] = 5
-        res = undergrowth_excel(new_data)
-        # print(new_data['id_list_region'])
-        return Response(new_data)
-
-class CreateSampleByListRegionId(ListAPIView):
-
-    def post(self, request, *args, **kwargs):
-        pass
-
-
