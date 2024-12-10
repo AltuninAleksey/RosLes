@@ -88,7 +88,10 @@ def create_header(sheets, data):
     sheets.merge_cells("G5:H5")
 
     sheets['I5'].value = "площадь ПП, га."
-    sheets['K5'].value = (data['square_one_sample_area'] / data['count_sample_area']) / 10000
+    try:
+        sheets['K5'].value = (data['square_one_sample_area'] / data['count_sample_area']) / 10000
+    except:
+        pass
     sheets['K5'].border = Border(bottom=Side(style="thin"))
     sheets.merge_cells("I5:J5")
     sheets.merge_cells("K5:L5")
@@ -164,12 +167,14 @@ def undergrowth_excel(sheets, data: dict = None):
             # cell.border = thin_border
             cur_col = 1
             cur_row+=1
+    # if all_count_sum == 0:
+    #     all_count_sum = 1
     sheets.cell(row=cur_row, column=1, value="Итого")
     sheets.cell(row=cur_row, column=2, value=all_count_sum)
-    sheets.cell(row=cur_row, column=3, value=avg_hg/all_count_sum)
+    sheets.cell(row=cur_row, column=3, value= avg_hg/all_count_sum if all_count_sum > 0 else 0)
     sheets.cell(row=cur_row+1, column=1, value="На 1 га")
-    sheets.cell(row=cur_row+1, column=2, value=all_count_sum/10000)
-    sheets.cell(row=cur_row+1, column=3, value=avg_hg/all_count_sum)
+    sheets.cell(row=cur_row+1, column=2, value=all_count_sum/10000 if all_count_sum > 0 else 0)
+    sheets.cell(row=cur_row+1, column=3, value=avg_hg/all_count_sum if all_count_sum > 0 else 0)
 
 
     test = sheets.cell(row=cur_row+1, column=3)
@@ -229,6 +234,7 @@ def find_max(data:dict, sample_list):
     return hg
 
 def get_repro(data: dict) -> None:
+    data['hg_each'] = []
     def from_context_get_repro_1(data: dict) -> dict:
         breeds_data = []
         breeds_dict = {}
@@ -242,7 +248,7 @@ def get_repro(data: dict) -> None:
 
         for i in data['data']:
             if i['id_type_of_reproduction'] == 1:
-                if i['id_breed'] not in breeds_data:
+                if i['id_breed'] not in breeds_data and i['id_breed'] != None:
                     breeds_data.append(i['id_breed'])
                 if i['id_sample'] not in sample_data:
                     sample_data.append(i['id_sample'])
@@ -270,7 +276,7 @@ def get_repro(data: dict) -> None:
         res['breeds_data'] = breeds_data
         res['sample_data'] = sample_data
         data['breed_total_1'] = breed_total
-        data['hg_each'] = hg_each
+        data['hg_each'].extend(hg_each)
         data['max_hg_1'] = max_hg
         # data.update({"repro_1": breeds_dict, "breeds": breeds_data, "sample_data": sample_data})
         data.update({"repro_1": res})
@@ -289,7 +295,7 @@ def get_repro(data: dict) -> None:
 
         for i in data['data']:
             if i['id_type_of_reproduction'] == 2:
-                if i['id_breed'] not in breeds_data:
+                if i['id_breed'] not in breeds_data and i['id_breed'] != None:
                     breeds_data.append(i['id_breed'])
                 if i['id_sample'] not in sample_data:
                     sample_data.append(i['id_sample'])
@@ -317,7 +323,7 @@ def get_repro(data: dict) -> None:
         res['breeds_data'] = breeds_data
         res['sample_data'] = sample_data
         data['breed_total_2'] = breed_total
-        data['hg_each'] = hg_each
+        data['hg_each'].extend(hg_each)
         data['max_hg_2'] = max_hg
         data.update({"repro_2": res})
         return data
@@ -335,7 +341,7 @@ def get_repro(data: dict) -> None:
 
         for i in data['data']:
             if i['id_type_of_reproduction'] == 3:
-                if i['id_breed'] not in breeds_data:
+                if i['id_breed'] not in breeds_data and i['id_breed'] != None:
                     breeds_data.append(i['id_breed'])
                 if i['id_sample'] not in sample_data:
                     sample_data.append(i['id_sample'])
@@ -363,7 +369,7 @@ def get_repro(data: dict) -> None:
         res['breeds_data'] = breeds_data
         res['sample_data'] = sample_data
         data['breed_total_3'] = breed_total
-        data['hg_each'] = hg_each
+        data['hg_each'].extend(hg_each)
         data['max_hg_3'] = max_hg
         data.update({"repro_3": res})
         return data
@@ -477,7 +483,7 @@ def list_region_excel(data: dict):
     print(data['name_breeds'])
 
     cur_col = last_col
-    sheets.cell(row=6, column=last_col, value="Естественное возобновление (семенное)")
+    sheets.cell(row=start_row, column=last_col, value="Естественное возобновление (семенное)")
     step = 0
     for i in data['repro_2']['breeds_data']:
         last_row, last_col = draw_col(sheets, last_row, last_col, data['repro_2']['breeds_dict'][i], samples_row, true_breeds[i], data['max_hg_2'][step])
@@ -485,7 +491,7 @@ def list_region_excel(data: dict):
     sheets.merge_cells(start_row=start_row, start_column=cur_col, end_row=start_row, end_column=last_col - 1)
 
     cur_col = last_col
-    sheets.cell(row=6, column=last_col, value="Естественное возобновление (вегетативное)")
+    sheets.cell(row=start_row, column=last_col, value="Естественное возобновление (вегетативное)")
     step = 0
     for i in data['repro_3']['breeds_data']:
         last_row, last_col = draw_col(sheets, last_row, last_col, data['repro_3']['breeds_dict'][i], samples_row, true_breeds[i], data['max_hg_3'][step])
