@@ -1887,7 +1887,7 @@ class AboutUserView(ListAPIView):
 
     def get(self, request, *args, **kwargs):
         user_id = request.user.pk
-        user = Profile.objects.get()
+        user = Profile.objects.get(id_user = user_id)
         AboutUserDataSerializer(user).data['FIO'].encode('utf-8')
         return Response({"data": AboutUserDataSerializer(user).data})
 
