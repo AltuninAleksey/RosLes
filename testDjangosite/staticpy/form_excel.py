@@ -543,7 +543,7 @@ def list_region_excel(data: dict):
     filepath = f'{BASE_DIR}/media/excel_files/listregion/listregion_{data["id"]}.xlsx'
     wb.save(filepath)
 
-    return filepath
+    return filepath.split("testDjangosite")[1]
 
 
 # list_region_excel()
