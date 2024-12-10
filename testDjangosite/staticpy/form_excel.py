@@ -114,13 +114,13 @@ def undergrowth_excel(sheets, data: dict = None):
     # create_header(sheets, data)
 
 
-    sheets['A6'].value = "Подлесок"
+    sheets['A7'].value = "Подлесок"
     sheets.merge_cells("A6:C6")
-    sheets['A6'].alignment = Alignment(horizontal='center')
-    sheets['A7'].value = "Порода"
-    sheets['B7'].value = "Количество растений"
-    sheets['B7'].alignment = Alignment(wrap_text=True)
-    sheets['C7'].value = "Средняя высота."
+    sheets['A7'].alignment = Alignment(horizontal='center')
+    sheets['A8'].value = "Порода"
+    sheets['B8'].value = "Количество растений"
+    sheets['B8'].alignment = Alignment(wrap_text=True)
+    sheets['C8'].value = "Средняя высота."
 
     sheets.column_dimensions['A'].width = 15
     sheets.column_dimensions['B'].width = 15
@@ -139,7 +139,6 @@ def undergrowth_excel(sheets, data: dict = None):
     last_count = 0
     avg_hg = 0
     name_breed = ''
-    print(data['name_breeds_under'])
     for i in data['data']:
         if i['id_undergrowth'] == None:
             continue
@@ -147,7 +146,6 @@ def undergrowth_excel(sheets, data: dict = None):
             for j in data['name_breeds_under']:
                 if j['id'] == i['id_undergrowth']:
                     name_breed = j['name']
-                    print(j['name'])
             cell = sheets.cell(row=cur_row, column=cur_col, value=name_breed)
             # cell.alignment = Alignment(wrap_text=True)
             # cell.border = thin_border
@@ -178,8 +176,8 @@ def undergrowth_excel(sheets, data: dict = None):
 
 
     test = sheets.cell(row=cur_row+1, column=3)
-    set_border(sheets, f"A6:{test.coordinate}")
-    print(test.coordinate)
+    set_border(sheets, f"A7:{test.coordinate}")
+
 
     # print(data)
     # wb.save(f'{BASE_DIR}/media/excel_files/listregion/undergrowth_{data["id_list_region"]}.xlsx')
@@ -211,7 +209,7 @@ def calculate_each(data:dict):
     var_3 = 0
     var_4 = 0
     var_5 = 0
-    print(f"FROM CALCULATE EACH {data}")
+
     for sample in data:
         for i in data[sample]:
             var_1 += i['to0_2']
@@ -437,7 +435,6 @@ def list_region_excel(data: dict):
     from openpyxl.utils.cell import get_column_letter
     sorted(data)
     get_repro(data)
-    print(data['repro_1'])
 
 
     wb = Workbook()
@@ -480,7 +477,7 @@ def list_region_excel(data: dict):
         step+=1
     # set_border(wb, "A6")
     sheets.merge_cells(start_row=start_row, start_column=start_col, end_row=start_row, end_column=last_col-1)
-    print(data['name_breeds'])
+
 
     cur_col = last_col
     sheets.cell(row=start_row, column=last_col, value="Естественное возобновление (семенное)")
@@ -506,7 +503,7 @@ def list_region_excel(data: dict):
     sheets.cell(row=cur_row+1, column=1, value="Всего")
 
     res_total = list(data['breed_total_1'].values()) + list(data['breed_total_2'].values()) + list(data['breed_total_3'].values())
-    print(res_total)
+
 
     step = 0
     for i in range(2, last_col, 5):
