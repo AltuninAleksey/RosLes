@@ -419,8 +419,11 @@ def draw_col(sheets, start_row, start_col, data, samples_row, breed, hg, FLAG = 
     for i in data:
         res = count_breeds(data[i])
         if i not in samples_row and FLAG:
-            last_row = max(samples_row.values())+1
-            samples_row[i] = last_row
+            if len(samples_row) == 0:
+                samples_row[i] = last_row
+            else:
+                last_row = max(samples_row.values())+1
+                samples_row[i] = last_row
         for j in range(len(res)):
             sheets.cell(row=last_row,column=start_col+j, value=res[j])
             total+=0
@@ -430,6 +433,48 @@ def draw_col(sheets, start_row, start_col, data, samples_row, breed, hg, FLAG = 
 
     # print(data[368])
     return last_row, last_col+1
+
+def draw_empty_col(sheets, start_col, ):
+    # sheets.merge_cells(start_row=6, start_column=start_col, end_row=6, end_column=start_col + 5)
+    def_row = 7
+    sheets.cell(row=def_row + 1, column=start_col).value = "Порода"
+    # sheets.cell(row=def_row + 1, column=start_col + 1).value = breed
+    sheets.cell(row=def_row + 1, column=start_col + 1).alignment = Alignment(wrap_text=True)
+    sheets.merge_cells(start_row=def_row + 1, start_column=start_col + 1, end_row=def_row + 1, end_column=start_col + 4)
+
+    sheets.cell(row=def_row + 2, column=start_col).value = "Макс высота"
+    sheets.cell(row=def_row + 2, column=start_col).alignment = Alignment(wrap_text=True)
+    # sheets.cell(row=def_row + 2, column=start_col + 1).value = hg
+    sheets.merge_cells(start_row=def_row + 2, start_column=start_col + 1, end_row=def_row + 2, end_column=start_col + 4)
+
+    sheets.cell(row=def_row + 3, column=start_col).value = "Высота растений, м."
+    sheets.merge_cells(start_row=def_row + 3, start_column=start_col, end_row=def_row + 3, end_column=start_col + 4)
+
+    last_row = def_row + 3
+    last_col = start_col + 4
+    max_row = 0
+    total = 0
+    hg_names = ['До 0,2', '0,21-0,5', '0,6-1,0', '1,1-1,5', 'Более 1,5']
+    for col in range(5):
+        for row in range(1):
+            sheets.cell(row=last_row + 1, column=start_col + col, value=hg_names[col])
+    # last_row += 2
+    # for i in data:
+    #     res = count_breeds(data[i])
+    #     if i not in samples_row and FLAG:
+    #         last_row = max(samples_row.values()) + 1
+    #         samples_row[i] = last_row
+    #     for j in range(len(res)):
+    #         sheets.cell(row=last_row, column=start_col + j, value=res[j])
+    #         total += 0
+    #     samples_row[i] = last_row
+    #     sheets.cell(row=last_row, column=1, value=i)
+    #     last_row += 1
+
+    # print(data[368])
+    # last_row = max(samples_row.values()) + 1
+    # samples_row[0] = last_row
+    return last_row, last_col + 1
 
 def list_region_excel(data: dict):
     from openpyxl.utils.cell import get_column_letter
@@ -472,9 +517,12 @@ def list_region_excel(data: dict):
     # ]
     samples_row = {}
     step = 0
-    for i in data['repro_1']['breeds_data']:
-        last_row, last_col = draw_col(sheets, last_row, last_col, data['repro_1']['breeds_dict'][i], samples_row, true_breeds[i], data['max_hg_1'][step],False)
-        step+=1
+    if len(data['repro_1']['breeds_data']) == 0:
+        last_row, last_col = draw_empty_col(sheets, last_col)
+    else:
+        for i in data['repro_1']['breeds_data']:
+            last_row, last_col = draw_col(sheets, last_row, last_col, data['repro_1']['breeds_dict'][i], samples_row, true_breeds[i], data['max_hg_1'][step],False)
+            step+=1
     # set_border(wb, "A6")
     sheets.merge_cells(start_row=start_row, start_column=start_col, end_row=start_row, end_column=last_col-1)
 
@@ -482,28 +530,45 @@ def list_region_excel(data: dict):
     cur_col = last_col
     sheets.cell(row=start_row, column=last_col, value="Естественное возобновление (семенное)")
     step = 0
-    for i in data['repro_2']['breeds_data']:
-        last_row, last_col = draw_col(sheets, last_row, last_col, data['repro_2']['breeds_dict'][i], samples_row, true_breeds[i], data['max_hg_2'][step])
-        step+=1
+    if len(data['repro_2']['breeds_data']) == 0:
+        last_row, last_col = draw_empty_col(sheets, last_col)
+    else:
+        for i in data['repro_2']['breeds_data']:
+            last_row, last_col = draw_col(sheets, last_row, last_col, data['repro_2']['breeds_dict'][i], samples_row, true_breeds[i], data['max_hg_2'][step])
+            step+=1
     sheets.merge_cells(start_row=start_row, start_column=cur_col, end_row=start_row, end_column=last_col - 1)
 
     cur_col = last_col
     sheets.cell(row=start_row, column=last_col, value="Естественное возобновление (вегетативное)")
     step = 0
-    for i in data['repro_3']['breeds_data']:
-        last_row, last_col = draw_col(sheets, last_row, last_col, data['repro_3']['breeds_dict'][i], samples_row, true_breeds[i], data['max_hg_3'][step])
-        step += 1
+    if len(data['repro_3']['breeds_data']) == 0:
+        last_row, last_col = draw_empty_col(sheets, last_col)
+    else:
+        for i in data['repro_3']['breeds_data']:
+            last_row, last_col = draw_col(sheets, last_row, last_col, data['repro_3']['breeds_dict'][i], samples_row, true_breeds[i], data['max_hg_3'][step])
+            step += 1
     sheets.merge_cells(start_row=start_row, start_column=cur_col, end_row=start_row, end_column=last_col - 1)
+    # if len(samples_row)!=0:
+    #     cur_row = max(samples_row.values())+1
+    # else:
+    #     cur_row = last_row
+    cur_row = max(samples_row.values()) + 1
 
-    cur_row = max(samples_row.values())+1
 
     sheets.cell(row=cur_row, column=1, value="Итого:")
     for i in range(len(data['hg_each'])):
         sheets.cell(row=cur_row, column=i+2, value=data['hg_each'][i])
     sheets.cell(row=cur_row+1, column=1, value="Всего")
+    res_total = []
+    if len(data['repro_1']['breeds_data']) == 0:
+        res_total.append(0)
+    if len(data['repro_2']['breeds_data']) == 0:
+        res_total.append(0)
+    if len(data['repro_3']['breeds_data']) == 0:
+        res_total.append(0)
+    res_total.extend(list(data['breed_total_1'].values()) + list(data['breed_total_2'].values()) + list(data['breed_total_3'].values()))
 
-    res_total = list(data['breed_total_1'].values()) + list(data['breed_total_2'].values()) + list(data['breed_total_3'].values())
-
+    print(res_total)
 
     step = 0
     for i in range(2, last_col, 5):
