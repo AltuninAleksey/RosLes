@@ -562,11 +562,17 @@ def list_region_excel(data: dict):
     res_total = []
     if len(data['repro_1']['breeds_data']) == 0:
         res_total.append(0)
+    else:
+        res_total.extend(list(data['breed_total_1'].values()))
     if len(data['repro_2']['breeds_data']) == 0:
         res_total.append(0)
+    else:
+        res_total.extend(list(data['breed_total_2'].values()))
     if len(data['repro_3']['breeds_data']) == 0:
         res_total.append(0)
-    res_total.extend(list(data['breed_total_1'].values()) + list(data['breed_total_2'].values()) + list(data['breed_total_3'].values()))
+    else:
+        res_total.extend(list(data['breed_total_3'].values()))
+
 
     print(res_total)
 
