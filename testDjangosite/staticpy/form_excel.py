@@ -489,6 +489,59 @@ def list_region_excel(data: dict):
 
     create_header(sheets, data)
     # sheets.title = "Подлесок"
+    # sheets['A7'].value = "Номер пробной площади"
+    # sheets.merge_cells("A7:A10")
+    # # sheets['A6'].aligment = Alignment(wrap_text=True)
+    # sheets['B7'].value = "Искусственное восстановление"
+    # test = sheets['B7']
+    # true_breeds = {}
+    # for i in data['name_breeds']:
+    #     true_breeds[i['id']] = i['name_breed']
+
+
+    start_col = 2
+    start_row = 7
+
+    last_col = start_col
+    last_row = start_row
+    if len(data['repro_1']['breeds_data']) == 0 and len(data['repro_2']['breeds_data'])== 0 and len(data['repro_3']['breeds_data'])==0:
+        # for i in range(3):
+        #     last_row, last_col = draw_empty_col(sheets, last_col)
+        #
+        # sheets.merge_cells(start_row=7, start_column=start_col, end_row=7, end_column=start_col + 4)
+        # sheets.cell(row=7, column=start_col+5, value='Естественное возобновление (семенное)')
+        # sheets.merge_cells(start_row=7, start_column=start_col+5, end_row=7, end_column=start_col + 9)
+        # sheets.cell(row=7, column=start_col + 10, value='Естественное возобновление (вегетативное)')
+        # sheets.merge_cells(start_row=7, start_column=start_col+10, end_row=7, end_column=start_col + 14)
+        #
+        #
+        #
+        # cur_row = 12
+        # sheets.cell(row=cur_row, column=1, value="Итого:")
+        # sheets.cell(row=cur_row + 1, column=1, value="Всего")
+        # sheets.cell(row=cur_row + 2, column=1, value="на 1 Га")
+        #
+        # last_cell = sheets.cell(row=cur_row + 2, column=last_col - 1)
+        #
+        # set_border(sheets, f"A7:{last_cell.coordinate}")
+        #
+        # for i in range(7):
+        #     rd = sheets.row_dimensions[i]
+        #     rd.height = 30
+        #
+        # for row in sheets.iter_rows():
+        #     for cell in row:
+        #         cell.alignment = Alignment(wrap_text=True, vertical='top')
+
+        new_sheet = wb.create_sheet('Подлесок')
+        undergrowth_excel(new_sheet, data=data)
+        create_header(new_sheet, data=data)
+        filepath = f'{BASE_DIR}/media/excel_files/listregion/listregion_{data["id"]}.xlsx'
+        wb.save(filepath)
+
+        return filepath.split("testDjangosite")[1]
+
+
     sheets['A7'].value = "Номер пробной площади"
     sheets.merge_cells("A7:A10")
     # sheets['A6'].aligment = Alignment(wrap_text=True)
@@ -497,13 +550,6 @@ def list_region_excel(data: dict):
     true_breeds = {}
     for i in data['name_breeds']:
         true_breeds[i['id']] = i['name_breed']
-
-
-    start_col = 2
-    start_row = 7
-
-    last_col = start_col
-    last_row = start_row
 
     # type_repro: [
     #     {
@@ -554,7 +600,6 @@ def list_region_excel(data: dict):
     #     cur_row = last_row
     cur_row = max(samples_row.values()) + 1
 
-
     sheets.cell(row=cur_row, column=1, value="Итого:")
     for i in range(len(data['hg_each'])):
         sheets.cell(row=cur_row, column=i+2, value=data['hg_each'][i])
@@ -574,7 +619,7 @@ def list_region_excel(data: dict):
         res_total.extend(list(data['breed_total_3'].values()))
 
 
-    print(res_total)
+    # print(res_total)
 
     step = 0
     for i in range(2, last_col, 5):
