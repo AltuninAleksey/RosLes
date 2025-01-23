@@ -1290,8 +1290,13 @@ class ListRegionFilters(ListAPIView):
     """
 
     def post(self, request, *args, **kwargs):
-        ser2 = ListRegion.objects.all()
+        try:
+            id_subject = request.user.subject_rf_id
+        except:
+            print("Cannot find user")
+        ser2 = ListRegion.objects.all(id_district_forestly__id_forestly == id_subject)
         if request.data['bSubjectrf']:
+            ser2 = ListRegion.objects.all()
             idSubjectrf = request.data['idSubjectrf']
             print("subjectrf")
             ser2 = ser2.filter(id_district_forestly__id_forestly__id_subject_rf = idSubjectrf)
@@ -2131,3 +2136,10 @@ class ListRegionDocxCreater(ListAPIView):
             return Response({"document": path})
             # return Response(new_data)
         return Response({"code": 400, "error_text": "dont send id"})
+
+
+class GetUserManual(ListAPIView):
+
+    def get(self, *args, **kwargs):
+        path = "/media/Rukovodstvo_Polzovatelya_AAS_GMVL_2025_01_20.docx"
+        return Response({"path": path})
