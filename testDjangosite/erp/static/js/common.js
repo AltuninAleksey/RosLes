@@ -104,3 +104,20 @@ function HideModal(ell) {
     document.body.style.overflow = '';
 }
 
+async function downloadDocument() {
+    const userManualUrl = urlGlobal + '/user_manual';
+    const response = await fetch(userManualUrl);
+    const data = await response.json();
+    const filePath = data.path;
+    const fullFileUrl = urlGlobal + filePath;
+    const fileResponse = await fetch(fullFileUrl);
+    const blob = await fileResponse.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'Руководство_Пользователя_ААС_ГМВЛ.docx';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.URL.revokeObjectURL(url);
+}

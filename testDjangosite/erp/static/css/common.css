@@ -92,6 +92,23 @@
     border-bottom: 3px solid #40E0D0;
 }
 
+.rukovodstvo {
+    vertical-align: middle;
+    font: normal 300 15px/19px Roboto;
+    padding: 6.5px 10px;
+    cursor: pointer;
+    height: 35px;
+    margin-top: 10px;
+    margin-right: 10px;
+    background: none;
+    border: none;
+    color: white;
+}
+
+.rukovodstvo:hover{
+    border-bottom: 3px solid #40E0D0;
+}
+
 .modal-all-profile {
 	display: none;
 	background: rgba(20, 20, 20, 0.3);

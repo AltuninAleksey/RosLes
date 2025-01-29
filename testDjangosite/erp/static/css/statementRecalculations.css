@@ -234,7 +234,6 @@ td {
 .butmenuadd{
     width: 325px;
     color: #000000;
-    margin-right: 0;
     margin-left: 30px;
     margin-bottom: -11px;
     margin-top: 18px;
@@ -244,7 +243,6 @@ td {
     height: 30px;
     border: 1px solid #9B9B9B;
     border-radius: 4px;
-    margin-right: 28px;
 }
 .butmenuadd:active{
     cursor: pointer;
