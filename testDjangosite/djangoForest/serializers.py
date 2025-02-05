@@ -470,7 +470,7 @@ class ListRegionSerializer(serializers.ModelSerializer):
         # instance.id_quarter = validated_data.get("id_quarter")
         instance.id_district_forestly = validated_data.get("id_district_forestly")
         instance.dacha = validated_data.get("dacha")
-        instance.name_quarter =validated_data.get("name_quarter")
+        instance.name_quarter = validated_data.get("name_quarter")
         instance.sample_region = validated_data.get("sample_region")
         instance.mark_del = validated_data.get("mark_del")
         instance.number_region = validated_data.get("number_region")
@@ -795,8 +795,8 @@ class FieldCardSerializer(serializers.ModelSerializer):
     date = serializers.DateField(source="id_list_region.date", read_only=True)
     number_region = serializers.CharField(source="id_list_region.number_region", read_only=True)
     dacha = serializers.CharField(source = "id_list_region.dacha", read_only = True)
-    name_quarter = serializers.CharField(source="id_list_region.name_quarter")
-    count_sample_area = serializers.IntegerField(source='calculate_count_of_sample')
+    # name_quarter = serializers.CharField(source="id_list_region.name_quarter")
+    # count_sample_area = serializers.IntegerField(source='calculate_count_of_sample')
 
     class Meta:
         model = FieldCard
@@ -948,3 +948,45 @@ class PlotCoeffSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class ListFieldSerializer(serializers.ModelSerializer):
+    # id_breed = serializers.CharField(source="id_list_region_breed.id_breed")
+    id_district_forestly = serializers.CharField(source="id_district_forestly.name_district_forestly")
+    forestly = serializers.CharField(source="id_district_forestly.id_forestly.name_forestly")
+    id_subject_rf = serializers.CharField(source="id_district_forestly.id_forestly.id_subject_rf")
+
+
+    class Meta:
+        model = ListRegion
+        fields = ['id', 'date', 'id_district_forestly', 'forestly', 'id_subject_rf', 'dacha', 'soil_lot', 'sample_region']
+
+
+class FieldSerializerExcel(serializers.ModelSerializer):
+    id = serializers.CharField(source='id_list_region')
+    id_district_forestly = serializers.CharField(source="id_list_region.id_district_forestly.name_district_forestly")
+    forestly = serializers.CharField(source="id_list_region.id_district_forestly.id_forestly.name_forestly")
+    id_subject_rf = serializers.CharField(source="id_list_region.id_district_forestly.id_forestly.id_subject_rf")
+    dacha = serializers.CharField(source="id_list_region.dacha")
+    soil_lot = serializers.CharField(source="id_list_region.soil_lot")
+    name_quarter = serializers.CharField(source="id_list_region.name_quarter")
+    date = serializers.CharField(source="id_list_region.date")
+
+
+    class Meta:
+        model = FieldCard
+        fields = ['id', 'date', 'id_district_forestly', 'forestly', 'id_subject_rf',  'dacha', 'soil_lot', 'name_quarter']
+
+
+class DescSerializerExcel(serializers.ModelSerializer):
+    id = serializers.CharField(source='id_list_region')
+    date = serializers.CharField(source="id_list_region.date")
+    id_district_forestly = serializers.CharField(source="id_list_region.id_district_forestly.name_district_forestly")
+    forestly = serializers.CharField(source="id_list_region.id_district_forestly.id_forestly.name_forestly")
+    id_subject_rf = serializers.CharField(source="id_list_region.id_district_forestly.id_forestly.id_subject_rf")
+    dacha = serializers.CharField(source="id_list_region.dacha")
+    soil_lot = serializers.CharField(source="id_list_region.soil_lot")
+    name_quarter = serializers.CharField(source="id_list_region.name_quarter")
+
+
+    class Meta:
+        model = FieldCard
+        fields = ['id', 'date', 'id_district_forestly', 'forestly', 'id_subject_rf',  'dacha', 'soil_lot', 'name_quarter']

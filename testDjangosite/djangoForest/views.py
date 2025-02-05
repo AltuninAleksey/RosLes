@@ -2095,7 +2095,7 @@ class ListRegionDocxCreater(ListAPIView):
             except:
                 return Response({"code": 404, "error_text": "not found id"})
             # list_reg = ListRegionSerializer(ListRegion.objects.get(id=request.data['id'])).data
-            print("XKLANSFLKASNFALKSFNLANSLFNLAKSFNKLASNFKANSKLFNASKLNFKLA")
+
             new_data = {}
             zxc = ListRegionSerializer(data).data
 
@@ -2143,3 +2143,94 @@ class GetUserManual(ListAPIView):
     def get(self, *args, **kwargs):
         path = "/media/Rukovodstvo_Polzovatelya_AAS_GMVL_2025_01_20.docx"
         return Response({"path": path})
+
+
+class GetAllListFieldDesc(ListAPIView):
+
+    def get(self, request, *args, **kwargs):
+        subject_id = request.user.subject_rf_id
+        # subject_id = 31
+        id_user = request.user.id
+        # id_user = 11
+        print(subject_id)
+        breed_data = []
+        all_data = {}
+        if subject_id:
+            data = []
+            data_field = []
+            desc_field = []
+            if not ListRegion.objects.filter(
+                    id_district_forestly_id__id_forestly_id__id_subject_rf_id=subject_id).exists():
+                return Response({"data": []})
+            lst = ListRegion.objects.filter(
+                id_district_forestly__isnull=False,
+                id_district_forestly_id__id_forestly_id__id_subject_rf_id=subject_id)
+            field = FieldCard.objects.filter(
+                id_list_region__id_district_forestly_id__id_forestly_id__id_subject_rf_id=subject_id)
+            desc = DescriptionRegion.objects.filter(id_list_region__id_district_forestly_id__id_forestly_id__id_subject_rf_id=subject_id)
+            desc_ready = DescSerializerExcel(desc, many=True).data
+            field_ready = FieldSerializerExcel(field, many=True).data
+            # data_field.append(FieldSerializerExcel(field, many=True).data
+            #)
+            # desc_field.append(DescSerializerExcel(desc, many=True).data)
+            lst_ready = GetAllListRegionDataSerializer(lst, many=True).data
+            # forestly = Forestly.objects.filter(id_in=lst.values("id_forestly"))
+
+            res = ListFieldSerializer(lst, many=True).data
+            for i in res:
+                data.append(i)
+            for i in range(len(desc_ready)):
+                data_field.append(field_ready[i])
+                desc_field.append(desc_ready[i])
+            czl_data_main = CZLSerializer(
+                CZL.objects.filter(Q(id_main_subject=subject_id) | Q(id_subject=subject_id)), many=True)
+            czl_main_id = czl_data_main.data[0].get("id_main_subject")
+            czl_objects = CZL.objects.filter(id_main_subject=czl_main_id).values("id_subject", "id_main_subject")
+            for k in czl_objects:
+                if k.get("id_main_subject") != subject_id:
+                    lst = ListRegion.objects.filter(
+                        id_district_forestly_id__id_forestly_id__id_subject_rf_id=k.get('id_main_subject'))
+
+                    res = ListFieldSerializer(lst, many=True).data
+                    field = FieldCard.objects.filter(
+                                                     id_list_region__id_district_forestly_id__id_forestly_id__id_subject_rf_id=k.get('id_main_subject'))
+                    desc = DescriptionRegion.objects.filter(
+                                                            id_list_region__id_district_forestly_id__id_forestly_id__id_subject_rf_id=k.get('id_main_subject'))
+                    field_ready = FieldSerializerExcel(field, many=True).data
+                    desc_ready = DescSerializerExcel(desc, many=True).data
+                    # data_field.append(FieldSerializerExcel(field, many=True).data)
+                    # desc_field.append(DescSerializerExcel(desc, many=True).data)
+                    for i in res:
+                        data.append(i)
+                    for i in range(len(desc_ready)):
+                        data_field.append(field_ready[i])
+                        desc_field.append(desc_ready[i])
+                    # data.append(GetAllListRegionDataSerializer(lst, many=True).data)
+                break
+            if len(czl_objects):
+                print(czl_objects)
+                for i in czl_objects:
+                    if i.get('id_subject') != subject_id:
+                        lst = ListRegion.objects.filter(
+                            id_district_forestly_id__id_forestly_id__id_subject_rf_id=i.get('id_subject'))
+                        field = FieldCard.objects.filter(
+                                                         id_list_region__id_district_forestly_id__id_forestly_id__id_subject_rf_id=i.get('id_subject'))
+                        desc = DescriptionRegion.objects.filter(
+                                                                id_list_region__id_district_forestly_id__id_forestly_id__id_subject_rf_id=i.get('id_subject'))
+
+                        res = ListFieldSerializer(lst, many=True).data
+                        desc_ready = DescSerializerExcel(desc, many=True).data
+                        field_ready = FieldSerializerExcel(field, many=True).data
+                        for i in res:
+                            data.append(i)
+                        for i in range(len(desc_ready)):
+                            data_field.append(field_ready[i])
+                            desc_field.append(desc_ready[i])
+            all_data.update({"data": data})
+            all_data.update({"data_field": data_field})
+            all_data.update({"desc_field": desc_field})
+            all_data.update({"id_user": id_user})
+            from staticpy.form_excel_list_main import form_getlistregion
+
+            path = form_getlistregion(all_data)
+            return Response({"document": path})
