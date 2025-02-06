@@ -2146,13 +2146,14 @@ class GetUserManual(ListAPIView):
 
 
 class GetAllListFieldDesc(ListAPIView):
+    permission_classes = [IsAuthenticated, ]
 
     def get(self, request, *args, **kwargs):
         subject_id = request.user.subject_rf_id
         # subject_id = 31
         id_user = request.user.id
         # id_user = 11
-        print(subject_id)
+        # print(subject_id)
         breed_data = []
         all_data = {}
         if subject_id:
