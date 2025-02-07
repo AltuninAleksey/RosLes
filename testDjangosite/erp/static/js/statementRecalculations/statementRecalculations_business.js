@@ -43,3 +43,18 @@ StatementRecalculationsBusiness.TypeData = {
     ALL: 0,
     BYID: 1
 }
+
+StatementRecalculationsBusiness.downloadExcel = async function() {
+
+    var token = document.cookie.match(/jwttoken=(.+?)(;|$)/)[1];
+
+    var requestData = await axios({
+        method: 'get',
+        url: urlGlobal + "/getmains",
+        responseType: 'json',
+        headers: {
+            'Authorization': 'Bearer ' + token
+        }
+    });
+    return requestData.data;
+}

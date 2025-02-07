@@ -46,3 +46,18 @@ DescriptionListLandBusiness.TypeData = {
     ALL: 0,
     BYID: 1
 }
+
+DescriptionListLandBusiness.downloadExcel = async function() {
+
+    var token = document.cookie.match(/jwttoken=(.+?)(;|$)/)[1];
+
+    var requestData = await axios({
+        method: 'get',
+        url: urlGlobal + "/getmains",
+        responseType: 'json',
+        headers: {
+            'Authorization': 'Bearer ' + token
+        }
+    });
+    return requestData.data;
+}

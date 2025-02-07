@@ -462,3 +462,32 @@ async function searchByFilter() {
 
     updateDataInDescriptionLandTbody(APP.dataTable);
 }
+
+async function downloadExcel() {
+
+    var urlExcel = await DescriptionListLandBusiness.downloadExcel();
+    urlExcel = urlExcel.document;
+
+    var fullUrl = urlGlobal + urlExcel;
+
+    const response = await fetch(fullUrl);
+
+    let filename = 'document.bin';
+    const contentDisposition = response.headers.get('Content-Disposition');
+    if (contentDisposition && contentDisposition.includes('filename=')) {
+        filename = contentDisposition.split('filename=')[1].replace(/["']/g, '');
+    }
+
+    const blob = await response.blob();
+
+    const url = window.URL.createObjectURL(blob);
+
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.URL.revokeObjectURL(url);
+}
