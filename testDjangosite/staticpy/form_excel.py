@@ -20,6 +20,12 @@ def set_border(ws, cell_range):
         for cell in row:
             cell.border = thin_border
 
+def len_samples(data: dict):
+    data_of_samples = []
+    for i in data['data']:
+        data_of_samples.append(i['id_sample'])
+
+    return len(data_of_samples)
 
 def create_header(sheets, data):
 
@@ -76,7 +82,11 @@ def create_header(sheets, data):
     sheets.merge_cells("K4:L4")
 
     sheets['A5'].value = "кол-во ПП, шт"
-    sheets['C5'].value = data['count_sample_area']
+    if data['count_sample_area'] != None:
+        sheets['C5'].value = data['count_sample_area']
+    else:
+        sheets['C5'].value = len_samples(data)
+
     sheets['C5'].border = Border(bottom=Side(style="thin"))
     sheets.merge_cells("A5:B5")
     sheets.merge_cells("C5:D5")
