@@ -6,6 +6,7 @@ from openpyxl.styles import PatternFill, Alignment, Font, Border, Side
 from openpyxl.workbook import Workbook
 import pandas as pd
 
+
 from testDjangosite.settings import BASE_DIR
 
 
@@ -28,7 +29,8 @@ def create_header(sheets):
 
 def form_getlistregion(data: dict ):
     filepath = f'{BASE_DIR}/media/excel_files/listregion/listregionfilters_{data["id_user"]}.xlsx'
-    col = ["Номер", 'Дата', 'Участковое лесничество', 'лесничество', 'Субъект РФ', 'Урочище', 'Выдел', 'Площадь']
+    print(data['data'])
+    col = ["Номер", 'Дата', 'Участковое лесничество', 'лесничество', 'Субъект РФ', 'Урочище', 'Выдел', 'Площадь', 'Квартал']
     col2 = ["Номер", 'Дата', 'Участковое лесничество', 'лесничество', 'Субъект РФ', 'Урочище', 'Выдел', 'Квартал']
     df = pd.DataFrame(data['data'])
     # field = loads(dumps(data['data_field']))
@@ -49,6 +51,11 @@ def form_getlistregion(data: dict ):
 
     sheets_names = wb.sheetnames
 
+    thin_border = Border(left=Side(style='thin'),
+                         right=Side(style='thin'),
+                         top=Side(style='thin'),
+                         bottom=Side(style='thin'))
+
     for j in range(0, 3):
         sheets = wb[sheets_names[j]]
         for i in range(7):
@@ -57,6 +64,7 @@ def form_getlistregion(data: dict ):
         for row in sheets.iter_rows():
             for cell in row:
                 cell.alignment = Alignment(wrap_text=True, vertical='top')
+                cell.border = thin_border
 
     wb.save(filepath)
 

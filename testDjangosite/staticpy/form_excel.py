@@ -92,15 +92,19 @@ def create_header(sheets, data):
     sheets.merge_cells("C5:D5")
 
     sheets['E5'].value = "площадь 1 ПП"
-    sheets['G5'].value = data['square_one_sample_area']
+    sheets['G5'].value = data['square']
     sheets['G5'].border = Border(bottom=Side(style="thin"))
     sheets.merge_cells("E5:F5")
     sheets.merge_cells("G5:H5")
 
     sheets['I5'].value = "площадь ПП, га."
     try:
-        sheets['K5'].value = (data['square_one_sample_area'] / data['count_sample_area']) / 10000
+        sam = data['count_sample_area']
+        if sam == 0:
+            sam = 1
+        sheets['K5'].value = (data['square'] / data['count_sample_area']) / 10000
     except:
+        # sheets['K5'].value = data['square']/10000
         pass
     sheets['K5'].border = Border(bottom=Side(style="thin"))
     sheets.merge_cells("I5:J5")
