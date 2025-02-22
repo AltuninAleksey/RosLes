@@ -795,7 +795,7 @@ class FieldCardSerializer(serializers.ModelSerializer):
     date = serializers.DateField(source="id_list_region.date", read_only=True)
     number_region = serializers.CharField(source="id_list_region.number_region", read_only=True)
     dacha = serializers.CharField(source = "id_list_region.dacha", read_only = True)
-    # name_quarter = serializers.CharField(source="id_list_region.name_quarter")
+    name_quarter = serializers.CharField(source="id_list_region.name_quarter")
     # count_sample_area = serializers.IntegerField(source='calculate_count_of_sample')
 
     class Meta:
