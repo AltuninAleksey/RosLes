@@ -953,11 +953,14 @@ class ListFieldSerializer(serializers.ModelSerializer):
     id_district_forestly = serializers.CharField(source="id_district_forestly.name_district_forestly")
     forestly = serializers.CharField(source="id_district_forestly.id_forestly.name_forestly")
     id_subject_rf = serializers.CharField(source="id_district_forestly.id_forestly.id_subject_rf")
+    name_quarter = serializers.CharField()
 
 
     class Meta:
         model = ListRegion
-        fields = ['id', 'date', 'id_district_forestly', 'forestly', 'id_subject_rf', 'dacha', 'soil_lot', 'sample_region']
+        fields = ['id', 'date', 'id_district_forestly', 'forestly', 'id_subject_rf', 'dacha', 'soil_lot', 'sample_region', 'name_quarter']
+
+
 
 
 class FieldSerializerExcel(serializers.ModelSerializer):
