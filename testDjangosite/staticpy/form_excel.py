@@ -82,10 +82,13 @@ def create_header(sheets, data):
     sheets.merge_cells("K4:L4")
 
     sheets['A5'].value = "кол-во ПП, шт"
+
+    len_samples_res = 1
     if data['count_sample_area'] != None:
         sheets['C5'].value = data['count_sample_area']
     else:
-        sheets['C5'].value = len_samples(data)
+        len_samples_res = len_samples(data)
+        sheets['C5'].value = len_samples_res
 
     sheets['C5'].border = Border(bottom=Side(style="thin"))
     sheets.merge_cells("A5:B5")
@@ -104,8 +107,7 @@ def create_header(sheets, data):
             sam = 1
         sheets['K5'].value = (data['square'] / data['count_sample_area']) / 10000
     except:
-        # sheets['K5'].value = data['square']/10000
-        pass
+        sheets['K5'].value = (data['square']/len_samples_res)/10000
     sheets['K5'].border = Border(bottom=Side(style="thin"))
     sheets.merge_cells("I5:J5")
     sheets.merge_cells("K5:L5")
