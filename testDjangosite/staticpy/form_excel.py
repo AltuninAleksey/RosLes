@@ -652,7 +652,18 @@ def list_region_excel(data: dict):
         step+=1
 
     sheets.cell(row=cur_row+2, column=1, value="на 1 Га")
+    len_samples_res = len_samples(data)
+    for i in range(2, last_col, 5):
 
+        try:
+            cell =  sheets.cell(row=cur_row + 1, column=i)
+            res = (data['square'] / len_samples_res) / 10000
+            sheets.cell(row=cur_row + 2, column=i, value=cell.value/res)
+        except:
+            pass
+        sheets.merge_cells(start_row=cur_row+2, start_column=i, end_row=cur_row+2, end_column=i+4)
+        # sheets.merge_cells(start_row=cur_row+2, start_column=i, end_row=cur_row+2, end_column=i+4)
+        step+=1
 
     last_cell = sheets.cell(row=cur_row+2, column=last_col-1)
 
