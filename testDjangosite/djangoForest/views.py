@@ -2114,16 +2114,18 @@ class ListRegionDocxCreater(ListAPIView):
 
             list_res = ListSerializer(list_data, many=True).data
             # print(new_data)
-
-            new_data.update({"id":request.data['id']})
-            new_data.update(zxc)
-            new_data.update(sample_area)
-            new_data.update(forestly)
-            new_data.update(ds_forestly)
-            new_data.update(field_card)
-            new_data.update({"name_breeds": name_breeds})
-            new_data.update({"name_breeds_under": name_breeds_under})
-            new_data.update({"data": ListSerializer(list_data, many=True).data})
+            try:
+                new_data.update({"id":request.data['id']})
+                new_data.update(zxc)
+                new_data.update(sample_area)
+                new_data.update(forestly)
+                new_data.update(ds_forestly)
+                new_data.update(field_card)
+                new_data.update({"name_breeds": name_breeds})
+                new_data.update({"name_breeds_under": name_breeds_under})
+                new_data.update({"data": ListSerializer(list_data, many=True).data})
+            except:
+                return Response({"error"})
             # path = form_docx_listregion(new_data, f"{BASE_DIR}/media/list_region/list_region_{470}.docx")
             # path = prep_to_form(new_data)
             # path = form_docx_listregion2(new_data)
@@ -2146,7 +2148,7 @@ class GetUserManual(ListAPIView):
 
 
 class GetAllListFieldDesc(ListAPIView):
-    permission_classes = [IsAuthenticated, ]
+    # permission_classes = [IsAuthenticated, ]
 
     def get(self, request, *args, **kwargs):
         subject_id = request.user.subject_rf_id
