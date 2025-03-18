@@ -70,8 +70,8 @@ class sync() {
     suspend fun load(viewModels: ViewModels, db: DBCountWood, context: AppCompatActivity){
 
 
-        var listregion=db.getLISTREGION()
-        var oldlistregion=db.getLISTREGION()
+        val listregion=db.getLISTREGION()
+        val oldlistregion=db.getLISTREGION()
 
         listregion.forEach{
             if (it.dacha=="")
@@ -92,14 +92,14 @@ class sync() {
         }
 
 
-        var oldsample = mutableListOf<SAMPLE_DATA>()
-        var sample = mutableListOf<SAMPLE_DATA>()
+        val oldsample = mutableListOf<SAMPLE_DATA>()
+        val sample = mutableListOf<SAMPLE_DATA>()
 
         for (i in oldlistregion.indices){
 
-            var sampleData=db.getSAMPLEbyID_Listregion(oldlistregion[i].id,listregion[i].id)
-            var test=db.getSAMPLEbyID_Listregion(oldlistregion[i].id,listregion[i].id)
-            viewModels.putSAMPLE(SAMPLE_REQEST(sampleData ))
+            val sampleData=db.getSAMPLEbyID_Listregion(oldlistregion[i].id,listregion[i].id,oldlistregion[i].soil_lot)
+            val test=db.getSAMPLEbyID_Listregion(oldlistregion[i].id,listregion[i].id,oldlistregion[i].soil_lot)
+            var a = viewModels.putSAMPLE(SAMPLE_REQEST(sampleData ))
 
             sampleData.forEach{
                 sample.add(it)
@@ -150,14 +150,14 @@ class sync() {
 
 
 //TEST
-        var filePath = "/data/data/com.example.rosles/databases/userdb.db"
-        var file = File(filePath)
-        if (file.exists()) {
-            temp.temp_object=null
-            temp.temp_objectsample=null
-            file.delete()
-            delay(5000)
-        }
+//        var filePath = "/data/data/com.example.rosles/databases/userdb.db"
+//        var file = File(filePath)
+//        if (file.exists()) {
+//            temp.temp_object=null
+//            temp.temp_objectsample=null
+//            file.delete()
+//            delay(5000)
+//        }
 
     }
 //    fun delete_values(db: DBCountWood,viewModels: ViewModels){

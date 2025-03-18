@@ -248,18 +248,19 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         return listregionrequest
     }
     @SuppressLint("Range")
-    fun getSAMPLEbyID_Listregion(oldid: Int,newid:Int):List<SAMPLE_DATA>{
+    fun getSAMPLEbyID_Listregion(oldid: Int,newid:Int,soil_lot: String):List<SAMPLE_DATA>{
         val database: SQLiteDatabase = this.writableDatabase
         val cursor: Cursor = database.rawQuery("select * from djangoForest_sample where id_list_region_id = $oldid",null)
         cursor.moveToFirst()
         val listregionrequest=mutableListOf<SAMPLE_DATA>()
+
         for (i in 1..cursor.getCount()) {
 
             val data= SAMPLE_DATA(
                 cursor.getString(cursor.getColumnIndex("id")).toInt(),
                 cursor.getString(cursor.getColumnIndex("date")).toString(),
                 cursor.getFloat(cursor.getColumnIndex("sample_area")),
-                cursor.getString(cursor.getColumnIndex("soil_lot")),
+                soil_lot,
                 cursor.getInt(cursor.getColumnIndex("width")),
                 cursor.getInt(cursor.getColumnIndex("lenght")),
                 cursor.getInt(cursor.getColumnIndex("square")),
