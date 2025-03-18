@@ -728,3 +728,20 @@ class CZL(models.Model):
                                         related_name='main_subject')
     id_subject = models.ForeignKey("SubjectRF", on_delete=models.CASCADE, verbose_name='Подчиненный субъект',
                                    related_name='slave_subject', null = True)
+
+
+class OOPT(models.Model):
+    name_oopt = models.CharField(max_length=300, verbose_name='ООПТ')
+
+
+class TypeForestUsing(models.Model):
+    name_using = models.CharField(max_length=300, verbose_name='Виды использования лесов')
+
+
+class PhaseVermin(models.Model):
+    code_phase = models.CharField(max_length=50, verbose_name='Код')
+    name_phase = models.CharField(max_length=300, verbose_name='Наименование фаз и стадий развития насекомых и болезней')
+
+
+class RightUseForestArea(models.Model):
+    name_right = models.CharField(max_length=150, verbose_name='Название (вид документов на право пользования)')
