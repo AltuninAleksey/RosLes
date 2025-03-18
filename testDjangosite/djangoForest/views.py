@@ -376,6 +376,7 @@ class SampleView(generics.ListCreateAPIView):
                     # ids_dict.update({request.data['data'][i]['id']: serealizer.data['id']})
                     ids_dict.append({"obj": {"last": request.data['data'][i]['id'], "new": serealizer.data['id']}})
             elif request.data['data'][i]['mark_update'] == 2:
+
                 # request.data['data'][i]['mark_update'].update('mark_update: 0')
                 serializer = SampleSerializer(data=request.data['data'][i])
                 serializer.is_valid(raise_exception=True)
@@ -385,6 +386,7 @@ class SampleView(generics.ListCreateAPIView):
                 lst.save()
                 # ids_dict.update({request.data['data'][i]['id']: serializer.data['id']})
                 ids_dict.append({"obj": {"last": request.data['data'][i]['id'], "new": serializer.data['id']}})
+
         return Response({"put": status.HTTP_200_OK, "ids": ids_dict})
         # return Response({"put": status.HTTP_200_OK})
 
@@ -1034,6 +1036,7 @@ class CreateSampleAndOther(ListAPIView):
         listregion_serializer = ListRegionSerializerUpdateBySample(data=request.data['sample'], instance=listregion_instance)
         listregion_serializer.is_valid()
         listregion_serializer.save()
+        Sample.objects.filter(id_list_region=request.data['sample']['id_list_region']).update(soil_lot = request.data['sample']['soil_lot'])
         id_sample = serializer.data['id']
         if len(request.data['list_data']) != 0:
             for i in request.data['list_data']:
@@ -1294,7 +1297,7 @@ class ListRegionFilters(ListAPIView):
             id_subject = request.user.subject_rf_id
         except:
             print("Cannot find user")
-        ser2 = ListRegion.objects.all(id_district_forestly__id_forestly == id_subject)
+        ser2 = ListRegion.objects.filter(id_district_forestly__id_forestly == id_subject)
         if request.data['bSubjectrf']:
             ser2 = ListRegion.objects.all()
             idSubjectrf = request.data['idSubjectrf']
@@ -2125,7 +2128,7 @@ class ListRegionDocxCreater(ListAPIView):
                 new_data.update({"name_breeds_under": name_breeds_under})
                 new_data.update({"data": ListSerializer(list_data, many=True).data})
             except:
-                return Response({"error"})
+                return Response({"error": 'NoneType'})
             # path = form_docx_listregion(new_data, f"{BASE_DIR}/media/list_region/list_region_{470}.docx")
             # path = prep_to_form(new_data)
             # path = form_docx_listregion2(new_data)
