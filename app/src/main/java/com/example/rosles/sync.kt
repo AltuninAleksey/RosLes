@@ -178,14 +178,14 @@ class sync() {
 
 
 //TEST
-//        var filePath = "/data/data/com.example.rosles/databases/userdb.db"
-//        var file = File(filePath)
-//        if (file.exists()) {
-//            temp.temp_object=null
-//            temp.temp_objectsample=null
-//            file.delete()
-//            delay(5000)
-//        }
+        var filePath = "/data/data/com.example.rosles/databases/userdb.db"
+        var file = File(filePath)
+        if (file.exists()) {
+            temp.temp_object=null
+            temp.temp_objectsample=null
+            file.delete()
+            delay(5000)
+        }
 
     }
 //    fun delete_values(db: DBCountWood,viewModels: ViewModels){
