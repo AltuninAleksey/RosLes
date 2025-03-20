@@ -62,7 +62,7 @@ class RetrofitAccountsSource(
         accountsApi.putLISTREGION(body)
     }
 
-    override suspend fun putSAMPLE(body:SAMPLE_REQEST): ResponseBody = wrapRetrofitExceptions  {
+    override suspend fun putSAMPLE(body:SAMPLE_REQEST):BaseResponceInterface = wrapRetrofitExceptions  {
         delay(1000)
         accountsApi.putSAMPLE(body)
     }

@@ -218,16 +218,10 @@ class ViewModels():BaseViewModel(
     fun putSAMPLE(body:SAMPLE_REQEST)=viewModelScope.safeLaunch{
 
         //простыня кода нужная для сериализации ответа
-        var bufer=accountsRepository.putSAMPLE(body).source().buffer.toString().toCharArray()
-        bufer.set(0,'{')
-        bufer.set(bufer.size-1,'}')
-        var temp2=""
-        bufer.forEach {
-            temp2+=it
-        }
-        val book = Gson().fromJson(temp2, text::class.java)
+
+        accountsRepository.putSAMPLE(body)
         //отправка в синглтон
-        sync.temp.temp_objectsample=book
+        //sync.temp.temp_objectsample=book
     }
     fun sendgps(body:GPS_Data_Send)=viewModelScope.safeLaunch{
         accountsRepository.sendgps(body)

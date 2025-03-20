@@ -3,9 +3,13 @@ package com.example.rosles
 import android.content.Context
 import android.content.ContextWrapper
 import android.graphics.Bitmap
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.rosles.Network.SafeRequest
+import com.example.rosles.Network.SourceProviderHolder
 import com.example.rosles.Network.ViewModels
 import com.example.rosles.RequestClass.UpdateRequest
+import com.example.rosles.ResponceClass.BaseResponceInterface
 import com.example.rosles.ResponceClass.GPS_Data
 import com.example.rosles.ResponceClass.GPS_Data_Send
 import com.example.rosles.ResponceClass.LISTREGION_REQUEST
@@ -79,9 +83,9 @@ class sync() {
         }
 
         viewModels.putLISTREGION(LISTREGION_REQUEST(listregion))
-        delay(10000)
+        delay(1000)
         if (temp.temp_object!=null){
-             temp.temp_object!!.text.ids.forEach { temp->
+             temp.temp_object!!.ids.forEach { temp->
 
                 listregion.forEach{
                     if (it.id== temp.obj.last){
@@ -99,7 +103,6 @@ class sync() {
 
             val sampleData=db.getSAMPLEbyID_Listregion(oldlistregion[i].id,listregion[i].id,oldlistregion[i].soil_lot)
             val test=db.getSAMPLEbyID_Listregion(oldlistregion[i].id,listregion[i].id,oldlistregion[i].soil_lot)
-            var a = viewModels.putSAMPLE(SAMPLE_REQEST(sampleData ))
 
             sampleData.forEach{
                 sample.add(it)
@@ -107,30 +110,55 @@ class sync() {
             test.forEach{
                 oldsample.add(it)
             }
-        }
 
-        delay(10000)
+            SafeRequest(viewModels).request(object : SafeRequest.Protection{
 
-        if (temp.temp_objectsample!=null){
-            temp.temp_objectsample!!.text.ids.forEach { temp->
+                override suspend fun makeRequest(): BaseResponceInterface {
 
-                sample.forEach{
-                    if (it.id== temp.obj.last){
-                        it.id=temp.obj.new
-                    }
+                    val result = SourceProviderHolder.sourcesProvider.getAccountsSource().putSAMPLE(SAMPLE_REQEST(sample))
+                    return result
                 }
-            }
+
+                override fun ifSuccess(responce: BaseResponceInterface?) {
+                    responce as text
+
+
+                    responce!!.ids.forEach { temp->
+
+                        sample.forEach{
+                            if (it.id== temp.obj.last){
+                                it.id=temp.obj.new
+                            }
+                        }
+                    }
+
+
+                    for (i in oldsample.indices){
+                        viewModels.putLIST(LIST_REQEST(
+                            db.getLIST(oldsample[i].id,sample[i].id),sample[i].id
+                        ))
+
+
+
+                        sendphoto(db,oldsample[i].id,sample[i].id,context,viewModels)
+
+                    }
+
+
+
+                }
+
+                override fun ifConnectionException() {
+                    Toast.makeText(context, "Нет подключения к интернету", Toast.LENGTH_SHORT).show()
+                }
+
+
+
+            })
+
+
         }
-
-        for (i in oldsample.indices){
-           sendphoto(db,oldsample[i].id,sample[i].id,context,viewModels)
-
-           viewModels.putLIST(LIST_REQEST(
-               db.getLIST(oldsample[i].id,sample[i].id),sample[i].id
-           ))
-        }
-
-
+        delay(1000)
 
 
         db.SEND_Gps_Data().forEach {

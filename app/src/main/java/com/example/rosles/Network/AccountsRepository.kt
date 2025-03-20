@@ -48,7 +48,7 @@ interface AccountsSource {
 
     suspend fun putLISTREGION(body: LISTREGION_REQUEST): ResponseBody
 
-    suspend fun putSAMPLE(body: SAMPLE_REQEST): ResponseBody
+    suspend fun putSAMPLE(body: SAMPLE_REQEST): BaseResponceInterface
 
     suspend fun putLIST(body: LIST_REQEST): ResponseBody
 
@@ -82,7 +82,7 @@ class AccountsRepository( private val accountsSource: AccountsSource) {
 
     suspend fun putLISTREGION(body: LISTREGION_REQUEST):ResponseBody = accountsSource.putLISTREGION(body)
 
-    suspend fun putSAMPLE(body: SAMPLE_REQEST):ResponseBody = accountsSource.putSAMPLE(body)
+    suspend fun putSAMPLE(body: SAMPLE_REQEST): BaseResponceInterface = accountsSource.putSAMPLE(body)
 
     suspend fun putLIST(body: LIST_REQEST):ResponseBody = accountsSource.putLIST(body)
 

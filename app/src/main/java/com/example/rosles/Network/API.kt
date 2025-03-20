@@ -51,7 +51,7 @@ interface API {
     suspend fun putLISTREGION(@Body body:LISTREGION_REQUEST):ResponseBody
 
     @PUT("sample")
-    suspend fun putSAMPLE(@Body body:SAMPLE_REQEST):ResponseBody
+    suspend fun putSAMPLE(@Body body:SAMPLE_REQEST):text
 
     @PUT("list")
     suspend fun putLIST(@Body body:LIST_REQEST):ResponseBody
