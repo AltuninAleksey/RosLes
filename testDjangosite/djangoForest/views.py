@@ -1542,18 +1542,22 @@ class GetFieldCard(ListAPIView):
     serializer_class = GPSManyCreateSerializer
 
     def get(self, request, *args, **kwargs):
+
         if kwargs:
             FieldCardSerializer().validate_pk(kwargs['pk'])
             lst = FieldCardSerializer(FieldCard.objects.get(id=kwargs['pk'])).data
             try:
                 lst_desc = DescriptionRegionSerializer(DescriptionRegion.objects.get(id_list_region=lst['id_list_region'])).data
                 lst.update({"id_desc": lst_desc['id']})
+                square = Sample.objects.filter(id_list_region=lst['id_list_region']).values('square')[:1]
+                lst.update({'square_one_sample_area': square[0]['square']})
             except:
                 lst.update({"id_desc": ""})
             return Response({
                 "FieldCard":
                     lst })
         subject_id = request.user.subject_rf_id
+
         if subject_id:
             data = []
             lst = FieldCard.objects.filter(
@@ -1577,7 +1581,6 @@ class GetFieldCard(ListAPIView):
                             id_list_region__id_district_forestly_id__id_forestly_id__id_subject_rf_id=i.get('id_subject'))
                         data.append(FieldCardSerializer(lst, many=True).data)
             return Response({"get": data})
-        lst = FieldCard.objects.all()
         return Response({"get": FieldCardSerializer(lst, many=True).data})
 
     def post(self, request, *args, **kwargs):
@@ -1649,12 +1652,6 @@ class GetFieldCard(ListAPIView):
                             status=status.HTTP_404_NOT_FOUND)
         ser_listregion = ListRegionUpdateNonMarkDel(data=request.data, instance=instance_region)
 
-        # if len(request.data['gps']) > 0:
-        #     for i in request.data['gps']:
-        #         instance_gps = GPS.objects.get(id=i['id'])
-        #         ser_gps = GPSSerializer(data=i, instance=instance_gps)
-        #         ser_gps.is_valid()
-        #         ser_gps.save()
         if not ser_listregion.is_valid():
             print({"error": status.HTTP_400_BAD_REQUEST,
                              "error_text": ser_listregion.errors[next(iter(ser_listregion.errors))][0]})
@@ -1679,6 +1676,9 @@ class GetFieldCard(ListAPIView):
                              "error_text": serealizer.errors[next(iter(serealizer.errors))][0]},
                             status=status.HTTP_400_BAD_REQUEST)
         serealizer.save()
+
+        Sample.objects.filter(id_list_region=request.data['id_list_region']).update(
+            square=request.data['square_one_sample_area'])
         return Response({'code': status.HTTP_200_OK}, status=status.HTTP_200_OK)
 
 
