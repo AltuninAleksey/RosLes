@@ -1,5 +1,6 @@
 from distutils.fancy_getopt import wrap_text
-
+from staticpy.form_excel_draw_list3 import main_draw
+from staticpy.form_excel import set_border
 import openpyxl
 from openpyxl.reader.excel import load_workbook
 from openpyxl.styles import PatternFill, Alignment, Font, Border, Side
@@ -65,6 +66,10 @@ def form_getlistregion(data: dict ):
             for cell in row:
                 cell.alignment = Alignment(wrap_text=True, vertical='top')
                 cell.border = thin_border
+
+    sheet_list3 = wb.create_sheet('Форма сводного файла')
+    main_draw(sheet_list3, data)
+    # set_border(sheet_list3, f'A3:{last_cell_sheet3.coordinate}')
 
     wb.save(filepath)
 
