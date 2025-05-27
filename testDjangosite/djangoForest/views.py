@@ -1286,6 +1286,8 @@ class GetAllEqualListRegion(ListAPIView):
 
 # добавить soil_lot  в фильтры в описание участка и полевые карточки тоже
 class ListRegionFilters(ListAPIView):
+    queryset = ListRegion.objects.all()
+    serializer_class = ListRegionSerializer
     """
 
     Фильтры перечетной ведомости участка
