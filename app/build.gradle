@@ -14,12 +14,12 @@ android {
         }
     }
     namespace 'com.example.rosles'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.example.rosles"
         minSdk 26
-        targetSdk 33
+        targetSdk 34
         versionCode 1
         versionName "1.0"
 
@@ -58,6 +58,7 @@ android {
     buildFeatures {
         viewBinding true
     }
+    buildToolsVersion '34.0.0'
 
 
 }
