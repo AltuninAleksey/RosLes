@@ -81,7 +81,7 @@ class AddProb : AppCompatActivity() {
         binding.buttonAuto.setOnClickListener {
             val sPref = getSharedPreferences("PreferencesName", MODE_PRIVATE)
             val id_user = sPref.getString("id", "")!!.toInt()
-            val id_region = intent.getStringExtra("id")!!.toInt()
+            val id_region = intent.getStringExtra("id")
 
             db.insertintolistsquare(
                 binding.date.text.toString(),

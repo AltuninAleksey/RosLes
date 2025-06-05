@@ -1,23 +1,16 @@
 package com.example.rosles.Network
 
-import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.rosles.DBCountWood
-import com.example.rosles.RequestClass.AuthRequest
-import com.example.rosles.RequestClass.PerechetRequest
 import com.example.rosles.RequestClass.RegistrationReqest
 import com.example.rosles.RequestClass.UpdateRequest
 import com.example.rosles.ResponceClass.*
-import com.example.rosles.sync
 import com.google.gson.Gson
-import org.json.JSONArray
-import org.json.JSONObject
 import retrofit2.Response
 import java.lang.Exception
-import kotlin.math.log
 
 
 class ViewModels():BaseViewModel(
@@ -125,7 +118,7 @@ class ViewModels():BaseViewModel(
     fun getSAMPLE(dbCountWood: DBCountWood)=viewModelScope.safeLaunch {
         try {
             accountsRepository.getSAMPLE().get.forEach {
-                dbCountWood.writeSAMPLE(it.id,it.date,it.sample_area,it.id_list_region,
+                dbCountWood.writeSAMPLE(it.id.toString(),it.date,it.sample_area,it.id_list_region,
                     it.id_profile,it.id_quarter,it.soil_lot,it.lenght,it.square,it.width)
             }
         } catch (e: EmptyFieldException) {
@@ -211,7 +204,7 @@ class ViewModels():BaseViewModel(
              }
              val book = Gson().fromJson(temp2, text::class.java)
              //отправка в синглтон
-              sync.temp.temp_object=book
+
         }
 
 

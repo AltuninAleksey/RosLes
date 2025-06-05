@@ -80,8 +80,8 @@ class ChangeSample:AppCompatActivity() {
 
     @SuppressLint("Range")
     fun RecyclerviewInit() {
-        val buf:Int?=intent.getStringExtra("id_sample")?.toInt()
-        val id_vdomost:Int?=intent.getStringExtra("id_vdomost")?.toInt()
+        val buf: String?=intent.getStringExtra("id_sample")
+        val id_vdomost: String?=intent.getStringExtra("id_vdomost")
         var sPref =getSharedPreferences("PreferencesName", MODE_PRIVATE);
         val id_user = sPref.getString("id", "")!!.toInt()
         val cursor=db.getSAMPLE(buf!!)

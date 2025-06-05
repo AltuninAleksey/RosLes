@@ -110,11 +110,11 @@ class gps_activity:AppCompatActivity() {
                val temp=  it as TableRow
                 Gps_Data_List.add(
                     GPS_Data(
-                            (temp.get(0) as TextView).text.toString().toInt(),//id
+                            (temp.get(0) as TextView).text.toString(),//id
                             (temp.get(1) as TextView).text.toString().toDouble(),//latitude
                             (temp.get(2) as TextView).text.toString().toDouble(),//longitude
                             (temp.get(3) as CheckBox).isChecked ,//center
-                            id_sample,
+                        id_sample.toString(),
                             2
                     )
                 )

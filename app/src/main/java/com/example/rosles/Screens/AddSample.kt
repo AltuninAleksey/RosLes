@@ -81,7 +81,7 @@ class AddSample : AppCompatActivity() {
         binding.buttonAuto.setOnClickListener {
             val sPref = getSharedPreferences("PreferencesName", MODE_PRIVATE)
             val id_user = sPref.getString("id", "")!!.toInt()
-            val id_region = intent.getStringExtra("id")!!.toInt()
+            val id_region = intent.getStringExtra("id")
 
             if ( binding.samplearea.text.isEmpty()){
                 binding.samplearea.setText("0")
@@ -112,7 +112,7 @@ class AddSample : AppCompatActivity() {
                 binding.vudel.text.toString(),
                 2
             )
-            db.Mark_Update_Listregion(id_region)
+            db.Mark_Update_Listregion(id_region!!)
             Toast.makeText(this, "Данные добавлены", Toast.LENGTH_LONG).show()
             finish()
             }else{

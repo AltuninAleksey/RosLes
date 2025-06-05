@@ -33,12 +33,12 @@ class ChoiceCvartal:AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = ""
         var id = intent.getStringExtra("id")
-        initcorutine(id!!.toInt())
+        initcorutine(id!!)
         binding.textView4.text="Выберите квартал"
     }
 
     @SuppressLint("Range")
-    fun initcorutine(id:Int){
+    fun initcorutine(id: String){
         var a : MutableList<BaseRespObject>  = mutableListOf()
         var quaterList = db.getQuater(id)
 

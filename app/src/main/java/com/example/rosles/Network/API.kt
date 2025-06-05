@@ -5,9 +5,7 @@ import com.example.rosles.RequestClass.PerechetRequest
 import com.example.rosles.RequestClass.RegistrationReqest
 import com.example.rosles.ResponceClass.*
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import okhttp3.ResponseBody
-import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -68,11 +66,11 @@ interface API {
         "Allow:POST, OPTIONS",
 //        "Content-Disposition: attachment; filename=aaa.jpg"
     )
-    suspend fun upload( @Part photo: MultipartBody.Part?,
-                        @Part("id_sample") id_sample: Int,
-                        @Part("latitude") latitude: Double,
-                        @Part("longitude") longitude: Double,
-                        @Part("date") date: String,): BaseResp
+    suspend fun upload(@Part photo: MultipartBody.Part?,
+                       @Part("id_sample") id_sample: String,
+                       @Part("latitude") latitude: Double,
+                       @Part("longitude") longitude: Double,
+                       @Part("date") date: String,): BaseResp
 
     @POST("list")
     suspend fun perechet(@Body body: PerechetRequest): BaseResp

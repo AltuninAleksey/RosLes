@@ -81,10 +81,10 @@ class ChangeListregion: AppCompatActivity() {
     @SuppressLint("Range")
     fun RecyclerviewInit() {
 
-        val id_Vedomost:Int=intent.getIntExtra("id_Vedomost",0)
+        val id_Vedomost: String? = intent.getStringExtra("id_Vedomost")
 
 
-        val vedom = db.getVedombyID(id_Vedomost)
+        val vedom = db.getVedombyID(id_Vedomost.toString())
 
 
         binding.idCvartal.setText(vedom?.quarterName)

@@ -1,11 +1,13 @@
 package com.example.rosles.ResponceClass
 
+import java.util.UUID
+
 data class SAMPLE_RESP(val get:List<SAMPLE_DATA>) : BaseResponceInterface
 
 data class SAMPLE_REQEST(val data:List<SAMPLE_DATA>) : BaseResponceInterface
 
 data class SAMPLE_DATA(
-    var id: Int,
+    var id: String,
     val date: String,
     val sample_area:Float?,
     var soil_lot: String,
@@ -13,7 +15,7 @@ data class SAMPLE_DATA(
     val lenght: Int?,
     val square: Int?,
     val id_profile: Int,
-    val id_list_region: Int,
+    val id_list_region: String,
     val id_quarter: Int,
     val mark_update:Int
     ) : BaseResponceInterface

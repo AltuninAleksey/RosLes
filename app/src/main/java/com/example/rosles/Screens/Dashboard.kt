@@ -86,8 +86,7 @@ class Dashboard: BaseActivity() {
 
             var file = File("/data/data/com.example.rosles/databases/userdb.db")
             if (file.exists()) {
-                sync.temp.temp_object=null
-                sync.temp.temp_objectsample=null
+
                 file.delete()
             }
 

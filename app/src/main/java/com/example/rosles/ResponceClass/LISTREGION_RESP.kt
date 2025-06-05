@@ -5,7 +5,7 @@ data class LISTREGION_RESP(val get:List<LISTREGION_DATA>) : BaseResponceInterfac
 data class LISTREGION_REQUEST(val data:List<LISTREGION_DATA>) : BaseResponceInterface
 
 data class LISTREGION_DATA(
-    var id: Int,
+    var id: String,
     val date: String,
     val sample_region: Float?,
     val soil_lot: String,

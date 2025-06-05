@@ -3,20 +3,12 @@ package com.example.rosles
 import android.content.Context
 import android.content.ContextWrapper
 import android.graphics.Bitmap
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.rosles.Network.SafeRequest
-import com.example.rosles.Network.SourceProviderHolder
 import com.example.rosles.Network.ViewModels
 import com.example.rosles.RequestClass.UpdateRequest
-import com.example.rosles.ResponceClass.BaseResponceInterface
-import com.example.rosles.ResponceClass.GPS_Data
 import com.example.rosles.ResponceClass.GPS_Data_Send
 import com.example.rosles.ResponceClass.LISTREGION_REQUEST
-import com.example.rosles.ResponceClass.LIST_REQEST
 import com.example.rosles.ResponceClass.SAMPLE_DATA
-import com.example.rosles.ResponceClass.SAMPLE_REQEST
-import com.example.rosles.ResponceClass.text
 import kotlinx.coroutines.delay
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
@@ -29,142 +21,73 @@ import java.util.UUID
 
 class sync() {
 
-    suspend  fun main1( viewModels: ViewModels, db: DBCountWood,  context: AppCompatActivity,value: Int,block:()->Unit) {
+    suspend fun main1(
+        viewModels: ViewModels,
+        db: DBCountWood,
+        context: AppCompatActivity,
+        value: Int,
+        block: () -> Unit
+    ) {
 
-            if(!db.djangoForest_undergrowth())
-                viewModels.getUNDER(db)
+        if (!db.djangoForest_undergrowth())
+            viewModels.getUNDER(db)
 
-            if(!db.djangoForest_breed())
-                viewModels.getBREED(db)
+        if (!db.djangoForest_breed())
+            viewModels.getBREED(db)
 
-            if (!db.djangoForest_subjectrf())
-                viewModels.getSUBJECTRF(db, value)
+        if (!db.djangoForest_subjectrf())
+            viewModels.getSUBJECTRF(db, value)
 
 
 //            if(!db.djangoForest_forestly())
 //                viewModels.getFORESTLY(db,id_subject)
 
-            if (!db.djangoForest_listregion())
-                viewModels.getLISTREGION(db, value)
+        if (!db.djangoForest_listregion())
+            viewModels.getLISTREGION(db, value)
 
-            if (!db.djangoForest_sample())
-                viewModels.getSAMPLE(db)
+        if (!db.djangoForest_sample())
+            viewModels.getSAMPLE(db)
 
-            if (!db.djangoForest_list())
-                viewModels.getLIST(db){
-                    block()
-                }
-            else{
-                delay(2000)
+        if (!db.djangoForest_list())
+            viewModels.getLIST(db) {
                 block()
             }
-
-
-
+        else {
+            delay(2000)
+            block()
         }
 
-//костыльный синглтон для получения ответа от сервера переделать на ретурн или клбек
-    object temp{
-        var temp_object:text?=null
 
-        var temp_objectsample:text?=null
     }
 
+//костыльный синглтон для получения ответа от сервера переделать на ретурн или клбек
 
-    suspend fun load(viewModels: ViewModels, db: DBCountWood, context: AppCompatActivity){
+
+    suspend fun load(viewModels: ViewModels, db: DBCountWood, context: AppCompatActivity) {
 
 
-        val listregion=db.getLISTREGION()
-        val oldlistregion=db.getLISTREGION()
+        val listregion = db.getLISTREGION()
 
-        listregion.forEach{
-            if (it.dacha=="")
-                it.dacha=null
+
+        listregion.forEach {
+            if (it.dacha == "")
+                it.dacha = null
         }
 
         viewModels.putLISTREGION(LISTREGION_REQUEST(listregion))
         delay(1000)
-        if (temp.temp_object!=null){
-             temp.temp_object!!.ids.forEach { temp->
-
-                listregion.forEach{
-                    if (it.id== temp.obj.last){
-                        it.id=temp.obj.new
-                    }
-                }
-            }
-        }
 
 
-        val oldsample = mutableListOf<SAMPLE_DATA>()
         val sample = mutableListOf<SAMPLE_DATA>()
 
-        for (i in oldlistregion.indices){
 
-            val sampleData=db.getSAMPLEbyID_Listregion(oldlistregion[i].id,listregion[i].id,oldlistregion[i].soil_lot)
-            val test=db.getSAMPLEbyID_Listregion(oldlistregion[i].id,listregion[i].id,oldlistregion[i].soil_lot)
-
-            sampleData.forEach{
-                sample.add(it)
-            }
-            test.forEach{
-                oldsample.add(it)
-            }
-
-            SafeRequest(viewModels).request(object : SafeRequest.Protection{
-
-                override suspend fun makeRequest(): BaseResponceInterface {
-
-                    val result = SourceProviderHolder.sourcesProvider.getAccountsSource().putSAMPLE(SAMPLE_REQEST(sample))
-                    return result
-                }
-
-                override fun ifSuccess(responce: BaseResponceInterface?) {
-                    responce as text
-
-
-                    responce!!.ids.forEach { temp->
-
-                        sample.forEach{
-                            if (it.id== temp.obj.last){
-                                it.id=temp.obj.new
-                            }
-                        }
-                    }
-
-
-                    for (i in oldsample.indices){
-                        viewModels.putLIST(LIST_REQEST(
-                            db.getLIST(oldsample[i].id,sample[i].id),sample[i].id
-                        ))
-
-
-
-                        sendphoto(db,oldsample[i].id,sample[i].id,context,viewModels)
-
-                    }
-
-
-
-                }
-
-                override fun ifConnectionException() {
-                    Toast.makeText(context, "Нет подключения к интернету", Toast.LENGTH_SHORT).show()
-                }
-
-
-
-            })
-
-
-        }
         delay(1000)
 
 
         db.SEND_Gps_Data().forEach {
-            var flag=0
-            if (it.flag_center){
-                flag=1
+            var flag = 0
+            if (it.flag_center) {
+                flag = 1
             }
             viewModels.sendgps(
                 GPS_Data_Send(
@@ -172,7 +95,7 @@ class sync() {
                     it.longitude,
                     flag,
                     it.id_sample
-            )
+                )
             )
         }
 
@@ -181,8 +104,7 @@ class sync() {
         var filePath = "/data/data/com.example.rosles/databases/userdb.db"
         var file = File(filePath)
         if (file.exists()) {
-            temp.temp_object=null
-            temp.temp_objectsample=null
+
             file.delete()
             delay(5000)
         }
@@ -201,13 +123,13 @@ class sync() {
 //
 //    }
 
-    fun sendphoto(db: DBCountWood,oldid:Int,id:Int,context: Context,viewModels: ViewModels){
-        db.getphotoall(oldid,id).forEach{
+    fun sendphoto(db: DBCountWood, id: String, context: Context, viewModels: ViewModels) {
+        db.getphoto( id).forEach {
             val wrapper = ContextWrapper(context)
             var file = wrapper.getDir("Images", Context.MODE_PRIVATE)
-            file = File(file,"${UUID.randomUUID()}.jpg")
+            file = File(file, "${UUID.randomUUID()}.jpg")
             val stream: OutputStream = FileOutputStream(file)
-            it.photo!!.compress(Bitmap.CompressFormat.JPEG,100,stream)
+            it.photo!!.compress(Bitmap.CompressFormat.JPEG, 100, stream)
             stream.flush()
             stream.close()
             val photoFile = file
@@ -216,7 +138,15 @@ class sync() {
                 photoFile.name,
                 photoFile.asRequestBody("image/*".toMediaType())
             )
-            viewModels.upload(UpdateRequest(photo,it.id_sample,it.latitude.toDouble(),it.longitude.toDouble(),it.date))
+            viewModels.upload(
+                UpdateRequest(
+                    photo,
+                    it.id_sample,
+                    it.latitude.toDouble(),
+                    it.longitude.toDouble(),
+                    it.date
+                )
+            )
         }
     }
 }

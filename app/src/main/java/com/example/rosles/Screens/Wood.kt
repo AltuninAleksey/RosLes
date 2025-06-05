@@ -1,4 +1,5 @@
 package com.example.rosles.Screens
+
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
@@ -33,13 +34,12 @@ class Wood : BaseActivity("Пробная площадь") {
     private var bufview: View? = null
     private var vidWood: String = ""
     private var vidWoodpodles: String = ""
-    private var hashbufWood=HashMap<String, ProbaWoodSimple?>()
-    private var podlesokhash=HashMap<String, PodlesokWood?>()
-    private var Get_Id_breed_Class:AddPorod?= AddPorod()
+    private var hashbufWood = HashMap<String, ProbaWoodSimple?>()
+    private var podlesokhash = HashMap<String, PodlesokWood?>()
+    private var Get_Id_breed_Class: AddPorod? = AddPorod()
 
-    var CountMainPorod=""
-    var activeCountPorod=""
-
+    var CountMainPorod = ""
+    var activeCountPorod = ""
 
 
     private val db = DBCountWood(this, null)
@@ -50,22 +50,22 @@ class Wood : BaseActivity("Пробная площадь") {
         binding = WoodBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.title = "Пробная площадь"
-        val id_sample =  intent.getIntExtra("udel",0)
-        val id_vdomost = intent.getStringExtra("proba").toString().toInt()
+        val id_sample: String? = intent.getStringExtra("udel")
+        val id_vdomost: String? = intent.getStringExtra("proba")
 
 
         invisibleplus()
 
 
-        val vedom = db.getVedombyID(id_vdomost)
+        val vedom = db.getVedombyID(id_vdomost.toString())
 
         binding.proba.text = intent.getStringExtra("numberOfPoroda")
         binding.lesnnich.text = vedom?.nameForestly
         binding.district.text = vedom?.nameDistrictForestly
-        binding.quater.text =   vedom?.quarterName
-        binding.vudel.text =    vedom?.soilLot
+        binding.quater.text = vedom?.quarterName
+        binding.vudel.text = vedom?.soilLot
 
-        binding.needvaluewood.text=intent.getStringExtra("valuewood")
+        binding.needvaluewood.text = intent.getStringExtra("valuewood")
         // хранение перечета В hashmap
         val vidvos = mutableListOf(
             ItemWood("iskus", 1),
@@ -100,24 +100,24 @@ class Wood : BaseActivity("Пробная площадь") {
         val podleslist = mutableListOf<ItemWood>()
         val favoriteLesList = db.getFavoriteLes(id_user)
 
-        for (i in 0..favoriteLesList.size-1) {
+        for (i in 0..favoriteLesList.size - 1) {
             leslist.add(favoriteLesList[i].toItemWood())
         }
 
         val favoritePodlesList = db.getFavoritePodles(id_user)
 
-        for (i in 0..favoritePodlesList.size-1) {
+        for (i in 0..favoritePodlesList.size - 1) {
             podleslist.add(favoritePodlesList[i].toItemWood())
         }
 
         //инициализация меню
         binding.include.user.setOnClickListener {
-            startActivity(Intent(this, gps_activity::class.java).putExtra("id_sample",id_sample))
+            startActivity(Intent(this, gps_activity::class.java).putExtra("id_sample", id_sample))
         }
         binding.include.open.setOnClickListener {
-            val intent=Intent(this, SelectPhoto::class.java)
-            intent.putExtra("id_sample",id_sample)
-            intent.putExtra("id_vdomost",id_vdomost)
+            val intent = Intent(this, SelectPhoto::class.java)
+            intent.putExtra("id_sample", id_sample)
+            intent.putExtra("id_vdomost", id_vdomost)
             startActivity(intent)
         }
 
@@ -155,9 +155,9 @@ class Wood : BaseActivity("Пробная площадь") {
 
             button.setOnClickListener {
 
-                val valueles=les.selectedItem as SpinerItem
-                val valuepodles=poldes.selectedItem as SpinerItem
-                if (valueles.id==0){
+                val valueles = les.selectedItem as SpinerItem
+                val valuepodles = poldes.selectedItem as SpinerItem
+                if (valueles.id == 0) {
                     flag = false
                 }
                 hash.forEach { t, u ->
@@ -172,18 +172,19 @@ class Wood : BaseActivity("Пробная площадь") {
                     db.addlesporod(id_user, valueles.id)
 
                     val buf = ProbaWoodSimple(
-                        db.getperechetID(id_sample,1,valueles.id),
-                        db.getperechetID(id_sample,2,valueles.id),
-                        db.getperechetID(id_sample,3,valueles.id))
-                    hashbufWood.put(valueles.name,buf)
-                    hashbufWood.forEach { t,u->
-                        u?.flag_main=false
+                        db.getperechetID(id_sample!!, 1, valueles.id),
+                        db.getperechetID(id_sample!!, 2, valueles.id),
+                        db.getperechetID(id_sample!!, 3, valueles.id)
+                    )!!
+                    hashbufWood.put(valueles.name, buf)
+                    hashbufWood.forEach { t, u ->
+                        u?.flag_main = false
                     }
                     GetCountWood("")
 
 
                 }
-                if (valuepodles.id==0){
+                if (valuepodles.id == 0) {
                     flagpodles = false
                 }
                 hashpodles.forEach { t, u ->
@@ -196,7 +197,10 @@ class Wood : BaseActivity("Пробная площадь") {
                 if (flagpodles) {
                     podleslist.add(ItemWood(poldes.getSelectedItem().toString()))
                     db.addpodlesporod(id_user, valuepodles.id)
-                    podlesokhash.put(valuepodles.name,PodlesokWood(idbreed_under = valuepodles.id, value = 0, id = 0))
+                    podlesokhash.put(
+                        valuepodles.name,
+                        PodlesokWood(idbreed_under = valuepodles.id, value = 0, id = 0)
+                    )
                 }
 
                 initrecycler(leslist, podleslist)
@@ -210,36 +214,35 @@ class Wood : BaseActivity("Пробная площадь") {
             writedata(vidWood)
             writedatapodles(vidWoodpodles)
 
-            val count_of_plant=binding.asd.text.toString().toInt()
+
             hashbufWood.forEach { t, u ->
 
-                if(u?.iskus?.id_prob==null){
-                    db.CreateLesPorodsV2(u?.iskus, id_sample,u?.flag_main)
-                }else{
-                    db.UpdateLesPorodsV2(u.iskus,u?.flag_main)
+                if (u?.iskus?.id_prob == null) {
+                    db.CreateLesPorodsV2(u?.iskus, id_sample!!, u?.flag_main)
+                } else {
+                    db.UpdateLesPorodsV2(u.iskus, u?.flag_main)
                 }
-                if(u?.estes?.id_prob==null){
-                    db.CreateLesPorodsV2(u?.estes, id_sample,u?.flag_main)
-                }else{
-                    db.UpdateLesPorodsV2(u.estes,u?.flag_main)
+                if (u?.estes?.id_prob == null) {
+                    db.CreateLesPorodsV2(u?.estes, id_sample!!, u?.flag_main)
+                } else {
+                    db.UpdateLesPorodsV2(u.estes, u?.flag_main)
                 }
-                if(u?.estestvenn?.id_prob==null){
-                    db.CreateLesPorodsV2(u?.estestvenn, id_sample,u?.flag_main)
-                }else{
-                    db.UpdateLesPorodsV2(u.estestvenn,u?.flag_main)
+                if (u?.estestvenn?.id_prob == null) {
+                    db.CreateLesPorodsV2(u?.estestvenn, id_sample!!, u?.flag_main)
+                } else {
+                    db.UpdateLesPorodsV2(u.estestvenn, u?.flag_main)
                 }
             }
             podlesokhash.forEach { t, u ->
-                if (u?.id==0){
-                    db.createpodles(u,id_sample)
-                }
-                else{
+                if (u?.id == 0) {
+                    db.createpodles(u, id_sample!!)
+                } else {
                     db.updatepodles(u)
                 }
             }
-           db.updatevalue(id_vdomost)
-            db.Mark_Update_Sample(id_sample)
-           finish()
+            db.updatevalue(id_vdomost!!)
+            db.Mark_Update_Sample(id_sample!!)
+            finish()
             Toast.makeText(this, "Данные записаны", Toast.LENGTH_SHORT)
                 .show()
         }
@@ -247,21 +250,22 @@ class Wood : BaseActivity("Пробная площадь") {
         leslist.forEach {
             val hashMap = HashMap<String, PerechetWood>()
             val poroda = it.name
-            val poroda_id=Get_Id_breed_Class?.getidbreed(it.name, db)!!
+            val poroda_id = Get_Id_breed_Class?.getidbreed(it.name, db)!!
 
             vidvos.forEach {
 
-                val value= db.getperechetID(id_sample,it.id,poroda_id)
+                val value = db.getperechetID(id_sample!!, it.id, poroda_id)
                 hashMap.put(it.name, value!!)
             }
             val buf = ProbaWoodSimple(
-                db.getperechetID(id_sample,1,poroda_id),
-                db.getperechetID(id_sample,2,poroda_id),
-                db.getperechetID(id_sample,3,poroda_id))
-                hashbufWood.put(poroda,buf)
+                db.getperechetID(id_sample!!, 1, poroda_id),
+                db.getperechetID(id_sample!!, 2, poroda_id),
+                db.getperechetID(id_sample!!, 3, poroda_id)
+            )
+            hashbufWood.put(poroda, buf)
         }
         podleslist.forEach {
-            podlesokhash.put(it.name,db.getperechetIDpodles(id_sample,it.id))
+            podlesokhash.put(it.name, db.getperechetIDpodles(id_sample!!, it.id))
         }
         initrecycler(leslist, podleslist)
         initasd()
@@ -271,46 +275,51 @@ class Wood : BaseActivity("Пробная площадь") {
     fun writedata(value_param: String) {
         val value = hashbufWood.get(value_param)
         with(binding) {
-            value?.iskus?.o2         = iskus02.text.toString().toInt()
-            value?.iskus?.o5         = iskus05.text.toString().toInt()
-            value?.iskus?.o6         = iskus06.text.toString().toInt()
-            value?.iskus?.o11        = iskus11.text.toString().toInt()
-            value?.iskus?.o15        = iskus15.text.toString().toInt()
-            value?.iskus?.type       = 1
-            value?.iskus?.id_breed   = Get_Id_breed_Class?.getidbreed(value_param,db)!!
-            value?.iskus?.maxHeight  = maksHeightIskus.text.toString().toFloatOrNull() ?: 0.0f
-            value?.iskus?.AVGHEight  = AvgHeightIskus.text.toString().toFloatOrNull() ?: 0.0f
+            value?.iskus?.o2 = iskus02.text.toString().toInt()
+            value?.iskus?.o5 = iskus05.text.toString().toInt()
+            value?.iskus?.o6 = iskus06.text.toString().toInt()
+            value?.iskus?.o11 = iskus11.text.toString().toInt()
+            value?.iskus?.o15 = iskus15.text.toString().toInt()
+            value?.iskus?.type = 1
+            value?.iskus?.id_breed = Get_Id_breed_Class?.getidbreed(value_param, db)!!
+            value?.iskus?.maxHeight = maksHeightIskus.text.toString().toFloatOrNull() ?: 0.0f
+            value?.iskus?.AVGHEight = AvgHeightIskus.text.toString().toFloatOrNull() ?: 0.0f
             value?.iskus?.AVGdiametr = AvgDiametrIskus.text.toString().toFloatOrNull() ?: 0.0f
 
-            value?.estes?.o2         = estes02.text.toString().toInt()
-            value?.estes?.o5         = estes05.text.toString().toInt()
-            value?.estes?.o6         = estes06.text.toString().toInt()
-            value?.estes?.o11        = estes11.text.toString().toInt()
-            value?.estes?.o15        = estes15.text.toString().toInt()
-            value?.estes?.type       = 2
-            value?.estes?.id_breed   = Get_Id_breed_Class?.getidbreed(value_param,db)!!
-            value?.estes?.maxHeight  = maksHeightestes.text.toString().toFloatOrNull() ?: 0.0f
-            value?.estes?.AVGHEight  = AvgHeightestes.text.toString().toFloatOrNull() ?: 0.0f
+            value?.estes?.o2 = estes02.text.toString().toInt()
+            value?.estes?.o5 = estes05.text.toString().toInt()
+            value?.estes?.o6 = estes06.text.toString().toInt()
+            value?.estes?.o11 = estes11.text.toString().toInt()
+            value?.estes?.o15 = estes15.text.toString().toInt()
+            value?.estes?.type = 2
+            value?.estes?.id_breed = Get_Id_breed_Class?.getidbreed(value_param, db)!!
+            value?.estes?.maxHeight = maksHeightestes.text.toString().toFloatOrNull() ?: 0.0f
+            value?.estes?.AVGHEight = AvgHeightestes.text.toString().toFloatOrNull() ?: 0.0f
             value?.estes?.AVGdiametr = AvgDiametrestes.text.toString().toFloatOrNull() ?: 0.0f
 
-            value?.estestvenn?.o2         = estestvennoe02.text.toString().toInt()
-            value?.estestvenn?.o5         = estestvennoe05.text.toString().toInt()
-            value?.estestvenn?.o6         = estestvennoe06.text.toString().toInt()
-            value?.estestvenn?.o11        = estestvennoe11.text.toString().toInt()
-            value?.estestvenn?.o15        = estestvennoe15.text.toString().toInt()
-            value?.estestvenn?.type       = 3
-            value?.estestvenn?.id_breed   = Get_Id_breed_Class?.getidbreed(value_param,db)!!
-            value?.estestvenn?.maxHeight  = maksHeightestestvennoe.text.toString().toFloatOrNull() ?: 0.0f
-            value?.estestvenn?.AVGHEight  = AvgHeightestestvennoe.text.toString().toFloatOrNull() ?: 0.0f
-            value?.estestvenn?.AVGdiametr = AvgDiametrestestvennoe.text.toString().toFloatOrNull() ?: 0.0f
+            value?.estestvenn?.o2 = estestvennoe02.text.toString().toInt()
+            value?.estestvenn?.o5 = estestvennoe05.text.toString().toInt()
+            value?.estestvenn?.o6 = estestvennoe06.text.toString().toInt()
+            value?.estestvenn?.o11 = estestvennoe11.text.toString().toInt()
+            value?.estestvenn?.o15 = estestvennoe15.text.toString().toInt()
+            value?.estestvenn?.type = 3
+            value?.estestvenn?.id_breed = Get_Id_breed_Class?.getidbreed(value_param, db)!!
+            value?.estestvenn?.maxHeight =
+                maksHeightestestvennoe.text.toString().toFloatOrNull() ?: 0.0f
+            value?.estestvenn?.AVGHEight =
+                AvgHeightestestvennoe.text.toString().toFloatOrNull() ?: 0.0f
+            value?.estestvenn?.AVGdiametr =
+                AvgDiametrestestvennoe.text.toString().toFloatOrNull() ?: 0.0f
         }
     }
+
     //запись данных в хеш таблицу подлеска
-    fun writedatapodles(value_param: String){
+    fun writedatapodles(value_param: String) {
         val value = podlesokhash.get(value_param)
-        value?.value=binding.kolras.text.toString().toInt()
-        value?.avgHeightpodles=binding.avgHeight.text.toString().toFloat()
+        value?.value = binding.kolras.text.toString().toInt()
+        value?.avgHeightpodles = binding.avgHeight.text.toString().toFloat()
     }
+
     //чтение данных из хеш таблицы
     fun initdata(value: String) {
         with(binding) {
@@ -347,9 +356,9 @@ class Wood : BaseActivity("Пробная площадь") {
         initasd()
     }
 
-    fun initdatapodles(value: String){
+    fun initdatapodles(value: String) {
         val buf = podlesokhash.get(value)
-        binding.kolras.text=buf?.value.toString()
+        binding.kolras.text = buf?.value.toString()
         binding.avgHeight.setText(buf?.avgHeightpodles.toString())
     }
 
@@ -357,22 +366,23 @@ class Wood : BaseActivity("Пробная площадь") {
         val adapter = WoodAdapter(a, object : BaseInterface {
 
             override fun onClick(itemView: Any) {
-                activeCountPorod=itemView.toString()
+                activeCountPorod = itemView.toString()
                 writedata(vidWood)
                 vidWood = itemView.toString()
                 initdata(vidWood)
                 visibleplus()
             }
-            override fun onClickButton(itemView: Any) {
-                CountMainPorod=itemView.toString()
 
-                hashbufWood.forEach { t,u->
-                    if (t==itemView.toString()){
+            override fun onClickButton(itemView: Any) {
+                CountMainPorod = itemView.toString()
+
+                hashbufWood.forEach { t, u ->
+                    if (t == itemView.toString()) {
                         u!!.setflagmain()
                     }
 
                 }
-                var a=hashbufWood
+                var a = hashbufWood
                 GetCountWood(itemView.toString())
 
                 //binding.valuewood.text=binding.asd.text
@@ -389,6 +399,7 @@ class Wood : BaseActivity("Пробная площадь") {
                 initdatapodles(vidWoodpodles)
                 visibleplus()
             }
+
             override fun onClickButton(itemView: Any) {}
         })
         binding.WoodRecyclerpodles.adapter = adapterpodles
@@ -396,6 +407,7 @@ class Wood : BaseActivity("Пробная площадь") {
 
     var flagActiveMultiPlus = false
     var flagActiveMultiMinus = false
+
     @SuppressLint("ClickableViewAccessibility")
     fun onClickCell(view: View) {
         if (flagActiveMultiPlus || flagActiveMultiMinus) {
@@ -430,7 +442,8 @@ class Wood : BaseActivity("Пробная площадь") {
                     }
                 }
             } else if (event.getAction() == MotionEvent.ACTION_UP ||
-                event.getAction() == MotionEvent.ACTION_CANCEL) {
+                event.getAction() == MotionEvent.ACTION_CANCEL
+            ) {
                 flagActiveMultiPlus = false
             }
             true
@@ -455,18 +468,20 @@ class Wood : BaseActivity("Пробная площадь") {
                     }
                 }
             } else if (event.getAction() == MotionEvent.ACTION_UP ||
-                event.getAction() == MotionEvent.ACTION_CANCEL) {
+                event.getAction() == MotionEvent.ACTION_CANCEL
+            ) {
                 flagActiveMultiMinus = false
             }
             true
         }
 
-        val textChangedListenerIskus = object: TextWatcher{
+        val textChangedListenerIskus = object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {}
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 val bufAvg: Float = binding.maksHeightIskus.text.toString().toFloatOrNull()?.let {
-                    avgHeight(binding.iskus02.text.toString().toFloat(),
+                    avgHeight(
+                        binding.iskus02.text.toString().toFloat(),
                         binding.iskus05.text.toString().toFloat(),
                         binding.iskus06.text.toString().toFloat(),
                         binding.iskus11.text.toString().toFloat(),
@@ -478,12 +493,13 @@ class Wood : BaseActivity("Пробная площадь") {
                 binding.AvgHeightIskus.text = if (bufAvg.isNaN()) "0.0" else bufAvg.toString()
             }
         }
-        val textChangedListenerEstes = object: TextWatcher{
+        val textChangedListenerEstes = object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {}
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 val bufAvg: Float = binding.maksHeightestes.text.toString().toFloatOrNull()?.let {
-                    avgHeight(binding.iskus02.text.toString().toFloat(),
+                    avgHeight(
+                        binding.iskus02.text.toString().toFloat(),
                         binding.estes05.text.toString().toFloat(),
                         binding.estes06.text.toString().toFloat(),
                         binding.estes11.text.toString().toFloat(),
@@ -495,21 +511,24 @@ class Wood : BaseActivity("Пробная площадь") {
                 binding.AvgHeightestes.text = if (bufAvg.isNaN()) "0.0" else bufAvg.toString()
             }
         }
-        val textChangedListenerEstestvennoe = object: TextWatcher{
-            override fun afterTextChanged(p0: Editable?){}
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int){}
+        val textChangedListenerEstestvennoe = object : TextWatcher {
+            override fun afterTextChanged(p0: Editable?) {}
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                val bufAvg: Float = binding.maksHeightestestvennoe.text.toString().toFloatOrNull()?.let {
-                    avgHeight(binding.iskus02.text.toString().toFloat(),
-                        binding.estestvennoe05.text.toString().toFloat(),
-                        binding.estestvennoe06.text.toString().toFloat(),
-                        binding.estestvennoe11.text.toString().toFloat(),
-                        binding.estestvennoe15.text.toString().toFloat(),
-                        it
-                    )
-                } ?: 0.0f
+                val bufAvg: Float =
+                    binding.maksHeightestestvennoe.text.toString().toFloatOrNull()?.let {
+                        avgHeight(
+                            binding.iskus02.text.toString().toFloat(),
+                            binding.estestvennoe05.text.toString().toFloat(),
+                            binding.estestvennoe06.text.toString().toFloat(),
+                            binding.estestvennoe11.text.toString().toFloat(),
+                            binding.estestvennoe15.text.toString().toFloat(),
+                            it
+                        )
+                    } ?: 0.0f
 
-                binding.AvgHeightestestvennoe.text = if (bufAvg.isNaN()) "0.0" else bufAvg.toString()
+                binding.AvgHeightestestvennoe.text =
+                    if (bufAvg.isNaN()) "0.0" else bufAvg.toString()
             }
         }
 
@@ -537,88 +556,96 @@ class Wood : BaseActivity("Пробная площадь") {
 
     }
 
-     fun avgHeight(value1:Float,value2:Float,value3:Float,value4:Float,value5:Float,valuemax:Float):Float{
-        val sum=value1+value2+value3+value4+value5
+    fun avgHeight(
+        value1: Float,
+        value2: Float,
+        value3: Float,
+        value4: Float,
+        value5: Float,
+        valuemax: Float
+    ): Float {
+        val sum = value1 + value2 + value3 + value4 + value5
 
-         val result=((value1*0.1+value2*0.35+value3*0.8+value4*1.3+((valuemax+1.51)/2*value5))/sum).toFloat()
+        val result =
+            ((value1 * 0.1 + value2 * 0.35 + value3 * 0.8 + value4 * 1.3 + ((valuemax + 1.51) / 2 * value5)) / sum).toFloat()
 
-        return  String.format("%.2f", result).replace(',', '.').toFloat()
+        return String.format("%.2f", result).replace(',', '.').toFloat()
 
     }
-    fun GetCountWood(value: String){
+
+    fun GetCountWood(value: String) {
 
 
-        if (activeCountPorod==value){
+        if (activeCountPorod == value) {
             writedata(value)
         }
 
-        var all_sum=0
+        var all_sum = 0
 
         hashbufWood.forEach {
-            var sum=0
-            if (it.value!!.flag_main==true){
-            sum+=
-            it.value!!.iskus!!.o2!!.toInt()+
-            it.value!!.iskus!!.o5!!.toInt()+
-            it.value!!.iskus!!.o6!!.toInt()+
-            it.value!!.iskus!!.o11!!.toInt()+
-            it.value!!.iskus!!.o15!!.toInt()+
-            it.value!!.estes!!.o2!!.toInt()+
-            it.value!!.estes!!.o5!!.toInt()+
-            it.value!!.estes!!.o6!!.toInt()+
-            it.value!!.estes!!.o11!!.toInt()+
-            it.value!!.estes!!.o15!!.toInt()+
-            it.value!!.estestvenn!!.o2!!.toInt()+
-            it.value!!.estestvenn!!.o5!!.toInt()+
-            it.value!!.estestvenn!!.o6!!.toInt()+
-            it.value!!.estestvenn!!.o11!!.toInt()+
-            it.value!!.estestvenn!!.o15!!.toInt()
-           all_sum+=sum
-                binding.valuewood.text=all_sum.toString()
+            var sum = 0
+            if (it.value!!.flag_main == true) {
+                sum +=
+                    it.value!!.iskus!!.o2!!.toInt() +
+                            it.value!!.iskus!!.o5!!.toInt() +
+                            it.value!!.iskus!!.o6!!.toInt() +
+                            it.value!!.iskus!!.o11!!.toInt() +
+                            it.value!!.iskus!!.o15!!.toInt() +
+                            it.value!!.estes!!.o2!!.toInt() +
+                            it.value!!.estes!!.o5!!.toInt() +
+                            it.value!!.estes!!.o6!!.toInt() +
+                            it.value!!.estes!!.o11!!.toInt() +
+                            it.value!!.estes!!.o15!!.toInt() +
+                            it.value!!.estestvenn!!.o2!!.toInt() +
+                            it.value!!.estestvenn!!.o5!!.toInt() +
+                            it.value!!.estestvenn!!.o6!!.toInt() +
+                            it.value!!.estestvenn!!.o11!!.toInt() +
+                            it.value!!.estestvenn!!.o15!!.toInt()
+                all_sum += sum
+                binding.valuewood.text = all_sum.toString()
 
-           }
-            binding.valuewood.text=all_sum.toString()
+            }
+            binding.valuewood.text = all_sum.toString()
         }
-        binding.valuewood.text=all_sum.toString()
-
-
-
+        binding.valuewood.text = all_sum.toString()
 
 
     }
-    fun initasd(){
-        with(binding){
-            val value:Int=
-                          iskus02.text.toString().toInt()+
-                          iskus05.text.toString().toInt()+
-                          iskus06.text.toString().toInt()+
-                          iskus11.text.toString().toInt()+
-                          iskus15.text.toString().toInt()+
-                          estes02.text.toString().toInt()+
-                          estes05.text.toString().toInt()+
-                          estes06.text.toString().toInt()+
-                          estes11.text.toString().toInt()+
-                          estes15.text.toString().toInt()+
-                          estestvennoe02.text.toString().toInt()+
-                          estestvennoe05.text.toString().toInt()+
-                          estestvennoe06.text.toString().toInt()+
-                          estestvennoe11.text.toString().toInt()+
-                          estestvennoe15.text.toString().toInt()
-            asd.text="0"
-            asd.text=value.toString()
+
+    fun initasd() {
+        with(binding) {
+            val value: Int =
+                iskus02.text.toString().toInt() +
+                        iskus05.text.toString().toInt() +
+                        iskus06.text.toString().toInt() +
+                        iskus11.text.toString().toInt() +
+                        iskus15.text.toString().toInt() +
+                        estes02.text.toString().toInt() +
+                        estes05.text.toString().toInt() +
+                        estes06.text.toString().toInt() +
+                        estes11.text.toString().toInt() +
+                        estes15.text.toString().toInt() +
+                        estestvennoe02.text.toString().toInt() +
+                        estestvennoe05.text.toString().toInt() +
+                        estestvennoe06.text.toString().toInt() +
+                        estestvennoe11.text.toString().toInt() +
+                        estestvennoe15.text.toString().toInt()
+            asd.text = "0"
+            asd.text = value.toString()
 
         }
 
     }
-    fun invisibleplus(){
-        binding.buttonPlus.isVisible=false
-        binding.buttonMinus.isVisible=false
-    }
-    fun visibleplus(){
-        binding.buttonPlus.isVisible=true
-        binding.buttonMinus.isVisible=true
+
+    fun invisibleplus() {
+        binding.buttonPlus.isVisible = false
+        binding.buttonMinus.isVisible = false
     }
 
+    fun visibleplus() {
+        binding.buttonPlus.isVisible = true
+        binding.buttonMinus.isVisible = true
+    }
 
 
 }

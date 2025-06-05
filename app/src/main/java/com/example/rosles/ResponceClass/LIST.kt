@@ -5,7 +5,7 @@ data class LIST_RESP(val get:List<LIST_DATA>) : BaseResponceInterface
 data class LIST_REQEST(val data:List<LIST_DATA>,var id_sample: Int =0) : BaseResponceInterface
 
 data class LIST_DATA(
-    val id: Int,
+    val id: String,
     val to0_2: Int,
     val from0_21To0_5: Int,
     val from0_6To1_0: Int,
@@ -17,7 +17,7 @@ data class LIST_DATA(
     val avg_height: Float?,
     val avg_height_undergrowth: Float?,
     val main: Int?,
-    val id_sample: Int,
+    val id_sample: String,
     val id_breed: Int?,
     val id_type_of_reproduction: Int?,
     val id_undergrowth: Int?,

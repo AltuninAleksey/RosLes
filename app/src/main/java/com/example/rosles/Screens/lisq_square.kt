@@ -22,8 +22,8 @@ class lisq_square : BaseActivity("Список пробных площадей")
     private lateinit var binding: ListSquareBinding
 
     private val db = DBCountWood(this, null)
-    var id_vdomost:Int?=0
-    var id_sample = 0
+    var id_vdomost: String?=null
+    var id_sample: String? = null
     var numberOfSelectPoroda: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,8 +34,8 @@ class lisq_square : BaseActivity("Список пробных площадей")
     }
 
     companion object{
-        var id_region=0
-        fun setregion(value:Int?){
+        var id_region: String? =null
+        fun setregion(value: String?){
             if(value!=null)
                 id_region=value
         }
@@ -49,10 +49,10 @@ class lisq_square : BaseActivity("Список пробных площадей")
 
     @SuppressLint("Range")
     fun RecyclerviewInit() {
-        setregion(intent.getIntExtra("id_Vedomost",0))
+        setregion(intent.getStringExtra("id_Vedomost",))
         id_vdomost = id_region
 
-        val vedom = db.getVedombyID(id_vdomost!!.toInt())
+        val vedom = db.getVedombyID(id_vdomost)
         binding.lesnnich.text = vedom?.nameForestly
         binding.district.text = vedom?.nameDistrictForestly
         binding.quater.text =   vedom?.quarterName
@@ -64,7 +64,7 @@ class lisq_square : BaseActivity("Список пробных площадей")
         val bufer_quater_id = vedom?.idQuarterId
 
 
-        val squareList = db.getlistsquare(id_vdomost!!.toInt())
+        val squareList = db.getlistsquare(id_vdomost!!)
 
         var activetableRow: TableRow? = null
 
@@ -99,7 +99,7 @@ class lisq_square : BaseActivity("Список пробных площадей")
                 activetableRow = tableRow
                 numberOfSelectPoroda = (tableRow.getChildAt(0) as TextView).text.toString()
                 activetableRow!!.setBackgroundResource(R.color.activecolumn)
-                id_sample = squareList[i].id.toInt()
+                id_sample = squareList[i].id
             }
 
             text0.setText((i+1).toString())
@@ -168,7 +168,7 @@ class lisq_square : BaseActivity("Список пробных площадей")
                     onRestart()
                 }
                 delete.setOnClickListener {
-                    db.delete_sample(id_sample)
+                    db.delete_sample(id_sample.toString())
                     dialog.dismiss()
                     onRestart()
                 }

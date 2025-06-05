@@ -5,19 +5,11 @@ import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
-import android.util.TypedValue
-import android.view.MenuItem
-import android.view.View
 import android.widget.*
 import androidx.activity.viewModels
-import androidx.appcompat.app.ActionBar
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.get
-import com.example.rosles.Adapters.BaseInterface
 import com.example.rosles.Adapters.ChoiceVudelAdapter
 import com.example.rosles.BaseActivity
 import com.example.rosles.DBCountWood
-import com.example.rosles.Models.Poroda
 import com.example.rosles.Network.Singletons
 import com.example.rosles.Network.ViewModels
 import com.example.rosles.R
@@ -34,7 +26,7 @@ class MainActivity : BaseActivity("Перечетные ведомости") {
     private lateinit var adapter: ChoiceVudelAdapter
 
     //to navigation next activity
-    var id_vedomost=0
+    var id_vedomost: String? =null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,7 +59,7 @@ class MainActivity : BaseActivity("Перечетные ведомости") {
         adapter = ChoiceVudelAdapter().apply {
             setData(db.readbyporoda())
             listener={
-                id_vedomost=it.id.toInt()
+                id_vedomost=it.id
             }
         }
 
@@ -76,7 +68,7 @@ class MainActivity : BaseActivity("Перечетные ведомости") {
 
 
         binding.toolbar.open.setOnClickListener {
-            if (id_vedomost != 0) {
+            if (id_vedomost != null) {
                 startActivity(
                     Intent(this, lisq_square::class.java)
                         .putExtra("id_Vedomost", id_vedomost))
@@ -85,7 +77,7 @@ class MainActivity : BaseActivity("Перечетные ведомости") {
             }
         }
         binding.toolbar.delete.setOnClickListener {
-            if (id_vedomost != 0) {
+            if (id_vedomost != null) {
                 val dialog: Dialog = Dialog(this)
                 dialog.setContentView(R.layout.dialog_delete)
                 dialog.setSizeRelativeCurrentWindow(0.85, 0.6)
@@ -99,7 +91,7 @@ class MainActivity : BaseActivity("Перечетные ведомости") {
                     onRestart()
                 }
                 delete.setOnClickListener {
-                    db.delete_listregion(id_vedomost)
+                    db.delete_listregion(id_vedomost!!)
                     dialog.dismiss()
                     onRestart()
                 }
@@ -107,7 +99,7 @@ class MainActivity : BaseActivity("Перечетные ведомости") {
         }
 
         binding.toolbar.save.setOnClickListener() {
-            if (id_vedomost != 0) {
+            if (id_vedomost != null) {
 
                 startActivity(
                     Intent(this,

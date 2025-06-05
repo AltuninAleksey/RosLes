@@ -29,8 +29,8 @@ class SelectPhoto:BaseActivity() {
 
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
     var photobuf:Bitmap?=null
-    var id_sample=0
-    var id_vdomost=0
+    var id_sample: String?=null
+    var id_vdomost: String?=null
     private val REQUEST_TAKE_PHOTO = 1
     private lateinit var binding: ScreenPhotoBinding
     private lateinit var locationManager: LocationManager
@@ -42,8 +42,8 @@ class SelectPhoto:BaseActivity() {
         setContentView(binding.root)
         gpsManager.init()
         // проверяем что разрешение получено
-        id_sample=intent.getIntExtra("id_sample",0)
-        id_vdomost=intent.getIntExtra("id_vdomost",0)
+        id_sample= intent.getStringExtra("id_sample")
+        id_vdomost= intent.getStringExtra("id_vdomost")
 
 
 
@@ -93,9 +93,9 @@ class SelectPhoto:BaseActivity() {
 
                     val temp=GPStracker(this)
 
-                    db.writephoto(temp.bitmap_to_base(thumbnailBitmap), id_sample,gpsManager.latitude,gpsManager.longitude,LocalDateTime.now().format(formatter).toString())
-                    db.Mark_Update_Sample(id_sample)
-                    db.Mark_Update_Listregion(id_vdomost)
+                    db.writephoto(temp.bitmap_to_base(thumbnailBitmap), id_sample!!,gpsManager.latitude,gpsManager.longitude,LocalDateTime.now().format(formatter).toString())
+                    db.Mark_Update_Sample(id_sample!!)
+                    db.Mark_Update_Listregion(id_vdomost!!)
                     onRestart()
                 }
             }
@@ -113,7 +113,7 @@ class SelectPhoto:BaseActivity() {
     fun inittable(){
 
         var activetableRow: TableRow? = null
-        val list=db.getphoto(id_sample)
+        val list=db.getphoto(id_sample!!)
 
         list.forEach {
             val tableRow = TableRow(this)

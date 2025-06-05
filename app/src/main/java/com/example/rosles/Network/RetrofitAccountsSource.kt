@@ -5,7 +5,6 @@ import com.example.rosles.ResponceClass.*
 import kotlinx.coroutines.delay
 import okhttp3.ResponseBody
 import retrofit2.Response
-import retrofit2.http.GET
 
 class RetrofitAccountsSource(
     config: RetrofitConfig
