@@ -1,8 +1,10 @@
 package com.example.rosles.Screens
 
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -11,6 +13,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBar
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
@@ -32,13 +36,30 @@ import kotlinx.coroutines.launch
 import java.io.File
 
 
+private const val REQUEST_CODE_PERMISSIONS = 1001
+
 class Dashboard: BaseActivity() {
 
     private lateinit var binding: DashboardBinding
     val viewModel by viewModels<ViewModels>()
     private var db = DBCountWood(this, null)
 
+    private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
 
+
+
+    private fun hasPermissions(): Boolean =
+        REQUIRED_PERMISSIONS.all { permission ->
+            ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED
+        }
+
+    private fun requestPermissions() {
+        ActivityCompat.requestPermissions(
+            this,
+            REQUIRED_PERMISSIONS,
+            REQUEST_CODE_PERMISSIONS
+        )
+    }
 
     @SuppressLint("SdCardPath", "SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,6 +70,13 @@ class Dashboard: BaseActivity() {
 
         binding = DashboardBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+
+        if (!hasPermissions()) {
+            requestPermissions()
+        }
+
+
 
 
         binding.profile.setOnLongClickListener {
@@ -143,7 +171,7 @@ class Dashboard: BaseActivity() {
                         val user = SourceProviderHolder.sourcesProvider.getAccountsSource().get_user(
                             AuthRequest(
                                 "slinchenkovapa@rcfh.rosleshoz.gov.ru",
-                               "cnhfuf1997"
+                                "cnhfuf1997"
                             )
                         )
                         return user

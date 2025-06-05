@@ -17,7 +17,6 @@ import java.util.*
 class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     SQLiteOpenHelper(context, DATABASE_NAME, factory, DATABASE_VERSION) {
     val context=context
-    var gpStracker= GPStracker(context)
     override fun onCreate(db: SQLiteDatabase) {
 
         db.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_breed" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name_breed" varchar(350) NOT NULL, "is_foliar" bool NULL, "is_pine" bool NULL, "ShortName" varchar(10) NULL);""")
@@ -689,7 +688,7 @@ inner join djangoForest_forestly as forestly on s2.id_forestly_id = forestly.id)
             cursor.moveToNext()
         }
         return hash
-        database.close()
+        close()
     }
 
     @SuppressLint("Range")
@@ -1051,10 +1050,9 @@ inner join djangoForest_forestly as forestly on s2.id_forestly_id = forestly.id)
     }
     fun writephoto(photo: String, id_sample: String, latitude:Double?, longitude:Double?, date:String){
         val db = this.writableDatabase
-
         db.execSQL(
-            """INSERT INTO djangoForest_photopoint( photo, id_sample_id,latitude,longitude,date)
-                |VALUES ( '$photo', '$id_sample','$latitude','$longitude','$date');""".trimMargin())
+            """INSERT INTO djangoForest_photopoint(id,photo, id_sample_id,latitude,longitude,date)
+                |VALUES ('${UUID.randomUUID()}', '$photo', '$id_sample','$latitude','$longitude','$date');""".trimMargin())
 
     }
 
@@ -1102,17 +1100,30 @@ inner join djangoForest_forestly as forestly on s2.id_forestly_id = forestly.id)
         //Log.v(date,"")
         db.execSQL(
             "Insert into djangoForest_gps\n" +
-                    "(latitude, longitude ,flag_center,id_sample_id,mark_update) \n" +
-                    "values ('${value.latitude}', '${value.longitude}' ,'${value.flag_center}','${value.id_sample}','${value.mark_update}')"
+                    "(id,latitude, longitude ,flag_center,id_sample_id,mark_update) \n" +
+                    "values ('${UUID.randomUUID()}','${value.latitude}', '${value.longitude}' ,'${value.flag_center}','${value.id_sample}','${value.mark_update}')"
         )
         db.close()
     }
 
+    fun Delete_Gps_Data(value:GPS_Data?){
+        val db = this.writableDatabase
+        //Log.v(date,"")
+        if (value!=null){
+            db.execSQL(
+                "DELETE FROM djangoForest_gps \n" +
+                        "WHERE id = '${value.id}';"
+            )
+            db.close()
+        }
+
+    }
+
     @SuppressLint("Range")
-    fun GET_Gps_Data(value: Int):List<GPS_Data>{
+    fun GET_Gps_Data(value: String): MutableList<GPS_Data>{
         val db = this.readableDatabase
         val cursor = db.rawQuery(
-            """SELECT * FROM djangoForest_gps where id_sample_id=$value """.trimMargin(),null)
+            """SELECT * FROM djangoForest_gps where id_sample_id='$value' """.trimMargin(),null)
         cursor.moveToFirst()
         val a= mutableListOf<GPS_Data>()
         for (i in 1..cursor.getCount()) {
