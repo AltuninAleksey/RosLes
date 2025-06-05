@@ -14,7 +14,7 @@ import com.example.rosles.databinding.ItemUdelBinding
 import com.example.rosles.databinding.VedomostitemBinding
 import com.example.roslesdef.Models.ItemWood
 
-class ChoiceVudelAdapter(): BaseAdapter<Poroda, VedomostitemBinding>() {
+class ChoiceVudelAdapter() : BaseAdapter<Poroda, VedomostitemBinding>() {
 
     override fun getBinding(
         inflater: LayoutInflater,
@@ -23,27 +23,24 @@ class ChoiceVudelAdapter(): BaseAdapter<Poroda, VedomostitemBinding>() {
     ) = VedomostitemBinding.inflate(inflater, parent, false)
 
 
-    var choise_second_item:View?=null
-
+    var choise_second_item: View? = null
     var listener: ((data: Poroda) -> Unit)? = null
 
     override fun bindViewHolder(holder: ViewBindingHolder, data: Poroda) {
 
-        holder.binding{
+        holder.binding {
 
 
-
-
-            itemBlock.setOnClickListener{
-                if (choise_second_item!=null){
+            itemBlock.setOnClickListener {
+                if (choise_second_item != null) {
                     choise_second_item!!.setBackgroundResource(R.color.color_background)
                 }
-                choise_second_item=it
+                choise_second_item = it
                 itemBlock.setBackgroundResource(R.color.activecolumn)
-                if(expandableLayout0.isExpanded){
+                if (expandableLayout0.isExpanded) {
                     expandableLayout0.collapse()
 
-                }else{
+                } else {
                     expandableLayout0.expand()
                 }
                 listener?.invoke(items[holder.adapterPosition])
@@ -51,7 +48,7 @@ class ChoiceVudelAdapter(): BaseAdapter<Poroda, VedomostitemBinding>() {
 
             }
             data.apply {
-                numberLesnich.setText(data.id)
+                numberLesnich.setText(data.id.substringBefore('-'))
                 nameLesnich.setText(data.nameForestly)
                 districtForestly.setText(data.nameDistrictForestly)
                 quter.setText(data.quarterName)
@@ -59,10 +56,10 @@ class ChoiceVudelAdapter(): BaseAdapter<Poroda, VedomostitemBinding>() {
                 dateTime.setText(data.date)
                 squareVudel.setText(data.square)
                 tract.setText(data.dacha)
-                if (data.markUpdate>0){
-                    markUpdateItem.visibility=View.VISIBLE
-                }else{
-                    markUpdateItem.visibility=View.GONE
+                if (data.markUpdate > 0) {
+                    markUpdateItem.visibility = View.VISIBLE
+                } else {
+                    markUpdateItem.visibility = View.GONE
                 }
 
             }
