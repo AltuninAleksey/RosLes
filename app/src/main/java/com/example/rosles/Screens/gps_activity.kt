@@ -45,13 +45,13 @@ class gps_activity : AppCompatActivity() {
         //инциализация навигации
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = "GPS"
-        //val id_sample = intent.getStringExtra("id_sample")
-        val id_sample = "c7f8575e-ca38-45ce-b566-5d931c18fa9f"
+        val id_sample = intent.getStringExtra("id_sample")
+        //val id_sample = "c7f8575e-ca38-45ce-b566-5d931c18fa9f"
         binding.toolbar.reload.visibility = View.GONE
         binding.toolbar.open.visibility = View.GONE
 
 
-        val Gps_Data_List: MutableList<GPS_Data> = db.GET_Gps_Data(id_sample)
+        val Gps_Data_List: MutableList<GPS_Data> = db.GET_Gps_Data(id_sample.toString())
 
 
 
@@ -97,7 +97,7 @@ class gps_activity : AppCompatActivity() {
                 gpsManager.latitude,
                 gpsManager.longitude,
                 checkBox.isChecked,
-                id_sample,
+                id_sample.toString(),
                 2
             )
 
