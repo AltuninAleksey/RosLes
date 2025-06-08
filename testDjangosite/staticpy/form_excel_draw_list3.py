@@ -36,75 +36,75 @@ def create_header(sheets, data):
     sheets['B2'].border = Border(top=Side(style="thin"), bottom=Side(style="thin"))
     sheets['B2'].border = Border(right=Side(style="thin"), bottom=Side(style="thin"))
 
-    sheets['C2'].value = "БПТ"
+    # sheets['C2'].value = "БПТ"
+    # sheets['C2'].border = Border(top=Side(style="thin"), bottom=Side(style="thin"))
+    # sheets['C2'].border = Border(right=Side(style="thin"), bottom=Side(style="thin"))
+
+    sheets['C2'].value = "Лесничество"
     sheets['C2'].border = Border(top=Side(style="thin"), bottom=Side(style="thin"))
     sheets['C2'].border = Border(right=Side(style="thin"), bottom=Side(style="thin"))
 
-    sheets['D2'].value = "Лесничество"
+    sheets['D2'].value = "Участковое лесничество"
     sheets['D2'].border = Border(top=Side(style="thin"), bottom=Side(style="thin"))
     sheets['D2'].border = Border(right=Side(style="thin"), bottom=Side(style="thin"))
 
-    sheets['E2'].value = "Участковое лесничество"
+    sheets['E2'].value = "Дача"
     sheets['E2'].border = Border(top=Side(style="thin"), bottom=Side(style="thin"))
     sheets['E2'].border = Border(right=Side(style="thin"), bottom=Side(style="thin"))
 
-    sheets['F2'].value = "Дача"
+    sheets['F2'].value = "Квартал"
     sheets['F2'].border = Border(top=Side(style="thin"), bottom=Side(style="thin"))
     sheets['F2'].border = Border(right=Side(style="thin"), bottom=Side(style="thin"))
 
-    sheets['G2'].value = "Квартал"
+    sheets['G2'].value = "Выдел"
     sheets['G2'].border = Border(top=Side(style="thin"), bottom=Side(style="thin"))
     sheets['G2'].border = Border(right=Side(style="thin"), bottom=Side(style="thin"))
 
-    sheets['H2'].value = "Выдел"
+    sheets['H2'].value = "Площадь"
     sheets['H2'].border = Border(top=Side(style="thin"), bottom=Side(style="thin"))
     sheets['H2'].border = Border(right=Side(style="thin"), bottom=Side(style="thin"))
 
-    sheets['I2'].value = "Площадь"
+    sheets['I2'].value = "Акт №"
     sheets['I2'].border = Border(top=Side(style="thin"), bottom=Side(style="thin"))
     sheets['I2'].border = Border(right=Side(style="thin"), bottom=Side(style="thin"))
 
-    sheets['J2'].value = "Акт №"
+    sheets['J2'].value = "Дата по акту"
     sheets['J2'].border = Border(top=Side(style="thin"), bottom=Side(style="thin"))
     sheets['J2'].border = Border(right=Side(style="thin"), bottom=Side(style="thin"))
 
-    sheets['K2'].value = "Дата по акту"
+    sheets['K2'].value = "Год отнесения"
     sheets['K2'].border = Border(top=Side(style="thin"), bottom=Side(style="thin"))
     sheets['K2'].border = Border(right=Side(style="thin"), bottom=Side(style="thin"))
 
-    sheets['L2'].value = "Год отнесения"
+    sheets['L2'].value = "Аренда"
     sheets['L2'].border = Border(top=Side(style="thin"), bottom=Side(style="thin"))
     sheets['L2'].border = Border(right=Side(style="thin"), bottom=Side(style="thin"))
 
-    sheets['M2'].value = "Аренда"
+    sheets['M2'].value = "Категория, год"
     sheets['M2'].border = Border(top=Side(style="thin"), bottom=Side(style="thin"))
     sheets['M2'].border = Border(right=Side(style="thin"), bottom=Side(style="thin"))
 
-    sheets['N2'].value = "Категория, год"
+    sheets['N2'].value = "Год проведения лесовосстановления"
     sheets['N2'].border = Border(top=Side(style="thin"), bottom=Side(style="thin"))
     sheets['N2'].border = Border(right=Side(style="thin"), bottom=Side(style="thin"))
 
-    sheets['O2'].value = "Год проведения лесовосстановления"
+    sheets['O2'].value = "Способ"
     sheets['O2'].border = Border(top=Side(style="thin"), bottom=Side(style="thin"))
     sheets['O2'].border = Border(right=Side(style="thin"), bottom=Side(style="thin"))
 
-    sheets['P2'].value = "Способ"
+    sheets['P2'].value = "Метод"
     sheets['P2'].border = Border(top=Side(style="thin"), bottom=Side(style="thin"))
     sheets['P2'].border = Border(right=Side(style="thin"), bottom=Side(style="thin"))
 
-    sheets['Q2'].value = "Метод"
+    sheets['Q2'].value = "Соответствует критериям и требованиям"
     sheets['Q2'].border = Border(top=Side(style="thin"), bottom=Side(style="thin"))
     sheets['Q2'].border = Border(right=Side(style="thin"), bottom=Side(style="thin"))
 
-    sheets['R2'].value = "Соответствует критериям и требованиям"
+    sheets['R2'].value = "Соответствует хозяйству"
     sheets['R2'].border = Border(top=Side(style="thin"), bottom=Side(style="thin"))
     sheets['R2'].border = Border(right=Side(style="thin"), bottom=Side(style="thin"))
 
-    sheets['S2'].value = "Соответствует хозяйству"
-    sheets['S2'].border = Border(top=Side(style="thin"), bottom=Side(style="thin"))
-    sheets['S2'].border = Border(right=Side(style="thin"), bottom=Side(style="thin"))
-
-    set_border(sheets, "A2:S2")
+    set_border(sheets, "A2:R2")
 
 
 
@@ -123,19 +123,20 @@ def main_draw(sheets, data: dict = None):
         #                                                                                      "id_forestly").get()
         # forestly = Forestly.objects.filter(id=ds_forestly['id_forestly']).values("name_forestly").get()
         # print(data['data'])
+        print(f"ID LIST REGIOPN {data['data'][row]['id']}")
         field = FieldCardSerializer(FieldCard.objects.get(id_list_region=data['data'][row]['id'])).data
         desc = DescriptionRegionSerializer(DescriptionRegion.objects.get(id_list_region=data['data'][row]['id'])).data
 
         sheets.cell(row=row+3, column=1).value = data['data'][row]['id']
         sheets.cell(row=row+3, column=2).value = data['data'][row]['date']
-        sheets.cell(row=row+3, column=3).value = 'уточнить'
-        sheets.cell(row=row+3, column=4).value = data['data'][row]['forestly']
-        sheets.cell(row=row + 3, column=5).value = data['data'][row]['id_district_forestly']
-        sheets.cell(row=row + 3, column=6).value = data['data'][row]['dacha']
-        sheets.cell(row=row + 3, column=7).value = data['data'][row]['name_quarter']
-        sheets.cell(row=row + 3, column=8).value = data['data'][row]['soil_lot']
-        sheets.cell(row=row + 3, column=9).value = data['data'][row]['sample_region']
-        sheets.cell(row=row + 3, column=10).value = 'уточнить'
+        sheets.cell(row=row+3, column=3).value = data['data'][row]['forestly']
+        sheets.cell(row=row + 3, column=4).value = data['data'][row]['id_district_forestly']
+        sheets.cell(row=row + 3, column=5).value = data['data'][row]['dacha']
+        sheets.cell(row=row + 3, column=6).value = data['data'][row]['name_quarter']
+        sheets.cell(row=row + 3, column=7).value = data['data'][row]['soil_lot']
+        sheets.cell(row=row + 3, column=8).value = data['data'][row]['sample_region']
+        sheets.cell(row=row + 3, column=9).value = field['point7number']
+        sheets.cell(row=row + 3, column=10).value = field['point7date']
         sheets.cell(row=row + 3, column=11).value = field['date_and_time']
         sheets.cell(row=row + 3, column=12).value = desc['year_assignment_land']
         if field['rent_area'] is False:
@@ -147,17 +148,17 @@ def main_draw(sheets, data: dict = None):
         else:
             sheets.cell(row=row + 3, column=14).value = cats[field['id_category_of_forest_fund_lands']]
         if field['id_method_of_reforestation'] is None:
-            sheets.cell(row=row + 3, column=16).value = "Не указано"
+            sheets.cell(row=row + 3, column=15).value = "Не указано"
         else:
-            sheets.cell(row=row + 3, column=16).value = methods[field['id_method_of_reforestation']]
-        sheets.cell(row=row + 3, column=17).value = 'способ и метод это не одно и тоже?'
-        sheets.cell(row=row + 3, column=18).value = 'Уточнить'
+            sheets.cell(row=row + 3, column=15).value = methods[field['id_method_of_reforestation']]
+        # sheets.cell(row=row + 3, column=16).value = desc['recovery_method']
+        sheets.cell(row=row + 3, column=17).value = 'Уточнить'
         if field['respond_farm'] is False:
-            sheets.cell(row=row + 3, column=19).value = "Нет"
+            sheets.cell(row=row + 3, column=18).value = "Нет"
         else:
-            sheets.cell(row=row + 3, column=19).value ='Да'
+            sheets.cell(row=row + 3, column=18).value ='Да'
 
-        last_cell = sheets.cell(row=row+3, column=19)
+        last_cell = sheets.cell(row=row+3, column=18)
 
     for col in sheets.columns:
         max_length = 0
