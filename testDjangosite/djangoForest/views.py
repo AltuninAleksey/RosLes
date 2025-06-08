@@ -102,7 +102,7 @@ class ListView(generics.ListCreateAPIView):
             except:
                 return Response({"Объект с данным id не найден"})
 
-        List.objects.filter(id_sample = request.data['id_sample']).delete()
+        # List.objects.filter(id_sample = request.data['id_sample']).delete()
 
         for i in range(len(request.data['data'])):
             serializer = ListSerializer(data=request.data['data'][i])
@@ -239,6 +239,9 @@ class ListRegionView(generics.ListCreateAPIView):
         return Response({"get":ListRegionSerializer(lst, many=True).data})
 
     def post(self, request):
+        if 'id' in request.data:
+            if not isinstance(request.data['id'], int):
+                request.data['unique_uid'] = request.data.pop('id')
         serializer = ListRegionSerializer(data=request.data)
         if not serializer.is_valid():
             print(serializer.errors)
@@ -251,6 +254,7 @@ class ListRegionView(generics.ListCreateAPIView):
         field.save()
         desc = DescriptionRegion(id_list_region = region)
         desc.save()
+        request.data['unique_uid_list_region'] = request.data['unique_uid']
         request.data.update({"id_list_region": serializer.data['id']})
         sample_ser = SampleSerializer(data=request.data)
         sample_ser.is_valid()
@@ -275,15 +279,24 @@ class ListRegionView(generics.ListCreateAPIView):
                          status=status.HTTP_404_NOT_FOUND)
         for i in range(len(request.data['data'])):
             if request.data['data'][i]['mark_update'] == 1:
-                if ListRegion.objects.filter(id=request.data['data'][i]["id"]).exists():
-                    instance = ListRegion.objects.get(id=request.data['data'][i]["id"])
-                    serealizer = ListRegionSerializer(data=request.data["data"][i], instance=instance)
-                    serealizer.is_valid(raise_exception=False)
-                    serealizer.save()
-                    # ids_dict.update({request.data['data'][i]['id']: serealizer.data['id']})
-                    ids_dict.append({"obj": {"last": request.data['data'][i]['id'], "new": serealizer.data['id']}})
+                if isinstance(request.data['data'][i]['id'], int):
+                    if ListRegion.objects.filter(id=request.data['data'][i]["id"]).exists():
+                        instance = ListRegion.objects.get(id=request.data['data'][i]["id"])
+                        serealizer = ListRegionSerializer(data=request.data["data"][i], instance=instance)
+                        serealizer.is_valid(raise_exception=False)
+                        serealizer.save()
+                        # ids_dict.update({request.data['data'][i]['id']: serealizer.data['id']})
+                        ids_dict.append({"obj": {"last": request.data['data'][i]['id'], "new": serealizer.data['id']}})
+                else:
+                    if ListRegion.objects.filter(unique_uid=request.data['data'][i]['id']).exists():
+                        instance = ListRegion.objects.get(unique_uid=request.data['data'][i]["id"])
+                        request.data['data'][i]['unique_uid'] = request.data['data'][i].pop('id')
+                        serealizer.is_valid(raise_exception=False)
+                        serealizer.save()
             elif request.data['data'][i]['mark_update'] == 2:
                 print(request.data['data'][i])
+                if not isinstance(request.data['data'][i]['id'], int):
+                    request.data['data'][i]['unique_uid']  = request.data['data'][i].pop('id')
                 serializer = ListRegionSerializer(data=request.data['data'][i])
                 serializer.is_valid(raise_exception=True)
                 serializer.save()
@@ -367,6 +380,7 @@ class SampleView(generics.ListCreateAPIView):
 
         for i in range(len(request.data['data'])):
             if request.data['data'][i]['mark_update'] == 1:
+
                 if Sample.objects.filter(id=request.data['data'][i]["id"]).exists():
                     instance = Sample.objects.get(id=request.data['data'][i]["id"])
                     print(instance)
@@ -2211,8 +2225,10 @@ class GetAllListFieldDesc(ListAPIView):
                     for i in res:
                         data.append(i)
                     for i in range(len(desc_ready)):
-                        data_field.append(field_ready[i])
+                        # data_field.append(field_ready[i])
                         desc_field.append(desc_ready[i])
+                    for i in range(len(field_ready)):
+                        data_field.append(field_ready[i])
                     # data.append(GetAllListRegionDataSerializer(lst, many=True).data)
                 break
             if len(czl_objects):
@@ -2232,8 +2248,13 @@ class GetAllListFieldDesc(ListAPIView):
                         for i in res:
                             data.append(i)
                         for i in range(len(desc_ready)):
-                            data_field.append(field_ready[i])
                             desc_field.append(desc_ready[i])
+                        if len(field_ready) != 0:
+                            print(f"LEN {len(field_ready)}")
+                            for i in range(len(field_ready)):
+                                data_field.append(field_ready[i])
+                        else:
+                            field_ready = []
             all_data.update({"data": data})
             all_data.update({"data_field": data_field})
             all_data.update({"desc_field": desc_field})
@@ -2242,3 +2263,23 @@ class GetAllListFieldDesc(ListAPIView):
 
             path = form_getlistregion(all_data)
             return Response({"document": path})
+
+
+
+class ForestDistrictView(APIView):
+
+    def get(self, request, *args, **kwargs):
+        data = ForestDistricts.objects.all()
+
+        return Response({'data': ForestDistrictSerializer(data, many=True).data})
+
+
+class ListRegionMobileView(APIView):
+
+
+    def post(self, request, *args, **kwargs):
+        pass
+
+
+    def put(self, request, *args, **kwargs):
+        pass

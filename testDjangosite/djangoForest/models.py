@@ -1,3 +1,5 @@
+import uuid
+
 from django.db import models
 from django.db.models import F
 import datetime
@@ -102,6 +104,7 @@ class PhotoPoint(models.Model):
     latitude = models.FloatField(u'Широта', blank=True, default=0)
     longitude = models.FloatField(u'Долгота', blank=True, default=0)
     date = models.CharField(u'Дата', null=True, max_length=100)
+    unique_uid = models.UUIDField(default=uuid.uuid4, unique=True, null=True)
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
@@ -110,11 +113,10 @@ class PhotoPoint(models.Model):
             coord(self.latitude, self.longitude, self.photo.path)
 
 
-
-
     class Meta:
         verbose_name = 'Фото точка'
         verbose_name_plural = 'Фото точка'
+
 
 class Profile(models.Model):
     FIO = models.CharField(u'ФИО', max_length=255)
@@ -154,6 +156,7 @@ class List(models.Model):
     mark_update = models.IntegerField(null=True, default=0)
     age = models.IntegerField(verbose_name="Возраст", null=True)
     ratio_composition = models.IntegerField(verbose_name="Коэфф. состава", null=True)
+    unique_uid = models.UUIDField(default=uuid.uuid4, unique=True, null=True)
 
 
     class Meta:
@@ -193,6 +196,7 @@ class ListRegion(models.Model):
     mark_update = models.IntegerField(null= True)
     number_region = models.CharField(max_length=100, default=0)
     id_profile = models.ForeignKey("Profile", on_delete=models.CASCADE, null=True)
+    unique_uid = models.UUIDField(default=uuid.uuid4, unique=True, null=True)
 
     class Meta:
         verbose_name = 'Перечетная ведомость участка'
@@ -221,6 +225,8 @@ class Sample(models.Model):
     lenght = models.FloatField(u'Длина', null=True, default=0)
     square = models.FloatField(u'Площадь', null=True, default=0)
     mark_update = models.IntegerField(null=True, default=0)
+    unique_uid = models.UUIDField(default=uuid.uuid4, unique=True, null=True)
+    # id_list_region_uuid = models.ForeignKey()
 
 
     class Meta:
@@ -536,6 +542,7 @@ class DescriptionRegion(models.Model):
     # id_method_of_reforestation = models.ForeignKey("MethodOfReforestation",
     #                                                on_delete=models.CASCADE, verbose_name="Способ лесовосстановления",
     #                                                null=True)
+    recovery_method = models.CharField(max_length=500, default=None, null=True)
     year_assignment_land = models.IntegerField(choices=YEAR_CHOICES, default=datetime.datetime.now().year,
                                             verbose_name="Год отнесения к землям", null=True)
     year_format_fond_trees = models.IntegerField(choices=YEAR_CHOICES, default=datetime.datetime.now().year,
@@ -572,6 +579,9 @@ class FieldCard(models.Model):
     id_list_region = models.ForeignKey("ListRegion",
                                        on_delete=models.CASCADE,
                                        verbose_name="Перечетная ведомость участка", null=True)
+    id_forest_districts = models.ForeignKey('ForestDistricts',
+                                            on_delete=models.CASCADE,
+                                            verbose_name='Лесные районы РФ', null=True)
     id_purpose_of_forests = models.ForeignKey("PurposeOfForests",
                                               on_delete=models.CASCADE,
                                               verbose_name="Целевое назначение лесов", null=True)
@@ -745,3 +755,7 @@ class PhaseVermin(models.Model):
 
 class RightUseForestArea(models.Model):
     name_right = models.CharField(max_length=150, verbose_name='Название (вид документов на право пользования)')
+
+
+# class ForestDistirct(models.Model):
+#     name_district = models.CharField(max_length=500, verbose_name='Наименование лесного района')
