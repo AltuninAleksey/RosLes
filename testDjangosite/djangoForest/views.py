@@ -1,4 +1,6 @@
 import datetime
+import uuid
+
 import simplejson
 from django.core.files.images import ImageFile
 from django.db.models import F
@@ -105,13 +107,40 @@ class ListView(generics.ListCreateAPIView):
         # List.objects.filter(id_sample = request.data['id_sample']).delete()
 
         for i in range(len(request.data['data'])):
-            serializer = ListSerializer(data=request.data['data'][i])
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
-            lst = List.objects.get(id=serializer.data['id'])
-            lst.mark_update = 0
-            lst.save()
-            ids_dict.append({"obj": {"last": request.data['data'][i]['id'], "new": serializer.data['id']}})
+            if request.data['data'][i]['mark_update'] == 1:
+                if isinstance(request.data['data'][i]['id'], int):
+                    if List.objects.filter(id=request.data['data'][i]["id"]).exists():
+                        instance = List.objects.get(id=request.data['data'][i]["id"])
+                        serealizer = ListSerializer(data=request.data["data"][i], instance=instance)
+                        serealizer.is_valid(raise_exception=True)
+                        serealizer.save()
+                        # ids_dict.update({request.data['data'][i]['id']: serealizer.data['id']})
+                        ids_dict.append({"obj": {"last": request.data['data'][i]['id'], "new": serealizer.data['id']}})
+                else:
+                    if List.objects.filter(unique_uid = request.data['data'][i]["id"]).exists():
+                        request.data['data'][i]['unique_uid'] = request.data['data'][i].pop('id')
+                        instance = List.objects.get(unique_uid=request.data['data'][i]["unique_uid"])
+                        serealizer = ListSerializer(data=request.data["data"][i], instance=instance)
+                        serealizer.is_valid(raise_exception=True)
+                        serealizer.save()
+            elif request.data['data'][i]['mark_update'] == 2:
+                if not isinstance(request.data['data'][i]['id'], int):
+                    request.data['data'][i]['unique_uid'] = request.data['data'][i].pop('id')
+                serializer = ListSerializer(data=request.data['data'][i])
+                serializer.is_valid(raise_exception=True)
+                serializer.save()
+                lst = List.objects.get(id=serializer.data['id'])
+                lst.mark_update = 0
+                lst.save()
+                # ids_dict.update({request.data['data'][i]['id']: serializer.data['id']})
+                ids_dict.append({"obj": {"last": request.data['data'][i]['id'], "new": serializer.data['id']}})
+            # serializer = ListSerializer(data=request.data['data'][i])
+            # serializer.is_valid(raise_exception=True)
+            # serializer.save()
+            # lst = List.objects.get(id=serializer.data['id'])
+            # lst.mark_update = 0
+            # lst.save()
+            # ids_dict.append({"obj": {"last": request.data['data'][i]['id'], "new": serializer.data['id']}})
 
         return Response({"put": status.HTTP_200_OK, "ids": ids_dict}, status=status.HTTP_200_OK)
         # for i in range(len(request.data['data'])):
@@ -380,18 +409,30 @@ class SampleView(generics.ListCreateAPIView):
 
         for i in range(len(request.data['data'])):
             if request.data['data'][i]['mark_update'] == 1:
-
-                if Sample.objects.filter(id=request.data['data'][i]["id"]).exists():
-                    instance = Sample.objects.get(id=request.data['data'][i]["id"])
-                    print(instance)
-                    serealizer = SampleSerializer(data=request.data["data"][i], instance=instance)
-                    serealizer.is_valid(raise_exception=True)
-                    serealizer.save()
-                    # ids_dict.update({request.data['data'][i]['id']: serealizer.data['id']})
-                    ids_dict.append({"obj": {"last": request.data['data'][i]['id'], "new": serealizer.data['id']}})
+                if isinstance(request.data['data'][i]['id'], int):
+                    if Sample.objects.filter(id=request.data['data'][i]["id"]).exists():
+                        instance = Sample.objects.get(id=request.data['data'][i]["id"])
+                        print(instance)
+                        serealizer = SampleSerializer(data=request.data["data"][i], instance=instance)
+                        serealizer.is_valid(raise_exception=True)
+                        serealizer.save()
+                        # ids_dict.update({request.data['data'][i]['id']: serealizer.data['id']})
+                        ids_dict.append({"obj": {"last": request.data['data'][i]['id'], "new": serealizer.data['id']}})
+                else:
+                    request.data['data'][i]['unique_uid'] =  request.data['data'][i].pop('id')
+                    if Sample.objects.filter(unique_uid=request.data['data'][i]["unique_uid"]).exists():
+                        instance = Sample.objects.get(unique_uid=request.data['data'][i]["unique_uid"])
+                        print(instance)
+                        serealizer = SampleSerializer(data=request.data["data"][i], instance=instance)
+                        serealizer.is_valid(raise_exception=True)
+                        serealizer.save()
+                        # ids_dict.update({request.data['data'][i]['id']: serealizer.data['id']})
+                        ids_dict.append({"obj": {"last": request.data['data'][i]['id'], "new": serealizer.data['id']}})
             elif request.data['data'][i]['mark_update'] == 2:
 
                 # request.data['data'][i]['mark_update'].update('mark_update: 0')
+                if not isinstance(request.data['data'][i]['id'], int):
+                    request.data['data'][i]['unique_uid'] = request.data['data'][i].pop('id')
                 serializer = SampleSerializer(data=request.data['data'][i])
                 serializer.is_valid(raise_exception=True)
                 serializer.save()
@@ -1230,14 +1271,26 @@ class PhotoPointView(APIView):
 
 
     def post(self, request, format = None):
+        if not isinstance(request.data['id'], int):
+            request.data['unique_uid'] = request.data.pop('id')
         serializer = PhotoPointSerializer(data=request.data, context=request)
         serializer.is_valid(raise_exception=True)
-        serializer.save(id_sample_id = request.data.get('id_sample'),
-                        photo = request.data.get('photo'),
-                        longitude = request.data.get('longitude'),
-                        latitude = request.data.get('latitude'),
-                        date = request.data.get('date')
-                        )
+        unique_uid = request.data.get('unique_uid')
+        if unique_uid is None:
+            serializer.save(id_sample_id = request.data.get('id_sample'),
+                            photo = request.data.get('photo'),
+                            longitude = request.data.get('longitude'),
+                            latitude = request.data.get('latitude'),
+                            date = request.data.get('date')
+                            )
+        else:
+            serializer.save(id_sample_id=request.data.get('id_sample'),
+                            photo=request.data.get('photo'),
+                            longitude=request.data.get('longitude'),
+                            latitude=request.data.get('latitude'),
+                            date=request.data.get('date'),
+                            unique_uid = unique_uid
+                            )
         return Response({"http": status.HTTP_200_OK}, status=200)
 
 
@@ -1245,8 +1298,8 @@ class AnroidDownland(APIView):
 
     def get(self, *args, **kwargs):
         return Response({"list": ListSerializer(List.objects.all(), many=True).data,
-                         "listregion": ListRegionSerializer(ListRegion.objects.all(), many=True).data,
-                         "sample": SampleSerializer(Sample.objects.all(), many=True).data,
+                         "listregion": ListRegionAndroidSerializer(ListRegion.objects.all(), many=True).data,
+                         "sample": SampleAndroidSerializer(Sample.objects.all(), many=True).data,
                          "subjectRF": SubjectRFSerializer(SubjectRF.objects.all(), many=True).data,
                          "forestly": ForestlySerializer(Forestly.objects.all(), many=True).data,
                          "district_forestly": DistrictForestlySerializer(DistrictForestly.objects.all(), many=True).data,

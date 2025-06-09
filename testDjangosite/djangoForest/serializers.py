@@ -116,9 +116,18 @@ class ListSerializer(serializers.ModelSerializer):
         instance.avg_height_undergrowth = validated_data.get("avg_height_undergrowth")
         instance.age = validated_data.get("age")
         instance.main = validated_data.get("main")
+        instance.main = validated_data.get('unique_uid')
         instance.mark_update = 0
         instance.save()
         return instance
+
+
+class ListSerializer(serializers.ModelSerializer):
+    id = serializers.CharField(source='unique_uid')
+
+    class Meta:
+        model = List
+        exclude = ['unique_uid']
 
 
 class GPSManyCreateSerializer(serializers.ModelSerializer):
@@ -221,9 +230,20 @@ class SampleSerializer(serializers.ModelSerializer):
         instance.width = validated_data.get("width")
         instance.lenght = validated_data.get("lenght")
         instance.square = validated_data.get("square")
+        instance.unique_uid = validated_data.get('unique_uid')
         instance.mark_update = 0
         instance.save()
         return instance
+
+
+class SampleAndroidSerializer(serializers.ModelSerializer):
+    id = serializers.CharField(source='unique_uid')
+
+    class Meta:
+        model = Sample
+        # fields = '__all__'
+        exclude = ['unique_uid']
+
 
 class AboutUserDataSerializer(serializers.Serializer):
     id = serializers.IntegerField()
@@ -457,6 +477,7 @@ class ListRegionSerializerUpdateBySample(serializers.ModelSerializer):
         return instance
 
 class ListRegionSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = ListRegion
         fields = "__all__"
@@ -476,8 +497,18 @@ class ListRegionSerializer(serializers.ModelSerializer):
         instance.number_region = validated_data.get("number_region")
         instance.mark_update = 0
         instance.id_profile = validated_data.get("id_profile")
+        instance.unique_uid = validated_data.get('unique_uid')
         instance.save()
         return instance
+
+
+class ListRegionAndroidSerializer(serializers.ModelSerializer):
+    number = serializers.CharField(source='id')
+    id = serializers.CharField(source='unique_uid')
+    class Meta:
+        model = ListRegion
+        exclude = ['unique_uid']
+
 
 
 class ListRegionUpdateSerializer(serializers.ModelSerializer):
@@ -779,6 +810,7 @@ class DescriptionRegionSerializerNonEconomyAct(serializers.ModelSerializer):
     number_region = serializers.CharField(source="id_list_region.number_region", read_only=True)
     economy_act_land = serializers.CharField(required=False)
 
+
     class Meta:
         model = DescriptionRegion
         fields = '__all__'
@@ -790,6 +822,7 @@ class FieldCardSerializer(serializers.ModelSerializer):
     id_district_forestly = serializers.IntegerField(source="id_list_region.id_district_forestly.id", read_only=True)
     id_forestly = serializers.IntegerField(source="id_list_region.id_district_forestly.id_forestly.id", read_only=True)
     id_subject_rf = serializers.IntegerField(source="id_list_region.id_district_forestly.id_forestly.id_subject_rf.id", read_only=True)
+    name_forest_district = serializers.CharField(source='id_forest_districts.name_forest_district', read_only=True)
     soil_lot = serializers.CharField(source="id_list_region.soil_lot", read_only=True)
     sample_region = serializers.FloatField(source="id_list_region.sample_region", read_only=True)
     date = serializers.DateField(source="id_list_region.date", read_only=True)
@@ -993,3 +1026,10 @@ class DescSerializerExcel(serializers.ModelSerializer):
     class Meta:
         model = FieldCard
         fields = ['id', 'date', 'id_district_forestly', 'forestly', 'id_subject_rf',  'dacha', 'soil_lot', 'name_quarter']
+
+
+class ForestDistrictSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ForestDistricts
+        fields = '__all__'
