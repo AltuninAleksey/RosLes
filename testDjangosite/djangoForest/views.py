@@ -2158,7 +2158,9 @@ class CreateSampleByListRegionId(ListAPIView):
 
 
 class ListRegionDocxCreater(ListAPIView):
-
+    queryset = ListRegion.objects.all()
+    serializer_class = ListRegionSerializer
+    
     def post(self, request, *args, **kwargs):
         # from staticpy.forming_docx import form_docx_listregion, prep_to_form, form_docx_listregion2, prepare_to_docx2
         from staticpy.form_excel import list_region_excel
