@@ -26,10 +26,12 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from testDjangosite import settings
 
 urlpatterns = [
+    path('', include('breed_recognition.urls')),
     re_path(r'^media/(?P<path>.*)$', serve,{'document_root': settings.MEDIA_ROOT}),
     re_path(r'^static/(?P<path>.*)$', serve,{'document_root': settings.STATIC_ROOT}),
     # path('exel', testviews.as_view()),
     # path('form_undergrowth', CreateUndergrowthExcel.as_view()),
+    path('forest_districts', ForestDistrictView.as_view()),
     path('getmains', GetAllListFieldDesc.as_view()),
     path('form_list_region', ListRegionDocxCreater.as_view()),
     path('user_manual', GetUserManual.as_view()),
