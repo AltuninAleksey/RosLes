@@ -1279,8 +1279,9 @@ class PhotoPointView(APIView):
 
 
     def post(self, request, format = None):
-        if not isinstance(request.data['id'], int):
-            request.data['unique_uid'] = request.data.pop('id')
+        if 'id' in request.data:
+            if not isinstance(request.data['id'], int):
+                request.data['unique_uid'] = request.data.pop('id')
         serializer = PhotoPointSerializer(data=request.data, context=request)
         serializer.is_valid(raise_exception=True)
         unique_uid = request.data.get('unique_uid')
