@@ -1368,7 +1368,7 @@ class ListRegionFilters(ListAPIView):
             id_subject = request.user.id_subject_rf
         except:
             print("Cannot find user")
-        ser2 = ListRegion.objects.filter(id_district_forestly__id_forestly__id_subject_rf == id_subject)
+        ser2 = ListRegion.objects.filter(id_district_forestly__id_forestly__id_subject_rf = id_subject)
         if request.data['bSubjectrf']:
             ser2 = ListRegion.objects.all()
             idSubjectrf = request.data['idSubjectrf']
