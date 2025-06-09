@@ -290,7 +290,8 @@ class ListRegionView(generics.ListCreateAPIView):
         field.save()
         desc = DescriptionRegion(id_list_region = region)
         desc.save()
-        request.data['unique_uid_list_region'] = request.data['unique_uid']
+        if 'unique_uid' in request.data:
+            request.data['unique_uid_list_region'] = request.data['unique_uid']
         request.data.update({"id_list_region": serializer.data['id']})
         sample_ser = SampleSerializer(data=request.data)
         sample_ser.is_valid()
