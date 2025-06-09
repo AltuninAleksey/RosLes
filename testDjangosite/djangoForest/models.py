@@ -175,6 +175,8 @@ class GPS(models.Model):
     latitude = models.FloatField(u'Широта')
     longitude = models.FloatField(u'Долгота')
     flag_center = models.IntegerField(u'Флаг центра')
+    unique_uid = models.UUIDField(default=uuid.uuid4, null=True, unique=True)
+
 
     class Meta:
         verbose_name = 'GPS'

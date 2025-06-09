@@ -186,6 +186,8 @@ class GpsView(generics.ListCreateAPIView):
         return Response({'get': GPSSerializer(lst, many=True).data})
 
     def post(self, request):
+        if not isinstance(request.data['id'], int):
+            request.data['unique_uid'] = request.data.pop('id')
         serializer = GPSSerializer(data=request.data)
         if not serializer.is_valid():
             return Response({"error": status.HTTP_400_BAD_REQUEST,
@@ -196,10 +198,15 @@ class GpsView(generics.ListCreateAPIView):
 
     def put(self, request, *args, **kwargs):
         try:
-            instance = GPS.objects.get(pk=kwargs['pk'])
+            if isinstance(kwargs['pk'], int):
+                instance = GPS.objects.get(pk=kwargs['pk'])
+            else:
+                instance = GPS.objects.get(unique_uid=kwargs['pk'])
         except:
             return Response({"error": "Объект с данным id не найден"})
-
+        if 'id' in request:
+            if not isinstance(request.data['id'], int):
+                request.data['unique_uid'] = request.data.pop('id')
         serealizer = GPSSerializer(data=request.data, instance=instance)
         serealizer.is_valid(raise_exception=True)
         serealizer.save()
