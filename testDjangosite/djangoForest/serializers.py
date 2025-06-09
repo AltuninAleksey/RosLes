@@ -123,6 +123,14 @@ class ListSerializer(serializers.ModelSerializer):
 
 
 class ListSerializer(serializers.ModelSerializer):
+    # id = serializers.CharField(source='unique_uid')
+
+    class Meta:
+        model = List
+        fields = '__all__'
+
+
+class ListAndroidSerializer(serializers.ModelSerializer):
     id = serializers.CharField(source='unique_uid')
 
     class Meta:

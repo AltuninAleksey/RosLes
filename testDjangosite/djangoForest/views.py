@@ -1077,13 +1077,6 @@ class CreateSampleAndOther(ListAPIView):
         else:
             serializer_gps = GPSSerializer(data="")
             serializer_gps.is_valid(raise_exception=False)
-        # if len(request.data['profile_data']) != 0:
-        #     for k in request.data['profile_data']:
-        #         serializer_profile = ProfileSerializer(data=k)
-        #         if not serializer_profile.is_valid():
-        #             return Response({"error + profile": status.HTTP_400_BAD_REQUEST,
-        #                              "error_text": serializer_profile.errors[next(iter(serializer_profile.errors))][0]},
-        #                             status=status.HTTP_400_BAD_REQUEST)
         return Response({"code": status.HTTP_201_CREATED}, status=status.HTTP_201_CREATED)
 
     def put(self, request, *args, **kwargs):
@@ -1306,7 +1299,7 @@ class PhotoPointView(APIView):
 class AnroidDownland(APIView):
 
     def get(self, *args, **kwargs):
-        return Response({"list": ListSerializer(List.objects.all(), many=True).data,
+        return Response({"list": ListAndroidSerializer(List.objects.all(), many=True).data,
                          "listregion": ListRegionAndroidSerializer(ListRegion.objects.all(), many=True).data,
                          "sample": SampleAndroidSerializer(Sample.objects.all(), many=True).data,
                          "subjectRF": SubjectRFSerializer(SubjectRF.objects.all(), many=True).data,
