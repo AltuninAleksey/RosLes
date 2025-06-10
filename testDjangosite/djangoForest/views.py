@@ -70,6 +70,16 @@ class ProfileView(generics.ListCreateAPIView):
         return Response({"put": serealizer.data})
 
 
+class ListMobile(ListAPIView):
+
+    def get(self, request, *args, **kwargs):
+        lst = List.objects.all()
+
+        return Response({'get': ListAndroidSerializer(lst, many=True).data})
+
+
+
+
 class ListView(generics.ListCreateAPIView):
     def get(self, request, **kwargs):
         if kwargs:
@@ -109,6 +119,7 @@ class ListView(generics.ListCreateAPIView):
         for i in range(len(request.data['data'])):
             if request.data['data'][i]['mark_update'] == 1:
                 if isinstance(request.data['data'][i]['id'], int):
+                    print('нет тут')
                     if List.objects.filter(id=request.data['data'][i]["id"]).exists():
                         instance = List.objects.get(id=request.data['data'][i]["id"])
                         serealizer = ListSerializer(data=request.data["data"][i], instance=instance)
@@ -117,7 +128,9 @@ class ListView(generics.ListCreateAPIView):
                         # ids_dict.update({request.data['data'][i]['id']: serealizer.data['id']})
                         ids_dict.append({"obj": {"last": request.data['data'][i]['id'], "new": serealizer.data['id']}})
                 else:
-                    if List.objects.filter(unique_uid = request.data['data'][i]["id"]).exists():
+                    uuid_id = uuid.UUID(request.data['data'][i]['id'])
+                    if List.objects.filter(unique_uid = uuid_id).exists():
+                        print('я тут')
                         request.data['data'][i]['unique_uid'] = request.data['data'][i].pop('id')
                         instance = List.objects.get(unique_uid=request.data['data'][i]["unique_uid"])
                         serealizer = ListSerializer(data=request.data["data"][i], instance=instance)
@@ -245,6 +258,13 @@ class GpsBySampleView(ListAPIView):
     #     return Response({"put": serealizer.data})
 
 
+class ListRegionMobileView(ListAPIView):
+
+    def get(self, request, *args, **kwargs):
+        query = ListRegion.objects.all()
+
+        return Response({'get':ListRegionAndroidSerializer(query, many=True).data})
+
 class ListRegionView(generics.ListCreateAPIView):
     model = ListRegion
 
@@ -325,14 +345,16 @@ class ListRegionView(generics.ListCreateAPIView):
                         # ids_dict.update({request.data['data'][i]['id']: serealizer.data['id']})
                         ids_dict.append({"obj": {"last": request.data['data'][i]['id'], "new": serealizer.data['id']}})
                 else:
+                    uuid_id = uuid.UUID(request.data['data'][i]['id'])
                     if ListRegion.objects.filter(unique_uid=request.data['data'][i]['id']).exists():
                         instance = ListRegion.objects.get(unique_uid=request.data['data'][i]["id"])
                         request.data['data'][i]['unique_uid'] = request.data['data'][i].pop('id')
+                        serealizer = ListRegionSerializer(data=request.data["data"][i], instance=instance)
                         serealizer.is_valid(raise_exception=False)
                         serealizer.save()
             elif request.data['data'][i]['mark_update'] == 2:
                 print(request.data['data'][i])
-                if not isinstance(request.data['data'][i]['id'], int):
+                if 'id' in request.data['data'][i] and not isinstance(request.data['data'][i]['id'], int) :
                     request.data['data'][i]['unique_uid']  = request.data['data'][i].pop('id')
                 serializer = ListRegionSerializer(data=request.data['data'][i])
                 serializer.is_valid(raise_exception=True)
@@ -378,6 +400,15 @@ class ListRegionByProfileView(ListView):
     def get(self, *args, **kwargs):
         return Response({"get": ListRegionSerializer(ListRegion.objects.filter(id_profile = kwargs['pk_profile']), many=True).data})
 
+
+
+class SampleMobileView(APIView):
+
+    def get(self, request, *args, **kwargs):
+
+        sample = Sample.objects.all()
+
+        return Response({'get': SampleAndroidSerializer(sample, many=True).data})
 
 class SampleView(generics.ListCreateAPIView):
 
@@ -428,6 +459,7 @@ class SampleView(generics.ListCreateAPIView):
                         ids_dict.append({"obj": {"last": request.data['data'][i]['id'], "new": serealizer.data['id']}})
                 else:
                     request.data['data'][i]['unique_uid'] =  request.data['data'][i].pop('id')
+                    uuid_id = uuid.UUID(request.data['data'][i]['unique_uid'])
                     if Sample.objects.filter(unique_uid=request.data['data'][i]["unique_uid"]).exists():
                         instance = Sample.objects.get(unique_uid=request.data['data'][i]["unique_uid"])
                         print(instance)
@@ -439,7 +471,7 @@ class SampleView(generics.ListCreateAPIView):
             elif request.data['data'][i]['mark_update'] == 2:
 
                 # request.data['data'][i]['mark_update'].update('mark_update: 0')
-                if not isinstance(request.data['data'][i]['id'], int):
+                if 'id' in request.data['data'][i] and not isinstance(request.data['data'][i]['id'], int):
                     request.data['data'][i]['unique_uid'] = request.data['data'][i].pop('id')
                 serializer = SampleSerializer(data=request.data['data'][i])
                 serializer.is_valid(raise_exception=True)
@@ -1252,6 +1284,11 @@ class UserAuth(generics.ListCreateAPIView):
         return Response({"error": status.HTTP_401_UNAUTHORIZED}, status=status.HTTP_401_UNAUTHORIZED)
 
 
+class PhotoPointMobileView(APIView):
+
+    def get(self, request, *args, **kwargs):
+        return Response(PhotoPointMobileView(PhotoPoint.objects.all(), many=True).data)
+
 class PhotoPointView(APIView):
     """
     Приемка фотокарточки
@@ -1427,7 +1464,7 @@ class GetListBySampleId(ListAPIView):
 
 class GetAllDescriptionRegion(ListAPIView):
 
-    permission_classes = [IsAuthenticated, ]
+    # permission_classes = [IsAuthenticated, ]
 
     def get(self, request, *args, **kwargs):
         if kwargs:
@@ -2160,7 +2197,7 @@ class CreateSampleByListRegionId(ListAPIView):
 class ListRegionDocxCreater(ListAPIView):
     queryset = ListRegion.objects.all()
     serializer_class = ListRegionSerializer
-    
+
     def post(self, request, *args, **kwargs):
         # from staticpy.forming_docx import form_docx_listregion, prep_to_form, form_docx_listregion2, prepare_to_docx2
         from staticpy.form_excel import list_region_excel
@@ -2331,12 +2368,3 @@ class ForestDistrictView(APIView):
         return Response({'data': ForestDistrictSerializer(data, many=True).data})
 
 
-class ListRegionMobileView(APIView):
-
-
-    def post(self, request, *args, **kwargs):
-        pass
-
-
-    def put(self, request, *args, **kwargs):
-        pass

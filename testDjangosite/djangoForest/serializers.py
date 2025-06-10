@@ -725,6 +725,14 @@ class GetAllListRegionDataSerializer(serializers.Serializer):
     soil_lot = serializers.CharField()
 
 
+
+class PhotoPointMobileSerializer(serializers.ModelSerializer):
+    id = serializers.CharField(source='unique_uid')
+
+    class Meta:
+        model = PhotoPoint
+        exclude = ['unique_uid']
+
 class PhotoPointSerializer(serializers.ModelSerializer):
 
     class Meta:
