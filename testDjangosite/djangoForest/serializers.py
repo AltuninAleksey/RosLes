@@ -132,6 +132,7 @@ class ListSerializer(serializers.ModelSerializer):
 
 class ListAndroidSerializer(serializers.ModelSerializer):
     id = serializers.CharField(source='unique_uid')
+    id_sample = serializers.CharField(source='id_sample.unique_uid')
 
     class Meta:
         model = List
@@ -254,6 +255,7 @@ class SampleSerializer(serializers.ModelSerializer):
 
 class SampleAndroidSerializer(serializers.ModelSerializer):
     id = serializers.CharField(source='unique_uid')
+    id_list_region = serializers.CharField(source='id_list_region.unique_uid')
 
     class Meta:
         model = Sample
@@ -521,6 +523,7 @@ class ListRegionSerializer(serializers.ModelSerializer):
 class ListRegionAndroidSerializer(serializers.ModelSerializer):
     number = serializers.CharField(source='id')
     id = serializers.CharField(source='unique_uid')
+
     class Meta:
         model = ListRegion
         exclude = ['unique_uid']

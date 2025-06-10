@@ -205,7 +205,7 @@ class GpsView(generics.ListCreateAPIView):
         return Response({'get': GPSSerializer(lst, many=True).data})
 
     def post(self, request):
-        if not isinstance(request.data['id'], int):
+        if 'id' in request.data and not isinstance(request.data['id'], int):
             request.data['unique_uid'] = request.data.pop('id')
         serializer = GPSSerializer(data=request.data)
         if not serializer.is_valid():
@@ -402,10 +402,15 @@ class ListRegionViewUpdate(ListView):
 
 
 class ListRegionByProfileView(ListView):
-
+    serializer_class = ListRegionSerializer
     def get(self, *args, **kwargs):
         return Response({"get": ListRegionSerializer(ListRegion.objects.filter(id_profile = kwargs['pk_profile']), many=True).data})
 
+
+class ListRegionByProfileMobileView(ListView):
+    serializer_class = ListRegionAndroidSerializer
+    def get(self, *args, **kwargs):
+        return Response({"get": ListRegionAndroidSerializer(ListRegion.objects.filter(id_profile = kwargs['pk_profile']), many=True).data})
 
 
 class SampleMobileView(APIView):
@@ -1315,27 +1320,33 @@ class PhotoPointView(APIView):
 
 
     def post(self, request, format = None):
-        if 'id' in request.data:
-            if not isinstance(request.data['id'], int):
-                request.data['unique_uid'] = request.data.pop('id')
+        # if 'id_sample' in request.data:
+        #     if not isinstance(request.data['id'], int):
+        #         request.data['unique_uid'] = request.data.pop('id')
+        # if 'id_sample' in request.data and uuid.UUID(request.data['id_sample'], uuid.uuid4()):
+        try:
+            id_sample = request.data.get('id_sample')
+            int_id = Sample.objects.filter(unique_uid = uuid.UUID(id_sample)).values('id')
+            request.data['id_sample'] = int_id[0]['id']
+        except:
+            print('id is int')
         serializer = PhotoPointSerializer(data=request.data, context=request)
         serializer.is_valid(raise_exception=True)
-        unique_uid = request.data.get('unique_uid')
-        if unique_uid is None:
-            serializer.save(id_sample_id = request.data.get('id_sample'),
-                            photo = request.data.get('photo'),
-                            longitude = request.data.get('longitude'),
-                            latitude = request.data.get('latitude'),
-                            date = request.data.get('date')
-                            )
-        else:
-            serializer.save(id_sample_id=request.data.get('id_sample'),
-                            photo=request.data.get('photo'),
-                            longitude=request.data.get('longitude'),
-                            latitude=request.data.get('latitude'),
-                            date=request.data.get('date'),
-                            unique_uid = unique_uid
-                            )
+        serializer.save(id_sample_id = request.data.get('id_sample'),
+                        photo = request.data.get('photo'),
+                        longitude = request.data.get('longitude'),
+                        latitude = request.data.get('latitude'),
+                        date = request.data.get('date')
+                        )
+        # else:
+        #     id_sample = Sample.objects.get(unique_uid=uuid.UUID(unique_uid)).values('id')
+        #     serializer.is_valid(raise_exception=True)
+        #     serializer.save(id_sample_id=id_sample,
+        #                     photo=request.data.get('photo'),
+        #                     longitude=request.data.get('longitude'),
+        #                     latitude=request.data.get('latitude'),
+        #                     date=request.data.get('date'),
+        #                     )
         return Response({"http": status.HTTP_200_OK}, status=200)
 
 
