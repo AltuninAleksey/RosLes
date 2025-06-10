@@ -111,6 +111,7 @@ urlpatterns = [
     path('listregion', ListRegionView.as_view()),
     path('mobile/listregion', ListRegionMobileView.as_view()),
     path('listregionbyprofile/<int:pk_profile>', ListRegionByProfileView.as_view()),
+    path('mobile/listregionbyprofile/<int:pk_profile>', ListRegionByProfileMobileView.as_view()),
     path('listregion/<int:pk>', ListRegionView.as_view()),
     path('sample', SampleView.as_view()),
     path('mobile/sample', SampleMobileView.as_view()),
