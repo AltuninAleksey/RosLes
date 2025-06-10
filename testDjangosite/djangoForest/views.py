@@ -1182,7 +1182,7 @@ class GetForestlyBySubjectRFId(viewsets.ViewSet):
         pk = kwargs.get('pk')
         lst = Forestly.objects.filter(id_subject_rf=pk)
 
-        return JsonResponse({'data': GetForestlyBySubjectRFIdSerializer(lst, many=True).data}, safe=False)
+        return Response({'data': GetForestlyBySubjectRFIdSerializer(lst, many=True).data})
 
 
 class GetDistrictForestlyByForestlyId(viewsets.ViewSet):
