@@ -854,7 +854,7 @@ class FieldCardSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({"error": 404, "error_text": "invalid id"})
 
     def update(self, instance, validated_data):
-        instance.id_forest_district = validated_data.get('id_forest_district')
+        instance.id_forest_districts = validated_data.get('id_forest_districts')
         instance.id_list_region = validated_data.get('id_list_region')
         instance.id_purpose_of_forests = validated_data.get("id_purpose_of_forests")
         instance.id_forest_protection_category = validated_data.get("id_forest_protection_category")
