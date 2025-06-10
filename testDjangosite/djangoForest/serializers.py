@@ -144,6 +144,14 @@ class GPSManyCreateSerializer(serializers.ModelSerializer):
         model = GPS
         fields = '__all__'
 
+
+class GPSMobileSerializer(serializers.ModelSerializer):
+    id = serializers.CharField(source='unique_uid')
+
+    class Meta:
+        model = GPS
+        exclude = ['unique_uid']
+
 class GPSSerializer(serializers.ModelSerializer):
     class Meta:
         model = GPS

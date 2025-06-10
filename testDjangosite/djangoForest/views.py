@@ -186,6 +186,12 @@ class ListView(generics.ListCreateAPIView):
         lst.delete()
         return Response({"code": status.HTTP_200_OK}, status=status.HTTP_200_OK)
 
+
+class GPSMobileView(APIView):
+
+    def get(self, request, *args, **kwargs):
+        return Response({'get': GPSMobileSerializer(GPS.objects.all(), many=True).data})
+
 class GpsView(generics.ListCreateAPIView):
     def get(self, request, **kwargs):
         if kwargs:
