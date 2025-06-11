@@ -380,7 +380,7 @@ class ListRegionView(generics.ListCreateAPIView):
                         serealizer.is_valid(raise_exception=False)
                         serealizer.save()
                         # ids_dict.update({request.data['data'][i]['id']: serealizer.data['id']})
-                        ids_dict.append({"obj": {"last": request.data['data'][i]['id'], "new": serealizer.data['id']}})
+                        # ids_dict.append({"obj": {"last": request.data['data'][i]['id'], "new": serealizer.data['id']}})
                 else:
                     uuid_id = uuid.UUID(request.data['data'][i]['id'])
                     if ListRegion.objects.filter(unique_uid=request.data['data'][i]['id']).exists():
@@ -404,7 +404,7 @@ class ListRegionView(generics.ListCreateAPIView):
                 lst.mark_update = 0
                 lst.save()
                 # ids_dict.update({request.data['data'][i]['id']: serializer.data['id']})
-                ids_dict.append({"obj": {"last": request.data['data'][i]['id'], "new": serializer.data['id']}})
+                # ids_dict.append({"obj": {"last": request.data['data'][i]['id'], "new": serializer.data['id']}})
         return Response({"put": status.HTTP_200_OK, "ids": ids_dict}, status=status.HTTP_200_OK)
         # return Response({"put": status.HTTP_200_OK}, status=status.HTTP_200_OK)
 
