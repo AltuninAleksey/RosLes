@@ -230,8 +230,8 @@ class GpsView(generics.ListCreateAPIView):
             request.data['unique_uid'] = request.data.pop('id')
         if 'id_sample' in request.data and isinstance(request.data['id_sample'], str):
             id_sample = Sample.objects.filter(
-                unique_uid=uuid.UUID(request.data['data'][i]['id_sample'])).values('id')
-            request.data['data'][i]['id_sample'] = id_sample[0]['id']
+                unique_uid=uuid.UUID(request.data['id_sample'])).values('id')
+            request.data['id_sample'] = id_sample[0]['id']
         serializer = GPSSerializer(data=request.data)
         if not serializer.is_valid():
             return Response({"error": status.HTTP_400_BAD_REQUEST,
@@ -1370,10 +1370,12 @@ class PhotoPointView(APIView):
         #     if not isinstance(request.data['id'], int):
         #         request.data['unique_uid'] = request.data.pop('id')
         # if 'id_sample' in request.data and uuid.UUID(request.data['id_sample'], uuid.uuid4()):
+        print(request.data)
         try:
             id_sample = request.data.get('id_sample')
             int_id = Sample.objects.filter(unique_uid = uuid.UUID(id_sample)).values('id')
             request.data['id_sample'] = int_id[0]['id']
+            print(type(request.data['id_sample']))
         except:
             print('id is int')
         serializer = PhotoPointSerializer(data=request.data, context=request)
