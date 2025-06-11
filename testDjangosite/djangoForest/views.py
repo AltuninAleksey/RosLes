@@ -119,18 +119,22 @@ class ListView(generics.ListCreateAPIView):
         for i in range(len(request.data['data'])):
             if request.data['data'][i]['mark_update'] == 1:
                 if isinstance(request.data['data'][i]['id'], int):
-                    print('нет тут')
+
                     if List.objects.filter(id=request.data['data'][i]["id"]).exists():
                         instance = List.objects.get(id=request.data['data'][i]["id"])
                         serealizer = ListSerializer(data=request.data["data"][i], instance=instance)
                         serealizer.is_valid(raise_exception=True)
                         serealizer.save()
                         # ids_dict.update({request.data['data'][i]['id']: serealizer.data['id']})
-                        ids_dict.append({"obj": {"last": request.data['data'][i]['id'], "new": serealizer.data['id']}})
+                        # ids_dict.append({"obj": {"last": request.data['data'][i]['id'], "new": serealizer.data['id']}})
                 else:
                     uuid_id = uuid.UUID(request.data['data'][i]['id'])
                     if List.objects.filter(unique_uid = uuid_id).exists():
-                        print('я тут')
+                        if 'id_sample' in request.data['data'][i]:
+                            if isinstance(request.data['data'][i]['id_sample'], str):
+                                id_sample = Sample.objects.filter(
+                                    unique_uid=uuid.UUID(request.data['data'][i]['id_sample'])).values('id')
+                                request.data['data'][i]['id_sample'] = id_sample[0]['id']
                         request.data['data'][i]['unique_uid'] = request.data['data'][i].pop('id')
                         instance = List.objects.get(unique_uid=request.data['data'][i]["unique_uid"])
                         serealizer = ListSerializer(data=request.data["data"][i], instance=instance)
@@ -139,6 +143,10 @@ class ListView(generics.ListCreateAPIView):
             elif request.data['data'][i]['mark_update'] == 2:
                 if not isinstance(request.data['data'][i]['id'], int):
                     request.data['data'][i]['unique_uid'] = request.data['data'][i].pop('id')
+                if 'id_sample' in request.data['data'][i]:
+                    if isinstance(request.data['data'][i]['id_sample'], str):
+                        id_sample = Sample.objects.filter(unique_uid = uuid.UUID(request.data['data'][i]['id_sample'])).values('id')
+                        request.data['data'][i]['id_sample'] = id_sample[0]['id']
                 serializer = ListSerializer(data=request.data['data'][i])
                 serializer.is_valid(raise_exception=True)
                 serializer.save()
@@ -146,7 +154,7 @@ class ListView(generics.ListCreateAPIView):
                 lst.mark_update = 0
                 lst.save()
                 # ids_dict.update({request.data['data'][i]['id']: serializer.data['id']})
-                ids_dict.append({"obj": {"last": request.data['data'][i]['id'], "new": serializer.data['id']}})
+                # ids_dict.append({"obj": {"last": request.data['data'][i]['id'], "new": serializer.data['id']}})
             # serializer = ListSerializer(data=request.data['data'][i])
             # serializer.is_valid(raise_exception=True)
             # serializer.save()
@@ -207,6 +215,10 @@ class GpsView(generics.ListCreateAPIView):
     def post(self, request):
         if 'id' in request.data and not isinstance(request.data['id'], int):
             request.data['unique_uid'] = request.data.pop('id')
+        if 'id_sample' in request.data and isinstance(request.data['id_sample'], str):
+            id_sample = Sample.objects.filter(
+                unique_uid=uuid.UUID(request.data['data'][i]['id_sample'])).values('id')
+            request.data['data'][i]['id_sample'] = id_sample[0]['id']
         serializer = GPSSerializer(data=request.data)
         if not serializer.is_valid():
             return Response({"error": status.HTTP_400_BAD_REQUEST,
@@ -467,23 +479,32 @@ class SampleView(generics.ListCreateAPIView):
                         serealizer.is_valid(raise_exception=True)
                         serealizer.save()
                         # ids_dict.update({request.data['data'][i]['id']: serealizer.data['id']})
-                        ids_dict.append({"obj": {"last": request.data['data'][i]['id'], "new": serealizer.data['id']}})
+                        # ids_dict.append({"obj": {"last": request.data['data'][i]['id'], "new": serealizer.data['id']}})
                 else:
                     request.data['data'][i]['unique_uid'] =  request.data['data'][i].pop('id')
                     uuid_id = uuid.UUID(request.data['data'][i]['unique_uid'])
                     if Sample.objects.filter(unique_uid=request.data['data'][i]["unique_uid"]).exists():
+                        if 'id_list_region' in request.data['data'][i]:
+                            if isinstance(request.data['data'][i]['id_list_region'], str):
+                                id_list_region = ListRegion.objects.filter(
+                                    unique_uid=uuid.UUID(request.data['data'][i]['id_list_region'])).values('id')
+                                request.data['data'][i]['id_list_region'] = id_list_region[0]['id']
                         instance = Sample.objects.get(unique_uid=request.data['data'][i]["unique_uid"])
                         print(instance)
                         serealizer = SampleSerializer(data=request.data["data"][i], instance=instance)
                         serealizer.is_valid(raise_exception=True)
                         serealizer.save()
                         # ids_dict.update({request.data['data'][i]['id']: serealizer.data['id']})
-                        ids_dict.append({"obj": {"last": request.data['data'][i]['id'], "new": serealizer.data['id']}})
+                        # ids_dict.append({"obj": {"last": request.data['data'][i]['id'], "new": serealizer.data['id']}})
             elif request.data['data'][i]['mark_update'] == 2:
 
                 # request.data['data'][i]['mark_update'].update('mark_update: 0')
                 if 'id' in request.data['data'][i] and not isinstance(request.data['data'][i]['id'], int):
                     request.data['data'][i]['unique_uid'] = request.data['data'][i].pop('id')
+                if 'id_list_region' in request.data['data'][i]:
+                    if isinstance(request.data['data'][i]['id_list_region'], str):
+                        id_list_region = ListRegion.objects.filter(unique_uid = uuid.UUID(request.data['data'][i]['id_list_region'])).values('id')
+                        request.data['data'][i]['id_list_region'] = id_list_region[0]['id']
                 serializer = SampleSerializer(data=request.data['data'][i])
                 serializer.is_valid(raise_exception=True)
                 serializer.save()
@@ -491,7 +512,7 @@ class SampleView(generics.ListCreateAPIView):
                 lst.mark_update = 0
                 lst.save()
                 # ids_dict.update({request.data['data'][i]['id']: serializer.data['id']})
-                ids_dict.append({"obj": {"last": request.data['data'][i]['id'], "new": serializer.data['id']}})
+                # ids_dict.append({"obj": {"last": request.data['data'][i]['id'], "new": serializer.data['id']}})
 
         return Response({"put": status.HTTP_200_OK, "ids": ids_dict})
         # return Response({"put": status.HTTP_200_OK})
