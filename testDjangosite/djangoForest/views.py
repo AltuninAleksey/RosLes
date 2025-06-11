@@ -71,6 +71,9 @@ class ProfileView(generics.ListCreateAPIView):
 
 
 class ListMobile(ListAPIView):
+    model = List
+    queryset = List.objects.all()
+    serializer_class = ListAndroidSerializer
 
     def get(self, request, *args, **kwargs):
         lst = List.objects.all()
@@ -81,6 +84,9 @@ class ListMobile(ListAPIView):
 
 
 class ListView(generics.ListCreateAPIView):
+    model = ListRegion
+    queryset = List.objects.all()
+    serializer_class = ListSerializer
     def get(self, request, **kwargs):
         if kwargs:
             try:
@@ -196,11 +202,18 @@ class ListView(generics.ListCreateAPIView):
 
 
 class GPSMobileView(APIView):
+    model = GPS
+    queryset = GPS.objects.all()
+    serializer_class = GPSMobileSerializer
 
     def get(self, request, *args, **kwargs):
         return Response({'get': GPSMobileSerializer(GPS.objects.all(), many=True).data})
 
 class GpsView(generics.ListCreateAPIView):
+    model = GPS
+    queryset = GPS.objects.all()
+    serializer_class = GPSSerializer
+
     def get(self, request, **kwargs):
         if kwargs:
             try:
@@ -277,6 +290,10 @@ class GpsBySampleView(ListAPIView):
 
 
 class ListRegionMobileView(ListAPIView):
+    model = ListRegion
+    queryset = ListRegion.objects.all()
+    serializer_class = ListRegionAndroidSerializer
+
 
     def get(self, request, *args, **kwargs):
         query = ListRegion.objects.all()
@@ -285,6 +302,8 @@ class ListRegionMobileView(ListAPIView):
 
 class ListRegionView(generics.ListCreateAPIView):
     model = ListRegion
+    queryset = ListRegion.objects.all()
+    serializer_class = ListRegionSerializer
 
     def get(self, request, *args, **kwargs):
         if kwargs:
@@ -426,6 +445,9 @@ class ListRegionByProfileMobileView(ListView):
 
 
 class SampleMobileView(APIView):
+    model = Sample
+    queryset = Sample.objects.all()
+    serializer_class = SampleAndroidSerializer
 
     def get(self, request, *args, **kwargs):
 
@@ -434,6 +456,9 @@ class SampleMobileView(APIView):
         return Response({'get': SampleAndroidSerializer(sample, many=True).data})
 
 class SampleView(generics.ListCreateAPIView):
+    model = Sample
+    queryset = Sample.objects.all()
+
 
     def get_serializer_class(self):
         return SampleSerializer
