@@ -6,6 +6,7 @@ data class LISTREGION_REQUEST(val data:List<LISTREGION_DATA>) : BaseResponceInte
 
 data class LISTREGION_DATA(
     var id: String,
+    var number: String="new",
     val date: String,
     val sample_region: Float?,
     val soil_lot: String,

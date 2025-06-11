@@ -8,7 +8,13 @@ import com.example.rosles.Network.ViewModels
 import com.example.rosles.RequestClass.UpdateRequest
 import com.example.rosles.ResponceClass.GPS_Data_Send
 import com.example.rosles.ResponceClass.LISTREGION_REQUEST
+import com.example.rosles.ResponceClass.LIST_DATA
+import com.example.rosles.ResponceClass.LIST_REQEST
+import com.example.rosles.ResponceClass.LIST_RESP
 import com.example.rosles.ResponceClass.SAMPLE_DATA
+import com.example.rosles.ResponceClass.SAMPLE_REQEST
+import com.example.rosles.ResponceClass.SAMPLE_RESP
+import com.example.rosles.ResponceClass.id
 import kotlinx.coroutines.delay
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
@@ -67,6 +73,9 @@ class sync() {
 
 
         val listregion = db.getLISTREGION()
+        val sample = db.getAllSAMPLE()
+        val list = db.getGLIST()
+
 
 
         listregion.forEach {
@@ -76,12 +85,42 @@ class sync() {
 
         viewModels.putLISTREGION(LISTREGION_REQUEST(listregion))
         delay(1000)
-
-
-        val sample = mutableListOf<SAMPLE_DATA>()
-
-
+        viewModels.putSAMPLE(SAMPLE_REQEST(sample))
         delay(1000)
+        viewModels.putLIST(LIST_REQEST(list))
+        delay(10000)
+
+
+        sample.forEach {
+            db.getphoto( it.id).forEach {
+                val wrapper = ContextWrapper(context)
+                var file = wrapper.getDir("Images", Context.MODE_PRIVATE)
+                file = File(file, "${UUID.randomUUID()}.jpg")
+                val stream: OutputStream = FileOutputStream(file)
+                it.photo!!.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+                stream.flush()
+                stream.close()
+                val photoFile = file
+                val photo = MultipartBody.Part.createFormData(
+                    "photo",
+                    photoFile.name,
+                    photoFile.asRequestBody("image/*".toMediaType())
+                )
+                viewModels.upload(
+                    UpdateRequest(
+                        photo,
+                        it.id_sample,
+                        it.latitude.toDouble(),
+                        it.longitude.toDouble(),
+                        it.date
+                    )
+                )
+            }
+            delay(1000)
+
+        }
+
+
 
 
         db.SEND_Gps_Data().forEach {
@@ -105,7 +144,7 @@ class sync() {
         var file = File(filePath)
         if (file.exists()) {
 
-            file.delete()
+           file.delete()
             delay(5000)
         }
 
@@ -123,32 +162,7 @@ class sync() {
 //
 //    }
 
-    fun sendphoto(db: DBCountWood, id: String, context: Context, viewModels: ViewModels) {
-        db.getphoto( id).forEach {
-            val wrapper = ContextWrapper(context)
-            var file = wrapper.getDir("Images", Context.MODE_PRIVATE)
-            file = File(file, "${UUID.randomUUID()}.jpg")
-            val stream: OutputStream = FileOutputStream(file)
-            it.photo!!.compress(Bitmap.CompressFormat.JPEG, 100, stream)
-            stream.flush()
-            stream.close()
-            val photoFile = file
-            val photo = MultipartBody.Part.createFormData(
-                "photo",
-                photoFile.name,
-                photoFile.asRequestBody("image/*".toMediaType())
-            )
-            viewModels.upload(
-                UpdateRequest(
-                    photo,
-                    it.id_sample,
-                    it.latitude.toDouble(),
-                    it.longitude.toDouble(),
-                    it.date
-                )
-            )
-        }
-    }
+
 }
 
 //    fun sendFileRequest(image: Bitmap,latitude:Double,longitude:Double,date: String,id:Int) {

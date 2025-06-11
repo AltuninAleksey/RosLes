@@ -29,5 +29,5 @@ data class PerechetWood(
 )
 
 
-data class PodlesokWood(var value:Int?,var avgHeightpodles:Float?=0f,var id:Int?,var idbreed_under:Int?=0) : BaseResponceInterface
+data class PodlesokWood(var value:Int?, var avgHeightpodles:Float?=0f, var id: String?, var idbreed_under:Int?=0) : BaseResponceInterface
 

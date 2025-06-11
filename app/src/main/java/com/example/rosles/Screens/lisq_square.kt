@@ -105,7 +105,7 @@ class lisq_square : BaseActivity("Список пробных площадей")
             text0.setText((i+1).toString())
             text1.setText(squareList[i].lenght)
             text2.setText(squareList[i].width)
-            text3.setText(squareList[i].square)
+            text3.setText(squareList[i].square.toString())
             text4.setText(squareList[i].date)
 
             tableRow.addView(text0, 0)

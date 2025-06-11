@@ -18,6 +18,7 @@ import com.example.rosles.R
 import com.example.rosles.ResponceClass.PerechetWood
 import com.example.rosles.ResponceClass.PodlesokWood
 import com.example.rosles.ResponceClass.ProbaWoodSimple
+import com.example.rosles.ResponceClass.id
 import com.example.rosles.databinding.WoodBinding
 import com.example.rosles.setSizeRelativeCurrentWindow
 import com.example.roslesdef.Adapters.WoodAdapter
@@ -199,7 +200,7 @@ class Wood : BaseActivity("Пробная площадь") {
                     db.addpodlesporod(id_user, valuepodles.id)
                     podlesokhash.put(
                         valuepodles.name,
-                        PodlesokWood(idbreed_under = valuepodles.id, value = 0, id = 0)
+                        PodlesokWood(idbreed_under = valuepodles.id, value = 0, id = null)
                     )
                 }
 
@@ -234,7 +235,7 @@ class Wood : BaseActivity("Пробная площадь") {
                 }
             }
             podlesokhash.forEach { t, u ->
-                if (u?.id == 0) {
+                if (u?.id == null) {
                     db.createpodles(u, id_sample!!)
                 } else {
                     db.updatepodles(u)

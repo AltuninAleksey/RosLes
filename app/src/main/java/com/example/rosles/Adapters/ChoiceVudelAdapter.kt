@@ -48,13 +48,13 @@ class ChoiceVudelAdapter() : BaseAdapter<Poroda, VedomostitemBinding>() {
 
             }
             data.apply {
-                numberLesnich.setText(data.id.substringBefore('-'))
+                numberLesnich.setText(data.number)
                 nameLesnich.setText(data.nameForestly)
                 districtForestly.setText(data.nameDistrictForestly)
                 quter.setText(data.quarterName)
                 vudel.setText(data.soilLot)
                 dateTime.setText(data.date)
-                squareVudel.setText(data.square)
+                squareVudel.setText(data.square.toString())
                 tract.setText(data.dacha)
                 if (data.markUpdate > 0) {
                     markUpdateItem.visibility = View.VISIBLE

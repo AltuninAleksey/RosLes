@@ -13,7 +13,7 @@ data class SAMPLE_DATA(
     var soil_lot: String,
     val width: Int?,
     val lenght: Int?,
-    val square: Int?,
+    val square: Double?,
     val id_profile: Int,
     val id_list_region: String,
     val id_quarter: Int,

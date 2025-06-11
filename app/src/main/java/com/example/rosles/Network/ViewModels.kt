@@ -109,7 +109,7 @@ class ViewModels():BaseViewModel(
     fun getLISTREGION(dbCountWood: DBCountWood,pk_profile:Int)=viewModelScope.safeLaunch {
         try {
             accountsRepository.getLISTREGION(pk_profile).get.forEach {
-                dbCountWood.writeLISTREGION(it.id,it.date,it.sample_region,it.name_quarter?:"",it.soil_lot,it.mark_update,it.id_profile,it.number_region,it.id_district_forestly,it.dacha?:"")
+                dbCountWood.writeLISTREGION(it.id,it.number,it.date,it.sample_region,it.name_quarter?:"",it.soil_lot,it.mark_update,it.id_profile,it.number_region,it.id_district_forestly,it.dacha?:"")
             }
         } catch (e: EmptyFieldException) {
             processEmptyFieldException(e)
@@ -118,7 +118,7 @@ class ViewModels():BaseViewModel(
     fun getSAMPLE(dbCountWood: DBCountWood)=viewModelScope.safeLaunch {
         try {
             accountsRepository.getSAMPLE().get.forEach {
-                dbCountWood.writeSAMPLE(it.id.toString(),it.date,it.sample_area,it.id_list_region,
+                dbCountWood.writeSAMPLE(it.id,it.date,it.sample_area,it.id_list_region,
                     it.id_profile,it.id_quarter,it.soil_lot,it.lenght,it.square,it.width)
             }
         } catch (e: EmptyFieldException) {
@@ -195,14 +195,8 @@ class ViewModels():BaseViewModel(
          fun putLISTREGION(body:LISTREGION_REQUEST)=viewModelScope.safeLaunch{
 
              //простыня кода нужная для сериализации ответа
-             var bufer=accountsRepository.putLISTREGION(body).source().buffer.toString().toCharArray()
-             bufer.set(0,'{')
-             bufer.set(bufer.size-1,'}')
-             var temp2=""
-             bufer.forEach {
-                 temp2+=it
-             }
-             val book = Gson().fromJson(temp2, text::class.java)
+             accountsRepository.putLISTREGION(body)
+
              //отправка в синглтон
 
         }
@@ -223,7 +217,7 @@ class ViewModels():BaseViewModel(
 
     fun putLIST(body:LIST_REQEST)=viewModelScope.safeLaunch{
 
-        body.data.get(0).id
+
         accountsRepository.putLIST(body)
     }
 

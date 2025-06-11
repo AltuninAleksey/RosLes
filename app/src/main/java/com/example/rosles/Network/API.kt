@@ -38,11 +38,11 @@ interface API {
     suspend fun getFORESTLY():FORESTLY_RESP
     @GET("czlbyprofile/mobile/{id}")
     suspend fun getSUBJECTRF(@Path("id") value: Int):SUBJECTRF_RESP
-    @GET("listregionbyprofile/{id}")
+    @GET("mobile/listregionbyprofile/{id}")
     suspend fun getLISTREGION(@Path("id") pk_profile: Int):LISTREGION_RESP
-    @GET("sample")
+    @GET("mobile/sample")
     suspend fun getSAMPLE():SAMPLE_RESP
-    @GET("list")
+    @GET("mobile/list")
     suspend fun getLIST():LIST_RESP
 
     @PUT("listregion")
