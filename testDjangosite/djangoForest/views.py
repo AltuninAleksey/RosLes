@@ -524,8 +524,9 @@ class SampleView(generics.ListCreateAPIView):
             elif request.data['data'][i]['mark_update'] == 2:
 
                 # request.data['data'][i]['mark_update'].update('mark_update: 0')
-                if 'id' in request.data['data'][i] and not isinstance(request.data['data'][i]['id'], int):
-                    request.data['data'][i]['unique_uid'] = request.data['data'][i].pop('id')
+                if 'id' in request.data['data'][i]:
+                    if isinstance(request.data['data'][i]['id'], str):
+                        request.data['data'][i]['unique_uid'] = request.data['data'][i].pop('id')
                 if 'id_list_region' in request.data['data'][i]:
                     if isinstance(request.data['data'][i]['id_list_region'], str):
                         id_list_region = ListRegion.objects.filter(unique_uid = uuid.UUID(request.data['data'][i]['id_list_region'])).values('id')
@@ -1372,6 +1373,8 @@ class PhotoPointView(APIView):
         # if 'id_sample' in request.data and uuid.UUID(request.data['id_sample'], uuid.uuid4()):
         print(request.data)
         try:
+            if '"' in request.data.get('id_sample'):
+                request.data.get('id_sample').replace('"', '')
             id_sample = request.data.get('id_sample')
             int_id = Sample.objects.filter(unique_uid = uuid.UUID(id_sample)).values('id')
             request.data['id_sample'] = int_id[0]['id']
