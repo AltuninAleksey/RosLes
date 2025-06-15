@@ -409,7 +409,7 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
 
 
     @SuppressLint("Range")
-    fun Mark_Update_List(id: String) {
+    fun Mark_Update_List(id: String?) {
         val database: SQLiteDatabase = this.writableDatabase
         val cursor: Cursor =
             database.rawQuery("select * from djangoForest_list where id='$id'", null)
@@ -420,6 +420,9 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
             )
         }
     }
+
+
+
 
 
     @SuppressLint("Range")
@@ -959,6 +962,7 @@ inner join djangoForest_forestly as forestly on s2.id_forestly_id = forestly.id)
         if (flag!!) {
             value_flag = 1
         }
+        Mark_Update_List(id_prob)
         db.execSQL(
             """ update djangoForest_list set to0_2 = $o2, from0_21To0_5 = $o5, from0_6To1_0 = $o6, from1_1to1_5 = $o11, from1_5 = $o15, 
                     avg_diameter = $AVGdiametr, avg_height = $AVGHEight, count_of_plants = 0,
@@ -988,6 +992,7 @@ inner join djangoForest_forestly as forestly on s2.id_forestly_id = forestly.id)
         var avg_height_undergrowth: Float? = value?.avgHeightpodles
         var id = value?.id
 
+        Mark_Update_List(id)
         db.execSQL(
             """UPDATE djangoForest_list SET count_of_plants = $count_of_plants , avg_height_undergrowth = $avg_height_undergrowth,mark_update=1 WHERE id = '$id'""".trimMargin()
         )
