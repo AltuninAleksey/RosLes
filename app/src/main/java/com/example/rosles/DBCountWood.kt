@@ -373,7 +373,12 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
                 data.from1_1to1_5==0&&
                 data.from1_5==0&&
                 data.to0_2==0)
+            {}
+            else{
                 listregionrequest.add(data)
+
+            }
+
             cursor.moveToNext()
         }
         cursor.close()
