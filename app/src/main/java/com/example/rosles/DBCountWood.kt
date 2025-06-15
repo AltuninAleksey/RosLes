@@ -367,7 +367,13 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
                    mark_update = cursor.getInt(cursor.getColumnIndex("mark_update")),
                    id_undergrowth = cursor.getIntOrNull(cursor.getColumnIndex("id_undergrowth_id")),
             )
-            listregionrequest.add(data)
+            if (data.to0_2==0&&
+                data.from0_21To0_5==0&&
+                data.from0_6To1_0==0&&
+                data.from1_1to1_5==0&&
+                data.from1_5==0&&
+                data.to0_2==0)
+                listregionrequest.add(data)
             cursor.moveToNext()
         }
         cursor.close()
@@ -895,7 +901,7 @@ inner join djangoForest_forestly as forestly on s2.id_forestly_id = forestly.id)
                 |   where id_sample_id = '$id_sample_id' and id_type_of_reproduction_id = $id_type_of_reproduction_id
                 |   and id_breed_id = $id_breed_id""".trimMargin(), null
         )
-        var example: PerechetWood? = PerechetWood("1", 1, 1)
+        var example: PerechetWood? = PerechetWood("0", 1, 1)
         cursor.moveToFirst()
         for (i in 1..cursor.getCount()) {
             example?.o2 = cursor.getInt(cursor.getColumnIndex("to0_2"))
