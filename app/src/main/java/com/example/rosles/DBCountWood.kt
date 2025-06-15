@@ -416,7 +416,7 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         cursor.moveToFirst()
         if (cursor.getInt(cursor.getColumnIndex("mark_update")) <= 1) {
             database.execSQL(
-                "update djangoForest_list set mark_update = 1 where id = $id"
+                "update djangoForest_list set mark_update = 1 where id = '$id'"
             )
         }
     }
