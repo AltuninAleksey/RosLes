@@ -994,7 +994,7 @@ inner join djangoForest_forestly as forestly on s2.id_forestly_id = forestly.id)
 
         Mark_Update_List(id)
         db.execSQL(
-            """UPDATE djangoForest_list SET count_of_plants = $count_of_plants , avg_height_undergrowth = $avg_height_undergrowth,mark_update=1 WHERE id = '$id'""".trimMargin()
+            """UPDATE djangoForest_list SET count_of_plants = $count_of_plants , avg_height_undergrowth = $avg_height_undergrowth WHERE id = '$id'""".trimMargin()
         )
 
     }
