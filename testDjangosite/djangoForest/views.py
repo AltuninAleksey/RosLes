@@ -1373,9 +1373,9 @@ class PhotoPointView(APIView):
         # if 'id_sample' in request.data and uuid.UUID(request.data['id_sample'], uuid.uuid4()):
         print(request.data)
         try:
-            if '"' in request.data.get('id_sample'):
-                request.data.get('id_sample').replace('"', '')
             id_sample = request.data.get('id_sample')
+            if '"' in id_sample:
+                request.data.get('id_sample').replace('"', '')
             int_id = Sample.objects.filter(unique_uid = uuid.UUID(id_sample)).values('id')
             request.data['id_sample'] = int_id[0]['id']
             print(type(request.data['id_sample']))
