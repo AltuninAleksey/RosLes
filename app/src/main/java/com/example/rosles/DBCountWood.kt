@@ -367,16 +367,8 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
                    mark_update = cursor.getInt(cursor.getColumnIndex("mark_update")),
                    id_undergrowth = cursor.getIntOrNull(cursor.getColumnIndex("id_undergrowth_id")),
             )
-            if (data.to0_2==0&&
-                data.from0_21To0_5==0&&
-                data.from0_6To1_0==0&&
-                data.from1_1to1_5==0&&
-                data.from1_5==0&&
-                data.to0_2==0)
-            {}
-            else{
+            if (data.to0_2 != 0 || data.from0_21To0_5 != 0 || data.from0_6To1_0 != 0 || data.from1_1to1_5 != 0 || data.from1_5 != 0 || data.count_of_plants != 0 ) {
                 listregionrequest.add(data)
-
             }
 
             cursor.moveToNext()
