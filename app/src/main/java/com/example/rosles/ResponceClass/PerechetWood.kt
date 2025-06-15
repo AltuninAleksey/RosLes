@@ -1,9 +1,6 @@
 package com.example.rosles.ResponceClass
 
-import java.util.*
 
-
-data class probaWOODD(var data: HashMap<String, PerechetWood>) : BaseResponceInterface
 
 data class ProbaWoodSimple(var iskus:PerechetWood?,var estes:PerechetWood?,var estestvenn:PerechetWood?,var flag_main:Boolean=false) : BaseResponceInterface{
     fun setflagmain(){
@@ -13,7 +10,7 @@ data class ProbaWoodSimple(var iskus:PerechetWood?,var estes:PerechetWood?,var e
 
 data class PerechetWood(
     var namewood: String,
-    var type: Int,
+    var type: Int?,
     var id_breed: Int = 0,
     var o2: Int? = 0,
     var o5: Int? = 0,

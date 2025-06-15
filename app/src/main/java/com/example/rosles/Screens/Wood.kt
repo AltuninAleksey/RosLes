@@ -274,51 +274,59 @@ class Wood : BaseActivity("Пробная площадь") {
 
     //запись данных в хеш таблицу
     fun writedata(value_param: String) {
-        val value = hashbufWood.get(value_param)
-        with(binding) {
-            value?.iskus?.o2 = iskus02.text.toString().toInt()
-            value?.iskus?.o5 = iskus05.text.toString().toInt()
-            value?.iskus?.o6 = iskus06.text.toString().toInt()
-            value?.iskus?.o11 = iskus11.text.toString().toInt()
-            value?.iskus?.o15 = iskus15.text.toString().toInt()
-            value?.iskus?.type = 1
-            value?.iskus?.id_breed = Get_Id_breed_Class?.getidbreed(value_param, db)!!
-            value?.iskus?.maxHeight = maksHeightIskus.text.toString().toFloatOrNull() ?: 0.0f
-            value?.iskus?.AVGHEight = AvgHeightIskus.text.toString().toFloatOrNull() ?: 0.0f
-            value?.iskus?.AVGdiametr = AvgDiametrIskus.text.toString().toFloatOrNull() ?: 0.0f
 
-            value?.estes?.o2 = estes02.text.toString().toInt()
-            value?.estes?.o5 = estes05.text.toString().toInt()
-            value?.estes?.o6 = estes06.text.toString().toInt()
-            value?.estes?.o11 = estes11.text.toString().toInt()
-            value?.estes?.o15 = estes15.text.toString().toInt()
-            value?.estes?.type = 2
-            value?.estes?.id_breed = Get_Id_breed_Class?.getidbreed(value_param, db)!!
-            value?.estes?.maxHeight = maksHeightestes.text.toString().toFloatOrNull() ?: 0.0f
-            value?.estes?.AVGHEight = AvgHeightestes.text.toString().toFloatOrNull() ?: 0.0f
-            value?.estes?.AVGdiametr = AvgDiametrestes.text.toString().toFloatOrNull() ?: 0.0f
+        if (value_param != "") {
+            var value = hashbufWood.get(value_param)
 
-            value?.estestvenn?.o2 = estestvennoe02.text.toString().toInt()
-            value?.estestvenn?.o5 = estestvennoe05.text.toString().toInt()
-            value?.estestvenn?.o6 = estestvennoe06.text.toString().toInt()
-            value?.estestvenn?.o11 = estestvennoe11.text.toString().toInt()
-            value?.estestvenn?.o15 = estestvennoe15.text.toString().toInt()
-            value?.estestvenn?.type = 3
-            value?.estestvenn?.id_breed = Get_Id_breed_Class?.getidbreed(value_param, db)!!
-            value?.estestvenn?.maxHeight =
-                maksHeightestestvennoe.text.toString().toFloatOrNull() ?: 0.0f
-            value?.estestvenn?.AVGHEight =
-                AvgHeightestestvennoe.text.toString().toFloatOrNull() ?: 0.0f
-            value?.estestvenn?.AVGdiametr =
-                AvgDiametrestestvennoe.text.toString().toFloatOrNull() ?: 0.0f
+            with(binding) {
+                value?.iskus?.o2 = iskus02.text.toString().toInt()
+                value?.iskus?.o5 = iskus05.text.toString().toInt()
+                value?.iskus?.o6 = iskus06.text.toString().toInt()
+                value?.iskus?.o11 = iskus11.text.toString().toInt()
+                value?.iskus?.o15 = iskus15.text.toString().toInt()
+                value?.iskus?.type = 1
+                value?.iskus?.id_breed = Get_Id_breed_Class?.getidbreed(value_param, db)!!
+                value?.iskus?.maxHeight = maksHeightIskus.text.toString().toFloatOrNull() ?: 0.0f
+                value?.iskus?.AVGHEight = AvgHeightIskus.text.toString().toFloatOrNull() ?: 0.0f
+                value?.iskus?.AVGdiametr = AvgDiametrIskus.text.toString().toFloatOrNull() ?: 0.0f
+
+                value?.estes?.o2 = estes02.text.toString().toInt()
+                value?.estes?.o5 = estes05.text.toString().toInt()
+                value?.estes?.o6 = estes06.text.toString().toInt()
+                value?.estes?.o11 = estes11.text.toString().toInt()
+                value?.estes?.o15 = estes15.text.toString().toInt()
+                value?.estes?.type = 2
+                value?.estes?.id_breed = Get_Id_breed_Class?.getidbreed(value_param, db)!!
+                value?.estes?.maxHeight = maksHeightestes.text.toString().toFloatOrNull() ?: 0.0f
+                value?.estes?.AVGHEight = AvgHeightestes.text.toString().toFloatOrNull() ?: 0.0f
+                value?.estes?.AVGdiametr = AvgDiametrestes.text.toString().toFloatOrNull() ?: 0.0f
+
+                value?.estestvenn?.o2 = estestvennoe02.text.toString().toInt()
+                value?.estestvenn?.o5 = estestvennoe05.text.toString().toInt()
+                value?.estestvenn?.o6 = estestvennoe06.text.toString().toInt()
+                value?.estestvenn?.o11 = estestvennoe11.text.toString().toInt()
+                value?.estestvenn?.o15 = estestvennoe15.text.toString().toInt()
+                value?.estestvenn?.type = 3
+                value?.estestvenn?.id_breed = Get_Id_breed_Class?.getidbreed(value_param, db)!!
+                value?.estestvenn?.maxHeight =
+                    maksHeightestestvennoe.text.toString().toFloatOrNull() ?: 0.0f
+                value?.estestvenn?.AVGHEight =
+                    AvgHeightestestvennoe.text.toString().toFloatOrNull() ?: 0.0f
+                value?.estestvenn?.AVGdiametr =
+                    AvgDiametrestestvennoe.text.toString().toFloatOrNull() ?: 0.0f
+            }
         }
     }
 
     //запись данных в хеш таблицу подлеска
     fun writedatapodles(value_param: String) {
-        val value = podlesokhash.get(value_param)
-        value?.value = binding.kolras.text.toString().toInt()
-        value?.avgHeightpodles = binding.avgHeight.text.toString().toFloat()
+        if (value_param != "") {
+
+            val value = podlesokhash.get(value_param)
+            value?.value = binding.kolras.text.toString().toInt()
+            value?.avgHeightpodles = binding.avgHeight.text.toString().toFloat()
+        }
+
     }
 
     //чтение данных из хеш таблицы
@@ -383,7 +391,6 @@ class Wood : BaseActivity("Пробная площадь") {
                     }
 
                 }
-                var a = hashbufWood
                 GetCountWood(itemView.toString())
 
                 //binding.valuewood.text=binding.asd.text

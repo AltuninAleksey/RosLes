@@ -170,8 +170,9 @@ class AddPorod : BaseActivity("Добавление") {
         for (i in 1..cursor.getCount()){
             hash.put(
             cursor.getString(cursor.getColumnIndex("name_breed")),
-            cursor.getString(cursor.getColumnIndex("id")).toInt())
+            cursor.getInt(cursor.getColumnIndex("id"))?:0)
             cursor.moveToNext()
+
         }
         cursor.close()
         return hash.get(value) // Q3?

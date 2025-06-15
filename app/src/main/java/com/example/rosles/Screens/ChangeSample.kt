@@ -82,13 +82,9 @@ class ChangeSample:AppCompatActivity() {
     fun RecyclerviewInit() {
         val buf: String?=intent.getStringExtra("id_sample")
         val id_vdomost: String?=intent.getStringExtra("id_vdomost")
-        var sPref =getSharedPreferences("PreferencesName", MODE_PRIVATE);
-        val id_user = sPref.getString("id", "")!!.toInt()
         val cursor=db.getSAMPLE(buf!!)
 
 
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-//        = LocalDateTime.now().format(formatter).toString()
 
 
         cursor.forEach{
@@ -113,9 +109,6 @@ class ChangeSample:AppCompatActivity() {
                 )
             db.Mark_Update_Sample(buf)
             db.Mark_Update_Listregion(id_vdomost!!)
-//            val intent = Intent(this, Sample::class.java)
-//            intent.putExtra("id_Vedomost", id_region)
-//            startActivity(intent)
             finish()
         }
         binding.date.setOnClickListener {
