@@ -100,6 +100,7 @@ async function setDataInPage() {
     document.getElementById("change_breed_and_structure_sapling").value = APP.documentData.change_breed_and_structure_sapling;
     document.getElementById("breed_composition_sapling_data_surver").value = APP.documentData.breed_composition;
     document.getElementById("results_surtvey").value = APP.documentData.results_surtvey;
+    document.getElementById("recovery_method").value = APP.documentData.recovery_method;
     document.getElementById("recommendation").value = APP.documentData.recomendation == null? "Отсутствует": APP.documentData.recomendation;
 
     let typeReproduction = document.getElementById("typeReproduction");
@@ -273,6 +274,7 @@ async function saveData() {
         id_schema_mixing_breeds: APP.documentData.id_schema_mixing_breeds,
         preservation_breed: APP.documentData.preservation_breed,
         number_region: number_region,
+        recovery_method: document.getElementById("recovery_method").value,
         gps: []
     };
 
@@ -408,7 +410,8 @@ async function generateDocx() {
         farm_according_data_survey: document.getElementById("farm_according_data_survey").options[document.getElementById("farm_according_data_survey").selectedIndex].text,
         breed_composition_sapling_data_surver: document.getElementById("breed_composition_sapling_data_surver").value,
         method_of_reforestation: document.getElementById("typeReproduction").options[document.getElementById("typeReproduction").selectedIndex].text,
-        name_dacha: document.getElementById("dacha").value
+        name_dacha: document.getElementById("dacha").value,
+        recovery_method: document.getElementById("recovery_method").value
     }
 
     var urlFile = await PlotDescriptionBusiness.generateDocx(data);

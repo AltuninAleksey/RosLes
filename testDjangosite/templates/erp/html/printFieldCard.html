@@ -138,6 +138,11 @@
                     <p>Выдел: <input class="mandatory" type="text" name="soil_lot" id="soil_lot" style="width: 95px"></p>
                     <p>Площадь участка: <input class="mandatory" type="text" name="sample_region" id="sample_region" style="width: 100px"></p>
                     <p>Квартал: <input class="mandatory" type="text" name="soil_lot" id="quarter" style="width: 95px; margin-left: 5px;"></p>
+                    <p style="width: 400px;">Лесной район:
+                        <select style="width: 247px;" name="forest_districts" id="forest_districts">
+<!--                                class="mandatory"-->
+                        </select>
+                    </p>
                 </form>
                 <h1 class="heading">Характеристики участка</h1>
                 <form action="" class="rerect r2 formcheck">
@@ -293,8 +298,10 @@
                     <p>В случае несоответствия участка критериям и требованиям к молоднякам, площади которых подлежат отнесению к землям, на которых
                         расположены леса, <p style="margin: -3px 0 1px" >указанным в Правилах лесовосстановления, утвержденных приказом Минприроды России от
                         <span id="number_order_2">25.03.2019 №188</span> (с изменениями) </p> <p> или лесохозяйственном регламенте лесничества,
-                        указать категорию земель фонда, к которой относится участок <span id="category_of_forest_fund_lands_2">вырубка</span> </p>
-                        <input type="text" name="plot_farm_referring_land" id="plot_farm_referring_land" style="width: 50%"></p>
+                        указать категорию земель фонда, к которой относится участок
+                        <select  type="text" name="plot_farm_referring_land" id="plot_farm_referring_land" style="width: 160px"></select>
+<!--                        <span id="category_of_forest_fund_lands_2">вырубка</span> </p>-->
+<!--                        <input type="text" name="plot_farm_referring_land" id="plot_farm_referring_land" style="width: 50%"></p>-->
 
                     <p>В случае отсутствия критериев для перевода в Правилах лесовосстановления необходимо внести реквизиты
                         лесохозяйственного регламента:</p>
@@ -321,7 +328,7 @@
                     <p>В присутствии</p>
                         <input  type="text" name="in_front" id="in_front" style="width: 50%">
                     <p>Дата и время натурного обследования
-                        <input  type="date" name="date_and_time" id="date_and_time" style="width: 100px">
+                        <input  type="date" name="date_and_time" id="date_and_time" style="width: 110px">
                         с <input  type="time" name="start_at" id="start_at" style="width: 100px">
                         по <input  type="time" name="end_at" id="end_at" style="width: 100px"></p>
                 </form>

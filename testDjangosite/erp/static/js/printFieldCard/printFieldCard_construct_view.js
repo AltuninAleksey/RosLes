@@ -112,25 +112,25 @@ function setEventListenerForObjects() {
        if (accord === "6") {
             document.getElementById('category_of_forest_fund_lands_other').style.display = 'block';
             document.getElementById('r1').style.height='240px';
-            document.getElementById('lands_other').onchange = function() {
-                document.getElementById('category_of_forest_fund_lands_2').innerHTML = document.getElementById('lands_other').value;
-            }
+//            document.getElementById('lands_other').onchange = function() {
+//                document.getElementById('category_of_forest_fund_lands_2').innerHTML = document.getElementById('lands_other').value;
+//            }
        } else {
             document.getElementById('category_of_forest_fund_lands_other').style.display = 'none';
             document.getElementById('r1').style.height='200px';
        }
 
-       if(accord === "6") {
-            document.getElementById('category_of_forest_fund_lands_2').innerHTML =
-            document.getElementById('lands_other').value == undefined? "":document.getElementById('lands_other').value;
-       } else {
-           for(var i = 0; i < APP.allCategoryOfForestFundLands.length; i++) {
-               if(APP.allCategoryOfForestFundLands[i].id == accord) {
-                   document.getElementById('category_of_forest_fund_lands_2').innerHTML = APP.allCategoryOfForestFundLands[i].name_category;
-                   break;
-               }
-           }
-       }
+//       if(accord === "6") {
+//            document.getElementById('category_of_forest_fund_lands_2').innerHTML =
+//            document.getElementById('lands_other').value == undefined? "":document.getElementById('lands_other').value;
+//       } else {
+//           for(var i = 0; i < APP.allCategoryOfForestFundLands.length; i++) {
+//               if(APP.allCategoryOfForestFundLands[i].id == accord) {
+//                   document.getElementById('category_of_forest_fund_lands_2').innerHTML = APP.allCategoryOfForestFundLands[i].name_category;
+//                   break;
+//               }
+//           }
+//       }
      }
 
 }
@@ -172,6 +172,7 @@ async function openPage() {
         APP.subjectrf.push(item_subject);
     }
 
+    APP.forestDistricts = await CommonBusiness.getForestDistricts();
 
     APP.documentData = await PrintFieldCardBusiness.getPrintFieldCardDataById(idDocument);
 
@@ -207,7 +208,23 @@ async function setConclusion() {
     document.getElementById("point7number2").value = APP.documentData.point7number;
     document.getElementById("point7agreed2").value = APP.documentData.point7agreed;
     document.getElementById("number_order").value = APP.documentData.number_order == null? "188" : APP.documentData.number_order;
-    document.getElementById("plot_farm_referring_land").value = APP.documentData.plot_farm_referring_land;
+
+
+    // MPO 24_03_2025
+    //document.getElementById("plot_farm_referring_land").value = APP.documentData.plot_farm_referring_land;
+    let plot_farm_referring_land = document.getElementById("plot_farm_referring_land");
+    let newHtml = "";
+
+    for(var i = 0; i < APP.allCategoryOfForestFundLands.length; i++) {
+        if(APP.allCategoryOfForestFundLands[i].id == Number(APP.documentData.plot_farm_referring_land)) {
+            newHtml = newHtml + "<option selected value=\"" + APP.allCategoryOfForestFundLands[i].id + "\">" + APP.allCategoryOfForestFundLands[i].name_category + "</option>";
+        } else {
+            newHtml = newHtml + "<option value=\"" + APP.allCategoryOfForestFundLands[i].id + "\">" + APP.allCategoryOfForestFundLands[i].name_category + "</option>";
+        }
+    }
+    plot_farm_referring_land.innerHTML = newHtml;
+
+
     document.getElementById("details_regulations").value = APP.documentData.details_regulations;
     document.getElementById("recomendation").value = APP.documentData.recomendation == null? "Отсутствует": APP.documentData.recomendation;
     document.getElementById("plot_features").value = APP.documentData.plot_features;
@@ -298,6 +315,7 @@ async function saveFieldCard() {
         id_forestly: lesName.value,
         id_quarter: quarter.value,
         id_subject_rf: APP.documentData.id_subject_rf, //regions.value,
+        id_forest_districts: document.getElementById("forest_districts").value,
         sample_region: document.getElementById("sample_region").value,
         soil_lot: document.getElementById("soil_lot").value,
         id_list_region: APP.documentData.id_list_region, //no
@@ -312,7 +330,8 @@ async function saveFieldCard() {
         width: null,
         lenght: null,
         square: null,
-        sample_area: 0
+        sample_area: 0,
+        square_one_sample_area: 0
     };
 
     if(document.getElementById("point7year").value != undefined && document.getElementById("point7year").value != null && document.getElementById("point7year").value != "") {
@@ -605,6 +624,7 @@ async function generateDocx() {
         id: Number(document.getElementById("idDocument").value),
         number_region: document.getElementById("number_region").value,
         subject_rf: CommonFunction.getSubjectNameByQuarterId(APP.subjectrf, document.getElementById("regionRF").value),
+        name_forest_district: CommonFunction.getForestDistrictsNameByForestDistrictsId(APP.forestDistricts, document.getElementById("forest_districts").value),
         forestly: CommonFunction.getForestlyNameByQuarterId(APP.forestly, document.getElementById("lesName").value),
         district_forestly: CommonFunction.getDistrictForestlyNameByQuarterId(APP.district_forestly, document.getElementById("ucLesName").value),
         name_quarter: document.getElementById("quarter").value,
@@ -652,7 +672,9 @@ async function generateDocx() {
     }
 
     if(!document.getElementById('plot_farm_referring_land').disabled) {
-        data.plot_farm_referring_land = document.getElementById("plot_farm_referring_land").value;
+        // MPO 24_03_2025
+        //data.plot_farm_referring_land = document.getElementById("plot_farm_referring_land").value;
+        data.plot_farm_referring_land = document.getElementById("plot_farm_referring_land").options[document.getElementById("plot_farm_referring_land").selectedIndex].text
     }
 
 

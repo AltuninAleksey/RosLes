@@ -1,4 +1,5 @@
 async function setDataInHeader() {
+    drawSelectForestDistricts();
     drawSelectSubjectRF();
     changeDataSelectForestly(APP.documentData.id_subject_rf);
 }
@@ -89,4 +90,18 @@ async function changeDataSelectQuarter(id) {
         APP.quarter = [];
     }
     drawSelectQuarter();
+}
+
+function drawSelectForestDistricts() {
+    var forest_districts = document.getElementById("forest_districts");
+    var newHtml = "";
+
+    for(var i = 0; i < APP.forestDistricts.length; i++) {
+        if(APP.forestDistricts[i].id == APP.documentData.id_forest_districts) {
+            newHtml = newHtml + "<option selected value=\"" + APP.forestDistricts[i].id + "\">" + APP.forestDistricts[i].name_forest_district + "</option>";
+        } else {
+            newHtml = newHtml + "<option value=\"" + APP.forestDistricts[i].id + "\">" + APP.forestDistricts[i].name_forest_district + "</option>";
+        }
+    }
+    forest_districts.innerHTML = newHtml;
 }

@@ -177,6 +177,22 @@ CommonBusiness.getCZL = async function() {
     return requestData.data;
 }
 
+CommonBusiness.getForestDistricts = async function() {
+
+    var token = document.cookie.match(/jwttoken=(.+?)(;|$)/)[1];
+
+    var requestData = await axios({
+        method: 'get',
+        url: urlGlobal + "/forest_districts",
+        responseType: 'json',
+        headers: {
+            'Authorization': 'Bearer ' + token
+        }
+    });
+
+    return requestData.data.data;
+}
+
 
 
 

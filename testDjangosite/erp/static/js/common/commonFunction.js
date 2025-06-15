@@ -1,5 +1,15 @@
 function CommonFunction() {}
 
+CommonFunction.getForestDistrictsNameByForestDistrictsId = function(forestDistrictsArray, id_forest_districts) {
+    for(var j = 0; j < forestDistrictsArray.length; j++) {
+        if(forestDistrictsArray[j].id == id_forest_districts) {
+            return forestDistrictsArray[j].name_forest_district;
+        }
+    }
+
+    return "";
+}
+
 CommonFunction.getQuarterNameByQuarterId = function(quarterArray, id_quarter) {
     for(var j = 0; j < quarterArray.length; j++) {
         if(quarterArray[j].id == id_quarter) {

@@ -53,6 +53,7 @@ async function openPage() {
 
     APP.deleteIdTableNull = [];
     APP.deleteIdTableOne = [];
+    APP.deleteIdTableThree = [];
 
 
     //var allForestData = await CommonBusiness.getAllForest();
@@ -224,6 +225,10 @@ async function saveRecalculating() {
 
     for(var i = 0; i <  APP.deleteIdTableNull.length; i++) {
         await RecalculatingDetailBusiness.deleteListById(APP.deleteIdTableNull[i]);
+    }
+
+    for(var i = 0; i < APP.deleteIdTableThree.length; i++) {
+        await RecalculatingDetailBusiness.deleteGpsPoint(APP.deleteIdTableThree[i]);
     }
 
     ShowModal('m1', 'Сохранение прошло успешно', '/static/img/check-circle-fill.svg')

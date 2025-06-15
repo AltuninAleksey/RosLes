@@ -1,4 +1,7 @@
 function setDataInTableFour() {
+
+    document.getElementById("id_sample-photo-point-add").value = APP.documentData.id;
+
     var table_4 = document.getElementById("table_4");
     var newHtml = "";
 
@@ -11,4 +14,24 @@ function setDataInTableFour() {
                                 </tr>`;
     }
     table_4.innerHTML = newHtml;
+
+    document.getElementById('form-photo-point-add').addEventListener('submit', async function(event) {
+        event.preventDefault();
+
+        const response = await fetch("" + urlGlobal + "/upload", {
+            method: 'POST',
+            body: new FormData(this)
+        });
+
+        closeAddForm('form-add-photo-point');
+
+        ShowModal('m1', 'Сохранение прошло успешно', '/static/img/check-circle-fill.svg')
+
+        setTimeout(function() {
+            let idDocument = document.getElementById("idDocument").value;
+            let idParent = document.getElementById("idParent").value;
+            getRecalculatingDetail(idDocument, idParent);
+        }, 3000);
+    });
+
 }

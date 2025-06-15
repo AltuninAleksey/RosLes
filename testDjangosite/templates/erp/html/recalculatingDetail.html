@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="{% static 'css/add-form-proba.css' %}">
     <link rel="stylesheet" href="{% static 'css/add-form-state.css' %}">
     <link rel="stylesheet" href="{% static 'css/add-form-gps.css' %}">
+    <link rel="stylesheet" href="{% static 'css/add-form-photo-point.css' %}">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.0/axios.js"></script>
     <script src="{% static 'js/global.js' %}"></script>
     <script src="{% static 'js/common/commonFunction.js' %}"></script>
@@ -248,18 +249,19 @@
                     <th class="gps-point-td2">Долгота</th>
                     <th class="gps-point-td2">Широта</th>
                     <th class="gps-point-td2">Центр</th>
+                    <th style="width: 1%;">
+                        <svg width="23px" height="23px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" >
+                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                            <g id="SVGRepo_iconCarrier">
+                                <path d="M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                            </g>
+                        </svg>
+                    </th>
                 </table>
                 <div class="scroll-table-body tbody-gps-point">
                     <table>
                         <tbody id="table_3">
-                            <tr>
-                                <td class="gps-point-td1">1</td>
-                                <td class="gps-point-td2">51.68</td>
-                                <td class="gps-point-td2">68.54</td>
-                                <td class="gps-point-td2">
-                                    <input type="checkbox">
-                                </td>
-                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -267,7 +269,7 @@
         </div>
         <div class="podlesok1 otstup2">
             <div class=" conpodles">
-                <div class="back butmenu podles" style="justify-content: flex-start; display: none">
+                <div class="back butmenu podles" style="justify-content: flex-start;" onclick="openAddForm('form-add-photo-point')">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin: 7px 10px 7px 15px;">
                         <circle cx="8" cy="8" r="8" fill="#177164"/>
                         <path d="M7.40002 8.60005V12.2H8.60002V8.60005H12.2V7.40005H8.60002V3.80005H7.40002V7.40005H3.79999V8.60005H7.40002Z" fill="white"/>
@@ -399,13 +401,42 @@
                 <div class="content">
                     <div class="form1">
                         <p class="p">Долгота</p>
-                        <input type="number" id="latitude-add">
+                        <input type="number" id="longitude-add">
                     </div>
                     <div class="form1">
                         <p class="p">Широта</p>
-                        <input class="longitude-add" type="number" id="longitude-add">
+                        <input class="longitude-add" type="number" id="latitude-add">
                         <button id="buttonAddGps">Добавить</button>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="form-add-photo-point" class="addFormfon display-none">
+            <div class="photo-point">
+                <h3>Добавление Фото-точки</h3>
+                <div class="exitFormAddGps" onclick="closeAddForm('form-add-photo-point')"></div>
+                <div class="content">
+                    <form id="form-photo-point-add" method="post" action="" enctype="multipart/form-data">
+                        <input id="id_sample-photo-point-add" type="hidden" name="id_sample">
+                        <div class="form1">
+                            <p class="p">Дата</p>
+                            <input name="date" type="datetime-local" id="date-photo-point-add">
+                        </div>
+                        <div class="form1">
+                            <p class="p">Долгота</p>
+                            <input step="any" name="longitude" type="number" id="longitude-photo-point-add">
+                        </div>
+                        <div class="form1">
+                            <p class="p">Широта</p>
+                            <input step="any" name="latitude" class="longitude-add" type="number" id="latitude-photo-point-add">
+                        </div>
+                        <div class="form1">
+                            <p class="p">Фото</p>
+                            <input name="photo" class="longitude-add" type="file" id="file-photo-point-add">
+                        </div>
+                        <button id="buttonAddPhotoPoint">Добавить</button>
+                    </form>
                 </div>
             </div>
         </div>

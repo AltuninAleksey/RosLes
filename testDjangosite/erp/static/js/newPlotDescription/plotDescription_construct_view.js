@@ -221,7 +221,8 @@ async function saveData() {
         width: null,
         lenght: null,
         square: null,
-        sample_area: 0
+        sample_area: 0,
+        recovery_method: document.getElementById("recovery_method").value
     }
 
     if(year_assignment_land != null && year_assignment_land != undefined && year_assignment_land != "") {
@@ -317,6 +318,10 @@ async function saveData() {
         ShowModal('m1', 'Заполните все обязательные поля!', '/static/img/exclamation-circle.svg')
         return;
     }
+
+//    console.log(data);
+//
+//    return;
 
     await NewPlotDescriptionBusiness.createPlotDescription(data);
 

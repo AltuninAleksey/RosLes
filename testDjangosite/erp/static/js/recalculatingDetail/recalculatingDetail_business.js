@@ -64,3 +64,13 @@ RecalculatingDetailBusiness.deleteListById = async function(id) {
 
     return requestData.data.get;
 }
+
+RecalculatingDetailBusiness.deleteGpsPoint = async function(id) {
+    var requestData = await axios({
+      method: 'delete',
+      url: urlGlobal + "/gps/" + id,
+      responseType: 'json'
+    });
+
+    return requestData.data.get;
+}

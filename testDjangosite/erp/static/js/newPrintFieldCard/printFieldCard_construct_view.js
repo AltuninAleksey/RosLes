@@ -176,6 +176,7 @@ async function openPage() {
         APP.subjectrf.push(item_subject);
     }
 
+    APP.forestDistricts = await CommonBusiness.getForestDistricts();
 
     APP.documentData = {};
 
@@ -258,6 +259,7 @@ async function saveFieldCard() {
         id_forestly: lesName.value,
         id_quarter: quarter.value,
         id_subject_rf: Number(APP.userData.id_subject_rf),//regions.value,
+        id_forest_districts: document.getElementById("forest_districts").value,
         number_region: document.getElementById("number_region").value,
         sample_region: document.getElementById("sample_region").value,
         soil_lot: document.getElementById("soil_lot").value,
