@@ -1123,10 +1123,8 @@ class GetAllListRegionData(viewsets.ViewSet):
                 if k.get("id_main_subject") != subject_id:
                     lst = ListRegion.objects.filter(
                         id_district_forestly_id__id_forestly_id__id_subject_rf_id=k.get('id_main_subject'))
-                    try:
-                        data.append(GetAllListRegionDataSerializer(lst, many=True).data)
-                    except Exception as e:
-                        print(f'ERROR {e}')
+
+                    data.append(GetAllListRegionDataSerializer(lst, many=True).data)
                 break
             if len(czl_objects):
                 print(czl_objects)
@@ -2345,9 +2343,9 @@ class GetAllListFieldDesc(ListAPIView):
             data = []
             data_field = []
             desc_field = []
-            if not ListRegion.objects.filter(
-                    id_district_forestly_id__id_forestly_id__id_subject_rf_id=subject_id).exists():
-                return Response({"data": []})
+            # if not ListRegion.objects.filter(
+            #         id_district_forestly_id__id_forestly_id__id_subject_rf_id=subject_id).exists():
+            #     return Response({"data": []})
             lst = ListRegion.objects.filter(
                 id_district_forestly__isnull=False,
                 id_district_forestly_id__id_forestly_id__id_subject_rf_id=subject_id)
