@@ -1,5 +1,5 @@
 from distutils.fancy_getopt import wrap_text
-
+from staticpy.form_excel_draw_list3 import main_draw
 import openpyxl
 from openpyxl.styles import PatternFill, Alignment, Font, Border, Side
 from openpyxl.workbook import Workbook
@@ -107,6 +107,8 @@ def create_header(sheets, data):
             sam = 1
         sheets['K5'].value = (data['square'] / data['count_sample_area']) / 10000
     except:
+        if len_samples_res == 0:
+            len_samples_res = 1
         sheets['K5'].value = (data['square']/len_samples_res)/10000
     sheets['K5'].border = Border(bottom=Side(style="thin"))
     sheets.merge_cells("I5:J5")
@@ -521,33 +523,6 @@ def list_region_excel(data: dict):
     last_col = start_col
     last_row = start_row
     if len(data['repro_1']['breeds_data']) == 0 and len(data['repro_2']['breeds_data'])== 0 and len(data['repro_3']['breeds_data'])==0:
-        # for i in range(3):
-        #     last_row, last_col = draw_empty_col(sheets, last_col)
-        #
-        # sheets.merge_cells(start_row=7, start_column=start_col, end_row=7, end_column=start_col + 4)
-        # sheets.cell(row=7, column=start_col+5, value='Естественное возобновление (семенное)')
-        # sheets.merge_cells(start_row=7, start_column=start_col+5, end_row=7, end_column=start_col + 9)
-        # sheets.cell(row=7, column=start_col + 10, value='Естественное возобновление (вегетативное)')
-        # sheets.merge_cells(start_row=7, start_column=start_col+10, end_row=7, end_column=start_col + 14)
-        #
-        #
-        #
-        # cur_row = 12
-        # sheets.cell(row=cur_row, column=1, value="Итого:")
-        # sheets.cell(row=cur_row + 1, column=1, value="Всего")
-        # sheets.cell(row=cur_row + 2, column=1, value="на 1 Га")
-        #
-        # last_cell = sheets.cell(row=cur_row + 2, column=last_col - 1)
-        #
-        # set_border(sheets, f"A7:{last_cell.coordinate}")
-        #
-        # for i in range(7):
-        #     rd = sheets.row_dimensions[i]
-        #     rd.height = 30
-        #
-        # for row in sheets.iter_rows():
-        #     for cell in row:
-        #         cell.alignment = Alignment(wrap_text=True, vertical='top')
 
         new_sheet = wb.create_sheet('Подлесок')
         undergrowth_excel(new_sheet, data=data)
@@ -567,16 +542,7 @@ def list_region_excel(data: dict):
     for i in data['name_breeds']:
         true_breeds[i['id']] = i['name_breed']
 
-    # type_repro: [
-    #     {
-    #         "1":
-    #             "id_breed": [{
-    #                   "id_sample": lists of this sample},
-    #                   {"id_sample": lists of this sample
-    # }]
-    #         "2": ....
-    #     }
-    # ]
+
     samples_row = {}
     step = 0
     if len(data['repro_1']['breeds_data']) == 0:
