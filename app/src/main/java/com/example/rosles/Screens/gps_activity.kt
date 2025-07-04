@@ -1,13 +1,8 @@
 package com.example.rosles.Screens
 
-import android.Manifest
-import android.content.Context
+import android.annotation.SuppressLint
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.location.Location
-import android.location.LocationManager
 import android.os.Bundle
-import android.location.LocationListener
 import android.os.Looper
 import android.view.Menu
 import android.view.MenuItem
@@ -18,9 +13,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.view.forEach
-import androidx.core.view.get
 import androidx.core.view.size
 import com.example.rosles.DBCountWood
 import com.example.rosles.Network.ViewModels
@@ -38,6 +30,7 @@ class gps_activity : AppCompatActivity() {
 
 
 
+    @SuppressLint("DefaultLocale")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = GpsBinding.inflate(layoutInflater)
@@ -72,11 +65,11 @@ class gps_activity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            var tableRow = TableRow(this)
-            var text1 = TextView(this)
-            var text2 = TextView(this)
-            var text3 = TextView(this)
-            var checkBox = CheckBox(this)
+            val tableRow = TableRow(this)
+            val text1 = TextView(this)
+            val text2 = TextView(this)
+            val text3 = TextView(this)
+            val checkBox = CheckBox(this)
 
             text1.textAlignment = View.TEXT_ALIGNMENT_CENTER
             text2.textAlignment = View.TEXT_ALIGNMENT_CENTER
@@ -89,8 +82,11 @@ class gps_activity : AppCompatActivity() {
             checkBox.setTextColor(-0x1000000)
 
             text1.setText(i.toString())
-            text2.setText(gpsManager.longitude.toString())
-            text3.setText(gpsManager.latitude.toString())
+            text2.setText(String.format("%.6f", gpsManager.latitude).replace(',','.'))
+            text3.setText(String.format("%.6f", gpsManager.longitude).replace(',','.'))
+
+
+
 
             val gpsData = GPS_Data(
                 text1.toString(),
@@ -150,11 +146,11 @@ class gps_activity : AppCompatActivity() {
 
 
         Gps_Data_List.forEach { gps ->
-                var tableRow = TableRow(this)
-                var text1 = TextView(this)
-                var text2 = TextView(this)
-                var text3 = TextView(this)
-                var checkBox = CheckBox(this)
+                val tableRow = TableRow(this)
+                val text1 = TextView(this)
+                val text2 = TextView(this)
+                val text3 = TextView(this)
+                val checkBox = CheckBox(this)
 
                 text1.textAlignment = View.TEXT_ALIGNMENT_CENTER
                 text2.textAlignment = View.TEXT_ALIGNMENT_CENTER
@@ -189,7 +185,7 @@ class gps_activity : AppCompatActivity() {
 
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(com.example.rosles.R.menu.menu, menu)
+        menuInflater.inflate(R.menu.menu, menu)
         return true
     }
 
