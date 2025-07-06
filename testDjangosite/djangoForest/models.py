@@ -156,7 +156,7 @@ class List(models.Model):
     mark_update = models.IntegerField(null=True, default=0)
     age = models.IntegerField(verbose_name="Возраст", null=True)
     ratio_composition = models.IntegerField(verbose_name="Коэфф. состава", null=True)
-    unique_uid = models.UUIDField(default=uuid.uuid4, unique=True, null=True)
+    unique_uid = models.UUIDField(default=uuid.uuid4, unique=True)
 
 
     class Meta:
@@ -194,11 +194,11 @@ class ListRegion(models.Model):
     name_quarter = models.CharField(max_length=300, verbose_name='Квартал', null=True)
     dacha = models.CharField(max_length=300, verbose_name='Урочище', null=True)
     soil_lot = models.CharField(max_length=300, verbose_name='Выдел', default=0, null=True)
-    mark_del = models.IntegerField(null = True)
+    mark_del = models.IntegerField(null = True )
     mark_update = models.IntegerField(null= True)
     number_region = models.CharField(max_length=100, default=0)
     id_profile = models.ForeignKey("Profile", on_delete=models.CASCADE, null=True)
-    unique_uid = models.UUIDField(default=uuid.uuid4, unique=True, null=True)
+    unique_uid = models.UUIDField(default=uuid.uuid4, unique=True)
 
     class Meta:
         verbose_name = 'Перечетная ведомость участка'
@@ -227,7 +227,7 @@ class Sample(models.Model):
     lenght = models.FloatField(u'Длина', null=True, default=0)
     square = models.FloatField(u'Площадь', null=True, default=0)
     mark_update = models.IntegerField(null=True, default=0)
-    unique_uid = models.UUIDField(default=uuid.uuid4, unique=True, null=True)
+    unique_uid = models.UUIDField(default=uuid.uuid4, unique=True)
     # id_list_region_uuid = models.ForeignKey()
 
 
@@ -544,7 +544,7 @@ class DescriptionRegion(models.Model):
     # id_method_of_reforestation = models.ForeignKey("MethodOfReforestation",
     #                                                on_delete=models.CASCADE, verbose_name="Способ лесовосстановления",
     #                                                null=True)
-    recovery_method = models.CharField(max_length=500,  null=True)
+    recovery_method = models.CharField(max_length=500, null=True)
     year_assignment_land = models.IntegerField(choices=YEAR_CHOICES, default=datetime.datetime.now().year,
                                             verbose_name="Год отнесения к землям", null=True)
     year_format_fond_trees = models.IntegerField(choices=YEAR_CHOICES, default=datetime.datetime.now().year,
