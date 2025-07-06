@@ -2048,8 +2048,14 @@ class FormingDocxView(ListAPIView):
 
     def post(self, request, *args, **kwargs):
         from staticpy import forming_docx
+        photo = PhotoPoint.objects.filter(
+            id_sample__in = Sample.objects.filter(id_list_region__in = FieldCard.objects.filter(
+                id=request.data['id']).values('id_list_region')).values('id')
+        ).values('photo')
 
-        path_docx = forming_docx.forming_docx_fieldcard(request.data)
+        print(photo)
+
+        path_docx = forming_docx.forming_docx_fieldcard(request.data, photo)
         return Response({"document": path_docx})
 
 
