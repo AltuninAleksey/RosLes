@@ -1,10 +1,10 @@
 from xml.dom.minidom import Document
 
-from docx.shared import Pt
+from docx.shared import Pt, Inches
 from jinja2.runtime import new_context
 
-from testDjangosite.settings import BASE_DIR
-from docxtpl import DocxTemplate
+from testDjangosite.settings import BASE_DIR, MEDIA_ROOT
+from docxtpl import DocxTemplate, InlineImage
 from docx import Document
 import os
 import uuid
@@ -14,10 +14,346 @@ import uuid
 # название описание участка тоже самое
 # две новых таблицы для хранения ссылок на полевую карточку и описание участка
 
-def forming_docx_fieldcard(context: dict):
+def form_docx_listregion2(context: dict):
+    # print(context['data'][0:3])
+    # print(f"ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ {len(context)}")
+    context = dict(sorted(context.items()))
+    trees_row = 1
+    ids_list = []
+    get_repro(context)
+    head_len = len(context['repro_1']) + len(context['repro_2']) + len(context['repro_3'])
+    print(head_len)
+    all_breeds = []
+    data = {"head": ["Искусственное восстановление", "Естесственное возобновление(семенное)",
+                     "Естесственное возобновление(вегатативное)"],
+            "head_len": head_len,
+            "breeds": "Порода: ",
+            "hg": "Макс. высота: ",
+            "hg_names": ['До 0,2', '0,21-0,5', '0,6-1,0', '1,1-1,5', 'Более 1,5'],
+            # "data_breeds_id": [1,2,3,4,5,6,7,8,9]
+            }
+    breeds = get_all_breeds(context)
+    hg = get_all_max_height(context)
+    data.update({"data_breeds": breeds, "max_height": hg})
+    doc = DocxTemplate(os.path.abspath(f"{BASE_DIR}/media/lst_template_1.docx"))
+    filepath = os.path.abspath(f"{BASE_DIR}/media/list_region/list_region_{context['id']}.docx")
+    doc.render(context)
+    doc.save(filepath)
+    doc = Document(filepath)
+    section = doc.sections[-1]
+    # section.orientation = 'LANDSCAPE'
+    res_len = len(context['breeds_1_data']) + len(context['breeds_2_data']) + len(context['breeds_3_data'])
+    table = doc.add_table(1, res_len)
+    table.style = 'Table Grid'
+    head_row = table.rows[0].cells
+    head_row[0].text = data['head'][0]
+    # if len(context['breeds_2_data']) != 0:
+    head_row[len(context['breeds_1_data'])].text = data['head'][1]
+    if len(context['breeds_3_data']) != 0:
+        head_row[len(context['breeds_1_data']) + len(context['breeds_2_data'])].text = data['head'][2]
+    else:
+        head_row[-1].text = data['head'][2]
+    print(f"BREEDS_1_DATA {context['breeds_1_data']}")
+    # head_row[len(context['repro_1'])].text = data['head'][1]
+    # head_row[len(context['repro_1']) + len(context['repro_2'])].text = data['head'][2]
+    ## Добавляем 2 новых строки, для породы и максимум
+    table.add_row()
+    table.add_row()
+    breeds_cells = table.rows[1].cells
+    hg_cells = table.rows[2].cells
+    for i in range(res_len):
+        hg_cells[i].text = data['hg'] + str(data['max_height'][i])
+    # sum_breeeds - все id-шники деревьев без повторений
+    sum_breeds = context['breeds_1_data'] + context['breeds_2_data'] + context['breeds_3_data']
+    # выводим айдишники деревьев
+    for i in range(len(sum_breeds)):
+        # breeds_cells[i].text = data['breeds'] + str(sum_breeds[i])
+        for j in context['name_breeds']:
+            if sum_breeds[i] == j['id']:
+                breeds_cells[i].text = data['breeds'] + str(j['name_breed']) + str(j['id'])
+
+    # # Создание таблицы где от 0,2 и т.д.
+    new_table = doc.add_table(1, res_len * 5)
+    new_table.style = 'Table Grid'
+    new_table.add_row()
+    hg_names_row = new_table.rows[0].cells
+    first_trees = new_table.rows[trees_row].cells
+    print(f"HG DATA 3 {context['breeds_3_data']}")
+    j = 0
+    for i in range(len(hg_names_row)):
+        if j == len(data['hg_names']):
+            j = 0
+        while i != len(hg_names_row):
+            hg_names_row[i].text = data['hg_names'][j]
+            hg_names_row[i].paragraphs[0].runs[0].font.size = Pt(8)
+            j += 1
+            break
+    repro1_breeds = data['data_breeds'][0:len(context['repro_1'])]
+    max_row_table_2 = get_max_row(data['data_breeds'])
+    for i in range(10):
+        new_table.add_row()
+    # print(repro1_breeds)
+    # Сделать функцию которая считает максимальное возможно количество строк которые нужно создать в этой таблице исходя из количества
+    # дублирующихся элементов для каждого repro, после чего сравнить количество элементов для каждого repro и на основе этого
+    # создать соотвествующее количество строк
+    # далее, в цикле ниже есть идея использовать некий счеткик для подсчета текущий строки, дабы можно было прыгать по этим строкам
+    # либо прям в цикле создавать и заполнять нееобходимые строки.
+    cur_row = 1
+    id_breed = 0
+    last_index = 0
+    cur_index = 0
+    print(context['hg_data_1'])
+    for i in range(len(new_table.rows[-1].cells)):
+        new_table.rows[-1].cells[i].text = "0"
+    # сделать чт обы в зависимости от шага записывало данные в соответ. столбец
+    step = 5
+    cur_breeds = []
+    cur_breeds_dict = {}
+    samples_id_dict = {}
+    AGAIN = False
+    for i in range(len(context['repro_1'])):
+        cur_row = 1
+        # cur_index = 0
+        # print(context['repro_1'][i]['id_breed'])
+        if context['repro_1'][i]['id_breed'] in cur_breeds:
+            # cur_row += cur_breeds.count(context['repro_1'][i]['id_breed'])
+            # cur_index = cur_breeds.index(context['repro_1'][i]['id_breed'])*5
+            # cur_index = ''.join(cur_breeds).rindex(context['repro_1'][i]['id_breed'])
+            cur_index = max(idx for idx, val in enumerate(cur_breeds) if val == context['repro_1'][i]['id_breed']) * 5
+            print(f"BREED {context['repro_1'][i]['id_breed']}")
+            print(f"INDEX {cur_index}")
+            print(f"CUR_BREED {cur_breeds}")
+            # cur_breeds.append(context['repro_1'][i]['id_breed'])
+            # cur_breeds_dict.update({context['repro_1'][i]['id_breed']: i-1})
+            AGAIN = True
+        else:
+            cur_breeds.append(context['repro_1'][i]['id_breed'])
+            cur_breeds_dict[context['repro_1'][i]['id_breed']] = i
+            samples_id_dict[context['repro_1'][i]['id_sample']] = cur_row
+        # print(context['repro_1'][i]['count_of_plants'])
+        res = get_cur_breed(context['repro_1'][i])
+        if AGAIN:
+            pos = cur_breeds_dict[context['repro_1'][i]['id_breed']] * 5
+            first_trees = new_table.rows[cur_row].cells[pos:pos + 5]
+            # new_table.rows[-1].cells[pos].text += str(int(new_table.rows[-1].cells[pos].text)+int(res[j]))
+            for j in range(5):
+                if first_trees[j].text == '':
+                    first_trees[j].text = str(0 + int(res[j]))
+                else:
+                    first_trees[j].text = str(int(first_trees[j].text) + int(res[j]))
+            print(res[j])
+            # AGAIN = False
+            # new_table_total.rows[0].cells[cur_breeds_dict[context['repro_1'][i]['id_breed']]].text = str(int(new_table_total.rows[0].cells[cur_breeds_dict[context['repro_1'][i]['id_breed']]].text) +res[j])
+        else:
+            first_trees = new_table.rows[cur_row].cells[cur_index:cur_index + 5]
+            for j in range(5):
+                first_trees[j].text = str(res[j])
+        AGAIN = False
+        cur_index+= 5
+        print(f"CUR INDEX {cur_index}")
+    cur_breeds.clear()
+    cur_breeds_dict.clear()
+    AGAIN = False
+    cur_index = len(context['breeds_1_data']) * 5
+    cur_index_1 = cur_index
+    saved_index = cur_index
+    # выводить не больше 3 пород
+    for i in range(len(context['repro_2'])):
+        AGAIN = False
+        cur_row = 1
+        if context['repro_2'][i]['id_breed'] in cur_breeds:
+            # cur_row += cur_breeds.count(context['repro_2'][i]['id_breed'])
+            # cur_index = cur_breeds.index(context['repro_1'][i]['id_breed'])*5
+            # cur_index = ''.join(cur_breeds).rindex(context['repro_1'][i]['id_breed'])
+            cur_index = max(idx for idx, val in enumerate(cur_breeds) if val == context['repro_2'][i]['id_breed']) * 5
+            print(f"BREED {context['repro_2'][i]['id_breed']}")
+            print(f"INDEX {cur_index}")
+            print(f"CUR_BREED {cur_breeds}")
+            cur_breeds.append(context['repro_2'][i]['id_breed'])
+            # cur_breeds_dict.update({context['repro_2'][i]['id_breed']: i})
+            AGAIN = True
+        else:
+            cur_breeds.append(context['repro_2'][i]['id_breed'])
+            cur_breeds_dict[context['repro_2'][i]['id_breed']] = i
+        res = get_cur_breed(context['repro_2'][i])
+        if AGAIN:
+            pos = saved_index + cur_breeds_dict[context['repro_2'][i]['id_breed']] * 5
+            # first_trees = new_table.rows[cur_row].cells[pos:len(context['breeds_1_data']) * 5 + cur_index + step]
+            first_trees = new_table.rows[cur_row].cells[pos:]
+            for j in range(5):
+                if first_trees[j].text == '':
+                    first_trees[j].text = str(0 + int(res[j]))
+                else:
+                    first_trees[j].text = str(int(first_trees[j].text) + int(res[j]))
+        else:
+            first_trees = new_table.rows[cur_row].cells[cur_index_1:]
+            for j in range(5):
+                first_trees[j].text = str(res[j])
+        # try:
+        #     first_trees[j].text = str(res[j])
+        # except:
+        #     cur_index-=5
+        print(f"CUR_INDEX {cur_index_1}")
+        # first_trees[j].text = str(res[j])
+        # for j in range(len(res)):
+        #     if AGAIN:
+        #         pos = ((len(context['breeds_1_data'])*5)) + cur_breeds_dict[context['repro_2'][i]['id_breed']] * 5
+        #         # first_trees = new_table.rows[cur_row].cells[pos:len(context['breeds_1_data']) * 5 + cur_index + step]
+        #         first_trees = new_table.rows[cur_row].cells[pos:]
+        #     else:
+        #         first_trees = new_table.rows[cur_row].cells[cur_index_1:]
+        #     # try:
+        #     #     first_trees[j].text = str(res[j])
+        #     # except:
+        #     #     cur_index-=5
+        #     print(f"CUR_INDEX {cur_index_1}")
+        #     first_trees[j].text = str(res[j])
+        # if cur_index != 0:
+        #     cur_index_1 += 5
+        cur_index_1+=5
+        cur_index = 0
+
+    cur_breeds.clear()
+    cur_breeds_dict.clear()
+    AGAIN = False
+    cur_index = (len(context['breeds_1_data']) + len(context['breeds_2_data'])) * 5
+    cur_index_1 = cur_index
+    saved_index = cur_index_1
+
+    step = 10
+    for i in range(len(context['repro_3'])):
+        AGAIN = False
+        cur_row = 1
+        if context['repro_3'][i]['id_breed'] in cur_breeds:
+            # cur_row += cur_breeds.count(context['repro_3'][i]['id_breed'])
+            cur_index = max(idx for idx, val in enumerate(cur_breeds) if val == context['repro_3'][i]['id_breed']) * 5
+            print(f"BREED {context['repro_3'][i]['id_breed']}")
+            print(f"INDEX {cur_index}")
+            print(f"CUR_BREED {cur_breeds}")
+            # cur_breeds.append(context['repro_3'][i]['id_breed'])
+            # cur_breeds_dict.update({context['repro_2'][i]['id_breed']: i})
+            AGAIN = True
+        else:
+            cur_breeds.append(context['repro_3'][i]['id_breed'])
+            cur_breeds_dict[context['repro_3'][i]['id_breed']] = i
+        res = get_cur_breed(context['repro_3'][i])
+        if AGAIN:
+            pos = saved_index + cur_breeds_dict[context['repro_3'][i]['id_breed']] * 5
+            # first_trees = new_table.rows[cur_row].cells[pos:len(context['breeds_1_data']) * 5 + cur_index + step]
+            first_trees = new_table.rows[cur_row].cells[pos:]
+            for j in range(5):
+                if first_trees[j].text == '':
+                    first_trees[j].text = str(0 + int(res[j]))
+                else:
+                    first_trees[j].text = str(int(first_trees[j].text) + int(res[j]))
+        else:
+            first_trees = new_table.rows[cur_row].cells[cur_index_1:]
+            for j in range(5):
+                first_trees[j].text = str(res[j])
+        # for j in range(len(res)):
+        #     if AGAIN:
+        #         pos = saved_index + cur_breeds_dict[context['repro_3'][i]['id_breed']] * 5
+        #         first_trees = new_table.rows[cur_row].cells[pos:]
+        #         # (len(context['breeds_1_data']) + len(context['breeds_2_data']) * 5) + cur_index + step
+        #     else:
+        #         first_trees = new_table.rows[cur_row].cells[
+        #                       cur_index_1:]
+        #         # len(context['breeds_1_data']) * 5 + cur_index + step + 5
+        #     # try:
+        #     #     first_trees[j].text = str(res[j])
+        #     # except: continue
+        #     first_trees[j].text = str(res[j])
+        # if cur_index != 0:
+        #     cur_index_1 += 5
+        cur_index_1 += 5
+        cur_index = 0
+
+    for i in range(0, len(new_table.columns)):
+        # print(new_table.columns[i].cells[2].text)
+        for j in range(1, len(new_table.rows)):
+            if new_table.columns[i].cells[j].text == '':
+                break
+            new_table.rows[-1].cells[i].text = str(int(new_table.rows[-1].cells[i].text) +int(new_table.columns[i].cells[j].text))
+    # new_table_total.add_row()
+    # total of every breeds new table
+
+    new_table_total = doc.add_table(1, res_len)
+    new_table_total.style = 'Table Grid'
+    new_ga = doc.add_table(1, res_len)
+    new_ga.style = 'Table Grid'
+    for i in range(res_len):
+        new_table_total.rows[0].cells[i].text = "0"
+    now = 0
+    for i in range(res_len):
+        for j in range(now, now+5):
+            new_table_total.rows[0].cells[i].text = str(int(new_table_total.rows[0].cells[i].text)+ int(new_table.rows[-1].cells[j].text))
+        if context['count_sample_area'] > 1:
+            new_ga.rows[0].cells[i].text = str(round(int(new_table_total.rows[0].cells[i].text)/context['sample_area']))
+        else:
+            new_ga.rows[0].cells[i].text = str(
+                round(int(new_table_total.rows[0].cells[i].text) / context['square_one_sample_area'], 2))
+        now+=5
+        # Сюда добавить условие на счет 1/несколько пп, пока сделаю так
+
+
+
+
+    filepath = os.path.abspath(f"{BASE_DIR}/media/list_region/list_region_{context['id']}.docx")
+    doc.save(filepath)
+    # print(context['data'][0:3])
+    print("ДЕЛО СДЕЛАНО")
+    return filepath.split("testDjangosite")[1]
+
+
+def prepare_to_docx2(context):
+    #Буду тут брать id лист региона и по одному вытаскивать из БД сэмплы, и на их основе рисовать таблицы
+    # в form_docx делать блок try которая в зависимости от сортировки будет рисовать новую таблицу, либо использовать текущую
+    if len(context['unique']) > 2:
+        first_uniq = context['unique'][0:2]
+        print(f"FIRST UNIIIIIIIIIIIIIIIIIIIIIIQ {first_uniq})")
+        second_uniq = context['unique'][2:]
+        print(f"FIRST UNIIIIIIIIIIIIIIIIIIIIIIQ {second_uniq})")
+        data = []
+        data2 = []
+        new_context = context.copy()
+        new_context.pop("data")
+        for i in range(len(context['data'])):
+            # print(context['data'][i]['id_breed'])
+            if context['data'][i]['id_breed'] in first_uniq:
+                print("ДА Я БЫЛ ЗДЕСЬ БЛЯТЬ НАХУЙ ЕБАНЫЙ В РООООООООООООООООООООООООООООООООООООООООТ")
+                data.append(context['data'][i])
+            else:
+                data2.append(context['data'][i])
+
+        new_context.update({"data": data})
+        print(f"NEW CKLSAJDNFDOPCJKSLDGNKLSNGKLSDNGKLSDNGLK SND{new_context}")
+        res = form_docx_listregion2(new_context)
+        new_context.pop('data')
+        new_context.update({"data": data2})
+        # res = form_docx_listregion2(new_context)
+        return res
+    res = form_docx_listregion2(context)
+    return res
+
+def forming_docx_fieldcard(context: dict, photo_arr: list = None):
     doc = DocxTemplate(os.path.abspath(f"{BASE_DIR}/media/fieldcard.docx"))
+    doc_image_arr = []
+    if photo_arr is not None:
+        for path_image in photo_arr:
+            doc_image_arr.append(InlineImage(doc, image_descriptor=MEDIA_ROOT + '/' + path_image['photo'], width=Inches(6), height=Inches(9) ))
+    # print(context)
+    print(MEDIA_ROOT)
+    context['images'] = doc_image_arr
     doc.render(context)
     filepath = os.path.abspath(f"{BASE_DIR}/media/docx_files/fieldcards/fieldcard_{context['id']}.docx")
+
+
+    # print(doc_image_arr)
+    # new_context = {'images': doc_image_arr}
+
+    # doc.render(new_context)
+
+
     doc.save(filepath)
     return filepath.split("testDjangosite")[1]
 
@@ -168,7 +504,9 @@ def get_cur_breed(repro_1: dict) -> list[int]:
     return res
 
 
-def form_docx_listregion(context: dict):
+def form_docx_listregion(context: dict, filepath:str):
+    # print(context['data'][0:3])
+    # print(f"ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ {len(context)}")
     trees_row = 1
     ids_list = []
     get_repro(context)
@@ -186,20 +524,24 @@ def form_docx_listregion(context: dict):
     breeds = get_all_breeds(context)
     hg = get_all_max_height(context)
     data.update({"data_breeds": breeds, "max_height": hg})
-    doc = DocxTemplate(os.path.abspath(f"{BASE_DIR}/media/lst_template_1.docx"))
-    filepath = os.path.abspath(f"{BASE_DIR}/media/list_region/list_region_{context['id']}.docx")
-    doc.render(context)
-    doc.save(filepath)
+    # doc = DocxTemplate(os.path.abspath(f"{BASE_DIR}/media/lst_template_1.docx"))
+    # filepath = os.path.abspath(f"{BASE_DIR}/media/list_region/list_region_{context['id']}.docx")
+    # doc.render(context)
+    # doc.save(filepath)
     doc = Document(filepath)
-    # section = doc.sections[-1]
+    section = doc.sections[-1]
     # section.orientation = 'LANDSCAPE'
     res_len = len(context['breeds_1_data']) + len(context['breeds_2_data']) + len(context['breeds_3_data'])
     table = doc.add_table(1, res_len)
     table.style = 'Table Grid'
     head_row = table.rows[0].cells
     head_row[0].text = data['head'][0]
+    # if len(context['breeds_2_data']) != 0:
     head_row[len(context['breeds_1_data'])].text = data['head'][1]
-    head_row[len(context['breeds_1_data']) + len(context['breeds_2_data'])].text = data['head'][2]
+    if len(context['breeds_3_data']) != 0:
+        head_row[len(context['breeds_1_data']) + len(context['breeds_2_data'])].text = data['head'][2]
+    else:
+        head_row[-1].text = data['head'][2]
     print(f"BREEDS_1_DATA {context['breeds_1_data']}")
     # head_row[len(context['repro_1'])].text = data['head'][1]
     # head_row[len(context['repro_1']) + len(context['repro_2'])].text = data['head'][2]
@@ -214,7 +556,10 @@ def form_docx_listregion(context: dict):
     sum_breeds = context['breeds_1_data'] + context['breeds_2_data'] + context['breeds_3_data']
     # выводим айдишники деревьев
     for i in range(len(sum_breeds)):
-        breeds_cells[i].text = data['breeds'] + str(sum_breeds[i])
+        # breeds_cells[i].text = data['breeds'] + str(sum_breeds[i])
+        for j in context['name_breeds']:
+            if sum_breeds[i] == j['id']:
+                breeds_cells[i].text = data['breeds'] + str(j['name_breed'])
 
     # # Создание таблицы где от 0,2 и т.д.
     new_table = doc.add_table(1, res_len * 5)
@@ -234,7 +579,7 @@ def form_docx_listregion(context: dict):
             break
     repro1_breeds = data['data_breeds'][0:len(context['repro_1'])]
     max_row_table_2 = get_max_row(data['data_breeds'])
-    for i in range(3):
+    for i in range(10):
         new_table.add_row()
     # print(repro1_breeds)
     # Сделать функцию которая считает максимальное возможно количество строк которые нужно создать в этой таблице исходя из количества
@@ -277,13 +622,25 @@ def form_docx_listregion(context: dict):
         for j in range(len(res)):
             if AGAIN:
                 pos = cur_breeds_dict[context['repro_1'][i]['id_breed']] * 5
-                first_trees = new_table.rows[cur_row].cells[pos:cur_index+step]
+                first_trees = new_table.rows[cur_row].cells[pos:]
                 # new_table.rows[-1].cells[pos].text += str(int(new_table.rows[-1].cells[pos].text)+int(res[j]))
                 print(res[j])
                 # new_table_total.rows[0].cells[cur_breeds_dict[context['repro_1'][i]['id_breed']]].text = str(int(new_table_total.rows[0].cells[cur_breeds_dict[context['repro_1'][i]['id_breed']]].text) +res[j])
             else:
-                first_trees = new_table.rows[cur_row].cells[cur_index:cur_index + step]
+                first_trees = new_table.rows[cur_row].cells[cur_index:]
                 # new_table.rows[-1].cells[cur_index].text += str(int(new_table.rows[-1].cells[cur_index].text)+int(res[j]))
+            # try:
+            #     first_trees[j].text = str(res[j])
+            # except:
+            #     cur_index-=5
+            #     if AGAIN:
+            #         pos = cur_breeds_dict[context['repro_1'][i]['id_breed']] * 5
+            #         first_trees = new_table.rows[cur_row].cells[pos:]
+            #         # new_table.rows[-1].cells[pos].text += str(int(new_table.rows[-1].cells[pos].text)+int(res[j]))
+            #         print(res[j])
+            #         # new_table_total.rows[0].cells[cur_breeds_dict[context['repro_1'][i]['id_breed']]].text = str(int(new_table_total.rows[0].cells[cur_breeds_dict[context['repro_1'][i]['id_breed']]].text) +res[j])
+            #     else:
+            #         first_trees = new_table.rows[cur_row].cells[cur_index:]
             first_trees[j].text = str(res[j])
             # new_table.rows[-1].cells[j].text += str(res[j])
         cur_index+= 5
@@ -315,12 +672,19 @@ def form_docx_listregion(context: dict):
         for j in range(len(res)):
             if AGAIN:
                 pos = ((len(context['breeds_1_data'])*5)) + cur_breeds_dict[context['repro_2'][i]['id_breed']] * 5
-                first_trees = new_table.rows[cur_row].cells[pos:len(context['breeds_1_data']) * 5 + cur_index + step]
+                # first_trees = new_table.rows[cur_row].cells[pos:len(context['breeds_1_data']) * 5 + cur_index + step]
+                first_trees = new_table.rows[cur_row].cells[pos:]
             else:
-                first_trees = new_table.rows[cur_row].cells[cur_index_1:len(context['breeds_1_data'])* 5 + cur_index + step + 5]
+                first_trees = new_table.rows[cur_row].cells[cur_index_1:]
+            # try:
+            #     first_trees[j].text = str(res[j])
+            # except:
+            #     cur_index-=5
+            print(f"CUR_INDEX {cur_index_1}")
             first_trees[j].text = str(res[j])
-        if cur_index != 0:
-            cur_index_1 += 5
+        # if cur_index != 0:
+        #     cur_index_1 += 5
+        cur_index_1+=5
         cur_index = 0
 
     cur_breeds.clear()
@@ -336,8 +700,6 @@ def form_docx_listregion(context: dict):
         cur_row = 1
         if context['repro_3'][i]['id_breed'] in cur_breeds:
             cur_row += cur_breeds.count(context['repro_3'][i]['id_breed'])
-            # cur_index = cur_breeds.index(context['repro_1'][i]['id_breed'])*5
-            # cur_index = ''.join(cur_breeds).rindex(context['repro_1'][i]['id_breed'])
             cur_index = max(idx for idx, val in enumerate(cur_breeds) if val == context['repro_3'][i]['id_breed']) * 5
             print(f"BREED {context['repro_3'][i]['id_breed']}")
             print(f"INDEX {cur_index}")
@@ -352,16 +714,19 @@ def form_docx_listregion(context: dict):
         for j in range(len(res)):
             if AGAIN:
                 pos = saved_index + cur_breeds_dict[context['repro_3'][i]['id_breed']] * 5
-                print(f"POOOOOOOOOOOOOOOOOOOOOOS {pos}")
                 first_trees = new_table.rows[cur_row].cells[pos:]
                 # (len(context['breeds_1_data']) + len(context['breeds_2_data']) * 5) + cur_index + step
             else:
                 first_trees = new_table.rows[cur_row].cells[
                               cur_index_1:]
                 # len(context['breeds_1_data']) * 5 + cur_index + step + 5
+            # try:
+            #     first_trees[j].text = str(res[j])
+            # except: continue
             first_trees[j].text = str(res[j])
-        if cur_index != 0:
-            cur_index_1 += 5
+        # if cur_index != 0:
+        #     cur_index_1 += 5
+        cur_index_1 += 5
         cur_index = 0
 
     for i in range(0, len(new_table.columns)):
@@ -396,7 +761,69 @@ def form_docx_listregion(context: dict):
 
     filepath = os.path.abspath(f"{BASE_DIR}/media/list_region/list_region_{context['id']}.docx")
     doc.save(filepath)
+    # print(context['data'][0:3])
+    print("ДЕЛО СДЕЛАНО")
     return filepath.split("testDjangosite")[1]
+
+
+def prep_to_form(context:dict):
+    doc = DocxTemplate(os.path.abspath(f"{BASE_DIR}/media/lst_template_1.docx"))
+    filepath = os.path.abspath(f"{BASE_DIR}/media/list_region/list_region_{context['id']}.docx")
+    doc.render(context)
+    doc.save(filepath)
+    # context = dict(sorted(context.items()))
+    get_repro(context)
+    # new_context = dict(sorted(context.items()))
+    new_context = context.copy()
+    print(f"CONTEXTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT\n {context}")
+    new_context.pop('data')
+    res = ''
+    sum_breeds = context['breeds_1_data'] + context['breeds_2_data'] + context['breeds_3_data']
+    print(f"SUM BREEEEEEEEEEEEEEEEEEDS{len(sum_breeds)}")
+    print(len(context['data'])//2)
+    step = 0
+    while True:
+        if len(context['data']) >= 8:
+            new_context.update({"data": context['data'][0:8]})
+
+            print(f"COOOOOOOOOOOOOOOOONTEXT PERED")
+            print(context)
+            context.update({"data": context['data'][8:]})
+            print(f"COOOOOOOOOOOOOOOOONTEXT AFTER")
+            print(context)
+            res = form_docx_listregion(new_context, filepath)
+            new_context.pop('data')
+        else:
+            new_context.update({"data": context['data'][0:len(context['data'])]})
+            context.update({"data": context['data'][:len(context['data'])]})
+            res = form_docx_listregion(new_context, filepath)
+            break
+    # if len(sum_breeds) > 7:
+    #     new_context.update({'data': context['data'][0:len(context['data']) // 2]})
+    #     # print(new_context)
+    #     res = form_docx_listregion(new_context, filepath)
+    #     new_context.pop('data')
+    #     new_context.update({'data': context['data'][len(context['data']) // 2:]})
+    #     print(f"CONTEXT NEW {new_context}")
+    #     res = form_docx_listregion(new_context, filepath)
+    # else:
+    #     # new_context.update({'data': context['data']})
+    #     res = form_docx_listregion(context, filepath)
+    # if len(context['data']) > 8:
+    #     for i in range(0, len(context['data']), 8):
+    #         if i + 8 > len(context['data']):
+    #             new_context.update({"data": context['data'][i:len(context['data'])]})
+    #             break
+    #         elif i >= len(context['data']):
+    #             new_context.update({"data":context['data'][i-8:len(context['data'])]})
+    #         else:
+    #             new_context.update({"data": context['data'][i:i + 8]})
+    #         res = form_docx_listregion(new_context, filepath)
+    #         new_context.pop('data')
+    # else:
+    #     res = form_docx_listregion(context, filepath)
+
+    return res
 
 
 test_data = {
@@ -408,6 +835,7 @@ test_data = {
     "sample_area": 5,
     "name_quarter": "тестовый квартал",
     "square_one_sample_area": 480,
+    "count_sample_area": 3,
 
     "data": [
         {
@@ -476,7 +904,7 @@ test_data = {
             "id": 446,
             "id_breed": 1,
             "id_sample": 368,
-            "id_type_of_reproduction": 2,
+            "id_type_of_reproduction": 1,
             "main": 0,
             "mark_update": 1,
             "max_height": 77,
@@ -494,7 +922,7 @@ test_data = {
             "id": 447,
             "id_breed": 5,
             "id_sample": 368,
-            "id_type_of_reproduction": 3,
+            "id_type_of_reproduction": 1,
             "main": 0,
             "mark_update": 1,
             "max_height": 14,
@@ -512,7 +940,7 @@ test_data = {
             "id": 449,
             "id_breed": 6,
             "id_sample": 368,
-            "id_type_of_reproduction": 2,
+            "id_type_of_reproduction": 1,
             "main": 0,
             "mark_update": 0,
             "max_height":15,
@@ -530,7 +958,7 @@ test_data = {
             "id": 450,
             "id_breed": 6,
             "id_sample": 368,
-            "id_type_of_reproduction": 3,
+            "id_type_of_reproduction": 1,
             "main": 0,
             "mark_update": 0,
             "max_height": 16,
@@ -548,7 +976,7 @@ test_data = {
             "id": 452,
             "id_breed": 6,
             "id_sample": 368,
-            "id_type_of_reproduction": 2,
+            "id_type_of_reproduction": 1,
             "main": 0,
             "mark_update": 2,
             "max_height": 17,
@@ -566,7 +994,7 @@ test_data = {
             "id": 453,
             "id_breed": 6,
             "id_sample": 368,
-            "id_type_of_reproduction": 3,
+            "id_type_of_reproduction": 1,
             "main": 0,
             "mark_update": 2,
             "max_height":18,
@@ -577,3 +1005,4 @@ test_data = {
 }
 
 # form_docx_listregion(test_data)
+# prep_to_form(test_data)

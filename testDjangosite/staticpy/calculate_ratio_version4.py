@@ -96,5 +96,6 @@ def calculate(data, square_data):
     # return_data = percent_of_breed(return_data, all_plants)
     # print(breed_list)
     # print(all_plants)
+    return_data = sorted(return_data, key=lambda d: d['ratio_composition'], reverse=True)
 
     return return_data
