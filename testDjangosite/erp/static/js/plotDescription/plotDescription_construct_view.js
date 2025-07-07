@@ -265,7 +265,7 @@ async function saveData() {
         id_forestly: lesName,
         id_list_region: APP.documentData.id_list_region,
         date: APP.documentData.date,
-        sample_region: sample_region,
+        sample_region: String(sample_region).replace(/,/g, '.'),
         soil_lot: soil_lot,
         id_subject_rf: regions,
         dacha: document.getElementById("dacha").value == "" ? null : document.getElementById("dacha").value,
@@ -274,7 +274,7 @@ async function saveData() {
         id_schema_mixing_breeds: APP.documentData.id_schema_mixing_breeds,
         preservation_breed: APP.documentData.preservation_breed,
         number_region: number_region,
-        recovery_method: document.getElementById("recovery_method").value,
+        recovery_method: document.getElementById("recovery_method").value == "" ? null : document.getElementById("recovery_method").value,
         gps: []
     };
 

@@ -163,7 +163,7 @@ async function saveData() {
 
     var data = {
         date: dateStatementNode,
-        sample_region: sampleRegionStatementNode,
+        sample_region: String(sampleRegionStatementNode).replace(/,/g, '.'),
         mark_del: 0,
         mark_update: 0,
         number_region: numberStatementNode,

@@ -77,9 +77,9 @@ function setEventListenerForObjects() {
 
     var completeness = document.getElementById('completeness');
     completeness.onchange = function() {
-        if(Number(completeness.value) > 1) {
-            completeness.value = 1;
-        }
+//        if(Number(completeness.value) > 1) {
+//            completeness.value = 1;
+//        }
 
         if(Number(completeness.value) < 0) {
             completeness.value = 0;
@@ -88,9 +88,9 @@ function setEventListenerForObjects() {
 
     var completeness2 = document.getElementById('completeness2');
     completeness2.onchange = function() {
-        if(Number(completeness2.value) > 1) {
-            completeness2.value = 1;
-        }
+//        if(Number(completeness2.value) > 1) {
+//            completeness2.value = 1;
+//        }
 
         if(Number(completeness2.value) < 0) {
             completeness2.value = 0;
@@ -316,7 +316,7 @@ async function saveFieldCard() {
         id_quarter: quarter.value,
         id_subject_rf: APP.documentData.id_subject_rf, //regions.value,
         id_forest_districts: document.getElementById("forest_districts").value,
-        sample_region: document.getElementById("sample_region").value,
+        sample_region: String(document.getElementById("sample_region").value).replace(/,/g, '.'),
         soil_lot: document.getElementById("soil_lot").value,
         id_list_region: APP.documentData.id_list_region, //no
         date: APP.documentData.date,

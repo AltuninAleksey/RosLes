@@ -181,7 +181,7 @@ async function changeDataSelectQuarter(id) {
 async function saveData() {
 
     let number_region = document.getElementById("number_region").value;
-    let sample_region = document.getElementById("sample_region").value;
+    let sample_region = String(document.getElementById("sample_region").value).replace(/,/g, '.');
     let soil_lot = document.getElementById("soil_lot").value;
     let year_assignment_land = document.getElementById("year_assignment_land").value;
     let year_format_fond_trees = document.getElementById("year_format_fond_trees").value;
@@ -222,7 +222,7 @@ async function saveData() {
         lenght: null,
         square: null,
         sample_area: 0,
-        recovery_method: document.getElementById("recovery_method").value
+        recovery_method: document.getElementById("recovery_method").value == "" ? null : document.getElementById("recovery_method").value
     }
 
     if(year_assignment_land != null && year_assignment_land != undefined && year_assignment_land != "") {
