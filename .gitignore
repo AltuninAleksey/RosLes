@@ -85,3 +85,5 @@ lint/tmp/
 # lint/reports/
 
 media/photos/
+media/excel_files/
+media/docx_files/
