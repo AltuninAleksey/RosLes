@@ -80,7 +80,7 @@ def create_header(sheets, data):
     sheets['L2'].border = Border(top=Side(style="thin"), bottom=Side(style="thin"))
     sheets['L2'].border = Border(right=Side(style="thin"), bottom=Side(style="thin"))
 
-    sheets['M2'].value = "Категория, год"
+    sheets['M2'].value = "Категория"
     sheets['M2'].border = Border(top=Side(style="thin"), bottom=Side(style="thin"))
     sheets['M2'].border = Border(right=Side(style="thin"), bottom=Side(style="thin"))
 
@@ -119,11 +119,6 @@ def main_draw(sheets, data: dict = None):
     print(data['data'])
     for row in range(len(data['data'])):
         first_sample = SampleSerializer(Sample.objects.filter(id_list_region=data['data'][row]['id']).first()).data
-        # ds_forestly = DistrictForestly.objects.filter(id=data['data'][row]['id_district_forestly']).values("name_district_forestly",
-        #                                                                                      "id_forestly").get()
-        # forestly = Forestly.objects.filter(id=ds_forestly['id_forestly']).values("name_forestly").get()
-        # print(data['data'])
-        print(f"ID LIST REGIOPN {data['data'][row]['id']}")
         field = FieldCardSerializer(FieldCard.objects.get(id_list_region=data['data'][row]['id'])).data
         desc = DescriptionRegionSerializer(DescriptionRegion.objects.get(id_list_region=data['data'][row]['id'])).data
 
@@ -137,22 +132,26 @@ def main_draw(sheets, data: dict = None):
         sheets.cell(row=row + 3, column=8).value = data['data'][row]['sample_region']
         sheets.cell(row=row + 3, column=9).value = field['point7number']
         sheets.cell(row=row + 3, column=10).value = field['point7date']
-        sheets.cell(row=row + 3, column=11).value = field['date_and_time']
-        sheets.cell(row=row + 3, column=12).value = desc['year_assignment_land']
+        sheets.cell(row=row + 3, column=11).value = field['point7year']
+        # sheets.cell(row=row + 3, column=13).value = desc['year_assignment_land']
         if field['rent_area'] is False:
-            sheets.cell(row=row + 3, column=13).value = 'Нет'
+            sheets.cell(row=row + 3, column=12).value = 'Нет'
         else:
-            sheets.cell(row=row + 3, column=13).value = 'Да'
+            sheets.cell(row=row + 3, column=12).value = 'Да'
         if field['id_category_of_forest_fund_lands'] is None:
-            sheets.cell(row=row + 3, column=14).value = "Не указано"
+            sheets.cell(row=row + 3, column=13).value = "Не указано"
         else:
-            sheets.cell(row=row + 3, column=14).value = cats[field['id_category_of_forest_fund_lands']]
+            sheets.cell(row=row + 3, column=13).value = cats[field['id_category_of_forest_fund_lands']]
         if field['id_method_of_reforestation'] is None:
             sheets.cell(row=row + 3, column=15).value = "Не указано"
         else:
             sheets.cell(row=row + 3, column=15).value = methods[field['id_method_of_reforestation']]
-        # sheets.cell(row=row + 3, column=16).value = desc['recovery_method']
-        sheets.cell(row=row + 3, column=17).value = 'Уточнить'
+        sheets.cell(row=row + 3, column=14).value = field['time_of_reforestation']
+        sheets.cell(row=row + 3, column=16).value = desc['recovery_method']
+        if field['conclusion'] is None:
+            sheets.cell(row=row + 3, column=17).value = 'Соответствует'
+        else:
+            sheets.cell(row=row + 3, column=17).value = field['conclusion']
         if field['respond_farm'] is False:
             sheets.cell(row=row + 3, column=18).value = "Нет"
         else:
