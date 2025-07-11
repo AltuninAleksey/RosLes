@@ -1475,10 +1475,12 @@ class ListRegionFilters(ListAPIView):
         except:
             ser2 = ListRegion.objects.all()
         if request.data['bSubjectrf']:
-            ser2 = ListRegion.objects.all()
+            # ser2 = ListRegion.objects.all()
             idSubjectrf = request.data['idSubjectrf']
             print("subjectrf")
             ser2 = ser2.filter(id_district_forestly__id_forestly__id_subject_rf = idSubjectrf)
+        if request.data['bQuarter']:
+            ser2 = ser2.filter(name_quarter = request.data['name_quarter'])
         if request.data['bForestly']:
             idForestly = request.data['idForestly']
             ser2 = ser2.filter(id_district_forestly__id_forestly = idForestly)
@@ -1703,6 +1705,8 @@ class DescriptionRegionFilter(ListAPIView):
         if request.data['bSoil_lot']:
             requestSoil_lot = request.data['soil_lot']
             ser2 = ser2.filter(id_list_region__soil_lot = requestSoil_lot)
+        if request.data['bQuarter']:
+            ser2 = ser2.filter(id_list_region__name_quarter = request.data['name_quarter'])
         ser2 = DescriptionRegionSerializer(ser2, many=True)
         return Response({"data": ser2.data})
 
@@ -1884,6 +1888,8 @@ class FieldCardFilter(ListAPIView):
         if request.data['bSoil_lot']:
             requestSoil_lot = request.data['soil_lot']
             ser2 = ser2.filter(id_list_region__soil_lot = requestSoil_lot)
+        if request.data['bQuarter']:
+            ser2 = ser2.filter(id_list_region__name_quarter = request.data['name_quarter'])
         ser2 = FieldCardSerializer(ser2, many=True)
         return Response({"data": ser2.data})
 
