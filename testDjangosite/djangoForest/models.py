@@ -6,6 +6,7 @@ import datetime
 # from .manager import AccountManager
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.contrib.auth.hashers import make_password
+from staticpy.get_local_id_czl import get_local_id_czl
 
 class AccountManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -196,7 +197,7 @@ class ListRegion(models.Model):
     soil_lot = models.CharField(max_length=300, verbose_name='Выдел', default=0, null=True)
     mark_del = models.IntegerField(null = True )
     mark_update = models.IntegerField(null= True)
-    number_region = models.CharField(max_length=100, default=0)
+    number_region = models.IntegerField(null=True)
     id_profile = models.ForeignKey("Profile", on_delete=models.CASCADE, null=True)
     unique_uid = models.UUIDField(default=uuid.uuid4, unique=True)
 
@@ -210,7 +211,11 @@ class ListRegion(models.Model):
 
     def save(self, *args, **kwargs):
         super(ListRegion, self).save(*args, **kwargs)
-        ListRegion.objects.update(number_region = F('id'))
+
+        id_czl = get_local_id_czl(self.id_profile.id)
+
+        ListRegion.objects.filter(id=self.id).update(number_region = id_czl['number_region__max'] + 1)
+        # ListRegion.objects.update(number_region = F('id'))
         # print(self.number_region)
 
 
