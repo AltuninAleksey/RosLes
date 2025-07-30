@@ -337,7 +337,6 @@ class ListRegionView(generics.ListCreateAPIView):
                 request.data['unique_uid'] = request.data.pop('id')
         serializer = ListRegionSerializer(data=request.data)
         if not serializer.is_valid():
-            print(serializer.errors)
             return Response({"error": status.HTTP_400_BAD_REQUEST,
                              "error_text": serializer.errors[next(iter(serializer.errors))][0]},
                             status=status.HTTP_400_BAD_REQUEST)
@@ -390,7 +389,6 @@ class ListRegionView(generics.ListCreateAPIView):
                         serealizer.is_valid(raise_exception=False)
                         serealizer.save()
             elif request.data['data'][i]['mark_update'] == 2:
-                print(request.data['data'][i])
                 if 'id' in request.data['data'][i] and not isinstance(request.data['data'][i]['id'], int) :
                     request.data['data'][i]['unique_uid']  = request.data['data'][i].pop('id')
                 serializer = ListRegionSerializer(data=request.data['data'][i])
@@ -499,7 +497,6 @@ class SampleView(generics.ListCreateAPIView):
                 if isinstance(request.data['data'][i]['id'], int):
                     if Sample.objects.filter(id=request.data['data'][i]["id"]).exists():
                         instance = Sample.objects.get(id=request.data['data'][i]["id"])
-                        print(instance)
                         serealizer = SampleSerializer(data=request.data["data"][i], instance=instance)
                         serealizer.is_valid(raise_exception=True)
                         serealizer.save()
@@ -515,7 +512,6 @@ class SampleView(generics.ListCreateAPIView):
                                     unique_uid=uuid.UUID(request.data['data'][i]['id_list_region'])).values('id')
                                 request.data['data'][i]['id_list_region'] = id_list_region[0]['id']
                         instance = Sample.objects.get(unique_uid=request.data['data'][i]["unique_uid"])
-                        print(instance)
                         serealizer = SampleSerializer(data=request.data["data"][i], instance=instance)
                         serealizer.is_valid(raise_exception=True)
                         serealizer.save()
@@ -798,13 +794,11 @@ class QuarterView(generics.ListCreateAPIView):
                 return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
                                 status=status.HTTP_404_NOT_FOUND)
         cache_data = cache.get("all_quarters")
-        # print(cache_data)
+
         if cache_data is None:
             cache_data = Quarter.objects.all()
             cache.set("all_quarters", cache_data)
-            print("all_quarters all cached")
         else:
-            print("otdal cache")
             return Response({'get': QuarterSerializer(cache_data, many=True).data})
         lst = Quarter.objects.all()
         return Response({'get':QuarterSerializer(lst, many=True).data})
@@ -923,7 +917,6 @@ class Point7TableView(ListAPIView):
     def get(self, request, *args, **kwargs):
         if kwargs:
             try:
-                print(kwargs['pk'])
                 lst = List.objects.filter(id_sample__id_list_region = kwargs["pk"]).values(
                     "age", "ratio_composition", "avg_height", "avg_diameter", "count_of_plants", "id_breed")
                 # print(lst)
@@ -951,7 +944,7 @@ class Point7TableSaplingView(ListAPIView):
         for id in data:
             sample_obj.append(id['id_sample'])
         sample_data = SampleSerializer(Sample.objects.filter(id__in=sample_obj), many=True).data
-        print(sample_data)
+
 
         # print(data)
         # print(data[0])
@@ -1103,7 +1096,6 @@ class GetAllListRegionData(viewsets.ViewSet):
     def list(self, request, **kwargs):
         # print(request.user.subject_rf_id)
         subject_id = request.user.subject_rf_id
-        print(subject_id)
         if subject_id:
             data = []
             # if not ListRegion.objects.filter(
@@ -1127,7 +1119,6 @@ class GetAllListRegionData(viewsets.ViewSet):
                     data.append(GetAllListRegionDataSerializer(lst, many=True).data)
                 break
             if len(czl_objects):
-                print(czl_objects)
                 for i in czl_objects:
                     if i.get('id_subject') != subject_id:
                         lst = ListRegion.objects.filter(
@@ -1278,7 +1269,6 @@ class GetQuarterByArrayDistrictIds(ListAPIView):
         for i in request.data['data']:
             quarter = GetQuarterByDistrictForestlyIdSerializer(
                 Quarter.objects.filter(id_district_forestly=i['id']), many=True).data
-            print(quarter)
             data.append({"quarter": quarter})
         return Response({"data": data}, status=status.HTTP_200_OK)
 
@@ -1294,7 +1284,6 @@ class UnionListRegions(generics.ListCreateAPIView):
             lst = Sample.objects.filter(id_list_region = i['id']).update(id_list_region = request.data['id'])
             object_region = ListRegion.objects.get(id=i['id'])
             object_region.delete()
-        print(request.data['id'])
         lst_sample = Sample.objects.filter(id_list_region = request.data['id'])
         return Response({"result": "Success"})
 
@@ -1372,7 +1361,6 @@ class PhotoPointView(APIView):
         #     if not isinstance(request.data['id'], int):
         #         request.data['unique_uid'] = request.data.pop('id')
         # if 'id_sample' in request.data and uuid.UUID(request.data['id_sample'], uuid.uuid4()):
-        print(request.data)
         try:
             id_sample = request.data.get('id_sample')
             if '"' in id_sample:
@@ -1477,7 +1465,6 @@ class ListRegionFilters(ListAPIView):
         if request.data['bSubjectrf']:
             # ser2 = ListRegion.objects.all()
             idSubjectrf = request.data['idSubjectrf']
-            print("subjectrf")
             ser2 = ser2.filter(id_district_forestly__id_forestly__id_subject_rf = idSubjectrf)
         if request.data['bQuarter']:
             ser2 = ser2.filter(name_quarter = request.data['name_quarter'])
@@ -1573,12 +1560,10 @@ class GetAllDescriptionRegion(ListAPIView):
                 if k.get("id_main_subject") != subject_id:
                     lst = DescriptionRegion.objects.filter(
                         id_list_region__id_district_forestly_id__id_forestly_id__id_subject_rf_id=k.get("id_main_subject"))
-                    print(f"lst: {len(lst)}")
                     data.append(DescriptionRegionSerializer(lst, many=True).data)
                 break
             if len(czl_objects):
                 for i in czl_objects:
-                    print(f"czl subject {i.get('id_subject')}")
                     if i.get('id_subject') != subject_id:
                         lst = DescriptionRegion.objects.filter(
                             id_list_region__id_district_forestly_id__id_forestly_id__id_subject_rf_id=i.get('id_subject'))
@@ -1590,7 +1575,6 @@ class GetAllDescriptionRegion(ListAPIView):
     def post(self, request, *args, **kwargs):
         list_serializer = ListRegionSerializer(data=request.data)
         if not list_serializer.is_valid():
-            print(list_serializer.errors)
             return Response({"error_list_region": status.HTTP_400_BAD_REQUEST,
                              "error_text": list_serializer.errors[next(iter(list_serializer.errors))][0]},
                             status=status.HTTP_400_BAD_REQUEST)
@@ -2448,3 +2432,16 @@ class ForestDistrictView(APIView):
         return Response({'data': ForestDistrictSerializer(data, many=True).data})
 
 
+class Nullview(APIView):
+
+    def get(self, request, *args, **kwargs):
+        from time import sleep
+        # for i in range(400, 720):
+        #     if ListRegion.objects.filter(id=i).exists():
+        #         # ListRegion.objects.filter(id=i).update(number_region = None)
+        #         lst = ListRegion.objects.get(id=i)
+        #         lst.save()
+                #
+        lst = ListRegion.objects.get(id=348)
+        lst.save()
+        return Response(0)

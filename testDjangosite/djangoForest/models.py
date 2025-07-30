@@ -211,10 +211,12 @@ class ListRegion(models.Model):
 
     def save(self, *args, **kwargs):
         super(ListRegion, self).save(*args, **kwargs)
+        if self.number_region is None:
+            print("number region is None, calculating local czl")
+            id_czl = get_local_id_czl(self.id_profile.id)
 
-        id_czl = get_local_id_czl(self.id_profile.id)
-
-        ListRegion.objects.filter(id=self.id).update(number_region = id_czl['number_region__max'] + 1)
+            ListRegion.objects.filter(id=self.id).update(number_region = id_czl['number_region__max'] + 1)
+        print("number region is not None")
         # ListRegion.objects.update(number_region = F('id'))
         # print(self.number_region)
 
