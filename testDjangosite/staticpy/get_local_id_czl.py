@@ -17,7 +17,6 @@ def get_local_id_czl(id_profile: int) -> int:
         list_czl = CZL.objects.filter(id_main_subject = main_czl['id_main_subject']).values('id_subject_id')
         # list_czl.append(main_czl[0])
     lst_subject = SubjectRF.objects.filter(Q(id__in = list_czl) | Q(id = main_czl['id_main_subject']))
-    print(list_czl)
     lst_region = ListRegion.objects.filter(id_profile_id__id_user_id__subject_rf_id__in = lst_subject)
     id_czl = lst_region.aggregate(Max('number_region'))
     if id_czl['number_region__max'] is None:
