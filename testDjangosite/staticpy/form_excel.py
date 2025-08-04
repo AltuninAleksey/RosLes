@@ -37,7 +37,7 @@ def create_header(sheets, data):
     sheets['A2'].border = Border(top=Side(style="thin"),bottom=Side(style="thin"))
     sheets['A2'].border = Border(top=Side(style="thin"),bottom=Side(style="thin"))
     sheets.merge_cells("B2:F2")
-    sheets['G2'].value = data['id']
+    sheets['G2'].value = data['number_region']
     sheets['G2'].border = Border(top=Side(style="thin"),bottom=Side(style="thin"))
     sheets['H2'].border = Border(top=Side(style="thin"),bottom=Side(style="thin"))
     sheets['I2'].border = Border(top=Side(style="thin"),bottom=Side(style="thin"))
