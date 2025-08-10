@@ -28,9 +28,8 @@ def create_header(sheets):
     # sheets.merge_cells("A1:B1")
 
 
-def form_getlistregion(data: dict ):
+def form_getlistregion(data: dict ) -> str:
     filepath = f'{BASE_DIR}/media/excel_files/listregion/listregionfilters_{data["id_user"]}.xlsx'
-    print(data['data'])
     col = ["Номер", 'Дата', 'Участковое лесничество', 'лесничество', 'Субъект РФ', 'Урочище', 'Выдел', 'Площадь', 'Квартал']
     col2 = ["Номер", 'Дата', 'Участковое лесничество', 'лесничество', 'Субъект РФ', 'Урочище', 'Выдел', 'Квартал']
     df = pd.DataFrame(data['data'])

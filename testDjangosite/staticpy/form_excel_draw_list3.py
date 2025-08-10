@@ -122,7 +122,7 @@ def main_draw(sheets, data: dict = None):
         field = FieldCardSerializer(FieldCard.objects.get(id_list_region=data['data'][row]['id'])).data
         desc = DescriptionRegionSerializer(DescriptionRegion.objects.get(id_list_region=data['data'][row]['id'])).data
 
-        sheets.cell(row=row+3, column=1).value = data['data'][row]['id']
+        sheets.cell(row=row+3, column=1).value = data['data'][row]['number_region']
         sheets.cell(row=row+3, column=2).value = data['data'][row]['date']
         sheets.cell(row=row+3, column=3).value = data['data'][row]['forestly']
         sheets.cell(row=row + 3, column=4).value = data['data'][row]['id_district_forestly']
