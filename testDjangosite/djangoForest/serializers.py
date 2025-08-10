@@ -1020,7 +1020,7 @@ class ListFieldSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ListRegion
-        fields = ['id', 'date', 'id_district_forestly', 'forestly', 'id_subject_rf', 'dacha', 'soil_lot', 'sample_region', 'name_quarter']
+        fields = ['number_region', 'date', 'id_district_forestly', 'forestly', 'id_subject_rf', 'dacha', 'soil_lot', 'sample_region', 'name_quarter']
 
 
 
@@ -1034,11 +1034,11 @@ class FieldSerializerExcel(serializers.ModelSerializer):
     soil_lot = serializers.CharField(source="id_list_region.soil_lot")
     name_quarter = serializers.CharField(source="id_list_region.name_quarter")
     date = serializers.CharField(source="id_list_region.date")
-
+    number_region = serializers.CharField(source="id_list_region.number_region")
 
     class Meta:
         model = FieldCard
-        fields = ['id', 'date', 'id_district_forestly', 'forestly', 'id_subject_rf',  'dacha', 'soil_lot', 'name_quarter']
+        fields = ['number_region', 'date', 'id_district_forestly', 'forestly', 'id_subject_rf',  'dacha', 'soil_lot', 'name_quarter']
 
 
 class DescSerializerExcel(serializers.ModelSerializer):
@@ -1050,11 +1050,12 @@ class DescSerializerExcel(serializers.ModelSerializer):
     dacha = serializers.CharField(source="id_list_region.dacha")
     soil_lot = serializers.CharField(source="id_list_region.soil_lot")
     name_quarter = serializers.CharField(source="id_list_region.name_quarter")
+    number_region = serializers.CharField(source="id_list_region.number_region")
 
 
     class Meta:
         model = FieldCard
-        fields = ['id', 'date', 'id_district_forestly', 'forestly', 'id_subject_rf',  'dacha', 'soil_lot', 'name_quarter']
+        fields = ['number_region', 'date', 'id_district_forestly', 'forestly', 'id_subject_rf',  'dacha', 'soil_lot', 'name_quarter']
 
 
 class ForestDistrictSerializer(serializers.ModelSerializer):
