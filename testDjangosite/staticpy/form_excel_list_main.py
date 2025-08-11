@@ -2,6 +2,7 @@ from distutils.fancy_getopt import wrap_text
 from staticpy.form_excel_draw_list3 import main_draw
 from staticpy.form_excel import set_border
 import openpyxl
+from copy import deepcopy
 from openpyxl.reader.excel import load_workbook
 from openpyxl.styles import PatternFill, Alignment, Font, Border, Side
 from openpyxl.workbook import Workbook
@@ -32,7 +33,12 @@ def form_getlistregion(data: dict ) -> str:
     filepath = f'{BASE_DIR}/media/excel_files/listregion/listregionfilters_{data["id_user"]}.xlsx'
     col = ["Номер", 'Дата', 'Участковое лесничество', 'лесничество', 'Субъект РФ', 'Урочище', 'Выдел', 'Площадь', 'Квартал']
     col2 = ["Номер", 'Дата', 'Участковое лесничество', 'лесничество', 'Субъект РФ', 'Урочище', 'Выдел', 'Квартал']
-    df = pd.DataFrame(data['data'])
+    new_data = deepcopy(data)
+    for i in range(len(new_data['data'])):
+        new_data['data'][i].pop('id')
+    df = pd.DataFrame(new_data['data'])
+
+
     # field = loads(dumps(data['data_field']))
     df2 = pd.DataFrame(data['data_field'])
     df3 = pd.DataFrame(data['desc_field'])
