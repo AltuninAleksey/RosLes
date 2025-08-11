@@ -1026,7 +1026,7 @@ class ListFieldSerializer(serializers.ModelSerializer):
 
 
 class FieldSerializerExcel(serializers.ModelSerializer):
-    id = serializers.CharField(source='id_list_region')
+    # id = serializers.CharField(source='id_list_region',)
     id_district_forestly = serializers.CharField(source="id_list_region.id_district_forestly.name_district_forestly")
     forestly = serializers.CharField(source="id_list_region.id_district_forestly.id_forestly.name_forestly")
     id_subject_rf = serializers.CharField(source="id_list_region.id_district_forestly.id_forestly.id_subject_rf")
@@ -1042,7 +1042,7 @@ class FieldSerializerExcel(serializers.ModelSerializer):
 
 
 class DescSerializerExcel(serializers.ModelSerializer):
-    id = serializers.CharField(source='id_list_region')
+    # id = serializers.CharField(source='id_list_region')
     date = serializers.CharField(source="id_list_region.date")
     id_district_forestly = serializers.CharField(source="id_list_region.id_district_forestly.name_district_forestly")
     forestly = serializers.CharField(source="id_list_region.id_district_forestly.id_forestly.name_forestly")
