@@ -153,7 +153,7 @@ async function saveData() {
         return;
     }
 
-    let numberStatementNode = document.querySelector("#numberStatement").value;
+    //let numberStatementNode = document.querySelector("#numberStatement").value;
     let dateStatementNode = document.querySelector("#dateStatement").value;
     let soilLotStatementNode = document.querySelector("#soilLotStatement").value;
     let sampleRegionStatementNode = document.querySelector("#sampleRegionStatement").value;
@@ -166,7 +166,7 @@ async function saveData() {
         sample_region: String(sampleRegionStatementNode).replace(/,/g, '.'),
         mark_del: 0,
         mark_update: 0,
-        number_region: numberStatementNode,
+        number_region: null,//numberStatementNode,
         id_profile: Number(APP.userData.id),
         name_quarter: quarterStatement == ""? null : quarterStatement,
         dacha: dachaStatement == ""? null : dachaStatement,

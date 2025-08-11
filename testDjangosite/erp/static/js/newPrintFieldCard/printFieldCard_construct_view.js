@@ -260,7 +260,7 @@ async function saveFieldCard() {
         id_quarter: quarter.value,
         id_subject_rf: Number(APP.userData.id_subject_rf),//regions.value,
         id_forest_districts: document.getElementById("forest_districts").value,
-        number_region: document.getElementById("number_region").value,
+        number_region: null,//document.getElementById("number_region").value,
         sample_region: String(document.getElementById("sample_region").value).replace(/,/g, '.'),
         soil_lot: document.getElementById("soil_lot").value,
         dacha: document.getElementById("dacha").value == ""? null : document.getElementById("dacha").value,

@@ -188,58 +188,78 @@ function sortByDate() {
 async function setEventForElementsFilter() {
 
     await setOptionInSubject();
+    let subjectNode = document.querySelector("#filter_subject_rf");
+    subjectNode.removeAttribute("disabled");
+    subjectNode.addEventListener('change', async (e)=>{
+        await setOptionInForestly(StatementRecalculationsBusiness.TypeData.BYID);
+    });
 
-    document
-        .querySelector("#checkbox_filter_subject_rf")
-        .addEventListener('click', async (e)=>{
-            let subjectNode = document.querySelector("#filter_subject_rf");
-            if(e.target.checked) {
-                subjectNode.removeAttribute("disabled")
-                subjectNode.addEventListener('change', async (e)=>{
-                    await setOptionInForestly(StatementRecalculationsBusiness.TypeData.BYID);
-                });
-                await setOptionInForestly(StatementRecalculationsBusiness.TypeData.BYID);
-            } else {
-                subjectNode.setAttribute("disabled", "on");
-                await setOptionInForestly(StatementRecalculationsBusiness.TypeData.ALL);
-            }
-        });
+    await setOptionInForestly(StatementRecalculationsBusiness.TypeData.BYID);
+    let forestlyNode = document.querySelector("#filter_forestly");
+    forestlyNode.removeAttribute("disabled");
+    forestlyNode.addEventListener('change', async (e)=>{
+        await setOptionInDistrictForestly(StatementRecalculationsBusiness.TypeData.BYID);
+    });
 
-    await setOptionInForestly(StatementRecalculationsBusiness.TypeData.ALL);
+    await setOptionInDistrictForestly(StatementRecalculationsBusiness.TypeData.BYID);
+    let districtForestly = document.querySelector("#filter_district_forestly");
+    districtForestly.removeAttribute("disabled");
 
-    document
-        .querySelector("#checkbox_filter_forestly")
-        .addEventListener('click', async (e)=>{
-            let forestlyNode = document.querySelector("#filter_forestly");
-            if(e.target.checked) {
-                forestlyNode.removeAttribute("disabled");
-                forestlyNode.addEventListener('change', async (e)=>{
-                    await setOptionInDistrictForestly(StatementRecalculationsBusiness.TypeData.BYID);
-                });
-                await setOptionInDistrictForestly(StatementRecalculationsBusiness.TypeData.BYID);
-            } else {
-                forestlyNode.setAttribute("disabled", "on");
-                await setOptionInDistrictForestly(StatementRecalculationsBusiness.TypeData.ALL);
-            }
-        });
+    document.querySelector("#filter_soil_lot").removeAttribute("readonly");
 
-    await setOptionInDistrictForestly(StatementRecalculationsBusiness.TypeData.ALL);
 
-    document
-        .querySelector("#checkbox_filter_district_forestly")
-        .addEventListener('click', async (e)=>{
-            let districtForestly = document.querySelector("#filter_district_forestly");
-            if(e.target.checked) {
-                districtForestly.removeAttribute("disabled");
-                districtForestly.addEventListener('change', async (e)=>{
-                    //await setOptionInQuarter(StatementRecalculationsBusiness.TypeData.BYID);
-                });
-                //await setOptionInQuarter(StatementRecalculationsBusiness.TypeData.BYID);
-            } else {
-                districtForestly.setAttribute("disabled", "on");
-                //await setOptionInQuarter(StatementRecalculationsBusiness.TypeData.ALL);
-            }
-        });
+
+//    document
+//        .querySelector("#checkbox_filter_subject_rf")
+//        .addEventListener('click', async (e)=>{
+//            let subjectNode = document.querySelector("#filter_subject_rf");
+//            if(e.target.checked) {
+//                subjectNode.removeAttribute("disabled")
+//                subjectNode.addEventListener('change', async (e)=>{
+//                    await setOptionInForestly(StatementRecalculationsBusiness.TypeData.BYID);
+//                });
+//                await setOptionInForestly(StatementRecalculationsBusiness.TypeData.BYID);
+//            } else {
+//                subjectNode.setAttribute("disabled", "on");
+//                await setOptionInForestly(StatementRecalculationsBusiness.TypeData.ALL);
+//            }
+//        });
+//
+//    await setOptionInForestly(StatementRecalculationsBusiness.TypeData.ALL);
+
+//    document
+//        .querySelector("#checkbox_filter_forestly")
+//        .addEventListener('click', async (e)=>{
+//            let forestlyNode = document.querySelector("#filter_forestly");
+//            if(e.target.checked) {
+//                forestlyNode.removeAttribute("disabled");
+//                forestlyNode.addEventListener('change', async (e)=>{
+//                    await setOptionInDistrictForestly(StatementRecalculationsBusiness.TypeData.BYID);
+//                });
+//                await setOptionInDistrictForestly(StatementRecalculationsBusiness.TypeData.BYID);
+//            } else {
+//                forestlyNode.setAttribute("disabled", "on");
+//                await setOptionInDistrictForestly(StatementRecalculationsBusiness.TypeData.ALL);
+//            }
+//        });
+//
+//    await setOptionInDistrictForestly(StatementRecalculationsBusiness.TypeData.ALL);
+
+//    document
+//        .querySelector("#checkbox_filter_district_forestly")
+//        .addEventListener('click', async (e)=>{
+//            let districtForestly = document.querySelector("#filter_district_forestly");
+//            if(e.target.checked) {
+//                districtForestly.removeAttribute("disabled");
+//                districtForestly.addEventListener('change', async (e)=>{
+//                    //await setOptionInQuarter(StatementRecalculationsBusiness.TypeData.BYID);
+//                });
+//                //await setOptionInQuarter(StatementRecalculationsBusiness.TypeData.BYID);
+//            } else {
+//                districtForestly.setAttribute("disabled", "on");
+//                //await setOptionInQuarter(StatementRecalculationsBusiness.TypeData.ALL);
+//            }
+//        });
 
    // await setOptionInQuarter(StatementRecalculationsBusiness.TypeData.ALL);
 
@@ -285,19 +305,19 @@ async function setEventForElementsFilter() {
             }
         });
 
-    document
-        .querySelector("#checkbox_filter_soil_lot")
-        .addEventListener('click', (e)=>{
-            if(e.target.checked) {
-                document
-                    .querySelector("#filter_soil_lot")
-                    .removeAttribute("readonly");
-            } else {
-                document
-                    .querySelector("#filter_soil_lot")
-                    .setAttribute("readonly", "on");
-            }
-        });
+//    document
+//        .querySelector("#checkbox_filter_soil_lot")
+//        .addEventListener('click', (e)=>{
+//            if(e.target.checked) {
+//                document
+//                    .querySelector("#filter_soil_lot")
+//                    .removeAttribute("readonly");
+//            } else {
+//                document
+//                    .querySelector("#filter_soil_lot")
+//                    .setAttribute("readonly", "on");
+//            }
+//        });
 
     document
         .querySelector("#but_filtr")
@@ -421,46 +441,66 @@ async function searchByFilter() {
     let dateEndNode = document.querySelector("#filter_date_end");
     let checkboxFilterSoilLot = document.querySelector("#checkbox_filter_soil_lot");
     let soilLot = document.querySelector("#filter_soil_lot");
+    let nameQuarter = document.querySelector("#filter_name_quarter");
 
     let data;
+//
+//    if(checkboxFilterSubjectRFNode.checked || checkboxFilterForestlyNode.checked
+//    || checkboxFilterDistrictForestlyNode.checked //|| checkboxFilterQuartalNode.checked
+//    || checkboxFilterDateStartNode.checked || checkboxFilterDateEnd.checked
+//    || checkboxFilterSoilLot.checked) {
+//
+//        let responseData = {
+//            bSubjectrf: true,
+//            idSubjectrf: Number(subjectRFNode.value),
+//            bForestly: true,
+//            idForestly: forestlyNode.value,
+//            bDistrictForestly: true,
+//            idDistrictForestly: districtForestlyNode.value,
+//            //bQuarter: checkboxFilterQuartalNode.checked,
+//            //idQuarter: quartalNode.value,
+//            bDate: checkboxFilterDateStartNode.checked,
+//            date: dateStartNode.value,
+//            bDateSec: checkboxFilterDateEnd.checked,
+//            dateSec: dateEndNode.value,
+//            bSoil_lot: true,
+//            soil_lot: soilLot.value
+//        };
+//
+//
+//        APP.dataTable = await StatementRecalculationsBusiness.getStatementListByFilter(responseData);
+//    } else {
+//
+//        var dataResponse = await StatementRecalculationsBusiness.getAllStatementList();
+//        var data2 = [];
+//        for(var i = 0; i < dataResponse.length; i++) {
+//            for(var j = 0; j < dataResponse[i].length; j++) {
+//                data2.push(dataResponse[i][j]);
+//            }
+//        }
+//
+//        APP.dataTable = data2;
+//    }
 
-    if(checkboxFilterSubjectRFNode.checked || checkboxFilterForestlyNode.checked
-    || checkboxFilterDistrictForestlyNode.checked //|| checkboxFilterQuartalNode.checked
-    || checkboxFilterDateStartNode.checked || checkboxFilterDateEnd.checked
-    || checkboxFilterSoilLot.checked) {
+    let responseData = {
+        bSubjectrf: true,
+        idSubjectrf: Number(subjectRFNode.value),
+        bForestly: true,
+        idForestly: forestlyNode.value,
+        bDistrictForestly: true,
+        idDistrictForestly: districtForestlyNode.value,
+        bQuarter: true,
+        name_quarter: nameQuarter.value,
+        //idQuarter: quartalNode.value,
+        bDate: checkboxFilterDateStartNode.checked,
+        date: dateStartNode.value,
+        bDateSec: checkboxFilterDateEnd.checked,
+        dateSec: dateEndNode.value,
+        bSoil_lot: true,
+        soil_lot: soilLot.value
+    };
 
-        let responseData = {
-            bSubjectrf: checkboxFilterSubjectRFNode.checked,
-            idSubjectrf: Number(subjectRFNode.value),
-            bForestly: checkboxFilterForestlyNode.checked,
-            idForestly: forestlyNode.value,
-            bDistrictForestly: checkboxFilterDistrictForestlyNode.checked,
-            idDistrictForestly: districtForestlyNode.value,
-            //bQuarter: checkboxFilterQuartalNode.checked,
-            //idQuarter: quartalNode.value,
-            bDate: checkboxFilterDateStartNode.checked,
-            date: dateStartNode.value,
-            bDateSec: checkboxFilterDateEnd.checked,
-            dateSec: dateEndNode.value,
-            bSoil_lot: checkboxFilterSoilLot.checked,
-            soil_lot: soilLot.value
-        };
-
-
-        APP.dataTable = await StatementRecalculationsBusiness.getStatementListByFilter(responseData);
-    } else {
-
-        var dataResponse = await StatementRecalculationsBusiness.getAllStatementList();
-        var data2 = [];
-        for(var i = 0; i < dataResponse.length; i++) {
-            for(var j = 0; j < dataResponse[i].length; j++) {
-                data2.push(dataResponse[i][j]);
-            }
-        }
-
-        APP.dataTable = data2;
-    }
-
+    APP.dataTable = await StatementRecalculationsBusiness.getStatementListByFilter(responseData);
 
     updateDataInStatementRecalculationsTbody(APP.dataTable);
 }

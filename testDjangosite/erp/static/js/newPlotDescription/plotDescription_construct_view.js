@@ -210,7 +210,7 @@ async function saveData() {
         id_subject_rf: regions,
         soil_lot: soil_lot,
         sample_region: sample_region,
-        number_region: number_region,
+        number_region: null,//number_region,
         count_plants: null,
         preservation_breed: null,
         id_schema_mixing_breeds: null,

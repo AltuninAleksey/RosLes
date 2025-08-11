@@ -88,7 +88,7 @@
     </div>
 
     <form id="form_filter" action="" class="form">
-        <p >Субьект РФ: <input type="checkbox" id="checkbox_filter_subject_rf" name="scales">
+        <p >Субьект РФ: <input type="checkbox" id="checkbox_filter_subject_rf" name="scales" style="display: none;">
             <label for="filter_subject_rf">
                 <select disabled name="sub" id="filter_subject_rf" style="width: 300px">
                     <option hidden disabled selected value=""></option>
@@ -97,7 +97,7 @@
         </p>
 
 
-        <p>Лесничество: <input type="checkbox" id="checkbox_filter_forestly" name="scales">
+        <p>Лесничество: <input type="checkbox" id="checkbox_filter_forestly" name="scales" style="display: none;">
             <label for="filter_forestly">
                 <select disabled name="sub" id="filter_forestly" style="width: 230px">
                     <option hidden disabled selected value=""></option>
@@ -105,13 +105,10 @@
             </label>
         </p>
 
-        <p>Начало периода: <input type="checkbox" id="checkbox_filter_date_start" name="scales" >
+        <p>Начало периода: <input type="checkbox" id="checkbox_filter_date_start" name="scales">
             <label for="filter_date_start"><input readonly type="date" id="filter_date_start" name=""></label> </p>
 
-        <p>Выдел: <input type="checkbox" id="checkbox_filter_soil_lot" name="scales">
-            <label for="filter_soil_lot"><input readonly type="text" id="filter_soil_lot" name=""></label> </p>
-
-        <p>Участкове лесничество: <input type="checkbox" id="checkbox_filter_district_forestly" name="scales">
+        <p>Участкове лесничество: <input type="checkbox" id="checkbox_filter_district_forestly" name="scales" style="display: none;">
             <label for="filter_district_forestly">
                 <select disabled name="sub" id="filter_district_forestly" style="width: 230px">
                     <option hidden disabled selected value=""></option>
@@ -119,16 +116,23 @@
             </label>
         </p>
 
+        <p>Квартал:
+            <label for="filter_name_quarter"><input type="text" id="filter_name_quarter" name=""></label> </p>
+
+
         <p>Окончание периода: <input type="checkbox" id="checkbox_filter_date_end" name="scales">
              <label for="filter_date_end"><input readonly type="date" id="filter_date_end" name=""></label> </p>
 
-        <p style="display: none">Квартал: <input type="checkbox" id="checkbox_filter_quartal" name="scales">
-            <label for="filter_quartal">
-                <select disabled name="sub" id="filter_quartal">
-                    <option hidden disabled selected value=""></option>
-                </select>
-            </label>
-        </p>
+        <p>Выдел: <input type="checkbox" id="checkbox_filter_soil_lot" name="scales" style="display: none;">
+            <label for="filter_soil_lot"><input readonly type="text" id="filter_soil_lot" name=""></label> </p>
+
+<!--        <p style="display: none">Квартал: <input type="checkbox" id="checkbox_filter_quartal" name="scales">-->
+<!--            <label for="filter_quartal">-->
+<!--                <select disabled name="sub" id="filter_quartal">-->
+<!--                    <option hidden disabled selected value=""></option>-->
+<!--                </select>-->
+<!--            </label>-->
+<!--        </p>-->
 
 <!--        <div class="block_quartal_and_soil_lot">-->
 <!--            -->
