@@ -2331,7 +2331,7 @@ class GetAllListFieldDesc(ListAPIView):
 
     def get(self, request, *args, **kwargs):
         subject_id = request.user.subject_rf_id
-        id_user = reZquest.user.id
+        id_user = request.user.id
         # subject_id = 31
         # id_user = 11
         # print(subject_id)
