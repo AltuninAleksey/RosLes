@@ -1130,6 +1130,8 @@ class GetAllListRegionData(viewsets.ViewSet):
 
 # id undergrowth = 0
 class CreateSampleAndOther(ListAPIView):
+    queryset = Sample.objects.all()
+    serializer_class = SampleSerializer
 
     def post(self, request, **kwargs):
         serializer = SampleSerializer(data=request.data['sample'])
@@ -2329,7 +2331,7 @@ class GetAllListFieldDesc(ListAPIView):
 
     def get(self, request, *args, **kwargs):
         subject_id = request.user.subject_rf_id
-        id_user = request.user.id
+        id_user = reZquest.user.id
         # subject_id = 31
         # id_user = 11
         # print(subject_id)

@@ -105,7 +105,7 @@ class PhotoPoint(models.Model):
     latitude = models.FloatField(u'Широта', blank=True, default=0)
     longitude = models.FloatField(u'Долгота', blank=True, default=0)
     date = models.CharField(u'Дата', null=True, max_length=100)
-    unique_uid = models.UUIDField(default=uuid.uuid4, unique=True, null=True)
+    unique_uid = models.UUIDField(default=uuid.uuid4, unique=True, null=True, blank=True)
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
@@ -157,7 +157,7 @@ class List(models.Model):
     mark_update = models.IntegerField(null=True, default=0)
     age = models.IntegerField(verbose_name="Возраст", null=True)
     ratio_composition = models.IntegerField(verbose_name="Коэфф. состава", null=True)
-    unique_uid = models.UUIDField(default=uuid.uuid4, unique=True)
+    unique_uid = models.UUIDField(default=uuid.uuid4, unique=True, blank=True)
 
 
     class Meta:
@@ -176,7 +176,7 @@ class GPS(models.Model):
     latitude = models.FloatField(u'Широта')
     longitude = models.FloatField(u'Долгота')
     flag_center = models.IntegerField(u'Флаг центра')
-    unique_uid = models.UUIDField(default=uuid.uuid4, null=True, unique=True)
+    unique_uid = models.UUIDField(default=uuid.uuid4, null=True, unique=True, blank=True)
 
 
     class Meta:
@@ -199,7 +199,7 @@ class ListRegion(models.Model):
     mark_update = models.IntegerField(null= True)
     number_region = models.IntegerField(null=True)
     id_profile = models.ForeignKey("Profile", on_delete=models.CASCADE, null=True)
-    unique_uid = models.UUIDField(default=uuid.uuid4, unique=True)
+    unique_uid = models.UUIDField(default=uuid.uuid4, unique=True, blank=True)
 
     class Meta:
         verbose_name = 'Перечетная ведомость участка'
@@ -232,7 +232,7 @@ class Sample(models.Model):
     lenght = models.FloatField(u'Длина', null=True, default=0)
     square = models.FloatField(u'Площадь', null=True, default=0)
     mark_update = models.IntegerField(null=True, default=0)
-    unique_uid = models.UUIDField(default=uuid.uuid4, unique=True)
+    unique_uid = models.UUIDField(default=uuid.uuid4, unique=True, blank=True)
     # id_list_region_uuid = models.ForeignKey()
 
 
