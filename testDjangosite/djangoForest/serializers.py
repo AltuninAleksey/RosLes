@@ -247,7 +247,7 @@ class SampleSerializer(serializers.ModelSerializer):
         instance.width = validated_data.get("width")
         instance.lenght = validated_data.get("lenght")
         instance.square = validated_data.get("square")
-        instance.unique_uid = validated_data.get('unique_uid')
+        # instance.unique_uid = validated_data.get('unique_uid')
         instance.mark_update = 0
         instance.save()
         return instance
@@ -515,7 +515,7 @@ class ListRegionSerializer(serializers.ModelSerializer):
         instance.number_region = validated_data.get("number_region")
         instance.mark_update = 0
         instance.id_profile = validated_data.get("id_profile")
-        instance.unique_uid = validated_data.get('unique_uid')
+        # instance.unique_uid = validated_data.get('unique_uid')
         instance.save()
         return instance
 
