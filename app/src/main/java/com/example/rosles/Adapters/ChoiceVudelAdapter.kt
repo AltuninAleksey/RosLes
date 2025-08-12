@@ -48,7 +48,7 @@ class ChoiceVudelAdapter() : BaseAdapter<Poroda, VedomostitemBinding>() {
 
             }
             data.apply {
-                numberLesnich.setText(data.number)
+                if(data.number!="0")numberLesnich.setText(data.number)else numberLesnich.setText("new")
                 nameLesnich.setText(data.nameForestly)
                 districtForestly.setText(data.nameDistrictForestly)
                 quter.setText(data.quarterName)

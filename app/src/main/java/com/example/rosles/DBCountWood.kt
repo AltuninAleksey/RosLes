@@ -312,11 +312,15 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         cursor.close()
         return listregionrequest
     }
+
     @SuppressLint("Range")
     fun getAllSAMPLE(): List<SAMPLE_DATA> {
         val database: SQLiteDatabase = this.writableDatabase
         val cursor: Cursor =
-            database.rawQuery("select * from djangoForest_sample where  mark_update =  2 OR mark_update = 1 ", null)
+            database.rawQuery(
+                "select * from djangoForest_sample where  mark_update =  2 OR mark_update = 1 ",
+                null
+            )
         cursor.moveToFirst()
         val listregionrequest = mutableListOf<SAMPLE_DATA>()
         for (i in 1..cursor.getCount()) {
@@ -341,33 +345,37 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         cursor.close()
         return listregionrequest
     }
-        @SuppressLint("Range")
-    fun getGLIST():List<LIST_DATA>{
+
+    @SuppressLint("Range")
+    fun getGLIST(): List<LIST_DATA> {
         val database: SQLiteDatabase = this.writableDatabase
-        val cursor: Cursor = database.rawQuery("select * from djangoForest_list where  mark_update =  2 OR mark_update = 1 ",null)
+        val cursor: Cursor = database.rawQuery(
+            "select * from djangoForest_list where  mark_update =  2 OR mark_update = 1 ",
+            null
+        )
         cursor.moveToFirst()
-        val listregionrequest=mutableListOf<LIST_DATA>()
+        val listregionrequest = mutableListOf<LIST_DATA>()
         for (i in 1..cursor.getCount()) {
-            val data= LIST_DATA(
-                   id = cursor.getString(cursor.getColumnIndex("id")),
-                   to0_2=  cursor.getInt(cursor.getColumnIndex("to0_2")),
-                   from0_21To0_5=  cursor.getInt(cursor.getColumnIndex("from0_21To0_5")).toInt(),
-                   from0_6To1_0=  cursor.getInt(cursor.getColumnIndex("from0_6To1_0")).toInt(),
-                   from1_1to1_5=  cursor.getInt(cursor.getColumnIndex("from1_1to1_5")).toInt(),
-                   from1_5 =  cursor.getInt(cursor.getColumnIndex("from1_5")).toInt(),
-                   max_height =  cursor.getFloat(cursor.getColumnIndex("max_height")),
-                   avg_diameter =  cursor.getFloat(cursor.getColumnIndex("avg_diameter")),
-                   count_of_plants =  cursor.getInt(cursor.getColumnIndex("count_of_plants")).toInt(),
-                   avg_height =   cursor.getFloat(cursor.getColumnIndex("avg_height")),
-                   avg_height_undergrowth = cursor.getFloat(cursor.getColumnIndex("avg_height_undergrowth")),
-                   main = cursor.getInt(cursor.getColumnIndex("main")),
-                   id_sample =  cursor.getString(cursor.getColumnIndex("id_sample_id")),
-                   id_breed = cursor.getIntOrNull(cursor.getColumnIndex("id_breed_id")),
-                   id_type_of_reproduction = cursor.getIntOrNull(cursor.getColumnIndex("id_type_of_reproduction_id")),
-                   mark_update = cursor.getInt(cursor.getColumnIndex("mark_update")),
-                   id_undergrowth = cursor.getIntOrNull(cursor.getColumnIndex("id_undergrowth_id")),
+            val data = LIST_DATA(
+                id = cursor.getString(cursor.getColumnIndex("id")),
+                to0_2 = cursor.getInt(cursor.getColumnIndex("to0_2")),
+                from0_21To0_5 = cursor.getInt(cursor.getColumnIndex("from0_21To0_5")).toInt(),
+                from0_6To1_0 = cursor.getInt(cursor.getColumnIndex("from0_6To1_0")).toInt(),
+                from1_1to1_5 = cursor.getInt(cursor.getColumnIndex("from1_1to1_5")).toInt(),
+                from1_5 = cursor.getInt(cursor.getColumnIndex("from1_5")).toInt(),
+                max_height = cursor.getFloat(cursor.getColumnIndex("max_height")),
+                avg_diameter = cursor.getFloat(cursor.getColumnIndex("avg_diameter")),
+                count_of_plants = cursor.getInt(cursor.getColumnIndex("count_of_plants")).toInt(),
+                avg_height = cursor.getFloat(cursor.getColumnIndex("avg_height")),
+                avg_height_undergrowth = cursor.getFloat(cursor.getColumnIndex("avg_height_undergrowth")),
+                main = cursor.getInt(cursor.getColumnIndex("main")),
+                id_sample = cursor.getString(cursor.getColumnIndex("id_sample_id")),
+                id_breed = cursor.getIntOrNull(cursor.getColumnIndex("id_breed_id")),
+                id_type_of_reproduction = cursor.getIntOrNull(cursor.getColumnIndex("id_type_of_reproduction_id")),
+                mark_update = cursor.getInt(cursor.getColumnIndex("mark_update")),
+                id_undergrowth = cursor.getIntOrNull(cursor.getColumnIndex("id_undergrowth_id")),
             )
-            if (data.to0_2 != 0 || data.from0_21To0_5 != 0 || data.from0_6To1_0 != 0 || data.from1_1to1_5 != 0 || data.from1_5 != 0 || data.count_of_plants != 0 ) {
+            if (data.to0_2 != 0 || data.from0_21To0_5 != 0 || data.from0_6To1_0 != 0 || data.from1_1to1_5 != 0 || data.from1_5 != 0 || data.count_of_plants != 0) {
                 listregionrequest.add(data)
             }
 
@@ -376,7 +384,6 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         cursor.close()
         return listregionrequest
     }
-
 
 
     @SuppressLint("Range")
@@ -422,24 +429,21 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     }
 
 
-
-
-
     @SuppressLint("Range")
     fun readbyporoda(): List<Poroda> {
         val database: SQLiteDatabase = this.writableDatabase
-            val cursor: Cursor = database.rawQuery(
-                """select listregion.id,listregion.number,listregion.mark_update,listregion.dacha,listregion.sample_region, s3.name_forestly, s3.name_district_forestly, s3.name_quarter, s3.dacha, s3.soil_lot, s3.sample_region, s3.date
+        val cursor: Cursor = database.rawQuery(
+            """select listregion.id,listregion.number_region,listregion.mark_update,listregion.dacha,listregion.sample_region, s3.name_forestly, s3.name_district_forestly, s3.name_quarter, s3.dacha, s3.soil_lot, s3.sample_region, s3.date
 from ((djangoForest_listregion as listregion INNER join djangoForest_districtforestly as district on listregion.id_district_forestly = district.id) as s2
 inner join djangoForest_forestly as forestly on s2.id_forestly_id = forestly.id) as s3""",
-                null
-            )
-            val porodaList: MutableList<Poroda> = mutableListOf<Poroda>();
-            cursor.moveToFirst()
-            for (i in 1..cursor.count) {
-                val poroda = Poroda(
+            null
+        )
+        val porodaList: MutableList<Poroda> = mutableListOf<Poroda>();
+        cursor.moveToFirst()
+        for (i in 1..cursor.count) {
+            val poroda = Poroda(
                 cursor.getString(cursor.getColumnIndex("id")),
-                cursor.getString(cursor.getColumnIndex("number"))?:"new",
+                cursor.getString(cursor.getColumnIndex("number_region"))?:"new"  ,
                 cursor.getString(cursor.getColumnIndex("name_forestly")),
                 cursor.getString(cursor.getColumnIndex("name_district_forestly")),
                 cursor.getString(cursor.getColumnIndex("name_quarter")),
@@ -851,7 +855,6 @@ inner join djangoForest_forestly as forestly on s2.id_forestly_id = forestly.id)
     }
 
 
-
     fun CreateLesPorodsV2(value: PerechetWood?, id_sample: String, flag: Boolean?) {
         val db = this.writableDatabase
         val o2 = value?.o2
@@ -940,7 +943,6 @@ inner join djangoForest_forestly as forestly on s2.id_forestly_id = forestly.id)
         cursor.close()
         return example
     }
-
 
 
     fun UpdateLesPorodsV2(value: PerechetWood?, flag: Boolean?) {
@@ -1169,7 +1171,6 @@ inner join djangoForest_forestly as forestly on s2.id_forestly_id = forestly.id)
         )
         db.close()
     }
-
 
 
     companion object {
