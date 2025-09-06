@@ -324,6 +324,12 @@ async function setEventForElementsFilter() {
         .addEventListener('click', async (e)=>{
             await searchByFilter();
         });
+
+    document
+        .querySelector("#reset_filtr")
+        .addEventListener('click', async (e)=>{
+            await resetFilter();
+        });
 }
 
 async function setOptionInSubject() {
@@ -502,6 +508,19 @@ async function searchByFilter() {
 
     APP.dataTable = await StatementRecalculationsBusiness.getStatementListByFilter(responseData);
 
+    updateDataInStatementRecalculationsTbody(APP.dataTable);
+}
+
+async function resetFilter() {
+    var dataResponse = await StatementRecalculationsBusiness.getAllStatementList();
+    var data2 = [];
+    for(var i = 0; i < dataResponse.length; i++) {
+        for(var j = 0; j < dataResponse[i].length; j++) {
+            data2.push(dataResponse[i][j]);
+        }
+    }
+
+    APP.dataTable = data2;
     updateDataInStatementRecalculationsTbody(APP.dataTable);
 }
 

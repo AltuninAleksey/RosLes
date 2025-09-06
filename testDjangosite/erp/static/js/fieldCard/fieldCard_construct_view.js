@@ -321,6 +321,12 @@ async function setEventForElementsFilter() {
         .addEventListener('click', async (e)=>{
             await searchByFilter();
         });
+
+    document
+        .querySelector("#reset_filtr")
+        .addEventListener('click', async (e)=>{
+            await resetFilter();
+        });
 }
 
 async function setOptionInSubject() {
@@ -499,6 +505,19 @@ async function searchByFilter() {
 
     APP.dataTable = await FieldCardBusiness.getFieldCardListByFilter(responseData);
 
+    updateDataInFieldCardTbody(APP.dataTable);
+}
+
+async function resetFilter() {
+    var dataResponse = await FieldCardBusiness.getAllFieldCardList();
+    var data2 = [];
+    for(var i = 0; i < dataResponse.length; i++) {
+        for(var j = 0; j < dataResponse[i].length; j++) {
+            data2.push(dataResponse[i][j]);
+        }
+    }
+
+    APP.dataTable = data2;
     updateDataInFieldCardTbody(APP.dataTable);
 }
 
