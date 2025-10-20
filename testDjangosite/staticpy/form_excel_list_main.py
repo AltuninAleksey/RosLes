@@ -31,48 +31,51 @@ def create_header(sheets):
 
 def form_getlistregion(data: dict ) -> str:
     filepath = f'{BASE_DIR}/media/excel_files/listregion/listregionfilters_{data["id_user"]}.xlsx'
-    col = ["Номер", 'Дата', 'Участковое лесничество', 'лесничество', 'Субъект РФ', 'Урочище', 'Выдел', 'Площадь', 'Квартал']
-    col2 = ["Номер", 'Дата', 'Участковое лесничество', 'лесничество', 'Субъект РФ', 'Урочище', 'Выдел', 'Квартал']
-    new_data = deepcopy(data)
-    for i in range(len(new_data['data'])):
-        new_data['data'][i].pop('id')
-    df = pd.DataFrame(new_data['data'])
+    # col = ["Номер", 'Дата', 'Участковое лесничество', 'лесничество', 'Субъект РФ', 'Урочище', 'Выдел', 'Площадь', 'Квартал']
+    # col2 = ["Номер", 'Дата', 'Участковое лесничество', 'лесничество', 'Субъект РФ', 'Урочище', 'Выдел', 'Квартал']
+    # new_data = deepcopy(data)
+    # for i in range(len(new_data['data'])):
+    #     new_data['data'][i].pop('id')
+    # df = pd.DataFrame(new_data['data'])
+    #
+    #
+    # # field = loads(dumps(data['data_field']))
+    # df2 = pd.DataFrame(data['data_field'])
+    # df3 = pd.DataFrame(data['desc_field'])
+    #
+    # df.columns=col
+    # df2.columns=col2
+    # df3.columns=col2
+    # df.to_excel(filepath)
+    # with pd.ExcelWriter(filepath, engine='openpyxl') as writer:
+    #     df.to_excel(writer, sheet_name="Перечетная ведомость")
+    #     df2.to_excel(writer, sheet_name="Полевая карточка")
+    #     df3.to_excel(writer, sheet_name="Описание участка")
 
+    # wb = load_workbook(filepath)
+    wb = Workbook()
+    # sheets = wb.active
+    #
+    # sheets_names = wb.sheetnames
+    #
+    # thin_border = Border(left=Side(style='thin'),
+    #                      right=Side(style='thin'),
+    #                      top=Side(style='thin'),
+    #                      bottom=Side(style='thin'))
+    #
+    # for j in range(0, 3):
+    #     sheets = wb[sheets_names[j]]
+    #     for i in range(7):
+    #         rd = sheets.row_dimensions[i]
+    #         rd.height = 30
+    #     for row in sheets.iter_rows():
+    #         for cell in row:
+    #             cell.alignment = Alignment(wrap_text=True, vertical='top')
+    #             cell.border = thin_border
 
-    # field = loads(dumps(data['data_field']))
-    df2 = pd.DataFrame(data['data_field'])
-    df3 = pd.DataFrame(data['desc_field'])
-
-    df.columns=col
-    df2.columns=col2
-    df3.columns=col2
-    df.to_excel(filepath)
-    with pd.ExcelWriter(filepath, engine='openpyxl') as writer:
-        df.to_excel(writer, sheet_name="Перечетная ведомость")
-        df2.to_excel(writer, sheet_name="Полевая карточка")
-        df3.to_excel(writer, sheet_name="Описание участка")
-
-    wb = load_workbook(filepath)
-    sheets = wb.active
-
-    sheets_names = wb.sheetnames
-
-    thin_border = Border(left=Side(style='thin'),
-                         right=Side(style='thin'),
-                         top=Side(style='thin'),
-                         bottom=Side(style='thin'))
-
-    for j in range(0, 3):
-        sheets = wb[sheets_names[j]]
-        for i in range(7):
-            rd = sheets.row_dimensions[i]
-            rd.height = 30
-        for row in sheets.iter_rows():
-            for cell in row:
-                cell.alignment = Alignment(wrap_text=True, vertical='top')
-                cell.border = thin_border
-
-    sheet_list3 = wb.create_sheet('Форма сводного файла')
+    # sheet_list3 = wb.create_sheet('Форма сводного файла')
+    sheet_list3 = wb.active
+    sheet_list3.title = 'Форма сводного файла'
     main_draw(sheet_list3, data)
     # set_border(sheet_list3, f'A3:{last_cell_sheet3.coordinate}')
 
