@@ -7,6 +7,7 @@ import datetime
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.contrib.auth.hashers import make_password
 from staticpy.get_local_id_czl import get_local_id_czl
+from staticpy.get_local_number_sample import get_local_number_sample
 
 class AccountManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -109,9 +110,10 @@ class PhotoPoint(models.Model):
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-        if self.photo:
-            from staticpy.cordinates import coord
-            coord(self.latitude, self.longitude, self.photo.path)
+        if self.latitude is not None or self.longitude is not None:
+            if self.photo:
+                from staticpy.cordinates import coord
+                coord(self.latitude, self.longitude, self.photo.path)
 
 
     class Meta:
@@ -215,8 +217,6 @@ class ListRegion(models.Model):
             id_czl = get_local_id_czl(self.id_profile.id)
 
             ListRegion.objects.filter(id=self.id).update(number_region = id_czl['number_region__max'] + 1)
-        # ListRegion.objects.update(number_region = F('id'))
-        # print(self.number_region)
 
 
 class Sample(models.Model):
@@ -233,7 +233,7 @@ class Sample(models.Model):
     square = models.FloatField(u'Площадь', null=True, default=0)
     mark_update = models.IntegerField(null=True, default=0)
     unique_uid = models.UUIDField(default=uuid.uuid4, unique=True, blank=True)
-    # id_list_region_uuid = models.ForeignKey()
+    number_sample = models.IntegerField(null=True)
 
 
     class Meta:
@@ -242,6 +242,13 @@ class Sample(models.Model):
 
     def __str__(self):
         return f"({self.id})-{self.date}, {self.sample_area}, {self.soil_lot}"
+
+
+    def save(self, *args, **kwargs):
+        if self.number_sample is None or self.number_sample == 0 or self.number_sample == '0':
+            cur_number_sample = get_local_number_sample(self.id_list_region.id)
+            self.number_sample = cur_number_sample['number_sample__max'] + 1
+        super(Sample, self).save(*args, **kwargs)
 
 
 class Post(models.Model):
