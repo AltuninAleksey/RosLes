@@ -233,7 +233,7 @@ class Sample(models.Model):
     lenght = models.FloatField(u'Длина', null=True, default=0)
     square = models.FloatField(u'Площадь', null=True, default=0)
     mark_update = models.IntegerField(null=True, default=0)
-    unique_uid = models.UUIDField(default=0, unique=True, blank=True)
+    unique_uid = models.UUIDField(default=uuid.uuid4, unique=True, blank=True)
     number_sample = models.IntegerField(null=True)
 
 
