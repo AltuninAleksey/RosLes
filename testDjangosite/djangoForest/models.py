@@ -1,4 +1,5 @@
 import uuid
+from email.policy import default
 
 from django.db import models
 from django.db.models import F
@@ -103,8 +104,8 @@ class Track(models.Model):
 class PhotoPoint(models.Model):
     photo = models.ImageField(upload_to="photos/%Y/%m/%d/")
     id_sample = models.ForeignKey("Sample", on_delete=models.CASCADE, verbose_name='Проба', null = True)
-    latitude = models.FloatField(u'Широта', blank=True, default=0)
-    longitude = models.FloatField(u'Долгота', blank=True, default=0)
+    latitude = models.FloatField(u'Широта', blank=True, default=0, null= True)
+    longitude = models.FloatField(u'Долгота', blank=True, default=0, null=True)
     date = models.CharField(u'Дата', null=True, max_length=100)
     unique_uid = models.UUIDField(default=uuid.uuid4, unique=True, null=True, blank=True)
 
@@ -232,7 +233,7 @@ class Sample(models.Model):
     lenght = models.FloatField(u'Длина', null=True, default=0)
     square = models.FloatField(u'Площадь', null=True, default=0)
     mark_update = models.IntegerField(null=True, default=0)
-    unique_uid = models.UUIDField(default=uuid.uuid4, unique=True, blank=True)
+    unique_uid = models.UUIDField(default=0, unique=True, blank=True)
     number_sample = models.IntegerField(null=True)
 
 
