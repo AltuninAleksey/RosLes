@@ -289,6 +289,7 @@ class SampleSerializerId(serializers.Serializer):
     square = serializers.FloatField()
     soil_lot = serializers.CharField()
     number_region = serializers.CharField(max_length=100, source='id_list_region.number_region')
+    number_sample = serializers.IntegerField()
 
 
 class PostSerializer(serializers.ModelSerializer):
@@ -679,6 +680,7 @@ class GetSampleListDataSerializer(serializers.Serializer):
     soil_lot = serializers.CharField()
     square = serializers.FloatField()
     number_region = serializers.CharField(source='id_list_region.number_region')
+    number_sample = serializers.CharField()
 
 
 class GetAllSampleListDataSerializer(serializers.Serializer):
