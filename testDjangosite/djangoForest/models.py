@@ -115,7 +115,7 @@ class PhotoPoint(models.Model):
             import datetime
             self.date = datetime.datetime.now().strftime("%Y-%m-%dT%H:%M")
         super().save(*args, **kwargs)
-        if self.latitude != 0.0 or self.longitude != 0.0:
+        if self.latitude != '0.0' or self.longitude != '0.0':
             if self.photo:
                 from staticpy.cordinates import coord
                 coord(self.latitude, self.longitude, self.photo.path)

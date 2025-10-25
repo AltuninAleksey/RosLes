@@ -2417,7 +2417,8 @@ class GetAllListFieldDesc(ListAPIView):
                                 data_field.append(field_ready[i])
                         else:
                             field_ready = []
-            all_data.update({"data": data})
+            all_data.update({"data": sorted(data, key=lambda x: x['number_region'])})
+            print(data)
             all_data.update({"data_field": data_field})
             all_data.update({"desc_field": desc_field})
             all_data.update({"id_user": id_user})
