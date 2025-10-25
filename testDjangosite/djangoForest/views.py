@@ -267,6 +267,8 @@ class GpsView(generics.ListCreateAPIView):
 
 
 class GpsBySampleView(ListAPIView):
+    queryset = GPS.objects.all()
+    serializer_class = GPSSerializer
 
     def get(self, *args, **kwargs):
         try:
@@ -2327,13 +2329,13 @@ class GetUserManual(ListAPIView):
 
 
 class GetAllListFieldDesc(ListAPIView):
-    permission_classes = [IsAuthenticated, ]
+    # permission_classes = [IsAuthenticated, ]
 
     def get(self, request, *args, **kwargs):
-        subject_id = request.user.subject_rf_id
-        id_user = request.user.id
-        # subject_id = 31
-        # id_user = 11
+        # subject_id = request.user.subject_rf_id
+        # id_user = request.user.id
+        subject_id = 31
+        id_user = 11
         # print(subject_id)
         breed_data = []
         all_data = {}
@@ -2432,18 +2434,3 @@ class ForestDistrictView(APIView):
         data = ForestDistricts.objects.all()
 
         return Response({'data': ForestDistrictSerializer(data, many=True).data})
-
-
-class Nullview(APIView):
-
-    def get(self, request, *args, **kwargs):
-        from time import sleep
-        # for i in range(400, 720):
-        #     if ListRegion.objects.filter(id=i).exists():
-        #         # ListRegion.objects.filter(id=i).update(number_region = None)
-        #         lst = ListRegion.objects.get(id=i)
-        #         lst.save()
-                #
-        lst = ListRegion.objects.get(id=348)
-        lst.save()
-        return Response(0)

@@ -154,6 +154,8 @@ class GPSMobileSerializer(serializers.ModelSerializer):
         exclude = ['unique_uid']
 
 class GPSSerializer(serializers.ModelSerializer):
+    number_sample = serializers.CharField(source="id_sample.number_sample", read_only=True)
+
     class Meta:
         model = GPS
         fields = '__all__'
