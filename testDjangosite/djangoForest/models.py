@@ -110,8 +110,12 @@ class PhotoPoint(models.Model):
     unique_uid = models.UUIDField(default=uuid.uuid4, unique=True, null=True, blank=True)
 
     def save(self, *args, **kwargs):
+        print(f"date is {self.date}")
+        if self.date == 'null':
+            import datetime
+            self.date = datetime.datetime.now().strftime("%Y-%m-%dT%H:%M")
         super().save(*args, **kwargs)
-        if self.latitude is not None or self.longitude is not None:
+        if self.latitude != 0.0 or self.longitude != 0.0:
             if self.photo:
                 from staticpy.cordinates import coord
                 coord(self.latitude, self.longitude, self.photo.path)
