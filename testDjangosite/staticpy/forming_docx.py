@@ -306,31 +306,25 @@ def form_docx_listregion2(context: dict):
 
 
 def prepare_to_docx2(context):
-    #Буду тут брать id лист региона и по одному вытаскивать из БД сэмплы, и на их основе рисовать таблицы
-    # в form_docx делать блок try которая в зависимости от сортировки будет рисовать новую таблицу, либо использовать текущую
+
     if len(context['unique']) > 2:
         first_uniq = context['unique'][0:2]
-        print(f"FIRST UNIIIIIIIIIIIIIIIIIIIIIIQ {first_uniq})")
         second_uniq = context['unique'][2:]
-        print(f"FIRST UNIIIIIIIIIIIIIIIIIIIIIIQ {second_uniq})")
+
         data = []
         data2 = []
         new_context = context.copy()
         new_context.pop("data")
         for i in range(len(context['data'])):
-            # print(context['data'][i]['id_breed'])
             if context['data'][i]['id_breed'] in first_uniq:
-                print("ДА Я БЫЛ ЗДЕСЬ БЛЯТЬ НАХУЙ ЕБАНЫЙ В РООООООООООООООООООООООООООООООООООООООООТ")
                 data.append(context['data'][i])
             else:
                 data2.append(context['data'][i])
 
         new_context.update({"data": data})
-        print(f"NEW CKLSAJDNFDOPCJKSLDGNKLSNGKLSDNGKLSDNGLK SND{new_context}")
         res = form_docx_listregion2(new_context)
         new_context.pop('data')
         new_context.update({"data": data2})
-        # res = form_docx_listregion2(new_context)
         return res
     res = form_docx_listregion2(context)
     return res
@@ -341,17 +335,14 @@ def forming_docx_fieldcard(context: dict, photo_arr: list = None):
     if photo_arr is not None:
         for path_image in photo_arr:
             doc_image_arr.append(InlineImage(doc, image_descriptor=MEDIA_ROOT + '/' + path_image['photo'], width=Inches(6), height=Inches(9) ))
-    # print(context)
-    print(MEDIA_ROOT)
+    if 'не соответствует' in context['conclusion'].lower():
+        context['point7date'] = ''
+        context['point7number'] = ''
+        context['point7agreed'] = ''
+        context['respond_farm '] = ''
     context['images'] = doc_image_arr
     doc.render(context)
     filepath = os.path.abspath(f"{BASE_DIR}/media/docx_files/fieldcards/fieldcard_{context['id']}.docx")
-
-
-    # print(doc_image_arr)
-    # new_context = {'images': doc_image_arr}
-
-    # doc.render(new_context)
 
 
     doc.save(filepath)
@@ -505,8 +496,6 @@ def get_cur_breed(repro_1: dict) -> list[int]:
 
 
 def form_docx_listregion(context: dict, filepath:str):
-    # print(context['data'][0:3])
-    # print(f"ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ {len(context)}")
     trees_row = 1
     ids_list = []
     get_repro(context)
@@ -524,10 +513,6 @@ def form_docx_listregion(context: dict, filepath:str):
     breeds = get_all_breeds(context)
     hg = get_all_max_height(context)
     data.update({"data_breeds": breeds, "max_height": hg})
-    # doc = DocxTemplate(os.path.abspath(f"{BASE_DIR}/media/lst_template_1.docx"))
-    # filepath = os.path.abspath(f"{BASE_DIR}/media/list_region/list_region_{context['id']}.docx")
-    # doc.render(context)
-    # doc.save(filepath)
     doc = Document(filepath)
     section = doc.sections[-1]
     # section.orientation = 'LANDSCAPE'
