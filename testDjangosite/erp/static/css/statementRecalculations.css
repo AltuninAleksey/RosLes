@@ -76,12 +76,12 @@ h3{
 }
 .form{
     display: grid;
-    grid-template-columns: 430px 430px 290px ;
+    grid-template-columns: 430px 430px 290px;
     grid-template-rows: repeat(3, 50px);
     position: absolute;
     margin-top: 10px;
     margin-left: 30px;
-    height: 150px;
+    height: 100px;
     color: #177164;
 }
 .form select, .form input{
@@ -111,7 +111,7 @@ h3{
     max-height: 550px;
     display: flex;
     flex-direction: column;
-    margin-top: 170px;
+    margin-top: 130px;
     margin-left: 30px;
     margin-right: 30px;
 }

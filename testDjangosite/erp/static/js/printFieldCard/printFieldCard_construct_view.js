@@ -57,23 +57,27 @@ function setEventListenerForObjects() {
        var accord = document.getElementById("conclusion").value;
        var respond_farm_value = respond_farm.value;
 
-       if (accord == "Соответствует" && respond_farm_value == "Соответствует") {
-        document.getElementById('plot_farm_referring_land').disabled = true;
-       } else {
-        document.getElementById('plot_farm_referring_land').disabled = false;
-       }
-    }
-
-    respond_farm.onchange = function() {
-       var accord = document.getElementById("conclusion").value;
-       var respond_farm_value = respond_farm.value;
-
-       if (accord == "Соответствует" && respond_farm_value == "Соответствует") {
+       if(accord == "Молодняк не соответствует Правилам лесовосстановления и лесохозяйственного регламента лесничества (отсутствие критериев и требований)") {
+            document.getElementById('plot_farm_referring_land').value = 0;
             document.getElementById('plot_farm_referring_land').disabled = true;
        } else {
+            document.getElementById('plot_farm_referring_land').value = 2;
             document.getElementById('plot_farm_referring_land').disabled = false;
        }
+
+       if(accord.includes("не соответствует")) {
+            respond_farm.disabled = true;
+            document.getElementById("point7date2").value = "";
+            document.getElementById("point7number2").value = "";
+            document.getElementById("point7agreed2").value = "";
+       } else {
+            respond_farm.disabled = false;
+            document.getElementById("point7date2").value = APP.documentData.point7date;
+            document.getElementById("point7number2").value = APP.documentData.point7number;
+            document.getElementById("point7agreed2").value = APP.documentData.point7agreed;
+       }
     }
+
 
     var completeness = document.getElementById('completeness');
     completeness.onchange = function() {
@@ -203,10 +207,7 @@ async function setDataInPage() {
 async function setConclusion() {
 
     document.getElementById("respond_farm").value = APP.documentData.respond_farm == null || APP.documentData.respond_farm == true? "Соответствует" : "Не соответствует";
-    document.getElementById("conclusion").value = APP.documentData.conclusion == "" || APP.documentData.conclusion == null? "Соответствует": APP.documentData.conclusion;
-    document.getElementById("point7date2").value = APP.documentData.point7date;
-    document.getElementById("point7number2").value = APP.documentData.point7number;
-    document.getElementById("point7agreed2").value = APP.documentData.point7agreed;
+    document.getElementById("conclusion").value = APP.documentData.conclusion == "" || APP.documentData.conclusion == null? "Соответствует лесохозяйственному регламенту": APP.documentData.conclusion;
     document.getElementById("number_order").value = APP.documentData.number_order == null? "188" : APP.documentData.number_order;
 
 
@@ -258,25 +259,51 @@ async function setConclusion() {
     var accord = document.getElementById("conclusion").value;
     var respond_farm_value = respond_farm.value;
 
-    if (accord == "Соответствует" && respond_farm_value == "Соответствует") {
-        document.getElementById('plot_farm_referring_land').disabled = true;
+    if(accord == "Молодняк не соответствует Правилам лесовосстановления и лесохозяйственного регламента лесничества (отсутствие критериев и требований)") {
+         document.getElementById('plot_farm_referring_land').value = 0;
+         document.getElementById('plot_farm_referring_land').disabled = true;
     } else {
-        document.getElementById('plot_farm_referring_land').disabled = false;
+         document.getElementById('plot_farm_referring_land').value = 2;
+         document.getElementById('plot_farm_referring_land').disabled = false;
+    }
+
+    if(accord.includes("не соответствует")) {
+         respond_farm.disabled = true;
+         document.getElementById("point7date2").value = "";
+         document.getElementById("point7number2").value = "";
+         document.getElementById("point7agreed2").value = "";
+    } else {
+         respond_farm.disabled = false;
+         document.getElementById("point7date2").value = APP.documentData.point7date;
+         document.getElementById("point7number2").value = APP.documentData.point7number;
+         document.getElementById("point7agreed2").value = APP.documentData.point7agreed;
     }
 
     var point7date = document.getElementById('point7date');
     point7date.onchange = function() {
-        document.getElementById('point7date2').value = document.getElementById('point7date').value;
+        APP.documentData.point7date = document.getElementById('point7date').value;
+        accord = document.getElementById("conclusion").value;
+        if(!accord.includes("не соответствует")) {
+            document.getElementById('point7date2').value = document.getElementById('point7date').value;
+        }
     }
 
     var point7number = document.getElementById('point7number');
     point7number.onchange = function() {
-        document.getElementById('point7number2').value = document.getElementById('point7number').value;
+        APP.documentData.point7number = document.getElementById('point7number').value;
+        accord = document.getElementById("conclusion").value;
+        if(!accord.includes("не соответствует")) {
+            document.getElementById('point7number2').value = document.getElementById('point7number').value;
+        }
     }
 
     var point7agreed = document.getElementById('point7agreed');
     point7agreed.onchange = function() {
-        document.getElementById('point7agreed2').value = document.getElementById('point7agreed').value;
+        APP.documentData.point7agreed = document.getElementById('point7agreed').value;
+        accord = document.getElementById("conclusion").value;
+        if(!accord.includes("не соответствует")) {
+            document.getElementById('point7agreed2').value = document.getElementById('point7agreed').value;
+        }
     }
 }
 

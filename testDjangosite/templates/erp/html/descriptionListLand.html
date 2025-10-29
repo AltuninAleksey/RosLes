@@ -127,15 +127,18 @@
             </label>
         </p>
 
-        <p>Квартал:
-            <label for="filter_name_quarter"><input type="text" id="filter_name_quarter" name=""></label> </p>
+        <div style="display: flex">
+            <p style="width: 200px">Квартал:
+                <label for="filter_name_quarter"><input type="text" id="filter_name_quarter" name="" style="width: 100px"></label> </p>
+
+            <p style="width: 200px">Выдел: <input type="checkbox" id="checkbox_filter_soil_lot" name="scales" style="display: none;">
+                <label for="filter_soil_lot"><input readonly type="text" id="filter_soil_lot" name="" style="width: 100px"></label> </p>
+        </div>
 
 
         <p>Окончание периода: <input type="checkbox" id="checkbox_filter_date_end" name="scales">
              <label for="filter_date_end"><input readonly type="date" id="filter_date_end" name=""></label> </p>
 
-        <p>Выдел: <input type="checkbox" id="checkbox_filter_soil_lot" name="scales" style="display: none;">
-            <label for="filter_soil_lot"><input readonly type="text" id="filter_soil_lot" name=""></label> </p>
 
 <!--        <p style="display: none">Квартал: <input type="checkbox" id="checkbox_filter_quartal" name="scales">-->
 <!--            <label for="filter_quartal">-->

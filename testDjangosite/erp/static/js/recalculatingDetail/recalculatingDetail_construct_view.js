@@ -167,6 +167,7 @@ function closeAddForm(id) {
         var proba_main = document.getElementById("proba-main");
         var proba_avg_d = document.getElementById("proba-avg-d");
         var proba_avg_h = document.getElementById("proba-avg-h");
+        var proba_age = document.getElementById("proba-age");
         //var proba_all_count = document.getElementById("proba-all-count");
 
         proba_021_05.value = "";
@@ -178,6 +179,7 @@ function closeAddForm(id) {
         proba_main.checked = false;
         proba_avg_d.value = "";
         proba_avg_h.value = "";
+        proba_age.value = "";
         //proba_all_count.value = "";
     }
 

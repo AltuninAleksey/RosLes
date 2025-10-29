@@ -20,7 +20,7 @@ async function setDataInResultNaturObs() {
 
     for(let i = 0; i < APP.gpsTable.length; i++) {
         newHTML += `<tr>
-                        <td><input readonly id="id_sample${i}" type="text" style="width: 100%" value="${APP.gpsTable[i].id_sample}"></td>
+                        <td><input readonly id="id_sample${i}" type="text" style="width: 100%" value="${APP.gpsTable[0].number_sample}"></td>
                         <td><input readonly id="latitude${i}" type="text" style="width: 100%" value=` + "\"" + Number(APP.gpsTable[i].latitude).toFixed(6) + "\"" + `></td>
                         <td><input readonly id="longitude${i}" type="text" style="width: 100%" value=` + "\"" + Number(APP.gpsTable[i].longitude).toFixed(6) + "\"" + `></td>
                         <td style="width: 50px;">

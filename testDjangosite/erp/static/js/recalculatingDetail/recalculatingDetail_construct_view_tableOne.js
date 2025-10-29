@@ -173,6 +173,7 @@ function addProba() {
     var proba_main = document.getElementById("proba-main");
     var proba_avg_d = document.getElementById("proba-avg-d");
     var proba_avg_h = document.getElementById("proba-avg-h");
+    var proba_age = document.getElementById("proba-age");
     var proba_all_count =  Number(proba_021_05.value) + Number(proba_11_15.value) + Number(proba_02.value) + Number(proba_06_10.value) + Number(proba_15.value); //document.getElementById("proba-all-count");
 
 
@@ -190,7 +191,8 @@ function addProba() {
         main: proba_main.checked? 1: 0,
         avg_diameter: Number(proba_avg_d.value),
         avg_height: Number(proba_avg_h.value),
-        count_of_plants: Number(proba_all_count)
+        count_of_plants: Number(proba_all_count),
+        age: Number(proba_age.value)
     };
 
     if(newData.avg_height == 0 || newData.avg_height == null || newData.avg_height == undefined) {

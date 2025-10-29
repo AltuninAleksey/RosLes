@@ -51,7 +51,7 @@ function setEventListenerForObjects() {
        var accord = document.getElementById("conclusion").value;
        var respond_farm_value = respond_farm.value;
 
-       if (accord == "Соответствует" && respond_farm_value == "Соответствует") {
+       if (accord.includes("Соответствует") && respond_farm_value == "Соответствует") {
         document.getElementById('plot_farm_referring_land').disabled = true;
        } else {
         document.getElementById('plot_farm_referring_land').disabled = false;
@@ -62,7 +62,7 @@ function setEventListenerForObjects() {
        var accord = document.getElementById("conclusion").value;
        var respond_farm_value = respond_farm.value;
 
-       if (accord == "Соответствует" && respond_farm_value == "Соответствует") {
+       if (accord.includes("Соответствует") && respond_farm_value == "Соответствует") {
             document.getElementById('plot_farm_referring_land').disabled = true;
        } else {
             document.getElementById('plot_farm_referring_land').disabled = false;
@@ -206,7 +206,7 @@ async function setDataInPage() {
 async function setConclusion() {
 
     document.getElementById("respond_farm").value = "Соответствует";
-    document.getElementById("conclusion").value = "Соответствует";
+    document.getElementById("conclusion").value = "Соответствует лесохозяйственному регламенту";
     document.getElementById("point7date2").value = "";
     document.getElementById("point7number2").value = "";
     document.getElementById("point7agreed2").value = "";
