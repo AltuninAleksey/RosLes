@@ -1,6 +1,6 @@
-let urlGlobal = "http://127.0.0.1:8000";
+//let urlGlobal = "http://127.0.0.1:8000";
 //let urlGlobal = "http://90.156.208.88:8093";
-//let urlGlobal = "http://92.50.227.100:58493";
+let urlGlobal = "http://92.50.227.100:58493";
 
 function getAvtorization() {
     window.location.href = urlGlobal + "/erp/avtorization";
