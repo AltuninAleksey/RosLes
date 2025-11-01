@@ -2047,7 +2047,6 @@ class FormingDocxView(ListAPIView):
                 id=request.data['id']).values('id_list_region')).values('id')
         ).values('photo')
 
-        print(photo)
 
         path_docx = forming_docx.forming_docx_fieldcard(request.data, photo)
         return Response({"document": path_docx})
@@ -2329,13 +2328,13 @@ class GetUserManual(ListAPIView):
 
 
 class GetAllListFieldDesc(ListAPIView):
-    # permission_classes = [IsAuthenticated, ]
+    permission_classes = [IsAuthenticated, ]
 
     def get(self, request, *args, **kwargs):
-        # subject_id = request.user.subject_rf_id
-        # id_user = request.user.id
-        subject_id = 31
-        id_user = 11
+        subject_id = request.user.subject_rf_id
+        id_user = request.user.id
+        # subject_id = 31
+        # id_user = 11
         # print(subject_id)
         breed_data = []
         all_data = {}
