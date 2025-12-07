@@ -2041,15 +2041,16 @@ class RatioCompositionCalculateInList(ListAPIView):
 class FormingDocxView(ListAPIView):
 
     def post(self, request, *args, **kwargs):
-        from staticpy import forming_docx
+        from staticpy import excel_form_field
         photo = PhotoPoint.objects.filter(
             id_sample__in = Sample.objects.filter(id_list_region__in = FieldCard.objects.filter(
                 id=request.data['id']).values('id_list_region')).values('id')
         ).values('photo')
 
 
-        path_docx = forming_docx.forming_docx_fieldcard(request.data, photo)
-        return Response({"document": path_docx})
+        # path_docx = forming_docx.forming_docx_fieldcard(request.data, photo)
+        path_excel = excel_form_field.create_forest_survey_excel(request.data, photo)
+        return Response({"document": path_excel})
 
 
 class AboutUserView(ListAPIView):
@@ -2064,9 +2065,10 @@ class AboutUserView(ListAPIView):
 class FormingDocxViewDescRegion(ListAPIView):
 
     def post(self, request, *args, **kwargs):
-        from staticpy import forming_docx
+        from staticpy import excel_desc_region
 
-        path_docx = forming_docx.forming_docx_desc_region(request.data)
+        # path_docx = forming_docx.forming_docx_desc_region(request.data)
+        path_docx = excel_desc_region.create_plot_description_excel(request.data)
         return Response({"document": path_docx})
 
 
@@ -2320,6 +2322,64 @@ class ListRegionDocxCreater(ListAPIView):
         return Response({"code": 400, "error_text": "dont send id"})
 
 
+class CreateAllExcelInOne(ListAPIView):
+    queryset = ListRegion.objects.all()
+    serializer_class = ListRegionSerializer
+
+    def post(self, request, *args, **kwargs):
+        # from staticpy.forming_docx import form_docx_listregion, prep_to_form, form_docx_listregion2, prepare_to_docx2
+        from staticpy.form_excel import list_region_excel
+        if request.data['id']:
+            try:
+                print(request.data['id'])
+                data = ListRegion.objects.get(id=request.data['id'])
+            except:
+                return Response({"code": 404, "error_text": "not found id"})
+            # list_reg = ListRegionSerializer(ListRegion.objects.get(id=request.data['id'])).data
+
+            new_data = {}
+            zxc = ListRegionSerializer(data).data
+
+            list_data = List.objects.filter(id_sample__id_list_region=request.data['id'])
+            list_only_breeds = List.objects.filter(id_sample__id_list_region=request.data['id']).values('id_breed').distinct()
+            list_only_breeds_under = List.objects.filter(id_sample__id_list_region=request.data['id']).values(
+                'id_undergrowth').distinct()
+            sample_area = Sample.objects.filter(id_list_region=request.data['id']).values("sample_area", "square").first()
+            field_card = FieldCard.objects.filter(id_list_region=request.data['id']).values("square_one_sample_area", "count_sample_area").get()
+            ds_forestly = DistrictForestly.objects.filter(id = zxc['id_district_forestly']).values("name_district_forestly", "id_forestly").get()
+            forestly = Forestly.objects.filter(id = ds_forestly['id_forestly']).values("name_forestly").get()
+            name_breeds = Breed.objects.filter(id__in = list_only_breeds).values("id", "name_breed")
+            name_breeds_under = Undergrowth.objects.filter(id__in=list_only_breeds_under).values("id", "name")
+            list_only_breeds = List.objects.filter(id_sample__id_list_region=request.data['id']).values(
+                'id_undergrowth').distinct()
+
+            list_res = ListSerializer(list_data, many=True).data
+            field_card_full_data = FieldCardSerializerModel(FieldCard.objects.filter(id_list_region=request.data['id']), many=True).data
+
+            desc_region_full_data = DescriptionRegionModelSerializerWithNames(DescriptionRegion.objects.get(id_list_region = request.data['id'])).data
+            print("=======================================")
+            print(field_card_full_data)
+            # print(new_data)
+            try:
+                new_data.update({"id":request.data['id']})
+                new_data.update(zxc)
+                new_data.update(sample_area)
+                new_data.update(forestly)
+                new_data.update(ds_forestly)
+                new_data.update(field_card)
+                new_data.update({"name_breeds": name_breeds})
+                new_data.update({"name_breeds_under": name_breeds_under})
+                new_data.update({"data": ListSerializer(list_data, many=True).data})
+                new_data.update({"data_for_field": field_card_full_data[0]})
+                new_data.update({"data_for_desc": desc_region_full_data})
+            except:
+                return Response({"error": 'NoneType'})
+            path = list_region_excel(new_data, podlesok=False, others=True)
+            return Response({"document": path})
+            # return Response(new_data)
+        return Response({"code": 400, "error_text": "dont send id"})
+
+
 class GetUserManual(ListAPIView):
 
     def get(self, *args, **kwargs):
@@ -2328,13 +2388,13 @@ class GetUserManual(ListAPIView):
 
 
 class GetAllListFieldDesc(ListAPIView):
-    permission_classes = [IsAuthenticated, ]
+    # permission_classes = [IsAuthenticated, ]
 
     def get(self, request, *args, **kwargs):
-        subject_id = request.user.subject_rf_id
-        id_user = request.user.id
-        # subject_id = 31
-        # id_user = 11
+        # subject_id = request.user.subject_rf_id
+        # id_user = request.user.id
+        id_user = 11
+        subject_id = 31
         # print(subject_id)
         breed_data = []
         all_data = {}

@@ -826,6 +826,21 @@ class DescriptionRegionSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+class DescriptionRegionModelSerializerWithNames(serializers.ModelSerializer):
+    district_forestly = serializers.CharField(source="id_list_region.id_district_forestly.name_district_forestly", read_only=True)
+    forestly = serializers.CharField(source="id_list_region.id_district_forestly.id_forestly.name_forestly", read_only=True)
+    id_subject_rf = serializers.CharField(
+        source="id_list_region.id_district_forestly.id_forestly.id_subject_rf.name_subject_RF", read_only=True)
+    soil_lot = serializers.CharField(source="id_list_region.soil_lot", read_only=True)
+    sample_region = serializers.FloatField(source="id_list_region.sample_region", read_only=True)
+    date = serializers.DateField(source="id_list_region.date", read_only=True)
+    # id_list_region = serializers.CharField(source="id_list_region.id")
+    number_region = serializers.CharField(source="id_list_region.number_region", read_only=True)
+    name_dacha = serializers.CharField(source="id_list_region.dacha", read_only=True)
+    name_quarter = serializers.CharField(source="id_list_region.name_quarter")
+    class Meta:
+        model = DescriptionRegion
+        fields = '__all__'
 
 class DescriptionRegionSerializerNonEconomyAct(serializers.ModelSerializer):
     # id_quarter = serializers.CharField(source='id_list_region.id_quarter.id')
@@ -921,6 +936,25 @@ class FieldCardSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+
+class FieldCardSerializerModel(serializers.ModelSerializer):
+    # id_quarter = serializers.CharField(source='id_list_region.id_quarter.id')
+    district_forestly = serializers.CharField(source="id_list_region.id_district_forestly.name_district_forestly", read_only=True)
+    forestly = serializers.CharField(source="id_list_region.id_district_forestly.id_forestly.name_forestly", read_only=True)
+    subject_rf = serializers.CharField(source="id_list_region.id_district_forestly.id_forestly.id_subject_rf.name_subject_RF",
+                                             read_only=True)
+    name_forest_district = serializers.CharField(source='id_forest_districts.name_forest_district', read_only=True)
+    soil_lot = serializers.CharField(source="id_list_region.soil_lot", read_only=True)
+    sample_region = serializers.FloatField(source="id_list_region.sample_region", read_only=True)
+    date = serializers.DateField(source="id_list_region.date", read_only=True)
+    number_region = serializers.CharField(source="id_list_region.number_region", read_only=True)
+    name_dacha = serializers.CharField(source="id_list_region.dacha", read_only=True)
+    name_quarter = serializers.CharField(source="id_list_region.name_quarter")
+
+    # count_sample_area = serializers.IntegerField(source='calculate_count_of_sample')
+    class Meta:
+        model = FieldCard
+        fields = '__all__'
 
 class FieldCardSerializerNoneSapling(serializers.ModelSerializer):
     dacha = serializers.CharField(source='id_list_region.dacha', read_only = True)
