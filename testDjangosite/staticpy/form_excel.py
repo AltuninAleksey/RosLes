@@ -1,5 +1,7 @@
 from distutils.fancy_getopt import wrap_text
 from staticpy.form_excel_draw_list3 import main_draw
+from staticpy.excel_desc_region import create_plot_description_excel
+from staticpy.excel_form_field import create_forest_survey_excel
 import openpyxl
 from openpyxl.styles import PatternFill, Alignment, Font, Border, Side
 from openpyxl.workbook import Workbook
@@ -494,7 +496,7 @@ def draw_empty_col(sheets, start_col, ):
     # samples_row[0] = last_row
     return last_row, last_col + 1
 
-def list_region_excel(data: dict):
+def list_region_excel(data: dict, podlesok: bool = True, others: bool = False):
     from openpyxl.utils.cell import get_column_letter
     sorted(data)
     get_repro(data)
@@ -642,11 +644,16 @@ def list_region_excel(data: dict):
     for row in sheets.iter_rows():
         for cell in row:
             cell.alignment = Alignment(wrap_text=True, vertical='top')
-
-    new_sheet = wb.create_sheet('Подлесок')
-    undergrowth_excel(new_sheet, data=data)
-    create_header(new_sheet, data=data)
+    if podlesok :
+        new_sheet = wb.create_sheet('Подлесок')
+        undergrowth_excel(new_sheet, data=data)
+        create_header(new_sheet, data=data)
+    if others:
+        create_plot_description_excel(data=data['data_for_desc'], wb=wb, save=False)
+        create_forest_survey_excel(data=data['data_for_field'], wb=wb, save=False)
     filepath = f'{BASE_DIR}/media/excel_files/listregion/listregion_{data["id"]}.xlsx'
+    if others:
+        filepath = f'{BASE_DIR}/media/excel_files/listregion/listregion_field_desc{data["id"]}.xlsx'
     wb.save(filepath)
 
     return filepath.split("testDjangosite")[1]
