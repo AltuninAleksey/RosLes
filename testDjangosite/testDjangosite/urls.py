@@ -33,6 +33,7 @@ urlpatterns = [
     path('forest_districts', ForestDistrictView.as_view()),
     path('getmains', GetAllListFieldDesc.as_view()),
     path('form_list_region', ListRegionDocxCreater.as_view()),
+    path('create_all_excel', CreateAllExcelInOne.as_view()),
     path('user_manual', GetUserManual.as_view()),
     path('logout', LogoutView.as_view()),
     path('v2/login', TokenObtainPairView.as_view()),
