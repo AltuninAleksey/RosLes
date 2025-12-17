@@ -3,6 +3,7 @@ package com.example.rosles.Screens
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -48,6 +49,7 @@ class Wood : BaseActivity("Пробная площадь") {
     @SuppressLint("Range", "SuspiciousIndentation")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         binding = WoodBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.title = "Пробная площадь"
