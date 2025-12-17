@@ -2049,7 +2049,7 @@ class FormingDocxView(ListAPIView):
 
 
         # path_docx = forming_docx.forming_docx_fieldcard(request.data, photo)
-        path_excel = excel_form_field.create_forest_survey_excel(request.data, photo)
+        path_excel = excel_form_field.create_forest_survey_excel(request.data)
         return Response({"document": path_excel})
 
 
