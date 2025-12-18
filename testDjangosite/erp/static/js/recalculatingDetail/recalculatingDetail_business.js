@@ -74,3 +74,13 @@ RecalculatingDetailBusiness.deleteGpsPoint = async function(id) {
 
     return requestData.data.get;
 }
+
+RecalculatingDetailBusiness.deletePhotoPoint = async function(id) {
+    requestData = await axios({
+        method: 'delete',
+        url: urlGlobal + "/upload/" + id,
+        responseType: 'json'
+    });
+
+    return requestData.data;
+}

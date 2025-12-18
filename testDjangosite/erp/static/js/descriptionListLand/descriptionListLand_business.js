@@ -61,3 +61,18 @@ DescriptionListLandBusiness.downloadExcel = async function() {
     });
     return requestData.data;
 }
+
+DescriptionListLandBusiness.downloadAllExcel = async function(data) {
+
+    var token = document.cookie.match(/jwttoken=(.+?)(;|$)/)[1];
+
+    var requestData = await axios({
+        method: 'post',
+        url: urlGlobal + "/create_all_excel",
+        data: data,
+        headers: {
+            'Authorization': 'Bearer ' + token
+        }
+    });
+    return requestData.data;
+}
