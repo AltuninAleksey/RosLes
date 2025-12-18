@@ -248,3 +248,4 @@ def create_plot_description_excel(data, wb=None, save: bool = True):
     if save:
         wb.save(output_filename)
         return output_filename.split("testDjangosite")[1]
+    return

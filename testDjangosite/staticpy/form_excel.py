@@ -630,7 +630,7 @@ def list_region_excel(data: dict, podlesok: bool = True, others: bool = False):
     filepath = f'{BASE_DIR}/media/excel_files/listregion/listregion_{data["id"]}.xlsx'
     if others:
         create_plot_description_excel(data=data['data_for_desc'], wb=wb, save=False)
-        create_forest_survey_excel(data=data['data_for_field'], wb=wb, save=False)
+        create_forest_survey_excel(data=data['data_for_field'], breeds_data = data, wb=wb, save=False)
         filepath = f'{BASE_DIR}/media/excel_files/listregion/listregion_field_desc{data["id"]}.xlsx'
     wb.save(filepath)
     print(f"FILEPATH {filepath}")

@@ -5,7 +5,7 @@ from openpyxl.utils import get_column_letter
 from testDjangosite.settings import BASE_DIR
 
 
-def create_forest_survey_excel(data, wb=None, save: bool = True):
+def create_forest_survey_excel(data, breeds_data, wb=None, save: bool = True):
     if save:
         output_filename = f'{BASE_DIR}/media/excel_files/field/field_{data["id"]}.xlsx'
 
@@ -147,12 +147,12 @@ def create_forest_survey_excel(data, wb=None, save: bool = True):
     create_wrapped_cell(ws, f'A{current_row}:G{current_row}', "Характеристика участка",
                         is_bold=True, alignment=center_align)
     current_row += 1
-
+    print(data['purpose_of_forests'])
     characteristics = [
         ("1.", "Целевое назначение лесов", data.get('purpose_of_forests', '')),
         ("", "Категория защитных лесов", data.get('forest_protection_category', '')),
         ("", "Особо защитные участки лесов", data.get('protected_areas_of_forests', '')),
-        ("2.", "Участок находится в аренде (постоянном бессрочном пользовании)", data.get('rent_area', '')),
+        ("2.", "Участок находится в аренде (постоянном бессрочном пользовании)", "Да" if data.get('rent_area', '') == True else "Нет" ),
         ("3.", "Категория земель лесного фонда, на которой восстановлено лесное насаждение",
          data.get('category_of_forest_fund_lands', '')),
         ("4.", "Способ лесовосстановления", data.get('method_of_reforestation', '')),
@@ -266,7 +266,7 @@ def create_forest_survey_excel(data, wb=None, save: bool = True):
 
     samples_data = data.get('samples', [])
     for sample in samples_data:
-        number_value = sample.get('number', '')
+        number_value = sample.get('number', '') if 'number' in sample else sample.get('number_sample', '')
         latitude_value = sample.get('latitude', '')
         longitude_value = sample.get('longitude', '')
 
@@ -304,11 +304,16 @@ def create_forest_survey_excel(data, wb=None, save: bool = True):
     saplings_data = data.get('saplings', [])
     for item in saplings_data:
         ratio_value = item.get('ratio_composition', '')
-        breed_value = item.get('breed', '')
-        age_value = item.get('age', '')
+        if 'breed' in item:
+            breed_value = item.get('breed', '')
+        if 'id_breed' in item:
+            for breed in breeds_data['name_breeds']:
+                if breed['id'] == item['id_breed']:
+                    breed_value = breed['name_breed']
+        age_value = item.get('age', '') if 'age' in item else item.get('avg_age', '')
         height_value = item.get('avg_height', '')
-        diameter_value = item.get('diameter', '')
-        count_value = item.get('count_of_plants', '')
+        diameter_value = item.get('diameter', '') if 'diameter' in item else item.get('avg_diameter', '')
+        count_value = item.get('count_of_plants', '') if 'count_of_plants' in item else item.get('total', '')
 
         create_table_cell(ws, f'A{current_row}', ratio_value)
         create_table_cell(ws, f'B{current_row}', breed_value)
@@ -374,3 +379,5 @@ def create_forest_survey_excel(data, wb=None, save: bool = True):
     if save:
         wb.save(output_filename)
         return output_filename.split("testDjangosite")[1]
+
+    return
