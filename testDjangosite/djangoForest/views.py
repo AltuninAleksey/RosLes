@@ -1393,6 +1393,16 @@ class PhotoPointView(APIView):
         return Response({"http": status.HTTP_200_OK}, status=200)
 
 
+    def delete(self, *args, **kwargs):
+        try:
+            instance = PhotoPoint.objects.get(id=kwargs['pk'])
+        except:
+            return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
+                            status=status.HTTP_404_NOT_FOUND)
+        instance.delete()
+        return Response({"code": status.HTTP_200_OK}, status=status.HTTP_200_OK)
+
+
 class AnroidDownland(APIView):
 
     def get(self, *args, **kwargs):
@@ -2357,8 +2367,6 @@ class CreateAllExcelInOne(ListAPIView):
             field_card_full_data = FieldCardSerializerModel(FieldCard.objects.filter(id_list_region=request.data['id']), many=True).data
 
             desc_region_full_data = DescriptionRegionModelSerializerWithNames(DescriptionRegion.objects.get(id_list_region = request.data['id'])).data
-            print("=======================================")
-            print(field_card_full_data)
             # print(new_data)
             try:
                 new_data.update({"id":request.data['id']})
