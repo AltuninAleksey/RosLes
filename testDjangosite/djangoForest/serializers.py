@@ -950,7 +950,19 @@ class FieldCardSerializerModel(serializers.ModelSerializer):
     number_region = serializers.CharField(source="id_list_region.number_region", read_only=True)
     name_dacha = serializers.CharField(source="id_list_region.dacha", read_only=True)
     name_quarter = serializers.CharField(source="id_list_region.name_quarter")
-
+    # economy = serializers.CharField(source='id_economy.name_economy', read_only=True)
+    # ratio = serializers.CharField(source='id_point7table.ratio_composition', read_only=True)
+    # age = serializers.CharField(source='id_point7table.age', read_only=True)
+    # avg_height = serializers.CharField(source='id_point7table.avg_height', read_only=True)
+    # avg_diametr = serializers.CharField(source='id_point7table.avg_diameter', read_only=True)
+    # count_plants = serializers.CharField(source='id_point7table.count_register_wood_plants', read_only=True)
+    purpose_of_forests = serializers.CharField(source='id_purpose_of_forests.name_purpose', read_only=True)
+    forest_protection_category = serializers.CharField(source="id_forest_protection_category.name_forest_protection_category", read_only=True)
+    method_of_reforestation = serializers.CharField(source="id_method_of_reforestation.name_of_method", read_only=True)
+    category_of_forest_fund_lands = serializers.CharField(source="id_category_of_forest_fund_lands.name_category")
+    sample_area = serializers.CharField(source='id_list_region.sample_region')
+    forest_conditions = serializers.CharField(source="id_type_forest_growing_conditions.type_forest_growing_conditions", read_only=True)
+    plot_farm_referring_land = serializers.CharField(source="id_category_of_forest_fund_lands", read_only=True)
     # count_sample_area = serializers.IntegerField(source='calculate_count_of_sample')
     class Meta:
         model = FieldCard
@@ -1047,6 +1059,14 @@ class PlotCoeffSerializer(serializers.ModelSerializer):
         model = PlotCoeff
         fields = "__all__"
 
+
+class PlotCoeffExcelSerializer(serializers.ModelSerializer):
+    breed = serializers.CharField(source='breed.name_breed')
+    avg_diametr = serializers.CharField(source='avg_diameter')
+    ratio = serializers.CharField(source="ratio_composition")
+    class Meta:
+        model = PlotCoeff
+        fields = "__all__"
 
 class ListFieldSerializer(serializers.ModelSerializer):
     # id_breed = serializers.CharField(source="id_list_region_breed.id_breed")

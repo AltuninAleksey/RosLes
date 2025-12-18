@@ -938,7 +938,6 @@ class Point7TableSaplingView(ListAPIView):
         if not FieldCard.objects.filter(pk=kwargs['id_field_card']).exists():
             return Response({"error": "fieldcard not found"}, status=status.HTTP_404_NOT_FOUND)
         id_list_region = FieldCard.objects.filter(pk=kwargs['id_field_card']).values("id_list_region")
-        # print(id_list_region[0])
         data = ListSerializer(List.objects.filter(id_sample__id_list_region=id_list_region[0]['id_list_region'],
                                                   id_undergrowth = None, count_of_plants__gt = 0),
                               many=True).data
@@ -946,25 +945,8 @@ class Point7TableSaplingView(ListAPIView):
         for id in data:
             sample_obj.append(id['id_sample'])
         sample_data = SampleSerializer(Sample.objects.filter(id__in=sample_obj), many=True).data
-
-
-        # print(data)
-        # print(data[0])
         calc_data = calculate(data, sample_data)
         return Response(calc_data)
-        # if kwargs:
-        #     from staticpy.calculate_ratio_composition import calculate_coeff
-        #     try:
-        #         lst = List.objects.filter(id_sample__id_list_region=kwargs["pk"]).values(
-        #             "age", "avg_height", "avg_diameter", "count_of_plants", "id_breed")
-        #         # print(lst)
-        #         print(calculate_coeff(lst))
-        #         return Response(calculate_coeff(lst))
-        #         # return Response({"get": Point7TableSaplingSerializer(point7Table2Sapling.objects.get(id=kwargs["pk"])).data})
-        #     except:
-        #         return Response({'error': status.HTTP_404_NOT_FOUND, 'error_text': "invalid id"},
-        #                         status=status.HTTP_404_NOT_FOUND)
-        # return Response({"get": Point7TableSaplingSerializer(point7Table2Sapling.objects.all(), many=True).data})
 
 
 class PurposeOfForestsView(ListAPIView):
@@ -2337,16 +2319,14 @@ class CreateAllExcelInOne(ListAPIView):
     serializer_class = ListRegionSerializer
 
     def post(self, request, *args, **kwargs):
-        # from staticpy.forming_docx import form_docx_listregion, prep_to_form, form_docx_listregion2, prepare_to_docx2
         from staticpy.form_excel import list_region_excel
+        from staticpy.calculate_ratio_version4 import calculate
         if request.data['id']:
             try:
                 print(request.data['id'])
                 data = ListRegion.objects.get(id=request.data['id'])
             except:
                 return Response({"code": 404, "error_text": "not found id"})
-            # list_reg = ListRegionSerializer(ListRegion.objects.get(id=request.data['id'])).data
-
             new_data = {}
             zxc = ListRegionSerializer(data).data
 
@@ -2367,7 +2347,17 @@ class CreateAllExcelInOne(ListAPIView):
             field_card_full_data = FieldCardSerializerModel(FieldCard.objects.filter(id_list_region=request.data['id']), many=True).data
 
             desc_region_full_data = DescriptionRegionModelSerializerWithNames(DescriptionRegion.objects.get(id_list_region = request.data['id'])).data
+            GPS_obj = GPSSerializer(GPS.objects.filter(id_sample__id_list_region=request.data['id'], flag_center=1), many=True).data
             # print(new_data)
+            plot_obj = PlotCoeffExcelSerializer(PlotCoeff.objects.filter(id_field_card=field_card_full_data[0]['id']), many=True).data
+            data = ListSerializer(List.objects.filter(id_sample__id_list_region=field_card_full_data[0]['id_list_region'],
+                                                      id_undergrowth=None, count_of_plants__gt=0),
+                                  many=True).data
+            sample_obj = []
+            for id in data:
+                sample_obj.append(id['id_sample'])
+            sample_data = SampleSerializer(Sample.objects.filter(id__in=sample_obj), many=True).data
+            calc_data = calculate(data, sample_data)
             try:
                 new_data.update({"id":request.data['id']})
                 new_data.update(zxc)
@@ -2380,11 +2370,13 @@ class CreateAllExcelInOne(ListAPIView):
                 new_data.update({"data": ListSerializer(list_data, many=True).data})
                 new_data.update({"data_for_field": field_card_full_data[0]})
                 new_data.update({"data_for_desc": desc_region_full_data})
+                new_data['data_for_field']['samples'] = GPS_obj
+                new_data['data_for_field']['coeff'] = plot_obj
+                new_data['data_for_field']['saplings'] = calc_data
             except:
                 return Response({"error": 'NoneType'})
             path = list_region_excel(new_data, podlesok=False, others=True)
             return Response({"document": path})
-            # return Response(new_data)
         return Response({"code": 400, "error_text": "dont send id"})
 
 
