@@ -103,10 +103,11 @@ def create_header(sheets, data):
     sheets.merge_cells("G5:H5")
 
     sheets['I5'].value = "площадь ПП, га."
+    if data['count_sample_area'] is None or data['count_sample_area'] == 0:
+        data['count_sample_area'] = 1
+    if data['square'] is None or data['square'] == 0:
+        data['square'] = 1
     try:
-        sam = data['count_sample_area']
-        if sam == 0:
-            sam = 1
         sheets['K5'].value = (data['square'] / data['count_sample_area']) / 10000
     except:
         if len_samples_res == 0:
