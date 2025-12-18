@@ -478,22 +478,6 @@ def draw_empty_col(sheets, start_col, ):
     for col in range(5):
         for row in range(1):
             sheets.cell(row=last_row + 1, column=start_col + col, value=hg_names[col])
-    # last_row += 2
-    # for i in data:
-    #     res = count_breeds(data[i])
-    #     if i not in samples_row and FLAG:
-    #         last_row = max(samples_row.values()) + 1
-    #         samples_row[i] = last_row
-    #     for j in range(len(res)):
-    #         sheets.cell(row=last_row, column=start_col + j, value=res[j])
-    #         total += 0
-    #     samples_row[i] = last_row
-    #     sheets.cell(row=last_row, column=1, value=i)
-    #     last_row += 1
-
-    # print(data[368])
-    # last_row = max(samples_row.values()) + 1
-    # samples_row[0] = last_row
     return last_row, last_col + 1
 
 def list_region_excel(data: dict, podlesok: bool = True, others: bool = False):
@@ -508,15 +492,6 @@ def list_region_excel(data: dict, podlesok: bool = True, others: bool = False):
     sheets.title = "Перечетная ведомость"
 
     create_header(sheets, data)
-    # sheets.title = "Подлесок"
-    # sheets['A7'].value = "Номер пробной площади"
-    # sheets.merge_cells("A7:A10")
-    # # sheets['A6'].aligment = Alignment(wrap_text=True)
-    # sheets['B7'].value = "Искусственное восстановление"
-    # test = sheets['B7']
-    # true_breeds = {}
-    # for i in data['name_breeds']:
-    #     true_breeds[i['id']] = i['name_breed']
 
 
     start_col = 2
@@ -525,13 +500,16 @@ def list_region_excel(data: dict, podlesok: bool = True, others: bool = False):
     last_col = start_col
     last_row = start_row
     if len(data['repro_1']['breeds_data']) == 0 and len(data['repro_2']['breeds_data'])== 0 and len(data['repro_3']['breeds_data'])==0:
-
-        new_sheet = wb.create_sheet('Подлесок')
-        undergrowth_excel(new_sheet, data=data)
-        create_header(new_sheet, data=data)
-        filepath = f'{BASE_DIR}/media/excel_files/listregion/listregion_{data["id"]}.xlsx'
+        if not others:
+            new_sheet = wb.create_sheet('Подлесок')
+            undergrowth_excel(new_sheet, data=data)
+            create_header(new_sheet, data=data)
+            filepath = f'{BASE_DIR}/media/excel_files/listregion/listregion_{data["id"]}.xlsx'
+        else:
+            create_plot_description_excel(data=data['data_for_desc'], wb=wb, save=False)
+            create_forest_survey_excel(data=data['data_for_field'], wb=wb, save=False)
+            filepath = f'{BASE_DIR}/media/excel_files/listregion/listregion_field_desc{data["id"]}.xlsx'
         wb.save(filepath)
-
         return filepath.split("testDjangosite")[1]
 
 
@@ -648,14 +626,13 @@ def list_region_excel(data: dict, podlesok: bool = True, others: bool = False):
         new_sheet = wb.create_sheet('Подлесок')
         undergrowth_excel(new_sheet, data=data)
         create_header(new_sheet, data=data)
+    filepath = f'{BASE_DIR}/media/excel_files/listregion/listregion_{data["id"]}.xlsx'
     if others:
         create_plot_description_excel(data=data['data_for_desc'], wb=wb, save=False)
         create_forest_survey_excel(data=data['data_for_field'], wb=wb, save=False)
-    filepath = f'{BASE_DIR}/media/excel_files/listregion/listregion_{data["id"]}.xlsx'
-    if others:
         filepath = f'{BASE_DIR}/media/excel_files/listregion/listregion_field_desc{data["id"]}.xlsx'
     wb.save(filepath)
-
+    print(f"FILEPATH {filepath}")
     return filepath.split("testDjangosite")[1]
 
 
