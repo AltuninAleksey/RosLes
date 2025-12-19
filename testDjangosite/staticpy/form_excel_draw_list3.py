@@ -111,12 +111,11 @@ def create_header(sheets, data):
 def main_draw(sheets, data: dict = None):
 
     create_header(sheets, data)
-
     methods = {2:"искусственное лесовосстановление", 3:"комбинированное лесовосстановление", 4: "естественное вследствие мер содействия лесовосстановлению", 5: "естественное вследсвие природных процессов"}
     cats = {2:"вырубка", 3:"гарь", 4: "прогалины и пустыри", 5: "погибшие насаждения", 6:'иное'}
     # data_test = ListRegionSerializer(ListRegion.objects.get(id=474)).data
     # print(data_test)
-    print(data['data'])
+
     for row in range(len(data['data'])):
         first_sample = SampleSerializer(Sample.objects.filter(id_list_region=data['data'][row]['id']).first()).data
         field = FieldCardSerializer(FieldCard.objects.get(id_list_region=data['data'][row]['id'])).data
@@ -170,6 +169,8 @@ def main_draw(sheets, data: dict = None):
                 pass
         adjusted_width = (max_length + 2) * 1.2
         sheets.column_dimensions[column].width = adjusted_width
-
-    set_border(sheets, f"A3:{last_cell.coordinate}")
+    if last_cell:
+        set_border(sheets, f"A3:{last_cell.coordinate}")
+    else:
+        set_border(sheets, "A2:R2")
     return last_cell
