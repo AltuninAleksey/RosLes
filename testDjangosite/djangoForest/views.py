@@ -2388,23 +2388,19 @@ class GetUserManual(ListAPIView):
 
 
 class GetAllListFieldDesc(ListAPIView):
-    # permission_classes = [IsAuthenticated, ]
+    permission_classes = [IsAuthenticated, ]
 
     def get(self, request, *args, **kwargs):
-        # subject_id = request.user.subject_rf_id
-        # id_user = request.user.id
-        id_user = 11
-        subject_id = 31
-        # print(subject_id)
+        subject_id = request.user.subject_rf_id
+        id_user = request.user.id
+        # id_user = 11
+        # subject_id = 31
         breed_data = []
         all_data = {}
         if subject_id:
             data = []
             data_field = []
             desc_field = []
-            # if not ListRegion.objects.filter(
-            #         id_district_forestly_id__id_forestly_id__id_subject_rf_id=subject_id).exists():
-            #     return Response({"data": []})
             lst = ListRegion.objects.filter(
                 id_district_forestly__isnull=False,
                 id_district_forestly_id__id_forestly_id__id_subject_rf_id=subject_id)
