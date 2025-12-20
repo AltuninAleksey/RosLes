@@ -606,7 +606,7 @@ def list_region_excel(data: dict, podlesok: bool = True, others: bool = False):
         try:
             cell =  sheets.cell(row=cur_row + 1, column=i)
             res = (data['square'] / len_samples_res) / 10000
-            sheets.cell(row=cur_row + 2, column=i, value=round(cell.value*10000)/400)
+            sheets.cell(row=cur_row + 2, column=i, value=round(cell.value*10000)/data['square'])
         except:
             pass
         sheets.merge_cells(start_row=cur_row+2, start_column=i, end_row=cur_row+2, end_column=i+4)
