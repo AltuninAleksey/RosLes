@@ -5,7 +5,7 @@ from openpyxl.utils import get_column_letter
 from testDjangosite.settings import BASE_DIR
 
 
-def create_forest_survey_excel(data, breeds_data, wb=None, save: bool = True):
+def create_forest_survey_excel(data, breeds_data = None, wb=None, save: bool = True):
     if save:
         output_filename = f'{BASE_DIR}/media/excel_files/field/field_{data["id"]}.xlsx'
 
@@ -306,7 +306,7 @@ def create_forest_survey_excel(data, breeds_data, wb=None, save: bool = True):
         ratio_value = item.get('ratio_composition', '')
         if 'breed' in item:
             breed_value = item.get('breed', '')
-        if 'id_breed' in item:
+        if 'id_breed' in item and not breeds_data is None:
             for breed in breeds_data['name_breeds']:
                 if breed['id'] == item['id_breed']:
                     breed_value = breed['name_breed']
