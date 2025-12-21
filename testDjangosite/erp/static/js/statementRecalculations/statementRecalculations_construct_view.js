@@ -147,7 +147,7 @@ function updateDataInStatementRecalculationsTbody(data) {
                             <td class="textAlignCenter td5">${data[i].name_quarter == null? "" : data[i].name_quarter}</td>
                             <td class="textAlignCenter td6">${data[i].soil_lot}</td>
                             <td class="textAlignCenter td6">${data[i].sample_region}</td>
-                            <td style="width: 10px; text-align: center; display:none;"` +  "onClick='event.stopPropagation();downloadAllExcel(" + data[i].id + ");'>" +
+                            <td style="width: 10px; text-align: center;"` +  "onClick='event.stopPropagation();downloadAllExcel(" + data[i].id + ");'>" +
                                 `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="fill:#000000"><path d="M11.292 16.706a1 1 0 0 0 1.416 0l3-3a1 1 0 0 0-1.414-1.414L13 13.586V4a1 1 0 0 0-2 0v9.586l-1.293-1.293a1 1 0 0 0-1.414 1.414zM17 19H7a1 1 0 0 0 0 2h10a1 1 0 0 0 0-2z" /></svg>
                             </td>
                             <td style="width: 15px; text-align: center;"` +  "onClick='event.stopPropagation();deleteStatementRecalculation(" + data[i].id + ");'>" +
