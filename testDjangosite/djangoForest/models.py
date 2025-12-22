@@ -611,7 +611,7 @@ class FieldCard(models.Model):
     rent_area = models.BooleanField(default=0, verbose_name="Участок находится в аренде", null=True)
     id_category_of_forest_fund_lands = models.ForeignKey("CategoryOfForestFundLands",
                                                          on_delete=models.CASCADE,
-                                                         verbose_name="Категория земель лесного фонда", null=True)
+                                                         verbose_name="Категория земель лесного фонда", null=True, default=2)
     id_method_of_reforestation = models.ForeignKey("MethodOfReforestation",
                                                    on_delete=models.CASCADE,
                                                    verbose_name="Способ лесовосстановления", null=True)
