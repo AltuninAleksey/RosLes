@@ -931,6 +931,9 @@ class Point7TableView(ListAPIView):
 
 
 class Point7TableSaplingView(ListAPIView):
+    queryset = List.objects.all()
+    model = List
+    serializer_class = SampleSerializer
 
     def get(self, request, *args, **kwargs):
         from staticpy.calculate_ratio_version4 import calculate
@@ -2298,16 +2301,8 @@ class ListRegionDocxCreater(ListAPIView):
                 new_data.update({"name_breeds": name_breeds})
                 new_data.update({"name_breeds_under": name_breeds_under})
                 new_data.update({"data": ListSerializer(list_data, many=True).data})
-                # new_data.update({"data_field": FieldCardSerializer(FieldCard.objects.get(id_list_region=request.data['id'])).data})
-                # new_data.update({"data_desc": DescriptionRegionSerializer(DescriptionRegion.objects.get(id_list_region=request.data['id'])).data})
-                # new_data.update({"data_sample": SampleSerializer(Sample.objects.filter(id_list_region=request.data['id']), many=True).data})
-                # new_data.update({"list_region": ListRegionSerializer(ListRegion.objects.get(id=request.data['id'])).data})
-                # new_data.update({'method': MethodOfReforestation.objects.get(id=new_data['data_field']['id_method_of_reforestation']).values('name_of_method')})
             except:
                 return Response({"error": 'NoneType'})
-            # path = form_docx_listregion(new_data, f"{BASE_DIR}/media/list_region/list_region_{470}.docx")
-            # path = prep_to_form(new_data)
-            # path = form_docx_listregion2(new_data)
             path = list_region_excel(new_data)
             return Response({"document": path})
             # return Response(new_data)
