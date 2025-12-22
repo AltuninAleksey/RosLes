@@ -147,7 +147,6 @@ def create_forest_survey_excel(data, breeds_data = None, wb=None, save: bool = T
     create_wrapped_cell(ws, f'A{current_row}:G{current_row}', "Характеристика участка",
                         is_bold=True, alignment=center_align)
     current_row += 1
-    print(data['purpose_of_forests'])
     characteristics = [
         ("1.", "Целевое назначение лесов", data.get('purpose_of_forests', '')),
         ("", "Категория защитных лесов", data.get('forest_protection_category', '')),
