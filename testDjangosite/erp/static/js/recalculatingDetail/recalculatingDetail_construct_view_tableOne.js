@@ -169,10 +169,10 @@ function addProba() {
     var proba_02 = document.getElementById("proba-0.2");
     var proba_06_10 = document.getElementById("proba-0.6-1.0");
     var proba_15 = document.getElementById("proba-1.5");
-    var proba_maxheig = document.getElementById("proba-maxheig");
+    var proba_maxheig = document.getElementById("proba-maxheig").replaceAll(",", ".");
     var proba_main = document.getElementById("proba-main");
-    var proba_avg_d = document.getElementById("proba-avg-d");
-    var proba_avg_h = document.getElementById("proba-avg-h");
+    var proba_avg_d = document.getElementById("proba-avg-d").replaceAll(",", ".");
+    var proba_avg_h = document.getElementById("proba-avg-h").replaceAll(",", ".");
     var proba_age = document.getElementById("proba-age");
     var proba_all_count =  Number(proba_021_05.value) + Number(proba_11_15.value) + Number(proba_02.value) + Number(proba_06_10.value) + Number(proba_15.value); //document.getElementById("proba-all-count");
 

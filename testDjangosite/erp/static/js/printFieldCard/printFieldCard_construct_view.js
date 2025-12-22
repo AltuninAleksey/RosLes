@@ -324,8 +324,8 @@ async function saveFieldCard() {
 
     for(var i = startIndexForSaveGps; i < APP.countLineGpsPoint; i++) {
         var id_sample = document.getElementById("id_sample"+i).value;
-        var latitude = document.getElementById("latitude"+i).value;
-        var longitude = document.getElementById("longitude"+i).value;
+        var latitude = document.getElementById("latitude"+i).value.replaceAll(",", ".");
+        var longitude = document.getElementById("longitude"+i).value.replaceAll(",", ".");
 
         var item = {
             longitude: longitude,
@@ -389,7 +389,7 @@ async function saveFieldCard() {
     }
 
     if(checkData(document.getElementById("completeness2").value)) {
-        data.completeness = document.getElementById("completeness2").value;
+        data.completeness = document.getElementById("completeness2").value.replaceAll(",", ".");
     }
 
     if(checkData(document.getElementById("conclusion").value)) {
@@ -461,7 +461,7 @@ async function saveFieldCard() {
     }
 
     if(checkData(document.getElementById("completeness").value == ""? null: document.getElementById("completeness").value)) {
-        data.point7_completeness = document.getElementById("completeness").value == ""? null: document.getElementById("completeness").value;
+        data.point7_completeness = document.getElementById("completeness").value == ""? null: document.getElementById("completeness").value.replaceAll(",", ".");
     }
 
     if(checkData(document.getElementById("point7_natural_composition").value)) {
@@ -473,7 +473,7 @@ async function saveFieldCard() {
     }
 
     if(checkData(document.getElementById("stock").value == ""? null : document.getElementById("stock").value)) {
-        data.point7_stock = document.getElementById("stock").value == ""? null : document.getElementById("stock").value;
+        data.point7_stock = document.getElementById("stock").value == ""? null : document.getElementById("stock").value.replaceAll(",", ".");
     }
 
     if(checkData(document.getElementById("point7agreed").value)) {
@@ -517,7 +517,7 @@ async function saveFieldCard() {
 
 
     if( checkData(document.getElementById("stock2").value)) {
-        data.stock = document.getElementById("stock2").value;
+        data.stock = document.getElementById("stock2").value.replaceAll(",", ".");
     }
 
     if( checkData(document.getElementById("time_of_reforestation").value)) {
@@ -544,8 +544,8 @@ async function saveFieldCard() {
             id: Number(document.getElementById("idLine"+i).value),
             ratio_composition: document.getElementById("ratio_composition"+i).value == ""? "0":document.getElementById("ratio_composition"+i).value,
             age: document.getElementById("age"+i).value == ""? "0":document.getElementById("age"+i).value,
-            avg_diameter: document.getElementById("avg_diameter"+i).value == ""? "0":document.getElementById("avg_diameter"+i).value,
-            avg_height: document.getElementById("avg_height"+i).value == ""? "0":document.getElementById("avg_height"+i).value,
+            avg_diameter: document.getElementById("avg_diameter"+i).value == ""? "0":document.getElementById("avg_diameter"+i).value.replaceAll(",", "."),
+            avg_height: document.getElementById("avg_height"+i).value == ""? "0":document.getElementById("avg_height"+i).value.replaceAll(",", "."),
             count_plants: document.getElementById("count_of_plants"+i).value == ""? "0":document.getElementById("count_of_plants"+i).value,
             breed: document.getElementById("id_breed"+i).value,
             id_field_card: APP.documentData.id
@@ -603,8 +603,8 @@ async function generateDocx() {
         var itemData = {
             ratio: document.getElementById("ratio_composition"+i).value,
             age: document.getElementById("age"+i).value,
-            avg_diametr: document.getElementById("avg_diameter"+i).value,
-            avg_height: document.getElementById("avg_height"+i).value,
+            avg_diametr: document.getElementById("avg_diameter"+i).value.replaceAll(",", "."),
+            avg_height: document.getElementById("avg_height"+i).value.replaceAll(",", "."),
             count_plants: document.getElementById("count_of_plants"+i).value,
             breed: CommonFunction.getBreedsName(APP.breeds, document.getElementById("id_breed"+i).value)
         }
@@ -672,16 +672,16 @@ async function generateDocx() {
         point7agreed: document.getElementById("point7agreed").value,
         point7_natural_composition: document.getElementById("point7_natural_composition").value,
         economy: document.getElementById("economy").options[document.getElementById("economy").selectedIndex].text,
-        completeness: document.getElementById("completeness").value,
-        point7_stock: document.getElementById("stock").value,
+        completeness: document.getElementById("completeness").value.replaceAll(",", "."),
+        point7_stock: document.getElementById("stock").value.replaceAll(",", "."),
         coeff: coeff,
         square_one_sample_area: document.getElementById("square_one_sample_area").value,
         count_sample_area: document.getElementById("count_sample_area").value,
         samples: samples,
         breed_composition: document.getElementById("breed_composition").value,
         economy_sapling: document.getElementById("economy_sapling").options[document.getElementById("economy_sapling").selectedIndex].text,
-        completeness_sapling: document.getElementById("completeness2").value,
-        stock_sapling: document.getElementById("stock2").value,
+        completeness_sapling: document.getElementById("completeness2").value.replaceAll(",", "."),
+        stock_sapling: document.getElementById("stock2").value.replaceAll(",", "."),
         saplings: saplings,
         conclusion: document.getElementById("conclusion").value,
         date_and_time:  document.getElementById("date_and_time").value == "" || document.getElementById("date_and_time").value == null ? "":document.getElementById("date_and_time").value,
