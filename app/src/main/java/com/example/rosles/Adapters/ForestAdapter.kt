@@ -22,8 +22,7 @@ class ForestAdapter(private var names: List<SpinerItem>) : RecyclerView.Adapter<
         val binding = ItemForestBinding.inflate(inflater,parent,false)
         return ForestAdapter.ViewHolder(binding)
     }
-    private var activebutton:TextView?=null
-    private var favoritebutton:TextView?=null
+
 
     @SuppressLint("ResourceAsColor")
     override fun onBindViewHolder(holder: ForestAdapter.ViewHolder, position: Int) {
@@ -46,7 +45,6 @@ class ForestAdapter(private var names: List<SpinerItem>) : RecyclerView.Adapter<
 
     fun getArraydata():List<SpinerItem>{
         return names
-
     }
     override fun getItemCount() = names.size
 }

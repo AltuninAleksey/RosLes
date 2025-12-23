@@ -5,6 +5,15 @@
     android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+    <EditText
+        android:id="@+id/textSearch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+
+        android:drawableEnd="@drawable/search"
+        android:drawablePadding="8dp"/>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_weight="1"
