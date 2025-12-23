@@ -40,7 +40,16 @@
                     android:layout_height="70dp"
                     android:gravity="center"
                     android:padding="3dip"
-                    android:text="№ точки"
+                    android:text="Широта"
+                    android:textColor="#ffff"
+                    android:textSize="@dimen/custom_size_table" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="70dp"
+                    android:gravity="center"
+                    android:padding="3dip"
+                    android:text="Долгота"
                     android:textColor="#ffff"
                     android:textSize="@dimen/custom_size_table" />
 

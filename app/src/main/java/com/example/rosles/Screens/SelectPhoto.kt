@@ -15,6 +15,7 @@ import android.view.View
 import android.widget.*
 import androidx.core.app.ActivityCompat
 import androidx.core.view.get
+import androidx.core.view.size
 import com.example.rosles.BaseActivity
 import com.example.rosles.DBCountWood
 import com.example.rosles.R
@@ -26,6 +27,8 @@ import java.time.format.DateTimeFormatter
 
 class SelectPhoto:BaseActivity() {
     private val db = DBCountWood(this, null)
+
+    var activeIdBuffer: String=""
 
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
     var photobuf:Bitmap?=null
@@ -47,11 +50,10 @@ class SelectPhoto:BaseActivity() {
 
 
 
-//        db.getphotoall()
+
 
         inittable()
 
-        val view: View = supportActionBar!!.customView
 
         binding.toolbar.reload.visibility = View.GONE
 
@@ -118,44 +120,55 @@ class SelectPhoto:BaseActivity() {
         list.forEach {
             val tableRow = TableRow(this)
 
+            val text0=TextView(this)
             val text1=TextView(this)
             val text2=TextView(this)
             val text3=TextView(this)
             val text4=TextView(this)
             val photo=it.photo
 
-            text1.setText(it.latitude.toString())
-            text2.setText(it.longitude.toString())
-            text3.setText(it.date.format(formatter).toString())
-            text4.setText(it.photo.toString().substringAfter('@'))
-
-            val textvalues=listOf(text1, text2, text3, text4)
+            text0.text = it.id
+            text0.visibility = View.GONE
+            text1.text = it.latitude.toString()
+            text2.text = it.longitude.toString()
+            text3.text = it.date.format(formatter).toString()
+            text4.text = it.photo.toString().substringAfter('@')
+            val textvalues=listOf(text0,text1, text2, text3, text4)
             textvalues.forEach {
                 it.textAlignment=View.TEXT_ALIGNMENT_CENTER
                 it.setTextColor(-0x1000000)
                 tableRow.addView(it)
             }
-            tableRow.setOnClickListener{
+            tableRow.setOnClickListener{itView->
+
                 photobuf=photo
                 activetableRow?.setBackgroundResource(R.color.color_transporent)
                 tableRow.setBackgroundResource(R.color.color_transporent)
                 activetableRow = tableRow
-                activetableRow!!.setBackgroundResource(R.color.activecolumn)
+                activetableRow.setBackgroundResource(R.color.activecolumn)
             }
             binding.tblLayout.addView(tableRow)
         }
 
         binding.toolbar.open.setOnClickListener{
             if(activetableRow!=null){
-                val latitude = activetableRow?.get(0) as TextView
-                val longitude = activetableRow?.get(1) as TextView
-                val date_value = activetableRow?.get(2) as TextView
+                val id = activetableRow?.get(0) as TextView
+                val latitude = activetableRow?.get(1) as TextView
+                val longitude = activetableRow?.get(2) as TextView
+                val date_value = activetableRow?.get(3) as TextView
                 val dialog: Dialog = Dialog(this)
                 dialog.setContentView(R.layout.view_image_dialog)
                 val image = dialog.findViewById<ImageView>(R.id.image_for_photo)
                 val coords = dialog.findViewById<TextView>(R.id.value_coord)
                 val date = dialog.findViewById<TextView>(R.id.value_date)
-                val delete = dialog.findViewById<Button>(R.id.delete)
+                val delete = dialog.findViewById<Button>(R.id.button_delete)
+
+                delete.setOnClickListener {
+                  db.deletePhoto(id.text.toString())
+                    dialog.dismiss()
+                    onRestart()
+                }
+
                 image.setImageBitmap(photobuf)
                 coords.setText("${latitude.text} ${longitude.text}")
                 date.setText("${date_value.text}")

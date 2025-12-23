@@ -74,7 +74,7 @@ public class GPStracker implements LocationListener {
             Location l = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             return l;
         }else {
-            Toast.makeText(context,"Пожалуйста, включите GPS! =)", Toast.LENGTH_LONG).show();
+            Toast.makeText(context,"Пожалуйста, включите GPS!", Toast.LENGTH_LONG).show();
         }
         return null;
     }

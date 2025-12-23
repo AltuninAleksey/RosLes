@@ -443,7 +443,7 @@ inner join djangoForest_forestly as forestly on s2.id_forestly_id = forestly.id)
         for (i in 1..cursor.count) {
             val poroda = Poroda(
                 cursor.getString(cursor.getColumnIndex("id")),
-                cursor.getString(cursor.getColumnIndex("number_region"))?:"new"  ,
+                cursor.getString(cursor.getColumnIndex("number_region")) ?: "new",
                 cursor.getString(cursor.getColumnIndex("name_forestly")),
                 cursor.getString(cursor.getColumnIndex("name_district_forestly")),
                 cursor.getString(cursor.getColumnIndex("name_quarter")),
@@ -1016,6 +1016,17 @@ inner join djangoForest_forestly as forestly on s2.id_forestly_id = forestly.id)
 
     }
 
+    fun deletePhoto(
+        id: String
+    ) {
+        val db = this.writableDatabase
+        db.execSQL(
+            "DELETE FROM djangoForest_photopoint \n" +
+                    "WHERE id = '${id}';"
+        )
+        db.close()
+    }
+
 
     @SuppressLint("Recycle", "Range")
     fun getphoto(id_sample_id: String): List<Photo> {
@@ -1028,7 +1039,8 @@ inner join djangoForest_forestly as forestly on s2.id_forestly_id = forestly.id)
         cursor.moveToFirst()
         val a = mutableListOf<Photo>()
         for (i in 1..cursor.getCount()) {
-            var phototemp = cursor.getString(cursor.getColumnIndex("photo"))
+            val id = cursor.getString(cursor.getColumnIndex("id"))
+            val phototemp = cursor.getString(cursor.getColumnIndex("photo"))
             val temp = GPStracker(context)
             val bmp = temp.base_to_bitmap(phototemp)
             val photosample = cursor.getString(cursor.getColumnIndex("id_sample_id"))
@@ -1036,7 +1048,7 @@ inner join djangoForest_forestly as forestly on s2.id_forestly_id = forestly.id)
             val longitude = cursor.getFloat(cursor.getColumnIndex("longitude"))
             val date = cursor.getString(cursor.getColumnIndex("date"))
 
-            a.add(Photo(bmp, photosample.toString(), latitude, longitude, date))
+            a.add(Photo(id, bmp, photosample.toString(), latitude, longitude, date))
             cursor.moveToNext()
         }
         cursor.close()
