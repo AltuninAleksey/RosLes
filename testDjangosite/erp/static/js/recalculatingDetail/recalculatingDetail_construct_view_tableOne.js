@@ -169,10 +169,10 @@ function addProba() {
     var proba_02 = document.getElementById("proba-0.2");
     var proba_06_10 = document.getElementById("proba-0.6-1.0");
     var proba_15 = document.getElementById("proba-1.5");
-    var proba_maxheig = document.getElementById("proba-maxheig").replaceAll(",", ".");
+    var proba_maxheig = document.getElementById("proba-maxheig");
     var proba_main = document.getElementById("proba-main");
-    var proba_avg_d = document.getElementById("proba-avg-d").replaceAll(",", ".");
-    var proba_avg_h = document.getElementById("proba-avg-h").replaceAll(",", ".");
+    var proba_avg_d = document.getElementById("proba-avg-d");
+    var proba_avg_h = document.getElementById("proba-avg-h");
     var proba_age = document.getElementById("proba-age");
     var proba_all_count =  Number(proba_021_05.value) + Number(proba_11_15.value) + Number(proba_02.value) + Number(proba_06_10.value) + Number(proba_15.value); //document.getElementById("proba-all-count");
 
@@ -187,15 +187,16 @@ function addProba() {
         from0_6To1_0 : Number(proba_06_10.value),
         from1_1to1_5 : Number(proba_11_15.value),
         from1_5 : Number(proba_15.value),
-        max_height : Number(proba_maxheig.value),
+        max_height : Number(proba_maxheig.value.replaceAll(",", ".")),
         main: proba_main.checked? 1: 0,
-        avg_diameter: Number(proba_avg_d.value),
-        avg_height: Number(proba_avg_h.value),
+        avg_diameter: Number(proba_avg_d.value.replaceAll(",", ".")),
+        avg_height: Number(proba_avg_h.value.replaceAll(",", ".")),
         count_of_plants: Number(proba_all_count),
         age: Number(proba_age.value)
     };
 
-    if(newData.avg_height == 0 || newData.avg_height == null || newData.avg_height == undefined) {
+    if((newData.avg_height == 0 || newData.avg_height == null || newData.avg_height == undefined)
+            && (newData.count_of_plants != 0)){
         newData.avg_height = ((newData.to0_2 *0.1+
                                                 newData.from0_21To0_5 *0.35+
                                                 newData.from0_6To1_0 *0.8+
