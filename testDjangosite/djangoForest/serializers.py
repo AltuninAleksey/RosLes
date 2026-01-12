@@ -939,30 +939,47 @@ class FieldCardSerializer(serializers.ModelSerializer):
 
 class FieldCardSerializerModel(serializers.ModelSerializer):
     # id_quarter = serializers.CharField(source='id_list_region.id_quarter.id')
-    district_forestly = serializers.CharField(source="id_list_region.id_district_forestly.name_district_forestly", read_only=True)
-    forestly = serializers.CharField(source="id_list_region.id_district_forestly.id_forestly.name_forestly", read_only=True)
+    district_forestly = serializers.CharField(source="id_list_region.id_district_forestly.name_district_forestly", read_only=True, allow_null=True,
+    default=None)
+    forestly = serializers.CharField(source="id_list_region.id_district_forestly.id_forestly.name_forestly", read_only=True, allow_null=True,
+    default=None)
     subject_rf = serializers.CharField(source="id_list_region.id_district_forestly.id_forestly.id_subject_rf.name_subject_RF",
-                                             read_only=True)
-    name_forest_district = serializers.CharField(source='id_forest_districts.name_forest_district', read_only=True)
-    soil_lot = serializers.CharField(source="id_list_region.soil_lot", read_only=True)
-    sample_region = serializers.FloatField(source="id_list_region.sample_region", read_only=True)
-    date = serializers.DateField(source="id_list_region.date", read_only=True)
-    number_region = serializers.CharField(source="id_list_region.number_region", read_only=True)
-    name_dacha = serializers.CharField(source="id_list_region.dacha", read_only=True)
-    name_quarter = serializers.CharField(source="id_list_region.name_quarter")
+                                             read_only=True, allow_null=True,
+    default=None)
+    name_forest_district = serializers.CharField(source='id_forest_districts.name_forest_district', read_only=True, allow_null=True,
+    default=None)
+    soil_lot = serializers.CharField(source="id_list_region.soil_lot", read_only=True, allow_null=True,
+    default=None)
+    sample_region = serializers.FloatField(source="id_list_region.sample_region", read_only=True, allow_null=True,
+    default=None)
+    date = serializers.DateField(source="id_list_region.date", read_only=True, allow_null=True,
+    default=None)
+    number_region = serializers.CharField(source="id_list_region.number_region", read_only=True, allow_null=True,
+    default=None)
+    name_dacha = serializers.CharField(source="id_list_region.dacha", read_only=True, allow_null=True,
+    default=None)
+    name_quarter = serializers.CharField(source="id_list_region.name_quarter", allow_null=True,
+    default=None)
     # economy = serializers.CharField(source='id_economy.name_economy', read_only=True)
     # ratio = serializers.CharField(source='id_point7table.ratio_composition', read_only=True)
     # age = serializers.CharField(source='id_point7table.age', read_only=True)
     # avg_height = serializers.CharField(source='id_point7table.avg_height', read_only=True)
     # avg_diametr = serializers.CharField(source='id_point7table.avg_diameter', read_only=True)
     # count_plants = serializers.CharField(source='id_point7table.count_register_wood_plants', read_only=True)
-    purpose_of_forests = serializers.CharField(source='id_purpose_of_forests.name_purpose', read_only=True)
-    forest_protection_category = serializers.CharField(source="id_forest_protection_category.name_forest_protection_category", read_only=True)
-    method_of_reforestation = serializers.CharField(source="id_method_of_reforestation.name_of_method", read_only=True)
-    category_of_forest_fund_lands = serializers.CharField(source="id_category_of_forest_fund_lands.name_category", read_only=True)
-    sample_area = serializers.CharField(source='id_list_region.sample_region', read_only=True)
-    forest_conditions = serializers.CharField(source="id_type_forest_growing_conditions.type_forest_growing_conditions", read_only=True)
-    plot_farm_referring_land = serializers.CharField(source="id_category_of_forest_fund_lands", read_only=True)
+    purpose_of_forests = serializers.CharField(source='id_purpose_of_forests.name_purpose', read_only=True, allow_null=True,
+    default=None)
+    forest_protection_category = serializers.CharField(source="id_forest_protection_category.name_forest_protection_category", read_only=True, allow_null=True,
+    default=None)
+    method_of_reforestation = serializers.CharField(source="id_method_of_reforestation.name_of_method", read_only=True, allow_null=True,
+    default=None)
+    category_of_forest_fund_lands = serializers.CharField(source="id_category_of_forest_fund_lands.name_category", read_only=True, allow_null=True,
+    default=None)
+    sample_area = serializers.CharField(source='id_list_region.sample_region', read_only=True, allow_null=True,
+    default=None)
+    forest_conditions = serializers.CharField(source="id_type_forest_growing_conditions.type_forest_growing_conditions", read_only=True, allow_null=True,
+    default=None)
+    plot_farm_referring_land = serializers.CharField(source="id_category_of_forest_fund_lands", read_only=True, allow_null=True,
+    default=None)
     # count_sample_area = serializers.IntegerField(source='calculate_count_of_sample')
     class Meta:
         model = FieldCard
