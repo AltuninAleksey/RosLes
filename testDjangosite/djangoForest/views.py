@@ -2477,6 +2477,82 @@ class GetAllListFieldDesc(ListAPIView):
             path = form_getlistregion(all_data)
             return Response({"document": path})
 
+class ChangePasswordView(ListAPIView):
+
+    def post(self, request):
+        try:
+            email = request.data.get('email')
+            new_password = request.data.get('password')
+
+            if not email or not new_password:
+                return JsonResponse({
+                    'success': False,
+                    'message': 'Email и новый пароль обязательны'
+                }, status=400)
+
+            try:
+                user = Users.objects.get(email=email)
+                user.password = new_password
+                user.save()
+
+                return JsonResponse({
+                    'success': True,
+                    'message': 'Пароль успешно изменен'
+                })
+
+            except User.DoesNotExist:
+                return JsonResponse({
+                    'success': False,
+                    'message': 'Пользователь с таким email не найден'
+                }, status=404)
+        except Exception as e:
+            return JsonResponse({
+                'success': False,
+                'message': f'Ошибка сервера: {str(e)}'
+            }, status=500)
+
+
+class ChangePasswordWithOldView(ListAPIView):
+    def post(self, request):
+        try:
+            data = request.data
+            email = data.get('email')
+            old_password = data.get('old_password')
+            new_password = data.get('new_password')
+
+            if not email or not old_password or not new_password:
+                return JsonResponse({
+                    'success': False,
+                    'message': 'Email, старый и новый пароль обязательны'
+                }, status=400)
+
+            try:
+                user = Users.objects.get(email=email)
+
+                if check_password(old_password, user.password):
+                    user.password = new_password
+                    user.save()
+
+                    return JsonResponse({
+                        'success': True,
+                        'message': 'Пароль успешно изменен'
+                    })
+                else:
+                    return JsonResponse({
+                        'success': False,
+                        'message': 'Неверный старый пароль'
+                    }, status=400)
+
+            except User.DoesNotExist:
+                return JsonResponse({
+                    'success': False,
+                    'message': 'Пользователь с таким email не найден'
+                }, status=404)
+        except Exception as e:
+            return JsonResponse({
+                'success': False,
+                'message': f'Ошибка сервера: {str(e)}'
+            }, status=500)
 
 
 class ForestDistrictView(APIView):
