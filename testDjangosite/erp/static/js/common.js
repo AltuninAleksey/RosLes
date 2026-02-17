@@ -19,6 +19,37 @@ function ShowModalProfile(elid) {
         document.body.style.overflow = 'hidden';
     }
 }
+
+function openChangePassword() {
+
+    HideModalProfile(m1profile, event);
+
+    document.getElementById('old_password').value = '';
+    document.getElementById('new_password').value = '';
+    document.getElementById('confirm_password').value = '';
+
+    document.getElementById('m1changePassword').style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+}
+function saveNewPassword() {
+    const oldPassword = document.getElementById('old_password').value;
+    const newPassword = document.getElementById('new_password').value;
+    const confirmPassword = document.getElementById('confirm_password').value;
+
+    if (!oldPassword || !newPassword || !confirmPassword) {
+        alert('Заполните все поля');
+        return;
+    }
+
+    if (newPassword !== confirmPassword) {
+        alert('Новый пароль и подтверждение не совпадают');
+        return;
+    }
+
+    HideModalProfile(m1changePassword, event);
+    alert('Пароль успешно изменен');
+}
+
 function HideModalProfile(ell, event){
     if (ell.classList.contains('modal-all-profile')) {
         ell.style.display = "none";

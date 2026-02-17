@@ -1,7 +1,7 @@
-buildDescriptionLandTbody();
+buildFieldCardTbody();
 
-async function buildDescriptionLandTbody() {
-    var dataResponse = await DescriptionListLandBusiness.getAllDescriptionLandList();
+async function buildFieldCardTbody() {
+    var dataResponse = await FieldCardBusiness.getAllFieldCardList();
     var data = [];
     for(var i = 0; i < dataResponse.length; i++) {
         for(var j = 0; j < dataResponse[i].length; j++) {
@@ -114,14 +114,14 @@ async function buildDescriptionLandTbody() {
 
     sortByDate();
 
-    //updateDataInDescriptionLandTbody(data);
+    //updateDataInFieldCardTbody(data);
 
     setEventForElementsFilter();
     setDataInProfile();
 }
 
-function updateDataInDescriptionLandTbody(data) {
-    var tableBody = document.getElementById("descriptionLand_tbody");
+function updateDataInFieldCardTbody(data) {
+    var tableBody = document.getElementById("fieldCard_tbody");
     var newHtml = "";
 
     for(var i = 0; i < data.length; i++) {
@@ -131,22 +131,21 @@ function updateDataInDescriptionLandTbody(data) {
         data[i].district_forestly = CommonFunction.getDistrictForestlyNameByQuarterId(APP.district_forestly, data[i].id_district_forestly);
         //data[i].quarter = CommonFunction.getQuarterNameByQuarterId(APP.quarter, data[i].id_quarter);
 
-        let strGetDescriptionLandDetail = "getPlotDescription(" + data[i].id + ",0)";
+        let strGetFieldCardDetail = "getPrintFieldCard(" + data[i].id + ",0)";
 
-        newHtml = newHtml + `<tr class="cursorPointer" onClick=${strGetDescriptionLandDetail}>
+        newHtml = newHtml + `<tr class="cursorPointer" onClick=${strGetFieldCardDetail}>
                             <td class="textAlignCenter td1">${data[i].date}</td>
                             <td class="textAlignCenter td8">${data[i].number_region}</td>
-                            <td class="textAlignCenter td2">${data[i].subjectrf}</td>
-                            <td class="textAlignCenter td3">${data[i].forestly}</td>
-                            <td class="textAlignCenter td4">${data[i].district_forestly}</td>
-                            <td class="textAlignCenter td9">${data[i].dacha == null? "" : data[i].dacha}</td>
+                            <td class="td2">${data[i].subjectrf}</td>
+                            <td class="td3">${data[i].forestly}</td>
+                            <td class="td4">${data[i].district_forestly}</td>
+                            <td class="td9">${data[i].dacha == null? "" : data[i].dacha}</td>
                             <td class="textAlignCenter td5">${data[i].name_quarter == null? "" : data[i].name_quarter}</td>
                             <td class="textAlignCenter td6">${data[i].soil_lot}</td>
-                            <td class="textAlignCenter td6">${data[i].sample_region}</td>
-                            <td class="textAlignCenter"` +  "onClick='event.stopPropagation();downloadAllExcel(" + data[i].id_list_region + ");'>" +
+                            <td style="width: 10px; text-align: center;"` +  "onClick='event.stopPropagation();downloadAllExcel(" + data[i].id_list_region + ");'>" +
                                 `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="fill:#000000"><path d="M11.292 16.706a1 1 0 0 0 1.416 0l3-3a1 1 0 0 0-1.414-1.414L13 13.586V4a1 1 0 0 0-2 0v9.586l-1.293-1.293a1 1 0 0 0-1.414 1.414zM17 19H7a1 1 0 0 0 0 2h10a1 1 0 0 0 0-2z" /></svg>
                             </td>
-                            <td class="textAlignCenter"` +  "onClick='event.stopPropagation();deleteDescriptionLand(" + data[i].id + ");'>" +
+                            <td style="width: 15px; text-align: center;"` +  "onClick='event.stopPropagation();deleteFieldCard(" + data[i].id + ");'>" +
                                 `<svg width="23px" height="23px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                     <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -160,15 +159,15 @@ function updateDataInDescriptionLandTbody(data) {
     tableBody.innerHTML = newHtml;
 }
 
-async function deleteDescriptionLand(id) {
+async function deleteFieldCard(id) {
 
     var data = {
-        id:id
+        id: id
     }
 
-    await DescriptionListLandBusiness.deleteDescriptionLandById(data);
+    await FieldCardBusiness.deleteFieldCardById(data);
 
-    getDescriptionListLand();
+    getFieldCard();
 }
 
 async  function downloadAllExcel(id) {
@@ -177,14 +176,13 @@ async  function downloadAllExcel(id) {
         id: id
     };
 
-    var urlFile = await DescriptionListLandBusiness.downloadAllExcel(data);
+    var urlFile = await FieldCardBusiness.downloadAllExcel(data);
     urlFile = urlFile.document;
 
     urlFile = urlGlobal + urlFile;
 
     window.open(urlFile, '_blank').focus();
 }
-
 
 function sortByDate() {
     if(APP.sortOrderTable1 != 1) {
@@ -199,7 +197,7 @@ function sortByDate() {
         document.querySelector("#sortDateForTable1").innerHTML = "&#8595;";
     }
 
-    updateDataInDescriptionLandTbody(APP.dataTable);
+    updateDataInFieldCardTbody(APP.dataTable);
 
 }
 
@@ -209,17 +207,17 @@ async function setEventForElementsFilter() {
     let subjectNode = document.querySelector("#filter_subject_rf");
     subjectNode.removeAttribute("disabled");
     subjectNode.addEventListener('change', async (e)=>{
-        await setOptionInForestly(DescriptionListLandBusiness.TypeData.BYID);
+        await setOptionInForestly(FieldCardBusiness.TypeData.BYID);
     });
 
-    await setOptionInForestly(DescriptionListLandBusiness.TypeData.BYID);
+    await setOptionInForestly(FieldCardBusiness.TypeData.BYID);
     let forestlyNode = document.querySelector("#filter_forestly");
     forestlyNode.removeAttribute("disabled");
     forestlyNode.addEventListener('change', async (e)=>{
-        await setOptionInDistrictForestly(DescriptionListLandBusiness.TypeData.BYID);
+        await setOptionInDistrictForestly(FieldCardBusiness.TypeData.BYID);
     });
 
-    await setOptionInDistrictForestly(DescriptionListLandBusiness.TypeData.BYID);
+    await setOptionInDistrictForestly(FieldCardBusiness.TypeData.BYID);
     let districtForestly = document.querySelector("#filter_district_forestly");
     districtForestly.removeAttribute("disabled");
 
@@ -232,16 +230,16 @@ async function setEventForElementsFilter() {
 //            if(e.target.checked) {
 //                subjectNode.removeAttribute("disabled")
 //                subjectNode.addEventListener('change', async (e)=>{
-//                    await setOptionInForestly(DescriptionListLandBusiness.TypeData.BYID);
+//                    await setOptionInForestly(FieldCardBusiness.TypeData.BYID);
 //                });
-//                await setOptionInForestly(DescriptionListLandBusiness.TypeData.BYID);
+//                await setOptionInForestly(FieldCardBusiness.TypeData.BYID);
 //            } else {
 //                subjectNode.setAttribute("disabled", "on");
-//                await setOptionInForestly(DescriptionListLandBusiness.TypeData.ALL);
+//                await setOptionInForestly(FieldCardBusiness.TypeData.ALL);
 //            }
 //        });
 //
-//    await setOptionInForestly(DescriptionListLandBusiness.TypeData.ALL);
+//    await setOptionInForestly(FieldCardBusiness.TypeData.ALL);
 //
 //    document
 //        .querySelector("#checkbox_filter_forestly")
@@ -250,16 +248,16 @@ async function setEventForElementsFilter() {
 //            if(e.target.checked) {
 //                forestlyNode.removeAttribute("disabled");
 //                forestlyNode.addEventListener('change', async (e)=>{
-//                    await setOptionInDistrictForestly(DescriptionListLandBusiness.TypeData.BYID);
+//                    await setOptionInDistrictForestly(FieldCardBusiness.TypeData.BYID);
 //                });
-//                await setOptionInDistrictForestly(DescriptionListLandBusiness.TypeData.BYID);
+//                await setOptionInDistrictForestly(FieldCardBusiness.TypeData.BYID);
 //            } else {
 //                forestlyNode.setAttribute("disabled", "on");
-//                await setOptionInDistrictForestly(DescriptionListLandBusiness.TypeData.ALL);
+//                await setOptionInDistrictForestly(FieldCardBusiness.TypeData.ALL);
 //            }
 //        });
 //
-//    await setOptionInDistrictForestly(DescriptionListLandBusiness.TypeData.ALL);
+//    await setOptionInDistrictForestly(FieldCardBusiness.TypeData.ALL);
 //
 //    document
 //        .querySelector("#checkbox_filter_district_forestly")
@@ -268,16 +266,16 @@ async function setEventForElementsFilter() {
 //            if(e.target.checked) {
 //                districtForestly.removeAttribute("disabled");
 //                districtForestly.addEventListener('change', async (e)=>{
-//                   // await setOptionInQuarter(DescriptionListLandBusiness.TypeData.BYID);
+//                    //await setOptionInQuarter(FieldCardBusiness.TypeData.BYID);
 //                });
-//                //await setOptionInQuarter(DescriptionListLandBusiness.TypeData.BYID);
+//                //await setOptionInQuarter(FieldCardBusiness.TypeData.BYID);
 //            } else {
 //                districtForestly.setAttribute("disabled", "on");
-//                //await setOptionInQuarter(DescriptionListLandBusiness.TypeData.ALL);
+//                //await setOptionInQuarter(FieldCardBusiness.TypeData.ALL);
 //            }
 //        });
 
-//    await setOptionInQuarter(DescriptionListLandBusiness.TypeData.ALL);
+//    await setOptionInQuarter(FieldCardBusiness.TypeData.ALL);
 //
 //    document
 //        .querySelector("#checkbox_filter_quartal")
@@ -364,14 +362,14 @@ async function setOptionInSubject() {
 
     subjectNode.innerHTML = newHtml;
 
-    await setOptionInForestly(DescriptionListLandBusiness.TypeData.BYID);
+    await setOptionInForestly(FieldCardBusiness.TypeData.BYID);
 }
 
 async function setOptionInForestly(status) {
     let forestlyNode = document.querySelector("#filter_forestly");
     let forestly;
 
-    if(status == DescriptionListLandBusiness.TypeData.BYID) {
+    if(status == FieldCardBusiness.TypeData.BYID) {
         let subjectNode = document.querySelector("#filter_subject_rf");
         forestly = await CommonBusiness.getForestlyByIdSubjectrf(subjectNode.value);
     } else {
@@ -389,14 +387,14 @@ async function setOptionInForestly(status) {
     }
     forestlyNode.innerHTML = newHtml;
 
-    await setOptionInDistrictForestly(DescriptionListLandBusiness.TypeData.BYID);
+    await setOptionInDistrictForestly(FieldCardBusiness.TypeData.BYID);
 }
 
 async function setOptionInDistrictForestly(status) {
     let districtForestlyNode = document.querySelector("#filter_district_forestly");
     let districtForestly = [];
 
-    if(status == DescriptionListLandBusiness.TypeData.BYID) {
+    if(status == FieldCardBusiness.TypeData.BYID) {
         let forestlyNode = document.querySelector("#filter_forestly");
 
         if(forestlyNode.value != "" && forestlyNode.value != null && forestlyNode.value != undefined) {
@@ -418,7 +416,7 @@ async function setOptionInDistrictForestly(status) {
 
     districtForestlyNode.innerHTML = newHtml;
 
-    //await setOptionInQuarter(DescriptionListLandBusiness.TypeData.BYID);
+    //await setOptionInQuarter(FieldCardBusiness.TypeData.BYID);
 }
 
 async function setOptionInQuarter(status) {
@@ -426,7 +424,7 @@ async function setOptionInQuarter(status) {
     let quarterNode = document.querySelector("#filter_quartal");
     let quarter = [];
 
-    if(status == DescriptionListLandBusiness.TypeData.BYID) {
+    if(status == FieldCardBusiness.TypeData.BYID) {
         let districtForestlyNode = document.querySelector("#filter_district_forestly");
 
         if(districtForestlyNode.value != "" && districtForestlyNode.value != null && districtForestlyNode.value != undefined) {
@@ -490,20 +488,21 @@ async function searchByFilter() {
 //        };
 //
 //
-//        APP.dataTable = await DescriptionListLandBusiness.getDescriptionLandListByFilter(responseData);
+//        APP.dataTable = await FieldCardBusiness.getFieldCardListByFilter(responseData);
 //    } else {
 //
-//        var dataResponse = await DescriptionListLandBusiness.getAllDescriptionLandList();
+//        var dataResponse = await FieldCardBusiness.getAllFieldCardList();
 //        var data2 = [];
 //        for(var i = 0; i < dataResponse.length; i++) {
 //            for(var j = 0; j < dataResponse[i].length; j++) {
 //                data2.push(dataResponse[i][j]);
 //            }
 //        }
+//
 //        APP.dataTable = data2;
 //    }
 
-    let responseData = {
+     let responseData = {
         bSubjectrf: true,
         idSubjectrf: Number(subjectRFNode.value),
         bForestly: true,
@@ -519,16 +518,15 @@ async function searchByFilter() {
         dateSec: dateEndNode.value,
         bSoil_lot: true,
         soil_lot: soilLot.value
-    };
+     };
 
+    APP.dataTable = await FieldCardBusiness.getFieldCardListByFilter(responseData);
 
-    APP.dataTable = await DescriptionListLandBusiness.getDescriptionLandListByFilter(responseData);
-
-    updateDataInDescriptionLandTbody(APP.dataTable);
+    updateDataInFieldCardTbody(APP.dataTable);
 }
 
 async function resetFilter() {
-    var dataResponse = await DescriptionListLandBusiness.getAllDescriptionLandList();
+    var dataResponse = await FieldCardBusiness.getAllFieldCardList();
     var data2 = [];
     for(var i = 0; i < dataResponse.length; i++) {
         for(var j = 0; j < dataResponse[i].length; j++) {
@@ -537,12 +535,12 @@ async function resetFilter() {
     }
 
     APP.dataTable = data2;
-    updateDataInDescriptionLandTbody(APP.dataTable);
+    updateDataInFieldCardTbody(APP.dataTable);
 }
 
 async function downloadExcel() {
 
-    var urlExcel = await DescriptionListLandBusiness.downloadExcel();
+    var urlExcel = await FieldCardBusiness.downloadExcel();
     urlExcel = urlExcel.document;
 
     var fullUrl = urlGlobal + urlExcel;

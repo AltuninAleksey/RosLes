@@ -113,12 +113,12 @@ async function setSampleList() {
         let strGetRecalculatingDetail = "getRecalculatingDetail(" + APP.sampleList[i].id +  "," + document.querySelector("#idDocument").value  + ")"
 
         newHtml += `<tr class="cursorPointer" onClick=${strGetRecalculatingDetail}>
-                        <td class="textAlignCenter td1">${APP.sampleList[i].date}</td>
-                        <td class="textAlignCenter td8">${APP.sampleList[i].number_sample}</td>
-                        <td class="textAlignCenter td2">${CommonFunction.getSubjectNameByQuarterId(APP.subjects, APP.sampleList[i].id_subject_rf)}</td>
-                        <td class="textAlignCenter td3">${CommonFunction.getForestlyNameByQuarterId(APP.forestly, APP.sampleList[i].id_forestly)}</td>
-                        <td class="textAlignCenter td4">${CommonFunction.getDistrictForestlyNameByQuarterId(APP.district_forestly, APP.sampleList[i].id_district_forestly)}</td>
-                        <td class="textAlignCenter td9">${APP.sampleList[i].dacha == null? "" : APP.sampleList[i].dacha}</td>
+                        <td class="td1">${APP.sampleList[i].date}</td>
+                        <td class="td8">${APP.sampleList[i].number_sample}</td>
+                        <td class="td2">${CommonFunction.getSubjectNameByQuarterId(APP.subjects, APP.sampleList[i].id_subject_rf)}</td>
+                        <td class="td3">${CommonFunction.getForestlyNameByQuarterId(APP.forestly, APP.sampleList[i].id_forestly)}</td>
+                        <td class="td4">${CommonFunction.getDistrictForestlyNameByQuarterId(APP.district_forestly, APP.sampleList[i].id_district_forestly)}</td>
+                        <td class="td9">${APP.sampleList[i].dacha == null? "" : APP.sampleList[i].dacha}</td>
                         <td class="textAlignCenter td5">${APP.sampleList[i].name_quarter == null? "":APP.sampleList[i].name_quarter}</td>
                         <td class="textAlignCenter td6">${APP.sampleList[i].soil_lot}</td>` +
                         "<td style=\"width: 1%;\">" +
