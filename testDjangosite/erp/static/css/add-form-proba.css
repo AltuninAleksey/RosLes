@@ -1,113 +1,262 @@
-
+/* ===== ОБЩИЕ СТИЛИ ДЛЯ МОДАЛЬНЫХ ОКОН ===== */
 .addFormfon {
-    margin: 0px;
+    display: none;
+    margin: 0;
     width: 100vw;
     height: 100vh;
-    background-color: rgb(126 130 130 / 71%);
+    background-color: rgba(0, 0, 0, 0.7);
     position: fixed;
     top: 0;
-    z-index: 2002;
-}
-
-.proba-content{
-    white-space: nowrap;
-}
-
-.content-item{
-    white-space: normal;
-	display: inline-block;
-	width: 48%;
-}
-.proba-content .content-item:first-child {
-	margin-right: 4%;
-}
-.proba{
-    position: absolute;
-    padding: 5px;
-    margin: auto;
-    top: 0;
-    right: 0;
-    bottom: 0;
     left: 0;
-    width: 600px;
-    height: 370px;
-    border: 2px solid grey;
-    background-color: white;
-}
-
-.proba h3 {
-    margin-left: 30px;
-    font-size: 1.17em;
-    font-weight: bold;
-    color: black;
-}
-
-.proba-select {
-    margin-left: 20px;
-}
-
-.proba-form1{
+    z-index: 2002;
     display: flex;
-    flex-direction: row;
+    justify-content: center;
     align-items: center;
-    padding-right: 5px;
-    padding-left: 5px;
-    justify-content: space-around;
-    margin-top: 10px;
+}
+.display-none {
+    display: none !important;
+}
+/* Размеры модальных окон */
+.modal-small {
+    background: white;
+    width: 450px;
+    max-width: 95%;
+    border-radius: 8px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    animation: modalFade 0.3s ease;
 }
 
-.proba-input {
-    width: 150px;
+.modal-medium {
+    background: white;
+    width: 550px;
+    max-width: 95%;
+    border-radius: 8px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    animation: modalFade 0.3s ease;
+}
+
+@keyframes modalFade {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Шапка модального окна */
+.modal-header {
+    padding: 16px 24px;
+    border-bottom: 2px solid #177164;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+    border-radius: 8px 8px 0 0;
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #177164;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.modal-close {
+    color: #666;
+    font-size: 28px;
+    font-weight: 300;
+    cursor: pointer;
+    line-height: 1;
+    transition: all 0.2s ease;
+}
+
+.modal-close:hover {
+    color: #177164;
+    transform: scale(1.1);
+}
+
+/* Тело модального окна */
+.modal-body {
+    padding: 24px;
+    overflow-y: auto;
+    max-height: 72vh;
+}
+
+/* Строка формы */
+.modal-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.modal-row:last-child {
+    margin-bottom: 0;
+}
+
+.modal-row label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #444;
+    width: 120px;
+    text-align: left;
+}
+
+/* Поля ввода */
+.modal-input {
+    width: 250px;
+    padding: 10px 12px;
+    border: 1px solid #d0d0d0;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    background: #ffffff;
+}
+
+.modal-input:focus {
+    outline: none;
+    border-color: #177164;
+    box-shadow: 0 0 0 3px rgba(23, 113, 100, 0.1);
+}
+
+.modal-input:hover {
+    border-color: #40E0D0;
+}
+
+/* Специальный стиль для file input */
+.modal-file-input {
+    width: 250px;
+    padding: 8px 0;
     font-size: 14px;
 }
 
-.maxheig{
+.modal-file-input::-webkit-file-upload-button {
+    background: #177164;
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    margin-right: 10px;
+    transition: all 0.2s ease;
+}
+
+.modal-file-input::-webkit-file-upload-button:hover {
+    background: #134a3a;
+}
+
+/* Select */
+select.modal-input {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23177164' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 16px;
+    padding-right: 40px;
+}
+
+/* Подвал с кнопками */
+.modal-footer {
+    padding: 16px 24px;
+    border-top: 1px solid #e0e0e0;
     display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
-    padding-right: 5px;
-    padding-left: 5px;
-    margin-left: -40px;
+    justify-content: flex-end;
+    gap: 12px;
+    background: #f8f9fa;
+    border-radius: 0 0 8px 8px;
 }
 
-.maxheig input {
-    margin-left: -100px;
-}
-
-
-.proba p{
-    margin-right: 20px;
-    font-size: 18px;
-}
-.proba .p{
-    margin-right: 28px;
-}
-.proba .p1{
-    margin-right: 35px;
-}
-.proba .p2{
-    margin-right: 35px;
-}
-.item2{
-    margin-top: -20px;
-}
-
-.exitFormAddProba {
-    position: absolute;
-    top: 20px;
-    right: 15px;
-    width: 20px;
-    height: 20px;
+/* Кнопки */
+.modal-btn {
+    padding: 10px 24px;
+    font-size: 13px;
+    font-weight: 600;
+    border: none;
+    border-radius: 4px;
     cursor: pointer;
-    background-color: grey;
-    clip-path: polygon(20% 0%, 0% 20%, 30% 50%, 0% 80%, 20% 100%, 50% 70%, 80% 100%, 100% 80%, 70% 50%, 100% 20%, 80% 0%, 50% 30%);
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
-.exitFormAddProba:hover {
-    background-color: #3bc1a0;
+.modal-btn-add {
+    background: #177164;
+    color: white;
 }
 
-.proba button {
-    cursor: pointer;
+.modal-btn-add:hover {
+    background: #134a3a;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.modal-btn-cancel {
+    background: white;
+    color: #666;
+    border: 1px solid #d0d0d0;
+}
+
+.modal-btn-cancel:hover {
+    background: #f5f5f5;
+    border-color: #999;
+}
+
+/* Адаптивность */
+@media (max-width: 600px) {
+    .modal-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .modal-row label {
+        width: 100%;
+    }
+
+    .modal-input,
+    .modal-file-input {
+        width: 100%;
+    }
+
+    .modal-footer {
+        flex-direction: column;
+    }
+
+    .modal-btn {
+        width: 100%;
+    }
+
+    .modal-small,
+    .modal-medium {
+        width: 95%;
+        margin: 10px;
+    }
+}
+
+/* Для очень маленьких экранов */
+@media (max-width: 380px) {
+    .modal-header h3 {
+        font-size: 16px;
+    }
+
+    .modal-body {
+        padding: 16px;
+    }
+
+    .modal-input {
+        padding: 8px 10px;
+        font-size: 13px;
+    }
 }

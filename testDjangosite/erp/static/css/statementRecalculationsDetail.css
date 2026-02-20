@@ -320,13 +320,30 @@ body {
 }
 
 /* Dark green header cells with icons */
-.sticky-header-table th:last-child {
+/* Стили только для последней ячейки в полной таблице */
+.full-table th:last-child {
     background: #134a3a;
     border-right: 1px solid #134a3a;
     border-bottom: 1px solid #134a3a;
     padding: 12px 8px;
     text-align: center;
 }
+
+/* Для компактной таблицы - убираем особые стили для последней ячейки */
+.compact-table th:last-child {
+    background: transparent; /* или наследовать от общих стилей */
+    border-right: 1px solid #177164;
+    border-bottom: 1px solid #177164;
+    padding: 10px; /* стандартные отступы */
+    text-align: center;
+}
+/*.sticky-header-table th:last-child {
+    background: #134a3a;
+    border-right: 1px solid #134a3a;
+    border-bottom: 1px solid #134a3a;
+    padding: 12px 8px;
+    text-align: center;
+}*/
 
 /* Table Body */
 .sticky-header-table tbody tr {
