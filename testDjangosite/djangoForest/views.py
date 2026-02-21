@@ -18,6 +18,8 @@ from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.hashers import make_password, check_password
 from django.core.cache import cache
 from django.db.models import Q
+from pathlib import Path
+
 
 from testDjangosite.settings import BASE_DIR
 from rest_framework.renderers import MultiPartRenderer, JSONRenderer
@@ -26,6 +28,9 @@ from django.core.files import File
 
 from djangoForest.serializers import *
 from collections import namedtuple
+
+import zipfile
+import os
 
 
 class TestAPIView(generics.ListAPIView):
@@ -2552,6 +2557,51 @@ class ChangePasswordWithOldView(ListAPIView):
                 'success': False,
                 'message': f'Ошибка сервера: {str(e)}'
             }, status=500)
+
+
+class DownloadPhotosArchiveView(APIView):
+
+    def get(self, request, *args, **kwargs):
+
+        try:
+            if not ListRegion.objects.filter(id=kwargs['id']).exists():
+                return Response({"error: ListRegion not found"}, status=status.HTTP_404_NOT_FOUND)
+            photos = PhotoPoint.objects.filter(id_sample__id_list_region_id=kwargs['id'])
+
+            if not photos.exists():
+                return Response(
+                    {"error": "Для данной записи фотографии не найдены"},
+                    status=status.HTTP_404_NOT_FOUND
+                )
+            print(photos)
+            zip_buffer = io.BytesIO()
+
+            with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zip_file:
+                for photo in photos:
+
+                    file_path = photo.photo.path
+                    print(file_path)
+
+                    file_name = os.path.basename(file_path)
+                    print(file_name)
+                    with open(file_path, 'rb') as f:
+                        zip_file.writestr(file_name, f.read())
+
+
+            zip_buffer.seek(0)
+
+            archive_name = f"zip/photos_record_{kwargs['id']}.zip"
+
+            response = HttpResponse(zip_buffer.getvalue(), content_type='application/zip')
+            response['Content-Disposition'] = f'attachment; filename="{archive_name}"'
+
+            return response
+
+        except Exception as e:
+            return Response(
+                {"error": str(e)},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
 
 class ForestDistrictView(APIView):
