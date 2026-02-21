@@ -77,7 +77,6 @@ class ListMobile(ListAPIView):
 
     def get(self, request, *args, **kwargs):
         lst = List.objects.all()
-
         return Response({'get': ListAndroidSerializer(lst, many=True).data})
 
 

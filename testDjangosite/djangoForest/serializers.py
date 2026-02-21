@@ -272,6 +272,7 @@ class AboutUserDataSerializer(serializers.Serializer):
     id_subject_rf = serializers.CharField(source="id_user.subject_rf.id")
     name_subject_rf = serializers.CharField(source="id_user.subject_rf.name_subject_RF")
     phoneNumber = serializers.CharField()
+    email = serializers.CharField(source="id_user.email")
 
 
 class SampleSerializerId(serializers.Serializer):
