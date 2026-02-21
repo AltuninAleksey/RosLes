@@ -38,14 +38,12 @@ def calculate_all_plants_of_breed(id_breed, request, square_total):
     if all_plants != 0:
         ratio_composition = round(((total*100)/all_plants)/10)
     if avg_height_total != 0:
-        avg_height_total = round(avg_height_total/total)
+        avg_height_total = round(avg_height_total/total, 2)
     if avg_diameter_total != 0:
         avg_diameter_total =round(avg_diameter_total/total)
     if square_total != 0:
         count_of_plants = round((total*10000)/square_total)
     else:
-        print(square_total)
-        print("SQUARE 0!")
         count_of_plants = round((total * 10000) / 400)
     return {"id_breed": id_breed, "total": count_of_plants,
             "avg_height": avg_height_total, "avg_diameter": avg_diameter_total, "avg_age": avg_age,
