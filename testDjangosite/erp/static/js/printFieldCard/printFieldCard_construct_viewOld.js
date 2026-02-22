@@ -307,71 +307,6 @@ async function setConclusion() {
     }
 }
 
-let hasUnsavedChanges = false;
-let ignoreFields = ['profile_fio','profile_phone','subjectStatement-profile','old_password','new_password','confirm_password'];
-
-window.addEventListener('beforeunload', (event) => {
-    if (hasUnsavedChanges) {
-        event.preventDefault();
-        event.returnValue = '';
-    }
-});
-
-function trackChanges() {
-    hasUnsavedChanges = true;
-   // console.log('Изменение обнаружено');
-}
-
-function addListenersToField(field) {
-
-    if (ignoreFields.includes(field.id) || ignoreFields.includes(field.name)) {
-        return;
-    }
-
-    field.addEventListener('input', trackChanges);
-    field.addEventListener('change', trackChanges);
-    if (field.type === 'checkbox' || field.type === 'radio') {
-        field.addEventListener('click', trackChanges);
-    }
-
-    //console.log('Отслеживание добавлено для:', field.name || field.id);
-}
-
-function trackAllFields() {
-    const inputFields = document.querySelectorAll('input, textarea, select');
-    inputFields.forEach(field => {
-        addListenersToField(field);
-    });
-}
-
-const observer = new MutationObserver((mutations) => {
-    mutations.forEach(mutation => {
-        mutation.addedNodes.forEach(node => {
-            if (node.nodeType === 1) {
-                if (node.matches && node.matches('input, textarea, select')) {
-                    addListenersToField(node);
-                }
-                if (node.querySelectorAll) {
-                    const nestedFields = node.querySelectorAll('input, textarea, select');
-                    nestedFields.forEach(field => addListenersToField(field));
-                }
-            }
-        });
-    });
-});
-
-observer.observe(document.body, {
-    childList: true,
-    subtree: true
-});
-
-trackAllFields();
-
-function resetChangesTracker() {
-    hasUnsavedChanges = false;
-    console.log('Трекер сброшен');
-}
-
 async function saveFieldCard() {
 
     let idDocument = document.getElementById("idDocument").value;
@@ -651,7 +586,7 @@ async function saveFieldCard() {
     }
 
     ShowModal('m1', 'Сохранение прошло успешно', '/static/img/check-circle-fill.svg')
-    resetChangesTracker();
+
     setTimeout(function() {
         let idDocument = document.getElementById("idDocument").value;
         let idParent = document.getElementById("idParent").value;
