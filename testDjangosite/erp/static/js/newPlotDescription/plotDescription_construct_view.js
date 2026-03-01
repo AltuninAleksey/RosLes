@@ -179,8 +179,8 @@ async function changeDataSelectQuarter(id) {
 }
 
 async function saveData() {
-
-    let number_region = document.getElementById("number_region").value;
+    try {
+            let number_region = document.getElementById("number_region").value;
     let sample_region = String(document.getElementById("sample_region").value).replace(/,/g, '.');
     let soil_lot = document.getElementById("soil_lot").value;
     let year_assignment_land = document.getElementById("year_assignment_land").value;
@@ -312,22 +312,25 @@ async function saveData() {
     data.start_at = null;
     data.end_at = null;
 
-
-
     if(!CommonFunction.checkMandatoryData()) {
         ShowModal('m1', 'Заполните все обязательные поля!', '/static/img/exclamation-circle.svg')
         return;
     }
-
+    showLoadingModal();
 //    console.log(data);
 //
 //    return;
 
     await NewPlotDescriptionBusiness.createPlotDescription(data);
-
+    hideLoadingModal();
     ShowModal('m1', 'Сохранение прошло успешно', '/static/img/check-circle-fill.svg')
 
     setTimeout(function() {
         getDescriptionListLand();
       }, 3000);
+    } catch (error) {
+      hideLoadingModal();
+      console.error('Ошибка сохранения:', error);
+      showError(error.message || 'Произошла ошибка при сохранении');
+    }
 }

@@ -226,8 +226,13 @@ async function setConclusion() {
 
 
 async function saveFieldCard() {
-
-    var regions = document.getElementById("regionRF");
+ try {
+    if(!CommonFunction.checkMandatoryData()) {
+        ShowModal('m1', 'Заполните все обязательные поля!', '/static/img/exclamation-circle.svg')
+        return;
+    }
+    showLoadingModal();
+        var regions = document.getElementById("regionRF");
     var lesName = document.getElementById("lesName");
     var ucLesName = document.getElementById("ucLesName");
     var quarter = document.getElementById("quarter");
@@ -441,12 +446,6 @@ async function saveFieldCard() {
         data.number_order = document.getElementById("number_order").value;
     }
 
-
-    if(!CommonFunction.checkMandatoryData()) {
-        ShowModal('m1', 'Заполните все обязательные поля!', '/static/img/exclamation-circle.svg')
-        return;
-    }
-
     var createData = await PrintFieldCardBusiness.getCreatePrintFieldCard(data);
 
     var point7Date = [];
@@ -468,12 +467,17 @@ async function saveFieldCard() {
     }
 
     await PrintFieldCardBusiness.getUpdatePoint7Table(point7Date);
-
+    hideLoadingModal();
     ShowModal('m1', 'Сохранение прошло успешно', '/static/img/check-circle-fill.svg')
 
     setTimeout(function() {
         getFieldCard();
       }, 3000);
+    } catch (error) {
+      hideLoadingModal();
+      console.error('Ошибка сохранения:', error);
+      showError(error.message || 'Произошла ошибка при сохранении');
+    }
 }
 
 

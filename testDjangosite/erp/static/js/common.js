@@ -152,3 +152,44 @@ async function downloadDocument() {
     a.remove();
     window.URL.revokeObjectURL(url);
 }
+/////для модального окна сохранение
+function showStatusModal(message, showSpinner = true, showButton = false) {
+  const modal = document.getElementById('statusModal');
+  const spinner = document.getElementById('loadingSpinner');
+  const messageEl = document.getElementById('statusMessage');
+  const closeButton = document.getElementById('modalCloseButton');
+  const text = document.getElementById('statusText');
+  const errorIcon = document.getElementById('errorIcon');
+
+  messageEl.textContent = message;
+  spinner.style.display = showSpinner ? 'block' : 'none';
+  closeButton.style.display = showButton ? 'block' : 'none';
+  text.style.display = showButton ? 'block' : 'none';
+  errorIcon.style.display = showButton ? 'block' : 'none';
+
+  modal.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+
+function hideStatusModal(event) {
+  const modal = document.getElementById('statusModal');
+  modal.style.display = 'none';
+  document.body.style.overflow = '';
+
+  if (event) {
+    event.preventDefault();
+  }
+}
+
+function showLoadingModal() {
+  showStatusModal('Сохранение...', true, false);
+}
+
+function hideLoadingModal() {
+  document.getElementById('statusModal').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+function showError(message) {
+  showStatusModal(message, false, true);
+}

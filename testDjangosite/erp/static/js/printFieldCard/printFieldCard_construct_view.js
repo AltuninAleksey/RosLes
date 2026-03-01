@@ -373,8 +373,8 @@ function resetChangesTracker() {
 }
 
 async function saveFieldCard() {
-
-    let idDocument = document.getElementById("idDocument").value;
+    try{
+        let idDocument = document.getElementById("idDocument").value;
     let idParent = document.getElementById("idParent").value;
 
     var regions = document.getElementById("regionRF");
@@ -592,12 +592,11 @@ async function saveFieldCard() {
         data.number_order = document.getElementById("number_order").value;
     }
 
-
     if(!CommonFunction.checkMandatoryData()) {
         ShowModal('m1', 'Заполните все обязательные поля!', '/static/img/exclamation-circle.svg')
         return;
     }
-
+    showLoadingModal();
     await PrintFieldCardBusiness.getUpdatePrintFieldCard(idDocument, data);
 
     var point7Date = [];
@@ -649,7 +648,7 @@ async function saveFieldCard() {
     for(var i = 0; i < APP.delIdPoint7.length; i++) {
         await PrintFieldCardBusiness.deletePoint7Table(APP.delIdPoint7[i]);
     }
-
+    hideLoadingModal();
     ShowModal('m1', 'Сохранение прошло успешно', '/static/img/check-circle-fill.svg')
     resetChangesTracker();
     setTimeout(function() {
@@ -657,6 +656,11 @@ async function saveFieldCard() {
         let idParent = document.getElementById("idParent").value;
         getPrintFieldCard(idDocument, idParent);
       }, 3000);
+    } catch (error){
+      hideLoadingModal();
+      console.error('Ошибка сохранения:', error);
+      showError(error.message || 'Произошла ошибка при сохранении');
+    }
 }
 
 async function generateDocx() {

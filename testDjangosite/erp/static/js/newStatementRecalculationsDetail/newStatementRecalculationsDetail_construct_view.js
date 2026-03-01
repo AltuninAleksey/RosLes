@@ -147,12 +147,12 @@ async function setQuarterStatement() {
 }
 
 async function saveData() {
-
-    if(!CommonFunction.checkMandatoryData()) {
+    try {
+        if(!CommonFunction.checkMandatoryData()) {
         ShowModal('m1', 'Заполните все обязательные поля!', '/static/img/exclamation-circle.svg')
         return;
     }
-
+    showLoadingModal();
     //let numberStatementNode = document.querySelector("#numberStatement").value;
     let dateStatementNode = document.querySelector("#dateStatement").value;
     let soilLotStatementNode = document.querySelector("#soilLotStatement").value;
@@ -175,11 +175,15 @@ async function saveData() {
     };
 
     await StatementRecalculationsBusinessDetail.getCreateSample(data);
-
+    hideLoadingModal();
     ShowModal('m1', 'Сохранение прошло успешно', '/static/img/check-circle-fill.svg')
 
     setTimeout(function() {
         getStatementRecalculations();
       }, 3000);
-
+    } catch (error) {
+      hideLoadingModal();
+      console.error('Ошибка сохранения:', error);
+      showError(error.message || 'Произошла ошибка при сохранении');
+    }
 }

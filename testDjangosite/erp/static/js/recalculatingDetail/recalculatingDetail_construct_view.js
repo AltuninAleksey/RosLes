@@ -251,11 +251,12 @@ function resetChangesTracker() {
     console.log('Трекер сброшен');
 }
 async function saveRecalculating() {
-    if(!CommonFunction.checkMandatoryData()) {
+    try {
+        if(!CommonFunction.checkMandatoryData()) {
         ShowModal('m1', 'Заполните все обязательные поля!', '/static/img/exclamation-circle.svg')
         return;
     }
-
+    showLoadingModal();
     let idDocument = document.getElementById("idDocument").value;
     let idParent = document.getElementById("idParent").value;
     var regionRFForm = document.getElementById("regionRF");
@@ -298,12 +299,19 @@ async function saveRecalculating() {
         await RecalculatingDetailBusiness.deleteGpsPoint(APP.deleteIdTableThree[i]);
     }
 
-    ShowModal('m1', 'Сохранение прошло успешно', '/static/img/check-circle-fill.svg')
+
     resetChangesTracker();
+    hideLoadingModal();
+    ShowModal('m1', 'Сохранение прошло успешно', '/static/img/check-circle-fill.svg')
     setTimeout(function() {
         let idDocument = document.getElementById("idDocument").value;
         let idParent = document.getElementById("idParent").value;
         getRecalculatingDetail(idDocument, idParent);
       }, 3000);
 
+    } catch (error) {
+      hideLoadingModal();
+      console.error('Ошибка сохранения:', error);
+      showError(error.message || 'Произошла ошибка при сохранении');
+    }
 }

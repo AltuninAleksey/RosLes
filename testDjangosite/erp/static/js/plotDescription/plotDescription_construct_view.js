@@ -302,8 +302,8 @@ function resetChangesTracker() {
     console.log('Трекер сброшен');
 }
 async function saveData() {
-
-    let number_region = document.getElementById("number_region").value;
+    try {
+        let number_region = document.getElementById("number_region").value;
     let sample_region = document.getElementById("sample_region").value;
     let soil_lot = document.getElementById("soil_lot").value;
     let year_assignment_land = document.getElementById("year_assignment_land").value;
@@ -437,17 +437,24 @@ async function saveData() {
         ShowModal('m1', 'Заполните все обязательные поля!', '/static/img/exclamation-circle.svg')
         return;
     }
+    showLoadingModal();
 
     await PlotDescriptionBusiness.setPlotDescriptionDataById(idDocument, data);
 
-    ShowModal('m1', 'Сохранение прошло успешно', '/static/img/check-circle-fill.svg')
-    resetChangesTracker();
 
+    resetChangesTracker();
+    hideLoadingModal();
+    ShowModal('m1', 'Сохранение прошло успешно', '/static/img/check-circle-fill.svg')
     setTimeout(function() {
         let idDocument = document.getElementById("idDocument").value;
         let idParent = document.getElementById("idParent").value;
         getPlotDescription(idDocument, idParent);
       }, 3000);
+    } catch (error) {
+      hideLoadingModal();
+      console.error('Ошибка сохранения:', error);
+      showError(error.message || 'Произошла ошибка при сохранении');
+    }
 }
 
 async function generateDocx() {

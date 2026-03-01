@@ -344,11 +344,12 @@ function resetChangesTracker() {
     console.log('Трекер сброшен');
 }
 async function saveData() {
-
-    if(!CommonFunction.checkMandatoryData()) {
+   try {
+     if(!CommonFunction.checkMandatoryData()) {
         ShowModal('m1', 'Заполните все обязательные поля!', '/static/img/exclamation-circle.svg')
         return;
     }
+    showLoadingModal();
 
     let id = document.querySelector("#idDocument").value;
     let numberStatementNode = document.querySelector("#numberStatement").value;
@@ -379,12 +380,22 @@ async function saveData() {
         await StatementRecalculationsBusinessDetail.deleteSample(APP.deleteIdSample[i]);
     }
 
-    ShowModal('m1', 'Сохранение прошло успешно', '/static/img/check-circle-fill.svg')
     resetChangesTracker();
+
     setTimeout(function() {
         let id = document.querySelector("#idDocument").value;
         getStatementRecalculationsDetail(id);
       }, 3000);
+
+    hideLoadingModal();
+
+    ShowModal('m1', 'Сохранение прошло успешно', '/static/img/check-circle-fill.svg')
+
+    } catch (error) {
+      hideLoadingModal();
+      console.error('Ошибка сохранения:', error);
+      showError(error.message || 'Произошла ошибка при сохранении');
+    }
 }
 
 async function generateDocx() {
