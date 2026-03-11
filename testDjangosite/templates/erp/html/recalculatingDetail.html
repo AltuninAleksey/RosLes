@@ -17,9 +17,9 @@
     <script src="{% static 'js/recalculatingDetail/recalculatingDetail_construct_header.js' %}" defer></script>
     <script src="{% static 'js/recalculatingDetail/recalculatingDetail_construct_view_tableOne.js' %}" defer></script>
     <script src="{% static 'js/recalculatingDetail/recalculatingDetail_construct_view_tableTwo.js' %}" defer></script>
-    <script src="{% static 'js/recalculatingDetail/recalculatingDetail_construct_view_tableThree.js' %}" defer>
-    </script><script src="{% static 'js/recalculatingDetail/recalculatingDetail_construct_view_tableFour.js' %}" defer></script>
-    </script><script src="{% static 'js/recalculatingDetail/recalculatingDetail_construct_view_tableNull.js' %}" defer></script>
+    <script src="{% static 'js/recalculatingDetail/recalculatingDetail_construct_view_tableThree.js' %}" defer></script>
+    <script src="{% static 'js/recalculatingDetail/recalculatingDetail_construct_view_tableFour.js' %}" defer></script>
+    <script src="{% static 'js/recalculatingDetail/recalculatingDetail_construct_view_tableNull.js' %}" defer></script>
     <script src="{% static 'js/recalculatingDetail/recalculatingDetail_construct_view.js' %}" defer></script>
     <script src="{% static 'js/common.js' %}" defer></script>
     {% endblock %}
@@ -102,7 +102,7 @@
                     </div>
                     <div>
                         <p>Дата перечета:</p>
-                        <input name="date_recalculation" id="date_recalculation"type="date">
+                        <input name="date_recalculation" id="date_recalculation" type="date">
                     </div>
                 </div>
         </form>
@@ -144,10 +144,6 @@
                         <div>
                             <p>Квартал:</p>
                             <input  class="mandatory" type="text" name="soil_lot" id="quarter">
-                        </div>
-                        <div>
-                            <p>Урочище:</p>
-                            <input id="dachaStatement" type="text">
                         </div>
                         <div>
                             <p>Выдел:</p>
@@ -518,7 +514,7 @@
         <div id="statusModalContent" class="modal-profileStatus">
             <div class="status-icon-container">
                 <div id="loadingSpinner" class="spinner" style="display: none;"></div>
-                <svg id="errorIcon" style="display: none" width="60px" height="60px" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--noto" preserveAspectRatio="xMidYMid meet">
+                <svg id="errorIcon" style="display: none" width="60px" height="60px" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" class="iconify iconify--noto" preserveAspectRatio="xMidYMid meet">
                     <path d="M69.8 88.1l1.8-80c.1-2.2-1.8-4.1-4-4.1H55.9c-2.3 0-4.1 1.9-4 4.1l1.8 80c.1 2.2 1.8 3.9 4 3.9h8c2.2 0 4-1.7 4.1-3.9z" fill="#f44336">
                     </path>
                     <g fill="#ffffff">

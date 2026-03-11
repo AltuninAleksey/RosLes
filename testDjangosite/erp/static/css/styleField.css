@@ -1006,6 +1006,10 @@ td input{
     color: #999999;
 }
 
+.mandatory_warning {
+    border: 3px solid red !important;
+}
+
 @media (max-width: 1200px) {
     .submenu.sb form.text {
         padding: 0 20px;

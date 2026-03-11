@@ -650,6 +650,10 @@ body {
     color: #999999;
 }
 
+.mandatory_warning {
+    border: 3px solid red !important;
+}
+
 @media (max-width: 1200px) {
     .hiv {
         flex-direction: column;
