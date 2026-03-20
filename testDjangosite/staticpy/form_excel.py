@@ -23,9 +23,9 @@ def set_border(ws, cell_range):
             cell.border = thin_border
 
 def len_samples(data: dict):
-    data_of_samples = []
+    data_of_samples = set()
     for i in data['data']:
-        data_of_samples.append(i['id_sample'])
+        data_of_samples.add(i['id_sample'])
 
     return len(data_of_samples)
 
@@ -103,12 +103,10 @@ def create_header(sheets, data):
     sheets.merge_cells("G5:H5")
 
     sheets['I5'].value = "площадь ПП, га."
-    if data['count_sample_area'] is None or data['count_sample_area'] == 0:
-        data['count_sample_area'] = 1
     if data['square'] is None or data['square'] == 0:
         data['square'] = 1
     try:
-        sheets['K5'].value = (data['square'] / data['count_sample_area']) / 10000
+        sheets['K5'].value = (data['square'] * len_samples_res) / 10000
     except:
         if len_samples_res == 0:
             len_samples_res = 1
@@ -230,7 +228,6 @@ def calculate_each(data:dict):
     var_3 = 0
     var_4 = 0
     var_5 = 0
-
     for sample in data:
         for i in data[sample]:
             var_1 += i['to0_2']
@@ -295,6 +292,8 @@ def get_repro(data: dict) -> None:
         res['breeds_data'] = breeds_data
         res['sample_data'] = sample_data
         data['breed_total_1'] = breed_total
+        if len(hg_each) == 0:
+            hg_each = [0 for i in range(5)]
         data['hg_each'].extend(hg_each)
         data['max_hg_1'] = max_hg
         # data.update({"repro_1": breeds_dict, "breeds": breeds_data, "sample_data": sample_data})
@@ -342,6 +341,8 @@ def get_repro(data: dict) -> None:
         res['breeds_data'] = breeds_data
         res['sample_data'] = sample_data
         data['breed_total_2'] = breed_total
+        if len(hg_each) == 0:
+            hg_each = [0 for i in range(5)]
         data['hg_each'].extend(hg_each)
         data['max_hg_2'] = max_hg
         data.update({"repro_2": res})
@@ -388,6 +389,8 @@ def get_repro(data: dict) -> None:
         res['breeds_data'] = breeds_data
         res['sample_data'] = sample_data
         data['breed_total_3'] = breed_total
+        if len(hg_each) == 0:
+            hg_each = [0 for i in range(5)]
         data['hg_each'].extend(hg_each)
         data['max_hg_3'] = max_hg
         data.update({"repro_3": res})
@@ -562,7 +565,6 @@ def list_region_excel(data: dict, podlesok: bool = True, others: bool = False):
     # else:
     #     cur_row = last_row
     cur_row = max(samples_row.values()) + 1
-
     sheets.cell(row=cur_row, column=1, value="Итого:")
     for i in range(len(data['hg_each'])):
         sheets.cell(row=cur_row, column=i+2, value=data['hg_each'][i])
@@ -571,7 +573,6 @@ def list_region_excel(data: dict, podlesok: bool = True, others: bool = False):
     if len(data['repro_1']['breeds_data']) == 0:
         res_total.append(0)
     else:
-        print(data['breed_total_1'])
         res_total.extend(list(data['breed_total_1'].values()))
     if len(data['repro_2']['breeds_data']) == 0:
         res_total.append(0)
@@ -605,10 +606,10 @@ def list_region_excel(data: dict, podlesok: bool = True, others: bool = False):
 
         try:
             cell =  sheets.cell(row=cur_row + 1, column=i)
-            res = (data['square'] / len_samples_res) / 10000
-            sheets.cell(row=cur_row + 2, column=i, value=round(cell.value*10000)/data['square'])
-        except:
-            pass
+            square = sheets.cell(row=5, column=11)
+            sheets.cell(row=cur_row + 2, column=i, value=round(cell.value/square.value))
+        except Exception as e:
+            print(e)
         sheets.merge_cells(start_row=cur_row+2, start_column=i, end_row=cur_row+2, end_column=i+4)
         # sheets.merge_cells(start_row=cur_row+2, start_column=i, end_row=cur_row+2, end_column=i+4)
         step+=1
