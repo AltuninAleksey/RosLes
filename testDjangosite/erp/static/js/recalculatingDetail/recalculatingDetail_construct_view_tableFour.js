@@ -65,6 +65,8 @@ function setDataInTableFour() {
 
         closeAddForm('form-add-photo-point');
 
+        hasUnsavedChanges = false;
+
         ShowModal('m1', 'Сохранение прошло успешно', '/static/img/check-circle-fill.svg');
 
         setTimeout(function() {

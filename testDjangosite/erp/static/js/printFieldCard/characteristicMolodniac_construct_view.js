@@ -35,7 +35,7 @@ async function setDataInCharacteristicMolodniac() {
                         <td><input readonly type="text" name="ratio_composition_molodniac${i}" id="ratio_composition_molodniac${i}" style="width: 100%" value="${APP.point7Table2Sapling[i].ratio_composition}"></td>
                         <td><input readonly type="text" name="id_breed_molodniac${i}" id="id_breed_molodniac${i}" style="width: 100%" value="${CommonFunction.getBreedsName(APP.breeds, APP.point7Table2Sapling[i].id_breed)}"></td>
                         <td><input readonly type="text" name="age_molodniac${i}" id="age_molodniac${i}" style="width: 100%" value="${APP.point7Table2Sapling[i].avg_age}"></td>
-                        <td><input readonly type="text" name="avg_height_molodniac${i}" id="avg_height_molodniac${i}" style="width: 100%" value="${APP.point7Table2Sapling[i].avg_height}"></td>
+                        <td><input readonly type="text" name="avg_height_molodniac${i}" id="avg_height_molodniac${i}" style="width: 100%" value="${ APP.point7Table2Sapling[i].avg_height}"></td>
                         <td><input readonly type="text" name="avg_diameter_molodniac${i}" id="avg_diameter_molodniac${i}" style="width: 100%" value="${APP.point7Table2Sapling[i].avg_diameter}"></td>
                         <td><input readonly type="text" name="count_of_plants_molodniac${i}" id="count_of_plants_molodniac${i}" style="width: 100%" value="${APP.point7Table2Sapling[i].total}"></td>
                     </tr>`;

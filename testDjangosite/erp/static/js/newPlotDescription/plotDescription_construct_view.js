@@ -181,7 +181,7 @@ async function changeDataSelectQuarter(id) {
 async function saveData() {
     try {
             let number_region = document.getElementById("number_region").value;
-    let sample_region = String(document.getElementById("sample_region").value).replace(/,/g, '.');
+    let sample_region = String(Number(String(document.getElementById("sample_region").value).replace(/,/g, '.')).toFixed(4));
     let soil_lot = document.getElementById("soil_lot").value;
     let year_assignment_land = document.getElementById("year_assignment_land").value;
     let year_format_fond_trees = document.getElementById("year_format_fond_trees").value;

@@ -127,6 +127,7 @@ async function setDataInCharacteristic() {
     APP.point7Table = await PrintFieldCardBusiness.getPoint7TableById(APP.documentData.id);
     //APP.point7Table = [];
     APP.countLinePoint7Table = APP.point7Table.length;
+    APP.countNewLinePoint7Table = 0;
     let point7Table = document.getElementById("id_point7_table");
     newHtml = "";
 
@@ -167,18 +168,29 @@ async function setDataInCharacteristic() {
 }
 
 function addNewLineInPoint7() {
+
+    hasUnsavedChanges = true;
+
     let point7Table = document.getElementById("id_point7_table");
     newHtml = "";
 
-    for(var i = 0; i < APP.countLinePoint7Table; i++) {
+    var oldIndex = 0;
+    var newIndex = 0;
+    for(var i = 0; i < APP.point7Table.length; i++) {
 
-        var idLine = document.getElementById("idLine"+i).value;
-        var ratio_composition = document.getElementById("ratio_composition"+i).value;
-        var id_breed = document.getElementById("id_breed"+i).value;
-        var age = document.getElementById("age"+i).value;
-        var avg_height = document.getElementById("avg_height"+i).value;
-        var avg_diameter = document.getElementById("avg_diameter"+i).value;
-        var count_of_plants = document.getElementById("count_of_plants"+i).value;
+        if(APP.delIdPoint7.includes(APP.point7Table[i].id)) {
+            continue;
+        }
+
+        var idLine = document.getElementById("idLine"+oldIndex).value;
+        var ratio_composition = document.getElementById("ratio_composition"+oldIndex).value;
+        var id_breed = document.getElementById("id_breed"+oldIndex).value;
+        var age = document.getElementById("age"+oldIndex).value;
+        var avg_height = document.getElementById("avg_height"+oldIndex).value;
+        var avg_diameter = document.getElementById("avg_diameter"+oldIndex).value;
+        var count_of_plants = document.getElementById("count_of_plants"+oldIndex).value;
+
+        oldIndex += 1;
 
         var newHtmlBreeds = "";
         for(var j = 0; j < APP.breeds.length; j++) {
@@ -189,50 +201,73 @@ function addNewLineInPoint7() {
             }
         }
 
-        if(i < APP.point7Table.length) {
-            newHtml += `<tr>
-                        <input id="idLine${i}" type="hidden" name="id" value="${idLine}">
-                        <td><input type="text" name="ratio_composition${i}" id="ratio_composition${i}" style="width: 100%" value="${ratio_composition}"></td>
-                        <td><select type="text" name="id_breed${i}" id="id_breed${i}" style="width: 100%">
-                        ${newHtmlBreeds}
-                        </select> </td>
-                        <td><input type="text" name="age${i}" id="age${i}" style="width: 100%" value="${age}"></td>
-                        <td><input type="text" name="avg_height${i}" id="avg_height${i}" style="width: 100%" value="${avg_height}"></td>
-                        <td><input type="text" name="avg_diameter${i}" id="avg_diameter${i}" style="width: 100%" value="${avg_diameter}"></td>
-                        <td><input type="text" name="count_of_plants${i}" id="count_of_plants${i}" style="width: 100%" value="${count_of_plants}"></td>
-                        <td style="width: 50px;">
-                            <svg onclick="deleteLinePoint7Table(${APP.point7Table[i].id})" class="cursorPointer" width="23px" height="23px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                                <g id="SVGRepo_iconCarrier">
-                                    <path d="M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                                </g>
-                            </svg>
-                        </td>
-                    </tr>`;
-        } else {
-            newHtml += `<tr>
-                        <input id="idLine${i}" type="hidden" name="id" value="${idLine}">
-                        <td><input type="text" name="ratio_composition${i}" id="ratio_composition${i}" style="width: 100%" value="${ratio_composition}"></td>
-                        <td><select type="text" name="id_breed${i}" id="id_breed${i}" style="width: 100%">
-                        ${newHtmlBreeds}
-                        </select> </td>
-                        <td><input type="text" name="age${i}" id="age${i}" style="width: 100%" value="${age}"></td>
-                        <td><input type="text" name="avg_height${i}" id="avg_height${i}" style="width: 100%" value="${avg_height}"></td>
-                        <td><input type="text" name="avg_diameter${i}" id="avg_diameter${i}" style="width: 100%" value="${avg_diameter}"></td>
-                        <td><input type="text" name="count_of_plants${i}" id="count_of_plants${i}" style="width: 100%" value="${count_of_plants}"></td>
-                        <td style="width: 50px;">
-                            <svg onclick="deleteNewLineInPoint7(${i})" class="cursorPointer" width="23px" height="23px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                                <g id="SVGRepo_iconCarrier">
-                                    <path d="M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                                </g>
-                            </svg>
-                        </td>
-                    </tr>`;
+        newHtml += `<tr>
+                    <input id="idLine${newIndex}" type="hidden" name="id" value="${APP.point7Table[i].id}">
+                    <td><input type="text" name="ratio_composition${newIndex}" id="ratio_composition${newIndex}" style="width: 100%" value="${ratio_composition}"></td>
+                    <td><select type="text" name="id_breed${newIndex}" id="id_breed${newIndex}" style="width: 100%">
+                    ${newHtmlBreeds}
+                    </select> </td>
+                    <td><input type="text" name="age${newIndex}" id="age${newIndex}" style="width: 100%" value="${age}"></td>
+                    <td><input type="text" name="avg_height${newIndex}" id="avg_height${newIndex}" style="width: 100%" value="${avg_height}"></td>
+                    <td><input type="text" name="avg_diameter${newIndex}" id="avg_diameter${newIndex}" style="width: 100%" value="${avg_diameter}"></td>
+                    <td><input type="text" name="count_of_plants${newIndex}" id="count_of_plants${newIndex}" style="width: 100%" value="${count_of_plants}"></td>
+                    <td style="width: 50px;">
+                        <svg onclick="deleteLinePoint7Table(${APP.point7Table[i].id})" class="cursorPointer" width="23px" height="23px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                            <g id="SVGRepo_iconCarrier">
+                                <path d="M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                            </g>
+                        </svg>
+                    </td>
+                </tr>`;
+
+
+        newIndex +=1;
+    }
+
+    for(var i = 0; i < APP.countNewLinePoint7Table; i++) {
+        var idLine = document.getElementById("idLine"+oldIndex).value;
+        var ratio_composition = document.getElementById("ratio_composition"+oldIndex).value;
+        var id_breed = document.getElementById("id_breed"+oldIndex).value;
+        var age = document.getElementById("age"+oldIndex).value;
+        var avg_height = document.getElementById("avg_height"+oldIndex).value;
+        var avg_diameter = document.getElementById("avg_diameter"+oldIndex).value;
+        var count_of_plants = document.getElementById("count_of_plants"+oldIndex).value;
+
+        oldIndex += 1;
+
+        var newHtmlBreeds = "";
+        for(var j = 0; j < APP.breeds.length; j++) {
+            if(id_breed == APP.breeds[j].id) {
+                newHtmlBreeds = newHtmlBreeds + "<option selected value=\"" + APP.breeds[j].id + "\">" + APP.breeds[j].name_breed + "</option>";
+            } else {
+                newHtmlBreeds = newHtmlBreeds + "<option value=\"" + APP.breeds[j].id + "\">" + APP.breeds[j].name_breed + "</option>";
+            }
         }
 
+        newHtml += `<tr>
+                    <input id="idLine${newIndex}" type="hidden" name="id" value="0">
+                    <td><input type="text" name="ratio_composition${newIndex}" id="ratio_composition${newIndex}" style="width: 100%" value="${ratio_composition}"></td>
+                    <td><select type="text" name="id_breed${newIndex}" id="id_breed${newIndex}" style="width: 100%">
+                    ${newHtmlBreeds}
+                    </select> </td>
+                    <td><input type="text" name="age${newIndex}" id="age${newIndex}" style="width: 100%" value="${age}"></td>
+                    <td><input type="text" name="avg_height${newIndex}" id="avg_height${newIndex}" style="width: 100%" value="${avg_height}"></td>
+                    <td><input type="text" name="avg_diameter${newIndex}" id="avg_diameter${newIndex}" style="width: 100%" value="${avg_diameter}"></td>
+                    <td><input type="text" name="count_of_plants${newIndex}" id="count_of_plants${newIndex}" style="width: 100%" value="${count_of_plants}"></td>
+                    <td style="width: 50px;">
+                        <svg onclick="deleteNewLineInPoint7(${newIndex})" class="cursorPointer" width="23px" height="23px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                            <g id="SVGRepo_iconCarrier">
+                                <path d="M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                            </g>
+                        </svg>
+                    </td>
+                </tr>`;
+
+        newIndex +=1;
 
     }
 
@@ -244,7 +279,7 @@ function addNewLineInPoint7() {
     newHtml += `<tr>
                     <input id="idLine${APP.countLinePoint7Table}" type="hidden" name="id" value="0">
                     <td><input type="text" name="ratio_composition${APP.countLinePoint7Table}" id="ratio_composition${APP.countLinePoint7Table}" style="width: 100%" value=""></td>
-                    <td><select type="text" name="id_breed${i}" id="id_breed${i}" style="width: 100%">
+                    <td><select type="text" name="id_breed${APP.countLinePoint7Table}" id="id_breed${APP.countLinePoint7Table}" style="width: 100%">
                         ${newHtmlBreeds}
                     </select> </td>
                     <td><input type="text" name="age${APP.countLinePoint7Table}" id="age${APP.countLinePoint7Table}" style="width: 100%" value=""></td>
@@ -262,6 +297,7 @@ function addNewLineInPoint7() {
                         </td>
                 </tr>`;
 
+    APP.countNewLinePoint7Table += 1;
     APP.countLinePoint7Table += 1;
 
     point7Table.innerHTML = newHtml;
@@ -271,20 +307,23 @@ function deleteNewLineInPoint7(del_index) {
     let point7Table = document.getElementById("id_point7_table");
     newHtml = "";
 
-    var index = 0;
-    for(var i = 0; i < APP.countLinePoint7Table; i++) {
+    var oldIndex = 0;
+    var newIndex = 0;
+    for(var i = 0; i < APP.point7Table.length; i++) {
 
-        if(i == del_index) {
+        if(APP.delIdPoint7.includes(APP.point7Table[i].id)) {
             continue;
         }
 
-        var idLine = document.getElementById("idLine"+i).value;
-        var ratio_composition = document.getElementById("ratio_composition"+i).value;
-        var id_breed = document.getElementById("id_breed"+i).value;
-        var age = document.getElementById("age"+i).value;
-        var avg_height = document.getElementById("avg_height"+i).value;
-        var avg_diameter = document.getElementById("avg_diameter"+i).value;
-        var count_of_plants = document.getElementById("count_of_plants"+i).value;
+        var idLine = document.getElementById("idLine"+oldIndex).value;
+        var ratio_composition = document.getElementById("ratio_composition"+oldIndex).value;
+        var id_breed = document.getElementById("id_breed"+oldIndex).value;
+        var age = document.getElementById("age"+oldIndex).value;
+        var avg_height = document.getElementById("avg_height"+oldIndex).value;
+        var avg_diameter = document.getElementById("avg_diameter"+oldIndex).value;
+        var count_of_plants = document.getElementById("count_of_plants"+oldIndex).value;
+
+        oldIndex += 1;
 
         var newHtmlBreeds = "";
         for(var j = 0; j < APP.breeds.length; j++) {
@@ -295,74 +334,111 @@ function deleteNewLineInPoint7(del_index) {
             }
         }
 
-        if(i < APP.point7Table.length) {
-            newHtml += `<tr>
-                        <input id="idLine${index}" type="hidden" name="id" value="${idLine}">
-                        <td><input type="text" name="ratio_composition${index}" id="ratio_composition${index}" style="width: 100%" value="${ratio_composition}"></td>
-                        <td><select type="text" name="id_breed${index}" id="id_breed${index}" style="width: 100%">
-                        ${newHtmlBreeds}
-                        </select> </td>
-                        <td><input type="text" name="age${index}" id="age${index}" style="width: 100%" value="${age}"></td>
-                        <td><input type="text" name="avg_height${index}" id="avg_height${index}" style="width: 100%" value="${avg_height}"></td>
-                        <td><input type="text" name="avg_diameter${index}" id="avg_diameter${index}" style="width: 100%" value="${avg_diameter}"></td>
-                        <td><input type="text" name="count_of_plants${index}" id="count_of_plants${index}" style="width: 100%" value="${count_of_plants}"></td>
-                        <td style="width: 50px;">
-                            <svg onclick="deleteLinePoint7Table(${APP.point7Table[i].id})" class="cursorPointer" width="23px" height="23px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                                <g id="SVGRepo_iconCarrier">
-                                    <path d="M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                                </g>
-                            </svg>
-                        </td>
-                    </tr>`;
-        } else {
-            newHtml += `<tr>
-                        <input id="idLine${index}" type="hidden" name="id" value="${idLine}">
-                        <td><input type="text" name="ratio_composition${index}" id="ratio_composition${index}" style="width: 100%" value="${ratio_composition}"></td>
-                        <td><select type="text" name="id_breed${index}" id="id_breed${index}" style="width: 100%">
-                        ${newHtmlBreeds}
-                        </select> </td>
-                        <td><input type="text" name="age${index}" id="age${index}" style="width: 100%" value="${age}"></td>
-                        <td><input type="text" name="avg_height${index}" id="avg_height${index}" style="width: 100%" value="${avg_height}"></td>
-                        <td><input type="text" name="avg_diameter${index}" id="avg_diameter${index}" style="width: 100%" value="${avg_diameter}"></td>
-                        <td><input type="text" name="count_of_plants${index}" id="count_of_plants${index}" style="width: 100%" value="${count_of_plants}"></td>
-                        <td style="width: 50px;">
-                            <svg onclick="deleteNewLineInPoint7(${index})" class="cursorPointer" width="23px" height="23px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                                <g id="SVGRepo_iconCarrier">
-                                    <path d="M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                                </g>
-                            </svg>
-                        </td>
-                    </tr>`;
+        newHtml += `<tr>
+                    <input id="idLine${newIndex}" type="hidden" name="id" value="${APP.point7Table[i].id}">
+                    <td><input type="text" name="ratio_composition${newIndex}" id="ratio_composition${newIndex}" style="width: 100%" value="${ratio_composition}"></td>
+                    <td><select type="text" name="id_breed${newIndex}" id="id_breed${newIndex}" style="width: 100%">
+                    ${newHtmlBreeds}
+                    </select> </td>
+                    <td><input type="text" name="age${newIndex}" id="age${newIndex}" style="width: 100%" value="${age}"></td>
+                    <td><input type="text" name="avg_height${newIndex}" id="avg_height${newIndex}" style="width: 100%" value="${avg_height}"></td>
+                    <td><input type="text" name="avg_diameter${newIndex}" id="avg_diameter${newIndex}" style="width: 100%" value="${avg_diameter}"></td>
+                    <td><input type="text" name="count_of_plants${newIndex}" id="count_of_plants${newIndex}" style="width: 100%" value="${count_of_plants}"></td>
+                    <td style="width: 50px;">
+                        <svg onclick="deleteLinePoint7Table(${APP.point7Table[i].id})" class="cursorPointer" width="23px" height="23px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                            <g id="SVGRepo_iconCarrier">
+                                <path d="M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                            </g>
+                        </svg>
+                    </td>
+                </tr>`;
+
+
+        newIndex +=1;
+    }
+
+    for(var i = 0; i < APP.countNewLinePoint7Table; i++) {
+        var idLine = document.getElementById("idLine"+oldIndex).value;
+        var ratio_composition = document.getElementById("ratio_composition"+oldIndex).value;
+        var id_breed = document.getElementById("id_breed"+oldIndex).value;
+        var age = document.getElementById("age"+oldIndex).value;
+        var avg_height = document.getElementById("avg_height"+oldIndex).value;
+        var avg_diameter = document.getElementById("avg_diameter"+oldIndex).value;
+        var count_of_plants = document.getElementById("count_of_plants"+oldIndex).value;
+
+        if(oldIndex == del_index) {
+            oldIndex += 1;
+            continue;
         }
 
-        index += 1;
+        oldIndex += 1;
+
+        var newHtmlBreeds = "";
+        for(var j = 0; j < APP.breeds.length; j++) {
+            if(id_breed == APP.breeds[j].id) {
+                newHtmlBreeds = newHtmlBreeds + "<option selected value=\"" + APP.breeds[j].id + "\">" + APP.breeds[j].name_breed + "</option>";
+            } else {
+                newHtmlBreeds = newHtmlBreeds + "<option value=\"" + APP.breeds[j].id + "\">" + APP.breeds[j].name_breed + "</option>";
+            }
+        }
+
+        newHtml += `<tr>
+                    <input id="idLine${newIndex}" type="hidden" name="id" value="0">
+                    <td><input type="text" name="ratio_composition${newIndex}" id="ratio_composition${newIndex}" style="width: 100%" value="${ratio_composition}"></td>
+                    <td><select type="text" name="id_breed${newIndex}" id="id_breed${newIndex}" style="width: 100%">
+                    ${newHtmlBreeds}
+                    </select> </td>
+                    <td><input type="text" name="age${newIndex}" id="age${newIndex}" style="width: 100%" value="${age}"></td>
+                    <td><input type="text" name="avg_height${newIndex}" id="avg_height${newIndex}" style="width: 100%" value="${avg_height}"></td>
+                    <td><input type="text" name="avg_diameter${newIndex}" id="avg_diameter${newIndex}" style="width: 100%" value="${avg_diameter}"></td>
+                    <td><input type="text" name="count_of_plants${newIndex}" id="count_of_plants${newIndex}" style="width: 100%" value="${count_of_plants}"></td>
+                    <td style="width: 50px;">
+                        <svg onclick="deleteNewLineInPoint7(${newIndex})" class="cursorPointer" width="23px" height="23px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                            <g id="SVGRepo_iconCarrier">
+                                <path d="M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                            </g>
+                        </svg>
+                    </td>
+                </tr>`;
+
+        newIndex +=1;
 
     }
 
+    APP.countNewLinePoint7Table -= 1;
     APP.countLinePoint7Table -= 1;
-
     point7Table.innerHTML = newHtml;
+
 }
 
 async function deleteLinePoint7Table(del_id) {
 
-        let point7Table = document.getElementById("id_point7_table");
+    hasUnsavedChanges = true;
+
+    let point7Table = document.getElementById("id_point7_table");
     newHtml = "";
 
-    var index = 0;
-    for(var i = 0; i < APP.countLinePoint7Table; i++) {
+    var oldIndex = 0;
+    var newIndex = 0;
+    for(var i = 0; i < APP.point7Table.length; i++) {
 
-        var idLine = document.getElementById("idLine"+i).value;
-        var ratio_composition = document.getElementById("ratio_composition"+i).value;
-        var id_breed = document.getElementById("id_breed"+i).value;
-        var age = document.getElementById("age"+i).value;
-        var avg_height = document.getElementById("avg_height"+i).value;
-        var avg_diameter = document.getElementById("avg_diameter"+i).value;
-        var count_of_plants = document.getElementById("count_of_plants"+i).value;
+        if(APP.delIdPoint7.includes(APP.point7Table[i].id)) {
+            continue;
+        }
+
+        var idLine = document.getElementById("idLine"+oldIndex).value;
+        var ratio_composition = document.getElementById("ratio_composition"+oldIndex).value;
+        var id_breed = document.getElementById("id_breed"+oldIndex).value;
+        var age = document.getElementById("age"+oldIndex).value;
+        var avg_height = document.getElementById("avg_height"+oldIndex).value;
+        var avg_diameter = document.getElementById("avg_diameter"+oldIndex).value;
+        var count_of_plants = document.getElementById("count_of_plants"+oldIndex).value;
+
+        oldIndex += 1;
 
         var newHtmlBreeds = "";
         for(var j = 0; j < APP.breeds.length; j++) {
@@ -373,55 +449,78 @@ async function deleteLinePoint7Table(del_id) {
             }
         }
 
-        if(i < APP.point7Table.length) {
-            if(APP.point7Table[i].id == del_id) {
-                continue;
-            }
-
-            newHtml += `<tr>
-                        <input id="idLine${index}" type="hidden" name="id" value="${idLine}">
-                        <td><input type="text" name="ratio_composition${index}" id="ratio_composition${index}" style="width: 100%" value="${ratio_composition}"></td>
-                        <td><select type="text" name="id_breed${index}" id="id_breed${index}" style="width: 100%">
-                        ${newHtmlBreeds}
-                        </select> </td>
-                        <td><input type="text" name="age${index}" id="age${index}" style="width: 100%" value="${age}"></td>
-                        <td><input type="text" name="avg_height${index}" id="avg_height${index}" style="width: 100%" value="${avg_height}"></td>
-                        <td><input type="text" name="avg_diameter${index}" id="avg_diameter${index}" style="width: 100%" value="${avg_diameter}"></td>
-                        <td><input type="text" name="count_of_plants${index}" id="count_of_plants${index}" style="width: 100%" value="${count_of_plants}"></td>
-                        <td style="width: 50px;">
-                            <svg onclick="deleteLinePoint7Table(${APP.point7Table[i].id})" class="cursorPointer" width="23px" height="23px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                                <g id="SVGRepo_iconCarrier">
-                                    <path d="M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                                </g>
-                            </svg>
-                        </td>
-                    </tr>`;
-        } else {
-            newHtml += `<tr>
-                        <input id="idLine${index}" type="hidden" name="id" value="${idLine}">
-                        <td><input type="text" name="ratio_composition${index}" id="ratio_composition${index}" style="width: 100%" value="${ratio_composition}"></td>
-                        <td><select type="text" name="id_breed${index}" id="id_breed${index}" style="width: 100%">
-                        ${newHtmlBreeds}
-                        </select> </td>
-                        <td><input type="text" name="age${index}" id="age${index}" style="width: 100%" value="${age}"></td>
-                        <td><input type="text" name="avg_height${index}" id="avg_height${index}" style="width: 100%" value="${avg_height}"></td>
-                        <td><input type="text" name="avg_diameter${index}" id="avg_diameter${index}" style="width: 100%" value="${avg_diameter}"></td>
-                        <td><input type="text" name="count_of_plants${index}" id="count_of_plants${index}" style="width: 100%" value="${count_of_plants}"></td>
-                        <td style="width: 50px;">
-                            <svg onclick="deleteNewLineInPoint7(${index})" class="cursorPointer" width="23px" height="23px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                                <g id="SVGRepo_iconCarrier">
-                                    <path d="M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                                </g>
-                            </svg>
-                        </td>
-                    </tr>`;
+        if(APP.point7Table[i].id == del_id) {
+            continue;
         }
 
-        index += 1;
+
+        newHtml += `<tr>
+                    <input id="idLine${newIndex}" type="hidden" name="id" value="${APP.point7Table[i].id}">
+                    <td><input type="text" name="ratio_composition${newIndex}" id="ratio_composition${newIndex}" style="width: 100%" value="${ratio_composition}"></td>
+                    <td><select type="text" name="id_breed${newIndex}" id="id_breed${newIndex}" style="width: 100%">
+                    ${newHtmlBreeds}
+                    </select> </td>
+                    <td><input type="text" name="age${newIndex}" id="age${newIndex}" style="width: 100%" value="${age}"></td>
+                    <td><input type="text" name="avg_height${newIndex}" id="avg_height${newIndex}" style="width: 100%" value="${avg_height}"></td>
+                    <td><input type="text" name="avg_diameter${newIndex}" id="avg_diameter${newIndex}" style="width: 100%" value="${avg_diameter}"></td>
+                    <td><input type="text" name="count_of_plants${newIndex}" id="count_of_plants${newIndex}" style="width: 100%" value="${count_of_plants}"></td>
+                    <td style="width: 50px;">
+                        <svg onclick="deleteLinePoint7Table(${APP.point7Table[i].id})" class="cursorPointer" width="23px" height="23px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                            <g id="SVGRepo_iconCarrier">
+                                <path d="M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                            </g>
+                        </svg>
+                    </td>
+                </tr>`;
+
+
+        newIndex +=1;
+    }
+
+    for(var i = 0; i < APP.countNewLinePoint7Table; i++) {
+        var idLine = document.getElementById("idLine"+oldIndex).value;
+        var ratio_composition = document.getElementById("ratio_composition"+oldIndex).value;
+        var id_breed = document.getElementById("id_breed"+oldIndex).value;
+        var age = document.getElementById("age"+oldIndex).value;
+        var avg_height = document.getElementById("avg_height"+oldIndex).value;
+        var avg_diameter = document.getElementById("avg_diameter"+oldIndex).value;
+        var count_of_plants = document.getElementById("count_of_plants"+oldIndex).value;
+
+        oldIndex += 1;
+
+        var newHtmlBreeds = "";
+        for(var j = 0; j < APP.breeds.length; j++) {
+            if(id_breed == APP.breeds[j].id) {
+                newHtmlBreeds = newHtmlBreeds + "<option selected value=\"" + APP.breeds[j].id + "\">" + APP.breeds[j].name_breed + "</option>";
+            } else {
+                newHtmlBreeds = newHtmlBreeds + "<option value=\"" + APP.breeds[j].id + "\">" + APP.breeds[j].name_breed + "</option>";
+            }
+        }
+
+        newHtml += `<tr>
+                    <input id="idLine${newIndex}" type="hidden" name="id" value="0">
+                    <td><input type="text" name="ratio_composition${newIndex}" id="ratio_composition${newIndex}" style="width: 100%" value="${ratio_composition}"></td>
+                    <td><select type="text" name="id_breed${newIndex}" id="id_breed${newIndex}" style="width: 100%">
+                    ${newHtmlBreeds}
+                    </select> </td>
+                    <td><input type="text" name="age${newIndex}" id="age${newIndex}" style="width: 100%" value="${age}"></td>
+                    <td><input type="text" name="avg_height${newIndex}" id="avg_height${newIndex}" style="width: 100%" value="${avg_height}"></td>
+                    <td><input type="text" name="avg_diameter${newIndex}" id="avg_diameter${newIndex}" style="width: 100%" value="${avg_diameter}"></td>
+                    <td><input type="text" name="count_of_plants${newIndex}" id="count_of_plants${newIndex}" style="width: 100%" value="${count_of_plants}"></td>
+                    <td style="width: 50px;">
+                        <svg onclick="deleteNewLineInPoint7(${newIndex})" class="cursorPointer" width="23px" height="23px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                            <g id="SVGRepo_iconCarrier">
+                                <path d="M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                            </g>
+                        </svg>
+                    </td>
+                </tr>`;
+
+        newIndex +=1;
 
     }
 

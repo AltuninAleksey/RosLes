@@ -407,7 +407,7 @@ async function saveFieldCard() {
         id_quarter: quarter.value,
         id_subject_rf: APP.documentData.id_subject_rf, //regions.value,
         id_forest_districts: document.getElementById("forest_districts").value,
-        sample_region: String(document.getElementById("sample_region").value).replace(/,/g, '.'),
+        sample_region: String(Number(String(document.getElementById("sample_region").value).replace(/,/g, '.')).toFixed(4)),
         soil_lot: document.getElementById("soil_lot").value,
         id_list_region: APP.documentData.id_list_region, //no
         date: APP.documentData.date,
@@ -608,7 +608,7 @@ async function saveFieldCard() {
             ratio_composition: document.getElementById("ratio_composition"+i).value == ""? "0":document.getElementById("ratio_composition"+i).value,
             age: document.getElementById("age"+i).value == ""? "0":document.getElementById("age"+i).value,
             avg_diameter: document.getElementById("avg_diameter"+i).value == ""? "0":document.getElementById("avg_diameter"+i).value.replaceAll(",", "."),
-            avg_height: document.getElementById("avg_height"+i).value == ""? "0":document.getElementById("avg_height"+i).value.replaceAll(",", "."),
+            avg_height: document.getElementById("avg_height"+i).value == ""? "0" : String(Number(String(document.getElementById("avg_height"+i).value.replaceAll(",", "."))).toFixed(2)),
             count_plants: document.getElementById("count_of_plants"+i).value == ""? "0":document.getElementById("count_of_plants"+i).value,
             breed: document.getElementById("id_breed"+i).value,
             id_field_card: APP.documentData.id
@@ -638,7 +638,7 @@ async function saveFieldCard() {
 
 
     for(var i = 0; i < APP.delIdList.length; i++) {
-        await PrintFieldCardBusiness.deletePoint7Table2Sapling(APP.delIdList[i]);
+            await PrintFieldCardBusiness.deletePoint7Table2Sapling(APP.delIdList[i]);
     }
 
     for(var i = 0; i < APP.delIdGpsPoint.length; i++) {
@@ -723,7 +723,7 @@ async function generateDocx() {
         forestly: CommonFunction.getForestlyNameByQuarterId(APP.forestly, document.getElementById("lesName").value),
         district_forestly: CommonFunction.getDistrictForestlyNameByQuarterId(APP.district_forestly, document.getElementById("ucLesName").value),
         name_quarter: document.getElementById("quarter").value,
-        sample_area: document.getElementById("sample_region").value,
+        sample_area: String(Number(String(document.getElementById("sample_region").value).replace(/,/g, '.')).toFixed(4)),
         soil_lot: document.getElementById("soil_lot").value,
         purpose_of_forests: document.getElementById("purpose_of_forests").options[document.getElementById("purpose_of_forests").selectedIndex].text,
         forest_protection_category: document.getElementById("forest_protection_category").options[document.getElementById("forest_protection_category").selectedIndex].text,

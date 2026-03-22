@@ -1,7 +1,12 @@
-buildFieldCardTbody();
 
-async function buildFieldCardTbody() {
-    var dataResponse = await FieldCardBusiness.getAllFieldCardList();
+// data.sort(function(a, b) { return a.date > b.date? 1 : -1; });
+// data.sort(function(a, b) { return a.date > b.date? -1 : 1; });
+
+
+buildStatementRecalculationsTbody();
+
+async function buildStatementRecalculationsTbody() {
+    var dataResponse = await StatementRecalculationsBusiness.getAllStatementList();
     var data = [];
     for(var i = 0; i < dataResponse.length; i++) {
         for(var j = 0; j < dataResponse[i].length; j++) {
@@ -14,7 +19,7 @@ async function buildFieldCardTbody() {
     APP.userData = await CommonBusiness.getUserData();
 
     //APP.subjectrf = await CommonBusiness.getAllSubjectrf();
-    //APP.forestly =  await CommonBusiness.getForestlyByIdSubjectrf(Number(APP.userData.id_subject_rf)); //allForestData.forestly;
+    //APP.subjectrf = APP.subjectrf.sort(function(a, b) { return a.name_subject_RF > b.name_subject_RF? 1 : -1; });
 
     var czl = await CommonBusiness.getCZL();
     APP.subjectrf = [];
@@ -59,6 +64,7 @@ async function buildFieldCardTbody() {
 
     var buffer_forestly = await CommonBusiness.getForestlyByArrayIdSubjectrf(dataForForestlyByArrayIdSubjectrf);
     APP.forestly = [];
+    //APP.forestly =  await CommonBusiness.getForestlyByIdSubjectrf(Number(APP.userData.id_subject_rf)); //allForestData.forestly;
 
     for(var i = 0; i < buffer_forestly.length; i++) {
         for(var j = 0; j < buffer_forestly[i].forestly_data.length; j++) {
@@ -86,7 +92,7 @@ async function buildFieldCardTbody() {
     }
 
 
-    //APP.quarter = [];
+//    APP.quarter = [];
     var arrayIdDistrictForestly = [];
     for(var i = 0; i < APP.district_forestly.length; i++) {
         arrayIdDistrictForestly.push({
@@ -104,8 +110,7 @@ async function buildFieldCardTbody() {
 //        }
 //    }
 
-    //APP.subjectrf = allForestData.subjectrf;
-    //APP.forestly = allForestData.forestly;
+
     //APP.district_forestly = allForestData.district_forestly;
     //APP.quarter = allForestData.quarter;
 
@@ -114,14 +119,14 @@ async function buildFieldCardTbody() {
 
     sortByDate();
 
-    //updateDataInFieldCardTbody(data);
+    //updateDataInStatementRecalculationsTbody(data);
 
     setEventForElementsFilter();
     setDataInProfile();
 }
 
-function updateDataInFieldCardTbody(data) {
-    var tableBody = document.getElementById("fieldCard_tbody");
+function updateDataInStatementRecalculationsTbody(data) {
+    var tableBody = document.getElementById("statementRecalculations_tbody");
     var newHtml = "";
 
     for(var i = 0; i < data.length; i++) {
@@ -131,22 +136,21 @@ function updateDataInFieldCardTbody(data) {
         data[i].district_forestly = CommonFunction.getDistrictForestlyNameByQuarterId(APP.district_forestly, data[i].id_district_forestly);
         //data[i].quarter = CommonFunction.getQuarterNameByQuarterId(APP.quarter, data[i].id_quarter);
 
-        let strGetFieldCardDetail = "getPrintFieldCard(" + data[i].id + ",0)";
-
-        newHtml = newHtml + `<tr class="cursorPointer" onClick=${strGetFieldCardDetail}>
+        let strGetStatementRecalculationsDetail = "getStatementRecalculationsDetail(" + data[i].id  + ")"
+        newHtml = newHtml + `<tr class="cursorPointer" onClick=${strGetStatementRecalculationsDetail}>
                             <td class="textAlignCenter td1">${data[i].date}</td>
                             <td class="textAlignCenter td8">${data[i].number_region}</td>
-                            <td class="textAlignCenter td2">${data[i].subjectrf}</td>
-                            <td class="textAlignCenter td3">${data[i].forestly}</td>
-                            <td class="textAlignCenter td4">${data[i].district_forestly}</td>
-                            <td class="textAlignCenter td9">${data[i].dacha == null? "" : data[i].dacha}</td>
+                            <td class="td2">${data[i].subjectrf}</td>
+                            <td class="td3">${data[i].forestly}</td>
+                            <td class="td4">${data[i].district_forestly}</td>
+                            <td class="td9">${data[i].dacha == null? "" : data[i].dacha}</td>
                             <td class="textAlignCenter td5">${data[i].name_quarter == null? "" : data[i].name_quarter}</td>
                             <td class="textAlignCenter td6">${data[i].soil_lot}</td>
                             <td class="textAlignCenter td6">${data[i].sample_region}</td>
-                            <td class="textAlignCenter"` +  "onClick='event.stopPropagation();downloadAllExcel(" + data[i].id_list_region + ");'>" +
+                            <td style="width: 10px; text-align: center;"` +  "onClick='event.stopPropagation();downloadAllExcel(" + data[i].id + ");'>" +
                                 `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="fill:#000000"><path d="M11.292 16.706a1 1 0 0 0 1.416 0l3-3a1 1 0 0 0-1.414-1.414L13 13.586V4a1 1 0 0 0-2 0v9.586l-1.293-1.293a1 1 0 0 0-1.414 1.414zM17 19H7a1 1 0 0 0 0 2h10a1 1 0 0 0 0-2z" /></svg>
                             </td>
-                            <td class="textAlignCenter"` +  "onClick='event.stopPropagation();deleteFieldCard(" + data[i].id + ");'>" +
+                            <td style="width: 15px; text-align: center;"` +  "onClick='event.stopPropagation();deleteStatementRecalculation(" + data[i].id + ");'>" +
                                 `<svg width="23px" height="23px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                     <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -160,15 +164,11 @@ function updateDataInFieldCardTbody(data) {
     tableBody.innerHTML = newHtml;
 }
 
-async function deleteFieldCard(id) {
+async  function deleteStatementRecalculation(id) {
 
-    var data = {
-        id: id
-    }
+    await StatementRecalculationsBusiness.deleteStatementRecalculationById(id);
 
-    await FieldCardBusiness.deleteFieldCardById(data);
-
-    getFieldCard();
+    getStatementRecalculations();
 }
 
 async  function downloadAllExcel(id) {
@@ -177,14 +177,12 @@ async  function downloadAllExcel(id) {
         id: id
     };
 
-    var urlFile = await FieldCardBusiness.downloadAllExcel(data);
+    var urlFile = await StatementRecalculationsBusiness.downloadAllExcel(data);
     urlFile = urlFile.document;
 
     urlFile = urlGlobal + urlFile;
 
     window.open(urlFile, '_blank').focus();
-
-    await FieldCardBusiness.downloadAllPhoto(id);
 }
 
 function sortByDate() {
@@ -200,7 +198,7 @@ function sortByDate() {
         document.querySelector("#sortDateForTable1").innerHTML = "&#8595;";
     }
 
-    updateDataInFieldCardTbody(APP.dataTable);
+    updateDataInStatementRecalculationsTbody(APP.dataTable);
 
 }
 
@@ -210,21 +208,23 @@ async function setEventForElementsFilter() {
     let subjectNode = document.querySelector("#filter_subject_rf");
     subjectNode.removeAttribute("disabled");
     subjectNode.addEventListener('change', async (e)=>{
-        await setOptionInForestly(FieldCardBusiness.TypeData.BYID);
+        await setOptionInForestly(StatementRecalculationsBusiness.TypeData.BYID);
     });
 
-    await setOptionInForestly(FieldCardBusiness.TypeData.BYID);
+    await setOptionInForestly(StatementRecalculationsBusiness.TypeData.BYID);
     let forestlyNode = document.querySelector("#filter_forestly");
     forestlyNode.removeAttribute("disabled");
     forestlyNode.addEventListener('change', async (e)=>{
-        await setOptionInDistrictForestly(FieldCardBusiness.TypeData.BYID);
+        await setOptionInDistrictForestly(StatementRecalculationsBusiness.TypeData.BYID);
     });
 
-    await setOptionInDistrictForestly(FieldCardBusiness.TypeData.BYID);
+    await setOptionInDistrictForestly(StatementRecalculationsBusiness.TypeData.BYID);
     let districtForestly = document.querySelector("#filter_district_forestly");
     districtForestly.removeAttribute("disabled");
 
     document.querySelector("#filter_soil_lot").removeAttribute("readonly");
+
+
 
 //    document
 //        .querySelector("#checkbox_filter_subject_rf")
@@ -233,17 +233,17 @@ async function setEventForElementsFilter() {
 //            if(e.target.checked) {
 //                subjectNode.removeAttribute("disabled")
 //                subjectNode.addEventListener('change', async (e)=>{
-//                    await setOptionInForestly(FieldCardBusiness.TypeData.BYID);
+//                    await setOptionInForestly(StatementRecalculationsBusiness.TypeData.BYID);
 //                });
-//                await setOptionInForestly(FieldCardBusiness.TypeData.BYID);
+//                await setOptionInForestly(StatementRecalculationsBusiness.TypeData.BYID);
 //            } else {
 //                subjectNode.setAttribute("disabled", "on");
-//                await setOptionInForestly(FieldCardBusiness.TypeData.ALL);
+//                await setOptionInForestly(StatementRecalculationsBusiness.TypeData.ALL);
 //            }
 //        });
 //
-//    await setOptionInForestly(FieldCardBusiness.TypeData.ALL);
-//
+//    await setOptionInForestly(StatementRecalculationsBusiness.TypeData.ALL);
+
 //    document
 //        .querySelector("#checkbox_filter_forestly")
 //        .addEventListener('click', async (e)=>{
@@ -251,17 +251,17 @@ async function setEventForElementsFilter() {
 //            if(e.target.checked) {
 //                forestlyNode.removeAttribute("disabled");
 //                forestlyNode.addEventListener('change', async (e)=>{
-//                    await setOptionInDistrictForestly(FieldCardBusiness.TypeData.BYID);
+//                    await setOptionInDistrictForestly(StatementRecalculationsBusiness.TypeData.BYID);
 //                });
-//                await setOptionInDistrictForestly(FieldCardBusiness.TypeData.BYID);
+//                await setOptionInDistrictForestly(StatementRecalculationsBusiness.TypeData.BYID);
 //            } else {
 //                forestlyNode.setAttribute("disabled", "on");
-//                await setOptionInDistrictForestly(FieldCardBusiness.TypeData.ALL);
+//                await setOptionInDistrictForestly(StatementRecalculationsBusiness.TypeData.ALL);
 //            }
 //        });
 //
-//    await setOptionInDistrictForestly(FieldCardBusiness.TypeData.ALL);
-//
+//    await setOptionInDistrictForestly(StatementRecalculationsBusiness.TypeData.ALL);
+
 //    document
 //        .querySelector("#checkbox_filter_district_forestly")
 //        .addEventListener('click', async (e)=>{
@@ -269,17 +269,17 @@ async function setEventForElementsFilter() {
 //            if(e.target.checked) {
 //                districtForestly.removeAttribute("disabled");
 //                districtForestly.addEventListener('change', async (e)=>{
-//                    //await setOptionInQuarter(FieldCardBusiness.TypeData.BYID);
+//                    //await setOptionInQuarter(StatementRecalculationsBusiness.TypeData.BYID);
 //                });
-//                //await setOptionInQuarter(FieldCardBusiness.TypeData.BYID);
+//                //await setOptionInQuarter(StatementRecalculationsBusiness.TypeData.BYID);
 //            } else {
 //                districtForestly.setAttribute("disabled", "on");
-//                //await setOptionInQuarter(FieldCardBusiness.TypeData.ALL);
+//                //await setOptionInQuarter(StatementRecalculationsBusiness.TypeData.ALL);
 //            }
 //        });
 
-//    await setOptionInQuarter(FieldCardBusiness.TypeData.ALL);
-//
+   // await setOptionInQuarter(StatementRecalculationsBusiness.TypeData.ALL);
+
 //    document
 //        .querySelector("#checkbox_filter_quartal")
 //        .addEventListener('click', (e)=>{
@@ -365,16 +365,16 @@ async function setOptionInSubject() {
 
     subjectNode.innerHTML = newHtml;
 
-    await setOptionInForestly(FieldCardBusiness.TypeData.BYID);
+    await setOptionInForestly(StatementRecalculationsBusiness.TypeData.BYID);
 }
 
 async function setOptionInForestly(status) {
     let forestlyNode = document.querySelector("#filter_forestly");
     let forestly;
 
-    if(status == FieldCardBusiness.TypeData.BYID) {
+    if(status == StatementRecalculationsBusiness.TypeData.BYID) {
         let subjectNode = document.querySelector("#filter_subject_rf");
-        forestly = await CommonBusiness.getForestlyByIdSubjectrf(subjectNode.value);
+        forestly = await CommonBusiness.getForestlyByIdSubjectrf(Number(subjectNode.value));
     } else {
         forestly = APP.forestly;
     }
@@ -390,14 +390,14 @@ async function setOptionInForestly(status) {
     }
     forestlyNode.innerHTML = newHtml;
 
-    await setOptionInDistrictForestly(FieldCardBusiness.TypeData.BYID);
+    await setOptionInDistrictForestly(StatementRecalculationsBusiness.TypeData.BYID);
 }
 
 async function setOptionInDistrictForestly(status) {
     let districtForestlyNode = document.querySelector("#filter_district_forestly");
     let districtForestly = [];
 
-    if(status == FieldCardBusiness.TypeData.BYID) {
+    if(status == StatementRecalculationsBusiness.TypeData.BYID) {
         let forestlyNode = document.querySelector("#filter_forestly");
 
         if(forestlyNode.value != "" && forestlyNode.value != null && forestlyNode.value != undefined) {
@@ -419,7 +419,7 @@ async function setOptionInDistrictForestly(status) {
 
     districtForestlyNode.innerHTML = newHtml;
 
-    //await setOptionInQuarter(FieldCardBusiness.TypeData.BYID);
+    //await setOptionInQuarter(StatementRecalculationsBusiness.TypeData.BYID);
 }
 
 async function setOptionInQuarter(status) {
@@ -427,7 +427,7 @@ async function setOptionInQuarter(status) {
     let quarterNode = document.querySelector("#filter_quartal");
     let quarter = [];
 
-    if(status == FieldCardBusiness.TypeData.BYID) {
+    if(status == StatementRecalculationsBusiness.TypeData.BYID) {
         let districtForestlyNode = document.querySelector("#filter_district_forestly");
 
         if(districtForestlyNode.value != "" && districtForestlyNode.value != null && districtForestlyNode.value != undefined) {
@@ -467,18 +467,18 @@ async function searchByFilter() {
     let nameQuarter = document.querySelector("#filter_name_quarter");
 
     let data;
-
+//
 //    if(checkboxFilterSubjectRFNode.checked || checkboxFilterForestlyNode.checked
 //    || checkboxFilterDistrictForestlyNode.checked //|| checkboxFilterQuartalNode.checked
 //    || checkboxFilterDateStartNode.checked || checkboxFilterDateEnd.checked
 //    || checkboxFilterSoilLot.checked) {
 //
 //        let responseData = {
-//            bSubjectrf: checkboxFilterSubjectRFNode.checked,
+//            bSubjectrf: true,
 //            idSubjectrf: Number(subjectRFNode.value),
-//            bForestly: checkboxFilterForestlyNode.checked,
+//            bForestly: true,
 //            idForestly: forestlyNode.value,
-//            bDistrictForestly: checkboxFilterDistrictForestlyNode.checked,
+//            bDistrictForestly: true,
 //            idDistrictForestly: districtForestlyNode.value,
 //            //bQuarter: checkboxFilterQuartalNode.checked,
 //            //idQuarter: quartalNode.value,
@@ -486,15 +486,15 @@ async function searchByFilter() {
 //            date: dateStartNode.value,
 //            bDateSec: checkboxFilterDateEnd.checked,
 //            dateSec: dateEndNode.value,
-//            bSoil_lot: checkboxFilterSoilLot.checked,
+//            bSoil_lot: true,
 //            soil_lot: soilLot.value
 //        };
 //
 //
-//        APP.dataTable = await FieldCardBusiness.getFieldCardListByFilter(responseData);
+//        APP.dataTable = await StatementRecalculationsBusiness.getStatementListByFilter(responseData);
 //    } else {
 //
-//        var dataResponse = await FieldCardBusiness.getAllFieldCardList();
+//        var dataResponse = await StatementRecalculationsBusiness.getAllStatementList();
 //        var data2 = [];
 //        for(var i = 0; i < dataResponse.length; i++) {
 //            for(var j = 0; j < dataResponse[i].length; j++) {
@@ -505,31 +505,31 @@ async function searchByFilter() {
 //        APP.dataTable = data2;
 //    }
 
-     let responseData = {
+    let responseData = {
         bSubjectrf: true,
         idSubjectrf: Number(subjectRFNode.value),
         bForestly: true,
         idForestly: forestlyNode.value,
         bDistrictForestly: true,
         idDistrictForestly: districtForestlyNode.value,
-        bQuarter: (nameQuarter.value != ''),
+        bQuarter: true,
         name_quarter: nameQuarter.value,
         //idQuarter: quartalNode.value,
         bDate: checkboxFilterDateStartNode.checked,
         date: dateStartNode.value,
         bDateSec: checkboxFilterDateEnd.checked,
         dateSec: dateEndNode.value,
-        bSoil_lot: (soilLot.value != ''),
+        bSoil_lot: true,
         soil_lot: soilLot.value
-     };
+    };
 
-    APP.dataTable = await FieldCardBusiness.getFieldCardListByFilter(responseData);
+    APP.dataTable = await StatementRecalculationsBusiness.getStatementListByFilter(responseData);
 
-    updateDataInFieldCardTbody(APP.dataTable);
+    updateDataInStatementRecalculationsTbody(APP.dataTable);
 }
 
 async function resetFilter() {
-    var dataResponse = await FieldCardBusiness.getAllFieldCardList();
+    var dataResponse = await StatementRecalculationsBusiness.getAllStatementList();
     var data2 = [];
     for(var i = 0; i < dataResponse.length; i++) {
         for(var j = 0; j < dataResponse[i].length; j++) {
@@ -538,12 +538,12 @@ async function resetFilter() {
     }
 
     APP.dataTable = data2;
-    updateDataInFieldCardTbody(APP.dataTable);
+    updateDataInStatementRecalculationsTbody(APP.dataTable);
 }
 
 async function downloadExcel() {
 
-    var urlExcel = await FieldCardBusiness.downloadExcel();
+    var urlExcel = await StatementRecalculationsBusiness.downloadExcel();
     urlExcel = urlExcel.document;
 
     var fullUrl = urlGlobal + urlExcel;

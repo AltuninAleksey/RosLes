@@ -31,7 +31,7 @@ function openChangePassword() {
     document.getElementById('m1changePassword').style.display = 'flex';
     document.body.style.overflow = 'hidden';
 }
-function saveNewPassword() {
+async function saveNewPassword() {
     const oldPassword = document.getElementById('old_password').value;
     const newPassword = document.getElementById('new_password').value;
     const confirmPassword = document.getElementById('confirm_password').value;
@@ -43,6 +43,35 @@ function saveNewPassword() {
 
     if (newPassword !== confirmPassword) {
         alert('Новый пароль и подтверждение не совпадают');
+        return;
+    }
+
+    data = {
+        "email": APP.userData.email,
+        "old_password": oldPassword,
+        "new_password": newPassword
+    }
+
+    var token = document.cookie.match(/jwttoken=(.+?)(;|$)/)[1];
+
+    try {
+        var requestData = await axios({
+            method: 'post',
+            url: urlGlobal + "/change_password_with_old",
+            data: data,
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        });
+    } catch (error) {
+      console.error('Произошла ошибка при выполнении запроса:' + error.response.data.message);
+      alert('Произошла ошибка при выполнении запроса: ' + error.response.data.message);
+      return;
+    }
+
+    if(requestData.status != 200) {
+        console.error('Произошла ошибка при выполнении запроса:' + requestData.data.message);
+        alert('Произошла ошибка при выполнении запроса: ' + requestData.data.message);
         return;
     }
 

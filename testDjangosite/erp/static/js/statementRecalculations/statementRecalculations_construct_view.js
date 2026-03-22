@@ -183,6 +183,8 @@ async  function downloadAllExcel(id) {
     urlFile = urlGlobal + urlFile;
 
     window.open(urlFile, '_blank').focus();
+
+    await StatementRecalculationsBusiness.downloadAllPhoto(id);
 }
 
 function sortByDate() {
@@ -467,43 +469,6 @@ async function searchByFilter() {
     let nameQuarter = document.querySelector("#filter_name_quarter");
 
     let data;
-//
-//    if(checkboxFilterSubjectRFNode.checked || checkboxFilterForestlyNode.checked
-//    || checkboxFilterDistrictForestlyNode.checked //|| checkboxFilterQuartalNode.checked
-//    || checkboxFilterDateStartNode.checked || checkboxFilterDateEnd.checked
-//    || checkboxFilterSoilLot.checked) {
-//
-//        let responseData = {
-//            bSubjectrf: true,
-//            idSubjectrf: Number(subjectRFNode.value),
-//            bForestly: true,
-//            idForestly: forestlyNode.value,
-//            bDistrictForestly: true,
-//            idDistrictForestly: districtForestlyNode.value,
-//            //bQuarter: checkboxFilterQuartalNode.checked,
-//            //idQuarter: quartalNode.value,
-//            bDate: checkboxFilterDateStartNode.checked,
-//            date: dateStartNode.value,
-//            bDateSec: checkboxFilterDateEnd.checked,
-//            dateSec: dateEndNode.value,
-//            bSoil_lot: true,
-//            soil_lot: soilLot.value
-//        };
-//
-//
-//        APP.dataTable = await StatementRecalculationsBusiness.getStatementListByFilter(responseData);
-//    } else {
-//
-//        var dataResponse = await StatementRecalculationsBusiness.getAllStatementList();
-//        var data2 = [];
-//        for(var i = 0; i < dataResponse.length; i++) {
-//            for(var j = 0; j < dataResponse[i].length; j++) {
-//                data2.push(dataResponse[i][j]);
-//            }
-//        }
-//
-//        APP.dataTable = data2;
-//    }
 
     let responseData = {
         bSubjectrf: true,
@@ -512,14 +477,14 @@ async function searchByFilter() {
         idForestly: forestlyNode.value,
         bDistrictForestly: true,
         idDistrictForestly: districtForestlyNode.value,
-        bQuarter: true,
+        bQuarter: (nameQuarter.value != ''),
         name_quarter: nameQuarter.value,
         //idQuarter: quartalNode.value,
         bDate: checkboxFilterDateStartNode.checked,
         date: dateStartNode.value,
         bDateSec: checkboxFilterDateEnd.checked,
         dateSec: dateEndNode.value,
-        bSoil_lot: true,
+        bSoil_lot: (soilLot.value != ''),
         soil_lot: soilLot.value
     };
 

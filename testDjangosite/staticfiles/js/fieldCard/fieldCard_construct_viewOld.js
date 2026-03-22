@@ -136,17 +136,16 @@ function updateDataInFieldCardTbody(data) {
         newHtml = newHtml + `<tr class="cursorPointer" onClick=${strGetFieldCardDetail}>
                             <td class="textAlignCenter td1">${data[i].date}</td>
                             <td class="textAlignCenter td8">${data[i].number_region}</td>
-                            <td class="textAlignCenter td2">${data[i].subjectrf}</td>
-                            <td class="textAlignCenter td3">${data[i].forestly}</td>
-                            <td class="textAlignCenter td4">${data[i].district_forestly}</td>
-                            <td class="textAlignCenter td9">${data[i].dacha == null? "" : data[i].dacha}</td>
+                            <td class="td2">${data[i].subjectrf}</td>
+                            <td class="td3">${data[i].forestly}</td>
+                            <td class="td4">${data[i].district_forestly}</td>
+                            <td class="td9">${data[i].dacha == null? "" : data[i].dacha}</td>
                             <td class="textAlignCenter td5">${data[i].name_quarter == null? "" : data[i].name_quarter}</td>
                             <td class="textAlignCenter td6">${data[i].soil_lot}</td>
-                            <td class="textAlignCenter td6">${data[i].sample_region}</td>
-                            <td class="textAlignCenter"` +  "onClick='event.stopPropagation();downloadAllExcel(" + data[i].id_list_region + ");'>" +
+                            <td style="width: 10px; text-align: center;"` +  "onClick='event.stopPropagation();downloadAllExcel(" + data[i].id_list_region + ");'>" +
                                 `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="fill:#000000"><path d="M11.292 16.706a1 1 0 0 0 1.416 0l3-3a1 1 0 0 0-1.414-1.414L13 13.586V4a1 1 0 0 0-2 0v9.586l-1.293-1.293a1 1 0 0 0-1.414 1.414zM17 19H7a1 1 0 0 0 0 2h10a1 1 0 0 0 0-2z" /></svg>
                             </td>
-                            <td class="textAlignCenter"` +  "onClick='event.stopPropagation();deleteFieldCard(" + data[i].id + ");'>" +
+                            <td style="width: 15px; text-align: center;"` +  "onClick='event.stopPropagation();deleteFieldCard(" + data[i].id + ");'>" +
                                 `<svg width="23px" height="23px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                     <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -183,8 +182,6 @@ async  function downloadAllExcel(id) {
     urlFile = urlGlobal + urlFile;
 
     window.open(urlFile, '_blank').focus();
-
-    await FieldCardBusiness.downloadAllPhoto(id);
 }
 
 function sortByDate() {
@@ -512,14 +509,14 @@ async function searchByFilter() {
         idForestly: forestlyNode.value,
         bDistrictForestly: true,
         idDistrictForestly: districtForestlyNode.value,
-        bQuarter: (nameQuarter.value != ''),
+        bQuarter: true,
         name_quarter: nameQuarter.value,
         //idQuarter: quartalNode.value,
         bDate: checkboxFilterDateStartNode.checked,
         date: dateStartNode.value,
         bDateSec: checkboxFilterDateEnd.checked,
         dateSec: dateEndNode.value,
-        bSoil_lot: (soilLot.value != ''),
+        bSoil_lot: true,
         soil_lot: soilLot.value
      };
 

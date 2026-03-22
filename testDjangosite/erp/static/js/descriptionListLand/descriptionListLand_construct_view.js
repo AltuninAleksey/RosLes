@@ -183,6 +183,8 @@ async  function downloadAllExcel(id) {
     urlFile = urlGlobal + urlFile;
 
     window.open(urlFile, '_blank').focus();
+
+    await DescriptionListLandBusiness.downloadAllPhoto(id);
 }
 
 
@@ -510,14 +512,14 @@ async function searchByFilter() {
         idForestly: forestlyNode.value,
         bDistrictForestly: true,
         idDistrictForestly: districtForestlyNode.value,
-        bQuarter: true,
+        bQuarter: (nameQuarter.value != ''),
         name_quarter: nameQuarter.value,
         //idQuarter: quartalNode.value,
         bDate: checkboxFilterDateStartNode.checked,
         date: dateStartNode.value,
         bDateSec: checkboxFilterDateEnd.checked,
         dateSec: dateEndNode.value,
-        bSoil_lot: true,
+        bSoil_lot: (soilLot.value != ''),
         soil_lot: soilLot.value
     };
 

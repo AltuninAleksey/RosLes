@@ -65,6 +65,9 @@ function changeGps(index, element, val) {
 }
 
 function addGps() {
+
+    hasUnsavedChanges = true;
+
     var latitudeAdd = document.getElementById("latitude-add");
     var longitudeAdd = document.getElementById("longitude-add");
 
@@ -109,6 +112,8 @@ function deleteNewLineInTableThree(del_index) {
 }
 
 function deleteLineInTableThree(del_id) {
+
+    hasUnsavedChanges = true;
 
     APP.deleteIdTableThree.push(del_id);
 

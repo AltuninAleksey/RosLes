@@ -4,13 +4,30 @@ function setDataInTableNull() {
 
     for(var i = 0; i < APP.dataTable_0.length; i++) {
 
-        var name_undergrowth = CommonFunction.getUndergrowthsName(APP.undergrowth, APP.dataTable_0[i].id_undergrowth);
+        var newHtmlUndergrowth = "";
+
+        for(var j = 0; j < APP.undergrowth.length; j++) {
+            if(APP.dataTable_0[i].id_undergrowth == APP.undergrowth[j].id) {
+                newHtmlUndergrowth = newHtmlUndergrowth + "<option selected value=\"" + APP.undergrowth[j].id + "\">" + APP.undergrowth[j].name + "</option>";
+            } else {
+                newHtmlUndergrowth = newHtmlUndergrowth + "<option value=\"" + APP.undergrowth[j].id + "\">" + APP.undergrowth[j].name + "</option>";
+            }
+        }
 
         if(APP.dataTable_0[i].id != "") {
             newHtml = newHtml + `<tr>
-                <td class="podles_td_1">${name_undergrowth}</td>
-                <td class="podles_td_2">${APP.dataTable_0[i].count_of_plants}</td>
-                <td class="podles_td_3">${APP.dataTable_0[i].avg_height_undergrowth}</td>` +
+                <td class="podles_td_1">
+                    <select onChange="updateUndefground(${i}, 'id_undergrowth', this.value);"
+                        type="text" name="id_undergrowth{i}" id="id_undergrowth{i}" style="width: 100%">
+                            ${newHtmlUndergrowth}
+                    </select>
+                </td>
+                <td class="podles_td_2">
+                    <input class="recalculation_input" onChange="updateUndefground(${i}, 'count_of_plants', this.value);" type="number" value="${APP.dataTable_0[i].count_of_plants}">
+                </td>
+                <td class="podles_td_3">
+                    <input class="recalculation_input" onChange="updateUndefground(${i}, 'avg_height_undergrowth', this.value);" type="text" value="${APP.dataTable_0[i].avg_height_undergrowth}">
+                </td>`+
                 "<td style=\"width: 1%;\">" +
                     "<svg onclick=\"deleteLineInTableNull(" + APP.dataTable_0[i].id + ")\" class=\"cursorPointer\" width=\"23px\" height=\"23px\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">" +
                         "<g id=\"SVGRepo_bgCarrier\" stroke-width=\"0\"></g> " +
@@ -23,9 +40,18 @@ function setDataInTableNull() {
             `</tr>`;
         } else {
             newHtml = newHtml + `<tr>
-                <td class="podles_td_1">${name_undergrowth}</td>
-                <td class="podles_td_2">${APP.dataTable_0[i].count_of_plants}</td>
-                <td class="podles_td_3">${APP.dataTable_0[i].avg_height_undergrowth}</td>` +
+                <td class="podles_td_1">
+                    <select onChange="updateUndefground(${i}, 'id_undergrowth', this.value);"
+                        type="text" name="id_undergrowth{i}" id="id_undergrowth{i}" style="width: 100%">
+                            ${newHtmlUndergrowth}
+                    </select>
+                </td>
+                <td class="podles_td_2">
+                    <input class="recalculation_input" onChange="updateUndefground(${i}, 'count_of_plants', this.value);" type="number" value="${APP.dataTable_0[i].count_of_plants}">
+                </td>
+                <td class="podles_td_3">
+                    <input class="recalculation_input" onChange="updateUndefground(${i}, 'avg_height_undergrowth', this.value);" type="text" value="${APP.dataTable_0[i].avg_height_undergrowth}">
+                </td>`+
                 "<td style=\"width: 1%;\">" +
                     "<svg onclick=\"deleteNewLineInTableNull(" + i + ")\" class=\"cursorPointer\" width=\"23px\" height=\"23px\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">" +
                         "<g id=\"SVGRepo_bgCarrier\" stroke-width=\"0\"></g> " +
@@ -42,7 +68,20 @@ function setDataInTableNull() {
     table_0.innerHTML = newHtml;
 }
 
+
+function updateUndefground(index, element, val) {
+
+    if(element == "avg_height_undergrowth") {
+        val = Number(val.replaceAll(",", "."));
+    }
+
+    APP.dataTable_0[index][element] = Number(val);
+}
+
 function addUndefground() {
+
+    hasUnsavedChanges = true;
+
     var breedName_undeground = document.getElementById("breedName-undeground");
     var count_add = document.getElementById("count-add");
     var avg_h_add = document.getElementById("avg-h-add");
@@ -80,6 +119,9 @@ function deleteNewLineInTableNull(del_index) {
 }
 
 function deleteLineInTableNull(del_id) {
+
+    hasUnsavedChanges = true;
+
     APP.deleteIdTableNull.push(del_id);
 
     var dataTable_0 = APP.dataTable_0;

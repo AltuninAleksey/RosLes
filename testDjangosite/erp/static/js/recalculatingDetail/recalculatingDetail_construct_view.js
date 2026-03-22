@@ -304,9 +304,8 @@ async function saveRecalculating() {
     hideLoadingModal();
     ShowModal('m1', 'Сохранение прошло успешно', '/static/img/check-circle-fill.svg')
     setTimeout(function() {
-        let idDocument = document.getElementById("idDocument").value;
         let idParent = document.getElementById("idParent").value;
-        getRecalculatingDetail(idDocument, idParent);
+        getStatementRecalculationsDetail(idParent);
       }, 3000);
 
     } catch (error) {

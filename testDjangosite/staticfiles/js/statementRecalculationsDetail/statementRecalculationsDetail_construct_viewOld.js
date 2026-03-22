@@ -113,12 +113,12 @@ async function setSampleList() {
         let strGetRecalculatingDetail = "getRecalculatingDetail(" + APP.sampleList[i].id +  "," + document.querySelector("#idDocument").value  + ")"
 
         newHtml += `<tr class="cursorPointer" onClick=${strGetRecalculatingDetail}>
-                        <td class="textAlignCenter td1">${APP.sampleList[i].date}</td>
-                        <td class="textAlignCenter td8">${APP.sampleList[i].number_sample}</td>
-                        <td class="textAlignCenter td2">${CommonFunction.getSubjectNameByQuarterId(APP.subjects, APP.sampleList[i].id_subject_rf)}</td>
-                        <td class="textAlignCenter td3">${CommonFunction.getForestlyNameByQuarterId(APP.forestly, APP.sampleList[i].id_forestly)}</td>
-                        <td class="textAlignCenter td4">${CommonFunction.getDistrictForestlyNameByQuarterId(APP.district_forestly, APP.sampleList[i].id_district_forestly)}</td>
-                        <td class="textAlignCenter td9">${APP.sampleList[i].dacha == null? "" : APP.sampleList[i].dacha}</td>
+                        <td class="td1">${APP.sampleList[i].date}</td>
+                        <td class="td8">${APP.sampleList[i].number_sample}</td>
+                        <td class="td2">${CommonFunction.getSubjectNameByQuarterId(APP.subjects, APP.sampleList[i].id_subject_rf)}</td>
+                        <td class="td3">${CommonFunction.getForestlyNameByQuarterId(APP.forestly, APP.sampleList[i].id_forestly)}</td>
+                        <td class="td4">${CommonFunction.getDistrictForestlyNameByQuarterId(APP.district_forestly, APP.sampleList[i].id_district_forestly)}</td>
+                        <td class="td9">${APP.sampleList[i].dacha == null? "" : APP.sampleList[i].dacha}</td>
                         <td class="textAlignCenter td5">${APP.sampleList[i].name_quarter == null? "":APP.sampleList[i].name_quarter}</td>
                         <td class="textAlignCenter td6">${APP.sampleList[i].soil_lot}</td>` +
                         "<td style=\"width: 1%;\">" +
@@ -137,8 +137,6 @@ async function setSampleList() {
 }
 
 function deleteNewLineInSampleList(del_id) {
-
-    hasUnsavedChanges = true;
 
     APP.deleteIdSample.push(del_id);
 
@@ -281,77 +279,13 @@ async function createSample() {
 
     getRecalculatingDetail(result.id, document.querySelector("#idDocument").value);
 }
-let hasUnsavedChanges = false;
-let ignoreFields = ['profile_fio','profile_phone','subjectStatement-profile','old_password','new_password','confirm_password'];
 
-window.addEventListener('beforeunload', (event) => {
-    if (hasUnsavedChanges) {
-        event.preventDefault();
-        event.returnValue = '';
-    }
-});
-
-function trackChanges() {
-    hasUnsavedChanges = true;
-    //console.log('Изменение обнаружено');
-}
-
-function addListenersToField(field) {
-
-    if (ignoreFields.includes(field.id) || ignoreFields.includes(field.name)) {
-        return;
-    }
-
-    field.addEventListener('input', trackChanges);
-    field.addEventListener('change', trackChanges);
-    if (field.type === 'checkbox' || field.type === 'radio') {
-        field.addEventListener('click', trackChanges);
-    }
-
-    //console.log('Отслеживание добавлено для:', field.name || field.id);
-}
-
-function trackAllFields() {
-    const inputFields = document.querySelectorAll('input, textarea, select');
-    inputFields.forEach(field => {
-        addListenersToField(field);
-    });
-}
-
-const observer = new MutationObserver((mutations) => {
-    mutations.forEach(mutation => {
-        mutation.addedNodes.forEach(node => {
-            if (node.nodeType === 1) {
-                if (node.matches && node.matches('input, textarea, select')) {
-                    addListenersToField(node);
-                }
-                if (node.querySelectorAll) {
-                    const nestedFields = node.querySelectorAll('input, textarea, select');
-                    nestedFields.forEach(field => addListenersToField(field));
-                }
-            }
-        });
-    });
-});
-
-observer.observe(document.body, {
-    childList: true,
-    subtree: true
-});
-
-trackAllFields();
-
-function resetChangesTracker() {
-    hasUnsavedChanges = false;
-    console.log('Трекер сброшен');
-}
 async function saveData() {
-   try {
-     if(!CommonFunction.checkMandatoryData()) {
+
+    if(!CommonFunction.checkMandatoryData()) {
         ShowModal('m1', 'Заполните все обязательные поля!', '/static/img/exclamation-circle.svg')
         return;
     }
-    showLoadingModal();
 
     let id = document.querySelector("#idDocument").value;
     let numberStatementNode = document.querySelector("#numberStatement").value;
@@ -365,7 +299,7 @@ async function saveData() {
     var data = {
         date: dateStatementNode,
         id: id,
-        sample_region: String(Number(String(sampleRegionStatementNode).replace(/,/g, '.')).toFixed(4)),
+        sample_region: String(sampleRegionStatementNode).replace(/,/g, '.'),
         mark_del: APP.documentData.mark_del? 1:0,
         mark_update: APP.documentData.mark_update? 1:0,
         number_region: numberStatementNode,
@@ -382,22 +316,12 @@ async function saveData() {
         await StatementRecalculationsBusinessDetail.deleteSample(APP.deleteIdSample[i]);
     }
 
-    resetChangesTracker();
+    ShowModal('m1', 'Сохранение прошло успешно', '/static/img/check-circle-fill.svg')
 
     setTimeout(function() {
         let id = document.querySelector("#idDocument").value;
         getStatementRecalculationsDetail(id);
       }, 3000);
-
-    hideLoadingModal();
-
-    ShowModal('m1', 'Сохранение прошло успешно', '/static/img/check-circle-fill.svg')
-
-    } catch (error) {
-      hideLoadingModal();
-      console.error('Ошибка сохранения:', error);
-      showError(error.message || 'Произошла ошибка при сохранении');
-    }
 }
 
 async function generateDocx() {
