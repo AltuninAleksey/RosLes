@@ -57,9 +57,9 @@
                 <div class="point cursorPointer activeLink" onclick="getNewStatementRecalculationsDetail()">
                     <a><h3>Список перечетных ведомостей</h3></a>
                 </div>
-                <div class="point cursorPointer" onclick="getMergeStatementRecalculations()">
-                    <a><h3>Объединить перечетные ведомости</h3></a>
-                </div>
+<!--                <div class="point cursorPointer" onclick="getMergeStatementRecalculations()">-->
+<!--                    <a><h3>Объединить перечетные ведомости</h3></a>-->
+<!--                </div>-->
             </div>
         </div>
     </header>
@@ -122,11 +122,6 @@
                 </label>
             </p>
 
-            <p>Начало периода:
-                <input type="checkbox" id="checkbox_filter_date_start" name="scales">
-                <label for="filter_date_start"><input readonly type="date" id="filter_date_start" name=""></label>
-            </p>
-
             <p>Участковое лесничество:
                 <input type="checkbox" id="checkbox_filter_district_forestly" name="scales" style="display: none;">
                 <label for="filter_district_forestly">
@@ -144,6 +139,12 @@
                 <input type="checkbox" id="checkbox_filter_soil_lot" name="scales" style="display: none;">
                 <label for="filter_soil_lot"><input readonly type="text" id="filter_soil_lot" name=""></label>
             </p>
+
+            <p>Начало периода:
+                <input type="checkbox" id="checkbox_filter_date_start" name="scales">
+                <label for="filter_date_start"><input readonly type="date" id="filter_date_start" name=""></label>
+            </p>
+
 
             <p>Окончание периода:
                 <input type="checkbox" id="checkbox_filter_date_end" name="scales">
