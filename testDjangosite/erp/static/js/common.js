@@ -222,3 +222,80 @@ function hideLoadingModal() {
 function showError(message) {
   showStatusModal(message, false, true);
 }
+//добавление точки в координатах
+document.addEventListener('DOMContentLoaded', () => {
+    document.body.addEventListener('input', (e) => {
+        if (e.target.classList && e.target.classList.contains('coordinate-input')) {
+            let cord = e.target.value.replace(/[^\d]/g, '');
+            let formatted = '';
+
+            for (let i = 0; i < cord.length; i++) {
+                if (i === 2 && cord.length > 2) {
+                    formatted += '.';
+                }
+                formatted += cord[i];
+            }
+            if (formatted.split('.').length > 2) {
+                return;
+            }
+
+            e.target.value = formatted;
+        }
+    });
+});
+
+///// убираем 0 при снятии фокуса, восстанавливаем 0 при фокусе
+(function() {
+
+    function handleFocus(e) {
+        if (e.target.value === '0') {
+            e.target.value = '';
+            e.target.dataset.wasZero = 'true';
+        } else {
+            e.target.dataset.wasZero = 'false';
+        }
+    }
+
+    function handleBlur(e) {
+        if (e.target.dataset.wasZero === 'true' && e.target.value === '') {
+            e.target.value = '0';
+        }
+        delete e.target.dataset.wasZero;
+    }
+
+    function initAllInputs() {
+        const inputsToInit = Array.from(document.querySelectorAll('input')).filter(input => {
+            return input.value === '0' || input.classList.contains('recalculation_input');
+        });
+
+        inputsToInit.forEach(input => {
+            input.addEventListener('focus', handleFocus);
+            input.addEventListener('blur', handleBlur);
+            input.setAttribute('data-zero-handler', 'true');
+        });
+
+    }
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initAllInputs);
+    } else {
+        initAllInputs();
+    }
+    // Наблюдаем за изменениями в DOM
+    const observer = new MutationObserver((mutations) => {
+        let hasNewNodes = false;
+        for (const mutation of mutations) {
+            if (mutation.addedNodes.length > 0) {
+                hasNewNodes = true;
+                break;
+            }
+        }
+        if (hasNewNodes) {
+            initAllInputs();
+        }
+    });
+
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true
+    });
+})();

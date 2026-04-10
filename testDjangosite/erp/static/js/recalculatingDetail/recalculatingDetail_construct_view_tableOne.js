@@ -96,7 +96,7 @@ function setDataInTableOne(switchButton) {
                                         "<td class=\"conpodles1_td_4\"><input class=\"recalculation_input\" onChange=\"updateRecalculating(" + i + ", " + "'age'" + ", this.value);\" type=\"text\" value=\"" + APP.dataTable_1[i].age + "\"></td> " +
                                         "<td class=\"conpodles1_td_5\"><input class=\"recalculation_input\" onChange=\"updateRecalculating(" + i + ", " + "'avg_diameter'" + ", this.value);\" type=\"text\" value=\"" + APP.dataTable_1[i].avg_diameter + "\"></td> " +
                                         "<td class=\"conpodles1_td_5\"><input id = \"conpodles1_td_5_" + i +"\" class=\"recalculation_input\" onChange=\"updateRecalculating(" + i + ", " + "'count_of_plants'" + ", this.value);\" type=\"text\" value=\"" + APP.dataTable_1[i].count_of_plants  + "\"></td>" +
-                                        "<td style=\"width: 1%;\">" +
+                                        "<td style=\"width: 1%; cursor: pointer;\">" +
                                             "<svg onclick=\"deleteLineInTableOne(" + APP.dataTable_1[i].id + ")\" class=\"cursorPointer\" width=\"23px\" height=\"23px\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">" +
                                                 "<g id=\"SVGRepo_bgCarrier\" stroke-width=\"0\"></g> " +
                                                 "<g id=\"SVGRepo_tracerCarrier\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></g>" +
@@ -123,7 +123,7 @@ function setDataInTableOne(switchButton) {
                                         "<td class=\"conpodles1_td_4\"><input class=\"recalculation_input\" onChange=\"updateRecalculating(" + i + ", " + "'age'" + ", this.value);\" type=\"text\" value=\"" + APP.dataTable_1[i].age + "\"></td> " +
                                         "<td class=\"conpodles1_td_5\"><input class=\"recalculation_input\" onChange=\"updateRecalculating(" + i + ", " + "'avg_diameter'" + ", this.value);\" type=\"text\" value=\"" + APP.dataTable_1[i].avg_diameter + "\"></td> " +
                                         "<td class=\"conpodles1_td_5\"><input id = \"conpodles1_td_5_" + i +"\" class=\"recalculation_input\" onChange=\"updateRecalculating(" + i + ", " + "'count_of_plants'" + ", this.value);\" type=\"text\" value=\"" + APP.dataTable_1[i].count_of_plants  + "\"></td>" +
-                                        "<td style=\"width: 1%;\">" +
+                                        "<td style=\"width: 1%; cursor: pointer;\">" +
                                             "<svg onclick=\"deleteNewLineInTableOne(" + i + ")\" class=\"cursorPointer\" width=\"23px\" height=\"23px\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">" +
                                                 "<g id=\"SVGRepo_bgCarrier\" stroke-width=\"0\"></g> " +
                                                 "<g id=\"SVGRepo_tracerCarrier\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></g>" +

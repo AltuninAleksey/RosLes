@@ -23,7 +23,7 @@ function setDataInTableFour() {
                                 <td class="photo-td2">${formatted}</td>
                                 <td class="photo-td3"><a href=${hrefStr}>img_${i + 1}</a></td>`;
 
-            newHtml = newHtml + "<td style=\"width: 1%;\">" +
+            newHtml = newHtml + "<td style=\"width: 1%; cursor: pointer;\">" +
                                 "<svg onclick=\"deleteLineInTableFour(" + APP.dataTable_4[i].id + ")\" class=\"cursorPointer\" width=\"23px\" height=\"23px\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">" +
                                     "<g id=\"SVGRepo_bgCarrier\" stroke-width=\"0\"></g> " +
                                     "<g id=\"SVGRepo_tracerCarrier\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></g>" +

@@ -17,7 +17,7 @@ function setDataInTableThree() {
 
 
         if(APP.dataTable_3[i].id != undefined) {
-            newHtml = newHtml + "<td style=\"width: 1%;\">" +
+            newHtml = newHtml + "<td style=\"width: 1%; cursor: pointer;\">" +
                                             "<svg onclick=\"deleteLineInTableThree(" + APP.dataTable_3[i].id + ")\" class=\"cursorPointer\" width=\"23px\" height=\"23px\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">" +
                                                 "<g id=\"SVGRepo_bgCarrier\" stroke-width=\"0\"></g> " +
                                                 "<g id=\"SVGRepo_tracerCarrier\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></g>" +
@@ -27,7 +27,7 @@ function setDataInTableThree() {
                                             "</svg>" +
                                         "</td>";
         } else {
-            newHtml = newHtml + "<td style=\"width: 1%;\">" +
+            newHtml = newHtml + "<td style=\"width: 1%; cursor: pointer;\">" +
                                             "<svg onclick=\"deleteNewLineInTableThree(" + i + ")\" class=\"cursorPointer\" width=\"23px\" height=\"23px\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">" +
                                                 "<g id=\"SVGRepo_bgCarrier\" stroke-width=\"0\"></g> " +
                                                 "<g id=\"SVGRepo_tracerCarrier\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></g>" +

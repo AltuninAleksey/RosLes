@@ -387,7 +387,9 @@ body {
 .sticky-header-table th.cursorPointer {
     cursor: pointer;
 }
-
+.cursorPointer{
+    cursor: pointer;
+}
 .sortDateArrow {
     margin-left: 8px;
     font-size: 18px;

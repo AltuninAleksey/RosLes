@@ -93,9 +93,9 @@ function addNewLineInGpsPoint() {
 
         newHtml += `<tr>
                     <td><input id="id_sample${newIndex}" readonly type="text" style="width: 100%" value="${id_sample}"></td>
-                    <td><input id="latitude${newIndex}" type="text" style="width: 100%" value="${latitude}"></td>
-                    <td><input id="longitude${newIndex}" type="text" style="width: 100%" value="${longitude}"></td>
-                    <td style="width: 50px;">
+                    <td><input id="latitude${newIndex}" class="coordinate-input" type="text" style="width: 100%" value="${latitude}"></td>
+                    <td><input id="longitude${newIndex}" class="coordinate-input" type="text" style="width: 100%" value="${longitude}"></td>
+                    <td class="cursorPointer" style="width: 50px;">
                         <svg onclick="deleteNewLineInGpsPoint(${newIndex})"class="cursorPointer" width="23px" height="23px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                             <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -112,9 +112,9 @@ function addNewLineInGpsPoint() {
 
     newHtml += `<tr>
                     <td><input id="id_sample${APP.countLineGpsPoint}" readonly type="text" style="width: 100%" value=""></td>
-                    <td><input id="latitude${APP.countLineGpsPoint}" type="text" style="width: 100%" value=""></td>
-                    <td><input id="longitude${APP.countLineGpsPoint}" type="text" style="width: 100%" value=""></td>
-                    <td style="width: 50px;">
+                    <td><input id="latitude${APP.countLineGpsPoint}" class="coordinate-input" type="text" style="width: 100%" value=""></td>
+                    <td><input id="longitude${APP.countLineGpsPoint}" class="coordinate-input" type="text" style="width: 100%" value=""></td>
+                    <td class="cursorPointer" style="width: 50px;">
                             <svg onclick="deleteNewLineInGpsPoint(${APP.countLineGpsPoint})" class="cursorPointer" width="23px" height="23px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                 <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -161,7 +161,7 @@ async function deleteGpsPointInMasterData(del_id) {
             <td><input id="id_sample${newIndex}" readonly type="text" style="width: 100%" value="${id_sample}"></td>
             <td><input id="latitude${newIndex}" readonly type="text" style="width: 100%" value="${latitude}"></td>
             <td><input id="longitude${newIndex}" readonly type="text" style="width: 100%" value="${longitude}"></td>
-            <td style="width: 50px;">
+            <td class="cursorPointer" style="width: 50px;">
                 <svg onclick="deleteGpsPointInMasterData(${APP.gpsTable[i].id})" class="cursorPointer" width="23px" height="23px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                     <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -189,7 +189,7 @@ async function deleteGpsPointInMasterData(del_id) {
                     <td><input id="id_sample${newIndex}" readonly type="text" style="width: 100%" value="${id_sample}"></td>
                     <td><input id="latitude${newIndex}" type="text" style="width: 100%" value="${latitude}"></td>
                     <td><input id="longitude${newIndex}" type="text" style="width: 100%" value="${longitude}"></td>
-                    <td style="width: 50px;">
+                    <td class="cursorPointer" style="width: 50px;">
                         <svg onclick="deleteNewLineInGpsPoint(${newIndex})"class="cursorPointer" width="23px" height="23px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                             <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -235,7 +235,7 @@ function deleteNewLineInGpsPoint(del_index) {
             <td><input id="id_sample${newIndex}" readonly type="text" style="width: 100%" value="${id_sample}"></td>
             <td><input id="latitude${newIndex}" readonly type="text" style="width: 100%" value="${latitude}"></td>
             <td><input id="longitude${newIndex}" readonly type="text" style="width: 100%" value="${longitude}"></td>
-            <td style="width: 50px;">
+            <td class="cursorPointer" style="width: 50px;">
                 <svg onclick="deleteGpsPointInMasterData(${APP.gpsTable[i].id})" class="cursorPointer" width="23px" height="23px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                     <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -268,7 +268,7 @@ function deleteNewLineInGpsPoint(del_index) {
                     <td><input id="id_sample${newIndex}" readonly type="text" style="width: 100%" value="${id_sample}"></td>
                     <td><input id="latitude${newIndex}" type="text" style="width: 100%" value="${latitude}"></td>
                     <td><input id="longitude${newIndex}" type="text" style="width: 100%" value="${longitude}"></td>
-                    <td style="width: 50px;">
+                    <td class="cursorPointer" style="width: 50px;">
                         <svg onclick="deleteNewLineInGpsPoint(${newIndex})"class="cursorPointer" width="23px" height="23px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                             <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>

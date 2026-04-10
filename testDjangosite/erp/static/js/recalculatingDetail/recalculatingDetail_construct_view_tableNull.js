@@ -28,7 +28,7 @@ function setDataInTableNull() {
                 <td class="podles_td_3">
                     <input class="recalculation_input" onChange="updateUndefground(${i}, 'avg_height_undergrowth', this.value);" type="text" value="${APP.dataTable_0[i].avg_height_undergrowth}">
                 </td>`+
-                "<td style=\"width: 1%;\">" +
+                "<td style=\"width: 1%; cursor: pointer;\">" +
                     "<svg onclick=\"deleteLineInTableNull(" + APP.dataTable_0[i].id + ")\" class=\"cursorPointer\" width=\"23px\" height=\"23px\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">" +
                         "<g id=\"SVGRepo_bgCarrier\" stroke-width=\"0\"></g> " +
                         "<g id=\"SVGRepo_tracerCarrier\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></g>" +
@@ -52,7 +52,7 @@ function setDataInTableNull() {
                 <td class="podles_td_3">
                     <input class="recalculation_input" onChange="updateUndefground(${i}, 'avg_height_undergrowth', this.value);" type="text" value="${APP.dataTable_0[i].avg_height_undergrowth}">
                 </td>`+
-                "<td style=\"width: 1%;\">" +
+                "<td style=\"width: 1%; cursor: pointer;\">" +
                     "<svg onclick=\"deleteNewLineInTableNull(" + i + ")\" class=\"cursorPointer\" width=\"23px\" height=\"23px\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">" +
                         "<g id=\"SVGRepo_bgCarrier\" stroke-width=\"0\"></g> " +
                         "<g id=\"SVGRepo_tracerCarrier\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></g>" +

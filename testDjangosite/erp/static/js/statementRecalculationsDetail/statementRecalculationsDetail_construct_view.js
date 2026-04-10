@@ -121,7 +121,7 @@ async function setSampleList() {
                         <td class="textAlignCenter td9">${APP.sampleList[i].dacha == null? "" : APP.sampleList[i].dacha}</td>
                         <td class="textAlignCenter td5">${APP.sampleList[i].name_quarter == null? "":APP.sampleList[i].name_quarter}</td>
                         <td class="textAlignCenter td6">${APP.sampleList[i].soil_lot}</td>` +
-                        "<td style=\"width: 1%;\">" +
+                        "<td style=\"width: 1%; cursor: pointer;\">" +
                             "<svg onclick=\"event.stopPropagation();deleteNewLineInSampleList(" + APP.sampleList[i].id + ")\" class=\"cursorPointer\" width=\"23px\" height=\"23px\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">" +
                                 "<g id=\"SVGRepo_bgCarrier\" stroke-width=\"0\"></g> " +
                                 "<g id=\"SVGRepo_tracerCarrier\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></g>" +
