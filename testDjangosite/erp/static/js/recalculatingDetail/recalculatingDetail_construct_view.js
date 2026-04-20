@@ -43,6 +43,15 @@ function setEventListenerForObjects() {
             addUndefground();
     });
 
+    var resetFiltr = document.getElementById('resetFiltr');
+        resetFiltr.addEventListener('click', function() {
+            resetFilter();
+    });
+
+    var filtrButton = document.getElementById('filtrButton');
+        filtrButton.addEventListener('click', function() {
+            filterOptions();
+    });
 
 
 
@@ -87,6 +96,8 @@ async function openPage() {
     APP.breeds = await CommonBusiness.getAllBreeds();
     APP.undergrowth = await CommonBusiness.getAllUndergrowth();
 
+    let allOptions = [];
+
     APP.documentData = await RecalculatingDetailBusiness.getRecalculatingDetailDataById(idDocument);
     let listData = await RecalculatingDetailBusiness.getListData(idDocument);
     APP.dataTable_1 = listData.list_data;
@@ -107,7 +118,67 @@ async function openPage() {
 
     setDataInProfile();
 }
+////////////
+function saveAllOptions() {
+    var breedName_undeground = document.getElementById("breedName-undeground");
+    allOptions = [];
+    for(let i = 0; i < breedName_undeground.options.length; i++) {
+        allOptions.push({
+            value: breedName_undeground.options[i].value,
+            text: breedName_undeground.options[i].text
+        });
+    }
+}
 
+function filterOptions() {
+    var filtrInput = document.getElementById("filtr");
+    var searchText = filtrInput.value.toLowerCase().trim();
+    var breedName_undeground = document.getElementById("breedName-undeground");
+
+    if (searchText === '') {
+        restoreAllOptions();
+        return;
+    }
+
+    breedName_undeground.innerHTML = '';
+
+    var filteredOptions = allOptions.filter(option =>
+        option.text.toLowerCase().includes(searchText)
+    );
+
+    if (filteredOptions.length === 0) {
+        let noOption = document.createElement('option');
+        noOption.text = 'Ничего не найдено';
+        noOption.disabled = true;
+        breedName_undeground.appendChild(noOption);
+    } else {
+        filteredOptions.forEach(option => {
+            let newOption = document.createElement('option');
+            newOption.value = option.value;
+            newOption.text = option.text;
+            breedName_undeground.appendChild(newOption);
+        });
+    }
+}
+
+function restoreAllOptions() {
+    var breedName_undeground = document.getElementById("breedName-undeground");
+    breedName_undeground.innerHTML = '';
+
+    allOptions.forEach(option => {
+        let newOption = document.createElement('option');
+        newOption.value = option.value;
+        newOption.text = option.text;
+        breedName_undeground.appendChild(newOption);
+    });
+}
+
+function resetFilter() {
+    var filtrInput = document.getElementById("filtr");
+    filtrInput.value = '';
+    restoreAllOptions();
+}
+/////////////
 function setDataFormAddProba() {
     var breedName_proba = document.getElementById("breedName-proba");
     var breedName_undeground = document.getElementById("breedName-undeground");
@@ -125,6 +196,7 @@ function setDataFormAddProba() {
     }
 
     breedName_undeground.innerHTML = newHtml;
+    saveAllOptions()
 }
 
 async function openAddForm(id) {

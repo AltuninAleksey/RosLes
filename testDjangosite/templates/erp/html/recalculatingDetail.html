@@ -404,12 +404,20 @@
             </div>
         </div>
         <div id="form-add-undeground" class="addFormfon display-none">
-            <div class="modal-small">
+            <div class="modal-small" style="width: 490px">
                 <div class="modal-header">
                     <h3>Добавление подлеска</h3>
                     <div class="modal-close" onclick="closeAddForm('form-add-undeground')">×</div>
                 </div>
                 <div class="modal-body">
+                    <div class="modal-row">
+                        <button class="modal-btn modal-btn-cancel" id="resetFiltr">Сбросить фильтр</button>
+                        <button class="modal-btn modal-btn-cancel" onclick="openAddForm('form-add-podlesok')">Добавить новый подлесок</button>
+                    </div>
+                    <div class="modal-row">
+                        <input type="text" id="filtr" class="modal-input">
+                        <button class="modal-btn modal-btn-add" id="filtrButton">Найти</button>
+                    </div>
                     <div class="modal-row">
                         <select id="breedName-undeground" class="modal-input">
                         </select>
@@ -426,6 +434,28 @@
                 <div class="modal-footer">
                     <button class="modal-btn modal-btn-cancel" onclick="closeAddForm('form-add-undeground')">Отмена</button>
                     <button class="modal-btn modal-btn-add" id="buttonAddUndefground">Добавить</button>
+                </div>
+            </div>
+        </div>
+        <div id="form-add-podlesok" class="addFormfon display-none">
+            <div class="modal-small">
+                <div class="modal-header">
+                    <h3>Добавление нового подлеска</h3>
+                    <div class="modal-close" onclick="closeAddForm('form-add-podlesok')">×</div>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-row">
+                        <label for="count-add">Краткое наименование</label>
+                        <input type="text" id="short-name" class="modal-input">
+                    </div>
+                    <div class="modal-row">
+                        <label for="avg-h-add">Полное наименование</label>
+                        <input type="text" id="full-name" class="modal-input">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="modal-btn modal-btn-cancel" onclick="closeAddForm('form-add-podlesok')">Отмена</button>
+                    <button class="modal-btn modal-btn-add" id="buttonAddPodlesok">Добавить</button>
                 </div>
             </div>
         </div>
