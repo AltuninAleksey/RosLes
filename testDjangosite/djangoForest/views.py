@@ -842,6 +842,17 @@ class UndergrowthView(APIView):
         return Response({"get":UndergrowthSerializer(Undergrowth.objects.all(), many=True).data})
 
 
+    def post(self, *args, **kwargs):
+        try:
+            serializer = UndergrowthSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+        except Exception as e:
+            return Response({"status": status.HTTP_500_INTERNAL_SERVER_ERROR, "error_text": e}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        return Response({"status": status.HTTP_201_CREATED})
+
+
 class UndergrowthByDefaultView(APIView):
 
     def get(self, *args, **kwargs):
@@ -2610,3 +2621,15 @@ class ForestDistrictView(APIView):
         data = ForestDistricts.objects.all()
 
         return Response({'data': ForestDistrictSerializer(data, many=True).data})
+
+
+class CzlIdByProfile(APIView):
+    permission_classes = [IsAuthenticated, ]
+
+    def get(self, request, *args, **kwargs):
+        from staticpy.get_local_id_czl import get_local_id_czl
+        user_id = request.user.id
+        profile_id = Profile.objects.filter(id_user = user_id).values('id')
+        local_czl = get_local_id_czl(profile_id[0]['id'])
+        print(local_czl)
+        return Response({"user_id": user_id})

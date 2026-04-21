@@ -253,6 +253,9 @@ class Sample(models.Model):
         if self.number_sample is None or self.number_sample == 0 or self.number_sample == '0':
             cur_number_sample = get_local_number_sample(self.id_list_region.id)
             self.number_sample = cur_number_sample['number_sample__max'] + 1
+
+        if self.id_list_region:
+            self.soil_lot = self.id_list_region.soil_lot
         super(Sample, self).save(*args, **kwargs)
 
 
