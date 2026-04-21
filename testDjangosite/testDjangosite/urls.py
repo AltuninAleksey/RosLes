@@ -31,6 +31,7 @@ urlpatterns = [
     # path('exel', testviews.as_view()),
     # path('form_undergrowth', CreateUndergrowthExcel.as_view()),
     path('zip_photos/<int:id>', DownloadPhotosArchiveView.as_view()),
+    path('czl_id', CzlIdByProfile.as_view()),
     path('change_password', ChangePasswordView.as_view()),
     path('change_password_with_old', ChangePasswordWithOldView.as_view()),
     path('forest_districts', ForestDistrictView.as_view()),
