@@ -223,6 +223,13 @@ class ListRegion(models.Model):
 
             ListRegion.objects.filter(id=self.id).update(number_region = id_czl['number_region__max'] + 1)
 
+    def delete(self, *args, **kwargs):
+        deleted_number = self.number_region
+        super(ListRegion, self).delete(*args, **kwargs)
+        if deleted_number is not None:
+            ListRegion.objects.filter(
+                number_region__gt=deleted_number
+            ).update(number_region=models.F('number_region') - 1)
 
 class Sample(models.Model):
     date = models.DateField(u'Дата пробы', null=True)
