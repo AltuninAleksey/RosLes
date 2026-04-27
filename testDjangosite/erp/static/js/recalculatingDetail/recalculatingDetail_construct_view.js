@@ -43,6 +43,11 @@ function setEventListenerForObjects() {
             addUndefground();
     });
 
+    var buttonAddPodlesok = document.getElementById("buttonAddPodlesok");
+        buttonAddPodlesok.addEventListener('click', function() {
+            addUndergrowth();
+    });
+
     var resetFiltr = document.getElementById('resetFiltr');
         resetFiltr.addEventListener('click', function() {
             resetFilter();
@@ -177,6 +182,29 @@ function resetFilter() {
     var filtrInput = document.getElementById("filtr");
     filtrInput.value = '';
     restoreAllOptions();
+}
+async function addUndergrowth() {
+
+    const namePodlesok = document.getElementById("namePodlesok").value;
+
+    data = {
+        "name": namePodlesok
+    }
+
+    try {
+        var requestData = await axios({
+            method: 'post',
+            url: urlGlobal + "/undergrowth",
+            data: data,
+        });
+    } catch (error) {
+      console.error('Произошла ошибка при выполнении запроса:' + error.response.data.message);
+      alert('Произошла ошибка при выполнении запроса: ' + error.response.data.message);
+      return;
+    }
+
+    setDataFormAddProba();
+    closeAddForm("form-add-podlesok");
 }
 /////////////
 function setDataFormAddProba() {

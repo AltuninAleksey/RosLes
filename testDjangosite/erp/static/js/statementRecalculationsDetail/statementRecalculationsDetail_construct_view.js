@@ -59,7 +59,7 @@ async function setDetailDataIdPage() {
 
     numberStatementInHeaderNode.innerHTML = APP.documentData.number_region;
     daterStatementInHeaderNode.innerHTML = APP.documentData.date;
-    numberStatementNode.value = APP.documentData.number_region;
+    numberStatementNode.value = "Номер: " + APP.documentData.number_region;
     dateStatementNode.value = APP.documentData.date;
     soilLotStatementNode.value = APP.documentData.soil_lot;
     sampleRegionStatementNode.value = APP.documentData.sample_region;

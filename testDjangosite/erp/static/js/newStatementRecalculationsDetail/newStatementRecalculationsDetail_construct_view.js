@@ -35,6 +35,26 @@ async function openPage() {
 }
 
 async function setDetailDataIdPage() {
+    let resultCZL = null;
+
+    var token = document.cookie.match(/jwttoken=(.+?)(;|$)/)[1];
+
+    try {
+        var requestData = await axios({
+            method: 'get',
+            url: urlGlobal + "/czl_id",
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        });
+
+        resultCZL = requestData.data.user_id;
+    } catch (error) {
+        console.error('Ошибка:', error);
+    }
+
+    document.getElementById("heading").innerHTML = "Новая перечетная ведомость участка № " + resultCZL;
+    document.getElementById("numberStatement").value = "Номер: " + resultCZL;
 
     var now = new Date();
     var day = ("0" + now.getDate()).slice(-2);
