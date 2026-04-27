@@ -848,7 +848,7 @@ class UndergrowthView(APIView):
             serializer.is_valid(raise_exception=True)
             serializer.save()
         except Exception as e:
-            return Response({"status": status.HTTP_500_INTERNAL_SERVER_ERROR, "error_text": e}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({"status": status.HTTP_400_BAD_REQUEST, "error_text": e}, status=status.HTTP_400_BAD_REQUEST)
 
         return Response({"status": status.HTTP_201_CREATED})
 
@@ -2633,3 +2633,15 @@ class CzlIdByProfile(APIView):
         local_czl = get_local_id_czl(profile_id[0]['id'])
         print(local_czl)
         return Response({"user_id": user_id})
+
+
+class GetCzlInfoByProfile(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        subject_rf_id = request.user.subject_rf
+        sujbect_rf = SubjectRF.objects.filter(id=subject_rf_id).values()
+        czl = CZL.objects.filter(Q(id_main_subject = subject_rf_id) | Q(id_subject = subject_rf_id)).values()
+
+        return Response({"subject": sujbect_rf, "czl": czl})
+
