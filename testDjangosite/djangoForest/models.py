@@ -231,6 +231,49 @@ class ListRegion(models.Model):
                 number_region__gt=deleted_number
             ).update(number_region=models.F('number_region') - 1)
 
+
+class AppFcListRegion(models.Model):
+    id_district_forestly = models.ForeignKey('DistrictForestly', on_delete=models.CASCADE, default= 2153)
+    soil_lot = models.CharField(max_length=10)
+    dacha = models.CharField(max_length=10)
+    name_quarter = models.CharField(max_length=10)
+    sample_region = models.FloatField()
+    date_create = models.DateField()
+    id_profile = models.ForeignKey('Profile', on_delete=models.CASCADE, verbose_name='Сотрудник ', null=True)
+
+
+class AppFcSample(models.Model):
+    number = models.CharField(max_length=10)
+    id_listregion = models.ForeignKey("ListRegion", on_delete=models.CASCADE)
+    length = models.FloatField()
+    width = models.FloatField()
+
+
+class AppFcForestCropsMolod(models.Model):
+    number = models.IntegerField()
+    id_sample = models.ForeignKey("Sample", on_delete=models.CASCADE)
+    to0_5 = models.IntegerField()
+    from0_6To1_5 = models.IntegerField()
+    from1_5 = models.IntegerField()
+    max_height = models.IntegerField()
+    id_breed = models.ForeignKey('Breed', on_delete=models.CASCADE)
+
+
+class AppFcForestCropsRows(models.Model):
+    number = models.IntegerField()
+    id_sample = models.ForeignKey("Sample", on_delete=models.CASCADE)
+    count_living = models.IntegerField()
+    count_dead = models.IntegerField()
+    id_breed = models.ForeignKey('Breed', on_delete=models.CASCADE)
+
+
+class AppFcForestCropsPlants(models.Model):
+    number = models.IntegerField()
+    id_sample = models.ForeignKey("Sample", on_delete=models.CASCADE)
+    diameter = models.IntegerField()
+    height = models.IntegerField()
+    id_breed = models.ForeignKey('Breed', on_delete=models.CASCADE)
+
 class Sample(models.Model):
     date = models.DateField(u'Дата пробы', null=True)
     sample_area = models.FloatField(verbose_name='Площадь пробы, га', null=True)
