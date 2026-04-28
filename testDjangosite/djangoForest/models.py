@@ -2,7 +2,7 @@ import uuid
 from email.policy import default
 
 from django.db import models
-from django.db.models import F
+from django.db.models import F, Q
 import datetime
 # from .manager import AccountManager
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
@@ -230,10 +230,15 @@ class ListRegion(models.Model):
             if self.id_district_forestly.id_forestly:
                 subject_rf = self.id_district_forestly.id_forestly.id_subject_rf
         super(ListRegion, self).delete(*args, **kwargs)
+        subject_ids = set()
+        czl_ids = CZL.objects.filter(Q(id_main_subject=22) | Q(id_subject=22)).values('id_main_subject', 'id_subject')
+        for czl in czl_ids:
+            subject_ids.add(czl['id_main_subject'])
+            subject_ids.add(czl['id_subject'])
         if deleted_number is not None:
             ListRegion.objects.filter(
                 number_region__gt=deleted_number,
-                id_district_forestly__id_forestly__id_subject_rf = subject_rf
+                id_district_forestly__id_forestly__id_subject_rf__in = subject_ids
             ).update(number_region=models.F('number_region') - 1)
 
 
