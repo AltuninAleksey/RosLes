@@ -8,7 +8,7 @@ def get_local_id_czl(id_profile: int) -> int:
     from djangoForest.models import Profile, CZL, ListRegion, SubjectRF
     lst_czl = []
     id_subject = Profile.objects.filter(id = id_profile).values('id_user_id__subject_rf_id')[0]
-    if id_subject == 27:
+    if id_subject['id_user_id__subject_rf_id'] == 27:
         lst_region = ListRegion.objects.filter(id_profile_id__id_user_id__subject_rf_id=27)
     else:
         if CZL.objects.filter(id_main_subject = id_subject['id_user_id__subject_rf_id']).exists():
