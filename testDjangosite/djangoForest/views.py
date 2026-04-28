@@ -2633,7 +2633,7 @@ class CzlIdByProfile(APIView):
         profile_id = Profile.objects.filter(id_user = user_id).values('id')
         local_czl = get_local_id_czl(profile_id[0]['id'])
         print(local_czl)
-        return Response({"czl": local_czl})
+        return Response({"czl": local_czl + 1})
 
 
 class GetCzlInfoByProfile(APIView):
