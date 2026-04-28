@@ -221,7 +221,7 @@ class ListRegion(models.Model):
         if self.number_region is None or self.number_region == 0 or self.number_region == '0':
             id_czl = get_local_id_czl(self.id_profile.id)
 
-            ListRegion.objects.filter(id=self.id).update(number_region = id_czl['number_region__max'] + 1)
+            ListRegion.objects.filter(id=self.id).update(number_region = id_czl['number_region__max'])
 
     def delete(self, *args, **kwargs):
         deleted_number = self.number_region
