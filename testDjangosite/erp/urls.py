@@ -53,7 +53,9 @@ urlpatterns = [
     path('documents/newPlotDescription', views.getNewPlotDescription),
     path('documents/newFieldCard', views.getNewFieldCard),
     path('avtorization', views.getAvtorization),
-    path('regestration', views.getRegestration)
+    path('regestration', views.getRegestration),
+    path('documents/forestCropsStatementRecalculations', views.getForestCrops),
+    path('documents/forestCropsStatementRecalculationsDetail', views.getForestCropsRecalculationsDetail)
 
 ]
 

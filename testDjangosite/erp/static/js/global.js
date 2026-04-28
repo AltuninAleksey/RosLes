@@ -66,7 +66,13 @@ function getPrintFieldCard(id, idParent) {
     window.location.href = urlGlobal + "/erp/documents/printFieldCard?id=" + id + "&idParent=" + idParent;
 }
 
+function getForestCrops() {
+    window.location.href = urlGlobal + "/erp/documents/forestCropsStatementRecalculations";
+}
 
+function getForestCropsRecalculationsDetail() {
+    window.location.href = urlGlobal + "/erp/documents/forestCropsStatementRecalculationsDetail";
+}
 
 async function getAllSubjectrf() {
 

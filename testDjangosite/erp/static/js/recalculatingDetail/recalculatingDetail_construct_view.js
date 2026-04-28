@@ -197,6 +197,7 @@ async function addUndergrowth() {
             url: urlGlobal + "/undergrowth",
             data: data,
         });
+        APP.undergrowth = await CommonBusiness.getAllUndergrowth();
     } catch (error) {
       console.error('Произошла ошибка при выполнении запроса:' + error.response.data.message);
       alert('Произошла ошибка при выполнении запроса: ' + error.response.data.message);

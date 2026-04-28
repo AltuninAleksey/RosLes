@@ -8,13 +8,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Авторизация пользователя</title>
     <link rel="stylesheet" href="{% static 'css/avtorization.css' %}">
+    <link rel="stylesheet" href="{% static 'css/add-form-proba.css' %}">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.0/axios.js"></script>
     <script src="{% static 'js/global.js' %}"></script>
     <script src="{% static 'js/avtorization/avtorization.js' %}" defer></script>
     {% endblock %}
 </head>
 <body>
-    <div class="login-page">
+    <div class="login-page" id="avtorization">
         <h2>Авторизация</h2>
         <form class="login-form">
             <p class="form"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" style="margin: 4px 0 -12px 0;" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -32,6 +33,15 @@
             <p class="cursor-pointer avt-reg-button"  onclick="getAvtorization()">Войти</p>
             <p class="cursor-pointer" style="font-size: 15px;" onclick="getRegestration()">Регистрация</p>
         </form>
+    </div>
+    <div class="login-page" id="modul" style="height: 210px; display: none">
+        <div >
+            <form class="modulForestCrops">
+                <h2 style="margin-bottom: 0;">Выберите модуль</h2>
+                <p class="cursor-pointer avt-reg-button"  onclick="getStatementRecalculations()">Молодняк</p>
+                <p class="cursor-pointer avt-reg-button"  onclick="getForestCrops()">Лесные культуры</p>
+            </form>
+        </div>
     </div>
 </body>
 </html>

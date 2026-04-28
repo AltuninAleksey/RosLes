@@ -440,3 +440,7 @@ def getAvtorization(request):
     return render(request, 'erp/html/avtorization.html')
 def getRegestration(request):
     return render(request, 'erp/html/regestration.html')
+def getForestCrops(request):
+    return render(request, 'erp/html/forestCropsStatementRecalculations.html')
+def getForestCropsRecalculationsDetail(request):
+    return render(request, 'erp/html/forestCropsStatementRecalculationsDetail.html')

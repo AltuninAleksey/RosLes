@@ -12,7 +12,9 @@ async function getAvtorization() {
 
     document.cookie = "jwttoken=" + token;
 
-    getStatementRecalculations();
+    //getStatementRecalculations();
+    document.getElementById('avtorization').style.display = "none";
+    document.getElementById('modul').style.display = "flex";
 }
 
 async function sartAvtorization(data) {

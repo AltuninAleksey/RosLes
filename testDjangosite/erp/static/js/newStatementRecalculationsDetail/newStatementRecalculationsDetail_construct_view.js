@@ -48,7 +48,7 @@ async function setDetailDataIdPage() {
             }
         });
 
-        resultCZL = requestData.data.user_id;
+        resultCZL = requestData.data.czl.number_region__max;
     } catch (error) {
         console.error('Ошибка:', error);
     }
