@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    {% block title %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Детальные данные перечетной ведомости</title>
+<!--    <link rel="stylesheet" href="{% static 'css/statementRecalculationsDetail.css' %}">-->
+    <link rel="stylesheet" href="{% static 'css/forestCropsStatementRecalculationsDetail.css' %}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.0/axios.js"></script>
+    <script src="{% static 'js/global.js' %}"></script>
+    <script src="{% static 'js/common/commonFunction.js' %}"></script>
+    <script src="{% static 'js/common/common_business.js' %}"></script>
+<!--    <script src="{% static 'js/statementRecalculationsDetail/statementRecalculationsDetail_business.js' %}" defer></script>-->
+<!--    <script src="{% static 'js/statementRecalculationsDetail/statementRecalculationsDetail_construct_view.js' %}" defer></script>-->
+        <script src="{% static 'js/forestCropsStatementRecalculationsDetail/forestCropsStatementRecalculationsDetail_business.js' %}" defer></script>
+        <script src="{% static 'js/forestCropsStatementRecalculationsDetail/forestCropsStatementRecalculationsDetail_construct_view.js' %}" defer></script>
+    <script src="{% static 'js/common.js' %}" defer></script>
+    {% endblock %}
+</head>
+<body>
+    <input id="idDocument" type="hidden" name="idDocument" value={{idDocument}}>
+    <header>
+        <div class="hiv">
+            <div class="hid" style="gap: 20px">
+                <img src="{% static 'img/Logo @img.svg' %}" alt="">
+                <div class="point cursorPointer" onclick="getForestCrops()">
+                    <a><h3>Лесные культуры</h3></a>
+                </div>
+            </div>
+            <div class="col-md-3-button-profile">
+                <button class="rukovodstvo" onclick="downloadDocument()">Скачать руководство пользователя</button>
+                <button class="save-profile">Профиль</button>
+            </div>
+        </div>
+        <div class="hiv2">
+            <div class="hid2">
+                <div class="point cursorPointer" onclick="getForestCrops()">
+                    <a><h3>Перечетная ведомость</h3></a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <h1 class="heading">Информация о перечетной ведомости <p style="display: contents;" id="numberStatementInHeader"></p> от <p style="display: contents;" id="dateStatementInHeader"></p></h1>
+
+    <div class="action-panel">
+        <div class="butmenuadd filtr" onclick="saveData()">
+            <svg width="22" height="22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7.5 19H5C3.89543 19 3 18.1046 3 17V3C3 1.89543 3.89543 1 5 1H15.6716C16.202 1 16.7107 1.21071 17.0858 1.58579L20.4142 4.91421C20.7893 5.28929 21 5.79799 21 6.32843V17C21 18.1046 20.1046 19 19 19H16.5M7.5 19H12H16.5M7.5 19V15C7.5 13.8954 8.39543 13 9.5 13H14.5C15.6046 13 16.5 13.8954 16.5 15V19" stroke="#ffffff" stroke-linejoin="round"/>
+                <line x1="0.5" y1="-0.5" x2="9.5" y2="-0.5" transform="matrix(-1 0 0 1 17 8)" stroke="#ffffff" stroke-linecap="round"/>
+            </svg>
+            <p class="p">Сохранить</p>
+        </div>
+        <div class="butmenuadd filtr" id="plotDescription">
+            <svg width="22" height="22" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 22">
+                <path d="M3 16H4.5" stroke="#177164" stroke-linecap="round"></path>
+                <path d="M8.5 16H21" stroke="#177164" stroke-linecap="round"></path>
+                <path d="M3 10H4.5" stroke="#177164" stroke-linecap="round"></path>
+                <path d="M8.5 10H21" stroke="#177164" stroke-linecap="round"></path>
+                <path d="M11.5 4H21" stroke="#177164" stroke-linecap="round"></path>
+                <path d="M3 4L5 6L10 1" stroke="#177164" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+            <p class="p">Описание участка</p>
+        </div>
+        <div class="butmenuadd" id="printFieldCard">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3 5V17C3 18.1046 3.89543 19 5 19H9.5M3 5V3C3 1.89543 3.89543 1 5 1H19C20.1046 1 21 1.89543 21 3V5M3 5H9.5M21 5V17C21 18.1046 20.1046 19 19 19H9.5M21 5H12H9.5M9.5 5V19" stroke="#ffffff" stroke-linejoin="round"/>
+            </svg>
+            <p class="p">Полевая карточка</p>
+        </div>
+        <div class="butmenuadd" onclick="generateDocx()">
+            <svg width="22" height="22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7.5 19H5C3.89543 19 3 18.1046 3 17V3C3 1.89543 3.89543 1 5 1H15.6716C16.202 1 16.7107 1.21071 17.0858 1.58579L20.4142 4.91421C20.7893 5.28929 21 5.79799 21 6.32843V17C21 18.1046 20.1046 19 19 19H16.5M7.5 19H12H16.5M7.5 19V15C7.5 13.8954 8.39543 13 9.5 13H14.5C15.6046 13 16.5 13.8954 16.5 15V19" stroke="#177164" stroke-linejoin="round"/>
+                <line x1="0.5" y1="-0.5" x2="9.5" y2="-0.5" transform="matrix(-1 0 0 1 17 8)" stroke="#177164" stroke-linecap="round"/>
+            </svg>
+            <p class="p">Скачать документ</p>
+        </div>
+    </div>
+
+<form action="" class="form vvod">
+    <div>
+        <div>
+            <input class="mandatory" id="numberStatement" type="text" readonly style="background: transparent;border: none;padding: 8px 0 ;font-size: 15px; cursor: default">
+            <h5>Номер: 01</h5>
+        </div>
+        <div>
+            <p>Дата:</p>
+            <input id="dateStatement" type="date">
+        </div>
+        <div>
+            <p>Субьект РФ:</p>
+            <select name="sub" id="subjectStatement">
+                <option hidden disabled selected value=""></option>
+            </select>
+        </div>
+        <div>
+            <p>Лесничество:</p>
+            <select name="les" id="forestlyStatement">
+                <option hidden disabled selected value=""></option>
+                <option>Брянское</option>
+                <option>Локчимское</option>
+            </select>
+        </div>
+        <div>
+            <p>Участковое лесничество:</p>
+            <select name="ucles" id="distriotForestlyStatement">
+                <option hidden disabled selected value=""></option>
+                <option>Четдинское</option>
+                <option>Локчимское</option>
+            </select>
+        </div>
+        <div>
+            <p>Урочище:</p>
+            <input id="dachaStatement" type="text">
+        </div>
+        <div>
+            <p>Квартал:</p>
+            <input class="mandatory" id="quarterStatement" type="text">
+        </div>
+        <div>
+            <p>Выдел:</p>
+            <input class="mandatory" id="soilLotStatement" type="text">
+        </div>
+        <div>
+            <p>Площадь участка:</p>
+            <input class="mandatory" id="sampleRegionStatement" type="text">
+        </div>
+    </div>
+</form>
+
+    <div class="conpodles2">
+        <div class="podlesok1">
+            <div class="action-panel" style="padding: 10px 0 16px 0; background: transparent; border-bottom: none;">
+                <div onclick="createSample()" class="butmenuadd" style="background: #177164;">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="8" cy="8" r="8" fill="white"/>
+                        <path d="M7.40002 8.60005V12.2H8.60002V8.60005H12.2V7.40005H8.60002V3.80005H7.40002V7.40005H3.79999V8.60005H7.40002Z" fill="#177164"/>
+                    </svg>
+                    <p class="p" style="color: white;">Добавить пробную площадь</p>
+                </div>
+            </div>
+
+            <div class="table-container" style="margin-bottom: 10px">
+                <table class="sticky-header-table  gps-table">
+                    <thead>
+                        <tr>
+                            <th class="textAlignCenter">Номер</th>
+                            <th class="textAlignCenter">Длина, м</th>
+                            <th class="textAlignCenter">Ширина, м</th>
+                            <th class="textAlignCenter">Площадь, м2</th>
+                            <th class="textAlignCenter">
+                                <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="sampleListTbody">
+                        <tr>
+                            <td class="textAlignCenter">01</td>
+                            <td class="textAlignCenter">5</td>
+                            <td class="textAlignCenter">3</td>
+                            <td class="textAlignCenter">15</td>
+                            <td class="textAlignCenter">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17" stroke="#000000" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"></path>
+                                </svg>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="textAlignCenter">01</td>
+                            <td class="textAlignCenter">5</td>
+                            <td class="textAlignCenter">3</td>
+                            <td class="textAlignCenter">15</td>
+                            <td class="textAlignCenter">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17" stroke="#000000" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"></path>
+                                </svg>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="textAlignCenter">01</td>
+                            <td class="textAlignCenter">5</td>
+                            <td class="textAlignCenter">3</td>
+                            <td class="textAlignCenter">15</td>
+                            <td class="textAlignCenter">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17" stroke="#000000" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"></path>
+                                </svg>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="textAlignCenter">01</td>
+                            <td class="textAlignCenter">5</td>
+                            <td class="textAlignCenter">3</td>
+                            <td class="textAlignCenter">15</td>
+                            <td class="textAlignCenter">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17" stroke="#000000" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"></path>
+                                </svg>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="podlesok1">
+            <div class="action-panel" style="padding: 10px 0 16px 0; background: transparent; border-bottom: none;">
+                <div onclick="createSample()" class="butmenuadd" style="background: #177164;">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="8" cy="8" r="8" fill="white"/>
+                        <path d="M7.40002 8.60005V12.2H8.60002V8.60005H12.2V7.40005H8.60002V3.80005H7.40002V7.40005H3.79999V8.60005H7.40002Z" fill="#177164"/>
+                    </svg>
+                    <p class="p" style="color: white;">Добавить учетный отрезок</p>
+                </div>
+            </div>
+
+            <div class="table-container" style="margin-bottom: 10px">
+                <table class="sticky-header-table compact-table">
+                    <thead>
+                        <tr>
+                            <th class="textAlignCenter">Номер</th>
+                            <th class="textAlignCenter">Длина, м</th>
+                            <th class="textAlignCenter">
+                                <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="sampleList">
+                        <tr>
+                            <td class="textAlignCenter">01</td>
+                            <td class="textAlignCenter">5</td>
+                            <td class="textAlignCenter">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17" stroke="#000000" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"></path>
+                                </svg>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="textAlignCenter">01</td>
+                            <td class="textAlignCenter">5</td>
+                            <td class="textAlignCenter">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17" stroke="#000000" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"></path>
+                                </svg>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="textAlignCenter">01</td>
+                            <td class="textAlignCenter">5</td>
+                            <td class="textAlignCenter">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17" stroke="#000000" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"></path>
+                                </svg>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="textAlignCenter">01</td>
+                            <td class="textAlignCenter">5</td>
+                            <td class="textAlignCenter">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17" stroke="#000000" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"></path>
+                                </svg>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="textAlignCenter">01</td>
+                            <td class="textAlignCenter">5</td>
+                            <td class="textAlignCenter">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17" stroke="#000000" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"></path>
+                                </svg>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="m1" class="modal-all">
+        <div id="m1i" class="modal">
+            <p class="modal-text">Сохранение прошло успешно</p>
+            <img class="modal-image" src="{% static '/img/check-circle-fill.svg' %}" alt="">
+        </div>
+    </div>
+
+    <div id="statusModal" class="modal-status" style="display: none" >
+        <div id="statusModalContent" class="modal-profileStatus">
+            <div class="status-icon-container">
+                <div id="loadingSpinner" class="spinner" style="display: none;"></div>
+                <svg id="errorIcon" style="display: none" width="60px" height="60px" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--noto" preserveAspectRatio="xMidYMid meet">
+                    <path d="M69.8 88.1l1.8-80c.1-2.2-1.8-4.1-4-4.1H55.9c-2.3 0-4.1 1.9-4 4.1l1.8 80c.1 2.2 1.8 3.9 4 3.9h8c2.2 0 4-1.7 4.1-3.9z" fill="#f44336">
+                    </path>
+                    <g fill="#ffffff">
+                    <path d="M64 50c.3-1.9-.5-26.2-.5-26.2s.1-3.5-2.8-3.8c-2.8-.3-3.8 2.3-3.8 4.1c0 1.8.4 21.5.6 23.3c.1 1.8 1.9 3.7 3.6 4.2s2.7-.2 2.9-1.6z" opacity=".2">
+                    </path>
+                    <circle cx="59.6" cy="13.4" r="3.3" opacity=".2">
+                    </circle>
+                    </g>
+                    <circle cx="64.1" cy="112" r="12" fill="#c33">
+                    </circle>
+                    <circle cx="62.4" cy="112" r="10.3" fill="#f44336">
+                    </circle>
+                    <path d="M56.5 108.4c1.2-1.8 3.8-3.3 6.5-3.7c.7-.1 1.3-.1 1.9.1c.4.2.8.6.5 1c-.2.4-.7.5-1.1.6c-2.5.7-4.8 2.4-6.2 4.4c-.5.8-1.4 2.9-2.4 2.4c-1-.7-.7-2.6.8-4.8z" opacity=".2" fill="#ffffff">
+                    </path>
+                    <path d="M71.9 4h-4.3c2.3 0 4.1 1.9 4 4.1l-1.8 80c-.1 2.2-1.8 3.9-4 3.9H70c2.2 0 4-1.7 4-3.9l1.8-80C76 5.9 74.1 4 71.9 4z" fill="#c33">
+                    </path>
+                </svg>
+            </div>
+            <p id="statusMessage">Сохранение</p>
+            <p id="statusText">Обратитесь к администратору системы</p>
+            <button id="modalCloseButton" class="exit" onclick="hideStatusModal(event)" style="display: none;">Закрыть</button>
+        </div>
+    </div>
+
+    <div id="m1profile" class="modal-all-profile">
+        <div id="m1i-profile" class="modal-profile">
+            <div class="login-form-profile">
+                <button class="but-exit" onclick="HideModalProfile(m1profile, event)"><span class="close-btn">&times;</span></button>
+                <h2 id="teg">Данные пользователя</h2>
+                <div class="form-profile">
+                    <input id="profile_fio" type="text" placeholder="ФИО"/>
+                </div>
+                <div class="form-profile">
+                    <input type="tel" placeholder="8хххххххххх" maxlength="14" pattern="8 [0-9]{3} [0-9]{3} [0-9]{4}" id="profile_phone"/>
+                </div>
+                <select name="sub" id="subjectStatement-profile" placeholder="password">
+                </select>
+                <div class="knopki-profile">
+                    <button class="rem" onclick="saveDataInProfile()">Сохранить</button>
+                    <button class="rem" onclick="openChangePassword()">Сменить пароль</button>
+                    <button class="exit" onclick="getAvtorization()">Выйти</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="m1changePassword" class="modal-all-profile">
+        <div id="m1i-password" class="modal-profile">
+            <div class="login-form-profile">
+                <button class="but-exit" onclick="HideModalProfile(m1changePassword, event)"><span class="close-btn">&times;</span></button>
+                <h2 >Смена пароля</h2>
+
+                <div class="form-profile">
+                    <input id="old_password" type="password" placeholder="Текущий пароль"/>
+                </div>
+                <div class="form-profile">
+                    <input id="new_password" type="password" placeholder="Новый пароль"/>
+                </div>
+                <div class="form-profile">
+                    <input id="confirm_password" type="password" placeholder="Подтвердите пароль"/>
+                </div>
+
+                <div class="knopki-profile">
+                    <button class="rem" onclick="saveNewPassword()">Сохранить</button>
+                    <button class="exit" onclick="HideModalProfile(m1changePassword, event)">Отмена</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
