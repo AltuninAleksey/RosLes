@@ -225,10 +225,14 @@ class ListRegion(models.Model):
 
     def delete(self, *args, **kwargs):
         deleted_number = self.number_region
+        if self.id_district_forestly:
+            if self.id_district_forestly.id_forestly:
+                subject_rf = self.id_district_forestly.id_forestly.id_subject_rf
         super(ListRegion, self).delete(*args, **kwargs)
         if deleted_number is not None:
             ListRegion.objects.filter(
-                number_region__gt=deleted_number
+                number_region__gt=deleted_number,
+                id_district_forestly__id_forestly__id_subject_rf = subject_rf
             ).update(number_region=models.F('number_region') - 1)
 
 
