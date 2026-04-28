@@ -9,7 +9,8 @@ def get_local_id_czl(id_profile: int) -> int:
     lst_czl = []
     id_subject = Profile.objects.filter(id = id_profile).values('id_user_id__subject_rf_id')[0]
     if id_subject['id_user_id__subject_rf_id'] == 27:
-        lst_region = ListRegion.objects.filter(id_profile_id__id_user_id__subject_rf_id=27)
+        lst_region = ListRegion.objects.filter(id_district_forestly__id_forestly__id_subject_rf=27)
+        print(lst_region)
     else:
         if CZL.objects.filter(id_main_subject = id_subject['id_user_id__subject_rf_id']).exists():
             main_czl = CZL.objects.filter(id_main_subject = id_subject['id_user_id__subject_rf_id']).values('id_main_subject')[0]
