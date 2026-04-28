@@ -241,38 +241,53 @@ class AppFcListRegion(models.Model):
     date_create = models.DateField()
     id_profile = models.ForeignKey('Profile', on_delete=models.CASCADE, verbose_name='Сотрудник ', null=True)
 
+    class Meta:
+        db_table = "djangoForest_app_fc_list_region"
+
 
 class AppFcSample(models.Model):
     number = models.CharField(max_length=10)
-    id_listregion = models.ForeignKey("ListRegion", on_delete=models.CASCADE)
+    id_listregion = models.ForeignKey("AppFcListRegion", on_delete=models.CASCADE)
     length = models.FloatField()
     width = models.FloatField()
+
+    class Meta:
+        db_table = "djangoForest_app_fc_sample"
 
 
 class AppFcForestCropsMolod(models.Model):
     number = models.IntegerField()
-    id_sample = models.ForeignKey("Sample", on_delete=models.CASCADE)
+    id_sample = models.ForeignKey("AppFcSample", on_delete=models.CASCADE)
     to0_5 = models.IntegerField()
     from0_6To1_5 = models.IntegerField()
     from1_5 = models.IntegerField()
     max_height = models.IntegerField()
     id_breed = models.ForeignKey('Breed', on_delete=models.CASCADE)
 
+    class Meta:
+        db_table = "djangoForest_app_fc_forest_crops_molod"
+
 
 class AppFcForestCropsRows(models.Model):
     number = models.IntegerField()
-    id_sample = models.ForeignKey("Sample", on_delete=models.CASCADE)
+    id_sample = models.ForeignKey("AppFcSample", on_delete=models.CASCADE)
     count_living = models.IntegerField()
     count_dead = models.IntegerField()
     id_breed = models.ForeignKey('Breed', on_delete=models.CASCADE)
 
+    class Meta:
+        db_table = "djangoForest_app_fc_forest_crops_rows"
+
 
 class AppFcForestCropsPlants(models.Model):
     number = models.IntegerField()
-    id_sample = models.ForeignKey("Sample", on_delete=models.CASCADE)
+    id_sample = models.ForeignKey("AppFcSample", on_delete=models.CASCADE)
     diameter = models.IntegerField()
     height = models.IntegerField()
     id_breed = models.ForeignKey('Breed', on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = "djangoForest_app_fc_forest_crops_plants"
 
 class Sample(models.Model):
     date = models.DateField(u'Дата пробы', null=True)
@@ -340,6 +355,7 @@ class SubjectRF(models.Model):
     class Meta:
         verbose_name = 'Субъект РФ'
         verbose_name_plural = 'Субъект РФ'
+        ordering = ['name_subject_RF']
 
 
 class Role(models.Model):
@@ -810,6 +826,9 @@ class CZL(models.Model):
                                         related_name='main_subject')
     id_subject = models.ForeignKey("SubjectRF", on_delete=models.CASCADE, verbose_name='Подчиненный субъект',
                                    related_name='slave_subject', null = True)
+
+    class Meta:
+        ordering = ['name_czl']
 
 
 class OOPT(models.Model):

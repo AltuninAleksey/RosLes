@@ -842,13 +842,14 @@ class UndergrowthView(APIView):
         return Response({"get":UndergrowthSerializer(Undergrowth.objects.all(), many=True).data})
 
 
-    def post(self, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         try:
             serializer = UndergrowthSerializer(data=request.data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
         except Exception as e:
-            return Response({"status": status.HTTP_400_BAD_REQUEST, "error_text": e}, status=status.HTTP_400_BAD_REQUEST)
+            print(e)
+            return Response({"status": status.HTTP_400_BAD_REQUEST, "error_text": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
         return Response({"status": status.HTTP_201_CREATED})
 
@@ -2117,7 +2118,7 @@ class GetCZL(ListAPIView):
             return Response({"name_main_czl": czl_data_main.data['name_czl'],
                              "id_main_subject": czl_data_main.data['id_main_subject'],
                              "name_main_subject": czl_data_main.data['name_main_subject'],
-                             "slave_subject": new_list})
+                             "slave_subject": sorted(new_list, key=lambda x: x["name_slave_subject"] )})
         else:
             profile_data = ProfileSerializer(Profile.objects.get(id_user = request.user.pk)).data['id_subject_rf']
             czl_data_main = CZLSerializer(CZL.objects.filter(Q(id_main_subject = profile_data) | Q(id_subject = profile_data)), many = True)
@@ -2126,7 +2127,7 @@ class GetCZL(ListAPIView):
         return Response({"name_main_czl": czl_data_main.data[0]['name_czl'],
                          "id_main_subject": czl_data_main.data[0]['id_main_subject'],
                          "name_main_subject": czl_data_main.data[0]['name_main_subject'],
-                         "slave_subject": czl_objects.data})
+                         "slave_subject": sorted(czl_objects.data, key=lambda x: x["name_slave_subject"]) })
         # return Response("asd")
 
 
@@ -2632,7 +2633,7 @@ class CzlIdByProfile(APIView):
         profile_id = Profile.objects.filter(id_user = user_id).values('id')
         local_czl = get_local_id_czl(profile_id[0]['id'])
         print(local_czl)
-        return Response({"user_id": user_id})
+        return Response({"czl": local_czl})
 
 
 class GetCzlInfoByProfile(APIView):
