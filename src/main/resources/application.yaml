@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: forestcrops
+  datasource:
+    url: jdbc:postgresql://92.50.227.100:58677/rosles?ApplicationName=forestcrops
+    username: roslesuser
+    password: f83hb53
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: none
+    show-sql: true
