@@ -231,7 +231,7 @@ class ListRegion(models.Model):
                 subject_rf = self.id_district_forestly.id_forestly.id_subject_rf
         super(ListRegion, self).delete(*args, **kwargs)
         subject_ids = set()
-        czl_ids = CZL.objects.filter(Q(id_main_subject=22) | Q(id_subject=22)).values('id_main_subject', 'id_subject')
+        czl_ids = CZL.objects.filter(Q(id_main_subject=subject_rf) | Q(id_subject=subject_rf)).values('id_main_subject', 'id_subject')
         for czl in czl_ids:
             subject_ids.add(czl['id_main_subject'])
             subject_ids.add(czl['id_subject'])
