@@ -68,7 +68,7 @@
             </svg>
             <p class="p">Сбросить фильтры</p>
         </div>
-        <div class="butmenuadd" onclick="getNewStatementRecalculations()">
+        <div class="butmenuadd" onclick="">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <circle cx="8" cy="8" r="8" fill="#40E0D0"/>
                 <path d="M7.40002 8.60005V12.2H8.60002V8.60005H12.2V7.40005H8.60002V3.80005H7.40002V7.40005H3.79999V8.60005H7.40002Z" fill="#134a3a"/>
@@ -141,7 +141,6 @@
                     <thead >
                         <tr>
                             <th class="textAlignCenter th1 cursorPointer positionRelative" onclick="sortByDate()">Дата <span id="sortDateForTable1" class="sortDateArrow">&#8595;</span></th>
-                            <th class="textAlignCenter th8">Номер</th>
                             <th class="textAlignCenter th2">Субъект РФ</th>
                             <th class="textAlignCenter th3">Лесничество</th>
                             <th class="textAlignCenter th4">Участковое лесничество</th>
@@ -162,7 +161,6 @@
                     <tbody id="statementRecalculations_tbody">
                         <tr onclick="getForestCropsRecalculationsDetail()">
                             <td class="textAlignCenter">01/01/2002</td>
-                            <td class="textAlignCenter">01</td>
                             <td class="textAlignCenter">Брянская область</td>
                             <td class="textAlignCenter">Брянское</td>
                             <td class="textAlignCenter">Брянское</td>
@@ -181,7 +179,6 @@
                         </tr>
                         <tr onclick="getForestCropsRecalculationsDetail()">
                             <td class="textAlignCenter">01/01/2002</td>
-                            <td class="textAlignCenter">01</td>
                             <td class="textAlignCenter">Брянская область</td>
                             <td class="textAlignCenter">Брянское</td>
                             <td class="textAlignCenter">Брянское</td>
@@ -200,7 +197,6 @@
                         </tr>
                         <tr onclick="getForestCropsRecalculationsDetail()">
                             <td class="textAlignCenter">01/01/2002</td>
-                            <td class="textAlignCenter">01</td>
                             <td class="textAlignCenter">Брянская область</td>
                             <td class="textAlignCenter">Брянское</td>
                             <td class="textAlignCenter">Брянское</td>
@@ -220,6 +216,11 @@
                     </tbody>
                 </table>
             </div>
+        </div>
+        <div class="pagination-container" id="paginationContainer">
+            <button class="pagination-btn" id="prevPageBtn" disabled>Назад</button>
+            <div class="pagination-numbers" id="paginationNumbers"></div>
+            <button class="pagination-btn" id="nextPageBtn">Вперед</button>
         </div>
     </div>
 

@@ -90,11 +90,6 @@ async function setEvent() {
 //                await setQuarterStatement();
 //        });
 
-    document
-        .getElementById("plotDescription")
-        .addEventListener('click',function() {
-        getPlotDescription(APP.documentData.id_desc, APP.documentData.id);
-    });
 
     document
         .getElementById("printFieldCard")

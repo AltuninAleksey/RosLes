@@ -360,16 +360,16 @@ body {
 .sticky-header-table td:nth-child(1) { width: 10%; }
 
 .sticky-header-table th:nth-child(2),
-.sticky-header-table td:nth-child(2) { width: 7%; }
+.sticky-header-table td:nth-child(2) { width: 12%; }
 
 .sticky-header-table th:nth-child(3),
-.sticky-header-table td:nth-child(3) { width: 12%; }
+.sticky-header-table td:nth-child(3) { width: 15%; }
 
 .sticky-header-table th:nth-child(4),
-.sticky-header-table td:nth-child(4) { width: 15%; }
+.sticky-header-table td:nth-child(4) { width: 18%; }
 
 .sticky-header-table th:nth-child(5),
-.sticky-header-table td:nth-child(5) { width: 18%; }
+.sticky-header-table td:nth-child(5) { width: 8%; }
 
 .sticky-header-table th:nth-child(6),
 .sticky-header-table td:nth-child(6) { width: 8%; }
@@ -379,9 +379,6 @@ body {
 
 .sticky-header-table th:nth-child(8),
 .sticky-header-table td:nth-child(8) { width: 8%; }
-
-.sticky-header-table th:nth-child(9),
-.sticky-header-table td:nth-child(9) { width: 8%; }
 
 /* Sorting */
 .sticky-header-table th.cursorPointer {
@@ -527,6 +524,59 @@ body {
 
 ::-ms-input-placeholder {
     color: #999999;
+}
+
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+    padding: 10px;
+}
+
+.pagination-btn {
+    padding: 8px 16px;
+    background-color: #177164;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.pagination-btn:hover:not(:disabled) {
+    background-color: #134a3a;
+}
+
+.pagination-btn:disabled {
+    background-color: white;
+    color: #666;
+    cursor: not-allowed;
+}
+
+.pagination-numbers {
+    display: flex;
+    gap: 5px;
+}
+
+.page-number {
+    padding: 8px 12px;
+    border: 1px solid #dee2e6;
+    background-color: white;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.3s;
+}
+
+.page-number:hover:not(.active) {
+    background-color: #e9ecef;
+}
+
+.page-number.active {
+    background-color: #177164;
+    color: white;
+    border-color: #177164;
 }
 
 @media (max-width: 1200px) {
