@@ -43,7 +43,7 @@ function setEventListenerForObjects() {
         addNewLineInGpsPoint();
     });
 
-    let plot_farm = document.getElementById('plot_farm_referring_land').disabled = true;
+    let plot_farm = document.getElementById('plot_farm_referring_land').disabled = false;
     var conclusion = document.getElementById('conclusion');
     var respond_farm = document.getElementById('respond_farm');
 
@@ -51,23 +51,34 @@ function setEventListenerForObjects() {
        var accord = document.getElementById("conclusion").value;
        var respond_farm_value = respond_farm.value;
 
-       if (accord.includes("Соответствует") && respond_farm_value == "Соответствует") {
-        document.getElementById('plot_farm_referring_land').disabled = true;
-       } else {
-        document.getElementById('plot_farm_referring_land').disabled = false;
-       }
-    }
-
-    respond_farm.onchange = function() {
-       var accord = document.getElementById("conclusion").value;
-       var respond_farm_value = respond_farm.value;
-
-       if (accord.includes("Соответствует") && respond_farm_value == "Соответствует") {
+       if(accord == "Молодняк не соответствует Правилам лесовосстановления и лесохозяйственного регламента лесничества (отсутствие критериев и требований)") {
+            document.getElementById('plot_farm_referring_land').value = 0;
             document.getElementById('plot_farm_referring_land').disabled = true;
        } else {
+            document.getElementById('plot_farm_referring_land').value = 2;
             document.getElementById('plot_farm_referring_land').disabled = false;
        }
+
+       if(accord.includes("не соответствует")) {
+            respond_farm.disabled = true;
+            document.getElementById("point7date2").value = "";
+            document.getElementById("point7number2").value = "";
+            document.getElementById("point7agreed2").value = "";
+       }  else {
+            respond_farm.disabled = false;
+       }
     }
+
+//    respond_farm.onchange = function() {
+//       var accord = document.getElementById("conclusion").value;
+//       var respond_farm_value = respond_farm.value;
+//
+//       if (accord.includes("Соответствует") && respond_farm_value == "Соответствует") {
+//            document.getElementById('plot_farm_referring_land').disabled = true;
+//       } else {
+//            document.getElementById('plot_farm_referring_land').disabled = false;
+//       }
+//    }
 
     var completeness = document.getElementById('completeness');
     completeness.onchange = function() {
@@ -211,13 +222,20 @@ async function setConclusion() {
     document.getElementById("point7number2").value = "";
     document.getElementById("point7agreed2").value = "";
     document.getElementById("number_order").value = "188";
-    document.getElementById("plot_farm_referring_land").value = "";
     document.getElementById("plot_features").value = "";
     document.getElementById("site_survey").value = "";
     document.getElementById("in_front").value = "";
     document.getElementById("date_and_time").value = "";
     document.getElementById("start_at").value = "";
     document.getElementById("end_at").value = "";
+
+    let plot_farm_referring_land = document.getElementById("plot_farm_referring_land");
+    let newHtml = "";
+
+    for(var i = 0; i < APP.allCategoryOfForestFundLands.length; i++) {
+        newHtml = newHtml + "<option value=\"" + APP.allCategoryOfForestFundLands[i].id + "\">" + APP.allCategoryOfForestFundLands[i].name_category + "</option>";
+    }
+    plot_farm_referring_land.innerHTML = newHtml;
 
     var number_order = document.getElementById('number_order');
     var number_order_2 = document.getElementById('number_order_2');

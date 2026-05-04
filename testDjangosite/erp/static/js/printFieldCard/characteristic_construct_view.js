@@ -95,8 +95,14 @@ async function setDataInCharacteristic() {
         if(APP.allTypeForestGrowingConditions[i].id == APP.documentData.id_type_forest_growing_conditions) {
             newHtml = newHtml + "<option selected value=\"" + APP.allTypeForestGrowingConditions[i].id + "\">" + APP.allTypeForestGrowingConditions[i].type_forest_growing_conditions + "</option>";
         } else {
-            newHtml = newHtml + "<option value=\"" + APP.allTypeForestGrowingConditions[i].id + "\">" + APP.allTypeForestGrowingConditions[i].type_forest_growing_conditions + "</option>";
-        }
+            if((APP.documentData.id_type_forest_growing_conditions == undefined ||
+                APP.documentData.id_type_forest_growing_conditions == null) &&
+                APP.allTypeForestGrowingConditions[i].id == 26) {
+                newHtml = newHtml + "<option selected value=\"" + APP.allTypeForestGrowingConditions[i].id + "\">" + APP.allTypeForestGrowingConditions[i].type_forest_growing_conditions + "</option>";
+            } else {
+                newHtml = newHtml + "<option value=\"" + APP.allTypeForestGrowingConditions[i].id + "\">" + APP.allTypeForestGrowingConditions[i].type_forest_growing_conditions + "</option>";
+            }
+       }
     }
     type_forest_growing_conditions.innerHTML = newHtml;
 

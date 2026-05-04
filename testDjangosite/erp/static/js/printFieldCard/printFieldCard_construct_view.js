@@ -61,7 +61,7 @@ function setEventListenerForObjects() {
             document.getElementById('plot_farm_referring_land').value = 0;
             document.getElementById('plot_farm_referring_land').disabled = true;
        } else {
-            document.getElementById('plot_farm_referring_land').value = 2;
+            document.getElementById('plot_farm_referring_land').value = Number(APP.documentData.plot_farm_referring_land);
             document.getElementById('plot_farm_referring_land').disabled = false;
        }
 
@@ -263,7 +263,7 @@ async function setConclusion() {
          document.getElementById('plot_farm_referring_land').value = 0;
          document.getElementById('plot_farm_referring_land').disabled = true;
     } else {
-         document.getElementById('plot_farm_referring_land').value = 2;
+         document.getElementById('plot_farm_referring_land').value = Number(APP.documentData.plot_farm_referring_land);
          document.getElementById('plot_farm_referring_land').disabled = false;
     }
 
