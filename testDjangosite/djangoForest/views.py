@@ -2641,7 +2641,7 @@ class GetCzlInfoByProfile(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
-        subject_rf_id = request.user.subject_rf
+        subject_rf_id = request.user.subject_rf_id
         sujbect_rf = SubjectRF.objects.filter(id=subject_rf_id).values()
         czl = CZL.objects.filter(Q(id_main_subject = subject_rf_id) | Q(id_subject = subject_rf_id)).values()
 

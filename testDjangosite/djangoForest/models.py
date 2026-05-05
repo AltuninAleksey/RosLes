@@ -4,6 +4,7 @@ from email.policy import default
 from django.db import models
 from django.db.models import F, Q
 import datetime
+from django.utils import timezone
 # from .manager import AccountManager
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.contrib.auth.hashers import make_password
@@ -250,6 +251,8 @@ class AppFcListRegion(models.Model):
     sample_region = models.FloatField()
     date_create = models.DateField()
     id_profile = models.ForeignKey('Profile', on_delete=models.CASCADE, verbose_name='Сотрудник ', null=True)
+    number = models.CharField(max_length=10, default=' ')
+    date_examination = models.DateField(default=timezone.now)
 
     class Meta:
         db_table = "djangoForest_app_fc_list_region"
@@ -271,7 +274,7 @@ class AppFcForestCropsMolod(models.Model):
     to0_5 = models.IntegerField()
     from0_6To1_5 = models.IntegerField()
     from1_5 = models.IntegerField()
-    max_height = models.IntegerField()
+    max_height = models.FloatField()
     id_breed = models.ForeignKey('Breed', on_delete=models.CASCADE)
 
     class Meta:
@@ -292,8 +295,8 @@ class AppFcForestCropsRows(models.Model):
 class AppFcForestCropsPlants(models.Model):
     number = models.IntegerField()
     id_sample = models.ForeignKey("AppFcSample", on_delete=models.CASCADE)
-    diameter = models.IntegerField()
-    height = models.IntegerField()
+    diameter = models.FloatField()
+    height = models.FloatField()
     id_breed = models.ForeignKey('Breed', on_delete=models.CASCADE)
 
     class Meta:
