@@ -537,7 +537,7 @@ body {
 
 .pagination-btn {
     padding: 8px 16px;
-    background-color: #177164;
+    background-color: white;
     color: white;
     border: none;
     border-radius: 4px;
@@ -546,7 +546,7 @@ body {
 }
 
 .pagination-btn:hover:not(:disabled) {
-    background-color: #134a3a;
+    background-color: #e9ecef;
 }
 
 .pagination-btn:disabled {

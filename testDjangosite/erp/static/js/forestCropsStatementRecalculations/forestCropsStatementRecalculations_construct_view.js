@@ -6,7 +6,9 @@
 buildStatementRecalculationsTbody();
 
 async function buildStatementRecalculationsTbody() {
-    var dataResponse = await StatementRecalculationsBusiness.getAllStatementList();
+    var response = await StatementRecalculationsBusiness.getAllStatementList();
+    APP.countPage = response.count;
+    var dataResponse = response.data;
     var data = [];
     for(var i = 0; i < dataResponse.length; i++) {
         for(var j = 0; j < dataResponse[i].length; j++) {
@@ -114,7 +116,7 @@ async function buildStatementRecalculationsTbody() {
     //APP.district_forestly = allForestData.district_forestly;
     //APP.quarter = allForestData.quarter;
 
-    APP.dataTable = data;
+    APP.dataTable = dataResponse;
     APP.sortOrderTable1 = 0;
 
     sortByDate();
@@ -174,14 +176,16 @@ async function buildStatementRecalculationsTbody() {
 // Пагинации
 let allData = [];
 let currentPage = 1;           // Текущая страница
-let rowsPerPage = 20;          // Количество строк на странице
+let rowsPerPage = 1;          // Количество строк на странице
 let totalPages = 1;
+let startIndex = 0;
 
 // Обновления таблицы с пагинацией
 function updateDataInStatementRecalculationsTbody(data) {
 
     allData = data;
-    totalPages = Math.ceil(allData.length / rowsPerPage);
+    //totalPages = Math.ceil(allData.length / rowsPerPage);
+    totalPages = Math.ceil(APP.countPage / rowsPerPage);
 
     updatePaginationControls();
 
@@ -191,7 +195,7 @@ function updateDataInStatementRecalculationsTbody(data) {
 
 function renderCurrentPage() {
 
-    const startIndex = (currentPage - 1) * rowsPerPage;
+    startIndex = (currentPage - 1) * rowsPerPage;
     const endIndex = Math.min(startIndex + rowsPerPage, allData.length);
     const pageData = allData.slice(startIndex, endIndex);
 
@@ -205,22 +209,22 @@ function renderTablePage(data) {
     var newHtml = "";
 
     for(var i = 0; i < data.length; i++) {
-        data[i].subjectrf = CommonFunction.getSubjectNameByQuarterId(APP.subjectrf, data[i].id_subject_rf);
-        data[i].forestly = CommonFunction.getForestlyNameByQuarterId(APP.forestly, data[i].id_forestly);
-        data[i].district_forestly = CommonFunction.getDistrictForestlyNameByQuarterId(APP.district_forestly, data[i].id_district_forestly);
+        data[i].subjectrf = CommonFunction.getSubjectNameByQuarterId(APP.subjectrf, data[i].idSubject);
+        data[i].forestly = CommonFunction.getForestlyNameByQuarterId(APP.forestly, data[i].idForestly);
+        data[i].district_forestly = CommonFunction.getDistrictForestlyNameByQuarterId(APP.district_forestly, data[i].idDistrictForestly);
 
-        let strGetStatementRecalculationsDetail = "getStatementRecalculationsDetail(" + data[i].id  + ")"
+//        let strGetStatementRecalculationsDetail = "getStatementRecalculationsDetail(" + data[i].id  + ")"
+        let strGetStatementRecalculationsDetail = "getForestCropsRecalculationsDetail()"
 
         newHtml = newHtml + `<tr class="cursorPointer" onClick=${strGetStatementRecalculationsDetail}>
             <td class="textAlignCenter td1">${data[i].date}</td>
-            <td class="textAlignCenter td8">${data[i].number_region}</td>
             <td class="textAlignCenter td2">${data[i].subjectrf}</td>
             <td class="textAlignCenter td3">${data[i].forestly}</td>
             <td class="textAlignCenter td4">${data[i].district_forestly}</td>
             <td class="textAlignCenter td9">${data[i].dacha == null ? "" : data[i].dacha}</td>
-            <td class="textAlignCenter td5">${data[i].name_quarter == null ? "" : data[i].name_quarter}</td>
-            <td class="textAlignCenter td6">${data[i].soil_lot}</td>
-            <td class="textAlignCenter td6">${data[i].sample_region}</td>
+            <td class="textAlignCenter td5">${data[i].nameQuarter == null ? "" : data[i].nameQuarter}</td>
+            <td class="textAlignCenter td6">${data[i].soilLot}</td>
+            <td class="textAlignCenter td6">${data[i].sampleRegion}</td>
             <td class="textAlignCenter cursorPointer" onClick='event.stopPropagation();downloadAllExcel(${data[i].id});'>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M2 6a2 2 0 0 1 2-2h5a1 1 0 0 1 .707.293L11.414 6H20a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6zm6.586 0H4v12h16V8h-9a1 1 0 0 1-.707-.293L8.586 6zM12 9.5a1 1 0 0 1 1 1v2.586l.293-.293a1 1 0 0 1 1.414 1.414l-2 2a1 1 0 0 1-1.414 0l-2-2a1 1 0 1 1 1.414-1.414l.293.293V10.5a1 1 0 0 1 1-1z" fill="#0D0D0D"/>
@@ -262,28 +266,38 @@ function updatePaginationControls() {
 
     paginationNumbers.innerHTML = "";
 
-    // Определяем диапазон отображаемых страниц
-    let startPage = Math.max(1, currentPage - 2);
-    let endPage = Math.min(totalPages, currentPage + 2);
-
-    // Добавляем первую страницу
-    if (startPage > 1) {
+    // Показываем первые 2 страницы
+    if (totalPages <= 5) {
+        for (let i = 1; i <= totalPages; i++) {
+            addPageButton(i);
+        }
+    } else {
+        // Всегда показываем первые 2 страницы
         addPageButton(1);
-        if (startPage > 2) {
+        addPageButton(2);
+
+        // Определяем, нужно ли многоточие
+        if (currentPage > 4) {
+            addDots();  // Многоточие
+        }
+
+        // Показываем текущую страницу и соседние
+        let startPage = Math.max(3, currentPage - 1);
+        let endPage = Math.min(totalPages - 2, currentPage + 1);
+
+        for (let i = startPage; i <= endPage; i++) {
+            if (i > 2 && i < totalPages - 1) {
+                addPageButton(i);
+            }
+        }
+
+        // Определяем, нужно ли многоточие в конце
+        if (currentPage < totalPages - 3) {
             addDots();
         }
-    }
 
-    // Добавляем страницы в диапазоне
-    for (let i = startPage; i <= endPage; i++) {
-        addPageButton(i);
-    }
-
-    // Добавляем последнюю страницу
-    if (endPage < totalPages) {
-        if (endPage < totalPages - 1) {
-            addDots();
-        }
+        // Показываем последние 2 страницы
+        addPageButton(totalPages - 1);
         addPageButton(totalPages);
     }
 }
@@ -369,7 +383,7 @@ function sortByDate() {
         document.querySelector("#sortDateForTable1").innerHTML = "&#8595;";
     }
 
-    //updateDataInStatementRecalculationsTbody(APP.dataTable);
+    updateDataInStatementRecalculationsTbody(APP.dataTable);
 
 }
 
@@ -552,11 +566,11 @@ async function setOptionInQuarter(status) {
 async function searchByFilter() {
 
     let checkboxFilterSubjectRFNode = document.querySelector("#checkbox_filter_subject_rf");
-    let subjectRFNode = document.querySelector("#filter_subject_rf");
+    let subjectRFNode = document.querySelector("#filter_subject_rf").value;
     let checkboxFilterForestlyNode = document.querySelector("#checkbox_filter_forestly");
-    let forestlyNode = document.querySelector("#filter_forestly");
+    let forestlyNode = document.querySelector("#filter_forestly").value;
     let checkboxFilterDistrictForestlyNode = document.querySelector("#checkbox_filter_district_forestly");
-    let districtForestlyNode = document.querySelector("#filter_district_forestly");
+    let districtForestlyNode = document.querySelector("#filter_district_forestly").value;
     //let checkboxFilterQuartalNode = document.querySelector("#checkbox_filter_quartal");
     //let quartalNode = document.querySelector("#filter_quartal")
     let checkboxFilterDateStartNode = document.querySelector("#checkbox_filter_date_start");
@@ -564,44 +578,52 @@ async function searchByFilter() {
     let checkboxFilterDateEnd = document.querySelector("#checkbox_filter_date_end");
     let dateEndNode = document.querySelector("#filter_date_end");
     let checkboxFilterSoilLot = document.querySelector("#checkbox_filter_soil_lot");
-    let soilLot = document.querySelector("#filter_soil_lot");
-    let nameQuarter = document.querySelector("#filter_name_quarter");
+    let soilLot = document.querySelector("#filter_soil_lot").value;
+    let nameQuarter = document.querySelector("#filter_name_quarter").value;
 
     let data;
 
-    let responseData = {
-        bSubjectrf: true,
-        idSubjectrf: Number(subjectRFNode.value),
-        bForestly: true,
-        idForestly: forestlyNode.value,
-        bDistrictForestly: true,
-        idDistrictForestly: districtForestlyNode.value,
-        bQuarter: (nameQuarter.value != ''),
-        name_quarter: nameQuarter.value,
-        //idQuarter: quartalNode.value,
-        bDate: checkboxFilterDateStartNode.checked,
-        date: dateStartNode.value,
-        bDateSec: checkboxFilterDateEnd.checked,
-        dateSec: dateEndNode.value,
-        bSoil_lot: (soilLot.value != ''),
-        soil_lot: soilLot.value
-    };
+    //APP.dataTable = await StatementRecalculationsBusiness.getStatementListByFilter(responseData);
+    let result = null;
+    var token = document.cookie.match(/jwttoken=(.+?)(;|$)/)[1];
+    try {
+        var requestData = await axios({
+            method: 'get',
+            url: "http://92.50.227.100:58493/forestcrops/api/listregion/list",
+            params: {
+                nameQuarter: nameQuarter,
+                idSubject: subjectRFNode,
+                idForestly: forestlyNode,
+                idDistrictForestly: districtForestlyNode,
+                soilLot: soilLot,
+                offset: startIndex,
+                limit: rowsPerPage,
+            },
+            responseType: 'json',
+            headers: {
+               'Authorization': 'Bearer ' + token
+            }
+        });
 
-    APP.dataTable = await StatementRecalculationsBusiness.getStatementListByFilter(responseData);
+        result = requestData.data.data;
+        APP.countPage = requestData.data.count
+    } catch (error) {
+        console.error('Ошибка:', error);
+    }
 
-    updateDataInStatementRecalculationsTbody(APP.dataTable);
+    updateDataInStatementRecalculationsTbody(result);
 }
 
 async function resetFilter() {
-    var dataResponse = await StatementRecalculationsBusiness.getAllStatementList();
+    var response = await StatementRecalculationsBusiness.getAllStatementList();
     var data2 = [];
     for(var i = 0; i < dataResponse.length; i++) {
         for(var j = 0; j < dataResponse[i].length; j++) {
             data2.push(dataResponse[i][j]);
         }
     }
-
-    APP.dataTable = data2;
+    var dataResponse = response.data;
+    APP.dataTable = dataResponse;
     updateDataInStatementRecalculationsTbody(APP.dataTable);
 }
 

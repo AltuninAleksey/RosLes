@@ -10,14 +10,14 @@ StatementRecalculationsBusiness.getAllStatementList = async function() {
 
     var requestData = await axios({
       method: 'get',
-      url: urlGlobal + "/getalllistregion",
+      url: "http://92.50.227.100:58493/forestcrops/api/listregion/list",
       responseType: 'json',
       headers: {
         'Authorization': 'Bearer ' + token
       }
     });
 
-    return requestData.data.data;
+    return requestData.data;
 }
 
 StatementRecalculationsBusiness.getStatementListByFilter = async function(data) {
