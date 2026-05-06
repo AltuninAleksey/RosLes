@@ -55,7 +55,8 @@ urlpatterns = [
     path('avtorization', views.getAvtorization),
     path('regestration', views.getRegestration),
     path('documents/forestCropsStatementRecalculations', views.getForestCrops),
-    path('documents/forestCropsStatementRecalculationsDetail', views.getForestCropsRecalculationsDetail)
+    path('documents/forestCropsStatementRecalculationsDetail', views.getForestCropsRecalculationsDetail),
+    path('documents/forestCropsInformTrialArea', views.getForestCropsInformTrialArea)
 
 ]
 

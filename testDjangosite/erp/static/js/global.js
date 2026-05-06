@@ -74,6 +74,10 @@ function getForestCropsRecalculationsDetail() {
     window.location.href = urlGlobal + "/erp/documents/forestCropsStatementRecalculationsDetail";
 }
 
+function getForestCropsInformTrialArea() {
+    window.location.href = urlGlobal + "/erp/documents/forestCropsInformTrialArea";
+}
+
 async function getAllSubjectrf() {
 
     var requestData = await axios({

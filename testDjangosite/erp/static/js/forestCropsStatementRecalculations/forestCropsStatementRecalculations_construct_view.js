@@ -9,19 +9,8 @@ async function buildStatementRecalculationsTbody() {
     var response = await StatementRecalculationsBusiness.getAllStatementList(1);
     APP.countPage = response.count;
     var dataResponse = response.data;
-    var data = [];
-    for(var i = 0; i < dataResponse.length; i++) {
-        for(var j = 0; j < dataResponse[i].length; j++) {
-            data.push(dataResponse[i][j]);
-        }
-    }
-
-    //var allForestData = await CommonBusiness.getAllForest();
 
     APP.userData = await CommonBusiness.getUserData();
-
-    //APP.subjectrf = await CommonBusiness.getAllSubjectrf();
-    //APP.subjectrf = APP.subjectrf.sort(function(a, b) { return a.name_subject_RF > b.name_subject_RF? 1 : -1; });
 
     var czl = await CommonBusiness.getCZL();
     APP.subjectrf = [];
@@ -66,14 +55,12 @@ async function buildStatementRecalculationsTbody() {
 
     var buffer_forestly = await CommonBusiness.getForestlyByArrayIdSubjectrf(dataForForestlyByArrayIdSubjectrf);
     APP.forestly = [];
-    //APP.forestly =  await CommonBusiness.getForestlyByIdSubjectrf(Number(APP.userData.id_subject_rf)); //allForestData.forestly;
 
     for(var i = 0; i < buffer_forestly.length; i++) {
         for(var j = 0; j < buffer_forestly[i].forestly_data.length; j++) {
             APP.forestly.push(buffer_forestly[i].forestly_data[j]);
         }
     }
-
 
     APP.district_forestly = [];
     var arrayIdForestly = [];
@@ -93,8 +80,6 @@ async function buildStatementRecalculationsTbody() {
         }
     }
 
-
-//    APP.quarter = [];
     var arrayIdDistrictForestly = [];
     for(var i = 0; i < APP.district_forestly.length; i++) {
         arrayIdDistrictForestly.push({
@@ -102,71 +87,17 @@ async function buildStatementRecalculationsTbody() {
         });
     }
 
-//    var dataForQuarterByArrayIdDistrictForestly = {
-//        "data": arrayIdDistrictForestly
-//    };
-//    var buff_quarter = await CommonBusiness.getQuarterByArrayIdDistrictForestly(dataForQuarterByArrayIdDistrictForestly);
-//    for(var i = 0; i < buff_quarter.length; i++) {
-//        for(var j = 0; j < buff_quarter[i].quarter.length; j++) {
-//            APP.quarter.push(buff_quarter[i].quarter[j]);
-//        }
-//    }
-
-
-    //APP.district_forestly = allForestData.district_forestly;
-    //APP.quarter = allForestData.quarter;
 
     APP.dataTable = dataResponse;
     APP.sortOrderTable1 = 0;
 
     sortByDate();
 
-    //updateDataInStatementRecalculationsTbody(data);
 
     setEventForElementsFilter();
     setDataInProfile();
-    initPagination();
 }
 
-//function updateDataInStatementRecalculationsTbody(data) {
-//    var tableBody = document.getElementById("statementRecalculations_tbody");
-//    var newHtml = "";
-//
-//    for(var i = 0; i < data.length; i++) {
-//
-//        data[i].subjectrf = CommonFunction.getSubjectNameByQuarterId(APP.subjectrf, data[i].id_subject_rf);
-//        data[i].forestly = CommonFunction.getForestlyNameByQuarterId(APP.forestly, data[i].id_forestly);
-//        data[i].district_forestly = CommonFunction.getDistrictForestlyNameByQuarterId(APP.district_forestly, data[i].id_district_forestly);
-//        //data[i].quarter = CommonFunction.getQuarterNameByQuarterId(APP.quarter, data[i].id_quarter);
-//
-//        let strGetStatementRecalculationsDetail = "getStatementRecalculationsDetail(" + data[i].id  + ")"
-//        newHtml = newHtml + `<tr class="cursorPointer" onClick=${strGetStatementRecalculationsDetail}>
-//                            <td class="textAlignCenter td1">${data[i].date}</td>
-//                            <td class="textAlignCenter td8">${data[i].number_region}</td>
-//                            <td class="textAlignCenter td2">${data[i].subjectrf}</td>
-//                            <td class="textAlignCenter td3">${data[i].forestly}</td>
-//                            <td class="textAlignCenter td4">${data[i].district_forestly}</td>
-//                            <td class="textAlignCenter td9">${data[i].dacha == null? "" : data[i].dacha}</td>
-//                            <td class="textAlignCenter td5">${data[i].name_quarter == null? "" : data[i].name_quarter}</td>
-//                            <td class="textAlignCenter td6">${data[i].soil_lot}</td>
-//                            <td class="textAlignCenter td6">${data[i].sample_region}</td>
-//                            <td class="textAlignCenter cursorPointer"` +  "onClick='event.stopPropagation();downloadAllExcel(" + data[i].id + ");'>" +
-//                                `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 6a2 2 0 0 1 2-2h5a1 1 0 0 1 .707.293L11.414 6H20a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6zm6.586 0H4v12h16V8h-9a1 1 0 0 1-.707-.293L8.586 6zM12 9.5a1 1 0 0 1 1 1v2.586l.293-.293a1 1 0 0 1 1.414 1.414l-2 2a1 1 0 0 1-1.414 0l-2-2a1 1 0 1 1 1.414-1.414l.293.293V10.5a1 1 0 0 1 1-1z" fill="#0D0D0D"/></svg>
-//                            </td>
-//                            <td class="textAlignCenter cursorPointer"` +  "onClick='event.stopPropagation();deleteStatementRecalculation(" + data[i].id + ");'>" +
-//                                `<svg width="23px" height="23px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-//                                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-//                                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-//                                    <g id="SVGRepo_iconCarrier">
-//                                        <path d="M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-//                                    </g>
-//                                </svg>
-//                            </td>
-//                        </tr> \n`;
-//    }
-//    tableBody.innerHTML = newHtml;
-//}
-//
 //async  function deleteStatementRecalculation(id) {
 //
 //    await StatementRecalculationsBusiness.deleteStatementRecalculationById(id);
@@ -178,31 +109,21 @@ let allData = [];
 let currentPage = 1;           // Текущая страница
 let rowsPerPage = 3;          // Количество строк на странице
 let totalPages = 1;
-let startIndex = 0;
+
 
 // Обновления таблицы с пагинацией
 function updateDataInStatementRecalculationsTbody(data) {
 
     allData = data;
-    //totalPages = Math.ceil(allData.length / rowsPerPage);
+
     totalPages = Math.ceil(APP.countPage / APP.limit);
 
     updatePaginationControls();
 
     currentPage = 1;
-    renderCurrentPage();
-}
 
-function renderCurrentPage() {
-
-    startIndex = (currentPage - 1) * rowsPerPage;
-    const endIndex = Math.min(startIndex + rowsPerPage, allData.length);
-    const pageData = allData.slice(startIndex, endIndex);
-
-    updatePaginationInfo(startIndex, endIndex);
-
-    renderTablePage(pageData);
-
+    updatePaginationInfo();
+    renderTablePage(allData);
     updateButtonsState();
 }
 
@@ -380,18 +301,18 @@ async function prevPage() {
     }
 }
 
-function initPagination() {
-    const prevBtn = document.getElementById("prevPageBtn");
-    const nextBtn = document.getElementById("nextPageBtn");
-
-    if (prevBtn) {
-        prevBtn.addEventListener("click", prevPage);
-    }
-
-    if (nextBtn) {
-        nextBtn.addEventListener("click", nextPage);
-    }
-}
+//function initPagination() {
+//    const prevBtn = document.getElementById("prevPageBtn");
+//    const nextBtn = document.getElementById("nextPageBtn");
+//
+//    if (prevBtn) {
+//        prevBtn.addEventListener("click", prevPage);
+//    }
+//
+//    if (nextBtn) {
+//        nextBtn.addEventListener("click", nextPage);
+//    }
+//}
 
 /////////////////
 async  function downloadAllExcel(id) {
@@ -477,20 +398,6 @@ async function setEventForElementsFilter() {
             }
         });
 
-//    document
-//        .querySelector("#checkbox_filter_soil_lot")
-//        .addEventListener('click', (e)=>{
-//            if(e.target.checked) {
-//                document
-//                    .querySelector("#filter_soil_lot")
-//                    .removeAttribute("readonly");
-//            } else {
-//                document
-//                    .querySelector("#filter_soil_lot")
-//                    .setAttribute("readonly", "on");
-//            }
-//        });
-
     document
         .querySelector("#but_filtr")
         .addEventListener('click', async (e)=>{
@@ -502,6 +409,9 @@ async function setEventForElementsFilter() {
         .addEventListener('click', async (e)=>{
             await resetFilter();
         });
+
+    document.getElementById("prevPageBtn").addEventListener("click", prevPage);
+    document.getElementById("nextPageBtn").addEventListener("click", nextPage);
 }
 
 async function setOptionInSubject() {
@@ -611,8 +521,6 @@ async function searchByFilter() {
     let forestlyNode = document.querySelector("#filter_forestly").value;
     let checkboxFilterDistrictForestlyNode = document.querySelector("#checkbox_filter_district_forestly");
     let districtForestlyNode = document.querySelector("#filter_district_forestly").value;
-    //let checkboxFilterQuartalNode = document.querySelector("#checkbox_filter_quartal");
-    //let quartalNode = document.querySelector("#filter_quartal")
     let checkboxFilterDateStartNode = document.querySelector("#checkbox_filter_date_start");
     let dateStartNode = document.querySelector("#filter_date_start");
     let checkboxFilterDateEnd = document.querySelector("#checkbox_filter_date_end");
@@ -621,10 +529,6 @@ async function searchByFilter() {
     let soilLot = document.querySelector("#filter_soil_lot").value;
     let nameQuarter = document.querySelector("#filter_name_quarter").value;
 
-    let data;
-
-    //APP.dataTable = await StatementRecalculationsBusiness.getStatementListByFilter(responseData);
-    let result = null;
     var token = document.cookie.match(/jwttoken=(.+?)(;|$)/)[1];
     try {
 
@@ -653,7 +557,6 @@ async function searchByFilter() {
         console.error('Ошибка:', error);
     }
 
-    updateDataInStatementRecalculationsTbody(result);
 }
 
 async function resetFilter() {
