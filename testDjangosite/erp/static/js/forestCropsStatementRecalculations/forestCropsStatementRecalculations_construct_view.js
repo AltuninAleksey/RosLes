@@ -6,7 +6,7 @@
 buildStatementRecalculationsTbody();
 
 async function buildStatementRecalculationsTbody() {
-    var response = await StatementRecalculationsBusiness.getAllStatementList();
+    var response = await StatementRecalculationsBusiness.getAllStatementList(1);
     APP.countPage = response.count;
     var dataResponse = response.data;
     var data = [];
@@ -185,7 +185,7 @@ function updateDataInStatementRecalculationsTbody(data) {
 
     allData = data;
     //totalPages = Math.ceil(allData.length / rowsPerPage);
-    totalPages = Math.ceil(APP.countPage / rowsPerPage);
+    totalPages = Math.ceil(APP.countPage / APP.limit);
 
     updatePaginationControls();
 
@@ -249,21 +249,18 @@ function renderTablePage(data) {
 
 function updatePaginationInfo() {
 
-    const startIndex = (currentPage - 1) * rowsPerPage;
-    const endIndex = Math.min(startIndex + rowsPerPage, allData.length);
+    const itemsOnCurrentPage = currentPage*APP.limit;
 
-    const itemsOnCurrentPage = endIndex - startIndex;
-
-    document.getElementById("totalCount").innerText = allData.length;
+    document.getElementById("totalCount").innerText = APP.countPage;
 
     document.getElementById("pageInfo").innerText = `Страница ${currentPage} из ${totalPages}`;
 
-    if (allData.length === 0) {
+    if (APP.countPage === 0) {
         document.getElementById("itemsInfo").innerText = `Нет записей`;
-    } else if (itemsOnCurrentPage === rowsPerPage) {
-        document.getElementById("itemsInfo").innerText = `Показано ${itemsOnCurrentPage} из ${allData.length} записей`;
+    } else if (itemsOnCurrentPage != totalPages) {
+        document.getElementById("itemsInfo").innerText = `Показано ${itemsOnCurrentPage} из ${APP.countPage} записей`;
     } else {
-        document.getElementById("itemsInfo").innerText = `Показано ${itemsOnCurrentPage} из ${allData.length} записей (последняя страница)`;
+        document.getElementById("itemsInfo").innerText = `Показано ${itemsOnCurrentPage} из ${APP.countPage} записей (последняя страница)`;
     }
 }
 
@@ -331,9 +328,16 @@ function addPageButton(pageNum) {
     if (pageNum === currentPage) {
         button.classList.add("active");
     }
-    button.addEventListener("click", () => {
+    button.addEventListener("click", async () => {
         currentPage = pageNum;
-        renderCurrentPage();
+
+        var response = await StatementRecalculationsBusiness.getAllStatementList(pageNum);
+        APP.countPage = response.count;
+        renderTablePage(response.data);
+
+        updateButtonsState();
+        updatePaginationInfo();
+
         updatePaginationControls();
     });
     document.getElementById("paginationNumbers").appendChild(button);
@@ -346,18 +350,32 @@ function addDots() {
     document.getElementById("paginationNumbers").appendChild(dots);
 }
 
-function nextPage() {
+async function nextPage() {
     if (currentPage < totalPages) {
         currentPage++;
-        renderCurrentPage();
+
+        var response = await StatementRecalculationsBusiness.getAllStatementList(currentPage);
+        APP.countPage = response.count;
+        renderTablePage(response.data);
+
+        updateButtonsState();
+        updatePaginationInfo();
+
         updatePaginationControls();
     }
 }
 
-function prevPage() {
+async function prevPage() {
     if (currentPage > 1) {
         currentPage--;
-        renderCurrentPage();
+
+        var response = await StatementRecalculationsBusiness.getAllStatementList(currentPage);
+        APP.countPage = response.count;
+        renderTablePage(response.data);
+
+        updateButtonsState();
+        updatePaginationInfo();
+
         updatePaginationControls();
     }
 }
@@ -609,26 +627,28 @@ async function searchByFilter() {
     let result = null;
     var token = document.cookie.match(/jwttoken=(.+?)(;|$)/)[1];
     try {
-        var requestData = await axios({
-            method: 'get',
-            url: "http://92.50.227.100:58493/forestcrops/api/listregion/list",
-            params: {
-                nameQuarter: nameQuarter,
-                idSubject: subjectRFNode,
-                idForestly: forestlyNode,
-                idDistrictForestly: districtForestlyNode,
-                soilLot: soilLot,
-                offset: startIndex,
-                limit: rowsPerPage,
-            },
-            responseType: 'json',
-            headers: {
-               'Authorization': 'Bearer ' + token
-            }
-        });
 
-        result = requestData.data.data;
-        APP.countPage = requestData.data.count
+        APP.params = {
+            nameQuarter: nameQuarter,
+            idSubject: subjectRFNode,
+            idForestly: forestlyNode,
+            idDistrictForestly: districtForestlyNode,
+            soilLot: soilLot
+        };
+
+        currentPage = 1;
+
+        var response = await StatementRecalculationsBusiness.getAllStatementList(1);
+        APP.countPage = response.count;
+        renderTablePage(response.data);
+
+        totalPages = Math.ceil(APP.countPage / APP.limit);
+
+        updateButtonsState();
+        updatePaginationInfo();
+
+        updatePaginationControls();
+
     } catch (error) {
         console.error('Ошибка:', error);
     }
@@ -637,12 +657,21 @@ async function searchByFilter() {
 }
 
 async function resetFilter() {
-    var response = await StatementRecalculationsBusiness.getAllStatementList();
-    APP.countPage = response.count;
-    var dataResponse = response.data;
 
-    APP.dataTable = dataResponse;
-    updateDataInStatementRecalculationsTbody(APP.dataTable);
+    APP.params = {};
+
+    currentPage = 1;
+
+    var response = await StatementRecalculationsBusiness.getAllStatementList(1);
+    APP.countPage = response.count;
+    renderTablePage(response.data);
+
+    totalPages = Math.ceil(APP.countPage / APP.limit);
+
+    updateButtonsState();
+    updatePaginationInfo();
+
+    updatePaginationControls();
 }
 
 async function downloadExcel() {

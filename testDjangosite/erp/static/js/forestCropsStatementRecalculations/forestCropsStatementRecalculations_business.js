@@ -1,16 +1,21 @@
 APP = {
-    idView: "forestCropsStatementRecalculations"
+    idView: "forestCropsStatementRecalculations",
+    params: {},
+    limit: 1
 }
 
 function StatementRecalculationsBusiness() {}
 
-StatementRecalculationsBusiness.getAllStatementList = async function() {
+StatementRecalculationsBusiness.getAllStatementList = async function(pageNum) {
+
+    var offset = (pageNum - 1)*APP.limit;
 
     var token = document.cookie.match(/jwttoken=(.+?)(;|$)/)[1];
 
     var requestData = await axios({
       method: 'get',
-      url: "http://92.50.227.100:58493/forestcrops/api/listregion/list",
+      url: ("http://92.50.227.100:58493/forestcrops/api/listregion/list?offset=" + offset + "&limit=" + APP.limit),
+      params: APP.params,
       responseType: 'json',
       headers: {
         'Authorization': 'Bearer ' + token
