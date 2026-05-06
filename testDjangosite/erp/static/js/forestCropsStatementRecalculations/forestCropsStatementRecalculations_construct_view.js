@@ -176,7 +176,7 @@ async function buildStatementRecalculationsTbody() {
 // Пагинации
 let allData = [];
 let currentPage = 1;           // Текущая страница
-let rowsPerPage = 1;          // Количество строк на странице
+let rowsPerPage = 3;          // Количество строк на странице
 let totalPages = 1;
 let startIndex = 0;
 
@@ -198,6 +198,8 @@ function renderCurrentPage() {
     startIndex = (currentPage - 1) * rowsPerPage;
     const endIndex = Math.min(startIndex + rowsPerPage, allData.length);
     const pageData = allData.slice(startIndex, endIndex);
+
+    updatePaginationInfo(startIndex, endIndex);
 
     renderTablePage(pageData);
 
@@ -243,6 +245,26 @@ function renderTablePage(data) {
     }
 
     tableBody.innerHTML = newHtml;
+}
+
+function updatePaginationInfo() {
+
+    const startIndex = (currentPage - 1) * rowsPerPage;
+    const endIndex = Math.min(startIndex + rowsPerPage, allData.length);
+
+    const itemsOnCurrentPage = endIndex - startIndex;
+
+    document.getElementById("totalCount").innerText = allData.length;
+
+    document.getElementById("pageInfo").innerText = `Страница ${currentPage} из ${totalPages}`;
+
+    if (allData.length === 0) {
+        document.getElementById("itemsInfo").innerText = `Нет записей`;
+    } else if (itemsOnCurrentPage === rowsPerPage) {
+        document.getElementById("itemsInfo").innerText = `Показано ${itemsOnCurrentPage} из ${allData.length} записей`;
+    } else {
+        document.getElementById("itemsInfo").innerText = `Показано ${itemsOnCurrentPage} из ${allData.length} записей (последняя страница)`;
+    }
 }
 
 // Обновление кнопок
@@ -616,13 +638,9 @@ async function searchByFilter() {
 
 async function resetFilter() {
     var response = await StatementRecalculationsBusiness.getAllStatementList();
-    var data2 = [];
-    for(var i = 0; i < dataResponse.length; i++) {
-        for(var j = 0; j < dataResponse[i].length; j++) {
-            data2.push(dataResponse[i][j]);
-        }
-    }
+    APP.countPage = response.count;
     var dataResponse = response.data;
+
     APP.dataTable = dataResponse;
     updateDataInStatementRecalculationsTbody(APP.dataTable);
 }
