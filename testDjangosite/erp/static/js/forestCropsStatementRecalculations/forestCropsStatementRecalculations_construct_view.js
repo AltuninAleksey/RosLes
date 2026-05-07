@@ -301,19 +301,6 @@ async function prevPage() {
     }
 }
 
-//function initPagination() {
-//    const prevBtn = document.getElementById("prevPageBtn");
-//    const nextBtn = document.getElementById("nextPageBtn");
-//
-//    if (prevBtn) {
-//        prevBtn.addEventListener("click", prevPage);
-//    }
-//
-//    if (nextBtn) {
-//        nextBtn.addEventListener("click", nextPage);
-//    }
-//}
-
 /////////////////
 async  function downloadAllExcel(id) {
 
