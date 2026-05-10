@@ -6,10 +6,12 @@ import com.rosles.forestcrops.dto.listregion.response.ListRegionList;
 import com.rosles.forestcrops.dto.request.ListIntegerRequest;
 import com.rosles.forestcrops.dto.response.StatusResponse;
 import com.rosles.forestcrops.dto.sample.request.SaveForestCropsItem;
+import com.rosles.forestcrops.dto.sample.request.SavePlantsForestCropsItem;
 import com.rosles.forestcrops.dto.sample.request.SaveSampleRequest;
 import com.rosles.forestcrops.dto.sample.response.*;
 import com.rosles.forestcrops.mapper.ForestCropsItemRowMapper;
 import com.rosles.forestcrops.mapper.ListRegionItemRowMapper;
+import com.rosles.forestcrops.mapper.PlantsForestCropsItemRowMapper;
 import com.rosles.forestcrops.mapper.SampleItemResponseRowMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -420,7 +422,138 @@ public class SampleRepository {
         }
     }
 
+    public PlantsForestCropsList getPlantsForestCropsList( Integer idSample, Integer offset, Integer size) throws ServiceException {
+        try {
 
+            PlantsForestCropsList plantsForestCropsList = new PlantsForestCropsList();
+
+            HashMap<String, Object> params = new HashMap<>();
+            params.put("limit", size);
+            params.put("offset", offset);
+            params.put("id", idSample);
+
+            String sql = "\n" +
+                    "select * from \"public\".\"djangoForest_app_fc_forest_crops_plants\" where id_sample_id = :id \n";
+
+
+            String sqlCount = "select count(*) from (\n" + sql + ") count";
+
+            Integer count = template.queryForObject(sqlCount, params, Integer.class);
+
+            sql += "order by id desc offset :offset limit :limit ";
+
+            List<PlantsForestCropsItem> plantsForestCropsItemList = template.query(sql, params, new PlantsForestCropsItemRowMapper());
+
+            plantsForestCropsList.setCount(count);
+            plantsForestCropsList.setData(plantsForestCropsItemList);
+
+            return plantsForestCropsList;
+
+        } catch (Exception e) {
+            log.error("Error: ListRegionRepository.getForestCropsList", e);
+
+            throw new ServiceException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Transactional(rollbackFor = ServiceException.class)
+    public StatusResponse deletePlansForestCrops(ListIntegerRequest listIntegerRequest) throws ServiceException {
+        try {
+
+            HashMap<String, Object> params = new HashMap<>();
+
+            String sql = "\n" +
+                    "delete from \"public\".\"djangoForest_app_fc_forest_crops_plants\" where id = :id \n";
+
+            for (Integer id : listIntegerRequest.getValues()) {
+
+                params = new HashMap<>();
+                params.put("id", id);
+
+                template.update(sql, params);
+            }
+
+            return new StatusResponse(0, "success");
+
+        } catch (Exception e) {
+            log.error("Error: ListRegionRepository.getForestCropsList", e);
+
+            throw new ServiceException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Transactional(rollbackFor = ServiceException.class)
+    public StatusResponse createPlantsForestCrops(SavePlantsForestCropsItem savePlantsForestCropsItem) throws ServiceException {
+        try {
+
+            HashMap<String, Object> params = new HashMap<>();
+
+            String sql = "\n" +
+                    "insert into \"djangoForest_app_fc_forest_crops_plants\" (\n" +
+                    "    \"diameter\",\n" +
+                    "    \"height\",\n" +
+                    "    id_breed_id,\n" +
+                    "    id_sample_id,\n" +
+                    "    \"number\")\n" +
+                    "values (\n" +
+                    "    :diameter,\n" +
+                    "    :height,\n" +
+                    "    :id_breed_id,\n" +
+                    "    :id_sample_id,\n" +
+                    "    1)";
+
+            for (PlantsForestCropsItem item : savePlantsForestCropsItem.getValues()) {
+
+                params = new HashMap<>();
+                params.put("diameter", item.getDiameter());
+                params.put("height", item.getHeight());
+                params.put("id_breed_id", item.getIdBreed());
+                params.put("id_sample_id", savePlantsForestCropsItem.getIdSample());
+
+                template.update(sql, params);
+            }
+
+            return new StatusResponse(0, "success");
+
+        } catch (Exception e) {
+            log.error("Error: ListRegionRepository.getForestCropsList", e);
+
+            throw new ServiceException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Transactional(rollbackFor = ServiceException.class)
+    public StatusResponse updatePlantsForestCrops(SavePlantsForestCropsItem savePlantsForestCropsItem) throws ServiceException {
+        try {
+
+            HashMap<String, Object> params = new HashMap<>();
+
+            String sql = "\n" +
+                    "update \"public\".\"djangoForest_app_fc_forest_crops_plants\" set\n" +
+                    "    diameter = :diameter,\n" +
+                    "    height = :height,\n" +
+                    "    id_breed_id = :id_breed_id\n" +
+                    "where id = :id";
+
+            for (PlantsForestCropsItem item : savePlantsForestCropsItem.getValues()) {
+
+                params = new HashMap<>();
+                params.put("id", item.getId());
+                params.put("diameter", item.getDiameter());
+                params.put("height", item.getHeight());
+                params.put("id_breed_id", item.getIdBreed());
+
+                template.update(sql, params);
+            }
+
+            return new StatusResponse(0, "success");
+
+        } catch (Exception e) {
+            log.error("Error: ListRegionRepository.getForestCropsList", e);
+
+            throw new ServiceException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
 
 }

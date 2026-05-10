@@ -4,11 +4,9 @@ import com.rosles.forestcrops.config.exception.ServiceException;
 import com.rosles.forestcrops.dto.request.ListIntegerRequest;
 import com.rosles.forestcrops.dto.response.StatusResponse;
 import com.rosles.forestcrops.dto.sample.request.SaveForestCropsItem;
+import com.rosles.forestcrops.dto.sample.request.SavePlantsForestCropsItem;
 import com.rosles.forestcrops.dto.sample.request.SaveSampleRequest;
-import com.rosles.forestcrops.dto.sample.response.ForestCropsList;
-import com.rosles.forestcrops.dto.sample.response.SampleInfoResponse;
-import com.rosles.forestcrops.dto.sample.response.SampleItemResponse;
-import com.rosles.forestcrops.dto.sample.response.SampleListResponse;
+import com.rosles.forestcrops.dto.sample.response.*;
 import com.rosles.forestcrops.service.SampleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -222,8 +220,87 @@ public class SampleController {
         }
     }
 
+    @GetMapping("/get-plants-forest-crops-list")
+    public ResponseEntity<PlantsForestCropsList> getPlantsForestCropsList(
+            @RequestParam(value = "idSample") Integer idSample,
+            @RequestParam(value = "offset", required = false) Integer offset,
+            @RequestParam(value = "limit", required = false) Integer size
+    ) throws ServiceException {
 
+        try {
 
+            if(offset == null) {
+                offset = 0;
+            }
+
+            if(size == null) {
+                size = 10;
+            }
+
+            return new ResponseEntity<>(sampleService.getPlantsForestCropsList(idSample, offset, size), HttpStatus.OK);
+        } catch (ServiceException e) {
+            throw e;
+        }
+        catch (Exception e) {
+            log.error("Error: ListRegionRepository.getPlantsForestCropsList", e);
+
+            throw new ServiceException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    }
+
+    @DeleteMapping("/delete-plants-forest-crops")
+    public ResponseEntity<StatusResponse> deletePlansForestCrops(
+            @RequestBody ListIntegerRequest listIntegerRequest) throws ServiceException {
+
+        try {
+            return new ResponseEntity<>(sampleService.deletePlansForestCrops(listIntegerRequest), HttpStatus.OK);
+        } catch (ServiceException e) {
+            throw e;
+        }
+        catch (Exception e) {
+            log.error("Error: ListRegionRepository.deleteForestCrops", e);
+
+            throw new ServiceException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    }
+
+    @PostMapping("/create-plants-forest-crops")
+    public ResponseEntity<StatusResponse> createPlantsForestCrops(
+            @RequestBody SavePlantsForestCropsItem savePlantsForestCropsItem
+    ) throws ServiceException {
+
+        try {
+
+            return new ResponseEntity<>(sampleService.createPlantsForestCrops(savePlantsForestCropsItem), HttpStatus.OK);
+        } catch (ServiceException e) {
+            throw e;
+        }
+        catch (Exception e) {
+            log.error("Error: SamplerController.createPlantsForestCrops", e);
+
+            throw new ServiceException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("/update-plants-forest-crops")
+    public ResponseEntity<StatusResponse> updatePlantsForestCrops(
+            @RequestBody SavePlantsForestCropsItem savePlantsForestCropsItem
+    ) throws ServiceException {
+
+        try {
+
+            return new ResponseEntity<>(sampleService.updatePlantsForestCrops(savePlantsForestCropsItem), HttpStatus.OK);
+        } catch (ServiceException e) {
+            throw e;
+        }
+        catch (Exception e) {
+            log.error("Error: SamplerController.updatePlantsForestCrops", e);
+
+            throw new ServiceException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
 
 }

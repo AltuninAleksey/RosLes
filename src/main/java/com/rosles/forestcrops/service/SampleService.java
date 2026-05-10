@@ -4,11 +4,9 @@ import com.rosles.forestcrops.config.exception.ServiceException;
 import com.rosles.forestcrops.dto.request.ListIntegerRequest;
 import com.rosles.forestcrops.dto.response.StatusResponse;
 import com.rosles.forestcrops.dto.sample.request.SaveForestCropsItem;
+import com.rosles.forestcrops.dto.sample.request.SavePlantsForestCropsItem;
 import com.rosles.forestcrops.dto.sample.request.SaveSampleRequest;
-import com.rosles.forestcrops.dto.sample.response.ForestCropsList;
-import com.rosles.forestcrops.dto.sample.response.SampleInfoResponse;
-import com.rosles.forestcrops.dto.sample.response.SampleItemResponse;
-import com.rosles.forestcrops.dto.sample.response.SampleListResponse;
+import com.rosles.forestcrops.dto.sample.response.*;
 import com.rosles.forestcrops.repository.SampleRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,6 +66,20 @@ public class SampleService {
         return sampleRepository.updateForestCrops(saveForestCropsItem);
     }
 
+    public PlantsForestCropsList getPlantsForestCropsList( Integer idSample, Integer offset, Integer size) throws ServiceException {
+        return sampleRepository.getPlantsForestCropsList(idSample, offset, size);
+    }
+
+    public StatusResponse deletePlansForestCrops(ListIntegerRequest listIntegerRequest) throws ServiceException {
+        return sampleRepository.deletePlansForestCrops(listIntegerRequest);
+    }
+
+    public StatusResponse createPlantsForestCrops(SavePlantsForestCropsItem savePlantsForestCropsItem) throws ServiceException {
+        return sampleRepository.createPlantsForestCrops(savePlantsForestCropsItem);
+    }
+    public StatusResponse updatePlantsForestCrops(SavePlantsForestCropsItem savePlantsForestCropsItem) throws ServiceException {
+        return sampleRepository.updatePlantsForestCrops(savePlantsForestCropsItem);
+    }
 
 
 }
