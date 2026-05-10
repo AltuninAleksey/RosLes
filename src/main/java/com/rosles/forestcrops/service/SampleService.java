@@ -1,8 +1,12 @@
 package com.rosles.forestcrops.service;
 
 import com.rosles.forestcrops.config.exception.ServiceException;
+import com.rosles.forestcrops.dto.request.ListIntegerRequest;
 import com.rosles.forestcrops.dto.response.StatusResponse;
+import com.rosles.forestcrops.dto.sample.request.SaveForestCropsItem;
 import com.rosles.forestcrops.dto.sample.request.SaveSampleRequest;
+import com.rosles.forestcrops.dto.sample.response.ForestCropsList;
+import com.rosles.forestcrops.dto.sample.response.SampleInfoResponse;
 import com.rosles.forestcrops.dto.sample.response.SampleItemResponse;
 import com.rosles.forestcrops.dto.sample.response.SampleListResponse;
 import com.rosles.forestcrops.repository.SampleRepository;
@@ -30,11 +34,40 @@ public class SampleService {
         return sampleRepository.getSampleList(idListRegion, offset, size);
     }
 
+    public SampleInfoResponse getSampleInfo(Integer id) throws ServiceException {
+        return sampleRepository.getSampleInfo(id);
+    }
+
     public SampleItemResponse createSample(SaveSampleRequest saveSampleRequest) throws ServiceException {
         return sampleRepository.createSample(saveSampleRequest);
+    }
+
+    public SampleItemResponse updateSample(SaveSampleRequest saveSampleRequest) throws ServiceException {
+        return sampleRepository.updateSample(saveSampleRequest);
     }
 
     public StatusResponse deleteSample(Integer id) throws ServiceException {
         return sampleRepository.deleteSample(id);
     }
+
+    public ForestCropsList getForestCropsList(Integer idSample, Integer offset,
+                                                              Integer size) throws ServiceException {
+
+        return sampleRepository.getForestCropsList(idSample, offset, size);
+    }
+
+    public StatusResponse deleteForestCrops(ListIntegerRequest listIntegerRequest) throws ServiceException {
+        return sampleRepository.deleteForestCrops(listIntegerRequest);
+    }
+
+    public StatusResponse createForestCrops(SaveForestCropsItem saveForestCropsItem) throws ServiceException {
+        return sampleRepository.createForestCrops(saveForestCropsItem);
+    }
+
+    public StatusResponse updateForestCrops(SaveForestCropsItem saveForestCropsItem) throws ServiceException {
+        return sampleRepository.updateForestCrops(saveForestCropsItem);
+    }
+
+
+
 }

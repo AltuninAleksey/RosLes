@@ -16,3 +16,10 @@ spring:
 service-url:
   molodnial: http://92.50.227.100:58493/
   #molodnial: http://localhost:8000/
+
+logging:
+  file:
+    path: /home/rcfh_adm/log/forestcrops
+    max-size: 500MB
+    max-history: 30
+    total-size-cap: 15GB
