@@ -4,6 +4,7 @@ import com.rosles.forestcrops.config.exception.ServiceException;
 import com.rosles.forestcrops.dto.request.ListIntegerRequest;
 import com.rosles.forestcrops.dto.response.StatusResponse;
 import com.rosles.forestcrops.dto.sample.request.SaveForestCropsItem;
+import com.rosles.forestcrops.dto.sample.request.SaveMolodForestCropsItem;
 import com.rosles.forestcrops.dto.sample.request.SavePlantsForestCropsItem;
 import com.rosles.forestcrops.dto.sample.request.SaveSampleRequest;
 import com.rosles.forestcrops.dto.sample.response.*;
@@ -79,6 +80,22 @@ public class SampleService {
     }
     public StatusResponse updatePlantsForestCrops(SavePlantsForestCropsItem savePlantsForestCropsItem) throws ServiceException {
         return sampleRepository.updatePlantsForestCrops(savePlantsForestCropsItem);
+    }
+
+    public MolodForestCropsList getMolodForestCropsList(Integer idSample, Integer offset, Integer size) throws ServiceException {
+        return sampleRepository.getMolodForestCropsList(idSample, offset, size);
+    }
+
+    public StatusResponse deleteMolodForestCrops(ListIntegerRequest listIntegerRequest) throws ServiceException {
+        return sampleRepository.deleteMolodForestCrops(listIntegerRequest);
+    }
+
+    public StatusResponse createMolodForestCrops(SaveMolodForestCropsItem saveMolodForestCropsItem) throws ServiceException {
+        return sampleRepository.createMolodForestCrops(saveMolodForestCropsItem);
+    }
+
+    public StatusResponse updateMolodForestCrops(SaveMolodForestCropsItem saveMolodForestCropsItem) throws ServiceException {
+        return sampleRepository.updateMolodForestCrops(saveMolodForestCropsItem);
     }
 
 

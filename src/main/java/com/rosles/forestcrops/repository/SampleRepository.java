@@ -6,13 +6,11 @@ import com.rosles.forestcrops.dto.listregion.response.ListRegionList;
 import com.rosles.forestcrops.dto.request.ListIntegerRequest;
 import com.rosles.forestcrops.dto.response.StatusResponse;
 import com.rosles.forestcrops.dto.sample.request.SaveForestCropsItem;
+import com.rosles.forestcrops.dto.sample.request.SaveMolodForestCropsItem;
 import com.rosles.forestcrops.dto.sample.request.SavePlantsForestCropsItem;
 import com.rosles.forestcrops.dto.sample.request.SaveSampleRequest;
 import com.rosles.forestcrops.dto.sample.response.*;
-import com.rosles.forestcrops.mapper.ForestCropsItemRowMapper;
-import com.rosles.forestcrops.mapper.ListRegionItemRowMapper;
-import com.rosles.forestcrops.mapper.PlantsForestCropsItemRowMapper;
-import com.rosles.forestcrops.mapper.SampleItemResponseRowMapper;
+import com.rosles.forestcrops.mapper.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -541,6 +539,146 @@ public class SampleRepository {
                 params.put("id", item.getId());
                 params.put("diameter", item.getDiameter());
                 params.put("height", item.getHeight());
+                params.put("id_breed_id", item.getIdBreed());
+
+                template.update(sql, params);
+            }
+
+            return new StatusResponse(0, "success");
+
+        } catch (Exception e) {
+            log.error("Error: ListRegionRepository.getForestCropsList", e);
+
+            throw new ServiceException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public MolodForestCropsList getMolodForestCropsList(Integer idSample, Integer offset, Integer size) throws ServiceException {
+        try {
+
+            MolodForestCropsList molodForestCropsList = new MolodForestCropsList();
+
+            HashMap<String, Object> params = new HashMap<>();
+            params.put("limit", size);
+            params.put("offset", offset);
+            params.put("id", idSample);
+
+            String sql = "\n" +
+                    "select * from \"public\".\"djangoForest_app_fc_forest_crops_molod\" where id_sample_id = :id \n";
+
+
+            String sqlCount = "select count(*) from (\n" + sql + ") count";
+
+            Integer count = template.queryForObject(sqlCount, params, Integer.class);
+
+            sql += "order by id desc offset :offset limit :limit ";
+
+            List<MolodForestCropsItem> molodForestCropsItemList = template.query(sql, params, new MolodForestCropsItemRowMapper());
+
+            molodForestCropsList.setCount(count);
+            molodForestCropsList.setData(molodForestCropsItemList);
+
+            return molodForestCropsList;
+
+        } catch (Exception e) {
+            log.error("Error: ListRegionRepository.getForestCropsList", e);
+
+            throw new ServiceException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Transactional(rollbackFor = ServiceException.class)
+    public StatusResponse deleteMolodForestCrops(ListIntegerRequest listIntegerRequest) throws ServiceException {
+        try {
+
+            HashMap<String, Object> params = new HashMap<>();
+
+            String sql = "\n" +
+                    "delete from \"public\".\"djangoForest_app_fc_forest_crops_molod\" where id = :id \n";
+
+            for (Integer id : listIntegerRequest.getValues()) {
+
+                params = new HashMap<>();
+                params.put("id", id);
+
+                template.update(sql, params);
+            }
+
+            return new StatusResponse(0, "success");
+
+        } catch (Exception e) {
+            log.error("Error: ListRegionRepository.getForestCropsList", e);
+
+            throw new ServiceException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Transactional(rollbackFor = ServiceException.class)
+    public StatusResponse createMolodForestCrops(SaveMolodForestCropsItem saveMolodForestCropsItem) throws ServiceException {
+        try {
+
+            HashMap<String, Object> params = new HashMap<>();
+
+            String sql = "\n" +
+                    "insert into \"djangoForest_app_fc_forest_crops_molod\" (\n" +
+                    "    \"from0_6To1_5\",\n" +
+                    "    from1_5,\n" +
+                    "    id_breed_id,\n" +
+                    "    id_sample_id,\n" +
+                    "    max_height,\n" +
+                    "    \"number\",\n" +
+                    "    to0_5)\n" +
+                    "values (\n" +
+                    "    :from0_6To1_5,\n" +
+                    "    :from1_5,\n" +
+                    "    1,\n" +
+                    "    4,\n" +
+                    "    1,\n" +
+                    "    1,\n" +
+                    "    :to0_5)";
+
+            for (MolodForestCropsItem item : saveMolodForestCropsItem.getValues()) {
+
+                params = new HashMap<>();
+                params.put("from0_6To1_5", item.getFrom0_6To1_5());
+                params.put("from1_5", item.getFrom1_5());
+                params.put("to0_5", item.getTo0_5());
+                params.put("id_breed_id", item.getIdBreed());
+                params.put("id_sample_id", saveMolodForestCropsItem.getIdSample());
+
+                template.update(sql, params);
+            }
+
+            return new StatusResponse(0, "success");
+
+        } catch (Exception e) {
+            log.error("Error: ListRegionRepository.createMolodForestCrops", e);
+
+            throw new ServiceException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Transactional(rollbackFor = ServiceException.class)
+    public StatusResponse updateMolodForestCrops(SaveMolodForestCropsItem saveMolodForestCropsItem) throws ServiceException {
+        try {
+
+            HashMap<String, Object> params = new HashMap<>();
+
+            String sql = "\n" +
+                    "update \"public\".\"djangoForest_app_fc_forest_crops_molod\" set\n" +
+                    "    \"from0_6To1_5\" = :from0_6To1_5,\n" +
+                    "    from1_5 = :from1_5,\n" +
+                    "    to0_5 = :to0_5,\n" +
+                    "    id_breed_id = :id_breed_id\n" +
+                    "where id = :id";
+
+            for (MolodForestCropsItem item : saveMolodForestCropsItem.getValues()) {
+
+                params = new HashMap<>();
+                params.put("id", item.getId());
+                params.put("from0_6To1_5", item.getFrom0_6To1_5());
+                params.put("from1_5", item.getFrom1_5());
+                params.put("to0_5", item.getTo0_5());
                 params.put("id_breed_id", item.getIdBreed());
 
                 template.update(sql, params);

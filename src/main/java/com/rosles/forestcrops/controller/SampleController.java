@@ -4,6 +4,7 @@ import com.rosles.forestcrops.config.exception.ServiceException;
 import com.rosles.forestcrops.dto.request.ListIntegerRequest;
 import com.rosles.forestcrops.dto.response.StatusResponse;
 import com.rosles.forestcrops.dto.sample.request.SaveForestCropsItem;
+import com.rosles.forestcrops.dto.sample.request.SaveMolodForestCropsItem;
 import com.rosles.forestcrops.dto.sample.request.SavePlantsForestCropsItem;
 import com.rosles.forestcrops.dto.sample.request.SaveSampleRequest;
 import com.rosles.forestcrops.dto.sample.response.*;
@@ -297,6 +298,88 @@ public class SampleController {
         }
         catch (Exception e) {
             log.error("Error: SamplerController.updatePlantsForestCrops", e);
+
+            throw new ServiceException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/get-molod-forest-crops-list")
+    public ResponseEntity<MolodForestCropsList> getMolodForestCropsList(
+            @RequestParam(value = "idSample") Integer idSample,
+            @RequestParam(value = "offset", required = false) Integer offset,
+            @RequestParam(value = "limit", required = false) Integer size
+    ) throws ServiceException {
+
+        try {
+
+            if(offset == null) {
+                offset = 0;
+            }
+
+            if(size == null) {
+                size = 10;
+            }
+
+            return new ResponseEntity<>(sampleService.getMolodForestCropsList(idSample, offset, size), HttpStatus.OK);
+        } catch (ServiceException e) {
+            throw e;
+        }
+        catch (Exception e) {
+            log.error("Error: ListRegionRepository.getMolodForestCropsList", e);
+
+            throw new ServiceException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    }
+
+    @DeleteMapping("/delete-molod-forest-crops")
+    public ResponseEntity<StatusResponse> deleteMolodForestCrops(
+            @RequestBody ListIntegerRequest listIntegerRequest) throws ServiceException {
+
+        try {
+            return new ResponseEntity<>(sampleService.deleteMolodForestCrops(listIntegerRequest), HttpStatus.OK);
+        } catch (ServiceException e) {
+            throw e;
+        }
+        catch (Exception e) {
+            log.error("Error: ListRegionRepository.deleteMolodForestCrops", e);
+
+            throw new ServiceException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    }
+
+    @PostMapping("/create-molod-forest-crops")
+    public ResponseEntity<StatusResponse> createMolodForestCrops(
+            @RequestBody SaveMolodForestCropsItem saveMolodForestCropsItem
+    ) throws ServiceException {
+
+        try {
+
+            return new ResponseEntity<>(sampleService.createMolodForestCrops(saveMolodForestCropsItem), HttpStatus.OK);
+        } catch (ServiceException e) {
+            throw e;
+        }
+        catch (Exception e) {
+            log.error("Error: SamplerController.createMolodForestCrops", e);
+
+            throw new ServiceException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("/update-molod-forest-crops")
+    public ResponseEntity<StatusResponse> updateMolodForestCrops(
+            @RequestBody SaveMolodForestCropsItem saveMolodForestCropsItem
+    ) throws ServiceException {
+
+        try {
+
+            return new ResponseEntity<>(sampleService.updateMolodForestCrops(saveMolodForestCropsItem), HttpStatus.OK);
+        } catch (ServiceException e) {
+            throw e;
+        }
+        catch (Exception e) {
+            log.error("Error: SamplerController.updateMolodForestCrops", e);
 
             throw new ServiceException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
