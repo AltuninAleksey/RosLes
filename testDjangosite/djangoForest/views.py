@@ -2647,3 +2647,52 @@ class GetCzlInfoByProfile(APIView):
 
         return Response({"subject": sujbect_rf, "czl": czl})
 
+
+class CreateAppFCExcel(APIView):
+
+    def post(self, request, *args, **kwargs):
+        from staticpy.create_molod_table import create_accounting_table_from_json
+        list_region = AppFcListRegion.objects.filter(id=request.data['id']).values(
+            'id',
+            'sample_region',
+            'soil_lot',
+            'dacha',
+            'name_quarter',
+            'date_examination',
+            'id_district_forestly__id',
+            'id_district_forestly__name_district_forestly',
+            'id_district_forestly__id_forestly__name_forestly',
+            'id_district_forestly__id_forestly__id_subject_rf__name_subject_RF',
+            )
+        samples = AppFcSample.objects.filter(id_listregion = request.data['id']).values()
+        samples_set_ids = set()
+        for sample in samples:
+            samples_set_ids.add(sample['id'])
+        breeds_set = set()
+
+        molod = AppFcForestCropsMolod.objects.filter(id_sample__in=samples_set_ids).values()
+        crops = AppFcForestCropsRows.objects.filter(id_sample__in=samples_set_ids).values()
+        plants = AppFcForestCropsPlants.objects.filter(id_sample__in=samples_set_ids).values()
+        for mol in molod:
+            breeds_set.add(mol['id_breed_id'])
+
+        for crop in crops:
+            breeds_set.add(crop['id_breed_id'])
+
+        for plant in plants:
+            breeds_set.add(plant['id_breed_id'])
+
+        all_breeds = Breed.objects.filter(id__in = breeds_set).values()
+
+        print(all_breeds)
+
+        result_dict = {
+            "list_region": list_region,
+            "samples": samples,
+            "molod": molod,
+            "crops": crops,
+            "plants": plants,
+            "all_breed": all_breeds
+        }
+        path = create_accounting_table_from_json(result_dict)
+        return Response({"file_path": path})
