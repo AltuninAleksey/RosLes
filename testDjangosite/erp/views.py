@@ -443,6 +443,8 @@ def getRegestration(request):
 def getForestCrops(request):
     return render(request, 'erp/html/forestCropsStatementRecalculations.html')
 def getForestCropsRecalculationsDetail(request):
-    return render(request, 'erp/html/forestCropsStatementRecalculationsDetail.html')
+    return render(request, 'erp/html/forestCropsStatementRecalculationsDetail.html',{'idDocument': request.GET.get('id')})
 def getForestCropsInformTrialArea(request):
     return render(request, 'erp/html/forestCropsInformTrialArea.html')
+def getNewForestCropsStatementRecalculationsDetail(request):
+    return render(request, 'erp/html/newForestCropsStatementRecalculationsDetail.html')

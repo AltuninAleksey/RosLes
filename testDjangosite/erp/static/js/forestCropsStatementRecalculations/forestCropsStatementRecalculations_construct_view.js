@@ -98,12 +98,6 @@ async function buildStatementRecalculationsTbody() {
     setDataInProfile();
 }
 
-//async  function deleteStatementRecalculation(id) {
-//
-//    await StatementRecalculationsBusiness.deleteStatementRecalculationById(id);
-//
-//    getStatementRecalculations();
-//}
 // Пагинации
 let allData = [];
 let currentPage = 1;           // Текущая страница
@@ -136,8 +130,7 @@ function renderTablePage(data) {
         data[i].forestly = CommonFunction.getForestlyNameByQuarterId(APP.forestly, data[i].idForestly);
         data[i].district_forestly = CommonFunction.getDistrictForestlyNameByQuarterId(APP.district_forestly, data[i].idDistrictForestly);
 
-//        let strGetStatementRecalculationsDetail = "getStatementRecalculationsDetail(" + data[i].id  + ")"
-        let strGetStatementRecalculationsDetail = "getForestCropsRecalculationsDetail()"
+        let strGetStatementRecalculationsDetail = "getForestCropsRecalculationsDetail(" + data[i].id + ")"
 
         newHtml = newHtml + `<tr class="cursorPointer" onClick=${strGetStatementRecalculationsDetail}>
             <td class="textAlignCenter td1">${data[i].date}</td>
@@ -167,7 +160,12 @@ function renderTablePage(data) {
 
     tableBody.innerHTML = newHtml;
 }
+async  function deleteStatementRecalculation(id) {
 
+    await StatementRecalculationsBusiness.deleteStatementRecalculationById(id);
+
+    getForestCrops();
+}
 function updatePaginationInfo() {
 
     const itemsOnCurrentPage = currentPage*APP.limit;

@@ -39,7 +39,7 @@ StatementRecalculationsBusiness.getStatementListByFilter = async function(data) 
 StatementRecalculationsBusiness.deleteStatementRecalculationById = async function(id) {
     var requestData = await axios({
         method: 'delete',
-        url: urlGlobal + "/listregion/" + id,
+        url: "http://92.50.227.100:58493/forestcrops/api/listregion/delete?id=" + id,
         responseType: 'json'
     });
 }

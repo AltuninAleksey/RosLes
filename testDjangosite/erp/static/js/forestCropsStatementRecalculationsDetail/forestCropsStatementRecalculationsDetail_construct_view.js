@@ -4,8 +4,7 @@ async function openPage() {
 
     APP.deleteIdSample = [];
 
-    //let idDocument = document.querySelector("#idDocument").value;
-
+    let idDocument = document.querySelector("#idDocument").value;
     //var allForestData = await CommonBusiness.getAllForest();
 
     //APP.subjectrf = allForestData.subjectrf;
@@ -15,7 +14,7 @@ async function openPage() {
 
     APP.userData = await CommonBusiness.getUserData();
 
-   // APP.documentData = await StatementRecalculationsBusinessDetail.getStatementRecalculationsDetailDataById(idDocument);
+    APP.documentData = await StatementRecalculationsBusinessDetail.getStatementRecalculationsDetailDataById(idDocument);
     //APP.subjects = await CommonBusiness.getAllSubjectrf();
 
     var czl = await CommonBusiness.getCZL();
@@ -36,8 +35,9 @@ async function openPage() {
         APP.subjects.push(item_subject);
     }
 
-  //  APP.sampleList = await StatementRecalculationsBusinessDetail.getSampleByIdListRegion(idDocument);
-
+    var sampleResp = await StatementRecalculationsBusinessDetail.getSampleByIdListRegion(idDocument,1);
+    APP.countPageDetail = sampleResp.count;
+    APP.sampleList = sampleResp.data
     APP.sortOrderTable1 = 0;
 
     await setDetailDataIdPage();
@@ -48,26 +48,23 @@ async function openPage() {
 
 async function setDetailDataIdPage() {
 
-//    let numberStatementInHeaderNode = document.querySelector("#numberStatementInHeader");
-//    let daterStatementInHeaderNode = document.querySelector("#dateStatementInHeader");
-//    let numberStatementNode = document.querySelector("#numberStatement");
-//    let dateStatementNode = document.querySelector("#dateStatement");
-//    let soilLotStatementNode = document.querySelector("#soilLotStatement");
-//    let sampleRegionStatementNode = document.querySelector("#sampleRegionStatement");
-//    let quarterStatementNode = document.querySelector("#quarterStatement");
-//    let dachaStatementNode = document.querySelector("#dachaStatement");
-//
-//    numberStatementInHeaderNode.innerHTML = APP.documentData.number_region;
-//    daterStatementInHeaderNode.innerHTML = APP.documentData.date;
-//    numberStatementNode.value = "Номер: " + APP.documentData.number_region;
-//    dateStatementNode.value = APP.documentData.date;
-//    soilLotStatementNode.value = APP.documentData.soil_lot;
-//    sampleRegionStatementNode.value = APP.documentData.sample_region;
-//    quarterStatementNode.value = APP.documentData.name_quarter;
-//    dachaStatementNode.value = APP.documentData.dacha;
+    let dateStatementNode = document.querySelector("#dateStatement");
+    let soilLotStatementNode = document.querySelector("#soilLotStatement");
+    let sampleRegionStatementNode = document.querySelector("#sampleRegionStatement");
+    let quarterStatementNode = document.querySelector("#quarterStatement");
+    let dachaStatementNode = document.querySelector("#dachaStatement");
+
+    dateStatementNode.value = APP.documentData.date;
+    dachaStatementNode.value = APP.documentData.dacha;
+
+    soilLotStatementNode.value = APP.documentData.soilLot;
+    sampleRegionStatementNode.value = APP.documentData.sampleRegion;
+    quarterStatementNode.value = APP.documentData.nameQuarter;
+
 
     await setSubjectsRF();
     //await setSampleList();
+    updateDataInStatementRecalculationsTbody();
 }
 
 async function setEvent() {
@@ -84,70 +81,214 @@ async function setEvent() {
                 await setDistriotForestlyStatement();
         });
 
-//    document
-//        .querySelector("#distriotForestlyStatement")
-//        .addEventListener('change', async (e)=>{
-//                await setQuarterStatement();
-//        });
-
-
     document
         .getElementById("printFieldCard")
         .addEventListener('click',function() {
         getPrintFieldCard(APP.documentData.id_field_card, APP.documentData.id);
     });
 
+    document.getElementById("prevPageBtn").addEventListener("click", prevPage);
+    document.getElementById("nextPageBtn").addEventListener("click", nextPage);
+
+    var buttonAddProba = document.getElementById("buttonAddProba");
+    buttonAddProba.addEventListener('click', function() {
+        createSample();
+    });
 }
 
-//async function setSampleList() {
-//    let sampleListTbodyNode = document.querySelector("#sampleListTbody");
-//    let newHtml = "";
-//
-//    for(let i = 0; i < APP.sampleList.length; i++) {
-//
-//        let strGetRecalculatingDetail = "getRecalculatingDetail(" + APP.sampleList[i].id +  "," + document.querySelector("#idDocument").value  + ")"
-//
-//        newHtml += `<tr class="cursorPointer" onClick=${strGetRecalculatingDetail}>
-//                        <td class="textAlignCenter td1">${APP.sampleList[i].date}</td>
-//                        <td class="textAlignCenter td8">${APP.sampleList[i].number_sample}</td>
-//                        <td class="textAlignCenter td2">${CommonFunction.getSubjectNameByQuarterId(APP.subjects, APP.sampleList[i].id_subject_rf)}</td>
-//                        <td class="textAlignCenter td3">${CommonFunction.getForestlyNameByQuarterId(APP.forestly, APP.sampleList[i].id_forestly)}</td>
-//                        <td class="textAlignCenter td4">${CommonFunction.getDistrictForestlyNameByQuarterId(APP.district_forestly, APP.sampleList[i].id_district_forestly)}</td>
-//                        <td class="textAlignCenter td9">${APP.sampleList[i].dacha == null? "" : APP.sampleList[i].dacha}</td>
-//                        <td class="textAlignCenter td5">${APP.sampleList[i].name_quarter == null? "":APP.sampleList[i].name_quarter}</td>
-//                        <td class="textAlignCenter td6">${APP.sampleList[i].soil_lot}</td>` +
-//                        "<td style=\"width: 1%; cursor: pointer;\">" +
-//                            "<svg onclick=\"event.stopPropagation();deleteNewLineInSampleList(" + APP.sampleList[i].id + ")\" class=\"cursorPointer\" width=\"23px\" height=\"23px\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">" +
-//                                "<g id=\"SVGRepo_bgCarrier\" stroke-width=\"0\"></g> " +
-//                                "<g id=\"SVGRepo_tracerCarrier\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></g>" +
-//                                "<g id=\"SVGRepo_iconCarrier\">" +
-//                                    "<path d=\"M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17\" stroke=\"#000000\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path> " +
-//                                "</g>" +
-//                            "</svg>" +
-//                        "</td>" +
-//                    `</tr>`;
-//    }
-//
-//    sampleListTbodyNode.innerHTML = newHtml;
-//}
-//
-//function deleteNewLineInSampleList(del_id) {
-//
-//    hasUnsavedChanges = true;
-//
-//    APP.deleteIdSample.push(del_id);
-//
-//    let oldSampleList = APP.sampleList;
-//    APP.sampleList = [];
-//
-//    for(var i = 0; i < oldSampleList.length; i++) {
-//        if(oldSampleList[i].id != del_id) {
-//            APP.sampleList.push(oldSampleList[i])
-//        }
-//    }
-//
-//    setSampleList();
-//}
+// Пагинации
+let currentPage = 1;           // Текущая страница
+let rowsPerPage = 3;          // Количество строк на странице
+let totalPages = 1;
+
+// Обновления таблицы с пагинацией
+function updateDataInStatementRecalculationsTbody() {
+
+    totalPages = Math.ceil(APP.countPageDetail / APP.limit);
+
+    updatePaginationControls();
+
+    currentPage = 1;
+
+    updatePaginationInfo();
+    renderTablePage();
+    updateButtonsState();
+}
+
+function renderTablePage() {
+    let sampleListTbodyNode = document.querySelector("#sampleListTbody");
+    let newHtml = "";
+
+    for(let i = 0; i < APP.sampleList.length; i++) {
+
+
+        let strGetRecalculatingDetail = "getForestCropsInformTrialArea()"
+        newHtml += `<tr class="cursorPointer" onClick=${strGetRecalculatingDetail}>
+                        <td class="textAlignCenter td8">${APP.sampleList[i].number}</td>
+                        <td class="textAlignCenter td9">${APP.sampleList[i].length}</td>
+                        <td class="textAlignCenter td5">${APP.sampleList[i].width}</td>
+                        <td class="textAlignCenter td6">${APP.sampleList[i].square}</td>` +
+                        "<td style=\"width: 1%; cursor: pointer;\">" +
+                            "<svg onclick=\"event.stopPropagation();deleteNewLineInSampleList(" +APP.sampleList[i].id + ")\" class=\"cursorPointer\" width=\"23px\" height=\"23px\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">" +
+                                "<g id=\"SVGRepo_bgCarrier\" stroke-width=\"0\"></g> " +
+                                "<g id=\"SVGRepo_tracerCarrier\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></g>" +
+                                "<g id=\"SVGRepo_iconCarrier\">" +
+                                    "<path d=\"M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17\" stroke=\"#000000\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path> " +
+                                "</g>" +
+                            "</svg>" +
+                        "</td>" +
+                    `</tr>`;
+    }
+
+    sampleListTbodyNode.innerHTML = newHtml;
+}
+async function deleteNewLineInSampleList(del_id) {
+    let idDocument = document.querySelector("#idDocument").value;
+    hasUnsavedChanges = true;
+    await StatementRecalculationsBusinessDetail.deleteSample(del_id);
+    var sampleResp = await StatementRecalculationsBusinessDetail.getSampleByIdListRegion(idDocument,1);
+    APP.countPageDetail = sampleResp.count;
+    APP.sampleList = sampleResp.data
+    updateDataInStatementRecalculationsTbody();
+}
+function updatePaginationInfo() {
+
+    const itemsOnCurrentPage = currentPage*APP.limit;
+
+    document.getElementById("totalCount").innerText = APP.countPageDetail;
+
+    document.getElementById("pageInfo").innerText = `Страница ${currentPage} из ${totalPages}`;
+
+    if (APP.countPageDetail === 0) {
+        document.getElementById("itemsInfo").innerText = `Нет записей`;
+    } else if (itemsOnCurrentPage != totalPages) {
+        document.getElementById("itemsInfo").innerText = `Показано ${itemsOnCurrentPage} из ${APP.countPageDetail} записей`;
+    } else {
+        document.getElementById("itemsInfo").innerText = `Показано ${itemsOnCurrentPage} из ${APP.countPageDetail} записей (последняя страница)`;
+    }
+}
+
+// Обновление кнопок
+function updateButtonsState() {
+    const prevBtn = document.getElementById("prevPageBtn");
+    const nextBtn = document.getElementById("nextPageBtn");
+
+    if (prevBtn) {
+        prevBtn.disabled = currentPage === 1;
+    }
+
+    if (nextBtn) {
+        nextBtn.disabled = currentPage === totalPages;
+    }
+}
+
+// Обновление элементов управления пагинацией
+function updatePaginationControls() {
+    const paginationNumbers = document.getElementById("paginationNumbers");
+    if (!paginationNumbers) return;
+
+    paginationNumbers.innerHTML = "";
+
+    // Показываем первые 2 страницы
+    if (totalPages <= 5) {
+        for (let i = 1; i <= totalPages; i++) {
+            addPageButton(i);
+        }
+    } else {
+        // Всегда показываем первые 2 страницы
+        addPageButton(1);
+        addPageButton(2);
+
+        // Определяем, нужно ли многоточие
+        if (currentPage > 4) {
+            addDots();  // Многоточие
+        }
+
+        // Показываем текущую страницу и соседние
+        let startPage = Math.max(3, currentPage - 1);
+        let endPage = Math.min(totalPages - 2, currentPage + 1);
+
+        for (let i = startPage; i <= endPage; i++) {
+            if (i > 2 && i < totalPages - 1) {
+                addPageButton(i);
+            }
+        }
+
+        // Определяем, нужно ли многоточие в конце
+        if (currentPage < totalPages - 3) {
+            addDots();
+        }
+
+        // Показываем последние 2 страницы
+        addPageButton(totalPages - 1);
+        addPageButton(totalPages);
+    }
+}
+
+function addPageButton(pageNum) {
+    const button = document.createElement("button");
+    let idDocument = document.querySelector("#idDocument").value;
+    button.innerText = pageNum;
+    button.classList.add("page-number");
+    if (pageNum === currentPage) {
+        button.classList.add("active");
+    }
+    button.addEventListener("click", async () => {
+        currentPage = pageNum;
+
+        var response = await StatementRecalculationsBusinessDetail.getSampleByIdListRegion(idDocument,pageNum);
+
+        APP.countPageDetail = response.count;
+        APP.sampleList = response.data
+        renderTablePage();
+
+        updateButtonsState();
+        updatePaginationInfo();
+
+        updatePaginationControls();
+    });
+    document.getElementById("paginationNumbers").appendChild(button);
+}
+
+function addDots() {
+    const dots = document.createElement("span");
+    dots.innerText = "...";
+    dots.classList.add("pagination-dots");
+    document.getElementById("paginationNumbers").appendChild(dots);
+}
+
+async function nextPage() {
+    let idDocument = document.querySelector("#idDocument").value;
+    if (currentPage < totalPages) {
+        currentPage++;
+        var response = await StatementRecalculationsBusinessDetail.getSampleByIdListRegion(idDocument,currentPage);
+        APP.countPageDetail = response.count;
+        APP.sampleList = response.data
+        renderTablePage();
+
+        updateButtonsState();
+        updatePaginationInfo();
+
+        updatePaginationControls();
+    }
+}
+
+async function prevPage() {
+    let idDocument = document.querySelector("#idDocument").value;
+    if (currentPage > 1) {
+        currentPage--;
+
+        var response = await StatementRecalculationsBusinessDetail.getSampleByIdListRegion(idDocument,currentPage);
+        APP.countPageDetail = response.count;
+        APP.sampleList = response.data
+        renderTablePage();
+
+        updateButtonsState();
+        updatePaginationInfo();
+
+        updatePaginationControls();
+    }
+}
 
 function sortByDate() {
     if(APP.sortOrderTable1 != 1) {
@@ -162,8 +303,6 @@ function sortByDate() {
         document.querySelector("#sortDateForTable1").innerHTML = "&#8595;";
     }
 
-    setSampleList();
-
 }
 
 
@@ -173,12 +312,7 @@ async function setSubjectsRF() {
     let newHtml = "";
 
     for(let i = 0; i < APP.subjects.length; i++) {
-//          if(APP.subjects[i].id == APP.documentData.id_subject_rf) {
-//            subjectStatementNode.value = APP.subjects[i].name_subject_RF;
-//            break;
-//          }
-//        if(APP.subjects[i].id == APP.documentData.id_subject_rf) {
-        if(i == 0) {
+        if(APP.subjects[i].id == APP.documentData.idSubject) {
             newHtml += '<option selected value="' + APP.subjects[i].id + '">' + APP.subjects[i].name_subject_RF + '</option>';
         } else {
             newHtml += '<option value="' + APP.subjects[i].id + '">' + APP.subjects[i].name_subject_RF + '</option>';
@@ -199,8 +333,7 @@ async function setForestly() {
     let forestlyStatementNode = document.querySelector("#forestlyStatement");
 
     for(let i = 0; i < APP.forestly.length; i++) {
-//        if(APP.forestly[i].id == APP.documentData.id_forestly) {
-        if(i == 0) {
+        if(APP.forestly[i].id == APP.documentData.idForestly) {
             newHtml += '<option selected value="' + APP.forestly[i].id + '">' + APP.forestly[i].name_forestly + '</option>';
         } else {
             newHtml += '<option value="' + APP.forestly[i].id + '">' + APP.forestly[i].name_forestly + '</option>';
@@ -225,8 +358,7 @@ async function setDistriotForestlyStatement() {
     let distriotForestlyNode = document.querySelector("#distriotForestlyStatement");
 
     for(let i = 0; i < APP.district_forestly.length; i++) {
-//        if(APP.district_forestly[i].id == APP.documentData.id_district_forestly) {
-        if(i == 0) {
+        if(APP.district_forestly[i].id == APP.documentData.idDistrictForestly) {
             newHtml += '<option selected value="' + APP.district_forestly[i].id + '">' + APP.district_forestly[i].name_district_forestly + '</option>';
         } else {
             newHtml += '<option value="' + APP.district_forestly[i].id + '">' + APP.district_forestly[i].name_district_forestly + '</option>';
@@ -235,49 +367,41 @@ async function setDistriotForestlyStatement() {
 
     distriotForestlyNode.innerHTML = newHtml;
 
-    //await setQuarterStatement();
+}
+async function openAddForm(id) {
+
+    var formAddProba = document.getElementById(id);
+    formAddProba.classList.remove("display-none");
+
+    var body = document.getElementById("body");
+    //body.classList.add("overflowHiddenImportant");
 }
 
-async function setQuarterStatement() {
-    let idDistrictForestly = document.querySelector("#distriotForestlyStatement").value;
-    APP.quarters = [];
+function closeAddForm(id) {
+    var formAddProba = document.getElementById(id);
+    formAddProba.classList.add("display-none");
 
-    if(idDistrictForestly != "" && idDistrictForestly != null && idDistrictForestly != undefined) {
-        APP.quarters = await CommonBusiness.getQuarterByIdDistrictForestly(idDistrictForestly);
-    }
+    var body = document.getElementById("body");
+    //body.classList.remove("overflowHiddenImportant");
 
-    let newHtml = "";
-
-    let quarterStatementNode = document.querySelector("#quarterStatement");
-
-    for(let i = 0; i < APP.quarters.length; i++) {
-        if(APP.quarters[i].id == APP.documentData.id_quarter) {
-            newHtml += '<option selected value="' + APP.quarters[i].id + '">' + APP.quarters[i].quarter_name + '</option>';
-        } else {
-            newHtml += '<option value="' + APP.quarters[i].id + '">' + APP.quarters[i].quarter_name + '</option>';
-        }
-    }
-
-    quarterStatementNode.innerHTML = newHtml;
 }
-
 async function createSample() {
-
+    let id = document.querySelector("#idDocument").value;
+    let width = document.getElementById("nameWidth");
+    let length = document.getElementById("nameLength");
     let data = {
-        date: new Date().toLocaleDateString('en-CA'),
-        sample_area: 0,
-        soil_lot: null,
-        width: 0,
-        lenght: 0,
-        square: 0,
-        id_profile: APP.userData.id,
-        id_list_region: APP.documentData.id,
-        mark_update: 0
+        idListRegion: Number(id),
+        width: Number(width.value),
+        length: Number(length.value),
     }
 
     let result = await StatementRecalculationsBusinessDetail.createSample(data);
-
-    getRecalculatingDetail(result.id, document.querySelector("#idDocument").value);
+    var sampleResp = await StatementRecalculationsBusinessDetail.getSampleByIdListRegion(id,1);
+    APP.countPageDetail = sampleResp.count;
+    APP.sampleList = sampleResp.data
+    updateDataInStatementRecalculationsTbody();
+    closeAddForm("form-add-proba");
+    //getRecalculatingDetail(result.id, document.querySelector("#idDocument").value);
 }
 let hasUnsavedChanges = false;
 let ignoreFields = ['profile_fio','profile_phone','subjectStatement-profile','old_password','new_password','confirm_password'];
@@ -352,7 +476,6 @@ async function saveData() {
     showLoadingModal();
 
     let id = document.querySelector("#idDocument").value;
-    let numberStatementNode = document.querySelector("#numberStatement").value;
     let dateStatementNode = document.querySelector("#dateStatement").value;
     let soilLotStatementNode = document.querySelector("#soilLotStatement").value;
     let sampleRegionStatementNode = document.querySelector("#sampleRegionStatement").value;
@@ -362,29 +485,22 @@ async function saveData() {
 
     var data = {
         date: dateStatementNode,
-        id: id,
-        sample_region: String(Number(String(sampleRegionStatementNode).replace(/,/g, '.')).toFixed(4)),
-        mark_del: APP.documentData.mark_del? 1:0,
-        mark_update: APP.documentData.mark_update? 1:0,
-        number_region: numberStatementNode,
-        name_quarter: quarterStatement == ""? null : quarterStatement,
+        id: Number(id),
+        sampleRegion: Number(sampleRegionStatementNode),
+        nameQuarter: quarterStatement == ""? null : quarterStatement,
         dacha: dachaStatement == ""? null : dachaStatement,
-        id_district_forestly: distriotForestlyStatement,
-        soil_lot: soilLotStatementNode
+        idDistrictForestly: Number(distriotForestlyStatement),
+        soilLot: soilLotStatementNode,
 
     };
 
-    await StatementRecalculationsBusinessDetail.getUpdateSample(id, data);
-
-    for(var i = 0; i < APP.deleteIdSample.length; i++) {
-        await StatementRecalculationsBusinessDetail.deleteSample(APP.deleteIdSample[i]);
-    }
+    await StatementRecalculationsBusinessDetail.getUpdateSample(data);
 
     resetChangesTracker();
 
     setTimeout(function() {
         let id = document.querySelector("#idDocument").value;
-        getStatementRecalculationsDetail(id);
+        getForestCropsRecalculationsDetail(id);
       }, 3000);
 
     hideLoadingModal();

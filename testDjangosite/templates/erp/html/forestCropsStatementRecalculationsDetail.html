@@ -7,16 +7,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Детальные данные перечетной ведомости</title>
-<!--    <link rel="stylesheet" href="{% static 'css/statementRecalculationsDetail.css' %}">-->
     <link rel="stylesheet" href="{% static 'css/forestCropsStatementRecalculationsDetail.css' %}">
+    <link rel="stylesheet" href="{% static 'css/add-form-proba.css' %}">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.0/axios.js"></script>
     <script src="{% static 'js/global.js' %}"></script>
     <script src="{% static 'js/common/commonFunction.js' %}"></script>
     <script src="{% static 'js/common/common_business.js' %}"></script>
-<!--    <script src="{% static 'js/statementRecalculationsDetail/statementRecalculationsDetail_business.js' %}" defer></script>-->
-<!--    <script src="{% static 'js/statementRecalculationsDetail/statementRecalculationsDetail_construct_view.js' %}" defer></script>-->
-        <script src="{% static 'js/forestCropsStatementRecalculationsDetail/forestCropsStatementRecalculationsDetail_business.js' %}" defer></script>
-        <script src="{% static 'js/forestCropsStatementRecalculationsDetail/forestCropsStatementRecalculationsDetail_construct_view.js' %}" defer></script>
+    <script src="{% static 'js/forestCropsStatementRecalculationsDetail/forestCropsStatementRecalculationsDetail_business.js' %}" defer></script>
+    <script src="{% static 'js/forestCropsStatementRecalculationsDetail/forestCropsStatementRecalculationsDetail_construct_view.js' %}" defer></script>
     <script src="{% static 'js/common.js' %}" defer></script>
     {% endblock %}
 </head>
@@ -44,7 +42,7 @@
         </div>
     </header>
 
-    <h1 class="heading">Информация о перечетной ведомости <p style="display: contents;" id="numberStatementInHeader"></p> от <p style="display: contents;" id="dateStatementInHeader"></p></h1>
+    <h1 class="heading">Информация об участке</h1>
 
     <div class="action-panel">
         <div class="butmenuadd filtr" onclick="saveData()">
@@ -119,7 +117,7 @@
     <div class="conpodles2">
         <div class="podlesok1">
             <div class="action-panel" style="padding: 10px 0 16px 0; background: transparent; border-bottom: none;">
-                <div onclick="createSample()" class="butmenuadd" style="background: #177164;">
+                <div onclick="openAddForm('form-add-proba')" class="butmenuadd" style="background: #177164;">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <circle cx="8" cy="8" r="8" fill="white"/>
                         <path d="M7.40002 8.60005V12.2H8.60002V8.60005H12.2V7.40005H8.60002V3.80005H7.40002V7.40005H3.79999V8.60005H7.40002Z" fill="#177164"/>
@@ -145,57 +143,33 @@
                         </tr>
                     </thead>
                     <tbody id="sampleListTbody">
-                        <tr onclick="getForestCropsInformTrialArea()">
-                            <td class="textAlignCenter">01</td>
-                            <td class="textAlignCenter">5</td>
-                            <td class="textAlignCenter">3</td>
-                            <td class="textAlignCenter">15</td>
-                            <td class="textAlignCenter">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17" stroke="#000000" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"></path>
-                                </svg>
-                            </td>
-                        </tr>
-                        <tr onclick="getForestCropsInformTrialArea()">
-                            <td class="textAlignCenter">01</td>
-                            <td class="textAlignCenter">5</td>
-                            <td class="textAlignCenter">3</td>
-                            <td class="textAlignCenter">15</td>
-                            <td class="textAlignCenter">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17" stroke="#000000" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"></path>
-                                </svg>
-                            </td>
-                        </tr>
-                        <tr onclick="getForestCropsInformTrialArea()">
-                            <td class="textAlignCenter">01</td>
-                            <td class="textAlignCenter">5</td>
-                            <td class="textAlignCenter">3</td>
-                            <td class="textAlignCenter">15</td>
-                            <td class="textAlignCenter">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17" stroke="#000000" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"></path>
-                                </svg>
-                            </td>
-                        </tr>
-                        <tr onclick="getForestCropsInformTrialArea()">
-                            <td class="textAlignCenter">01</td>
-                            <td class="textAlignCenter">5</td>
-                            <td class="textAlignCenter">3</td>
-                            <td class="textAlignCenter">15</td>
-                            <td class="textAlignCenter">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17" stroke="#000000" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"></path>
-                                </svg>
-                            </td>
-                        </tr>
+
                     </tbody>
                 </table>
+            </div>
+
+            <div class="pagination-container" id="paginationContainer">
+                <button class="pagination-btn" id="prevPageBtn" disabled>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#666" class="bi bi-chevron-left" viewBox="0 0 16 16">
+                      <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+                    </svg>
+                </button>
+                <div class="pagination-numbers" id="paginationNumbers"></div>
+                <button class="pagination-btn" id="nextPageBtn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#666" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                      <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="pagination-info" id="paginationInfo">
+                <div class="items-info"><span id="pageInfo">Страница </span></div>
+                <div class="items-info"><span id="itemsInfo">Показано  записей</span></div>
+                <div class="items-info"> Всего <span id="totalCount">0</span> элемента(-ов)</div>
             </div>
         </div>
         <div class="podlesok1">
             <div class="action-panel" style="padding: 10px 0 16px 0; background: transparent; border-bottom: none;">
-                <div onclick="createSample()" class="butmenuadd" style="background: #177164;">
+                <div onclick="createSample()" class="butmenuadd" style="background: #177164; display: none">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <circle cx="8" cy="8" r="8" fill="white"/>
                         <path d="M7.40002 8.60005V12.2H8.60002V8.60005H12.2V7.40005H8.60002V3.80005H7.40002V7.40005H3.79999V8.60005H7.40002Z" fill="#177164"/>
@@ -219,57 +193,33 @@
                         </tr>
                     </thead>
                     <tbody id="sampleList">
-                        <tr onclick="getForestCropsInformTrialArea()">
-                            <td class="textAlignCenter">01</td>
-                            <td class="textAlignCenter">5</td>
-                            <td class="textAlignCenter">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17" stroke="#000000" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"></path>
-                                </svg>
-                            </td>
-                        </tr>
-                        <tr onclick="getForestCropsInformTrialArea()">
-                            <td class="textAlignCenter">01</td>
-                            <td class="textAlignCenter">5</td>
-                            <td class="textAlignCenter">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17" stroke="#000000" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"></path>
-                                </svg>
-                            </td>
-                        </tr>
-                        <tr onclick="getForestCropsInformTrialArea()">
-                            <td class="textAlignCenter">01</td>
-                            <td class="textAlignCenter">5</td>
-                            <td class="textAlignCenter">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17" stroke="#000000" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"></path>
-                                </svg>
-                            </td>
-                        </tr>
-                        <tr onclick="getForestCropsInformTrialArea()">
-                            <td class="textAlignCenter">01</td>
-                            <td class="textAlignCenter">5</td>
-                            <td class="textAlignCenter">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17" stroke="#000000" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"></path>
-                                </svg>
-                            </td>
-                        </tr>
-                        <tr onclick="getForestCropsInformTrialArea()">
-                            <td class="textAlignCenter">01</td>
-                            <td class="textAlignCenter">5</td>
-                            <td class="textAlignCenter">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17" stroke="#000000" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"></path>
-                                </svg>
-                            </td>
-                        </tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
-
+    <div id="form-add-proba" class="addFormfon display-none">
+        <div class="modal-small">
+            <div class="modal-header">
+                <h3>Добавление пробной площади</h3>
+                <div class="modal-close" onclick="closeAddForm('form-add-proba')">×</div>
+            </div>
+            <div class="modal-body">
+                <div class="modal-row">
+                    <label for="nameLength">Длинна</label>
+                    <input type="number" id="nameLength" class="modal-input">
+                </div>
+                <div class="modal-row">
+                    <label for="nameWidth">Ширина</label>
+                    <input type="number" id="nameWidth" class="modal-input">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-cancel" onclick="closeAddForm('form-add-proba')">Отмена</button>
+                <button class="modal-btn modal-btn-add" id="buttonAddProba">Добавить</button>
+            </div>
+        </div>
+    </div>
     <div id="m1" class="modal-all">
         <div id="m1i" class="modal">
             <p class="modal-text">Сохранение прошло успешно</p>

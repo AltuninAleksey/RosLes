@@ -56,7 +56,8 @@ urlpatterns = [
     path('regestration', views.getRegestration),
     path('documents/forestCropsStatementRecalculations', views.getForestCrops),
     path('documents/forestCropsStatementRecalculationsDetail', views.getForestCropsRecalculationsDetail),
-    path('documents/forestCropsInformTrialArea', views.getForestCropsInformTrialArea)
+    path('documents/forestCropsInformTrialArea', views.getForestCropsInformTrialArea),
+    path('documents/newForestCropsStatementRecalculationsDetail', views.getNewForestCropsStatementRecalculationsDetail),
 
 ]
 
