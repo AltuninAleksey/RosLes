@@ -3,7 +3,8 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    /*font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;*/
+    font-family: "Times New Roman",Tahoma, Geneva, Times,  serif;
 }
 
 body {
@@ -14,7 +15,7 @@ body {
     height: 28px;
     margin: 23px auto;
 
-    font-family: 'Roboto';
+   /* font-family: 'Roboto';*/
     font-style: normal;
     font-weight: 500;
     font-size: 24px;
@@ -278,7 +279,6 @@ body {
     overflow-y: auto;
     position: relative;
     max-height: calc(100vh - 340px);
-    /*border-top: 1px solid #e0e0e0;*/
     min-width: 100%;
 }
 
@@ -306,7 +306,7 @@ body {
 .sticky-header-table th {
     background: #177164;
     color: white;
-    padding: 12px 16px;
+    padding: 12px 8px;
     font-size: 12px;
     font-weight: 600;
     text-transform: uppercase;
@@ -399,7 +399,7 @@ body {
     word-wrap: break-word; }
 
 .sticky-header-table th:nth-child(5),
-.sticky-header-table td:nth-child(5) { width: 4%; white-space: normal;
+.sticky-header-table td:nth-child(5) { width: 40px; white-space: normal;
     word-wrap: break-word; }
 
 /* Sorting */
@@ -493,7 +493,7 @@ body {
 .rem, .exit {
     flex: 1;
     padding: 12px 24px;
-    font-size: 13px;
+    font-size: 11px;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -715,7 +715,7 @@ body {
 }
 
 .items-info {
-    font-family: monospace;
+    /*font-family: monospace;*/
 }
 
 .mandatory_warning {
@@ -756,7 +756,7 @@ body {
     }
 
     .compact-table th:nth-child(3),
-    .compact-table td:nth-child(3) { width: 4%; }
+    .compact-table td:nth-child(3) { width: 40px; }
 
     .sticky-header-table {
         width: 100%;
@@ -766,6 +766,29 @@ body {
         table-layout: fixed;
     }
 @media (max-width: 1200px) {
+    .conpodles2 {
+        flex-direction: column;
+        gap: 16px;
+        padding: 0 16px;
+    }
+
+    .podlesok1 {
+        width: 100%;
+        min-width: auto;
+        flex: none;
+        margin-bottom: 0;
+    }
+
+    .pagination-container {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .pagination-info {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+    }
     .hiv {
         flex-direction: column;
         gap: 16px;
@@ -807,15 +830,16 @@ body {
     .sticky-header-table th {
         border-right: 1px solid #177164 !important;
     }
-
+/*
     .sticky-header-table th:nth-last-child(2),
     .sticky-header-table th:last-child {
         border-right: 1px solid #134a3a !important;
     }
+*/
     .sticky-header-table th:nth-child(5),
     .sticky-header-table td:nth-child(5) { width: 10%; }
     .compact-table th:nth-child(3),
-    .compact-table td:nth-child(3) { width: 12%; }
+    .compact-table td:nth-child(3) { width: 14%; }
     .modal-all-profile {
         align-items: center;
         justify-content: center;
@@ -827,7 +851,32 @@ body {
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
+/*
+    .conpodles2 {
+        flex-direction: column;
+        gap: 16px;
+        padding: 0 16px;
+    }
+
+    .podlesok1 {
+        width: 100%;
+        min-width: auto;
+        flex: none;
+        margin-bottom: 0;
+    }
+
+    .pagination-container {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .pagination-info {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+    }
+    */
     .action-panel,
     .form,
     .content {
@@ -862,7 +911,7 @@ body {
 
     .sticky-header-table th,
     .sticky-header-table td {
-        padding: 10px 12px;
+        padding: 10px 9px;
         font-size: 11px;
     }
     .sticky-header-table th:nth-child(5),
@@ -877,16 +926,17 @@ body {
         margin-top: 10px;
     }
     .heading {
-        width: 414px;
+        width: 412px;
         height: 28px;
         margin: 20px auto;
-        font-family: 'Roboto';
+        /*font-family: 'Roboto';*/
         font-style: normal;
         font-weight: 500;
         font-size: 19px;
         line-height: 10px;
         white-space: normal;
         word-wrap: break-word;
+        text-align: center;
     }
 }
 

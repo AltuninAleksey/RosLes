@@ -74,8 +74,8 @@ function getForestCropsRecalculationsDetail(id) {
     window.location.href = urlGlobal + "/erp/documents/forestCropsStatementRecalculationsDetail?id=" + id;
 }
 
-function getForestCropsInformTrialArea() {
-    window.location.href = urlGlobal + "/erp/documents/forestCropsInformTrialArea";
+function getForestCropsInformTrialArea(id) {
+    window.location.href = urlGlobal + "/erp/documents/forestCropsInformTrialArea?id=" + id;
 }
 
 function getNewForestCropsStatementRecalculationsDetail() {

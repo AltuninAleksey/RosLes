@@ -122,7 +122,7 @@ function renderTablePage() {
     for(let i = 0; i < APP.sampleList.length; i++) {
 
 
-        let strGetRecalculatingDetail = "getForestCropsInformTrialArea()"
+        let strGetRecalculatingDetail = "getForestCropsInformTrialArea(" + APP.sampleList[i].id + ")"
         newHtml += `<tr class="cursorPointer" onClick=${strGetRecalculatingDetail}>
                         <td class="textAlignCenter td8">${APP.sampleList[i].number}</td>
                         <td class="textAlignCenter td9">${APP.sampleList[i].length}</td>
@@ -491,7 +491,6 @@ async function saveData() {
         dacha: dachaStatement == ""? null : dachaStatement,
         idDistrictForestly: Number(distriotForestlyStatement),
         soilLot: soilLotStatementNode,
-
     };
 
     await StatementRecalculationsBusinessDetail.getUpdateSample(data);

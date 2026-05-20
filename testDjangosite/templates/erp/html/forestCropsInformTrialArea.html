@@ -8,12 +8,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Детальные данные перечетной ведомости</title>
     <link rel="stylesheet" href="{% static 'css/forestCropsInformTrialArea.css' %}">
+    <link rel="stylesheet" href="{% static 'css/add-form-proba.css' %}">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.0/axios.js"></script>
     <script src="{% static 'js/global.js' %}"></script>
     <script src="{% static 'js/common/commonFunction.js' %}"></script>
     <script src="{% static 'js/common/common_business.js' %}"></script>
-    <script src="{% static 'js/forestCropsStatementRecalculationsDetail/forestCropsStatementRecalculationsDetail_business.js' %}" defer></script>
-    <script src="{% static 'js/forestCropsStatementRecalculationsDetail/forestCropsStatementRecalculationsDetail_construct_view.js' %}" defer></script>
+    <script src="{% static 'js/forestCropsInformTrialArea/forestCropsInformTrialArea_business.js' %}" defer></script>
+    <script src="{% static 'js/forestCropsInformTrialArea/forestCropsInformTrialArea_construct_view_tableNull.js' %}" defer></script>
+    <script src="{% static 'js/forestCropsInformTrialArea/forestCropsInformTrialArea_construct_view_tableOne.js' %}" defer></script>
+    <script src="{% static 'js/forestCropsInformTrialArea/forestCropsInformTrialArea_construct_view_tableTwo.js' %}" defer></script>
+    <script src="{% static 'js/forestCropsInformTrialArea/forestCropsInformTrialArea_construct_view.js' %}" defer></script>
     <script src="{% static 'js/common.js' %}" defer></script>
     {% endblock %}
 </head>
@@ -110,13 +114,25 @@
                 <p>Площадь участка:</p>
                 <input class="mandatory" id="sampleRegionStatement" type="text">
             </div>
+            <div>
+                <p>Длинна пробной площади:</p>
+                <input id="lengthSample" type="text">
+            </div>
+            <div>
+                <p>Ширина пробной площади:</p>
+                <input id="widthSample" type="text">
+            </div>
+            <div>
+                <p>Площадь пробной площади:</p>
+                <input readonly id="squareSample" type="text">
+            </div>
         </div>
     </form>
 
     <div class="conpodles2">
         <div class="podlesok1">
             <div class="action-panel" style="padding: 10px 0 10px 0; background: transparent; border-bottom: none;">
-                <div onclick="createSample()" class="butmenuadd" style="background: #177164;">
+                <div onclick="openAddForm('form-add-proba')" class="butmenuadd" style="background: #177164;">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <circle cx="8" cy="8" r="8" fill="white"/>
                         <path d="M7.40002 8.60005V12.2H8.60002V8.60005H12.2V7.40005H8.60002V3.80005H7.40002V7.40005H3.79999V8.60005H7.40002Z" fill="#177164"/>
@@ -129,7 +145,7 @@
             </div>
 
             <div class="table-container" style="margin-bottom: 10px">
-                <h4 style="margin: 0px 0px 10px 0px; text-align: center;font-family: 'Roboto';font-size: 18px;font-style: normal;font-weight: 500;">Лесные культуры</h4>
+                <h4 style="margin: 0px 0px 10px 0px; text-align: center;font-size: 18px;font-style: normal;font-weight: 500;">Лесные культуры</h4>
                 <table class="sticky-header-table  compact-table">
                     <thead>
                         <tr>
@@ -141,69 +157,49 @@
                                     <path d="M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
                             </th>
+                            <th class="textAlignCenter">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                                  <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
+                                </svg>
+                            </th>
                         </tr>
                     </thead>
                     <tbody id="sampleListTbody">
-                        <tr>
-                            <td class="textAlignCenter">01</td>
-                            <td class="textAlignCenter">5</td>
-                            <td class="textAlignCenter">15</td>
-                            <td class="textAlignCenter">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17" stroke="#000000" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"></path>
-                                </svg>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="textAlignCenter">5</td>
-                            <td class="textAlignCenter">3</td>
-                            <td class="textAlignCenter">15</td>
-                            <td class="textAlignCenter">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17" stroke="#000000" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"></path>
-                                </svg>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="textAlignCenter">01</td>
-                            <td class="textAlignCenter">5</td>
-                            <td class="textAlignCenter">15</td>
-                            <td class="textAlignCenter">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17" stroke="#000000" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"></path>
-                                </svg>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="textAlignCenter">01</td>
-                            <td class="textAlignCenter">3</td>
-                            <td class="textAlignCenter">15</td>
-                            <td class="textAlignCenter">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17" stroke="#000000" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"></path>
-                                </svg>
-                            </td>
-                        </tr>
                     </tbody>
                 </table>
+            </div>
+            <div class="pagination-container" id="paginationForestContainer">
+                <button class="pagination-btn" id="prevForestPageBtn" disabled>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#666" class="bi bi-chevron-left" viewBox="0 0 16 16">
+                      <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+                    </svg>
+                </button>
+                <div class="pagination-numbers" id="paginationForestNumbers"></div>
+                <button class="pagination-btn" id="nextForestPageBtn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#666" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                      <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="pagination-info" id="paginationForestInfo">
+                <div class="items-info"><span id="pageForestInfo">Страница </span></div>
+                <div class="items-info"><span id="itemsForestInfo">Показано  записей</span></div>
+                <div class="items-info"> Всего <span id="totalForestCount">0</span> элемента(-ов)</div>
             </div>
         </div>
         <div class="podlesok1">
             <div class="action-panel" style="padding: 10px 0 10px 0; background: transparent; border-bottom: none;">
-                <div onclick="createSample()" class="butmenuadd" style="background: #177164;">
+                <div onclick="openAddForm('form-add-diameter')" class="butmenuadd" style="background: #177164;">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <circle cx="8" cy="8" r="8" fill="white"/>
                         <path d="M7.40002 8.60005V12.2H8.60002V8.60005H12.2V7.40005H8.60002V3.80005H7.40002V7.40005H3.79999V8.60005H7.40002Z" fill="#177164"/>
                     </svg>
                     <p class="p" style="color: white;">Добавить</p>
                 </div>
-                <div>
-
-                </div>
             </div>
 
             <div class="table-container" style="margin-bottom: 10px">
-                <h4 style="margin: 0px 0px 10px 0px; text-align: center;font-family: 'Roboto';font-size: 18px;font-style: normal;font-weight: 500;">Диаметр корневой шейки и высота</h4>
+                <h4 style="margin: 0px 0px 10px 0px; text-align: center;font-size: 18px;font-style: normal;font-weight: 500;">Диаметр корневой шейки и высота</h4>
                 <table class="sticky-header-table compact-table">
                     <thead>
                         <tr>
@@ -215,61 +211,34 @@
                                     <path d="M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
                             </th>
+                            <th class="textAlignCenter">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                                  <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
+                                </svg>
+                            </th>
                         </tr>
                     </thead>
                     <tbody id="sampleList">
-                        <tr>
-                            <td class="textAlignCenter">01</td>
-                            <td class="textAlignCenter">5</td>
-                            <td class="textAlignCenter">5</td>
-                            <td class="textAlignCenter">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17" stroke="#000000" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"></path>
-                                </svg>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="textAlignCenter">01</td>
-                            <td class="textAlignCenter">5</td>
-                            <td class="textAlignCenter">5</td>
-                            <td class="textAlignCenter">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17" stroke="#000000" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"></path>
-                                </svg>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="textAlignCenter">01</td>
-                            <td class="textAlignCenter">5</td>
-                            <td class="textAlignCenter">5</td>
-                            <td class="textAlignCenter">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17" stroke="#000000" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"></path>
-                                </svg>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="textAlignCenter">01</td>
-                            <td class="textAlignCenter">5</td>
-                            <td class="textAlignCenter">5</td>
-                            <td class="textAlignCenter">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17" stroke="#000000" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"></path>
-                                </svg>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="textAlignCenter">01</td>
-                            <td class="textAlignCenter">5</td>
-                            <td class="textAlignCenter">5</td>
-                            <td class="textAlignCenter">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17" stroke="#000000" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"></path>
-                                </svg>
-                            </td>
-                        </tr>
                     </tbody>
                 </table>
+            </div>
+            <div class="pagination-container" id="paginationDiameterContainer">
+                <button class="pagination-btn" id="prevDiameterPageBtn" disabled>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#666" class="bi bi-chevron-left" viewBox="0 0 16 16">
+                      <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+                    </svg>
+                </button>
+                <div class="pagination-numbers" id="paginationDiameterNumbers"></div>
+                <button class="pagination-btn" id="nextDiameterPageBtn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#666" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                      <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="pagination-info" id="paginationDiameterInfo">
+                <div class="items-info"><span id="pageDiameterInfo">Страница </span></div>
+                <div class="items-info"><span id="itemsDiameterInfo">Показано  записей</span></div>
+                <div class="items-info"> Всего <span id="totalDiameterCount">0</span> элемента(-ов)</div>
             </div>
         </div>
     </div>
@@ -277,20 +246,17 @@
     <div class="conpodles2">
         <div class="podlesok1">
             <div class="action-panel" style="padding: 10px 0 10px 0; background: transparent; border-bottom: none;">
-                <div onclick="createSample()" class="butmenuadd" style="background: #177164;">
+                <div onclick="openAddForm('form-add-Podrost')" class="butmenuadd" style="background: #177164;">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <circle cx="8" cy="8" r="8" fill="white"/>
                         <path d="M7.40002 8.60005V12.2H8.60002V8.60005H12.2V7.40005H8.60002V3.80005H7.40002V7.40005H3.79999V8.60005H7.40002Z" fill="#177164"/>
                     </svg>
                     <p class="p" style="color: white;">Добавить</p>
                 </div>
-                <div>
-
-                </div>
             </div>
 
             <div class="table-container" style="margin-bottom: 10px">
-                 <h4 style="margin: 0px 0px 10px 0px; text-align: center;font-family: 'Roboto';font-size: 18px;font-style: normal;font-weight: 500;">Подрост и молодняк основных лесных древесных пород</h4>
+                 <h4 style="margin: 0px 0px 10px 0px; text-align: center;font-size: 18px;font-style: normal;font-weight: 500;">Подрост и молодняк основных лесных древесных пород</h4>
                 <table class="sticky-header-table">
                     <thead>
                     <tr>
@@ -303,60 +269,124 @@
                                 <path d="M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
                         </th>
+                        <th class="textAlignCenter">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                                <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
+                            </svg>
+                        </th>
                     </tr>
                     </thead>
                     <tbody id="sampleListMolodnyk">
-                    <tr>
-                                <td class="textAlignCenter">Сосна</td>
-                                <td class="textAlignCenter">5</td>
-                                <td class="textAlignCenter">15</td>
-                                <td class="textAlignCenter">5</td>
-                                <td class="textAlignCenter">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17" stroke="#000000" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"></path>
-                                    </svg>
-                                </td>
-                            </tr>
-                    <tr>
-                                <td class="textAlignCenter">Осина</td>
-                                <td class="textAlignCenter">3</td>
-                                <td class="textAlignCenter">15</td>
-                                <td class="textAlignCenter">5</td>
-                                <td class="textAlignCenter">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17" stroke="#000000" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"></path>
-                                    </svg>
-                                </td>
-                            </tr>
-                    <tr>
-                                <td class="textAlignCenter">Береза</td>
-                                <td class="textAlignCenter">5</td>
-                                <td class="textAlignCenter">15</td>
-                                <td class="textAlignCenter">5</td>
-                                <td class="textAlignCenter">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17" stroke="#000000" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"></path>
-                                    </svg>
-                                </td>
-                            </tr>
-                    <tr>
-                                <td class="textAlignCenter">Клен</td>
-                                <td class="textAlignCenter">3</td>
-                                <td class="textAlignCenter">15</td>
-                                <td class="textAlignCenter">5</td>
-                                <td class="textAlignCenter">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17" stroke="#000000" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"></path>
-                                    </svg>
-                                </td>
-                            </tr>
+
                     </tbody>
                 </table>
+            </div>
+            <div class="pagination-container" id="paginationPodrostContainer">
+                <button class="pagination-btn" id="prevPodrostPageBtn" disabled>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#666" class="bi bi-chevron-left" viewBox="0 0 16 16">
+                      <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+                    </svg>
+                </button>
+                <div class="pagination-numbers" id="paginationPodrostNumbers"></div>
+                <button class="pagination-btn" id="nextPodrostPageBtn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#666" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                      <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="pagination-info" id="paginationPodrostInfo">
+                <div class="items-info"><span id="pagePodrostInfo">Страница </span></div>
+                <div class="items-info"><span id="itemsPodrostInfo">Показано  записей</span></div>
+                <div class="items-info"> Всего <span id="totalPodrostCount">0</span> элемента(-ов)</div>
             </div>
         </div>
     </div>
 
-
+    <div id="form-add-proba" class="addFormfon display-none">
+        <div class="modal-small">
+            <div class="modal-header">
+                <h3>Добавление лесной культуры</h3>
+                <div class="modal-close" onclick="closeAddForm('form-add-proba')">×</div>
+            </div>
+            <div class="modal-body">
+                <div class="modal-row">
+                    <label for="breed">Порода</label>
+                    <select id="breed" class="modal-input">
+                    </select>
+                </div>
+                <div class="modal-row">
+                    <label for="countDead">Погибшие, шт</label>
+                    <input type="number" id="countDead" class="modal-input">
+                </div>
+                <div class="modal-row">
+                    <label for="countLiving">Живые, шт</label>
+                    <input type="number" id="countLiving" class="modal-input">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-cancel" onclick="closeAddForm('form-add-proba')">Отмена</button>
+                <button class="modal-btn modal-btn-add" id="buttonAddProba">Добавить</button>
+            </div>
+        </div>
+    </div>
+    <div id="form-add-diameter" class="addFormfon display-none">
+        <div class="modal-small">
+            <div class="modal-header">
+                <h3>Добавление диаметра корневой шейки и высоты</h3>
+                <div class="modal-close" onclick="closeAddForm('form-add-diameter')">×</div>
+            </div>
+            <div class="modal-body">
+                <div class="modal-row">
+                    <label for="breedDiameter">Порода</label>
+                    <select id="breedDiameter" class="modal-input">
+                    </select>
+                </div>
+                <div class="modal-row">
+                    <label for="diameter">Диаметр, мм</label>
+                    <input type="number" id="diameter" class="modal-input" step="0.1" min="0">
+                </div>
+                <div class="modal-row">
+                    <label for="height">Высота, см</label>
+                    <input type="number" id="height" class="modal-input" step="0.1" min="0">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-cancel" onclick="closeAddForm('form-add-diameter')">Отмена</button>
+                <button class="modal-btn modal-btn-add" id="buttonAddDiameter">Добавить</button>
+            </div>
+        </div>
+    </div>
+    <div id="form-add-Podrost" class="addFormfon display-none">
+        <div class="modal-small">
+            <div class="modal-header">
+                <h3>Добавление подроста и молодняка</h3>
+                <div class="modal-close" onclick="closeAddForm('form-add-Podrost')">×</div>
+            </div>
+            <div class="modal-body">
+                <div class="modal-row">
+                    <label for="breedPodrost">Порода</label>
+                    <select id="breedPodrost" class="modal-input">
+                    </select>
+                </div>
+                <div class="modal-row">
+                    <label for="to0_5">До 0.5, шт</label>
+                    <input type="number" id="to0_5" class="modal-input" step="0.1" min="0">
+                </div>
+                <div class="modal-row">
+                    <label for="from0_6To1_5">От 0.6 до 1.5, шт</label>
+                    <input type="number" id="from0_6To1_5" class="modal-input" step="0.1" min="0">
+                </div>
+                <div class="modal-row">
+                    <label for="from1_5">Более 1.5, шт</label>
+                    <input type="number" id="from1_5" class="modal-input" step="0.1" min="0">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-cancel" onclick="closeAddForm('form-add-Podrost')">Отмена</button>
+                <button class="modal-btn modal-btn-add" id="buttonAddPodrost">Добавить</button>
+            </div>
+        </div>
+    </div>
     <div id="m1" class="modal-all">
         <div id="m1i" class="modal">
             <p class="modal-text">Сохранение прошло успешно</p>

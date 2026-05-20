@@ -3,7 +3,8 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    /*font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;*/
+    font-family: "Times New Roman",Tahoma, Geneva, Times,  serif;
 }
 
 body {
@@ -14,7 +15,7 @@ body {
     height: 28px;
     margin: 23px auto;
 
-    font-family: 'Roboto';
+   /* font-family: 'Roboto';*/
     font-style: normal;
     font-weight: 500;
     font-size: 24px;
@@ -397,7 +398,11 @@ body {
     word-wrap: break-word; }
 
 .sticky-header-table th:nth-child(5),
-.sticky-header-table td:nth-child(5) { width: 5%; white-space: normal;
+.sticky-header-table td:nth-child(5) { width: 50px; white-space: normal;
+    word-wrap: break-word; }
+
+.sticky-header-table th:nth-child(6),
+.sticky-header-table td:nth-child(6) { width: 50px; white-space: normal;
     word-wrap: break-word; }
 
 /* Sorting */
@@ -491,7 +496,7 @@ body {
 .rem, .exit {
     flex: 1;
     padding: 12px 24px;
-    font-size: 13px;
+    font-size: 11px;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -642,7 +647,82 @@ body {
 ::-ms-input-placeholder {
     color: #999999;
 }
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+    padding: 10px;
+}
 
+.pagination-btn {
+    padding: 8px 16px;
+    background-color: white;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.pagination-btn:hover:not(:disabled) {
+    background-color: #e9ecef;
+}
+
+.pagination-btn:disabled {
+    background-color: white;
+    color: #666;
+    cursor: not-allowed;
+}
+
+.pagination-numbers {
+    display: flex;
+    gap: 5px;
+}
+
+.page-number {
+    padding: 8px 12px;
+    border: 1px solid #dee2e6;
+    background-color: white;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.3s;
+}
+
+.page-number:hover:not(.active) {
+    background-color: #e9ecef;
+}
+
+.page-number.active {
+    background-color: #177164;
+    color: white;
+    border-color: #177164;
+}
+
+.pagination-info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    font-size: 14px;
+    color: #666;
+    flex-wrap: wrap;
+    gap: 40px;
+}
+
+.page-info {
+    font-weight: bold;
+    color: #007bff;
+}
+
+.items-info {
+   /* font-family: monospace;*/
+}
+.highlighted {
+  background-color: #FF9999 !important;
+  transition: background-color 0.3s;
+}
 .mandatory_warning {
     border: 3px solid red !important;
 }
@@ -688,7 +768,10 @@ body {
     }
 
     .compact-table th:nth-child(4),
-    .compact-table td:nth-child(4) { width: 5%; }
+    .compact-table td:nth-child(4) { width: 50px; }
+
+    .compact-table th:nth-child(5),
+    .compact-table td:nth-child(5) { width: 50px; }
 
     .sticky-header-table {
         width: 100%;
@@ -698,6 +781,29 @@ body {
         table-layout: fixed;
     }
 @media (max-width: 1200px) {
+    .conpodles2 {
+        flex-direction: column;
+        gap: 16px;
+        padding: 0 16px;
+    }
+
+    .podlesok1 {
+        width: 100%;
+        min-width: auto;
+        flex: none;
+        margin-bottom: 0;
+    }
+
+    .pagination-container {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .pagination-info {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+    }
     .hiv {
         flex-direction: column;
         gap: 16px;
@@ -740,10 +846,11 @@ body {
         border-right: 1px solid #177164 !important;
     }
 
-    .sticky-header-table th:nth-last-child(2),
+/*    .sticky-header-table th:nth-last-child(2),
     .sticky-header-table th:last-child {
         border-right: 1px solid #134a3a !important;
     }
+*/
     .sticky-header-table th:nth-child(5),
     .sticky-header-table td:nth-child(5) { width: 10%; }
     .compact-table th:nth-child(4),
@@ -797,10 +904,12 @@ body {
         padding: 10px 3px;
         font-size: 11px;
     }
+    /*
     .sticky-header-table th:nth-child(5),
     .sticky-header-table td:nth-child(5) { width: 11%; }
     .compact-table th:nth-child(4),
     .compact-table td:nth-child(4) { width: 12%; }
+    */
     .modal-all-profile {
         align-items: center;
         justify-content: center;
@@ -814,7 +923,7 @@ body {
         width: 250px;
         height: 28px;
         margin: 20px auto;
-        font-family: 'Roboto';
+        /*font-family: 'Roboto';*/
         font-style: normal;
         font-weight: 500;
         font-size: 19px;
