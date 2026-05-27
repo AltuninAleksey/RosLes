@@ -68,24 +68,71 @@ async function setDetailDataIdPage() {
     let widthSampleNode = document.querySelector("#widthSample");
     let squareSampleNode = document.querySelector("#squareSample");
 
-    dateStatementNode.value = APP.documentData.listRegion.date;
+    let subjectStatementNode = document.querySelector("#subjectStatement");
+    let forestlyStatementNode = document.querySelector("#forestlyStatement");
+    let distriotForestlyNode = document.querySelector("#distriotForestlyStatement");
+
+//    dateStatementNode.value = "Дата обследования: " + APP.documentData.listRegion.date;
+//    dachaStatementNode.value = "Урочище: " + APP.documentData.listRegion.dacha;
+//
+//    soilLotStatementNode.value = "Выдел: " + APP.documentData.listRegion.soilLot;
+//    sampleRegionStatementNode.value = "Площадь участка: " + APP.documentData.listRegion.sampleRegion;
+//    quarterStatementNode.value = "Квартал: " + APP.documentData.listRegion.nameQuarter;
+    dateStatementNode.value =  APP.documentData.listRegion.date;
     dachaStatementNode.value = APP.documentData.listRegion.dacha;
 
-    soilLotStatementNode.value = APP.documentData.listRegion.soilLot;
-    sampleRegionStatementNode.value = APP.documentData.listRegion.sampleRegion;
+    soilLotStatementNode.value =  APP.documentData.listRegion.soilLot;
+    sampleRegionStatementNode.value =  APP.documentData.listRegion.sampleRegion;
     quarterStatementNode.value = APP.documentData.listRegion.nameQuarter;
 
-    lengthSampleNode.value = APP.documentData.sample.length;
-    widthSampleNode.value = APP.documentData.sample.width;
-    squareSampleNode.value = APP.documentData.sample.square;
+    for(let i = 0; i < APP.subjects.length; i++) {
+        if(APP.subjects[i].id == APP.documentData.listRegion.idSubject) {
+            //subjectStatementNode.value = "Субьект РФ: " + APP.subjects[i].name_subject_RF;
+            subjectStatementNode.value = APP.subjects[i].name_subject_RF;
+        }
+    }
 
-    await setSubjectsRF();
+    APP.forestly = await CommonBusiness.getForestlyByIdSubjectrf(APP.documentData.listRegion.idSubject);
+
+    for(let i = 0; i < APP.forestly.length; i++) {
+        if(APP.forestly[i].id == APP.documentData.listRegion.idForestly) {
+           // forestlyStatementNode.value = "Лесничество: " + APP.forestly[i].name_forestly;
+            forestlyStatementNode.value = APP.forestly[i].name_forestly;
+        }
+    }
+
+    APP.district_forestly = await CommonBusiness.getDistrictForestlyByIdForestly(APP.documentData.listRegion.idForestly);
+
+    for(let i = 0; i < APP.district_forestly.length; i++) {
+        if(APP.district_forestly[i].id == APP.documentData.listRegion.idDistrictForestly) {
+           // distriotForestlyNode.value = "Участковое лесничество: " + APP.district_forestly[i].name_district_forestly;
+           distriotForestlyNode.value = APP.district_forestly[i].name_district_forestly;
+        }
+    }
+
+    lengthSampleNode.value = Number(APP.documentData.sample.length).toFixed(2);
+    widthSampleNode.value = Number(APP.documentData.sample.width).toFixed(2);
+    squareSampleNode.value = Number(APP.documentData.sample.square).toFixed(2);
 
     updateDataInNullTable();
     updateDataInOneTable();
     updateDataInTwoTable();
 }
 
+
+const field1 = document.getElementById('lengthSample');
+const field2 = document.getElementById('widthSample');
+
+
+function formatToTwoDecimals(input) {
+  const value = parseFloat(input.value);
+  if (!isNaN(value)) {
+    input.value = value.toFixed(2);
+  }
+}
+
+field1.addEventListener('blur', () => formatToTwoDecimals(field1));
+field2.addEventListener('blur', () => formatToTwoDecimals(field2));
 async function setEvent() {
 
     document
@@ -140,69 +187,6 @@ function sortByDate() {
 
 }
 
-
-async function setSubjectsRF() {
-    let subjectStatementNode = document.querySelector("#subjectStatement");
-
-    let newHtml = "";
-
-    for(let i = 0; i < APP.subjects.length; i++) {
-        if(APP.subjects[i].id == APP.documentData.listRegion.idSubject) {
-            newHtml += '<option selected value="' + APP.subjects[i].id + '">' + APP.subjects[i].name_subject_RF + '</option>';
-        } else {
-            newHtml += '<option value="' + APP.subjects[i].id + '">' + APP.subjects[i].name_subject_RF + '</option>';
-        }
-    }
-
-    subjectStatementNode.innerHTML = newHtml;
-
-    await setForestly();
-}
-
-async function setForestly() {
-    let idSubject = document.querySelector("#subjectStatement").value;
-    APP.forestly = await CommonBusiness.getForestlyByIdSubjectrf(idSubject);
-
-    let newHtml = "";
-
-    let forestlyStatementNode = document.querySelector("#forestlyStatement");
-
-    for(let i = 0; i < APP.forestly.length; i++) {
-        if(APP.forestly[i].id == APP.documentData.listRegion.idForestly) {
-            newHtml += '<option selected value="' + APP.forestly[i].id + '">' + APP.forestly[i].name_forestly + '</option>';
-        } else {
-            newHtml += '<option value="' + APP.forestly[i].id + '">' + APP.forestly[i].name_forestly + '</option>';
-        }
-    }
-
-    forestlyStatementNode.innerHTML = newHtml;
-
-    await setDistriotForestlyStatement();
-}
-
-async function setDistriotForestlyStatement() {
-    let idForestly = document.querySelector("#forestlyStatement").value;
-    APP.district_forestly = [];
-
-    if(idForestly != "" && idForestly != null && idForestly != undefined) {
-        APP.district_forestly = await CommonBusiness.getDistrictForestlyByIdForestly(idForestly);
-    }
-
-    let newHtml = "";
-
-    let distriotForestlyNode = document.querySelector("#distriotForestlyStatement");
-
-    for(let i = 0; i < APP.district_forestly.length; i++) {
-        if(APP.district_forestly[i].id == APP.documentData.listRegion.idDistrictForestly) {
-            newHtml += '<option selected value="' + APP.district_forestly[i].id + '">' + APP.district_forestly[i].name_district_forestly + '</option>';
-        } else {
-            newHtml += '<option value="' + APP.district_forestly[i].id + '">' + APP.district_forestly[i].name_district_forestly + '</option>';
-        }
-    }
-
-    distriotForestlyNode.innerHTML = newHtml;
-
-}
 async function openAddForm(id) {
 
     var formAddProba = document.getElementById(id);
@@ -331,32 +315,11 @@ async function saveData() {
 
     let updSample = {
         id: Number(id),
-        width: Number(width.value),
-        length: Number(length.value),
+        width: Number(width.value).toFixed(2),
+        length: Number(length.value).toFixed(2),
     }
 
     await forestCropsInformTrialArea.getUpdateSample(updSample);
-
-    if(APP.deleteNullTable.length > 0) {
-         var nullDell = {
-            values : APP.deleteNullTable
-        };
-        await forestCropsInformTrialArea.deleteSample(nullDell);
-    }
-
-    if(APP.deleteOneTable.length > 0) {
-         var oneDell = {
-            values : APP.deleteOneTable
-        };
-        await forestCropsInformTrialArea.deleteSampleOne(oneDell);
-    }
-
-    if(APP.deleteTwoTable.length > 0) {
-         var twoDell = {
-            values : APP.deleteTwoTable
-        };
-        await forestCropsInformTrialArea.deleteSampleTwo(twoDell);
-    }
 
     if(APP.dateUpdate.length > 0) {
         var nullUpd = {
@@ -385,10 +348,6 @@ async function saveData() {
     APP.dateUpdate = [];
     APP.dateUpdateOne = [];
     APP.dateUpdateTwo = [];
-
-    APP.deleteNullTable = [];
-    APP.deleteOneTable = [];
-    APP.deleteTwoTable = [];
 
     APP.nullTableList = [];
     APP.oneTableList = [];

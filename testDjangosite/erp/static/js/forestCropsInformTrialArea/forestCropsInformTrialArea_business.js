@@ -1,6 +1,6 @@
 APP = {
     idView: "forestCropsInformTrialArea",
-    limit: 1,
+    limit: 2,
 }
 
 function forestCropsInformTrialArea() {}

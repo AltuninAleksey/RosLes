@@ -385,14 +385,28 @@ function closeAddForm(id) {
     //body.classList.remove("overflowHiddenImportant");
 
 }
+const nameLength = document.getElementById('nameLength');
+const nameWidth = document.getElementById('nameWidth');
+
+
+function formatToTwoDecimals(input) {
+  const value = parseFloat(input.value);
+  if (!isNaN(value)) {
+    input.value = value.toFixed(2);
+  }
+}
+
+nameLength.addEventListener('blur', () => formatToTwoDecimals(field1));
+nameWidth.addEventListener('blur', () => formatToTwoDecimals(field2));
+
 async function createSample() {
     let id = document.querySelector("#idDocument").value;
     let width = document.getElementById("nameWidth");
     let length = document.getElementById("nameLength");
     let data = {
         idListRegion: Number(id),
-        width: Number(width.value),
-        length: Number(length.value),
+        width: Number(width.value).toFixed(2),
+        length: Number(length.value).toFixed(2),
     }
 
     let result = await StatementRecalculationsBusinessDetail.createSample(data);

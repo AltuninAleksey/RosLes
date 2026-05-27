@@ -74,57 +74,47 @@
         <div>
             <div>
                 <p>Дата обследования:</p>
-                <input id="dateStatement" type="date">
+                <input id="dateStatement" type="text" readonly style="background: transparent;border: none;padding: 8px 0 ;font-size: 15px; cursor: default">
             </div>
             <div>
                 <p>Субьект РФ:</p>
-                <select name="sub" id="subjectStatement">
-                    <option hidden disabled selected value=""></option>
-                </select>
+                <input id="subjectStatement" type="text" readonly style="background: transparent;border: none;padding: 8px 0 ;font-size: 15px; cursor: default">
             </div>
             <div>
                 <p>Лесничество:</p>
-                <select name="les" id="forestlyStatement">
-                    <option hidden disabled selected value=""></option>
-                    <option>Брянское</option>
-                    <option>Локчимское</option>
-                </select>
+                <input id="forestlyStatement" type="text" readonly style="background: transparent;border: none;padding: 8px 0 ;font-size: 15px; cursor: default">
             </div>
             <div>
                 <p>Участковое лесничество:</p>
-                <select name="ucles" id="distriotForestlyStatement">
-                    <option hidden disabled selected value=""></option>
-                    <option>Четдинское</option>
-                    <option>Локчимское</option>
-                </select>
+                <input id="distriotForestlyStatement" type="text" readonly style="background: transparent;border: none;padding: 8px 0 ;font-size: 15px; cursor: default">
             </div>
             <div>
                 <p>Урочище:</p>
-                <input id="dachaStatement" type="text">
+                <input id="dachaStatement" type="text" readonly style="background: transparent;border: none;padding: 8px 0 ;font-size: 15px; cursor: default">
             </div>
             <div>
                 <p>Квартал:</p>
-                <input class="mandatory" id="quarterStatement" type="text">
+                <input id="quarterStatement" type="text" readonly style="background: transparent;border: none;padding: 8px 0 ;font-size: 15px; cursor: default">
             </div>
             <div>
                 <p>Выдел:</p>
-                <input class="mandatory" id="soilLotStatement" type="text">
+                <input id="soilLotStatement" type="text" readonly style="background: transparent;border: none;padding: 8px 0 ;font-size: 15px; cursor: default">
             </div>
             <div>
                 <p>Площадь участка:</p>
-                <input class="mandatory" id="sampleRegionStatement" type="text">
+                <input id="sampleRegionStatement" type="text" readonly style="background: transparent;border: none;padding: 8px 0 ;font-size: 15px; cursor: default">
             </div>
             <div>
                 <p>Длинна пробной площади:</p>
-                <input id="lengthSample" type="text">
+                <input id="lengthSample" type="text"  placeholder="0.00">
             </div>
             <div>
                 <p>Ширина пробной площади:</p>
-                <input id="widthSample" type="text">
+                <input id="widthSample" type="text"  placeholder="0.00">
             </div>
             <div>
                 <p>Площадь пробной площади:</p>
-                <input readonly id="squareSample" type="text">
+                <input readonly id="squareSample" type="text"  placeholder="0.00">
             </div>
         </div>
     </form>
@@ -264,6 +254,7 @@
                         <th class="textAlignCenter">До 0.5, шт</th>
                         <th class="textAlignCenter">От 0.6 до 1.5, шт</th>
                         <th class="textAlignCenter">Более 1.5, шт</th>
+                        <th class="textAlignCenter">Макс. высота</th>
                         <th class="textAlignCenter">
                             <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -379,6 +370,10 @@
                 <div class="modal-row">
                     <label for="from1_5">Более 1.5, шт</label>
                     <input type="number" id="from1_5" class="modal-input" step="0.1" min="0">
+                </div>
+                <div class="modal-row">
+                    <label for="maxHeight">Максимальная высота</label>
+                    <input type="number" id="maxHeight" class="modal-input" step="0.1" min="0">
                 </div>
             </div>
             <div class="modal-footer">

@@ -1,65 +1,61 @@
 // Пагинации
 let currentPage = 1;           // Текущая страница
-let rowsPerPage = 3;          // Количество строк на странице
 let totalPages = 1;
 
 // Обновления таблицы с пагинацией
 function updateDataInNullTable() {
-    console.log(APP.nullTableList)
+
     totalPages = Math.ceil(APP.countNullTable / APP.limit);
 
     updatePaginationControls();
 
-    currentPage = 1;
-
+   // currentPage = 1;
+    if (totalPages > 0 && currentPage > totalPages) {
+        currentPage = totalPages;
+    }
+    if (currentPage < 1) {
+        currentPage = 1;
+    }
     updatePaginationInfo();
     renderTablePage();
     updateButtonsState();
 }
 function renderTablePage() {
-    console.log("Отрисовка таблицы лесных культур вызвана")
+
     let sampleListTbodyNode = document.querySelector("#sampleListTbody");
     let newHtml = "";
-
     for(let i = 0; i < APP.nullTableList.length; i++) {
-        const currentItem = APP.nullTableList[i];
-        const recordId = currentItem.id;
-
-        const isMarkedForDelete = APP.deleteNullTable.includes(recordId);
         var newHtmlBreeds = "";
 
         for(var j = 0; j < APP.breeds.length; j++) {
-            if(currentItem.idBreed == APP.breeds[j].id) {
+            if(APP.nullTableList[i].idBreed == APP.breeds[j].id) {
                 newHtmlBreeds = newHtmlBreeds + "<option selected value=\"" + APP.breeds[j].id + "\">" + APP.breeds[j].name_breed + "</option>";
             } else {
                 newHtmlBreeds = newHtmlBreeds + "<option value=\"" + APP.breeds[j].id + "\">" + APP.breeds[j].name_breed + "</option>";
             }
         }
 
-         const rowClass = `cursorPointer ${isMarkedForDelete ? 'highlighted' : ''}`;
-
-                newHtml += `<tr class="${rowClass}" data-id="${recordId}">
+                newHtml += `<tr class="cursorPointer" data-id="${APP.nullTableList[i].id}">
                         <td class="textAlignCenter td8"><select type="text" name="id_breed${i}" id="id_breed${i}" style="width: 180px; border: none; text-align: center; background: transparent; outline: none; box-shadow: none; -webkit-appearance: none; -moz-appearance: none; appearance: none;">${newHtmlBreeds}</select></td>
                         <td class="textAlignCenter td9">${APP.nullTableList[i].countLiving}</td>
-                        <td class="textAlignCenter td5">${APP.nullTableList[i].countDead}</td>` +
-                        "<td style=\"width: 1%; cursor: pointer; text-align: center\">" +
-                            "<svg onclick=\"deleteLineInNullTable(" +APP.nullTableList[i].id + ")\" class=\"cursorPointer\" width=\"23px\" height=\"23px\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">" +
-                                "<g id=\"SVGRepo_bgCarrier\" stroke-width=\"0\"></g> " +
-                                "<g id=\"SVGRepo_tracerCarrier\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></g>" +
-                                "<g id=\"SVGRepo_iconCarrier\">" +
-                                    "<path d=\"M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17\" stroke=\"#000000\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path> " +
-                                "</g>" +
-                            "</svg>" +
-                        "</td>" +
-                        "<td style=\"width: 1%; cursor: pointer; text-align: center\">" +
-                            "<svg onClick=\"event.stopPropagation();editLineInNullTable(" +APP.nullTableList[i].id + ")\" xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" fill=\"currentColor\" class=\"bi bi-pencil\" viewBox=\"0 0 16 16\">" +
-                              "<path d=\"M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325\"/>"
-                            "</svg>" +
-                        "</td>" +
-                    `</tr>`;
+                        <td class="textAlignCenter td5">${APP.nullTableList[i].countDead}</td>
+                        <td style="width: 1%; cursor: pointer; text-align: center">
+                            <svg onclick="deleteLineInNullTable(${APP.nullTableList[i].id})" class="cursorPointer" width="23px" height="23px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </td>
+                        <td style="width: 1%; cursor: pointer; text-align: center">
+                            <svg onclick="event.stopPropagation();editLineInNullTable(${APP.nullTableList[i].id})" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
+                            </svg>
+                        </td>
+                    </tr>`;
     }
 
     sampleListTbodyNode.innerHTML = newHtml;
+//    console.log('APP.limit:', APP.limit);
+//    console.log('currentPage:', currentPage);
+//    console.log('totalPages:', totalPages);
 }
 function editLineInNullTable(id, event) {
     if (event) {
@@ -96,14 +92,14 @@ function editLineInNullTable(id, event) {
 
     // Добавляем кнопки сохранить/отменить в последнюю ячейку
     cells[4].innerHTML = `
-        <button onclick="saveInlineEdit(${id})" style="margin-right: 5px; padding: 5px 10px; border: none; background: transparent;">
+        <button onclick=";saveInlineNullEdit(${id})" style="padding: 5px 10px; border:none; z-index: 1000; background: transparent;">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
               <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425z"/>
             </svg>
         </button>
     `;
 }
-function saveInlineEdit(id) {
+function saveInlineNullEdit(id) {
 
     const targetRow = document.querySelector(`tr[data-id="${id}"]`);
     if (!targetRow) return;
@@ -140,16 +136,41 @@ function saveInlineEdit(id) {
     // Перерисовываем таблицу
     updateDataInNullTable();
 }
-function deleteLineInNullTable(del_id) {
-
+async function deleteLineInNullTable(del_id) {
+    let id = document.querySelector("#idDocument").value;
     hasUnsavedChanges = true;
-
-    APP.deleteNullTable.push(del_id);
 
     if (!APP.deleteNullTable.includes(del_id)) {
         APP.deleteNullTable.push(del_id);
     }
+    if(APP.deleteNullTable.length > 0) {
+         var nullDell = {
+            values : APP.deleteNullTable
+        };
+        await forestCropsInformTrialArea.deleteSample(nullDell);
+    }
+    APP.deleteNullTable = [];
+    var nullTableResp = await forestCropsInformTrialArea.getSampleByIdListRegion(id,currentPage);
+    APP.countNullTable = nullTableResp.count;
+    APP.nullTableList = nullTableResp.data
 
+    let newTotalPages = Math.ceil(APP.countNullTable / APP.limit);
+
+    if (currentPage > newTotalPages && newTotalPages > 0) {
+        currentPage = newTotalPages;
+    } else if (newTotalPages === 0) {
+        currentPage = 1;
+    }
+
+    if (currentPage < 1) {
+        currentPage = 1;
+    }
+
+    if (currentPage !== nullTableResp.currentPage) {
+        var correctedResp = await forestCropsInformTrialArea.getSampleByIdListRegion(id, currentPage);
+        APP.countNullTable = correctedResp.count;
+        APP.nullTableList = correctedResp.data;
+    }
     updateDataInNullTable();
 }
 
@@ -172,6 +193,8 @@ function deleteLineInNullTable(del_id) {
         values : APP.createSample
     };
     APP.createSample = [];
+    countDead.value = "";
+    countLiving.value = "";
     await forestCropsInformTrialArea.createSample(data);
     var nullTableResp = await forestCropsInformTrialArea.getSampleByIdListRegion(id,1);
     APP.countNullTable = nullTableResp.count;
@@ -187,15 +210,15 @@ function deleteLineInNullTable(del_id) {
 
 function updatePaginationInfo() {
 
-    const itemsOnCurrentPage = currentPage*APP.limit;
+    const itemsOnCurrentPage = Math.min(currentPage * APP.limit, APP.countNullTable);
 
     document.getElementById("totalForestCount").innerText = APP.countNullTable;
 
-    document.getElementById("pageForestInfo").innerText = `Страница ${currentPage} из ${totalPages}`;
+    document.getElementById("pageForestInfo").innerText = `Страница ${currentPage} из ${totalPages || 1}`;
 
     if (APP.countNullTable === 0) {
         document.getElementById("itemsForestInfo").innerText = `Нет записей`;
-    } else if (itemsOnCurrentPage != totalPages) {
+    } else if (itemsOnCurrentPage != APP.countNullTable) {
         document.getElementById("itemsForestInfo").innerText = `Показано ${itemsOnCurrentPage} из ${APP.countNullTable} записей`;
     } else {
         document.getElementById("itemsForestInfo").innerText = `Показано ${itemsOnCurrentPage} из ${APP.countNullTable} записей (последняя страница)`;
@@ -212,7 +235,7 @@ function updateButtonsState() {
     }
 
     if (nextBtn) {
-        nextBtn.disabled = currentPage === totalPages;
+        nextBtn.disabled = currentPage === totalPages || totalPages === 0;
     }
 }
 
