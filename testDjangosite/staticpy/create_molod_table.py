@@ -163,6 +163,9 @@ def create_accounting_table_from_json(json_data: dict):
 
     sorted_samples = sorted(samples, key=lambda x: x.get('id', 0))
 
+    # Порядковый номер ПП (начинается с 1)
+    pp_number = 1
+
     for idx, sample in enumerate(sorted_samples):
         sample_id = sample.get('id')
         length = sample.get('length', 0)
@@ -188,9 +191,9 @@ def create_accounting_table_from_json(json_data: dict):
 
         # Для каждой строки выводим культуру и молодняк параллельно
         for i in range(max_rows):
-            # Номер ПП и размеры (только в первой строке)
+            # Номер ПП и размеры (только в первой строке) - выводим порядковый номер, а не id
             if i == 0:
-                ws.cell(row=current_row, column=1).value = sample_id
+                ws.cell(row=current_row, column=1).value = pp_number
                 ws.cell(row=current_row, column=1).alignment = center_alignment
                 ws.cell(row=current_row, column=1).font = normal_font
 
@@ -287,6 +290,9 @@ def create_accounting_table_from_json(json_data: dict):
                 cell.fill = gap_fill
                 cell.alignment = center_alignment
             current_row += 1
+
+        # Увеличиваем порядковый номер для следующей ПП
+        pp_number += 1
 
     # ИТОГИ
     avg_diameter = round(sum(all_diameters) / len(all_diameters), 2) if all_diameters else 0
