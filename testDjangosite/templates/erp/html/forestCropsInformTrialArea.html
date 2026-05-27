@@ -23,6 +23,7 @@
 </head>
 <body>
     <input id="idDocument" type="hidden" name="idDocument" value={{idDocument}}>
+    <input id="idParent" type="hidden" name="idParent" value={{idParent}}>
     <header>
         <div class="hiv">
             <div class="hid" style="gap: 20px">
@@ -38,6 +39,11 @@
         </div>
         <div class="hiv2">
             <div class="hid2">
+                <div class="back" id="back_event" style="display: flex; align-items: center; cursor: pointer;">
+                    <svg width="18" height="10" viewBox="0 0 18 10" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin: 7px 10px;">
+                        <path d="M0.931396 4.95239L5.9314 0V4H17.9314V6H5.9314V10L0.931396 4.95239Z" fill="#4A4A4A"/>
+                    </svg>
+                </div>
                 <div class="point cursorPointer" onclick="getForestCrops()">
                     <a><h3>Перечетная ведомость</h3></a>
                 </div>

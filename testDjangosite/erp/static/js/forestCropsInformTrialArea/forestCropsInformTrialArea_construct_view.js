@@ -133,6 +133,7 @@ function formatToTwoDecimals(input) {
 
 field1.addEventListener('blur', () => formatToTwoDecimals(field1));
 field2.addEventListener('blur', () => formatToTwoDecimals(field2));
+
 async function setEvent() {
 
     document
@@ -169,6 +170,12 @@ async function setEvent() {
     var buttonAddPodrost = document.getElementById("buttonAddPodrost");
     buttonAddPodrost.addEventListener('click', function() {
         createTwoSample();
+    });
+
+    let idParent = document.getElementById("idParent").value;
+    var back_event = document.getElementById("back_event");
+    back_event.addEventListener('click',function() {
+        getForestCropsRecalculationsDetail(idParent);
     });
 }
 

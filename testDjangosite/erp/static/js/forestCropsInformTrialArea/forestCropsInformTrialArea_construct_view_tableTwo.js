@@ -122,7 +122,7 @@ function saveInlineTwoEdit(id) {
     const newTo0_5 = targetRow.cells[1].querySelector('.edit-to5')?.value;
     const newFrom0_6To1_5 = targetRow.cells[2].querySelector('.edit-from6')?.value;
     const newFrom1_5 = targetRow.cells[3].querySelector('.edit-from1_5')?.value;
-    const newMaxHeight = targetRow.cells[3].querySelector('.edit-maxHeight')?.value;
+    const newMaxHeight = targetRow.cells[4].querySelector('.edit-maxHeight')?.value;
 
     if (!newBreed || !newTo0_5 === undefined || !newFrom0_6To1_5 === undefined || !newFrom1_5 === undefined || !newMaxHeight === undefined) {
         console.error('Не удалось получить значения');
@@ -217,7 +217,7 @@ async function deleteLineInTwoTable(del_id){
         to0_5: Number(to0_5.value),
         from0_6To1_5: Number(from0_6To1_5.value),
         from1_5: Number(from1_5.value),
-        maxHeight: Number(maxHeight),
+        maxHeight: Number(maxHeight.value),
         idBreed: Number(idBreed.value),
     }
     APP.createTwoSample.push(table);
