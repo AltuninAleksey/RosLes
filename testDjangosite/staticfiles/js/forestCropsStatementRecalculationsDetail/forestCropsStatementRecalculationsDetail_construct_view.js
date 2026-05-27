@@ -153,7 +153,7 @@ async function deleteNewLineInSampleList(del_id) {
 }
 function updatePaginationInfo() {
 
-    const itemsOnCurrentPage = currentPage*APP.limit;
+    const itemsOnCurrentPage = Math.min(currentPage * APP.limit, APP.countPageDetail);
 
     document.getElementById("totalCount").innerText = APP.countPageDetail;
 

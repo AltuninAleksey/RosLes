@@ -168,7 +168,7 @@ async  function deleteStatementRecalculation(id) {
 }
 function updatePaginationInfo() {
 
-    const itemsOnCurrentPage = currentPage*APP.limit;
+    const itemsOnCurrentPage = Math.min(currentPage * APP.limit, APP.countPage);
 
     document.getElementById("totalCount").innerText = APP.countPage;
 

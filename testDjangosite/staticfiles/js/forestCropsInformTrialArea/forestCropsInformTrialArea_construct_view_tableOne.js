@@ -169,7 +169,7 @@ async function deleteLineInOneTable(del_id) {
 
     if (currentPageOne > newTotalPagesOne && newTotalPagesOne > 0) {
         currentPageOne = newTotalPagesOne;
-    } else if (newTotalPages === 0) {
+    } else if (newTotalPagesOne  === 0) {
         currentPageOne = 1;
     }
 
@@ -178,7 +178,7 @@ async function deleteLineInOneTable(del_id) {
     }
 
     if (currentPageOne !== oneTableResp.currentPageOne) {
-        var correctedResp = await forestCropsInformTrialArea.getSampleByIdListRegion(id, currentPageOne);
+        var correctedResp = await forestCropsInformTrialArea.getOneTable(id, currentPageOne);
         APP.countOneTable = correctedResp.count;
         APP.oneTableList = correctedResp.data;
     }

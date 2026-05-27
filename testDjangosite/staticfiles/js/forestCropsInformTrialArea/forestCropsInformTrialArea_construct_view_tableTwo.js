@@ -191,7 +191,7 @@ async function deleteLineInTwoTable(del_id){
     }
 
     if (currentPageTwo !== twoTableResp.currentPageTwo) {
-        var correctedResp = await forestCropsInformTrialArea.getSampleByIdListRegion(id, currentPageTwo);
+        var correctedResp = await forestCropsInformTrialArea.getTwoTable(id, currentPageTwo);
         APP.countTwoTable = correctedResp.count;
         APP.twoTableList = correctedResp.data;
     }
