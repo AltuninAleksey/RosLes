@@ -1,6 +1,5 @@
 import openpyxl
 from openpyxl.styles import Alignment, Border, Side, Font, PatternFill
-from openpyxl.utils import get_column_letter
 from collections import defaultdict
 from testDjangosite.settings import BASE_DIR
 import os
@@ -43,6 +42,7 @@ def create_accounting_table_from_json(json_data: dict):
         key = (m.get('id_sample_id'), m.get('id_breed_id'))
         molod_by_sample_and_breed[key].append(m)
 
+    # ЗАГОЛОВОК ФОРМЫ
     ws.merge_cells('A1:J1')
     ws['A1'] = "ФОРМА ПЕРЕЧЕТНОЙ ВЕДОМОСТИ"
     ws['A1'].font = Font(bold=True, size=12, name='Times New Roman')
@@ -100,6 +100,7 @@ def create_accounting_table_from_json(json_data: dict):
     ws['F5'].font = normal_font
     ws['F5'].alignment = center_alignment
 
+    # ЗАГОЛОВКИ ТАБЛИЦЫ
     ws.merge_cells('A7:A9')
     ws['A7'] = "Номер ПП/ УО"
     ws['A7'].alignment = center_alignment
@@ -154,7 +155,6 @@ def create_accounting_table_from_json(json_data: dict):
     if not samples:
         ws.cell(row=current_row, column=1).value = "Нет данных"
         wb.save(output_file)
-        print(f"Файл {output_file} создан (нет данных)")
         return output_file.split("testDjangosite")[1] if "testDjangosite" in output_file else output_file
 
     all_diameters = []
@@ -170,25 +170,26 @@ def create_accounting_table_from_json(json_data: dict):
         area_ha = (length * width) / 10000 if length and width else 0
         total_area_sum += area_ha
 
-        all_breeds_in_sample = set()
-
+        # Получаем списки пород отдельно для культур и для молодняка
+        crops_breeds = []
         for key in crops_by_sample_and_breed.keys():
             if key[0] == sample_id:
-                all_breeds_in_sample.add(key[1])
+                crops_breeds.append(key[1])
 
+        molod_breeds = []
         for key in molod_by_sample_and_breed.keys():
             if key[0] == sample_id:
-                all_breeds_in_sample.add(key[1])
+                molod_breeds.append(key[1])
 
-        if not all_breeds_in_sample:
-            all_breeds_in_sample.add(None)
+        # Определяем количество строк: максимум из культур и молодняка
+        max_rows = max(len(crops_breeds), len(molod_breeds), 1)
 
-        breeds_list = sorted(
-            [b for b in all_breeds_in_sample if b is not None]) if None not in all_breeds_in_sample else [None]
         start_row = current_row
 
-        for breed_idx, breed_id in enumerate(breeds_list):
-            if breed_idx == 0:
+        # Для каждой строки выводим культуру и молодняк параллельно
+        for i in range(max_rows):
+            # Номер ПП и размеры (только в первой строке)
+            if i == 0:
                 ws.cell(row=current_row, column=1).value = sample_id
                 ws.cell(row=current_row, column=1).alignment = center_alignment
                 ws.cell(row=current_row, column=1).font = normal_font
@@ -198,7 +199,9 @@ def create_accounting_table_from_json(json_data: dict):
                 ws.cell(row=current_row, column=2).alignment = center_alignment
                 ws.cell(row=current_row, column=2).font = normal_font
 
-            if breed_id:
+            # ЛЕСНЫЕ КУЛЬТУРЫ (колонки C=3, D=4, E=5, F=6, G=7)
+            if i < len(crops_breeds):
+                breed_id = crops_breeds[i]
                 crops_list = crops_by_sample_and_breed.get((sample_id, breed_id), [])
                 if crops_list:
                     total_living = sum(c.get('count_living', 0) for c in crops_list)
@@ -208,12 +211,7 @@ def create_accounting_table_from_json(json_data: dict):
                     breed_name = breed.get('short_name') or breed.get('name_breed', '')
 
                     ws.cell(row=current_row, column=3).value = breed_name
-                    ws.cell(row=current_row, column=3).alignment = center_alignment
-                    ws.cell(row=current_row, column=3).font = normal_font
-
                     ws.cell(row=current_row, column=4).value = total_living
-                    ws.cell(row=current_row, column=4).alignment = center_alignment
-                    ws.cell(row=current_row, column=4).font = normal_font
 
                     plants_list = plants_by_sample_and_breed.get((sample_id, breed_id), [])
                     if plants_list:
@@ -221,29 +219,32 @@ def create_accounting_table_from_json(json_data: dict):
                         avg_height_plants = round(sum(p.get('height', 0) for p in plants_list) / len(plants_list), 2)
 
                         ws.cell(row=current_row, column=5).value = avg_diameter
-                        ws.cell(row=current_row, column=5).alignment = center_alignment
-                        ws.cell(row=current_row, column=5).font = normal_font
-
                         ws.cell(row=current_row, column=6).value = avg_height_plants
-                        ws.cell(row=current_row, column=6).alignment = center_alignment
-                        ws.cell(row=current_row, column=6).font = normal_font
 
                         all_diameters.extend([p.get('diameter', 0) for p in plants_list if p.get('diameter')])
                         all_heights.extend([p.get('height', 0) for p in plants_list if p.get('height')])
 
                     ws.cell(row=current_row, column=7).value = total_dead
-                    ws.cell(row=current_row, column=7).alignment = center_alignment
-                    ws.cell(row=current_row, column=7).font = normal_font
 
-            if breed_id:
+                    for col in range(3, 8):
+                        ws.cell(row=current_row, column=col).alignment = center_alignment
+                        ws.cell(row=current_row, column=col).font = normal_font
+            else:
+                # Пустые ячейки для культур, если строк меньше
+                for col in range(3, 8):
+                    ws.cell(row=current_row, column=col).value = ''
+                    ws.cell(row=current_row, column=col).alignment = center_alignment
+                    ws.cell(row=current_row, column=col).font = normal_font
+
+            # ПОДРОСТ И МОЛОДНЯК (колонки H=8, I=9, J=10)
+            if i < len(molod_breeds):
+                breed_id = molod_breeds[i]
                 molod_list = molod_by_sample_and_breed.get((sample_id, breed_id), [])
                 if molod_list:
                     breed = all_breed.get(breed_id, {})
                     breed_name = breed.get('short_name') or breed.get('name_breed', '')
 
                     ws.cell(row=current_row, column=8).value = breed_name
-                    ws.cell(row=current_row, column=8).alignment = center_alignment
-                    ws.cell(row=current_row, column=8).font = normal_font
 
                     total_count = 0
                     max_h = 0
@@ -254,21 +255,30 @@ def create_accounting_table_from_json(json_data: dict):
                         max_h = max(max_h, m.get('max_height', 0))
 
                     ws.cell(row=current_row, column=9).value = total_count
-                    ws.cell(row=current_row, column=9).alignment = center_alignment
-                    ws.cell(row=current_row, column=9).font = normal_font
-
                     ws.cell(row=current_row, column=10).value = round(max_h, 2) if max_h else ''
-                    ws.cell(row=current_row, column=10).alignment = center_alignment
-                    ws.cell(row=current_row, column=10).font = normal_font
+
+                    for col in range(8, 11):
+                        ws.cell(row=current_row, column=col).alignment = center_alignment
+                        ws.cell(row=current_row, column=col).font = normal_font
+            else:
+                # Пустые ячейки для молодняка, если строк меньше
+                for col in range(8, 11):
+                    ws.cell(row=current_row, column=col).value = ''
+                    ws.cell(row=current_row, column=col).alignment = center_alignment
+                    ws.cell(row=current_row, column=col).font = normal_font
 
             for col in range(1, 11):
                 ws.cell(row=current_row, column=col).border = thin_border
+
             current_row += 1
 
-        if len(breeds_list) > 1:
+        # Объединяем колонки A и B для всех строк этой ПП
+        rows_count = current_row - start_row
+        if rows_count > 1:
             ws.merge_cells(start_row=start_row, start_column=1, end_row=current_row - 1, end_column=1)
             ws.merge_cells(start_row=start_row, start_column=2, end_row=current_row - 1, end_column=2)
 
+        # Разделитель между ПП
         if idx < len(sorted_samples) - 1:
             for col in range(1, 11):
                 cell = ws.cell(row=current_row, column=col)
@@ -278,6 +288,7 @@ def create_accounting_table_from_json(json_data: dict):
                 cell.alignment = center_alignment
             current_row += 1
 
+    # ИТОГИ
     avg_diameter = round(sum(all_diameters) / len(all_diameters), 2) if all_diameters else 0
     avg_height = round(sum(all_heights) / len(all_heights), 2) if all_heights else 0
 
@@ -288,21 +299,17 @@ def create_accounting_table_from_json(json_data: dict):
     ws.cell(row=current_row, column=1).value = "Всего"
     ws.cell(row=current_row, column=1).font = bold_font
     ws.cell(row=current_row, column=2).value = round(total_area_sum, 4)
-    ws.cell(row=current_row, column=2).font = normal_font
     ws.cell(row=current_row, column=4).value = total_crops_count
-    ws.cell(row=current_row, column=4).font = bold_font
     ws.cell(row=current_row, column=5).value = avg_diameter
-    ws.cell(row=current_row, column=5).font = bold_font
     ws.cell(row=current_row, column=6).value = avg_height
-    ws.cell(row=current_row, column=6).font = bold_font
     ws.cell(row=current_row, column=7).value = total_crops_dead
-    ws.cell(row=current_row, column=7).font = bold_font
     ws.cell(row=current_row, column=9).value = total_young_count
-    ws.cell(row=current_row, column=9).font = bold_font
 
     for col in range(1, 11):
         ws.cell(row=current_row, column=col).border = thin_border
         ws.cell(row=current_row, column=col).alignment = center_alignment
+        if col in [1, 2, 4, 5, 6, 7, 9]:
+            ws.cell(row=current_row, column=col).font = bold_font
     current_row += 1
 
     if total_area_sum > 0:
@@ -316,6 +323,7 @@ def create_accounting_table_from_json(json_data: dict):
             ws.cell(row=current_row, column=col).alignment = center_alignment
             ws.cell(row=current_row, column=col).font = normal_font
 
+    # Ширина колонок
     column_widths = {'A': 10, 'B': 22, 'C': 12, 'D': 10, 'E': 18, 'F': 12, 'G': 12, 'H': 12, 'I': 10, 'J': 10}
     for col, width in column_widths.items():
         ws.column_dimensions[col].width = width
