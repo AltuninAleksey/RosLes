@@ -36,7 +36,7 @@ function renderTwoTablePage() {
             }
         }
 
-                newHtml += `<tr class="cursorPointer" data-id="${APP.twoTableList[i].id}">
+                newHtml += `<tr class="cursorPointer" data-two-id="${APP.twoTableList[i].id}">
                         <td class="textAlignCenter td8"><select type="text" name="id_breed${i}" id="id_breed${i}" style="width: 180px; border: none; text-align: center; background: transparent; outline: none; box-shadow: none; -webkit-appearance: none; -moz-appearance: none; appearance: none;">${newHtmlBreeds}</select></td>
                         <td class="textAlignCenter td9">${APP.twoTableList[i].to0_5}</td>
                         <td class="textAlignCenter td9">${APP.twoTableList[i].from0_6To1_5}</td>
@@ -68,7 +68,7 @@ function editLineInTwoTable(id, event) {
     }
 
     // Находим строку по ID
-    const targetRow = document.querySelector(`tr[data-id="${id}"]`);
+    const targetRow = document.querySelector(`tr[data-two-id="${id}"]`);
     if (!targetRow) return;
 
     const cells = targetRow.cells;
@@ -114,7 +114,7 @@ function truncateTo2Decimals(value) {
 }
 function saveInlineTwoEdit(id) {
 
-    const targetRow = document.querySelector(`tr[data-id="${id}"]`);
+    const targetRow = document.querySelector(`tr[data-two-id="${id}"]`);
     if (!targetRow) return;
 
     // Получаем новые значения из полей ввода

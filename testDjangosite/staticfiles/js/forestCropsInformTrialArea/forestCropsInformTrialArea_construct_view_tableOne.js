@@ -9,8 +9,13 @@ function updateDataInOneTable() {
 
     updatePaginationOneControls();
 
-    currentPageOne = 1;
-
+    //currentPageOne = 1;
+    if (totalPagesOne > 0 && currentPageOne > totalPagesOne) {
+        currentPageOne = totalPagesOne;
+    }
+    if (currentPageOne < 1) {
+        currentPageOne = 1;
+    }
     updatePaginationOneInfo();
     renderOneTablePage();
     updateButtonsOne();
@@ -20,10 +25,7 @@ function renderOneTablePage() {
     let newHtml = "";
 
     for(let i = 0; i < APP.oneTableList.length; i++) {
-        const currentOneItem = APP.oneTableList[i];
-        const recordOneId = currentOneItem.id;
 
-        const isMarkedForDeleteOne = APP.deleteOneTable.includes(recordOneId);
         var newHtmlBreeds = "";
 
         for(var j = 0; j < APP.breeds.length; j++) {
@@ -33,26 +35,22 @@ function renderOneTablePage() {
                 newHtmlBreeds = newHtmlBreeds + "<option value=\"" + APP.breeds[j].id + "\">" + APP.breeds[j].name_breed + "</option>";
             }
         }
-        const rowClass = `cursorPointer ${isMarkedForDeleteOne ? 'highlighted' : ''}`;
-                newHtml += `<tr class="${rowClass}" data-id="${recordOneId}">
+
+                newHtml += `<tr class="cursorPointer" data-one-id="${APP.oneTableList[i].id}">
                         <td class="textAlignCenter td8"><select type="text" name="id_breed${i}" id="id_breed${i}" style="width: 180px; border: none; text-align: center; background: transparent; outline: none; box-shadow: none; -webkit-appearance: none; -moz-appearance: none; appearance: none;">${newHtmlBreeds}</select></td>
                         <td class="textAlignCenter td9">${APP.oneTableList[i].diameter}</td>
-                        <td class="textAlignCenter td5">${APP.oneTableList[i].height}</td>` +
-                        "<td style=\"width: 1%; cursor: pointer; text-align: center\">" +
-                            "<svg onclick=\"deleteLineInOneTable(" +APP.oneTableList[i].id + ")\" class=\"cursorPointer\" width=\"23px\" height=\"23px\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">" +
-                                "<g id=\"SVGRepo_bgCarrier\" stroke-width=\"0\"></g> " +
-                                "<g id=\"SVGRepo_tracerCarrier\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></g>" +
-                                "<g id=\"SVGRepo_iconCarrier\">" +
-                                    "<path d=\"M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17\" stroke=\"#000000\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path> " +
-                                "</g>" +
-                            "</svg>" +
-                        "</td>" +
-                        "<td style=\"width: 1%; cursor: pointer; text-align: center\">" +
-                            "<svg onClick=\"event.stopPropagation();editLineInOneTable(" +APP.oneTableList[i].id + ")\" xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" fill=\"currentColor\" class=\"bi bi-pencil\" viewBox=\"0 0 16 16\">" +
-                              "<path d=\"M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325\"/>"
-                            "</svg>" +
-                        "</td>" +
-                    `</tr>`;
+                        <td class="textAlignCenter td5">${APP.oneTableList[i].height}</td>
+                        <td style="width: 1%; cursor: pointer; text-align: center">
+                            <svg onclick="deleteLineInOneTable(${APP.oneTableList[i].id})" class="cursorPointer" width="23px" height="23px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </td>
+                        <td style="width: 1%; cursor: pointer; text-align: center">
+                            <svg onclick="event.stopPropagation();editLineInOneTable(${APP.oneTableList[i].id})" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
+                            </svg>
+                        </td>
+                    </tr>`;
     }
 
     sampleListOneTbodyNode.innerHTML = newHtml;
@@ -68,7 +66,7 @@ function editLineInOneTable(id, event) {
     }
 
     // Находим строку по ID
-    const targetRow = document.querySelector(`tr[data-id="${id}"]`);
+    const targetRow = document.querySelector(`tr[data-one-id="${id}"]`);
     if (!targetRow) return;
 
     const cells = targetRow.cells;
@@ -92,7 +90,7 @@ function editLineInOneTable(id, event) {
 
     // Добавляем кнопки сохранить/отменить в последнюю ячейку
     cells[4].innerHTML = `
-        <button onclick="saveInlineEdit(${id})" style="margin-right: 5px; padding: 5px 10px; border: none; background: transparent;">
+        <button onclick="saveInlineOneEdit(${id})" style="margin-right: 5px; padding: 5px 10px; border: none; background: transparent;">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
               <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425z"/>
             </svg>
@@ -103,19 +101,16 @@ function editLineInOneTable(id, event) {
 function truncateTo2Decimals(value) {
     if (value === undefined || value === null || value === '') return 0;
 
-    // Преобразуем в строку и заменяем запятую
     let str = String(value).replace(',', '.');
 
-    // Парсим число
     let num = parseFloat(str);
     if (isNaN(num)) return 0;
 
-    // Отсекаем до 2 знаков (НЕ округляем!)
     return Math.floor(num * 100) / 100;
 }
-function saveInlineEdit(id) {
+function saveInlineOneEdit(id) {
 
-    const targetRow = document.querySelector(`tr[data-id="${id}"]`);
+    const targetRow = document.querySelector(`tr[data-one-id="${id}"]`);
     if (!targetRow) return;
 
     // Получаем новые значения из полей ввода
@@ -152,14 +147,40 @@ function saveInlineEdit(id) {
     updateDataInOneTable();
 }
 
-function deleteLineInOneTable(del_id) {
-
+async function deleteLineInOneTable(del_id) {
+    let id = document.querySelector("#idDocument").value;
     hasUnsavedChanges = true;
-
-    APP.deleteOneTable.push(del_id);
 
     if (!APP.deleteOneTable.includes(del_id)) {
         APP.deleteOneTable.push(del_id);
+    }
+    if(APP.deleteOneTable.length > 0) {
+         var oneDell = {
+            values : APP.deleteOneTable
+        };
+        await forestCropsInformTrialArea.deleteSampleOne(oneDell);
+    }
+    APP.deleteOneTable = [];
+    var oneTableResp = await forestCropsInformTrialArea.getOneTable(id,currentPageOne);
+    APP.countOneTable = oneTableResp.count;
+    APP.oneTableList = oneTableResp.data
+
+    let newTotalPagesOne = Math.ceil(APP.countOneTable / APP.limit);
+
+    if (currentPageOne > newTotalPagesOne && newTotalPagesOne > 0) {
+        currentPageOne = newTotalPagesOne;
+    } else if (newTotalPages === 0) {
+        currentPageOne = 1;
+    }
+
+    if (currentPageOne < 1) {
+        currentPageOne = 1;
+    }
+
+    if (currentPageOne !== oneTableResp.currentPageOne) {
+        var correctedResp = await forestCropsInformTrialArea.getSampleByIdListRegion(id, currentPageOne);
+        APP.countOneTable = correctedResp.count;
+        APP.oneTableList = correctedResp.data;
     }
 
     updateDataInOneTable();
@@ -188,6 +209,8 @@ function deleteLineInOneTable(del_id) {
         values : APP.createOneSample
     };
     APP.createOneSample = [];
+    height.value = "";
+    diameter.value = "";
     await forestCropsInformTrialArea.createOneSample(data);
     var oneTableResp = await forestCropsInformTrialArea.getOneTable(id,1);
     APP.countOneTable = oneTableResp.count;
@@ -203,15 +226,15 @@ function deleteLineInOneTable(del_id) {
 
 function updatePaginationOneInfo() {
 
-    const itemsOnCurrentPage = currentPageOne*APP.limit;
+    const itemsOnCurrentPage = Math.min(currentPageOne * APP.limit, APP.countOneTable);
 
     document.getElementById("totalDiameterCount").innerText = APP.countOneTable;
 
-    document.getElementById("pageDiameterInfo").innerText = `Страница ${currentPageOne} из ${totalPagesOne}`;
+    document.getElementById("pageDiameterInfo").innerText = `Страница ${currentPageOne} из ${totalPagesOne || 1}`;
 
     if (APP.countOneTable === 0) {
         document.getElementById("itemsDiameterInfo").innerText = `Нет записей`;
-    } else if (itemsOnCurrentPage != totalPagesOne) {
+    } else if (itemsOnCurrentPage !=  APP.countOneTable) {
         document.getElementById("itemsDiameterInfo").innerText = `Показано ${itemsOnCurrentPage} из ${APP.countOneTable} записей`;
     } else {
         document.getElementById("itemsDiameterInfo").innerText = `Показано ${itemsOnCurrentPage} из ${APP.countOneTable} записей (последняя страница)`;
@@ -228,7 +251,7 @@ function updateButtonsOne() {
     }
 
     if (nextBtn) {
-        nextBtn.disabled = currentPageOne === totalPagesOne;
+        nextBtn.disabled = currentPageOne === totalPagesOne || totalPagesOne === 0;
     }
 }
 

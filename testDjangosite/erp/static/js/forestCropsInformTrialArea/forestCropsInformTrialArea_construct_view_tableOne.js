@@ -36,7 +36,7 @@ function renderOneTablePage() {
             }
         }
 
-                newHtml += `<tr class="cursorPointer" data-id="${APP.oneTableList[i].id}">
+                newHtml += `<tr class="cursorPointer" data-one-id="${APP.oneTableList[i].id}">
                         <td class="textAlignCenter td8"><select type="text" name="id_breed${i}" id="id_breed${i}" style="width: 180px; border: none; text-align: center; background: transparent; outline: none; box-shadow: none; -webkit-appearance: none; -moz-appearance: none; appearance: none;">${newHtmlBreeds}</select></td>
                         <td class="textAlignCenter td9">${APP.oneTableList[i].diameter}</td>
                         <td class="textAlignCenter td5">${APP.oneTableList[i].height}</td>
@@ -66,7 +66,7 @@ function editLineInOneTable(id, event) {
     }
 
     // Находим строку по ID
-    const targetRow = document.querySelector(`tr[data-id="${id}"]`);
+    const targetRow = document.querySelector(`tr[data-one-id="${id}"]`);
     if (!targetRow) return;
 
     const cells = targetRow.cells;
@@ -110,7 +110,7 @@ function truncateTo2Decimals(value) {
 }
 function saveInlineOneEdit(id) {
 
-    const targetRow = document.querySelector(`tr[data-id="${id}"]`);
+    const targetRow = document.querySelector(`tr[data-one-id="${id}"]`);
     if (!targetRow) return;
 
     // Получаем новые значения из полей ввода
