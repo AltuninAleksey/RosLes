@@ -253,7 +253,7 @@ class AppFcListRegion(models.Model):
     id_profile = models.ForeignKey('Profile', on_delete=models.CASCADE, verbose_name='Сотрудник ', null=True)
     number = models.CharField(max_length=10, default=' ')
     date_examination = models.DateField(default=timezone.now)
-
+    id_dacha = models.ForeignKey("Dacha", on_delete=models.CASCADE, null=True, default=None)
     class Meta:
         db_table = "djangoForest_app_fc_list_region"
 
@@ -823,7 +823,7 @@ class ForestDistricts(models.Model):
 
 class Dacha(models.Model):
     name_side = models.CharField(max_length=300)
-    quarter = models.ForeignKey("Quarter", on_delete=models.CASCADE)
+    district_forestly = models.ForeignKey("DistrictForestly", on_delete=models.CASCADE, null=True)
 
     class Meta:
         verbose_name = "Дача/Урочище"
