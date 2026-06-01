@@ -14,8 +14,6 @@ def create_accounting_table_from_json(json_data: dict):
                          bottom=Side(style='thin'))
     center_alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)
     left_alignment = Alignment(horizontal='left', vertical='center', wrap_text=True)
-    header_fill = PatternFill(start_color="D9E1F2", end_color="D9E1F2", fill_type="solid")
-    gap_fill = PatternFill(start_color="D9E1F2", end_color="D9E1F2", fill_type="solid")
     bold_font = Font(bold=True, name='Times New Roman', size=10)
     normal_font = Font(name='Times New Roman', size=10)
 
@@ -44,7 +42,7 @@ def create_accounting_table_from_json(json_data: dict):
 
     # ЗАГОЛОВОК ФОРМЫ
     ws.merge_cells('A1:J1')
-    ws['A1'] = "ФОРМА ПЕРЕЧЕТНОЙ ВЕДОМОСТИ"
+    ws['A1'] = "ПЕРЕЧЕТНАЯ ВЕДОМОСТЬ"
     ws['A1'].font = Font(bold=True, size=12, name='Times New Roman')
     ws['A1'].alignment = center_alignment
 
@@ -101,56 +99,77 @@ def create_accounting_table_from_json(json_data: dict):
     ws['F5'].alignment = center_alignment
 
     # ЗАГОЛОВКИ ТАБЛИЦЫ
-    ws.merge_cells('A7:A9')
-    ws['A7'] = "Номер ПП/ УО"
-    ws['A7'].alignment = center_alignment
-    ws['A7'].font = bold_font
+    ws.merge_cells('A6:A8')
+    ws['A6'] = "Номер ПП/ УО"
+    ws['A6'].alignment = center_alignment
+    ws['A6'].font = bold_font
 
-    ws.merge_cells('B7:B9')
-    ws['B7'] = "Размер ПП (длина, ширина), м, площадь ПП, га/ длина УО, м"
-    ws['B7'].alignment = center_alignment
-    ws['B7'].font = bold_font
+    ws.merge_cells('B6:B8')
+    ws['B6'] = "Размер ПП (длина, ширина), м, площадь ПП, га/ длина УО, м"
+    ws['B6'].alignment = center_alignment
+    ws['B6'].font = bold_font
 
-    ws.merge_cells('C7:G7')
-    ws['C7'] = "Лесные культуры"
+    ws.merge_cells('C6:G6')
+    ws['C6'] = "Лесные культуры"
+    ws['C6'].alignment = center_alignment
+    ws['C6'].font = bold_font
+
+    ws.merge_cells('H6:J6')
+    ws['H6'] = "Подрост и молодняк основных лесных древесных пород"
+    ws['H6'].alignment = center_alignment
+    ws['H6'].font = bold_font
+
+    # Строка 7
+    ws.merge_cells('C7:C8')
+    ws['C7'] = "порода"
     ws['C7'].alignment = center_alignment
     ws['C7'].font = bold_font
 
-    ws.merge_cells('H7:J7')
-    ws['H7'] = "Подрост и молодняк основных лесных древесных пород"
+    ws.merge_cells('D7:F7')
+    ws['D7'] = "сохранившиеся растения"
+    ws['D7'].alignment = center_alignment
+    ws['D7'].font = bold_font
+
+    ws.merge_cells('G7:G8')
+    ws['G7'] = "погибшие растения, шт."
+    ws['G7'].alignment = center_alignment
+    ws['G7'].font = bold_font
+
+    ws.merge_cells('H7:H8')
+    ws['H7'] = "порода"
     ws['H7'].alignment = center_alignment
     ws['H7'].font = bold_font
 
-    ws['C8'] = "пород"
-    ws['C8'].alignment = center_alignment
-    ws.merge_cells('D8:F8')
-    ws['D8'] = "сохранившиеся растения"
+    ws.merge_cells('I7:I8')
+    ws['I7'] = "кол-во, шт."
+    ws['I7'].alignment = center_alignment
+    ws['I7'].font = bold_font
+
+    ws.merge_cells('J7:J8')
+    ws['J7'] = "высота, м"
+    ws['J7'].alignment = center_alignment
+    ws['J7'].font = bold_font
+
+    # Строка 8
+    ws['D8'] = "кол-во, шт."
     ws['D8'].alignment = center_alignment
-    ws['G8'] = "погибшие растения, шт."
-    ws['G8'].alignment = center_alignment
-    ws['H8'] = "порода"
-    ws['H8'].alignment = center_alignment
-    ws['I8'] = "кол-во, шт."
-    ws['I8'].alignment = center_alignment
-    ws['J8'] = "высота, м"
-    ws['J8'].alignment = center_alignment
+    ws['D8'].font = bold_font
+    ws['E8'] = "диаметр корневой шейки, мм"
+    ws['E8'].alignment = center_alignment
+    ws['E8'].font = bold_font
+    ws['F8'] = "высота, см"
+    ws['F8'].alignment = center_alignment
+    ws['F8'].font = bold_font
 
-    ws['D9'] = "кол-во, шт."
-    ws['D9'].alignment = center_alignment
-    ws['E9'] = "диаметр корневой шейки, мм"
-    ws['E9'].alignment = center_alignment
-    ws['F9'] = "высота, см"
-    ws['F9'].alignment = center_alignment
-
-    for row in range(7, 10):
+    # Применяем границы и стили к заголовкам
+    for row in range(6, 9):
         for col in range(1, 11):
             cell = ws.cell(row=row, column=col)
             cell.border = thin_border
-            cell.fill = header_fill
             cell.font = bold_font
             cell.alignment = center_alignment
 
-    current_row = 10
+    current_row = 9
 
     if not samples:
         ws.cell(row=current_row, column=1).value = "Нет данных"
@@ -191,7 +210,7 @@ def create_accounting_table_from_json(json_data: dict):
 
         # Для каждой строки выводим культуру и молодняк параллельно
         for i in range(max_rows):
-            # Номер ПП и размеры (только в первой строке) - выводим порядковый номер, а не id
+            # Номер ПП и размеры (только в первой строке)
             if i == 0:
                 ws.cell(row=current_row, column=1).value = pp_number
                 ws.cell(row=current_row, column=1).alignment = center_alignment
@@ -281,16 +300,6 @@ def create_accounting_table_from_json(json_data: dict):
             ws.merge_cells(start_row=start_row, start_column=1, end_row=current_row - 1, end_column=1)
             ws.merge_cells(start_row=start_row, start_column=2, end_row=current_row - 1, end_column=2)
 
-        # Разделитель между ПП
-        if idx < len(sorted_samples) - 1:
-            for col in range(1, 11):
-                cell = ws.cell(row=current_row, column=col)
-                cell.value = ""
-                cell.border = thin_border
-                cell.fill = gap_fill
-                cell.alignment = center_alignment
-            current_row += 1
-
         # Увеличиваем порядковый номер для следующей ПП
         pp_number += 1
 
@@ -302,8 +311,8 @@ def create_accounting_table_from_json(json_data: dict):
     total_crops_dead = sum(c.get('count_dead', 0) for c in crops)
     total_young_count = sum(m.get('to0_5', 0) + m.get('from0_6To1_5', 0) + m.get('from1_5', 0) for m in molod)
 
+    # Строка "Всего" - жирный шрифт, с двумя знаками после запятой
     ws.cell(row=current_row, column=1).value = "Всего"
-    ws.cell(row=current_row, column=1).font = bold_font
     ws.cell(row=current_row, column=2).value = round(total_area_sum, 4)
     ws.cell(row=current_row, column=4).value = total_crops_count
     ws.cell(row=current_row, column=5).value = avg_diameter
@@ -312,22 +321,23 @@ def create_accounting_table_from_json(json_data: dict):
     ws.cell(row=current_row, column=9).value = total_young_count
 
     for col in range(1, 11):
-        ws.cell(row=current_row, column=col).border = thin_border
-        ws.cell(row=current_row, column=col).alignment = center_alignment
-        if col in [1, 2, 4, 5, 6, 7, 9]:
-            ws.cell(row=current_row, column=col).font = bold_font
+        cell = ws.cell(row=current_row, column=col)
+        cell.border = thin_border
+        cell.alignment = center_alignment
+        cell.font = bold_font  # Жирный шрифт для всей строки "Всего"
     current_row += 1
 
+    # Строка "Итого на 1 га" - жирный шрифт, округление до целых
     if total_area_sum > 0:
         ws.cell(row=current_row, column=1).value = "Итого на 1 га"
-        ws.cell(row=current_row, column=1).font = bold_font
-        ws.cell(row=current_row, column=4).value = round(total_crops_count / total_area_sum, 2)
-        ws.cell(row=current_row, column=7).value = round(total_crops_dead / total_area_sum, 2)
-        ws.cell(row=current_row, column=9).value = round(total_young_count / total_area_sum, 2)
+        ws.cell(row=current_row, column=4).value = round(total_crops_count / total_area_sum, 0)
+        ws.cell(row=current_row, column=7).value = round(total_crops_dead / total_area_sum, 0)
+        ws.cell(row=current_row, column=9).value = round(total_young_count / total_area_sum, 0)
         for col in range(1, 11):
-            ws.cell(row=current_row, column=col).border = thin_border
-            ws.cell(row=current_row, column=col).alignment = center_alignment
-            ws.cell(row=current_row, column=col).font = normal_font
+            cell = ws.cell(row=current_row, column=col)
+            cell.border = thin_border
+            cell.alignment = center_alignment
+            cell.font = bold_font  # Жирный шрифт для всей строки "Итого на 1 га"
 
     # Ширина колонок
     column_widths = {'A': 10, 'B': 22, 'C': 12, 'D': 10, 'E': 18, 'F': 12, 'G': 12, 'H': 12, 'I': 10, 'J': 10}
@@ -336,10 +346,9 @@ def create_accounting_table_from_json(json_data: dict):
 
     ws.row_dimensions[1].height = 25
     ws.row_dimensions[2].height = 20
-    ws.row_dimensions[7].height = 35
+    ws.row_dimensions[6].height = 35
+    ws.row_dimensions[7].height = 25
     ws.row_dimensions[8].height = 25
-    ws.row_dimensions[9].height = 25
-    ws.freeze_panes = 'A10'
 
     os.makedirs(os.path.dirname(output_file), exist_ok=True)
     wb.save(output_file)
