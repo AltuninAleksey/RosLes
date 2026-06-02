@@ -79,7 +79,7 @@ async function setDetailDataIdPage() {
 //    sampleRegionStatementNode.value = "Площадь участка: " + APP.documentData.listRegion.sampleRegion;
 //    quarterStatementNode.value = "Квартал: " + APP.documentData.listRegion.nameQuarter;
     dateStatementNode.value =  APP.documentData.listRegion.date;
-    dachaStatementNode.value = APP.documentData.listRegion.dacha;
+  //  dachaStatementNode.value = APP.documentData.listRegion.dacha;
 
     soilLotStatementNode.value =  APP.documentData.listRegion.soilLot;
     sampleRegionStatementNode.value =  APP.documentData.listRegion.sampleRegion;
@@ -107,6 +107,14 @@ async function setDetailDataIdPage() {
         if(APP.district_forestly[i].id == APP.documentData.listRegion.idDistrictForestly) {
            // distriotForestlyNode.value = "Участковое лесничество: " + APP.district_forestly[i].name_district_forestly;
            distriotForestlyNode.value = APP.district_forestly[i].name_district_forestly;
+        }
+    }
+
+    APP.dacha = await CommonBusiness.getDachaStatementByIdDistrictForestly(APP.documentData.listRegion.idDistrictForestly);
+
+    for(let i = 0; i < APP.dacha.length; i++) {
+        if(APP.dacha[i].id == APP.documentData.listRegion.idDacha) {
+           dachaStatementNode.value = APP.dacha[i].name;
         }
     }
 
