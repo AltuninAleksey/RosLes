@@ -52,10 +52,8 @@ async function setDetailDataIdPage() {
     let soilLotStatementNode = document.querySelector("#soilLotStatement");
     let sampleRegionStatementNode = document.querySelector("#sampleRegionStatement");
     let quarterStatementNode = document.querySelector("#quarterStatement");
-    let dachaStatementNode = document.querySelector("#dachaStatement");
 
     dateStatementNode.value = APP.documentData.date;
-    dachaStatementNode.value = APP.documentData.dacha;
 
     soilLotStatementNode.value = APP.documentData.soilLot;
     sampleRegionStatementNode.value = APP.documentData.sampleRegion;
@@ -79,6 +77,12 @@ async function setEvent() {
         .querySelector("#forestlyStatement")
         .addEventListener('change', async (e)=>{
                 await setDistriotForestlyStatement();
+        });
+
+    document
+        .querySelector("#distriotForestlyStatement")
+        .addEventListener('change', async (e)=>{
+                await setDachaStatement();
         });
 
     document
@@ -367,6 +371,32 @@ async function setDistriotForestlyStatement() {
 
     distriotForestlyNode.innerHTML = newHtml;
 
+    await setDachaStatement();
+
+}
+
+async function setDachaStatement() {
+    let idDacha = document.querySelector("#distriotForestlyStatement").value;
+    APP.dacha = [];
+
+    if(idDacha != "" && idDacha != null && idDacha != undefined) {
+        APP.dacha = await CommonBusiness.getDachaStatementByIdDistrictForestly(idDacha);
+    }
+
+    let newHtml = "";
+
+    let dachaStatementNode = document.querySelector("#dachaStatement");
+
+    for(let i = 0; i < APP.dacha.length; i++) {
+        if(APP.dacha[i].id == APP.documentData.idDacha) {
+            newHtml += '<option selected value="' + APP.dacha[i].id + '">' + APP.dacha[i].name + '</option>';
+        } else {
+            newHtml += '<option value="' + APP.dacha[i].id + '">' + APP.dacha[i].name + '</option>';
+        }
+    }
+
+    dachaStatementNode.innerHTML = newHtml;
+
 }
 async function openAddForm(id) {
 
@@ -503,6 +533,7 @@ async function saveData() {
         sampleRegion: Number(sampleRegionStatementNode),
         nameQuarter: quarterStatement == ""? null : quarterStatement,
         dacha: dachaStatement == ""? null : dachaStatement,
+        idDacha: Number(dachaStatement),
         idDistrictForestly: Number(distriotForestlyStatement),
         soilLot: soilLotStatementNode,
     };

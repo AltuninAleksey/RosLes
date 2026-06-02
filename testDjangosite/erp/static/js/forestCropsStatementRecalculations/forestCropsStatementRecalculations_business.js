@@ -78,3 +78,18 @@ StatementRecalculationsBusiness.downloadAllExcel = async function(data) {
     });
     return requestData.data;
 }
+
+StatementRecalculationsBusiness.dachaList = async function() {
+
+    var token = document.cookie.match(/jwttoken=(.+?)(;|$)/)[1];
+
+    var requestData = await axios({
+        method: 'get',
+        url: "http://92.50.227.100:58493/forestcrops/api/shared/get-all-dacha",
+        responseType: 'json',
+        headers: {
+            'Authorization': 'Bearer ' + token
+        }
+    });
+    return requestData.data;
+}

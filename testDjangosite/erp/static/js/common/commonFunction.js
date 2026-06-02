@@ -51,6 +51,16 @@ CommonFunction.getDistrictForestlyNameByQuarterId = function(district_forestly, 
     return "";
 }
 
+CommonFunction.getDachaStatementNameById = function(dacha, id_dacha) {
+    for(var j = 0; j < dacha.length; j++) {
+        if(dacha[j].id == id_dacha) {
+            return dacha[j].name;
+        }
+    }
+
+    return "";
+}
+
 CommonFunction.getBreedsName = function(breeds, id_breed) {
     for(var j = 0; j < breeds.length; j++) {
         if(breeds[j].id == id_breed) {

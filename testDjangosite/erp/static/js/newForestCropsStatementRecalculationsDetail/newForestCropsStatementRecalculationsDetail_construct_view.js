@@ -59,6 +59,11 @@ async function setEvent() {
                 await setDistriotForestlyStatement();
         });
 
+    document
+        .querySelector("#distriotForestlyStatement")
+        .addEventListener('change', async (e)=>{
+                await setDachaStatement();
+        });
 }
 
 async function setSubjectsRF() {
@@ -113,6 +118,31 @@ async function setDistriotForestlyStatement() {
     }
 
     distriotForestlyNode.innerHTML = newHtml;
+    await setDachaStatement();
+}
+
+async function setDachaStatement() {
+    let idDacha = document.querySelector("#distriotForestlyStatement").value;
+    APP.dacha = [];
+
+    if(idDacha != "" && idDacha != null && idDacha != undefined) {
+        APP.dacha = await CommonBusiness.getDachaStatementByIdDistrictForestly(idDacha);
+    }
+
+    let newHtml = "";
+
+    let dachaStatementNode = document.querySelector("#dachaStatement");
+
+    for(let i = 0; i < APP.dacha.length; i++) {
+        if(APP.dacha[i].id == APP.documentData.idDacha) {
+            newHtml += '<option selected value="' + APP.dacha[i].id + '">' + APP.dacha[i].name + '</option>';
+        } else {
+            newHtml += '<option value="' + APP.dacha[i].id + '">' + APP.dacha[i].name + '</option>';
+        }
+    }
+
+    dachaStatementNode.innerHTML = newHtml;
+
 }
 
 async function saveData() {
@@ -133,6 +163,7 @@ async function saveData() {
     var data = {
         date: dateStatementNode,
         dacha: dachaStatement == ""? null : dachaStatement,
+        idDacha: Number(dachaStatement),
         nameQuarter: quarterStatement == ""? null : quarterStatement,
         sampleRegion: String(sampleRegionStatementNode).replace(/,/g, '.'),
         mark_del: 0,

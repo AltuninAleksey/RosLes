@@ -87,6 +87,10 @@ async function buildStatementRecalculationsTbody() {
         });
     }
 
+    APP.dacha = [];
+    var dachaResponse = await StatementRecalculationsBusiness.dachaList();
+    APP.dacha = dachaResponse.data;
+
 
     APP.dataTable = dataResponse;
     APP.sortOrderTable1 = 0;
@@ -129,6 +133,7 @@ function renderTablePage(data) {
         data[i].subjectrf = CommonFunction.getSubjectNameByQuarterId(APP.subjectrf, data[i].idSubject);
         data[i].forestly = CommonFunction.getForestlyNameByQuarterId(APP.forestly, data[i].idForestly);
         data[i].district_forestly = CommonFunction.getDistrictForestlyNameByQuarterId(APP.district_forestly, data[i].idDistrictForestly);
+        data[i].dachaList = CommonFunction.getDachaStatementNameById(APP.dacha, data[i].idDacha);
 
         let strGetStatementRecalculationsDetail = "getForestCropsRecalculationsDetail(" + data[i].id + ")"
 
@@ -137,7 +142,7 @@ function renderTablePage(data) {
             <td class="textAlignCenter td2">${data[i].subjectrf}</td>
             <td class="textAlignCenter td3">${data[i].forestly}</td>
             <td class="textAlignCenter td4">${data[i].district_forestly}</td>
-            <td class="textAlignCenter td9">${data[i].dacha == null ? "" : data[i].dacha}</td>
+            <td class="textAlignCenter td9">${data[i].dachaList}</td>
             <td class="textAlignCenter td5">${data[i].nameQuarter == null ? "" : data[i].nameQuarter}</td>
             <td class="textAlignCenter td6">${data[i].soilLot}</td>
             <td class="textAlignCenter td6">${data[i].sampleRegion}</td>

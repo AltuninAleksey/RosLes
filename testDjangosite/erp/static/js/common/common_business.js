@@ -52,6 +52,21 @@ CommonBusiness.getDistrictForestlyByIdForestly = async function(id) {
 
 }
 
+CommonBusiness.getDachaStatementByIdDistrictForestly = async function(id) {
+    var token = document.cookie.match(/jwttoken=(.+?)(;|$)/)[1];
+    var requestData = await axios({
+        method: 'get',
+        url: "http://92.50.227.100:58493/forestcrops/api/shared/get-dacha?idDistrictForestly=" + id,
+        responseType: 'json',
+        headers: {
+          'Authorization': 'Bearer ' + token
+        }
+    });
+
+    return requestData.data.data;
+
+}
+
 CommonBusiness.getQuarterByIdDistrictForestly = async function(id) {
 
     if(id == "") {
