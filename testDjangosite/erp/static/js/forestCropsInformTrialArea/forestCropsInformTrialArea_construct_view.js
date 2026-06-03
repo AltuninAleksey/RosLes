@@ -372,7 +372,8 @@ async function saveData() {
 
     setTimeout(function() {
         let id = document.querySelector("#idDocument").value;
-        getForestCropsInformTrialArea(id);
+        let idParent = document.querySelector("#idParent").value;
+        getForestCropsInformTrialArea(id, idParent);
       }, 3000);
 
     hideLoadingModal();
