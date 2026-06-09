@@ -186,41 +186,136 @@ async function deleteLineInOneTable(del_id) {
     updateDataInOneTable();
 }
 
- async function createOneSample() {
-    let id = document.querySelector("#idDocument").value;
-    let idBreed = document.getElementById("breedDiameter");
-    let height = document.getElementById("height");
-    let diameter = document.getElementById("diameter");
+//async function createOneSample() {
+//    let id = document.querySelector("#idDocument").value;
+//    let idBreed = document.getElementById("breedDiameter");
+//    let height = document.getElementById("height");
+//    let diameter = document.getElementById("diameter");
+//
+//    const diameterValue = truncateTo2Decimals(diameter.value);
+//    const heightValue = truncateTo2Decimals(height.value);
+//
+//    APP.createOneSample = [];
+//
+//    let table = {
+//        idBreed: Number(idBreed.value),
+//        height: heightValue,
+//        diameter: diameterValue,
+//    }
+//    APP.createOneSample.push(table);
+//
+//    var data = {
+//        idSample: Number(id),
+//        values : APP.createOneSample
+//    };
+//    APP.createOneSample = [];
+//    height.value = "";
+//    diameter.value = "";
+//    await forestCropsInformTrialArea.createOneSample(data);
+//    var oneTableResp = await forestCropsInformTrialArea.getOneTable(id,1);
+//    APP.countOneTable = oneTableResp.count;
+//    APP.oneTableList = oneTableResp.data
+//
+//    updateDataInOneTable();
+//    closeAddForm("form-add-diameter");
+//}
 
-    const diameterValue = truncateTo2Decimals(diameter.value);
-    const heightValue = truncateTo2Decimals(height.value);
+function replaceSpacesWithSemicolon(inputId) {
+    const input = document.getElementById(inputId);
 
-    APP.createOneSample = [];
+    input.addEventListener('input', function() {
+        const cursorPos = this.selectionStart;
+        const originalValue = this.value;
+        let newValue = originalValue.replace(/\s/g, ';');
+        newValue = newValue.replace(/;+/g, ';');
+        if (originalValue !== newValue) {
+            this.value = newValue;
+            // корректируем позицию курсора, если она сместилась из‑за замены
+            const diff = newValue.length - originalValue.length;
+            this.setSelectionRange(cursorPos + diff, cursorPos + diff);
+        }
+    });
+}
 
-    let table = {
-        idBreed: Number(idBreed.value),
-        height: heightValue,
-        diameter: diameterValue,
+// Использование:
+replaceSpacesWithSemicolon('height');
+replaceSpacesWithSemicolon('diameter');
+// Функция для разбора строки с разделителем ; в массив чисел
+function parseMultipleValues(inputString) {
+    if (!inputString || inputString.trim() === '') {
+        return [];
     }
-    APP.createOneSample.push(table);
 
-    var data = {
-        idSample: Number(id),
-        values : APP.createOneSample
-    };
-    APP.createOneSample = [];
-    height.value = "";
-    diameter.value = "";
-    await forestCropsInformTrialArea.createOneSample(data);
-    var oneTableResp = await forestCropsInformTrialArea.getOneTable(id,1);
-    APP.countOneTable = oneTableResp.count;
-    APP.oneTableList = oneTableResp.data
+    // Разделяем по ; и преобразуем в числа
+    const values = inputString.split(';')
+        .map(v => v.trim()) // Убираем пробелы вокруг
+        .filter(v => v !== '') // Убираем пустые значения
+        .map(v => {
+            // Заменяем запятую на точку и преобразуем в число
+            const num = parseFloat(v.replace(',', '.'));
+            // Проверяем на валидность
+            return isNaN(num) ? null : truncateTo2Decimals(num);
+        })
+        .filter(v => v !== null && v > 0); // Убираем некорректные значения
 
-    updateDataInOneTable();
-    closeAddForm("form-add-diameter");
+    return values;
+}
 
-    console.log('Добавлена запись:', data);
-    console.log('Все записи:', APP.oneTableList);
+//// Основная функция создания записей
+async function createOneSample() {
+    try {
+        let id = document.querySelector("#idDocument").value;
+        let idBreed = document.getElementById("breedDiameter");
+        let height = document.getElementById("height");
+        let diameter = document.getElementById("diameter");
+
+        // Получаем значения и разбираем их
+        const heightValues = parseMultipleValues(height.value);
+        const diameterValues = parseMultipleValues(diameter.value);
+
+        // Проверяем, что массивы не пустые
+        if (heightValues.length === 0 || diameterValues.length === 0) {
+            alert('Пожалуйста, заполните оба поля!');
+            return;
+        }
+
+        // Проверяем, что количество значений совпадает
+        if (heightValues.length !== diameterValues.length) {
+            alert(`Количество значений не совпадает!\nВысота: ${heightValues.length} шт\nДиаметр: ${diameterValues.length} шт\nДолжно быть одинаковое количество.`);
+            return;
+        }
+
+        // Создаем массив записей
+        APP.createOneSample = [];
+        for (let i = 0; i < heightValues.length; i++) {
+            APP.createOneSample.push({
+                idBreed: Number(idBreed.value),
+                height: heightValues[i],
+                diameter: diameterValues[i]
+            });
+        }
+
+        var data = {
+            idSample: Number(id),
+            values: APP.createOneSample
+        };
+        await forestCropsInformTrialArea.createOneSample(data);
+
+        height.value = "";
+        diameter.value = "";
+        APP.createOneSample = [];
+
+        var oneTableResp = await forestCropsInformTrialArea.getOneTable(id, 1);
+        APP.countOneTable = oneTableResp.count;
+        APP.oneTableList = oneTableResp.data;
+
+        updateDataInOneTable();
+        closeAddForm("form-add-diameter");
+
+    } catch (error) {
+        console.error('Ошибка при добавлении:', error);
+        alert('Ошибка при добавлении записей');
+    }
 
 }
 

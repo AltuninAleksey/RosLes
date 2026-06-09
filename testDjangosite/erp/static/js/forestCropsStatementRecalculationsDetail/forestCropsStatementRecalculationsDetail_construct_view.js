@@ -131,7 +131,7 @@ function renderTablePage() {
                         <td class="textAlignCenter td8">${APP.sampleList[i].number}</td>
                         <td class="textAlignCenter td9">${APP.sampleList[i].length}</td>
                         <td class="textAlignCenter td5">${APP.sampleList[i].width}</td>
-                        <td class="textAlignCenter td6">${APP.sampleList[i].square}</td>` +
+                        <td class="textAlignCenter td6">${APP.sampleList[i].square.toFixed(4)}</td>` +
                         "<td style=\"width: 1%; cursor: pointer;\">" +
                             "<svg onclick=\"event.stopPropagation();deleteNewLineInSampleList(" +APP.sampleList[i].id + ")\" class=\"cursorPointer\" width=\"23px\" height=\"23px\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">" +
                                 "<g id=\"SVGRepo_bgCarrier\" stroke-width=\"0\"></g> " +
@@ -387,12 +387,16 @@ async function setDachaStatement() {
 
     let dachaStatementNode = document.querySelector("#dachaStatement");
 
-    for(let i = 0; i < APP.dacha.length; i++) {
-        if(APP.dacha[i].id == APP.documentData.idDacha) {
-            newHtml += '<option selected value="' + APP.dacha[i].id + '">' + APP.dacha[i].name + '</option>';
-        } else {
-            newHtml += '<option value="' + APP.dacha[i].id + '">' + APP.dacha[i].name + '</option>';
+    newHtml += '<option value="">  </option>';
+    if (APP.documentData.idDacha !== null) {
+        for(let i = 0; i < APP.dacha.length; i++) {
+            if(APP.dacha[i].id == APP.documentData.idDacha) {
+                newHtml += '<option selected value="' + APP.dacha[i].id + '">' + APP.dacha[i].name + '</option>';
+            } else {
+                newHtml += '<option value="' + APP.dacha[i].id + '">' + APP.dacha[i].name + '</option>';
+            }
         }
+    } else {
     }
 
     dachaStatementNode.innerHTML = newHtml;
@@ -533,7 +537,7 @@ async function saveData() {
         sampleRegion: Number(sampleRegionStatementNode),
         nameQuarter: quarterStatement == ""? null : quarterStatement,
         dacha: dachaStatement == ""? null : dachaStatement,
-        idDacha: Number(dachaStatement),
+        idDacha: dachaStatement == ""? null : Number(dachaStatement),
         idDistrictForestly: Number(distriotForestlyStatement),
         soilLot: soilLotStatementNode,
     };
@@ -541,7 +545,6 @@ async function saveData() {
     await StatementRecalculationsBusinessDetail.getUpdateSample(data);
 
     resetChangesTracker();
-
     setTimeout(function() {
         let id = document.querySelector("#idDocument").value;
         getForestCropsRecalculationsDetail(id);

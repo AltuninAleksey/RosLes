@@ -133,14 +133,17 @@ async function setDachaStatement() {
 
     let dachaStatementNode = document.querySelector("#dachaStatement");
 
-    for(let i = 0; i < APP.dacha.length; i++) {
-        if(APP.dacha[i].id == APP.documentData.idDacha) {
-            newHtml += '<option selected value="' + APP.dacha[i].id + '">' + APP.dacha[i].name + '</option>';
-        } else {
-            newHtml += '<option value="' + APP.dacha[i].id + '">' + APP.dacha[i].name + '</option>';
+    newHtml += '<option value="">  </option>';
+    if (APP.documentData.idDacha !== null) {
+        for(let i = 0; i < APP.dacha.length; i++) {
+            if(APP.dacha[i].id == APP.documentData.idDacha) {
+                newHtml += '<option selected value="' + APP.dacha[i].id + '">' + APP.dacha[i].name + '</option>';
+            } else {
+                newHtml += '<option value="' + APP.dacha[i].id + '">' + APP.dacha[i].name + '</option>';
+            }
         }
+    } else {
     }
-
     dachaStatementNode.innerHTML = newHtml;
 
 }
@@ -163,7 +166,7 @@ async function saveData() {
     var data = {
         date: dateStatementNode,
         dacha: dachaStatement == ""? null : dachaStatement,
-        idDacha: Number(dachaStatement),
+        idDacha: dachaStatement == ""? null : Number(dachaStatement),
         nameQuarter: quarterStatement == ""? null : quarterStatement,
         sampleRegion: String(sampleRegionStatementNode).replace(/,/g, '.'),
         mark_del: 0,

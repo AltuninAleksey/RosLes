@@ -72,14 +72,7 @@ async function setDetailDataIdPage() {
     let forestlyStatementNode = document.querySelector("#forestlyStatement");
     let distriotForestlyNode = document.querySelector("#distriotForestlyStatement");
 
-//    dateStatementNode.value = "Дата обследования: " + APP.documentData.listRegion.date;
-//    dachaStatementNode.value = "Урочище: " + APP.documentData.listRegion.dacha;
-//
-//    soilLotStatementNode.value = "Выдел: " + APP.documentData.listRegion.soilLot;
-//    sampleRegionStatementNode.value = "Площадь участка: " + APP.documentData.listRegion.sampleRegion;
-//    quarterStatementNode.value = "Квартал: " + APP.documentData.listRegion.nameQuarter;
     dateStatementNode.value =  APP.documentData.listRegion.date;
-  //  dachaStatementNode.value = APP.documentData.listRegion.dacha;
 
     soilLotStatementNode.value =  APP.documentData.listRegion.soilLot;
     sampleRegionStatementNode.value =  APP.documentData.listRegion.sampleRegion;
@@ -120,7 +113,7 @@ async function setDetailDataIdPage() {
 
     lengthSampleNode.value = Number(APP.documentData.sample.length).toFixed(2);
     widthSampleNode.value = Number(APP.documentData.sample.width).toFixed(2);
-    squareSampleNode.value = Number(APP.documentData.sample.square).toFixed(2);
+    squareSampleNode.value = Number(APP.documentData.sample.square).toFixed(4);
 
     updateDataInNullTable();
     updateDataInOneTable();
@@ -130,7 +123,25 @@ async function setDetailDataIdPage() {
 
 const field1 = document.getElementById('lengthSample');
 const field2 = document.getElementById('widthSample');
+const resultField = document.getElementById('squareSample');
 
+function calculateAndSetSquare() {
+
+    const length = parseFloat(field1.value.replace(',', '.'));
+    const width = parseFloat(field2.value.replace(',', '.'));
+
+    if (!isNaN(length) && !isNaN(width) && length > 0 && width > 0) {
+        const square = length * width / 10000;
+        resultField.value = square.toFixed(4);
+    } else {
+        resultField.value = '';
+    }
+}
+
+field1.addEventListener('input', calculateAndSetSquare);
+field2.addEventListener('input', calculateAndSetSquare);
+field1.addEventListener('change', calculateAndSetSquare);
+field2.addEventListener('change', calculateAndSetSquare);
 
 function formatToTwoDecimals(input) {
   const value = parseFloat(input.value);
