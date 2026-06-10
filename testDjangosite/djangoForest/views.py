@@ -2663,6 +2663,7 @@ class CreateAppFCExcel(APIView):
             'id_district_forestly__name_district_forestly',
             'id_district_forestly__id_forestly__name_forestly',
             'id_district_forestly__id_forestly__id_subject_rf__name_subject_RF',
+            'id_dacha__name_side'
             )
         samples = AppFcSample.objects.filter(id_listregion = request.data['id']).values()
         samples_set_ids = set()
