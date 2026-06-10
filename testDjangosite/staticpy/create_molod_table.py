@@ -25,6 +25,15 @@ def create_accounting_table_from_json(json_data: dict):
     plants = json_data.get('plants', [])
     all_breed = {b['id']: b for b in json_data.get('all_breed', [])}
 
+    def format_number(value):
+        if value is None or value == '':
+            return ''
+        try:
+            formatted = f"{float(value):.1f}".replace('.', ',')
+            return formatted
+        except (ValueError, TypeError):
+            return value
+
     crops_by_sample_and_breed = defaultdict(list)
     for c in crops:
         key = (c.get('id_sample_id'), c.get('id_breed_id'))
@@ -75,7 +84,7 @@ def create_accounting_table_from_json(json_data: dict):
     ws['E4'] = "Урочище (дача)"
     ws['E4'].font = normal_font
     ws['E4'].alignment = center_alignment
-    ws['F4'] = list_region.get('dacha', '0')
+    ws['F4'] = list_region.get('id_dacha__name_side', '')
     ws['F4'].font = normal_font
     ws['F4'].alignment = center_alignment
 
@@ -237,14 +246,14 @@ def create_accounting_table_from_json(json_data: dict):
 
                     plants_list = plants_by_sample_and_breed.get((sample_id, breed_id), [])
                     if plants_list:
-                        avg_diameter = round(sum(p.get('diameter', 0) for p in plants_list) / len(plants_list), 2)
-                        avg_height_plants = round(sum(p.get('height', 0) for p in plants_list) / len(plants_list), 2)
+                        avg_diameter = sum(p.get('diameter', 0) for p in plants_list) / len(plants_list)
+                        avg_height_plants = sum(p.get('height', 0) for p in plants_list) / len(plants_list)
 
-                        ws.cell(row=current_row, column=5).value = avg_diameter
-                        ws.cell(row=current_row, column=6).value = avg_height_plants
+                        ws.cell(row=current_row, column=5).value = format_number(avg_diameter)
+                        ws.cell(row=current_row, column=6).value = format_number(avg_height_plants)
 
-                        all_diameters.extend([p.get('diameter', 0) for p in plants_list if p.get('diameter')])
-                        all_heights.extend([p.get('height', 0) for p in plants_list if p.get('height')])
+                        all_diameters.append(avg_diameter)
+                        all_heights.append(avg_height_plants)
 
                     ws.cell(row=current_row, column=7).value = total_dead
 
@@ -277,7 +286,7 @@ def create_accounting_table_from_json(json_data: dict):
                         max_h = max(max_h, m.get('max_height', 0))
 
                     ws.cell(row=current_row, column=9).value = total_count
-                    ws.cell(row=current_row, column=10).value = round(max_h, 2) if max_h else ''
+                    ws.cell(row=current_row, column=10).value = format_number(max_h) if max_h else ''
 
                     for col in range(8, 11):
                         ws.cell(row=current_row, column=col).alignment = center_alignment
@@ -304,19 +313,19 @@ def create_accounting_table_from_json(json_data: dict):
         pp_number += 1
 
     # ИТОГИ
-    avg_diameter = round(sum(all_diameters) / len(all_diameters), 2) if all_diameters else 0
-    avg_height = round(sum(all_heights) / len(all_heights), 2) if all_heights else 0
+    avg_diameter = sum(all_diameters) / len(all_diameters) if all_diameters else 0
+    avg_height = sum(all_heights) / len(all_heights) if all_heights else 0
 
     total_crops_count = sum(c.get('count_living', 0) for c in crops)
     total_crops_dead = sum(c.get('count_dead', 0) for c in crops)
     total_young_count = sum(m.get('to0_5', 0) + m.get('from0_6To1_5', 0) + m.get('from1_5', 0) for m in molod)
 
-    # Строка "Всего" - жирный шрифт, с двумя знаками после запятой
+    # Строка "Всего" - жирный шрифт, с одним знаком после запятой для диаметра и высоты
     ws.cell(row=current_row, column=1).value = "Всего"
     ws.cell(row=current_row, column=2).value = round(total_area_sum, 4)
     ws.cell(row=current_row, column=4).value = total_crops_count
-    ws.cell(row=current_row, column=5).value = avg_diameter
-    ws.cell(row=current_row, column=6).value = avg_height
+    ws.cell(row=current_row, column=5).value = format_number(avg_diameter)
+    ws.cell(row=current_row, column=6).value = format_number(avg_height)
     ws.cell(row=current_row, column=7).value = total_crops_dead
     ws.cell(row=current_row, column=9).value = total_young_count
 
@@ -324,7 +333,7 @@ def create_accounting_table_from_json(json_data: dict):
         cell = ws.cell(row=current_row, column=col)
         cell.border = thin_border
         cell.alignment = center_alignment
-        cell.font = bold_font  # Жирный шрифт для всей строки "Всего"
+        cell.font = bold_font
     current_row += 1
 
     # Строка "Итого на 1 га" - жирный шрифт, округление до целых
@@ -337,7 +346,7 @@ def create_accounting_table_from_json(json_data: dict):
             cell = ws.cell(row=current_row, column=col)
             cell.border = thin_border
             cell.alignment = center_alignment
-            cell.font = bold_font  # Жирный шрифт для всей строки "Итого на 1 га"
+            cell.font = bold_font
 
     # Ширина колонок
     column_widths = {'A': 10, 'B': 22, 'C': 12, 'D': 10, 'E': 18, 'F': 12, 'G': 12, 'H': 12, 'I': 10, 'J': 10}
