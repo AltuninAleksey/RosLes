@@ -319,20 +319,38 @@ async  function downloadAllExcel(id) {
     window.open(urlFile, '_blank').focus();
 }
 
-function sortByDate() {
-    if(APP.sortOrderTable1 != 1) {
-        APP.dataTable.sort(function(a, b) { return a.date > b.date? -1 : 1; });
-        APP.sortOrderTable1 = 1;
+async function sortByDate() {
 
+    if(APP.sortByDate != 1) {
+        APP.sortByDate = 1;
         document.querySelector("#sortDateForTable1").innerHTML = "&#8593;";
     } else {
-        APP.dataTable.sort(function(a, b) { return a.date > b.date? 1 : -1; });
-        APP.sortOrderTable1 = -1;
-
+        APP.sortByDate = -1;
         document.querySelector("#sortDateForTable1").innerHTML = "&#8595;";
     }
 
-    updateDataInStatementRecalculationsTbody(APP.dataTable);
+    var response = await StatementRecalculationsBusiness.getAllStatementList(currentPage);
+    APP.countPage = response.count;
+    renderTablePage(response.data);
+
+    updateButtonsState();
+    updatePaginationInfo();
+
+    updatePaginationControls();
+
+//    if(APP.sortOrderTable1 != 1) {
+//        APP.dataTable.sort(function(a, b) { return a.date > b.date? -1 : 1; });
+//        APP.sortOrderTable1 = 1;
+//
+//        document.querySelector("#sortDateForTable1").innerHTML = "&#8593;";
+//    } else {
+//        APP.dataTable.sort(function(a, b) { return a.date > b.date? 1 : -1; });
+//        APP.sortOrderTable1 = -1;
+//
+//        document.querySelector("#sortDateForTable1").innerHTML = "&#8595;";
+//    }
+//
+//    updateDataInStatementRecalculationsTbody(APP.dataTable);
 
 }
 

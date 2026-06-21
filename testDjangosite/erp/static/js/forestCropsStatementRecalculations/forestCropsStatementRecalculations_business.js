@@ -1,7 +1,8 @@
 APP = {
     idView: "forestCropsStatementRecalculations",
     params: {},
-    limit: 20
+    limit: 20,
+    sortByDate: -1
 }
 
 function StatementRecalculationsBusiness() {}
@@ -14,7 +15,8 @@ StatementRecalculationsBusiness.getAllStatementList = async function(pageNum) {
 
     var requestData = await axios({
       method: 'get',
-      url: ("http://92.50.227.100:58493/forestcrops/api/listregion/list?offset=" + offset + "&limit=" + APP.limit),
+      url: ("http://92.50.227.100:58493/forestcrops/api/listregion/list?offset=" + offset
+        + "&limit=" + APP.limit + "&sortByDate=" + APP.sortByDate),
       params: APP.params,
       responseType: 'json',
       headers: {
