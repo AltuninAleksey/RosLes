@@ -221,14 +221,41 @@ body {
     background: #e8f5e9;
     border-bottom: 1px solid #e0e0e0;
 }
-
+/*
 .form > div {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     gap: 16px;
     align-items: end;
 }
+*//*
+.adaptive-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    align-items: end;
+}
 
+.three-columns {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(180px, 290px));
+    gap: 16px;
+    align-items: end;
+}*/
+.form > div:first-child {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    align-items: end;
+}
+
+.form > div:last-child {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(180px, 290px));
+    gap: 16px;
+    align-items: end;
+    max-width: 37%; /* Ограничиваем ширину второго блока */
+}
 .form p {
     margin: 0;
     font-size: 13px;
@@ -273,8 +300,8 @@ body {
 }
 
 .table-container {
-    overflow-x: auto;
-    overflow-y: auto;
+    /*overflow-x: auto;
+    overflow-y: auto;*/
     position: relative;
     max-height: calc(100vh - 340px);
    /* border-top: 1px solid #e0e0e0;*/
@@ -784,6 +811,28 @@ body {
         border-spacing: 0;
         table-layout: fixed;
     }
+
+.breedSelect{
+    width: 180px;
+    border: none;
+    text-align: center;
+    background: transparent;
+    outline: none;
+    box-shadow: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+@media (max-width: 1600px) {
+    .form > div:last-child {
+        max-width: 42%;
+    }
+}
+@media (max-width: 1400px) {
+    .form > div:last-child {
+        max-width: 49%;
+    }
+}
 @media (max-width: 1200px) {
     .conpodles2 {
         flex-direction: column;
@@ -842,7 +891,7 @@ body {
     }
 
     .table-container {
-        overflow-x: auto;
+        /*overflow-x: auto;*/
         -webkit-overflow-scrolling: touch;
     }
 
@@ -867,6 +916,9 @@ body {
     .modal-profile {
         margin-right: 10px;
         margin-top: 10px;
+    }
+    .form > div:last-child {
+        max-width: 59%;
     }
 }
 
@@ -894,10 +946,13 @@ body {
         display: none;
     }
 
-    .form > div {
+    .form > div:first-child {
         grid-template-columns: 1fr;
     }
-
+    .form > div:last-child {
+        max-width: 100%;
+        grid-template-columns: 1fr;
+    }
     .form p:nth-child(5),
     .form p:nth-child(6) {
         min-width: auto;
@@ -934,8 +989,11 @@ body {
         line-height: 10px;
     }
     .table-container {
-        overflow-x: auto;
+        /*overflow-x: auto;*/
         -webkit-overflow-scrolling: touch;
+    }
+    .breedSelect{
+        width: 75px;
     }
 }
 
@@ -967,7 +1025,10 @@ body {
         margin-top: 10px;
     }
     .table-container {
-        overflow-x: auto;
+        /*overflow-x: auto;*/
         -webkit-overflow-scrolling: touch;
+    }
+    .breedSelect{
+        width: 75px;
     }
 }

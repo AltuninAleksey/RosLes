@@ -30,14 +30,14 @@ function renderTwoTablePage() {
 
         for(var j = 0; j < APP.breeds.length; j++) {
             if(APP.twoTableList[i].idBreed == APP.breeds[j].id) {
-                newHtmlBreeds = newHtmlBreeds + "<option selected value=\"" + APP.breeds[j].id + "\">" + APP.breeds[j].name_breed + "</option>";
+                newHtmlBreeds = newHtmlBreeds + "<option selected value=\"" + APP.breeds[j].id + "\">" + APP.breeds[j].name + "</option>";
             } else {
-                newHtmlBreeds = newHtmlBreeds + "<option value=\"" + APP.breeds[j].id + "\">" + APP.breeds[j].name_breed + "</option>";
+                newHtmlBreeds = newHtmlBreeds + "<option value=\"" + APP.breeds[j].id + "\">" + APP.breeds[j].name + "</option>";
             }
         }
 
                 newHtml += `<tr class="cursorPointer" data-two-id="${APP.twoTableList[i].id}">
-                        <td class="textAlignCenter td8"><select type="text" name="id_breed${i}" id="id_breed${i}" style="width: 180px; border: none; text-align: center; background: transparent; outline: none; box-shadow: none; -webkit-appearance: none; -moz-appearance: none; appearance: none;">${newHtmlBreeds}</select></td>
+                        <td class="textAlignCenter td8"><select class="breedSelect" type="text" name="id_breed${i}" id="id_breed${i}">${newHtmlBreeds}</select></td>
                         <td class="textAlignCenter td9">${APP.twoTableList[i].to0_5}</td>
                         <td class="textAlignCenter td9">${APP.twoTableList[i].from0_6To1_5}</td>
                         <td class="textAlignCenter td9">${APP.twoTableList[i].from1_5}</td>
@@ -80,15 +80,116 @@ function editLineInTwoTable(id, event) {
     const currentFrom1_5 = record.from1_5;
     const currentMaxHeight = record.maxHeight;
 
+    const selectPodrostId = `edit-breed-${id}`;
+    const hiddenInputPodrost = `edit-selected-breed-podrost-${id}`;
     // Создаем select для породы
-    let breedOptions = "";
-    for (let j = 0; j < APP.breeds.length; j++) {
-        const selected = APP.breeds[j].id === currentBreed ? "selected" : "";
-        breedOptions += `<option value="${APP.breeds[j].id}" ${selected}>${APP.breeds[j].name_breed}</option>`;
-    }
+//    let breedOptions = "";
+//    for (let j = 0; j < APP.breeds.length; j++) {
+//        const selected = APP.breeds[j].id === currentBreed ? "selected" : "";
+//        breedOptions += `<option value="${APP.breeds[j].id}" ${selected}>${APP.breeds[j].name}</option>`;
+//    }
+     let breedSelectHtml = `
+        <div class="custom-select edit-custom-podrost-select" id="${selectPodrostId}" style="width: 100%;">
+            <div class="custom-select-trigger" id="podrostTrigger" style="border: none; border-bottom: 1px solid #40E0D0; border-radius: 0; padding: 6px 12px; min-height: 35px;">
+                <span class="selected-value" id="podrostSelected">
+                    <span class="selected-name">Выберите породу</span>
+                    <span class="selected-short"></span>
+                </span>
+                <span class="arrow" style="color: #40E0D0;">▼</span>
+            </div>
+            <div class="custom-select-options" id="podrostOptions" style="border-color: #40E0D0;top: 0; bottom: 40px;">
+            </div>
+        </div>
+        <input type="hidden" id="${hiddenInputPodrost}" value="${currentBreed}">
+    `;
 
+    cells[0].innerHTML = breedSelectHtml;
+
+    const selectContainer = document.getElementById(selectPodrostId);
+    if (selectContainer) {
+
+       const optionsContainerPodrost = document.getElementById('podrostOptions');
+       const selectedPodrostValue = document.getElementById('podrostSelected');
+       const hiddenPodrostInputId = document.getElementById(hiddenInputPodrost);
+
+        if (optionsContainerPodrost) {
+            optionsContainerPodrost.innerHTML = '';
+
+            APP.breeds.forEach(item => {
+                const option = document.createElement('div');
+                option.className = 'custom-option';
+                option.dataset.value = item.id;
+                const isSelected = item.id === currentBreed;
+                if (isSelected) {
+                    option.classList.add('selected');
+                }
+                option.innerHTML = `
+                    <div class="option-name">${item.name}</div>
+                    <div class="option-short">${item.shortName || ''}</div>
+                `;
+
+                option.addEventListener('click', (function(item, selectedPodrostValue, hiddenPodrostInputId, optionsContainerPodrost, selectContainer) {
+                    return function(e) {
+                        e.stopPropagation();
+
+                        // Обновляем отображение
+                        if (selectedPodrostValue) {
+                            selectedPodrostValue.innerHTML = `
+                                <span class="selected-name">${item.name}</span>
+                                <span class="selected-short">${item.shortName || ''}</span>
+                            `;
+                        }
+
+                        if (hiddenPodrostInputId) {
+                            hiddenPodrostInputId.value = item.id;
+                        }
+
+                        optionsContainerPodrost.querySelectorAll('.custom-option').forEach(opt => {
+                            opt.classList.remove('selected');
+                        });
+                        option.classList.add('selected');
+
+                        selectContainer.classList.remove('open');
+                    };
+                })(item, selectedPodrostValue, hiddenPodrostInputId, optionsContainerPodrost, selectContainer));
+
+                optionsContainerPodrost.appendChild(option);
+            });
+
+            if (currentBreed) {
+                const selectedBreed = APP.breeds.find(item => item.id === currentBreed);
+                if (selectedBreed && selectedPodrostValue) {
+                    selectedPodrostValue.innerHTML = `
+                        <span class="selected-name">${selectedBreed.name}</span>
+                        <span class="selected-short">${selectedBreed.shortName || ''}</span>
+                    `;
+                }
+            }
+        }
+
+        const podrostTrigger = document.getElementById('podrostTrigger');
+        if (podrostTrigger) {
+
+            podrostTrigger.addEventListener('click', function(e) {
+                e.stopPropagation();
+
+                document.querySelectorAll('.edit-custom-podrost-select.open').forEach(el => {
+                    if (el !== selectContainer) {
+                        el.classList.remove('open');
+                    }
+                });
+                selectContainer.classList.toggle('open');
+
+                if (selectContainer.classList.contains('open')) {
+                    setTimeout(() => {
+                        positionDropdown(selectContainer);
+                    }, 10);
+                }
+            });
+        }
+    }
     // Заменяем содержимое ячеек на поля ввода с кнопками
-    cells[0].innerHTML = `<select class="edit-breed" data-field="breed" style="width: 100%; padding: 6px 12px; border: none; background: transparent; border-bottom: 1px solid #40E0D0;">${breedOptions}</select>`;
+    //cells[0].innerHTML = `<select class="edit-breed" data-field="breed" style="width: 100%; padding: 6px 12px; border: none; background: transparent; border-bottom: 1px solid #40E0D0;">${breedOptions}</select>`;
     cells[1].innerHTML = `<input type="number" class="edit-to5" data-field="to0_5" value="${currentTo0_5}"  style="width: 100%; padding: 6px 12px; border: none; background: transparent; border-bottom: 1px solid #40E0D0;">`;
     cells[2].innerHTML = `<input type="number" class="edit-from6" data-field="from0_6To1_5" value="${currentFrom06}" style="width: 100%; padding: 6px 12px; border: none; background: transparent; border-bottom: 1px solid #40E0D0;">`;
     cells[3].innerHTML = `<input type="number" class="edit-from1_5" data-field="from1_5" value="${currentFrom1_5}" style="width: 100%; padding: 6px 12px; border: none; background: transparent; border-bottom: 1px solid #40E0D0;">`;
@@ -101,6 +202,55 @@ function editLineInTwoTable(id, event) {
             </svg>
         </button>
     `;
+    document.addEventListener('click', function closeSelect(e) {
+        document.querySelectorAll('.edit-custom-podrost-select.open').forEach(el => {
+            if (!el.contains(e.target)) {
+                el.classList.remove('open');
+            }
+        });
+    });
+}
+function positionDropdown(selectContainer) {
+    const trigger = selectContainer.querySelector('.custom-select-trigger');
+    const options = selectContainer.querySelector('.custom-select-options');
+
+    if (!trigger || !options) return;
+
+    setTimeout(() => {
+
+        const triggerRect = trigger.getBoundingClientRect();
+        const optionsHeight = options.scrollHeight || 200;
+
+        const spaceBelow = window.innerHeight - triggerRect.bottom;
+
+        const spaceAbove = triggerRect.top;
+
+        const fitsBelow = spaceBelow >= optionsHeight + 100;
+        const fitsAbove = spaceAbove >= optionsHeight + 100;
+
+        options.style.top = '';
+        options.style.bottom = '';
+        options.style.transform = '';
+        options.style.maxHeight = '';
+
+        if (fitsBelow) {
+            options.style.top = '100%';
+            options.style.bottom = 'auto';
+            options.style.transform = 'translateY(5px)';
+            options.style.maxHeight = Math.min(optionsHeight, spaceBelow - 20) + 'px';
+        } else if (fitsAbove) {
+            options.style.top = 'auto';
+            options.style.bottom = '100%';
+            options.style.transform = 'translateY(-5px)';
+            options.style.maxHeight = Math.min(optionsHeight, spaceAbove - 20) + 'px';
+        } else {
+            // Если не помещается нигде - открываем вниз с ограничением
+            options.style.top = '100%';
+            options.style.bottom = 'auto';
+            options.style.transform = 'translateY(5px)';
+            options.style.maxHeight = Math.max(spaceBelow - 20, 150) + 'px';
+        }
+    }, 5);
 }
 function truncateTo2Decimals(value) {
     if (value === undefined || value === null || value === '') return 0;
@@ -118,7 +268,9 @@ function saveInlineTwoEdit(id) {
     if (!targetRow) return;
 
     // Получаем новые значения из полей ввода
-    const newBreed = targetRow.cells[0].querySelector('.edit-breed')?.value;
+    const hiddenInput = document.getElementById(`edit-selected-breed-podrost-${id}`);
+    const newBreed = hiddenInput ? hiddenInput.value : null;
+    //const newBreed = targetRow.cells[0].querySelector('.edit-breed')?.value;
     const newTo0_5 = targetRow.cells[1].querySelector('.edit-to5')?.value;
     const newFrom0_6To1_5 = targetRow.cells[2].querySelector('.edit-from6')?.value;
     const newFrom1_5 = targetRow.cells[3].querySelector('.edit-from1_5')?.value;
@@ -201,7 +353,6 @@ async function deleteLineInTwoTable(del_id){
 
  async function createTwoSample() {
     let id = document.querySelector("#idDocument").value;
-    let idBreed = document.getElementById("breedPodrost");
     let to0_5 = document.getElementById("to0_5");
     let from0_6To1_5 = document.getElementById("from0_6To1_5");
     let from1_5 = document.getElementById("from1_5");
@@ -218,7 +369,7 @@ async function deleteLineInTwoTable(del_id){
         from0_6To1_5: Number(from0_6To1_5.value),
         from1_5: Number(from1_5.value),
         maxHeight: Number(maxHeight.value),
-        idBreed: Number(idBreed.value),
+        idBreed: Number(APP.forestPodrostSelectId),
     }
     APP.createTwoSample.push(table);
 

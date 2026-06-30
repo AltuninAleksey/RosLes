@@ -30,14 +30,14 @@ function renderOneTablePage() {
 
         for(var j = 0; j < APP.breeds.length; j++) {
             if(APP.oneTableList[i].idBreed == APP.breeds[j].id) {
-                newHtmlBreeds = newHtmlBreeds + "<option selected value=\"" + APP.breeds[j].id + "\">" + APP.breeds[j].name_breed + "</option>";
+                newHtmlBreeds = newHtmlBreeds + "<option selected value=\"" + APP.breeds[j].id + "\">" + APP.breeds[j].name + "</option>";
             } else {
-                newHtmlBreeds = newHtmlBreeds + "<option value=\"" + APP.breeds[j].id + "\">" + APP.breeds[j].name_breed + "</option>";
+                newHtmlBreeds = newHtmlBreeds + "<option value=\"" + APP.breeds[j].id + "\">" + APP.breeds[j].name + "</option>";
             }
         }
 
                 newHtml += `<tr class="cursorPointer" data-one-id="${APP.oneTableList[i].id}">
-                        <td class="textAlignCenter td8"><select type="text" name="id_breed${i}" id="id_breed${i}" style="width: 180px; border: none; text-align: center; background: transparent; outline: none; box-shadow: none; -webkit-appearance: none; -moz-appearance: none; appearance: none;">${newHtmlBreeds}</select></td>
+                        <td class="textAlignCenter td8"><select class="breedSelect" type="text" name="id_breed${i}" id="id_breed${i}">${newHtmlBreeds}</select></td>
                         <td class="textAlignCenter td9">${APP.oneTableList[i].diameter}</td>
                         <td class="textAlignCenter td5">${APP.oneTableList[i].height}</td>
                         <td style="width: 1%; cursor: pointer; text-align: center">
@@ -77,14 +77,112 @@ function editLineInOneTable(id, event) {
     const currentHeight = record.height;
 
     // Создаем select для породы
-    let breedOptions = "";
-    for (let j = 0; j < APP.breeds.length; j++) {
-        const selected = APP.breeds[j].id === currentBreed ? "selected" : "";
-        breedOptions += `<option value="${APP.breeds[j].id}" ${selected}>${APP.breeds[j].name_breed}</option>`;
-    }
+//    let breedOptions = "";
+//    for (let j = 0; j < APP.breeds.length; j++) {
+//        const selected = APP.breeds[j].id === currentBreed ? "selected" : "";
+//        breedOptions += `<option value="${APP.breeds[j].id}" ${selected}>${APP.breeds[j].name}</option>`;
+//    }
 
+    const selectId = `edit-breed-${id}`;
+    const hiddenInputId = `edit-selected-breed-${id}`;
+
+    // Создаем HTML для кастомного select
+    let breedSelectHtml = `
+        <div class="custom-select edit-custom-select" id="${selectId}" style="width: 100%;">
+            <div class="custom-select-trigger" style="border: none; border-bottom: 1px solid #40E0D0; border-radius: 0; padding: 6px 12px; min-height: 35px;">
+                <span class="selected-value">
+                    <span class="selected-name">Выберите породу</span>
+                    <span class="selected-short"></span>
+                </span>
+                <span class="arrow" style="color: #40E0D0;">▼</span>
+            </div>
+            <div class="custom-select-options" style="border-color: #40E0D0;">
+            </div>
+        </div>
+        <input type="hidden" id="${hiddenInputId}" value="${currentBreed}">
+    `;
+
+    cells[0].innerHTML = breedSelectHtml;
+
+    const selectContainer = document.getElementById(selectId);
+    if (selectContainer) {
+        const optionsContainer = selectContainer.querySelector('.custom-select-options');
+        const selectedValue = selectContainer.querySelector('.selected-value');
+        const hiddenInput = document.getElementById(hiddenInputId);
+
+        if (optionsContainer) {
+            optionsContainer.innerHTML = '';
+
+            APP.breeds.forEach(item => {
+                const option = document.createElement('div');
+                option.className = 'custom-option';
+                option.dataset.value = item.id;
+                const isSelected = item.id === currentBreed;
+                if (isSelected) {
+                    option.classList.add('selected');
+                }
+                option.innerHTML = `
+                    <div class="option-name">${item.name}</div>
+                    <div class="option-short">${item.shortName || ''}</div>
+                `;
+
+                option.addEventListener('click', (function(item, selectedValue, hiddenInput, optionsContainer, selectContainer) {
+                    return function(e) {
+                        e.stopPropagation();
+
+                        // Обновляем отображение
+                        if (selectedValue) {
+                            selectedValue.innerHTML = `
+                                <span class="selected-name">${item.name}</span>
+                                <span class="selected-short">${item.shortName || ''}</span>
+                            `;
+                        }
+
+                        if (hiddenInput) {
+                            hiddenInput.value = item.id;
+                            console.log('Выбрана порода ID:', item.id, 'Название:', item.name);
+                        }
+
+                        optionsContainer.querySelectorAll('.custom-option').forEach(opt => {
+                            opt.classList.remove('selected');
+                        });
+                        option.classList.add('selected');
+
+                        selectContainer.classList.remove('open');
+                    };
+                })(item, selectedValue, hiddenInput, optionsContainer, selectContainer));
+
+                optionsContainer.appendChild(option);
+            });
+
+            if (currentBreed) {
+                const selectedBreed = APP.breeds.find(item => item.id === currentBreed);
+                if (selectedBreed && selectedValue) {
+                    selectedValue.innerHTML = `
+                        <span class="selected-name">${selectedBreed.name}</span>
+                        <span class="selected-short">${selectedBreed.shortName || ''}</span>
+                    `;
+                }
+            }
+        }
+
+        const trigger = selectContainer.querySelector('.custom-select-trigger');
+        if (trigger) {
+
+            trigger.addEventListener('click', function(e) {
+                e.stopPropagation();
+
+                document.querySelectorAll('.edit-custom-select.open').forEach(el => {
+                    if (el !== selectContainer) {
+                        el.classList.remove('open');
+                    }
+                });
+                selectContainer.classList.toggle('open');
+            });
+        }
+    }
     // Заменяем содержимое ячеек на поля ввода с кнопками
-    cells[0].innerHTML = `<select class="edit-breed" data-field="breed" style="width: 100%; padding: 6px 12px; border: none; background: transparent; border-bottom: 1px solid #40E0D0;">${breedOptions}</select>`;
+    //cells[0].innerHTML = `<select class="edit-breed" data-field="breed" style="width: 100%; padding: 6px 12px; border: none; background: transparent; border-bottom: 1px solid #40E0D0;">${breedOptions}</select>`;
     cells[1].innerHTML = `<input type="number" step="0.1" min="0" class="edit-diameter" data-field="diameter" value="${currentDiameter}"  style="width: 100%; padding: 6px 12px; border: none; background: transparent; border-bottom: 1px solid #40E0D0;">`;
     cells[2].innerHTML = `<input type="number" step="0.1" min="0" class="edit-height" data-field="height" value="${currentHeight}" style="width: 100%; padding: 6px 12px; border: none; background: transparent; border-bottom: 1px solid #40E0D0;">`;
 
@@ -96,7 +194,13 @@ function editLineInOneTable(id, event) {
             </svg>
         </button>
     `;
-
+    document.addEventListener('click', function closeSelect(e) {
+        document.querySelectorAll('.edit-custom-select.open').forEach(el => {
+            if (!el.contains(e.target)) {
+                el.classList.remove('open');
+            }
+        });
+    });
 }
 function truncateTo2Decimals(value) {
     if (value === undefined || value === null || value === '') return 0;
@@ -108,13 +212,36 @@ function truncateTo2Decimals(value) {
 
     return Math.floor(num * 100) / 100;
 }
+
+const trigger = document.querySelector('.custom-select-trigger');
+const options = document.querySelector('.custom-select-options');
+
+function positionDropdown() {
+  if (!trigger || !options) return;
+
+  const triggerRect = trigger.getBoundingClientRect();
+  const spaceBelow = window.innerHeight - triggerRect.bottom;
+  const neededHeight = Math.min(250, options.scrollHeight); // max-height из CSS
+
+  if (spaceBelow < neededHeight) {
+    // Открываем вверх
+    options.style.bottom = `${window.innerHeight - triggerRect.top}px`;
+    options.style.top = 'auto';
+  } else {
+    // Открываем вниз
+    options.style.top = `${triggerRect.bottom + window.scrollY}px`;
+    options.style.bottom = 'auto';
+  }
+}
 function saveInlineOneEdit(id) {
 
     const targetRow = document.querySelector(`tr[data-one-id="${id}"]`);
     if (!targetRow) return;
 
     // Получаем новые значения из полей ввода
-    const newBreed = targetRow.cells[0].querySelector('.edit-breed')?.value;
+    const hiddenInput = document.getElementById(`edit-selected-breed-${id}`);
+    const newBreed = hiddenInput ? hiddenInput.value : null;
+    //const newBreed = targetRow.cells[0].querySelector('.edit-breed')?.value;
     const newDiameter = targetRow.cells[1].querySelector('.edit-diameter')?.value;
     const newHeight = targetRow.cells[2].querySelector('.edit-height')?.value;
 
@@ -245,7 +372,6 @@ function parseMultipleValues(inputString) {
     if (!inputString || inputString.trim() === '') {
         return [];
     }
-
     // Разделяем по ; и преобразуем в числа
     const values = inputString.split(';')
         .map(v => v.trim()) // Убираем пробелы вокруг
@@ -279,19 +405,23 @@ async function createOneSample() {
             return;
         }
 
-        // Проверяем, что количество значений совпадает
+//        // Проверяем, что количество значений совпадает
+//        if (heightValues.length !== diameterValues.length) {
+//            alert(`Количество значений не совпадает!\nВысота: ${heightValues.length} шт\nДиаметр: ${diameterValues.length} шт\nДолжно быть одинаковое количество.`);
+//            return;
+//        }
         if (heightValues.length !== diameterValues.length) {
-            alert(`Количество значений не совпадает!\nВысота: ${heightValues.length} шт\nДиаметр: ${diameterValues.length} шт\nДолжно быть одинаковое количество.`);
-            return;
+            const maxLen = Math.max(heightValues.length, diameterValues.length);
+            while (heightValues.length < maxLen) heightValues.push(0);
+            while (diameterValues.length < maxLen) diameterValues.push(0);
         }
-
         // Создаем массив записей
         APP.createOneSample = [];
         for (let i = 0; i < heightValues.length; i++) {
             APP.createOneSample.push({
-                idBreed: Number(idBreed.value),
+                idBreed: Number(APP.breedSelectId),
+                diameter: diameterValues[i],
                 height: heightValues[i],
-                diameter: diameterValues[i]
             });
         }
 

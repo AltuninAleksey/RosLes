@@ -145,7 +145,7 @@ function renderTablePage(data) {
             <td class="textAlignCenter td9">${data[i].dachaList}</td>
             <td class="textAlignCenter td5">${data[i].nameQuarter == null ? "" : data[i].nameQuarter}</td>
             <td class="textAlignCenter td6">${data[i].soilLot}</td>
-            <td class="textAlignCenter td6">${data[i].sampleRegion}</td>
+            <td class="textAlignCenter td6">${data[i].sampleRegion.toFixed(4)}</td>
             <td class="textAlignCenter cursorPointer" onClick='event.stopPropagation();downloadAllExcel(${data[i].id});'>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M2 6a2 2 0 0 1 2-2h5a1 1 0 0 1 .707.293L11.414 6H20a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6zm6.586 0H4v12h16V8h-9a1 1 0 0 1-.707-.293L8.586 6zM12 9.5a1 1 0 0 1 1 1v2.586l.293-.293a1 1 0 0 1 1.414 1.414l-2 2a1 1 0 0 1-1.414 0l-2-2a1 1 0 1 1 1.414-1.414l.293.293V10.5a1 1 0 0 1 1-1z" fill="#0D0D0D"/>
@@ -373,6 +373,14 @@ async function setEventForElementsFilter() {
     await setOptionInDistrictForestly(StatementRecalculationsBusiness.TypeData.BYID);
     let districtForestly = document.querySelector("#filter_district_forestly");
     districtForestly.removeAttribute("disabled");
+    districtForestly.addEventListener('change', async (e)=>{
+        await setDachaStatement(StatementRecalculationsBusiness.TypeData.BYID);
+    });
+
+
+    await setDachaStatement(StatementRecalculationsBusiness.TypeData.BYID);
+    let dachaStatement = document.querySelector("#filter_dacha");
+    dachaStatement.removeAttribute("disabled");
 
     document.querySelector("#filter_soil_lot").removeAttribute("readonly");
 
@@ -490,33 +498,37 @@ async function setOptionInDistrictForestly(status) {
 
     districtForestlyNode.innerHTML = newHtml;
 
-    //await setOptionInQuarter(StatementRecalculationsBusiness.TypeData.BYID);
+    await setDachaStatement(StatementRecalculationsBusiness.TypeData.BYID);
 }
 
-async function setOptionInQuarter(status) {
-
-    let quarterNode = document.querySelector("#filter_quartal");
-    let quarter = [];
+async function setDachaStatement(status) {
+    let dachaStatementNode = document.querySelector("#filter_dacha");
+    let dachaStatement = [];
 
     if(status == StatementRecalculationsBusiness.TypeData.BYID) {
-        let districtForestlyNode = document.querySelector("#filter_district_forestly");
+        let districtForestlyNode = document.querySelector("#filter_district_forestly").value;
 
-        if(districtForestlyNode.value != "" && districtForestlyNode.value != null && districtForestlyNode.value != undefined) {
-            quarter = await CommonBusiness.getQuarterByIdDistrictForestly(districtForestlyNode.value);
+        if(districtForestlyNode != "" && districtForestlyNode != null && districtForestlyNode != undefined) {
+            dachaStatement = await CommonBusiness.getDachaStatementByIdDistrictForestly(districtForestlyNode);
         }
     } else {
-        quarter = APP.quarter;
+        dachaStatement = APP.dacha;
     }
 
-    var newHtml = "";
-    for(var j = 0; j < quarter.length; j++) {
-        if(j == 0) {
-            newHtml = newHtml + "<option selected value=\"" + quarter[j].id + "\">" + quarter[j].quarter_name + "</option>";
+    let newHtml = "";
+
+    newHtml += '<option value="">  </option>';
+
+    for(let i = 0; i < dachaStatement.length; i++) {
+        if(i == 0) {
+            newHtml += '<option selected value="' + dachaStatement[i].id + '">' + dachaStatement[i].name + '</option>';
         } else {
-            newHtml = newHtml + "<option value=\"" + quarter[j].id + "\">" + quarter[j].quarter_name + "</option>";
+            newHtml += '<option value="' + dachaStatement[i].id + '">' + dachaStatement[i].name + '</option>';
         }
     }
-    quarterNode.innerHTML = newHtml;
+
+    dachaStatementNode.innerHTML = newHtml;
+
 }
 
 async function searchByFilter() {
@@ -527,6 +539,7 @@ async function searchByFilter() {
     let forestlyNode = document.querySelector("#filter_forestly").value;
     let checkboxFilterDistrictForestlyNode = document.querySelector("#checkbox_filter_district_forestly");
     let districtForestlyNode = document.querySelector("#filter_district_forestly").value;
+    let dachaStatementNode = document.querySelector("#filter_dacha").value;
     let checkboxFilterDateStartNode = document.querySelector("#checkbox_filter_date_start");
     let dateStartNode = document.querySelector("#filter_date_start");
     let checkboxFilterDateEnd = document.querySelector("#checkbox_filter_date_end");
@@ -543,6 +556,7 @@ async function searchByFilter() {
             idSubject: subjectRFNode,
             idForestly: forestlyNode,
             idDistrictForestly: districtForestlyNode,
+            idDacha: dachaStatementNode,
             soilLot: soilLot
         };
 

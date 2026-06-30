@@ -178,12 +178,13 @@ async function saveData() {
 
     };
 
-    await newForestCropsStatementRecalculationsBusinessDetail.getCreateSample(data);
+    var response = await newForestCropsStatementRecalculationsBusinessDetail.getCreateSample(data);
+    let sampleId = response.id;
     hideLoadingModal();
     ShowModal('m1', 'Сохранение прошло успешно', '/static/img/check-circle-fill.svg')
 
     setTimeout(function() {
-        getForestCrops();
+        getForestCropsRecalculationsDetail(sampleId);
       }, 3000);
     } catch (error) {
       hideLoadingModal();

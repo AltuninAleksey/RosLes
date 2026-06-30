@@ -21,6 +21,7 @@
     background: white;
     width: 450px;
     max-width: 95%;
+    max-height: 90vh;
     border-radius: 8px;
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
     display: flex;
@@ -87,8 +88,8 @@
 /* Тело модального окна */
 .modal-body {
     padding: 24px;
-    overflow-y: auto;
-    max-height: 72vh;
+    overflow-y: visible;
+    flex: 1;
 }
 
 /* Строка формы */
@@ -212,7 +213,95 @@ select.modal-input {
     background: #f5f5f5;
     border-color: #999;
 }
+.custom-select {
+    position: relative;
+    width: 400px;
+    z-index: 10000;
+}
 
+.custom-select-trigger {
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+     padding: 10px 15px;
+     border: 2px solid #177164;
+     border-radius: 6px;
+     background: white;
+     cursor: pointer;
+     min-height: 45px;
+}
+
+.selected-value {
+    flex: 1;
+}
+
+.selected-name {
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+}
+
+.selected-short {
+    font-size: 11px;
+    color: #999;
+}
+
+.arrow {
+    transition: transform 0.3s;
+    font-size: 12px;
+    color: #177164;
+    margin-left: 10px;
+}
+
+.custom-select.open .arrow {
+    transform: rotate(180deg);
+}
+
+.custom-select-options {
+     position: absolute;
+     top: calc(100% + 5px);
+     left: 0;
+     right: 0;
+     max-height: 300px;
+     overflow-y: auto;
+     background: white;
+     border: 2px solid #177164;
+     border-radius: 6px;
+     box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+     display: none;
+     z-index: 99999;
+}
+
+.custom-select.open .custom-select-options {
+     display: block;
+}
+
+.custom-option {
+     padding: 10px 15px;
+     border-bottom: 1px solid #f0f0f0;
+     cursor: pointer;
+     transition: all 0.2s;
+}
+
+.custom-option:hover {
+      background: #e8f5e9;
+}
+
+.custom-option.selected {
+      background: #c8e6c9;
+}
+
+.option-name {
+      font-size: 16px;
+      font-weight: 500;
+      color: #333;
+}
+
+.option-short {
+      font-size: 13px;
+      color: #999;
+      margin-top: 2px;
+}
 /* Адаптивность */
 @media (max-width: 600px) {
     .modal-row {
@@ -242,6 +331,9 @@ select.modal-input {
     .modal-medium {
         width: 95%;
         margin: 10px;
+    }
+    .custom-select {
+        width: 100%;
     }
 }
 

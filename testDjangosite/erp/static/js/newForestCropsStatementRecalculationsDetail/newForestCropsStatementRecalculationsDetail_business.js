@@ -16,4 +16,6 @@ newForestCropsStatementRecalculationsBusinessDetail.getCreateSample = async func
           'Authorization': 'Bearer ' + token
         }
     });
+
+    return requestData.data;
 }

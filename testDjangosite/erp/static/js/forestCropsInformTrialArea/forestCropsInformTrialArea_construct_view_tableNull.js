@@ -29,14 +29,14 @@ function renderTablePage() {
 
         for(var j = 0; j < APP.breeds.length; j++) {
             if(APP.nullTableList[i].idBreed == APP.breeds[j].id) {
-                newHtmlBreeds = newHtmlBreeds + "<option selected value=\"" + APP.breeds[j].id + "\">" + APP.breeds[j].name_breed + "</option>";
+                newHtmlBreeds = newHtmlBreeds + "<option selected value=\"" + APP.breeds[j].id + "\">" + APP.breeds[j].name + "</option>";
             } else {
-                newHtmlBreeds = newHtmlBreeds + "<option value=\"" + APP.breeds[j].id + "\">" + APP.breeds[j].name_breed + "</option>";
+                newHtmlBreeds = newHtmlBreeds + "<option value=\"" + APP.breeds[j].id + "\">" + APP.breeds[j].name + "</option>";
             }
         }
 
                 newHtml += `<tr class="cursorPointer" data-id="${APP.nullTableList[i].id}">
-                        <td class="textAlignCenter td8"><select type="text" name="id_breed${i}" id="id_breed${i}" style="width: 180px; border: none; text-align: center; background: transparent; outline: none; box-shadow: none; -webkit-appearance: none; -moz-appearance: none; appearance: none;">${newHtmlBreeds}</select></td>
+                        <td class="textAlignCenter td8"><select class="breedSelect" type="text" name="id_breed${i}" id="id_breed${i}">${newHtmlBreeds}</select></td>
                         <td class="textAlignCenter td9">${APP.nullTableList[i].countLiving}</td>
                         <td class="textAlignCenter td5">${APP.nullTableList[i].countDead}</td>
                         <td style="width: 1%; cursor: pointer; text-align: center">
@@ -53,9 +53,7 @@ function renderTablePage() {
     }
 
     sampleListTbodyNode.innerHTML = newHtml;
-//    console.log('APP.limit:', APP.limit);
-//    console.log('currentPage:', currentPage);
-//    console.log('totalPages:', totalPages);
+
 }
 function editLineInNullTable(id, event) {
     if (event) {
@@ -78,15 +76,110 @@ function editLineInNullTable(id, event) {
     const currentLiving = record.countLiving;
     const currentDead = record.countDead;
 
+    const selectForestId = `edit-breed-${id}`;
+    const hiddenInputForest = `edit-selected-breed-forest-${id}`;
     // Создаем select для породы
-    let breedOptions = "";
-    for (let j = 0; j < APP.breeds.length; j++) {
-        const selected = APP.breeds[j].id === currentBreed ? "selected" : "";
-        breedOptions += `<option value="${APP.breeds[j].id}" ${selected}>${APP.breeds[j].name_breed}</option>`;
-    }
+//    let breedOptions = "";
+//    for (let j = 0; j < APP.breeds.length; j++) {
+//        const selected = APP.breeds[j].id === currentBreed ? "selected" : "";
+//        breedOptions += `<option value="${APP.breeds[j].id}" ${selected}>${APP.breeds[j].name}</option>`;
+//    }
+     let breedSelectHtml = `
+        <div class="custom-select edit-custom-forest-select" id="${selectForestId}" style="width: 100%;">
+            <div class="custom-select-trigger" id="forestTrigger" style="border: none; border-bottom: 1px solid #40E0D0; border-radius: 0; padding: 6px 12px; min-height: 35px;">
+                <span class="selected-value" id="forestSelected">
+                    <span class="selected-name">Выберите породу</span>
+                    <span class="selected-short"></span>
+                </span>
+                <span class="arrow" style="color: #40E0D0;">▼</span>
+            </div>
+            <div class="custom-select-options" id="forestOptions" style="border-color: #40E0D0;">
+            </div>
+        </div>
+        <input type="hidden" id="${hiddenInputForest}" value="${currentBreed}">
+    `;
 
+    cells[0].innerHTML = breedSelectHtml;
+
+    const selectContainer = document.getElementById(selectForestId);
+    if (selectContainer) {
+
+       const optionsContainerForest = document.getElementById('forestOptions');
+       const selectedForestValue = document.getElementById('forestSelected');
+       const hiddenForestInputId = document.getElementById(hiddenInputForest);
+
+        if (optionsContainerForest) {
+            optionsContainerForest.innerHTML = '';
+
+            APP.breeds.forEach(item => {
+                const option = document.createElement('div');
+                option.className = 'custom-option';
+                option.dataset.value = item.id;
+                const isSelected = item.id === currentBreed;
+                if (isSelected) {
+                    option.classList.add('selected');
+                }
+                option.innerHTML = `
+                    <div class="option-name">${item.name}</div>
+                    <div class="option-short">${item.shortName || ''}</div>
+                `;
+
+                option.addEventListener('click', (function(item, selectedForestValue, hiddenForestInputId, optionsContainerForest, selectContainer) {
+                    return function(e) {
+                        e.stopPropagation();
+
+                        // Обновляем отображение
+                        if (selectedForestValue) {
+                            selectedForestValue.innerHTML = `
+                                <span class="selected-name">${item.name}</span>
+                                <span class="selected-short">${item.shortName || ''}</span>
+                            `;
+                        }
+
+                        if (hiddenForestInputId) {
+                            hiddenForestInputId.value = item.id;
+                        }
+
+                        optionsContainerForest.querySelectorAll('.custom-option').forEach(opt => {
+                            opt.classList.remove('selected');
+                        });
+                        option.classList.add('selected');
+
+                        selectContainer.classList.remove('open');
+                    };
+                })(item, selectedForestValue, hiddenForestInputId, optionsContainerForest, selectContainer));
+
+                optionsContainerForest.appendChild(option);
+            });
+
+            if (currentBreed) {
+                const selectedBreed = APP.breeds.find(item => item.id === currentBreed);
+                if (selectedBreed && selectedForestValue) {
+                    selectedForestValue.innerHTML = `
+                        <span class="selected-name">${selectedBreed.name}</span>
+                        <span class="selected-short">${selectedBreed.shortName || ''}</span>
+                    `;
+                }
+            }
+        }
+
+        const forestTrigger = document.getElementById('forestTrigger');
+        if (forestTrigger) {
+
+            forestTrigger.addEventListener('click', function(e) {
+                e.stopPropagation();
+
+                document.querySelectorAll('.edit-custom-forest-select.open').forEach(el => {
+                    if (el !== selectContainer) {
+                        el.classList.remove('open');
+                    }
+                });
+                selectContainer.classList.toggle('open');
+            });
+        }
+    }
     // Заменяем содержимое ячеек на поля ввода с кнопками
-    cells[0].innerHTML = `<select class="edit-breed" data-field="breed" style="width: 100%; padding: 6px 12px; border: none; background: transparent; border-bottom: 1px solid #40E0D0;">${breedOptions}</select>`;
+    //cells[0].innerHTML = `<select class="edit-breed" data-field="breed" style="width: 100%; padding: 6px 12px; border: none; background: transparent; border-bottom: 1px solid #40E0D0;">${breedOptions}</select>`;
     cells[1].innerHTML = `<input type="number" class="edit-living" data-field="living" value="${currentLiving}"  style="width: 100%; padding: 6px 12px; border: none; background: transparent; border-bottom: 1px solid #40E0D0;">`;
     cells[2].innerHTML = `<input type="number" class="edit-dead" data-field="dead" value="${currentDead}" style="width: 100%; padding: 6px 12px; border: none; background: transparent; border-bottom: 1px solid #40E0D0;">`;
 
@@ -98,6 +191,13 @@ function editLineInNullTable(id, event) {
             </svg>
         </button>
     `;
+    document.addEventListener('click', function closeSelect(e) {
+        document.querySelectorAll('.edit-custom-forest-select.open').forEach(el => {
+            if (!el.contains(e.target)) {
+                el.classList.remove('open');
+            }
+        });
+    });
 }
 function saveInlineNullEdit(id) {
 
@@ -105,7 +205,9 @@ function saveInlineNullEdit(id) {
     if (!targetRow) return;
 
     // Получаем новые значения из полей ввода
-    const newBreed = targetRow.cells[0].querySelector('.edit-breed')?.value;
+    const hiddenInput = document.getElementById(`edit-selected-breed-forest-${id}`);
+    const newBreed = hiddenInput ? hiddenInput.value : null;
+    //const newBreed = targetRow.cells[0].querySelector('.edit-breed')?.value;
     const newLiving = targetRow.cells[1].querySelector('.edit-living')?.value;
     const newDead = targetRow.cells[2].querySelector('.edit-dead')?.value;
 
@@ -117,9 +219,9 @@ function saveInlineNullEdit(id) {
     // Сохраняем изменения в APP.dateUpdate для отправки на сервер
     APP.dateUpdate.push({
         id: id,
-        idBreed: Number(newBreed),
-        countLiving: Number(newLiving),
         countDead: Number(newDead),
+        countLiving: Number(newLiving),
+        idBreed: Number(newBreed),
     });
 
     // Обновляем данные в APP.nullTableList
@@ -128,8 +230,8 @@ function saveInlineNullEdit(id) {
         APP.nullTableList[index] = {
             ...APP.nullTableList[index],
             idBreed: Number(newBreed),
-            countLiving: Number(newLiving),
             countDead: Number(newDead),
+            countLiving: Number(newLiving),
         };
     }
 
@@ -174,38 +276,93 @@ async function deleteLineInNullTable(del_id) {
     updateDataInNullTable();
 }
 
- async function createSample() {
-    let id = document.querySelector("#idDocument").value;
-    let idBreed = document.getElementById("breed");
-    let countDead = document.getElementById("countDead");
-    let countLiving = document.getElementById("countLiving");
-    APP.createSample = [];
+function replaceSpaces(inputId) {
+    const input = document.getElementById(inputId);
 
-    let table = {
-        idBreed: Number(idBreed.value),
-        countDead: Number(countDead.value),
-        countLiving: Number(countLiving.value),
+    input.addEventListener('input', function() {
+        const curPos = this.selectionStart;
+        const original = this.value;
+        let newValue = original.replace(/\s/g, ';');
+        newValue = newValue.replace(/;+/g, ';');
+        if (original !== newValue) {
+            this.value = newValue;
+            // корректируем позицию курсора, если она сместилась из‑за замены
+            const diff = newValue.length - original.length;
+            this.setSelectionRange(curPos + diff, curPos + diff);
+        }
+    });
+}
+
+// Использование:
+replaceSpaces('countLiving');
+replaceSpaces('countDead');
+// Функция для разбора строки с разделителем ; в массив чисел
+function parseValues(inputString) {
+    if (!inputString || inputString.trim() === '') {
+        return [];
     }
-    APP.createSample.push(table);
-    //APP.nullTableList.push(table);
-    var data = {
-        idSample: Number(id),
-        values : APP.createSample
-    };
-    APP.createSample = [];
-    countDead.value = "";
-    countLiving.value = "";
-    await forestCropsInformTrialArea.createSample(data);
-    var nullTableResp = await forestCropsInformTrialArea.getSampleByIdListRegion(id,1);
-    APP.countNullTable = nullTableResp.count;
-    APP.nullTableList = nullTableResp.data
 
-    updateDataInNullTable();
-    closeAddForm("form-add-proba");
+    // Разделяем по ; и преобразуем в числа
+    const values = inputString.split(';')
+        .map(v => v.trim()) // Убираем пробелы вокруг
+        .filter(v => v !== '') // Убираем пустые значения
+        .map(v => {
+            // Заменяем запятую на точку и преобразуем в число
+            const num = parseFloat(v.replace(',', '.'));
+            // Проверяем на валидность
+            return isNaN(num) ? null : truncateTo2Decimals(num);
+        })
+        .filter(v => v !== null && v > 0);
 
-    console.log('Добавлена запись:', data);
-    console.log('Все записи:', APP.nullTableList);
+    return values;
+}
+async function createSample() {
+    try {
+        let id = document.querySelector("#idDocument").value;
+        let countDead = document.getElementById("countDead");
+        let countLiving = document.getElementById("countLiving");
+        APP.createSample = [];
 
+        const countDeadValues = parseValues(countDead.value);
+        const countLivingValues = parseValues(countLiving.value);
+
+        if (countDeadValues.length === 0 || countLivingValues.length === 0) {
+            alert('Пожалуйста, заполните оба поля!');
+            return;
+        }
+        if (countDeadValues.length !== countLivingValues.length) {
+            const maxLen = Math.max(countDeadValues.length, countLivingValues.length);
+            while (countDeadValues.length < maxLen) countDeadValues.push(0);
+            while (countLivingValues.length < maxLen) countLivingValues.push(0);
+        }
+
+        for (let i = 0; i < countDeadValues.length; i++) {
+             APP.createSample.push({
+                 countDead: countDeadValues[i],
+                 countLiving: countLivingValues[i],
+                 idBreed: Number(APP.forestBreedSelectId),
+             });
+        }
+
+        var data = {
+            idSample: Number(id),
+            values : APP.createSample
+        };
+        APP.createSample = [];
+        countDead.value = "";
+        countLiving.value = "";
+        await forestCropsInformTrialArea.createSample(data);
+        var nullTableResp = await forestCropsInformTrialArea.getSampleByIdListRegion(id,1);
+        APP.countNullTable = nullTableResp.count;
+        APP.nullTableList = nullTableResp.data
+
+        updateDataInNullTable();
+        closeAddForm("form-add-proba");
+
+    } catch (error) {
+        console.error('Ошибка при добавлении:', error);
+        alert('Ошибка при добавлении записей');
+    }
 }
 
 function updatePaginationInfo() {

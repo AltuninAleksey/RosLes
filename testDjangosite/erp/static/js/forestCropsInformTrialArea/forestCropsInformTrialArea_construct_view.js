@@ -34,7 +34,6 @@ async function openPage() {
 
         APP.subjects.push(item_subject);
     }
-    APP.breeds = await CommonBusiness.getAllBreeds();
 
     var nullTableResp = await forestCropsInformTrialArea.getSampleByIdListRegion(idDocument,1);
     APP.countNullTable = nullTableResp.count;
@@ -54,7 +53,7 @@ async function openPage() {
 
     setEvent();
     setDataInProfile();
-    setDataFormAddProba()
+    //setDataFormAddProba()
 }
 
 async function setDetailDataIdPage() {
@@ -196,6 +195,11 @@ async function setEvent() {
     back_event.addEventListener('click',function() {
         getForestCropsRecalculationsDetail(idParent);
     });
+
+//    var buttonSaveСhang = document.getElementById("buttonSaveСhang");
+//    buttonSaveСhang.addEventListener('click', function() {
+//        saveData();
+//    });
 }
 
 function sortByDate() {
@@ -230,37 +234,235 @@ function closeAddForm(id) {
     //body.classList.remove("overflowHiddenImportant");
 
 }
-function setDataFormAddProba() {
-    var breed = document.getElementById("breed");
+//function setDataFormAddProba() {
+//    var breed = document.getElementById("breed");
+//
+//    var newHtml = "";
+//
+//    for(var i = 0; i < APP.breeds.length; i++) {
+//        newHtml = newHtml + "<option value=\"" + APP.breeds[i].id + "\">" + APP.breeds[i].name + "</option>";
+//    }
+//
+//    breed.innerHTML = newHtml;
+//
+//    var breedDiameter = document.getElementById("breedDiameter");
+//
+//    var newHtml = "";
+//
+//    for(var i = 0; i < APP.breeds.length; i++) {
+//        newHtml = newHtml + "<option value=\"" + APP.breeds[i].id + "\">" + APP.breeds[i].name + "</option>";
+//    }
+//
+//    breedDiameter.innerHTML = newHtml;
+//
+//    var breedPodrost = document.getElementById("breedPodrost");
+//
+//    var newHtml = "";
+//
+//    for(var i = 0; i < APP.breeds.length; i++) {
+//        newHtml = newHtml + "<option value=\"" + APP.breeds[i].id + "\">" + APP.breeds[i].name + "</option>";
+//    }
+//
+//    breedPodrost.innerHTML = newHtml;
+//}
 
-    var newHtml = "";
+function initCustomSelectForest(containerId, data, onSelect) {
+   const container = document.getElementById(containerId);
+   if (!container) return;
 
-    for(var i = 0; i < APP.breeds.length; i++) {
-        newHtml = newHtml + "<option value=\"" + APP.breeds[i].id + "\">" + APP.breeds[i].name_breed + "</option>";
-    }
+   const forestTrigger = document.getElementById('forestTrigger');
+   const optionsContainerForest = document.getElementById('forestOptions');
+   const selectedForestValue = document.getElementById('forestSelected');
+   const hiddenInputForest = document.getElementById('selectBreedId');
 
-    breed.innerHTML = newHtml;
+   data.forEach(item => {
+       const option = document.createElement('div');
+       option.className = 'custom-option';
+       option.dataset.value = item.id;
+       option.innerHTML = `
+           <div class="option-name">${item.name}</div>
+           <div class="option-short">${item.shortName || ''}</div>
+       `;
+       option.addEventListener('click', () => {
+           // Обновляем отображение
+           selectedForestValue.innerHTML = `
+               <span class="selected-name">${item.name}</span>
+               <span class="selected-short">${item.shortName || ''}</span>
+           `;
 
-    var breedDiameter = document.getElementById("breedDiameter");
+           // Обновляем скрытое поле
+           if (hiddenInputForest) {
+               hiddenInputForest.value = item.id;
+           }
 
-    var newHtml = "";
+           // Вызываем callback
+           if (onSelect) {
+               onSelect(item.id, item);
+           }
 
-    for(var i = 0; i < APP.breeds.length; i++) {
-        newHtml = newHtml + "<option value=\"" + APP.breeds[i].id + "\">" + APP.breeds[i].name_breed + "</option>";
-    }
+           // Закрываем список
+           container.classList.remove('open');
+       });
+       optionsContainerForest.appendChild(option);
+   });
 
-    breedDiameter.innerHTML = newHtml;
+   forestTrigger.addEventListener('click', (e) => {
+         e.stopPropagation();
+        container.classList.toggle('open');
+   });
 
-    var breedPodrost = document.getElementById("breedPodrost");
+    document.addEventListener('click', () => {
+        container.classList.remove('open');
+    });
 
-    var newHtml = "";
-
-    for(var i = 0; i < APP.breeds.length; i++) {
-        newHtml = newHtml + "<option value=\"" + APP.breeds[i].id + "\">" + APP.breeds[i].name_breed + "</option>";
-    }
-
-    breedPodrost.innerHTML = newHtml;
+    return {
+       getValue: () => hiddenInputForest ? hiddenInputForest.value : null,
+       getSelected: () => {
+            const id = hiddenInputForest ? hiddenInputForest.value : null;
+           return data.find(item => item.id == id) || null;
+       }
+    };
 }
+
+function initCustomSelectDiameter(containerId, data, onSelect) {
+   const container = document.getElementById(containerId);
+   if (!container) return;
+
+   const trigger = container.querySelector('.custom-select-trigger');
+   const optionsContainer = container.querySelector('.custom-select-options');
+   const selectedValue = container.querySelector('.selected-value');
+   const hiddenInput = document.getElementById('selectedBreedId');
+
+   data.forEach(item => {
+       const option = document.createElement('div');
+       option.className = 'custom-option';
+       option.dataset.value = item.id;
+       option.innerHTML = `
+           <div class="option-name">${item.name}</div>
+           <div class="option-short">${item.shortName || ''}</div>
+       `;
+       option.addEventListener('click', () => {
+           // Обновляем отображение
+           selectedValue.innerHTML = `
+               <span class="selected-name">${item.name}</span>
+               <span class="selected-short">${item.shortName || ''}</span>
+           `;
+
+           // Обновляем скрытое поле
+           if (hiddenInput) {
+               hiddenInput.value = item.id;
+           }
+
+           // Вызываем callback
+           if (onSelect) {
+               onSelect(item.id, item);
+           }
+
+           // Закрываем список
+           container.classList.remove('open');
+       });
+       optionsContainer.appendChild(option);
+   });
+
+   trigger.addEventListener('click', (e) => {
+         e.stopPropagation();
+        container.classList.toggle('open');
+   });
+
+    document.addEventListener('click', () => {
+        container.classList.remove('open');
+    });
+
+    return {
+       getValue: () => hiddenInput ? hiddenInput.value : null,
+       getSelected: () => {
+            const id = hiddenInput ? hiddenInput.value : null;
+           return data.find(item => item.id == id) || null;
+       }
+    };
+}
+
+function initCustomSelectPodrost(containerId, data, onSelect) {
+   const container = document.getElementById(containerId);
+   if (!container) return;
+
+   const podrostTrigger = document.getElementById('podrostTrigger');
+   const optionsContainerPodrost = document.getElementById('podrostOptions');
+   const selectedPodrostValue = document.getElementById('podrostSelected');
+   const hiddenInputPodrost = document.getElementById('selectPodrostId');
+
+   data.forEach(item => {
+       const option = document.createElement('div');
+       option.className = 'custom-option';
+       option.dataset.value = item.id;
+       option.innerHTML = `
+           <div class="option-name">${item.name}</div>
+           <div class="option-short">${item.shortName || ''}</div>
+       `;
+       option.addEventListener('click', () => {
+           // Обновляем отображение
+           selectedPodrostValue.innerHTML = `
+               <span class="selected-name">${item.name}</span>
+               <span class="selected-short">${item.shortName || ''}</span>
+           `;
+
+           // Обновляем скрытое поле
+           if (hiddenInputPodrost) {
+               hiddenInputPodrost.value = item.id;
+           }
+
+           // Вызываем callback
+           if (onSelect) {
+               onSelect(item.id, item);
+           }
+
+           // Закрываем список
+           container.classList.remove('open');
+       });
+       optionsContainerPodrost.appendChild(option);
+   });
+
+   podrostTrigger.addEventListener('click', (e) => {
+         e.stopPropagation();
+        container.classList.toggle('open');
+   });
+
+    document.addEventListener('click', () => {
+        container.classList.remove('open');
+    });
+
+    return {
+       getValue: () => hiddenInputPodrost ? hiddenInputPodrost.value : null,
+       getSelected: () => {
+            const id = hiddenInputPodrost ? hiddenInputPodrost.value : null;
+           return data.find(item => item.id == id) || null;
+       }
+    };
+}
+async function initApp() {
+    try {
+        var responseBreeds = await forestCropsInformTrialArea.getAllBreeds();
+        APP.breeds = responseBreeds.data;
+        APP.countBreeds = responseBreeds.count;
+
+        const breedSelector = initCustomSelectDiameter('breedSelect', APP.breeds, (id, item) => {
+            APP.breedSelectId = id;
+        });
+        const forestBreedSelector = initCustomSelectForest('breed', APP.breeds, (id, item) => {
+            APP.forestBreedSelectId = id;
+        });
+        const forestPodrostSelector = initCustomSelectPodrost('breedPodrost', APP.breeds, (id, item) => {
+            APP.forestPodrostSelectId = id;
+        });
+
+    } catch (error) {
+        console.error('Ошибка инициализации:', error);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    initApp();
+});
 
 let hasUnsavedChanges = false;
 let ignoreFields = ['profile_fio','profile_phone','subjectStatement-profile','old_password','new_password','confirm_password'];
@@ -274,7 +476,6 @@ window.addEventListener('beforeunload', (event) => {
 
 function trackChanges() {
     hasUnsavedChanges = true;
-    //console.log('Изменение обнаружено');
 }
 
 function addListenersToField(field) {
@@ -384,7 +585,8 @@ async function saveData() {
     setTimeout(function() {
         let id = document.querySelector("#idDocument").value;
         let idParent = document.querySelector("#idParent").value;
-        getForestCropsInformTrialArea(id, idParent);
+        //getForestCropsInformTrialArea(id, idParent);
+        getForestCropsRecalculationsDetail(idParent);
       }, 3000);
 
     hideLoadingModal();

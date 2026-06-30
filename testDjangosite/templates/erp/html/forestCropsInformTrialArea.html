@@ -77,7 +77,7 @@
     </div>
 
     <form action="" class="form vvod">
-        <div>
+        <div class="adaptive-grid" >
             <div>
                 <p>Дата обследования:</p>
                 <input id="dateStatement" type="text" readonly style="background: transparent;border: none;padding: 8px 0 ;font-size: 15px; cursor: default">
@@ -95,7 +95,7 @@
                 <input id="distriotForestlyStatement" type="text" readonly style="background: transparent;border: none;padding: 8px 0 ;font-size: 15px; cursor: default">
             </div>
             <div>
-                <p>Урочище:</p>
+                <p>Урочище(Дача):</p>
                 <input id="dachaStatement" type="text" readonly style="background: transparent;border: none;padding: 8px 0 ;font-size: 15px; cursor: default">
             </div>
             <div>
@@ -110,6 +110,8 @@
                 <p>Площадь участка:</p>
                 <input id="sampleRegionStatement" type="text" readonly style="background: transparent;border: none;padding: 8px 0 ;font-size: 15px; cursor: default">
             </div>
+        </div>
+        <div class="three-columns">
             <div>
                 <p>Длина, м:</p>
                 <input id="lengthSample" type="text"  placeholder="0.00">
@@ -302,22 +304,34 @@
     <div id="form-add-proba" class="addFormfon display-none">
         <div class="modal-small">
             <div class="modal-header">
-                <h3>Добавление лесной культуры</h3>
+                <div>
+                    <h3>Лесная культура</h3>
+                    <p style="color: red; font-size: 17px;">Несколько значений вводятся через пробел</p>
+                </div>
                 <div class="modal-close" onclick="closeAddForm('form-add-proba')">×</div>
             </div>
             <div class="modal-body">
                 <div class="modal-row">
-                    <label for="breed">Порода</label>
-                    <select id="breed" class="modal-input">
-                    </select>
-                </div>
-                <div class="modal-row">
-                    <label for="countDead">Погибшие, шт</label>
-                    <input type="number" id="countDead" class="modal-input">
+                        <div class="custom-select" id="breed">
+                            <div class="custom-select-trigger" id="forestTrigger">
+                                <span class="selected-value" id="forestSelected">
+                                    <span class="selected-name">Выберите породу</span>
+                                    <span class="selected-short"></span>
+                                </span>
+                                <span class="arrow">▼</span>
+                            </div>
+                            <div class="custom-select-options" id="forestOptions">
+                            </div>
+                        </div>
+                        <input type="hidden" id="selectBreedId" value="">
                 </div>
                 <div class="modal-row">
                     <label for="countLiving">Живые, шт</label>
-                    <input type="number" id="countLiving" class="modal-input">
+                    <input type="text" id="countLiving" class="modal-input">
+                </div>
+                <div class="modal-row">
+                    <label for="countDead">Погибшие, шт</label>
+                    <input type="text" id="countDead" class="modal-input">
                 </div>
             </div>
             <div class="modal-footer">
@@ -329,14 +343,26 @@
     <div id="form-add-diameter" class="addFormfon display-none">
         <div class="modal-small">
             <div class="modal-header">
-                <h3>Добавление диаметра корневой шейки и высоты</h3>
+                <div>
+                    <h3>Диаметр корневой шейки и высота</h3>
+                    <p style="color: red; font-size: 17px;">Несколько значений вводятся через пробел</p>
+                </div>
                 <div class="modal-close" onclick="closeAddForm('form-add-diameter')">×</div>
             </div>
             <div class="modal-body">
                 <div class="modal-row">
-                    <label for="breedDiameter">Порода</label>
-                    <select id="breedDiameter" class="modal-input">
-                    </select>
+                        <div class="custom-select" id="breedSelect">
+                            <div class="custom-select-trigger">
+                                <span class="selected-value">
+                                    <span class="selected-name">Выберите породу</span>
+                                    <span class="selected-short"></span>
+                                </span>
+                                <span class="arrow">▼</span>
+                            </div>
+                            <div class="custom-select-options">
+                            </div>
+                        </div>
+                        <input type="hidden" id="selectedBreedId" value="">
                 </div>
                 <div class="modal-row">
                     <label for="diameter">Диаметр, мм</label>
@@ -356,14 +382,23 @@
     <div id="form-add-Podrost" class="addFormfon display-none">
         <div class="modal-small">
             <div class="modal-header">
-                <h3>Добавление подроста и молодняка</h3>
+                <h3>Подрост и молодняк</h3>
                 <div class="modal-close" onclick="closeAddForm('form-add-Podrost')">×</div>
             </div>
             <div class="modal-body">
                 <div class="modal-row">
-                    <label for="breedPodrost">Порода</label>
-                    <select id="breedPodrost" class="modal-input">
-                    </select>
+                        <div class="custom-select" id="breedPodrost">
+                            <div class="custom-select-trigger" id="podrostTrigger">
+                                <span class="selected-value" id="podrostSelected">
+                                    <span class="selected-name">Выберите породу</span>
+                                    <span class="selected-short"></span>
+                                </span>
+                                <span class="arrow">▼</span>
+                            </div>
+                            <div class="custom-select-options" id="podrostOptions">
+                            </div>
+                        </div>
+                        <input type="hidden" id="selectPodrostId" value="">
                 </div>
                 <div class="modal-row">
                     <label for="to0_5">До 0.5, шт</label>
@@ -394,7 +429,17 @@
             <img class="modal-image" src="{% static '/img/check-circle-fill.svg' %}" alt="">
         </div>
     </div>
-
+<!--    <div id="form-load-noSave" class="addFormfon">-->
+<!--        <div class="modal-medium">-->
+<!--            <div class="modal-header">-->
+<!--                <h3>Вы уверены, что хотите покинуть страницу? Внесенные изменения могут не сохраниться.</h3>-->
+<!--            </div>-->
+<!--            <div class="modal-footer">-->
+<!--                <button class="modal-btn modal-btn-cancel" onclick="closeAddForm('form-load-noSave')">Выйти без изменений</button>-->
+<!--                <button class="modal-btn modal-btn-add" id="buttonSaveСhang">Сохранить изменения</button>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
     <div id="statusModal" class="modal-status" style="display: none" >
         <div id="statusModalContent" class="modal-profileStatus">
             <div class="status-icon-container">
