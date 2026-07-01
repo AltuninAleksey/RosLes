@@ -98,6 +98,15 @@ async function setEvent() {
     buttonAddProba.addEventListener('click', function() {
         createSample();
     });
+    var buttonSave = document.getElementById("buttonSave");
+    buttonSave.addEventListener('click', function() {
+        saveAndExit();
+    });
+
+    var buttonExit = document.getElementById("buttonExit");
+    buttonExit.addEventListener('click', function() {
+        exitWithoutSave();
+    });
 }
 
 // Пагинации
@@ -452,18 +461,18 @@ async function createSample() {
     //getRecalculatingDetail(result.id, document.querySelector("#idDocument").value);
 }
 let hasUnsavedChanges = false;
+let pendingNavigation = null;
 let ignoreFields = ['profile_fio','profile_phone','subjectStatement-profile','old_password','new_password','confirm_password'];
 
-window.addEventListener('beforeunload', (event) => {
-    if (hasUnsavedChanges) {
-        event.preventDefault();
-        event.returnValue = '';
-    }
-});
+//window.addEventListener('beforeunload', (event) => {
+//    if (hasUnsavedChanges) {
+//        event.preventDefault();
+//        event.returnValue = '';
+//    }
+//});
 
 function trackChanges() {
     hasUnsavedChanges = true;
-    //console.log('Изменение обнаружено');
 }
 
 function addListenersToField(field) {
@@ -478,7 +487,6 @@ function addListenersToField(field) {
         field.addEventListener('click', trackChanges);
     }
 
-    //console.log('Отслеживание добавлено для:', field.name || field.id);
 }
 
 function trackAllFields() {
@@ -514,6 +522,64 @@ trackAllFields();
 function resetChangesTracker() {
     hasUnsavedChanges = false;
     console.log('Трекер сброшен');
+}
+document.addEventListener('click', function(e) {
+    const clickable = e.target.closest('[onclick]');
+    if (!clickable) return;
+    let pendingFn = null;
+
+    if (clickable.hasAttribute('onclick')) {
+        const onclickAttr = clickable.getAttribute('onclick');
+        if (onclickAttr &&
+            !onclickAttr.includes('closeAddForm') &&
+            !onclickAttr.includes('openAddForm') &&
+            !onclickAttr.includes('downloadDocument') &&
+            !onclickAttr.includes('saveData') &&
+            !onclickAttr.includes('generateDocx') &&
+            !onclickAttr.includes('createSample') &&
+            !onclickAttr.includes('hideStatusModal') &&
+            !onclickAttr.includes('HideModalProfile') &&
+            !onclickAttr.includes('saveDataInProfile') &&
+            !onclickAttr.includes('openChangePassword') &&
+            !onclickAttr.includes('saveNewPassword') &&
+            !onclickAttr.includes('deleteNewLineInSampleList') &&
+            !onclickAttr.includes('getAvtorization'))
+            {
+            try {
+                pendingFn = () => eval(onclickAttr);
+            } catch (error) {
+                console.error(error);
+            }
+        }
+    }
+    if (pendingFn && hasUnsavedChanges) {
+        e.preventDefault();
+        e.stopPropagation();
+        pendingNavigation = pendingFn;
+        openAddForm('form-load-noSave');
+    }
+}, true);
+
+function exitWithoutSave() {
+    closeAddForm('form-load-noSave');
+    hasUnsavedChanges = false;
+
+    if (typeof pendingNavigation === 'function') {
+        pendingNavigation();
+        pendingNavigation = null;
+    }
+}
+
+function saveAndExit() {
+    saveData();
+
+    closeAddForm('form-load-noSave');
+    hasUnsavedChanges = false;
+
+    if (typeof pendingNavigation === 'function') {
+        pendingNavigation();
+        pendingNavigation = null;
+    }
 }
 async function saveData() {
    try {

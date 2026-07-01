@@ -166,14 +166,14 @@ async function setEvent() {
                 await setDistriotForestlyStatement();
         });
 
-    document.getElementById("prevForestPageBtn").addEventListener("click", prevPage);
-    document.getElementById("nextForestPageBtn").addEventListener("click", nextPage);
+    document.getElementById("prevForestPageBtn").addEventListener("click", prevPageForest);
+    document.getElementById("nextForestPageBtn").addEventListener("click", nextPageForest);
 
-    document.getElementById("prevDiameterPageBtn").addEventListener("click", prevPage);
-    document.getElementById("nextDiameterPageBtn").addEventListener("click", nextPage);
+    document.getElementById("prevDiameterPageBtn").addEventListener("click", prevPageDiameter);
+    document.getElementById("nextDiameterPageBtn").addEventListener("click", nextPageDiameter);
 
-    document.getElementById("prevPodrostPageBtn").addEventListener("click", prevPage);
-    document.getElementById("nextPodrostPageBtn").addEventListener("click", nextPage);
+    document.getElementById("prevPodrostPageBtn").addEventListener("click", prevPagePodrost);
+    document.getElementById("nextPodrostPageBtn").addEventListener("click", nextPagePodrost);
 
     var buttonAddProba = document.getElementById("buttonAddProba");
     buttonAddProba.addEventListener('click', function() {
@@ -195,11 +195,17 @@ async function setEvent() {
     back_event.addEventListener('click',function() {
         getForestCropsRecalculationsDetail(idParent);
     });
+    back_event.setAttribute('data-custom-action', 'back_event');
 
-//    var buttonSaveСhang = document.getElementById("buttonSaveСhang");
-//    buttonSaveСhang.addEventListener('click', function() {
-//        saveData();
-//    });
+    var buttonSaveСhang = document.getElementById("buttonSaveСhang");
+    buttonSaveСhang.addEventListener('click', function() {
+        saveAndExit();
+    });
+
+    var buttonExit = document.getElementById("buttonExit");
+    buttonExit.addEventListener('click', function() {
+        exitWithoutSave();
+    });
 }
 
 function sortByDate() {
@@ -465,14 +471,15 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 let hasUnsavedChanges = false;
+let pendingNavigation = null;
 let ignoreFields = ['profile_fio','profile_phone','subjectStatement-profile','old_password','new_password','confirm_password'];
 
-window.addEventListener('beforeunload', (event) => {
-    if (hasUnsavedChanges) {
-        event.preventDefault();
-        event.returnValue = '';
-    }
-});
+//window.addEventListener('beforeunload', (event) => {
+//    if (hasUnsavedChanges) {
+//        event.preventDefault();
+//        event.returnValue = '';
+//    }
+//});
 
 function trackChanges() {
     hasUnsavedChanges = true;
@@ -526,6 +533,77 @@ trackAllFields();
 function resetChangesTracker() {
     hasUnsavedChanges = false;
     console.log('Трекер сброшен');
+}
+
+document.addEventListener('click', function(e) {
+    const clickable = e.target.closest('[onclick], [data-custom-action]');
+    if (!clickable) return;
+    let pendingFn = null;
+
+    if (clickable.hasAttribute('onclick')) {
+        const onclickAttr = clickable.getAttribute('onclick');
+        if (onclickAttr &&
+            !onclickAttr.includes('closeAddForm') &&
+            !onclickAttr.includes('openAddForm') &&
+            !onclickAttr.includes('editLineInNullTable') &&
+            !onclickAttr.includes('deleteLineInNullTable') &&
+            !onclickAttr.includes('downloadDocument') &&
+            !onclickAttr.includes('saveInlineNullEdit') &&
+            !onclickAttr.includes('saveInlineOneEdit') &&
+            !onclickAttr.includes('editLineInOneTable') &&
+            !onclickAttr.includes('deleteLineInOneTable') &&
+            !onclickAttr.includes('saveInlineTwoEdit') &&
+            !onclickAttr.includes('editLineInTwoTable') &&
+            !onclickAttr.includes('deleteLineInTwoTable') &&
+            !onclickAttr.includes('hideStatusModal') &&
+            !onclickAttr.includes('HideModalProfile') &&
+            !onclickAttr.includes('saveDataInProfile') &&
+            !onclickAttr.includes('openChangePassword') &&
+            !onclickAttr.includes('saveNewPassword') &&
+            !onclickAttr.includes('saveData') &&
+            !onclickAttr.includes('getAvtorization'))
+            {
+            try {
+                pendingFn = () => eval(onclickAttr);
+            } catch (error) {
+                console.error(error);
+            }
+        }
+    } else if (clickable.hasAttribute('data-custom-action')) {
+        const action = clickable.getAttribute('data-custom-action');
+        if (action === 'back_event'){
+            const currentId = document.getElementById("idParent").value;
+            pendingFn = () => getForestCropsRecalculationsDetail(currentId);
+        }
+    }
+    if (pendingFn && hasUnsavedChanges) {
+        e.preventDefault();
+        e.stopPropagation();
+        pendingNavigation = pendingFn;
+        openAddForm('form-load-noSave');
+    }
+}, true);
+
+function exitWithoutSave() {
+    closeAddForm('form-load-noSave');
+    hasUnsavedChanges = false;
+
+    if (typeof pendingNavigation === 'function') {
+        pendingNavigation();
+        pendingNavigation = null;
+    }
+}
+
+function saveAndExit() {
+    saveData();
+
+    closeAddForm('form-load-noSave');
+    hasUnsavedChanges = false;
+
+    if (typeof pendingNavigation === 'function') {
+        pendingNavigation();
+        pendingNavigation = null;
+    }
 }
 
 async function saveData() {

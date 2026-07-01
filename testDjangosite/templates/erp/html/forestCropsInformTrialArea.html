@@ -429,17 +429,17 @@
             <img class="modal-image" src="{% static '/img/check-circle-fill.svg' %}" alt="">
         </div>
     </div>
-<!--    <div id="form-load-noSave" class="addFormfon">-->
-<!--        <div class="modal-medium">-->
-<!--            <div class="modal-header">-->
-<!--                <h3>Вы уверены, что хотите покинуть страницу? Внесенные изменения могут не сохраниться.</h3>-->
-<!--            </div>-->
-<!--            <div class="modal-footer">-->
-<!--                <button class="modal-btn modal-btn-cancel" onclick="closeAddForm('form-load-noSave')">Выйти без изменений</button>-->
-<!--                <button class="modal-btn modal-btn-add" id="buttonSaveСhang">Сохранить изменения</button>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
+    <div id="form-load-noSave" class="addFormfon display-none">
+        <div class="modal-medium">
+            <div class="modal-header">
+                <h3>Вы уверены, что хотите покинуть страницу? Внесенные изменения могут не сохраниться!</h3>
+            </div>
+            <div class="modal-footer" style="justify-content: center;">
+                <button class="modal-btn modal-btn-cancel" id="buttonExit">Выйти без изменений</button>
+                <button class="modal-btn modal-btn-add" id="buttonSaveСhang" >Сохранить изменения</button>
+            </div>
+        </div>
+    </div>
     <div id="statusModal" class="modal-status" style="display: none" >
         <div id="statusModalContent" class="modal-profileStatus">
             <div class="status-icon-container">

@@ -25,6 +25,9 @@ function renderTablePage() {
     let sampleListTbodyNode = document.querySelector("#sampleListTbody");
     let newHtml = "";
     for(let i = 0; i < APP.nullTableList.length; i++) {
+//        const breed = APP.breeds.find(b => b.id === APP.nullTableList[i].idBreed);
+//        const breedName = breed ? breed.name : 'Неизвестно';
+//        <td class="textAlignCenter td8 breed-display">${breedName}</td>
         var newHtmlBreeds = "";
 
         for(var j = 0; j < APP.breeds.length; j++) {
@@ -471,7 +474,7 @@ function addDots() {
     document.getElementById("paginationForestNumbers").appendChild(dots);
 }
 
-async function nextPage() {
+async function nextPageForest() {
     let idDocument = document.querySelector("#idDocument").value;
     if (currentPage < totalPages) {
         currentPage++;
@@ -487,7 +490,7 @@ async function nextPage() {
     }
 }
 
-async function prevPage() {
+async function prevPageForest() {
     let idDocument = document.querySelector("#idDocument").value;
     if (currentPage > 1) {
         currentPage--;

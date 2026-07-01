@@ -555,9 +555,10 @@ function addDots() {
     document.getElementById("paginationDiameterNumbers").appendChild(dots);
 }
 
-async function nextPage() {
+async function nextPageDiameter() {
     let idDocument = document.querySelector("#idDocument").value;
     if (currentPageOne < totalPagesOne) {
+
         currentPageOne++;
         var response = await forestCropsInformTrialArea.getOneTable(idDocument,currentPageOne);
         APP.countOneTable = response.count;
@@ -571,7 +572,7 @@ async function nextPage() {
     }
 }
 
-async function prevPage() {
+async function prevPageDiameter() {
     let idDocument = document.querySelector("#idDocument").value;
     if (currentPageOne > 1) {
         currentPageOne--;

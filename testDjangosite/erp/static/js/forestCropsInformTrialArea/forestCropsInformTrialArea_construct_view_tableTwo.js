@@ -501,7 +501,7 @@ function addDots() {
     document.getElementById("paginationPodrostNumbers").appendChild(dots);
 }
 
-async function nextPage() {
+async function nextPagePodrost() {
     let idDocument = document.querySelector("#idDocument").value;
     if (currentPageTwo < totalPagesTwo) {
         currentPageTwo++;
@@ -517,7 +517,7 @@ async function nextPage() {
     }
 }
 
-async function prevPage() {
+async function prevPagePodrost() {
     let idDocument = document.querySelector("#idDocument").value;
     if (currentPage > 1) {
         currentPage--;
