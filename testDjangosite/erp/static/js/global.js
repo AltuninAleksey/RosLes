@@ -3,6 +3,7 @@
 let urlGlobal = "http://92.50.227.100:58493";
 
 
+
 function getAvtorization() {
     window.location.href = urlGlobal + "/erp/avtorization";
 }
