@@ -213,6 +213,7 @@ select.modal-input {
     background: #f5f5f5;
     border-color: #999;
 }
+
 .custom-select {
     position: relative;
     width: 400px;
@@ -292,16 +293,27 @@ select.modal-input {
 }
 
 .option-name {
-      font-size: 16px;
+      font-size: 14px;
       font-weight: 500;
       color: #333;
 }
 
 .option-short {
-      font-size: 13px;
+      font-size: 11px;
       color: #999;
       margin-top: 2px;
 }
+
+.custom-option.empty {
+    color: #999;
+    cursor: default;
+    text-align: center;
+    padding: 20px;
+}
+
+.custom-option.empty:hover {
+    background: transparent;
+}*/
 /* Адаптивность */
 @media (max-width: 600px) {
     .modal-row {

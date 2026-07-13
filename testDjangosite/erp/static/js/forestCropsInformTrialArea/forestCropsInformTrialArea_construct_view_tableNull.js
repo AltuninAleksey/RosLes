@@ -81,22 +81,24 @@ function editLineInNullTable(id, event) {
 
     const selectForestId = `edit-breed-${id}`;
     const hiddenInputForest = `edit-selected-breed-forest-${id}`;
-    // Создаем select для породы
-//    let breedOptions = "";
-//    for (let j = 0; j < APP.breeds.length; j++) {
-//        const selected = APP.breeds[j].id === currentBreed ? "selected" : "";
-//        breedOptions += `<option value="${APP.breeds[j].id}" ${selected}>${APP.breeds[j].name}</option>`;
-//    }
+    const forestTriggerId = `edit-forest-trigger-${id}`;
+    const forestSelected = `edit-forest-select-${id}`;
+    const forestOptions = `edit-forest-options-${id}`;
+    const forestSearchInput = `edit-forest-search-input-${id}`;
+
      let breedSelectHtml = `
-        <div class="custom-select edit-custom-forest-select" id="${selectForestId}" style="width: 100%;">
-            <div class="custom-select-trigger" id="forestTrigger" style="border: none; border-bottom: 1px solid #40E0D0; border-radius: 0; padding: 6px 12px; min-height: 35px;">
-                <span class="selected-value" id="forestSelected">
+        <div class="custom-select edit-custom-forest-select" id="${selectForestId}" style="width: 100%;position: relative;">
+            <div class="custom-select-trigger" id="${forestTriggerId}" style="padding: 6px 12px; border: none; border-radius: 0; border-bottom: 1px solid #40E0D0; cursor: pointer; min-height: 35px;">
+                 <input type="text" id="${forestSearchInput}"
+                         placeholder="Поиск"
+                         style="flex: 1; border: none; outline: none; font-size: 14px; padding: 4px 0; background: transparent;">
+                <span class="selected-value" id="${forestSelected}" style="display: none;">
                     <span class="selected-name">Выберите породу</span>
                     <span class="selected-short"></span>
                 </span>
-                <span class="arrow" style="color: #40E0D0;">▼</span>
+                <span class="arrow" style="color: #40E0D0; font-size: 12px;">▼</span>
             </div>
-            <div class="custom-select-options" id="forestOptions" style="border-color: #40E0D0;">
+            <div class="custom-select-options" id="${forestOptions}" style="margin-top: 4px; border-color: #40E0D0">
             </div>
         </div>
         <input type="hidden" id="${hiddenInputForest}" value="${currentBreed}">
@@ -107,14 +109,106 @@ function editLineInNullTable(id, event) {
     const selectContainer = document.getElementById(selectForestId);
     if (selectContainer) {
 
-       const optionsContainerForest = document.getElementById('forestOptions');
-       const selectedForestValue = document.getElementById('forestSelected');
+       const optionsContainerForest = document.getElementById(forestOptions);
+       const selectedForestValue = document.getElementById(forestSelected);
        const hiddenForestInputId = document.getElementById(hiddenInputForest);
+       const searchInput = document.getElementById(forestSearchInput);
+       const forestTrigger = document.getElementById(forestTriggerId);
 
-        if (optionsContainerForest) {
+       let currentData = APP.breeds || [];
+       let selectedId = currentBreed || null;
+       let hasChanges = false;
+
+       const originalBreedId = currentBreed;
+
+       function restoreOriginalValue() {
+           if (originalBreedId) {
+               const originalBreed = currentData.find(item => item.id === originalBreedId);
+               if (originalBreed) {
+                   selectedId = originalBreedId;
+                   selectedForestValue.innerHTML = `
+                       <span class="selected-name">${originalBreed.name}</span>
+                       <span class="selected-short">${originalBreed.shortName || ''}</span>
+                   `;
+                   selectedForestValue.classList.add('active');
+                   searchInput.style.display = 'none';
+                   selectedForestValue.style.display = 'block';
+                   hiddenInput.value = originalBreedId;
+                   hasChanges = false;
+                   return true;
+               }
+           } else {
+               selectedId = null;
+               selectedForestValue.classList.remove('active');
+               selectedForestValue.style.display = 'none';
+               searchInput.style.display = 'block';
+               searchInput.value = '';
+               hiddenInput.value = '';
+               hasChanges = false;
+               return false;
+           }
+       }
+
+       function checkAndRestore() {
+           if (!hasChanges && selectedId !== originalBreedId) {
+               restoreOriginalValue();
+               return true;
+           }
+           if (!selectedId && originalBreedId) {
+               restoreOriginalValue();
+               return true;
+           }
+           return false;
+       }
+
+       function showSelectedMode() {
+            if (selectedId) {
+                const selectedItem = currentData.find(item => item.id === selectedId);
+                if (selectedItem) {
+                    selectedForestValue.innerHTML = `
+                        <span class="selected-name">${selectedItem.name}</span>
+                        <span class="selected-short">${selectedItem.shortName || ''}</span>
+                    `;
+                    selectedForestValue.classList.add('active');
+                    selectedForestValue.style.display = 'block';
+                    searchInput.style.display = 'none';
+                    searchInput.value = '';
+                    return;
+                }
+            } else {
+                selectedForestValue.style.display = 'none';
+                selectedForestValue.classList.remove('active');
+                searchInput.style.display = 'block';
+                searchInput.value = '';
+            }
+        }
+
+       function filterOptions(searchText) {
+            const search = searchText.toLowerCase().trim();
+
+            if (!search) {
+                renderOptions(currentData);
+                return;
+            }
+
+            const filtered = currentData.filter(item =>
+                item.name.toLowerCase().includes(search) ||
+                (item.shortName && item.shortName.toLowerCase().includes(search))
+            );
+
+            renderOptions(filtered, search);
+        }
+
+       function renderOptions(options, searchText = '') {
             optionsContainerForest.innerHTML = '';
-
-            APP.breeds.forEach(item => {
+            if (!options || options.length === 0) {
+                const empty = document.createElement('div');
+                empty.className = 'custom-option empty';
+                empty.textContent = searchText ? 'Ничего не найдено' : 'Нет доступных пород';
+                optionsContainerForest.appendChild(empty);
+                return;
+            }
+            options.forEach(item => {
                 const option = document.createElement('div');
                 option.className = 'custom-option';
                 option.dataset.value = item.id;
@@ -127,10 +221,10 @@ function editLineInNullTable(id, event) {
                     <div class="option-short">${item.shortName || ''}</div>
                 `;
 
-                option.addEventListener('click', (function(item, selectedForestValue, hiddenForestInputId, optionsContainerForest, selectContainer) {
-                    return function(e) {
+                option.addEventListener('click', function(e) {
                         e.stopPropagation();
-
+                        selectedId = item.id;
+                        hasChanges = true;
                         // Обновляем отображение
                         if (selectedForestValue) {
                             selectedForestValue.innerHTML = `
@@ -142,36 +236,84 @@ function editLineInNullTable(id, event) {
                         if (hiddenForestInputId) {
                             hiddenForestInputId.value = item.id;
                         }
+                        selectedForestValue.classList.add('active');
 
+                        searchInput.style.display = 'none';
+                        selectedForestValue.style.display = 'block';
                         optionsContainerForest.querySelectorAll('.custom-option').forEach(opt => {
                             opt.classList.remove('selected');
                         });
                         option.classList.add('selected');
 
                         selectContainer.classList.remove('open');
-                    };
-                })(item, selectedForestValue, hiddenForestInputId, optionsContainerForest, selectContainer));
+                    });
 
                 optionsContainerForest.appendChild(option);
             });
 
-            if (currentBreed) {
-                const selectedBreed = APP.breeds.find(item => item.id === currentBreed);
-                if (selectedBreed && selectedForestValue) {
-                    selectedForestValue.innerHTML = `
-                        <span class="selected-name">${selectedBreed.name}</span>
-                        <span class="selected-short">${selectedBreed.shortName || ''}</span>
-                    `;
-                }
+       }
+       if (currentBreed) {
+            const selectedBreed = APP.breeds.find(item => item.id === currentBreed);
+            if (selectedBreed) {
+                selectedId = currentBreed;
+                selectedForestValue.innerHTML = `
+                    <span class="selected-name">${selectedBreed.name}</span>
+                    <span class="selected-short">${selectedBreed.shortName || ''}</span>
+                `;
+                selectedForestValue.classList.add('active');
+                searchInput.style.display = 'none';
+                selectedForestValue.style.display = 'block';
+                hiddenForestInputId.value = currentBreed;
             }
-        }
+       } else {
+            searchInput.style.display = 'block';
+            selectedForestValue.style.display = 'none';
+       }
+       renderOptions(currentData);
 
-        const forestTrigger = document.getElementById('forestTrigger');
-        if (forestTrigger) {
+       searchInput.addEventListener('input', function(e) {
+            e.stopPropagation();
+            const value = this.value;
 
+            if (value.trim()) {
+                selectContainer.classList.add('open');
+                filterOptions(value);
+            } else {
+                renderOptions(currentData);
+            }
+       });
+
+       if (forestTrigger) {
             forestTrigger.addEventListener('click', function(e) {
                 e.stopPropagation();
+                if (e.target === searchInput) {
+                    return;
+                }
+                const wasOpen = selectContainer.classList.contains('open');
+                if (wasOpen) {
+                    selectContainer.classList.remove('open');
+                    if (!hasChanges && selectedId !== originalBreedId) {
+                        restoreOriginalValue();
+                    } else {
+                        showSelectedMode();
+                    }
+                    return;
+                }
 
+                if (selectedId) {
+                    selectedForestValue.classList.remove('active');
+                    selectedForestValue.style.display = 'none';
+                    searchInput.style.display = 'block';
+                    searchInput.value = '';
+                    searchInput.focus();
+                    renderOptions(currentData);
+                } else {
+                    searchInput.style.display = 'block';
+                    searchInput.value = '';
+                    selectedForestValue.style.display = 'none';
+                    searchInput.focus();
+                    renderOptions(currentData);
+                }
                 document.querySelectorAll('.edit-custom-forest-select.open').forEach(el => {
                     if (el !== selectContainer) {
                         el.classList.remove('open');
@@ -179,7 +321,17 @@ function editLineInNullTable(id, event) {
                 });
                 selectContainer.classList.toggle('open');
             });
-        }
+       }
+       document.addEventListener('click', function closeSelect(e) {
+            if (!selectContainer.contains(e.target) && selectContainer.classList.contains('open')) {
+                selectContainer.classList.remove('open');
+                if (!hasChanges && selectedId !== originalBreedId) {
+                    restoreOriginalValue();
+                } else {
+                    showSelectedMode();
+                }
+            }
+       });
     }
     // Заменяем содержимое ячеек на поля ввода с кнопками
     //cells[0].innerHTML = `<select class="edit-breed" data-field="breed" style="width: 100%; padding: 6px 12px; border: none; background: transparent; border-bottom: 1px solid #40E0D0;">${breedOptions}</select>`;
@@ -188,19 +340,12 @@ function editLineInNullTable(id, event) {
 
     // Добавляем кнопки сохранить/отменить в последнюю ячейку
     cells[4].innerHTML = `
-        <button onclick=";saveInlineNullEdit(${id})" style="padding: 5px 10px; border:none; z-index: 1000; background: transparent;">
+        <button onclick="saveInlineNullEdit(${id})" style="padding: 5px 10px; border:none; z-index: 1000; background: transparent;">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
               <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425z"/>
             </svg>
         </button>
     `;
-    document.addEventListener('click', function closeSelect(e) {
-        document.querySelectorAll('.edit-custom-forest-select.open').forEach(el => {
-            if (!el.contains(e.target)) {
-                el.classList.remove('open');
-            }
-        });
-    });
 }
 function saveInlineNullEdit(id) {
 

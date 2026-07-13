@@ -312,18 +312,22 @@
             </div>
             <div class="modal-body">
                 <div class="modal-row">
-                        <div class="custom-select" id="breed">
-                            <div class="custom-select-trigger" id="forestTrigger">
-                                <span class="selected-value" id="forestSelected">
-                                    <span class="selected-name">Выберите породу</span>
-                                    <span class="selected-short"></span>
-                                </span>
-                                <span class="arrow">▼</span>
-                            </div>
-                            <div class="custom-select-options" id="forestOptions">
-                            </div>
+                    <div class="custom-select" id="breed" style="position: relative; width: 100%;">
+                        <div class="custom-select-trigger" id="forestTrigger" style="display: flex; align-items: center; gap: 8px; padding: 6px 12px; border: 2px solid #177164; border-radius: 6px; cursor: pointer; min-height: 45px;">
+                            <input type="text" id="forestSearchInput"
+                                   placeholder="Поиск"
+                                   style="flex: 1; border: none; outline: none; font-size: 14px; padding: 4px 0; background: transparent;">
+                            <span class="selected-value" id="forestSelected" style="display: none;">
+                                <span class="selected-name"></span>
+                                <span class="selected-short"></span>
+                            </span>
+                            <span class="arrow" style="color: #177164; font-size: 12px;">▼</span>
+                        </div>
+                        <div class="custom-select-options" id="forestOptions"
+                             style="position: absolute; top: 100%; left: 0; right: 0; max-height: 250px; overflow-y: auto; background: white; border: 2px solid #177164; border-radius: 6px; z-index: 9999; margin-top: 4px; box-shadow: 0 4px 20px rgba(0,0,0,0.15);">
                         </div>
                         <input type="hidden" id="selectBreedId" value="">
+                    </div>
                 </div>
                 <div class="modal-row">
                     <label for="countLiving">Живые, шт</label>
@@ -351,18 +355,22 @@
             </div>
             <div class="modal-body">
                 <div class="modal-row">
-                        <div class="custom-select" id="breedSelect">
-                            <div class="custom-select-trigger">
-                                <span class="selected-value">
-                                    <span class="selected-name">Выберите породу</span>
-                                    <span class="selected-short"></span>
-                                </span>
-                                <span class="arrow">▼</span>
-                            </div>
-                            <div class="custom-select-options">
-                            </div>
+                    <div class="custom-select" id="breedSelect" style="position: relative; width: 100%;">
+                        <div class="custom-select-trigger" style="display: flex; align-items: center; gap: 8px; padding: 6px 12px; border: 2px solid #177164; border-radius: 6px; cursor: pointer; min-height: 45px;">
+                            <input type="text" id="breedSearchInput"
+                                   placeholder="Поиск"
+                                   style="flex: 1; border: none; outline: none; font-size: 14px; padding: 4px 0; background: transparent;">
+                            <span class="selected-value" style="display: none;">
+                                <span class="selected-name"></span>
+                                <span class="selected-short"></span>
+                            </span>
+                            <span class="arrow" style="color: #177164; font-size: 12px;">▼</span>
+                        </div>
+                        <div class="custom-select-options"
+                             style="position: absolute; top: 100%; left: 0; right: 0; max-height: 250px; overflow-y: auto; background: white; border: 2px solid #177164; border-radius: 6px; z-index: 9999; margin-top: 4px; box-shadow: 0 4px 20px rgba(0,0,0,0.15);">
                         </div>
                         <input type="hidden" id="selectedBreedId" value="">
+                    </div>
                 </div>
                 <div class="modal-row">
                     <label for="diameter">Диаметр, мм</label>
@@ -387,18 +395,22 @@
             </div>
             <div class="modal-body">
                 <div class="modal-row">
-                        <div class="custom-select" id="breedPodrost">
-                            <div class="custom-select-trigger" id="podrostTrigger">
-                                <span class="selected-value" id="podrostSelected">
-                                    <span class="selected-name">Выберите породу</span>
-                                    <span class="selected-short"></span>
-                                </span>
-                                <span class="arrow">▼</span>
-                            </div>
-                            <div class="custom-select-options" id="podrostOptions">
-                            </div>
+                    <div class="custom-select" id="breedPodrost" style="position: relative; width: 100%;">
+                        <div class="custom-select-trigger" id="podrostTrigger" style="display: flex; align-items: center; gap: 8px; padding: 6px 12px; border: 2px solid #177164; border-radius: 6px; cursor: pointer; min-height: 45px;">
+                            <input type="text" id="podrostSearchInput"
+                                   placeholder="Поиск"
+                                   style="flex: 1; border: none; outline: none; font-size: 14px; padding: 4px 0; background: transparent;">
+                            <span class="selected-value" id="podrostSelected" style="display: none;">
+                                <span class="selected-name"></span>
+                                <span class="selected-short"></span>
+                            </span>
+                            <span class="arrow" style="color: #177164; font-size: 12px;">▼</span>
+                        </div>
+                        <div class="custom-select-options" id="podrostOptions"
+                             style="position: absolute; top: 100%; left: 0; right: 0; max-height: 250px; overflow-y: auto; background: white; border: 2px solid #177164; border-radius: 6px; z-index: 9999; margin-top: 4px; box-shadow: 0 4px 20px rgba(0,0,0,0.15);">
                         </div>
                         <input type="hidden" id="selectPodrostId" value="">
+                    </div>
                 </div>
                 <div class="modal-row">
                     <label for="to0_5">До 0.5, шт</label>

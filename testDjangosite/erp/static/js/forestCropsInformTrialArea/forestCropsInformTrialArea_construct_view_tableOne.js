@@ -65,38 +65,35 @@ function editLineInOneTable(id, event) {
         return;
     }
 
-    // Находим строку по ID
     const targetRow = document.querySelector(`tr[data-one-id="${id}"]`);
     if (!targetRow) return;
 
     const cells = targetRow.cells;
 
-    // Сохраняем текущие значения
     const currentBreed = record.idBreed;
     const currentDiameter = record.diameter;
     const currentHeight = record.height;
 
-    // Создаем select для породы
-//    let breedOptions = "";
-//    for (let j = 0; j < APP.breeds.length; j++) {
-//        const selected = APP.breeds[j].id === currentBreed ? "selected" : "";
-//        breedOptions += `<option value="${APP.breeds[j].id}" ${selected}>${APP.breeds[j].name}</option>`;
-//    }
-
     const selectId = `edit-breed-${id}`;
     const hiddenInputId = `edit-selected-breed-${id}`;
+    const triggerId = `edit-trigger-${id}`;
+    const breedSearchInput = `edit-breed-search-input-${id}`;
+    const breedOptions = `edit-breed-options-${id}`;
+    const breedSelected = `edit-breed-select-${id}`;
 
-    // Создаем HTML для кастомного select
     let breedSelectHtml = `
         <div class="custom-select edit-custom-select" id="${selectId}" style="width: 100%;">
-            <div class="custom-select-trigger" style="border: none; border-bottom: 1px solid #40E0D0; border-radius: 0; padding: 6px 12px; min-height: 35px;">
-                <span class="selected-value">
+            <div class="custom-select-trigger" id="${triggerId}" style="border: none; cursor: pointer; border-bottom: 1px solid #40E0D0; border-radius: 0; padding: 6px 12px; min-height: 35px;">
+                <input type="text" id="${breedSearchInput}"
+                       placeholder="Поиск"
+                       style="flex: 1; border: none; outline: none; font-size: 14px; padding: 4px 0; background: transparent;">
+                <span class="selected-value" id="${breedSelected}" style="display: none;">
                     <span class="selected-name">Выберите породу</span>
                     <span class="selected-short"></span>
                 </span>
-                <span class="arrow" style="color: #40E0D0;">▼</span>
+                <span class="arrow" style="color: #40E0D0; font-size: 12px">▼</span>
             </div>
-            <div class="custom-select-options" style="border-color: #40E0D0;">
+            <div class="custom-select-options" id="${breedOptions}" style="margin-top: 4px; border-color: #40E0D0;">
             </div>
         </div>
         <input type="hidden" id="${hiddenInputId}" value="${currentBreed}">
@@ -106,18 +103,109 @@ function editLineInOneTable(id, event) {
 
     const selectContainer = document.getElementById(selectId);
     if (selectContainer) {
-        const optionsContainer = selectContainer.querySelector('.custom-select-options');
-        const selectedValue = selectContainer.querySelector('.selected-value');
+        const optionsContainer = document.getElementById(breedOptions);
+        const selectedValue = document.getElementById(breedSelected);
         const hiddenInput = document.getElementById(hiddenInputId);
+        const searchBreedInput = document.getElementById(breedSearchInput);
+        const trigger = document.getElementById(triggerId);
 
-        if (optionsContainer) {
+        let currentDataBreed = APP.breeds || [];
+        let selectedIdBreed = currentBreed || null;
+        let hasChangesBreed = false;
+
+        const originalBreedId = currentBreed;
+
+        function restoreOriginalBreedValue() {
+            if (originalBreedId) {
+                const originalBreed = currentDataBreed.find(item => item.id === originalBreedId);
+                if (originalBreed) {
+                    selectedIdBreed = originalBreedId;
+                    selectedValue.innerHTML = `
+                        <span class="selected-name">${originalBreed.name}</span>
+                        <span class="selected-short">${originalBreed.shortName || ''}</span>
+                    `;
+                    selectedValue.classList.add('active');
+                    searchBreedInput.style.display = 'none';
+                    selectedValue.style.display = 'block';
+                    hiddenInput.value = originalBreedId;
+                    hasChangesBreed = false;
+                    return true;
+                }
+            } else {
+                selectedIdBreed = null;
+                selectedValue.classList.remove('active');
+                selectedValue.style.display = 'none';
+                searchBreedInput.style.display = 'block';
+                searchBreedInput.value = '';
+                hiddenInput.value = '';
+                hasChangesBreed = false;
+                return false;
+            }
+        }
+
+        function checkAndRestoreBreed() {
+            if (!hasChangesBreed && selectedIdBreed !== originalBreedId) {
+                restoreOriginalBreedValue();
+                return true;
+            }
+            if (!selectedIdBreed && originalBreedId) {
+                restoreOriginalBreedValue();
+                return true;
+            }
+            return false;
+        }
+
+        function showSelectedBreedMode() {
+            if (selectedIdBreed) {
+                const selectedItem = currentDataBreed.find(item => item.id === selectedIdBreed);
+                if (selectedItem) {
+                    selectedValue.innerHTML = `
+                        <span class="selected-name">${selectedItem.name}</span>
+                        <span class="selected-short">${selectedItem.shortName || ''}</span>
+                    `;
+                    selectedValue.classList.add('active');
+                    selectedValue.style.display = 'block';
+                    searchBreedInput.style.display = 'none';
+                    searchBreedInput.value = '';
+                    return;
+                }
+            } else {
+                selectedValue.style.display = 'none';
+                selectedValue.classList.remove('active');
+                searchBreedInput.style.display = 'block';
+                searchBreedInput.value = '';
+            }
+        }
+
+        function filterOptionsBreed(searchText) {
+            const search = searchText.toLowerCase().trim();
+            if (!search) {
+                renderBreedOptions(currentDataBreed);
+                return;
+            }
+            const filtered = currentDataBreed.filter(item =>
+                item.name.toLowerCase().includes(search) ||
+                (item.shortName && item.shortName.toLowerCase().includes(search))
+            );
+            renderBreedOptions(filtered, search);
+        }
+
+        function renderBreedOptions(options, searchText = '') {
             optionsContainer.innerHTML = '';
 
-            APP.breeds.forEach(item => {
+            if (!options || options.length === 0) {
+                const empty = document.createElement('div');
+                empty.className = 'custom-option empty';
+                empty.textContent = searchText ? 'Ничего не найдено' : 'Нет доступных пород';
+                optionsContainer.appendChild(empty);
+                return;
+            }
+
+            options.forEach(item => {
                 const option = document.createElement('div');
                 option.className = 'custom-option';
                 option.dataset.value = item.id;
-                const isSelected = item.id === currentBreed;
+                const isSelected = item.id === selectedIdBreed;
                 if (isSelected) {
                     option.classList.add('selected');
                 }
@@ -126,62 +214,123 @@ function editLineInOneTable(id, event) {
                     <div class="option-short">${item.shortName || ''}</div>
                 `;
 
-                option.addEventListener('click', (function(item, selectedValue, hiddenInput, optionsContainer, selectContainer) {
-                    return function(e) {
-                        e.stopPropagation();
+                option.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    selectedIdBreed = item.id;
+                    hasChangesBreed = true;
 
-                        // Обновляем отображение
-                        if (selectedValue) {
-                            selectedValue.innerHTML = `
-                                <span class="selected-name">${item.name}</span>
-                                <span class="selected-short">${item.shortName || ''}</span>
-                            `;
-                        }
+                    if (selectedValue) {
+                        selectedValue.innerHTML = `
+                            <span class="selected-name">${item.name}</span>
+                            <span class="selected-short">${item.shortName || ''}</span>
+                        `;
+                    }
 
-                        if (hiddenInput) {
-                            hiddenInput.value = item.id;
-                            console.log('Выбрана порода ID:', item.id, 'Название:', item.name);
-                        }
+                    if (hiddenInput) {
+                        hiddenInput.value = item.id;
+                    }
 
-                        optionsContainer.querySelectorAll('.custom-option').forEach(opt => {
-                            opt.classList.remove('selected');
-                        });
-                        option.classList.add('selected');
+                    selectedValue.classList.add('active');
+                    searchBreedInput.style.display = 'none';
+                    selectedValue.style.display = 'block';
 
-                        selectContainer.classList.remove('open');
-                    };
-                })(item, selectedValue, hiddenInput, optionsContainer, selectContainer));
+                    optionsContainer.querySelectorAll('.custom-option').forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    option.classList.add('selected');
+
+                    selectContainer.classList.remove('open');
+                });
 
                 optionsContainer.appendChild(option);
             });
-
-            if (currentBreed) {
-                const selectedBreed = APP.breeds.find(item => item.id === currentBreed);
-                if (selectedBreed && selectedValue) {
-                    selectedValue.innerHTML = `
-                        <span class="selected-name">${selectedBreed.name}</span>
-                        <span class="selected-short">${selectedBreed.shortName || ''}</span>
-                    `;
-                }
-            }
         }
 
-        const trigger = selectContainer.querySelector('.custom-select-trigger');
-        if (trigger) {
+        if (currentBreed) {
+            const selectedBreed = currentDataBreed.find(item => item.id === currentBreed);
+            if (selectedBreed) {
+                selectedIdBreed = currentBreed;
+                selectedValue.innerHTML = `
+                    <span class="selected-name">${selectedBreed.name}</span>
+                    <span class="selected-short">${selectedBreed.shortName || ''}</span>
+                `;
+                selectedValue.classList.add('active');
+                searchBreedInput.style.display = 'none';
+                selectedValue.style.display = 'block';
+                hiddenInput.value = currentBreed;
+            }
+        } else {
+            searchBreedInput.style.display = 'block';
+            selectedValue.style.display = 'none';
+        }
 
+        renderBreedOptions(currentDataBreed);
+
+        searchBreedInput.addEventListener('input', function(e) {
+            e.stopPropagation();
+            const value = this.value;
+            if (value.trim()) {
+                selectContainer.classList.add('open');
+                filterOptionsBreed(value);
+            } else {
+                renderBreedOptions(currentDataBreed);
+            }
+        });
+
+        if (trigger) {
             trigger.addEventListener('click', function(e) {
                 e.stopPropagation();
+                if (e.target === searchBreedInput) {
+                    return;
+                }
+                const wasOpen = selectContainer.classList.contains('open');
+                if (wasOpen) {
+                    selectContainer.classList.remove('open');
+                    if (!hasChangesBreed && selectedIdBreed !== originalBreedId) {
+                        restoreOriginalBreedValue();
+                    } else {
+                        showSelectedBreedMode();
+                    }
+                    return;
+                }
+
+                if (selectedIdBreed) {
+                    searchBreedInput.style.display = 'block';
+                    searchBreedInput.value = '';
+                    selectedValue.style.display = 'none';
+                    selectedValue.classList.remove('active');
+                    searchBreedInput.focus();
+                    renderBreedOptions(currentDataBreed);
+                } else {
+                    searchBreedInput.style.display = 'block';
+                    searchBreedInput.value = '';
+                    selectedValue.style.display = 'none';
+                    searchBreedInput.focus();
+                    renderBreedOptions(currentDataBreed);
+                }
 
                 document.querySelectorAll('.edit-custom-select.open').forEach(el => {
                     if (el !== selectContainer) {
                         el.classList.remove('open');
                     }
                 });
-                selectContainer.classList.toggle('open');
+
+                selectContainer.classList.add('open');
             });
         }
+        document.addEventListener('click', function closeSelect(e) {
+        if (!selectContainer.contains(e.target) && selectContainer.classList.contains('open')) {
+            selectContainer.classList.remove('open');
+            if (!hasChangesBreed && selectedIdBreed !== originalBreedId) {
+                restoreOriginalBreedValue();
+            } else {
+                showSelectedBreedMode();
+            }
+        }
+    });
     }
-    // Заменяем содержимое ячеек на поля ввода с кнопками
+
+    //    // Заменяем содержимое ячеек на поля ввода с кнопками
     //cells[0].innerHTML = `<select class="edit-breed" data-field="breed" style="width: 100%; padding: 6px 12px; border: none; background: transparent; border-bottom: 1px solid #40E0D0;">${breedOptions}</select>`;
     cells[1].innerHTML = `<input type="number" step="0.1" min="0" class="edit-diameter" data-field="diameter" value="${currentDiameter}"  style="width: 100%; padding: 6px 12px; border: none; background: transparent; border-bottom: 1px solid #40E0D0;">`;
     cells[2].innerHTML = `<input type="number" step="0.1" min="0" class="edit-height" data-field="height" value="${currentHeight}" style="width: 100%; padding: 6px 12px; border: none; background: transparent; border-bottom: 1px solid #40E0D0;">`;
@@ -194,14 +343,8 @@ function editLineInOneTable(id, event) {
             </svg>
         </button>
     `;
-    document.addEventListener('click', function closeSelect(e) {
-        document.querySelectorAll('.edit-custom-select.open').forEach(el => {
-            if (!el.contains(e.target)) {
-                el.classList.remove('open');
-            }
-        });
-    });
 }
+
 function truncateTo2Decimals(value) {
     if (value === undefined || value === null || value === '') return 0;
 

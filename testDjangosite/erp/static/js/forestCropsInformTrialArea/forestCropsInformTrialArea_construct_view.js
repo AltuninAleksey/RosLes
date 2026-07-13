@@ -273,63 +273,253 @@ function closeAddForm(id) {
 //}
 
 function initCustomSelectForest(containerId, data, onSelect) {
-   const container = document.getElementById(containerId);
-   if (!container) return;
+    const container = document.getElementById(containerId);
+    if (!container) return;
 
-   const forestTrigger = document.getElementById('forestTrigger');
-   const optionsContainerForest = document.getElementById('forestOptions');
-   const selectedForestValue = document.getElementById('forestSelected');
-   const hiddenInputForest = document.getElementById('selectBreedId');
+    const forestTrigger = document.getElementById('forestTrigger');
+    const optionsContainerForest = document.getElementById('forestOptions');
+    const selectedForestValue = document.getElementById('forestSelected');
+    const hiddenInputForest = document.getElementById('selectBreedId');
+    const searchInput = document.getElementById('forestSearchInput');
 
-   data.forEach(item => {
-       const option = document.createElement('div');
-       option.className = 'custom-option';
-       option.dataset.value = item.id;
-       option.innerHTML = `
-           <div class="option-name">${item.name}</div>
-           <div class="option-short">${item.shortName || ''}</div>
-       `;
-       option.addEventListener('click', () => {
-           // Обновляем отображение
-           selectedForestValue.innerHTML = `
-               <span class="selected-name">${item.name}</span>
-               <span class="selected-short">${item.shortName || ''}</span>
-           `;
+    let currentData = data || [];
+    let selectedId = null;
+    let hasChanges = false;
 
-           // Обновляем скрытое поле
-           if (hiddenInputForest) {
-               hiddenInputForest.value = item.id;
-           }
+    const originalId = hiddenInputForest ? hiddenInputForest.value : null;
 
-           // Вызываем callback
-           if (onSelect) {
-               onSelect(item.id, item);
-           }
+    function restoreOriginalForestValue() {
+        if (originalId) {
+            const originalItem = currentDataPodrost.find(item => item.id === parseInt(originalId));
+            if (originalItem) {
+                selectedId = originalId;
+                selectedForestValue.innerHTML = `
+                    <span class="selected-name">${originalItem.name}</span>
+                    <span class="selected-short">${originalItem.shortName || ''}</span>
+                `;
+                selectedForestValue.classList.add('active');
+                searchInput.style.display = 'none';
+                selectedForestValue.style.display = 'block';
+                hiddenInputForest.value = originalId;
+                hasChanges = false;
+                return true;
+            }
+        } else {
+            selectedId = null;
+            selectedForestValue.classList.remove('active');
+            selectedForestValue.style.display = 'none';
+            searchInput.style.display = 'block';
+            searchInput.value = '';
+            hiddenInputForest.value = '';
+            hasChanges = false;
+            return false;
+        }
+    }
 
-           // Закрываем список
-           container.classList.remove('open');
-       });
-       optionsContainerForest.appendChild(option);
-   });
+    function checkAndRestoreForest() {
+        if (!hasChanges && selectedId !== originalId) {
+            restoreOriginalForestValue();
+            return true;
+        }
+        if (!selectedId && originalId) {
+            restoreOriginalForestValue();
+            return true;
+        }
+        return false;
+    }
 
-   forestTrigger.addEventListener('click', (e) => {
-         e.stopPropagation();
-        container.classList.toggle('open');
-   });
+    function showSelectedModeForest() {
+        if (selectedId) {
+            const selectedItem = currentData.find(item => item.id === parseInt(selectedId));
+            if (selectedItem) {
+                selectedForestValue.innerHTML = `
+                    <span class="selected-name">${selectedItem.name}</span>
+                    <span class="selected-short">${selectedItem.shortName || ''}</span>
+                `;
+                selectedForestValue.classList.add('active');
+                selectedForestValue.style.display = 'block';
+                searchInput.style.display = 'none';
+                searchInput.value = '';
+                return;
+            }
+        } else {
+             selectedForestValue.style.display = 'none';
+            selectedForestValue.classList.remove('active');
+            searchInput.style.display = 'block';
+            searchInput.value = '';
+        }
+    }
+    function filterOptions(searchText) {
+        const search = searchText.toLowerCase().trim();
 
-    document.addEventListener('click', () => {
+        if (!search) {
+            renderOptions(currentData);
+            return;
+        }
+
+        const filtered = currentData.filter(item =>
+            item.name.toLowerCase().includes(search) ||
+            (item.shortName && item.shortName.toLowerCase().includes(search))
+        );
+
+        renderOptions(filtered, search);
+    }
+
+    function renderOptions(options, searchText = '') {
+        optionsContainerForest.innerHTML = '';
+
+        if (!options || options.length === 0) {
+            const empty = document.createElement('div');
+            empty.className = 'custom-option empty';
+            empty.textContent = searchText ? 'Ничего не найдено' : 'Нет доступных пород';
+            optionsContainerForest.appendChild(empty);
+            return;
+        }
+
+        options.forEach(item => {
+            const option = document.createElement('div');
+            option.className = 'custom-option';
+            if (item.id === parseInt(selectedId)) {
+                option.classList.add('selected');
+            }
+            option.dataset.value = item.id;
+
+            option.innerHTML = `
+                <div class="option-name">${item.name}</div>
+                <div class="option-short">${item.shortName || ''}</div>
+            `;
+
+            option.addEventListener('click', function(e) {
+                e.stopPropagation();
+                selectOption(item);
+            });
+
+            optionsContainerForest.appendChild(option);
+        });
+
+        if (options.length > 0 && searchText) {
+            const info = document.createElement('div');
+            info.style.cssText = 'padding: 8px 15px; font-size: 12px; color: #999; border-bottom: 1px solid #f0f0f0;';
+            info.textContent = `Найдено: ${options.length}`;
+            optionsContainerForest.prepend(info);
+        }
+    }
+
+    function selectOption(item) {
+        selectedId = item.id;
+        hasChanges = true;
+
+        hiddenInputForest.value = item.id;
+
+        selectedForestValue.innerHTML = `
+            <span class="selected-name">${item.name}</span>
+            <span class="selected-short">${item.shortName || ''}</span>
+        `;
+        selectedForestValue.classList.add('active');
+
+        searchInput.style.display = 'none';
+        selectedForestValue.style.display = 'block';
+
+        const allOptions = optionsContainerForest.querySelectorAll('.custom-option:not(.empty)');
+        allOptions.forEach(opt => {
+            opt.classList.toggle('selected', parseInt(opt.dataset.value) === item.id);
+        });
+
         container.classList.remove('open');
+
+        if (onSelect && typeof onSelect === 'function') {
+            onSelect(item.id, item);
+        }
+    }
+
+    searchInput.addEventListener('input', function(e) {
+        e.stopPropagation();
+        const value = this.value;
+
+        if (value.trim()) {
+            container.classList.add('open');
+            filterOptions(value);
+        } else {
+            renderOptions(currentData);
+        }
     });
 
+    forestTrigger.addEventListener('click', function(e) {
+        if (e.target === searchInput) {
+            return;
+        }
+
+        e.stopPropagation();
+        const wasOpen = container.classList.contains('open');
+
+        if (wasOpen) {
+            container.classList.remove('open');
+            if (!hasChanges && selectedId !== originalId) {
+                restoreOriginalForestValue();
+            } else {
+                showSelectedModeForest();
+            }
+            return;
+        }
+        if (selectedId) {
+            searchInput.style.display = 'block';
+            searchInput.value = '';
+            selectedForestValue.style.display = 'none';
+            selectedForestValue.classList.remove('active');
+            searchInput.focus();
+            renderOptions(currentData);
+        } else {
+            searchInput.style.display = 'block';
+            searchInput.value = '';
+            selectedForestValue.style.display = 'none';
+            searchInput.focus();
+            renderOptions(currentData);
+        }
+
+        container.classList.toggle('open');
+    });
+
+    document.addEventListener('click', function(e) {
+        if (!container.contains(e.target) && container.classList.contains('open')) {
+            container.classList.remove('open');
+
+            if (!hasChanges && selectedId !== originalId) {
+                restoreOriginalForestValue();
+            } else {
+                showSelectedModeForest();
+            }
+        }
+    });
+    if (originalId) {
+        const originalItem = currentData.find(item => item.id === parseInt(originalId));
+        if (originalItem) {
+            selectedId = originalId;
+            selectedForestValue.innerHTML = `
+                <span class="selected-name">${originalItem.name}</span>
+                <span class="selected-short">${originalItem.shortName || ''}</span>
+            `;
+            selectedForestValue.classList.add('active');
+            searchInput.style.display = 'none';
+            selectedForestValue.style.display = 'block';
+            hiddenInputForest.value = originalId;
+        } else {
+            searchInput.style.display = 'block';
+            selectedForestValue.style.display = 'none';
+        }
+    } else {
+        searchInput.style.display = 'block';
+        selectedForestValue.style.display = 'none';
+    }
+    renderOptions(currentData);
+
     return {
-       getValue: () => hiddenInputForest ? hiddenInputForest.value : null,
-       getSelected: () => {
+        getValue: () => hiddenInputForest ? hiddenInputForest.value : null,
+        getSelected: () => {
             const id = hiddenInputForest ? hiddenInputForest.value : null;
-           return data.find(item => item.id == id) || null;
-       }
+            return currentData.find(item => item.id == id) || null;
+        },
     };
 }
-
 function initCustomSelectDiameter(containerId, data, onSelect) {
    const container = document.getElementById(containerId);
    if (!container) return;
@@ -338,111 +528,494 @@ function initCustomSelectDiameter(containerId, data, onSelect) {
    const optionsContainer = container.querySelector('.custom-select-options');
    const selectedValue = container.querySelector('.selected-value');
    const hiddenInput = document.getElementById('selectedBreedId');
+   const searchInputDiameter = document.getElementById('breedSearchInput');
 
-   data.forEach(item => {
-       const option = document.createElement('div');
-       option.className = 'custom-option';
-       option.dataset.value = item.id;
-       option.innerHTML = `
-           <div class="option-name">${item.name}</div>
-           <div class="option-short">${item.shortName || ''}</div>
-       `;
-       option.addEventListener('click', () => {
-           // Обновляем отображение
-           selectedValue.innerHTML = `
-               <span class="selected-name">${item.name}</span>
-               <span class="selected-short">${item.shortName || ''}</span>
-           `;
+   let currentDataDiameter = data || [];
+   let selectedIdDiameter = null;
+   let hasChangesDiameter = false;
 
-           // Обновляем скрытое поле
-           if (hiddenInput) {
-               hiddenInput.value = item.id;
-           }
+   const originalDiameterId = hiddenInput ? hiddenInput.value : null;
 
-           // Вызываем callback
-           if (onSelect) {
-               onSelect(item.id, item);
-           }
+   function restoreOriginalDiameterValue() {
+        if (originalDiameterId) {
+            const originalItem = currentDataDiameter.find(item => item.id === parseInt(originalDiameterId));
+            if (originalItem) {
+                selectedIdDiameter = originalDiameterId;
+                selectedValue.innerHTML = `
+                    <span class="selected-name">${originalItem.name}</span>
+                    <span class="selected-short">${originalItem.shortName || ''}</span>
+                `;
+                selectedValue.classList.add('active');
+                searchInputDiameter.style.display = 'none';
+                selectedValue.style.display = 'block';
+                hiddenInput.value = originalDiameterId;
+                hasChangesDiameter = false;
+                return true;
+            }
+        } else {
+            selectedIdDiameter = null;
+            selectedValue.classList.remove('active');
+            selectedValue.style.display = 'none';
+            searchInputDiameter.style.display = 'block';
+            searchInputDiameter.value = '';
+            hiddenInput.value = '';
+            hasChangesDiameter = false;
+            return false;
+        }
+   }
 
-           // Закрываем список
-           container.classList.remove('open');
-       });
-       optionsContainer.appendChild(option);
+    function checkAndRestoreDiameter() {
+        if (!hasChangesDiameter && selectedIdDiameter !== originalDiameterId) {
+            restoreOriginalDiameterValue();
+            return true;
+        }
+        if (!selectedIdDiameter && originalDiameterId) {
+            restoreOriginalDiameterValue();
+            return true;
+        }
+        return false;
+    }
+
+    function showSelectedModeDiameter() {
+        if (selectedIdDiameter) {
+            const selectedItem = currentDataDiameter.find(item => item.id === parseInt(selectedIdDiameter));
+            if (selectedItem) {
+                selectedValue.innerHTML = `
+                    <span class="selected-name">${selectedItem.name}</span>
+                    <span class="selected-short">${selectedItem.shortName || ''}</span>
+                `;
+                selectedValue.classList.add('active');
+                selectedValue.style.display = 'block';
+                searchInputDiameter.style.display = 'none';
+                searchInputDiameter.value = '';
+                return;
+            }
+        } else {
+             selectedValue.style.display = 'none';
+            selectedValue.classList.remove('active');
+            searchInputDiameter.style.display = 'block';
+            searchInputDiameter.value = '';
+        }
+    }
+
+   function filterOptionsDiameter(searchText) {
+        const search = searchText.toLowerCase().trim();
+
+        if (!search) {
+            renderOptionsDiameter(currentDataDiameter);
+            return;
+        }
+
+        const filtered = currentDataDiameter.filter(item =>
+            item.name.toLowerCase().includes(search) ||
+            (item.shortName && item.shortName.toLowerCase().includes(search))
+        );
+
+        renderOptionsDiameter(filtered, search);
+   }
+
+   function renderOptionsDiameter(options, searchText = '') {
+        optionsContainer.innerHTML = '';
+
+        if (!options || options.length === 0) {
+            const empty = document.createElement('div');
+            empty.className = 'custom-option empty';
+            empty.textContent = searchText ? 'Ничего не найдено' : 'Нет доступных пород';
+            optionsContainer.appendChild(empty);
+            return;
+        }
+
+        options.forEach(item => {
+            const option = document.createElement('div');
+            option.className = 'custom-option';
+            if (item.id === parseInt(selectedIdDiameter)) {
+                option.classList.add('selected');
+            }
+            option.dataset.value = item.id;
+
+            option.innerHTML = `
+                <div class="option-name">${item.name}</div>
+                <div class="option-short">${item.shortName || ''}</div>
+            `;
+
+            option.addEventListener('click', function(e) {
+                e.stopPropagation();
+                selectOptionDiameter(item);
+            });
+
+            optionsContainer.appendChild(option);
+        });
+
+        if (options.length > 0 && searchText) {
+            const info = document.createElement('div');
+            info.style.cssText = 'padding: 8px 15px; font-size: 12px; color: #999; border-bottom: 1px solid #f0f0f0;';
+            info.textContent = `Найдено: ${options.length}`;
+            optionsContainer.prepend(info);
+        }
+   }
+
+   function selectOptionDiameter(item) {
+        selectedIdDiameter = item.id;
+        hasChangesDiameter = true;
+
+        hiddenInput.value = item.id;
+
+        selectedValue.innerHTML = `
+            <span class="selected-name">${item.name}</span>
+            <span class="selected-short">${item.shortName || ''}</span>
+        `;
+        selectedValue.classList.add('active');
+
+        searchInputDiameter.style.display = 'none';
+        selectedValue.style.display = 'block';
+
+        const allOptions = optionsContainer.querySelectorAll('.custom-option:not(.empty)');
+        allOptions.forEach(opt => {
+            opt.classList.toggle('selected', parseInt(opt.dataset.value) === item.id);
+        });
+
+        container.classList.remove('open');
+
+        if (onSelect && typeof onSelect === 'function') {
+            onSelect(item.id, item);
+        }
+   }
+
+   searchInputDiameter.addEventListener('input', function(e) {
+       e.stopPropagation();
+       const value = this.value;
+
+       if (value.trim()) {
+           container.classList.add('open');
+           filterOptionsDiameter(value);
+       } else {
+           renderOptionsDiameter(currentDataDiameter);
+       }
    });
 
-   trigger.addEventListener('click', (e) => {
-         e.stopPropagation();
+   trigger.addEventListener('click', function (e) {
+        if (e.target === searchInputDiameter) {
+            return;
+        }
+        e.stopPropagation();
+        const wasOpen = container.classList.contains('open');
+
+        if (wasOpen) {
+            container.classList.remove('open');
+            if (!hasChangesDiameter && selectedIdDiameter !== originalDiameterId) {
+                restoreOriginalDiameterValue();
+            } else {
+                showSelectedModeDiameter();
+            }
+            return;
+        }
+        if (selectedIdDiameter) {
+            searchInputDiameter.style.display = 'block';
+            searchInputDiameter.value = '';
+            selectedValue.style.display = 'none';
+            selectedValue.classList.remove('active');
+            searchInputDiameter.focus();
+            renderOptionsDiameter(currentDataDiameter);
+        } else {
+            searchInputDiameter.style.display = 'block';
+            searchInputDiameter.value = '';
+            selectedValue.style.display = 'none';
+            searchInputDiameter.focus();
+            renderOptionsDiameter(currentDataDiameter);
+        }
         container.classList.toggle('open');
    });
 
-    document.addEventListener('click', () => {
-        container.classList.remove('open');
+    document.addEventListener('click', function(e) {
+        if (!container.contains(e.target) && container.classList.contains('open')) {
+            container.classList.remove('open');
+
+            if (!hasChangesDiameter && selectedIdDiameter !== originalDiameterId) {
+                restoreOriginalDiameterValue();
+            } else {
+                showSelectedModeDiameter();
+            }
+        }
     });
 
+    if (originalDiameterId) {
+        const originalItem = currentDataDiameter.find(item => item.id === parseInt(originalDiameterId));
+        if (originalItem) {
+            selectedIdDiameter = originalDiameterId;
+            selectedValue.innerHTML = `
+                <span class="selected-name">${originalItem.name}</span>
+                <span class="selected-short">${originalItem.shortName || ''}</span>
+            `;
+            selectedValue.classList.add('active');
+            searchInputDiameter.style.display = 'none';
+            selectedValue.style.display = 'block';
+            hiddenInput.value = originalDiameterId;
+        } else {
+            searchInputDiameter.style.display = 'block';
+            selectedValue.style.display = 'none';
+        }
+    } else {
+        searchInputDiameter.style.display = 'block';
+        selectedValue.style.display = 'none';
+    }
+
+    renderOptionsDiameter(currentDataDiameter);
     return {
        getValue: () => hiddenInput ? hiddenInput.value : null,
        getSelected: () => {
             const id = hiddenInput ? hiddenInput.value : null;
-           return data.find(item => item.id == id) || null;
+           return currentDataDiameter.find(item => item.id == id) || null;
        }
     };
 }
 
 function initCustomSelectPodrost(containerId, data, onSelect) {
-   const container = document.getElementById(containerId);
-   if (!container) return;
+    const container = document.getElementById(containerId);
+    if (!container) return;
 
-   const podrostTrigger = document.getElementById('podrostTrigger');
-   const optionsContainerPodrost = document.getElementById('podrostOptions');
-   const selectedPodrostValue = document.getElementById('podrostSelected');
-   const hiddenInputPodrost = document.getElementById('selectPodrostId');
+    const podrostTrigger = document.getElementById('podrostTrigger');
+    const optionsContainerPodrost = document.getElementById('podrostOptions');
+    const selectedPodrostValue = document.getElementById('podrostSelected');
+    const hiddenInputPodrost = document.getElementById('selectPodrostId');
+    const searchInputPodrost = document.getElementById('podrostSearchInput');
 
-   data.forEach(item => {
-       const option = document.createElement('div');
-       option.className = 'custom-option';
-       option.dataset.value = item.id;
-       option.innerHTML = `
-           <div class="option-name">${item.name}</div>
-           <div class="option-short">${item.shortName || ''}</div>
-       `;
-       option.addEventListener('click', () => {
-           // Обновляем отображение
-           selectedPodrostValue.innerHTML = `
-               <span class="selected-name">${item.name}</span>
-               <span class="selected-short">${item.shortName || ''}</span>
-           `;
+    let currentDataPodrost = data || [];
+    let selectedIdPodrost = null;
+    let hasChangesPodrost = false;
 
-           // Обновляем скрытое поле
-           if (hiddenInputPodrost) {
-               hiddenInputPodrost.value = item.id;
-           }
+    const originalPodrostId = hiddenInputPodrost ? hiddenInputPodrost.value : null;
 
-           // Вызываем callback
-           if (onSelect) {
-               onSelect(item.id, item);
-           }
+    function restoreOriginalPodrostValue() {
+        if (originalPodrostId) {
+            const originalItem = currentDataPodrost.find(item => item.id === parseInt(originalPodrostId));
+            if (originalItem) {
+                selectedIdPodrost = originalPodrostId;
+                selectedPodrostValue.innerHTML = `
+                    <span class="selected-name">${originalItem.name}</span>
+                    <span class="selected-short">${originalItem.shortName || ''}</span>
+                `;
+                selectedPodrostValue.classList.add('active');
+                searchInputPodrost.style.display = 'none';
+                selectedPodrostValue.style.display = 'block';
+                hiddenInputPodrost.value = originalPodrostId;
+                hasChangesPodrost = false;
+                return true;
+            }
+        } else {
+            selectedIdPodrost = null;
+            selectedPodrostValue.classList.remove('active');
+            selectedPodrostValue.style.display = 'none';
+            searchInputPodrost.style.display = 'block';
+            searchInputPodrost.value = '';
+            hiddenInputPodrost.value = '';
+            hasChangesPodrost = false;
+            return false;
+        }
+    }
 
-           // Закрываем список
-           container.classList.remove('open');
-       });
-       optionsContainerPodrost.appendChild(option);
-   });
+    function checkAndRestorePodrost() {
+        if (!hasChangesPodrost && selectedIdPodrost !== originalPodrostId) {
+            restoreOriginalPodrostValue();
+            return true;
+        }
+        if (!selectedIdPodrost && originalPodrostId) {
+            restoreOriginalPodrostValue();
+            return true;
+        }
+        return false;
+    }
 
-   podrostTrigger.addEventListener('click', (e) => {
-         e.stopPropagation();
-        container.classList.toggle('open');
-   });
+    function showSelectedMode() {
+        if (selectedIdPodrost) {
+            const selectedItem = currentDataPodrost.find(item => item.id === parseInt(selectedIdPodrost));
+            if (selectedItem) {
+                selectedPodrostValue.innerHTML = `
+                    <span class="selected-name">${selectedItem.name}</span>
+                    <span class="selected-short">${selectedItem.shortName || ''}</span>
+                `;
+                selectedPodrostValue.classList.add('active');
+                selectedPodrostValue.style.display = 'block';
+                searchInputPodrost.style.display = 'none';
+                searchInputPodrost.value = '';
+                return;
+            }
+        } else {
+             selectedPodrostValue.style.display = 'none';
+            selectedPodrostValue.classList.remove('active');
+            searchInputPodrost.style.display = 'block';
+            searchInputPodrost.value = '';
+        }
+    }
 
-    document.addEventListener('click', () => {
+    function filterOptionsPodrost(searchText) {
+        const search = searchText.toLowerCase().trim();
+        if (!search) {
+            renderOptionsPodrost(currentDataPodrost);
+            return;
+        }
+        const filtered = currentDataPodrost.filter(item =>
+            item.name.toLowerCase().includes(search) ||
+            (item.shortName && item.shortName.toLowerCase().includes(search))
+        );
+        renderOptionsPodrost(filtered, search);
+    }
+
+    function renderOptionsPodrost(options, searchText = '') {
+        optionsContainerPodrost.innerHTML = '';
+
+        if (!options || options.length === 0) {
+            const empty = document.createElement('div');
+            empty.className = 'custom-option empty';
+            empty.textContent = searchText ? 'Ничего не найдено' : 'Нет доступных пород';
+            optionsContainerPodrost.appendChild(empty);
+            return;
+        }
+
+        options.forEach(item => {
+            const option = document.createElement('div');
+            option.className = 'custom-option';
+            if (item.id === parseInt(selectedIdPodrost)) {
+                option.classList.add('selected');
+            }
+            option.dataset.value = item.id;
+
+            option.innerHTML = `
+                <div class="option-name">${item.name}</div>
+                <div class="option-short">${item.shortName || ''}</div>
+            `;
+
+            option.addEventListener('click', function(e) {
+                e.stopPropagation();
+                selectOptionPodrost(item);
+            });
+
+            optionsContainerPodrost.appendChild(option);
+        });
+
+        if (options.length > 0 && searchText) {
+            const info = document.createElement('div');
+            info.style.cssText = 'padding: 8px 15px; font-size: 12px; color: #999; border-bottom: 1px solid #f0f0f0;';
+            info.textContent = `Найдено: ${options.length}`;
+            optionsContainerPodrost.prepend(info);
+        }
+    }
+
+    function selectOptionPodrost(item) {
+        selectedIdPodrost = item.id;
+        hasChangesPodrost = true;
+
+        hiddenInputPodrost.value = item.id;
+
+        selectedPodrostValue.innerHTML = `
+            <span class="selected-name">${item.name}</span>
+            <span class="selected-short">${item.shortName || ''}</span>
+        `;
+        selectedPodrostValue.classList.add('active');
+
+        searchInputPodrost.style.display = 'none';
+        selectedPodrostValue.style.display = 'block';
+
+        const allOptions = optionsContainerPodrost.querySelectorAll('.custom-option:not(.empty)');
+        allOptions.forEach(opt => {
+            opt.classList.toggle('selected', parseInt(opt.dataset.value) === item.id);
+        });
+
         container.classList.remove('open');
+
+        if (onSelect && typeof onSelect === 'function') {
+            onSelect(item.id, item);
+        }
+    }
+
+    searchInputPodrost.addEventListener('input', function(e) {
+        e.stopPropagation();
+        const value = this.value;
+
+        if (value.trim()) {
+            container.classList.add('open');
+            filterOptionsPodrost(value);
+        } else {
+            renderOptionsPodrost(currentDataPodrost);
+        }
     });
 
+    podrostTrigger.addEventListener('click', function(e) {
+        if (e.target === searchInputPodrost) {
+            return;
+        }
+
+        e.stopPropagation();
+        const wasOpen = container.classList.contains('open');
+
+        if (wasOpen) {
+            container.classList.remove('open');
+            if (!hasChangesPodrost && selectedIdPodrost !== originalPodrostId) {
+                restoreOriginalPodrostValue();
+            } else {
+                showSelectedMode();
+            }
+            return;
+        }
+
+        if (selectedIdPodrost) {
+            searchInputPodrost.style.display = 'block';
+            searchInputPodrost.value = '';
+            selectedPodrostValue.style.display = 'none';
+            selectedPodrostValue.classList.remove('active');
+            searchInputPodrost.focus();
+            renderOptionsPodrost(currentDataPodrost);
+        } else {
+            searchInputPodrost.style.display = 'block';
+            searchInputPodrost.value = '';
+            selectedPodrostValue.style.display = 'none';
+            searchInputPodrost.focus();
+            renderOptionsPodrost(currentDataPodrost);
+        }
+
+        container.classList.add('open');
+    });
+
+    document.addEventListener('click', function(e) {
+        if (!container.contains(e.target) && container.classList.contains('open')) {
+            container.classList.remove('open');
+
+            if (!hasChangesPodrost && selectedIdPodrost !== originalPodrostId) {
+                restoreOriginalPodrostValue();
+            } else {
+                showSelectedMode();
+            }
+        }
+    });
+
+    if (originalPodrostId) {
+        const originalItem = currentDataPodrost.find(item => item.id === parseInt(originalPodrostId));
+        if (originalItem) {
+            selectedIdPodrost = originalPodrostId;
+            selectedPodrostValue.innerHTML = `
+                <span class="selected-name">${originalItem.name}</span>
+                <span class="selected-short">${originalItem.shortName || ''}</span>
+            `;
+            selectedPodrostValue.classList.add('active');
+            searchInputPodrost.style.display = 'none';
+            selectedPodrostValue.style.display = 'block';
+            hiddenInputPodrost.value = originalPodrostId;
+        } else {
+            searchInputPodrost.style.display = 'block';
+            selectedPodrostValue.style.display = 'none';
+        }
+    } else {
+        searchInputPodrost.style.display = 'block';
+        selectedPodrostValue.style.display = 'none';
+    }
+
+    renderOptionsPodrost(currentDataPodrost);
+
     return {
-       getValue: () => hiddenInputPodrost ? hiddenInputPodrost.value : null,
-       getSelected: () => {
+        getValue: () => hiddenInputPodrost ? hiddenInputPodrost.value : null,
+        getSelected: () => {
             const id = hiddenInputPodrost ? hiddenInputPodrost.value : null;
-           return data.find(item => item.id == id) || null;
-       }
+            return currentDataPodrost.find(item => item.id == id) || null;
+        },
     };
 }
 async function initApp() {
@@ -474,13 +1047,6 @@ let hasUnsavedChanges = false;
 let pendingNavigation = null;
 let ignoreFields = ['profile_fio','profile_phone','subjectStatement-profile','old_password','new_password','confirm_password'];
 
-//window.addEventListener('beforeunload', (event) => {
-//    if (hasUnsavedChanges) {
-//        event.preventDefault();
-//        event.returnValue = '';
-//    }
-//});
-
 function trackChanges() {
     hasUnsavedChanges = true;
 }
@@ -497,7 +1063,6 @@ function addListenersToField(field) {
         field.addEventListener('click', trackChanges);
     }
 
-    //console.log('Отслеживание добавлено для:', field.name || field.id);
 }
 
 function trackAllFields() {

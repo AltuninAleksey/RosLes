@@ -82,22 +82,25 @@ function editLineInTwoTable(id, event) {
 
     const selectPodrostId = `edit-breed-${id}`;
     const hiddenInputPodrost = `edit-selected-breed-podrost-${id}`;
+    const triggerPodrostId = `edit-trigger-podrost-${id}`;
+    const podrostSearchInput = `edit-podrost-search-input-${id}`;
+    const podrostOptions = `edit-podrost-options-${id}`;
+    const podrostSelected = `edit-podrost-select-${id}`;
+
     // Создаем select для породы
-//    let breedOptions = "";
-//    for (let j = 0; j < APP.breeds.length; j++) {
-//        const selected = APP.breeds[j].id === currentBreed ? "selected" : "";
-//        breedOptions += `<option value="${APP.breeds[j].id}" ${selected}>${APP.breeds[j].name}</option>`;
-//    }
      let breedSelectHtml = `
         <div class="custom-select edit-custom-podrost-select" id="${selectPodrostId}" style="width: 100%;">
-            <div class="custom-select-trigger" id="podrostTrigger" style="border: none; border-bottom: 1px solid #40E0D0; border-radius: 0; padding: 6px 12px; min-height: 35px;">
-                <span class="selected-value" id="podrostSelected">
+            <div class="custom-select-trigger" id="${triggerPodrostId}" style="border: none; cursor: pointer; border-bottom: 1px solid #40E0D0; border-radius: 0; padding: 6px 12px; min-height: 35px;">
+                <input type="text" id="${podrostSearchInput}"
+                       placeholder="Поиск"
+                       style="flex: 1; border: none; outline: none; font-size: 14px; padding: 4px 0; background: transparent;">
+                <span class="selected-value" id="${podrostSelected}" style="display: none;">
                     <span class="selected-name">Выберите породу</span>
                     <span class="selected-short"></span>
                 </span>
-                <span class="arrow" style="color: #40E0D0;">▼</span>
+                <span class="arrow" style="color: #40E0D0;font-size: 12px">▼</span>
             </div>
-            <div class="custom-select-options" id="podrostOptions" style="border-color: #40E0D0;top: 0; bottom: 40px;">
+            <div class="custom-select-options" id="${podrostOptions}" style="border-color: #40E0D0;top: 0; bottom: 40px;">
             </div>
         </div>
         <input type="hidden" id="${hiddenInputPodrost}" value="${currentBreed}">
@@ -108,18 +111,108 @@ function editLineInTwoTable(id, event) {
     const selectContainer = document.getElementById(selectPodrostId);
     if (selectContainer) {
 
-       const optionsContainerPodrost = document.getElementById('podrostOptions');
-       const selectedPodrostValue = document.getElementById('podrostSelected');
+       const optionsContainerPodrost = document.getElementById(podrostOptions);
+       const selectedPodrostValue = document.getElementById(podrostSelected);
        const hiddenPodrostInputId = document.getElementById(hiddenInputPodrost);
+       const searchPodrostInput = document.getElementById(podrostSearchInput);
+       const podrostTrigger = document.getElementById(triggerPodrostId);
 
-        if (optionsContainerPodrost) {
+       let currentDataPodrost = APP.breeds || [];
+       let selectedIdPodrost = currentBreed || null;
+       let hasChangesPodrost = false;
+
+       const originalPodrostId = currentBreed;
+
+       function restoreOriginalPodrostValue() {
+           if (originalPodrostId) {
+               const originalBreed = currentDataPodrost.find(item => item.id === originalPodrostId);
+               if (originalBreed) {
+                   selectedIdPodrost = originalPodrostId;
+                   selectedPodrostValue.innerHTML = `
+                       <span class="selected-name">${originalBreed.name}</span>
+                       <span class="selected-short">${originalBreed.shortName || ''}</span>
+                   `;
+                   selectedPodrostValue.classList.add('active');
+                   searchPodrostInput.style.display = 'none';
+                   selectedPodrostValue.style.display = 'block';
+                   hiddenPodrostInputId.value = originalPodrostId;
+                   hasChangesPodrost = false;
+                   return true;
+               }
+           } else {
+               selectedIdPodrost = null;
+               selectedPodrostValue.classList.remove('active');
+               selectedPodrostValue.style.display = 'none';
+               searchPodrostInput.style.display = 'block';
+               searchPodrostInput.value = '';
+               hiddenPodrostInputId.value = '';
+               hasChangesPodrost = false;
+               return false;
+           }
+       }
+
+        function checkAndRestorePodrost() {
+            if (!hasChangesPodrost && selectedIdPodrost !== originalPodrostId) {
+                restoreOriginalPodrostValue();
+                return true;
+            }
+            if (!selectedIdPodrost && originalPodrostId) {
+                restoreOriginalPodrostValue();
+                return true;
+            }
+            return false;
+        }
+
+        function showSelectedPodrostMode() {
+            if (selectedIdPodrost) {
+                const selectedItem = currentDataPodrost.find(item => item.id === selectedIdPodrost);
+                if (selectedItem) {
+                    selectedPodrostValue.innerHTML = `
+                        <span class="selected-name">${selectedItem.name}</span>
+                        <span class="selected-short">${selectedItem.shortName || ''}</span>
+                    `;
+                    selectedPodrostValue.classList.add('active');
+                    selectedPodrostValue.style.display = 'block';
+                    searchPodrostInput.style.display = 'none';
+                    searchPodrostInput.value = '';
+                    return;
+                }
+            } else {
+                selectedPodrostValue.style.display = 'none';
+                selectedPodrostValue.classList.remove('active');
+                searchPodrostInput.style.display = 'block';
+                searchPodrostInput.value = '';
+            }
+        }
+
+        function filterOptionsPodrost(searchText) {
+            const search = searchText.toLowerCase().trim();
+            if (!search) {
+                renderPodrostOptions(currentDataPodrost);
+                return;
+            }
+            const filtered = currentDataPodrost.filter(item =>
+                item.name.toLowerCase().includes(search) ||
+                (item.shortName && item.shortName.toLowerCase().includes(search))
+            );
+            renderPodrostOptions(filtered, search);
+        }
+
+        function renderPodrostOptions(options, searchText = '')  {
             optionsContainerPodrost.innerHTML = '';
+            if (!options || options.length === 0) {
+                const empty = document.createElement('div');
+                empty.className = 'custom-option empty';
+                empty.textContent = searchText ? 'Ничего не найдено' : 'Нет доступных пород';
+                optionsContainerPodrost.appendChild(empty);
+                return;
+            }
 
-            APP.breeds.forEach(item => {
+            options.forEach(item => {
                 const option = document.createElement('div');
                 option.className = 'custom-option';
                 option.dataset.value = item.id;
-                const isSelected = item.id === currentBreed;
+                const isSelected = item.id === selectedIdPodrost;
                 if (isSelected) {
                     option.classList.add('selected');
                 }
@@ -128,11 +221,11 @@ function editLineInTwoTable(id, event) {
                     <div class="option-short">${item.shortName || ''}</div>
                 `;
 
-                option.addEventListener('click', (function(item, selectedPodrostValue, hiddenPodrostInputId, optionsContainerPodrost, selectContainer) {
-                    return function(e) {
+                option.addEventListener('click', function(e) {
                         e.stopPropagation();
+                        selectedIdPodrost = item.id;
+                        hasChangesPodrost = true;
 
-                        // Обновляем отображение
                         if (selectedPodrostValue) {
                             selectedPodrostValue.innerHTML = `
                                 <span class="selected-name">${item.name}</span>
@@ -143,36 +236,83 @@ function editLineInTwoTable(id, event) {
                         if (hiddenPodrostInputId) {
                             hiddenPodrostInputId.value = item.id;
                         }
-
+                        selectedPodrostValue.classList.add('active');
+                        searchPodrostInput.style.display = 'none';
+                        selectedPodrostValue.style.display = 'block';
                         optionsContainerPodrost.querySelectorAll('.custom-option').forEach(opt => {
                             opt.classList.remove('selected');
                         });
                         option.classList.add('selected');
 
                         selectContainer.classList.remove('open');
-                    };
-                })(item, selectedPodrostValue, hiddenPodrostInputId, optionsContainerPodrost, selectContainer));
+                });
 
-                optionsContainerPodrost.appendChild(option);
+                    optionsContainerPodrost.appendChild(option);
             });
 
-            if (currentBreed) {
-                const selectedBreed = APP.breeds.find(item => item.id === currentBreed);
-                if (selectedBreed && selectedPodrostValue) {
-                    selectedPodrostValue.innerHTML = `
-                        <span class="selected-name">${selectedBreed.name}</span>
-                        <span class="selected-short">${selectedBreed.shortName || ''}</span>
-                    `;
-                }
+        }
+        if (currentBreed) {
+            const selectedBreed = currentDataPodrost.find(item => item.id === currentBreed);
+            if (selectedBreed) {
+                selectedIdPodrost = currentBreed;
+                selectedPodrostValue.innerHTML = `
+                    <span class="selected-name">${selectedBreed.name}</span>
+                    <span class="selected-short">${selectedBreed.shortName || ''}</span>
+                `;
+                selectedPodrostValue.classList.add('active');
+                searchPodrostInput.style.display = 'none';
+                selectedPodrostValue.style.display = 'block';
+                hiddenPodrostInputId.value = currentBreed;
             }
+        } else {
+            searchPodrostInput.style.display = 'block';
+            selectedPodrostValue.style.display = 'none';
         }
 
-        const podrostTrigger = document.getElementById('podrostTrigger');
+        renderPodrostOptions(currentDataPodrost);
+
+        searchPodrostInput.addEventListener('input', function(e) {
+            e.stopPropagation();
+            const value = this.value;
+            if (value.trim()) {
+                selectContainer.classList.add('open');
+                filterOptionsPodrost(value);
+            } else {
+                renderPodrostOptions(currentDataPodrost);
+            }
+        });
         if (podrostTrigger) {
 
             podrostTrigger.addEventListener('click', function(e) {
                 e.stopPropagation();
+                if (e.target === searchPodrostInput) {
+                    return;
+                }
+                const wasOpen = selectContainer.classList.contains('open');
+                if (wasOpen) {
+                    selectContainer.classList.remove('open');
+                    if (!hasChangesPodrost && selectedIdPodrost !== originalPodrostId) {
+                        restoreOriginalPodrostValue();
+                    } else {
+                        showSelectedPodrostMode();
+                    }
+                    return;
+                }
 
+                if (selectedIdPodrost) {
+                    searchPodrostInput.style.display = 'block';
+                    searchPodrostInput.value = '';
+                    selectedPodrostValue.style.display = 'none';
+                    selectedPodrostValue.classList.remove('active');
+                    searchPodrostInput.focus();
+                    renderPodrostOptions(currentDataPodrost);
+                } else {
+                    searchPodrostInput.style.display = 'block';
+                    searchPodrostInput.value = '';
+                    selectedPodrostValue.style.display = 'none';
+                    searchPodrostInput.focus();
+                    renderPodrostOptions(currentDataPodrost);
+                }
                 document.querySelectorAll('.edit-custom-podrost-select.open').forEach(el => {
                     if (el !== selectContainer) {
                         el.classList.remove('open');
@@ -187,6 +327,16 @@ function editLineInTwoTable(id, event) {
                 }
             });
         }
+        document.addEventListener('click', function closeSelect(e) {
+            if (!selectContainer.contains(e.target) && selectContainer.classList.contains('open')) {
+                selectContainer.classList.remove('open');
+                if (!hasChangesPodrost && selectedIdPodrost !== originalPodrostId) {
+                    restoreOriginalPodrostValue();
+                } else {
+                    showSelectedPodrostMode();
+                }
+            }
+        });
     }
     // Заменяем содержимое ячеек на поля ввода с кнопками
     //cells[0].innerHTML = `<select class="edit-breed" data-field="breed" style="width: 100%; padding: 6px 12px; border: none; background: transparent; border-bottom: 1px solid #40E0D0;">${breedOptions}</select>`;
@@ -202,13 +352,6 @@ function editLineInTwoTable(id, event) {
             </svg>
         </button>
     `;
-    document.addEventListener('click', function closeSelect(e) {
-        document.querySelectorAll('.edit-custom-podrost-select.open').forEach(el => {
-            if (!el.contains(e.target)) {
-                el.classList.remove('open');
-            }
-        });
-    });
 }
 function positionDropdown(selectContainer) {
     const trigger = selectContainer.querySelector('.custom-select-trigger');
