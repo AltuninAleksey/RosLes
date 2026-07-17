@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:paddingVertical="4dp">
+
+    <EditText
+        android:id="@+id/editCell1"
+        style="@style/Widget.AppCompat.EditText"
+        android:layout_width="0dp"
+        android:layout_height="55dp"
+        android:layout_margin="3dp"
+        android:layout_weight="1"
+        android:background="@drawable/cell_border"
+        android:gravity="center"
+        android:inputType="number"
+        android:maxLength="6"
+        android:padding="4dp"
+        android:textSize="14sp" />
+
+    <EditText
+        android:id="@+id/editCell2"
+        style="@style/Widget.AppCompat.EditText"
+        android:layout_width="0dp"
+        android:layout_height="55dp"
+        android:layout_margin="3dp"
+        android:layout_weight="1"
+        android:background="@drawable/cell_border"
+        android:gravity="center"
+        android:inputType="number"
+        android:maxLength="6"
+        android:padding="4dp"
+        android:textSize="14sp" />
+
+    <EditText
+        android:id="@+id/editCell3"
+        style="@style/Widget.AppCompat.EditText"
+        android:layout_width="0dp"
+        android:layout_height="55dp"
+        android:layout_margin="3dp"
+        android:layout_weight="1"
+        android:background="@drawable/cell_border"
+        android:gravity="center"
+        android:inputType="number"
+        android:maxLength="6"
+        android:padding="4dp"
+        android:textSize="14sp" />
+
+</LinearLayout>

@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_background"
+    android:orientation="vertical">
+
+    <!-- Custom Navigation Bar -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#177164"
+        android:orientation="vertical"
+        android:paddingBottom="8dp">
+
+        <!-- Row 1: Back + Title + Save -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="10dp">
+
+            <ImageButton
+                android:id="@+id/btnBack"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:padding="8dp"
+                android:src="@drawable/back"
+                android:contentDescription="Назад" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Карточки учета"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <ImageButton
+                android:id="@+id/btnSave"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:padding="8dp"
+                android:src="@drawable/save"
+                android:contentDescription="Сохранить" />
+        </LinearLayout>
+
+        <!-- Row 2: Metadata (scrollable horizontally) -->
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="8dp"
+                    android:text="Дата: 05.07.2026"
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="20dp"
+                    android:background="#80FFFFFF" />
+
+                <TextView
+                    android:id="@+id/tvSubject"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="8dp"
+                    android:text="Субъект: Московская"
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="20dp"
+                    android:background="#80FFFFFF" />
+
+                <TextView
+                    android:id="@+id/tvForestry"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="8dp"
+                    android:text="Лес-во: Брянское"
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="20dp"
+                    android:background="#80FFFFFF" />
+
+                <TextView
+                    android:id="@+id/tvDistrict"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="8dp"
+                    android:text="Участк.: Мичуринское"
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="20dp"
+                    android:background="#80FFFFFF" />
+
+                <TextView
+                    android:id="@+id/tvTract"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="8dp"
+                    android:text="Квартал: 5"
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="20dp"
+                    android:background="#80FFFFFF" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="8dp"
+                    android:text="Порода:"
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
+
+                <Spinner
+                    android:id="@+id/spinnerBreed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minWidth="100dp"
+                    android:paddingHorizontal="4dp"
+                    android:textSize="12sp" />
+            </LinearLayout>
+        </HorizontalScrollView>
+    </LinearLayout>
+
+    <!-- Main Content: Two Columns -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <!-- Left Column -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvLeftHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/color_button_main"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="Диаметр корневой шейки"
+                android:textColor="@color/white"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvLeft"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:orientation="vertical"
+                android:paddingHorizontal="4dp"
+                android:paddingTop="4dp"
+                tools:listitem="@layout/item_dual_list_card" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/color_button_main" />
+
+        <!-- Right Column -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvRightHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/color_button_main"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="Высота корневой шейки"
+                android:textColor="@color/white"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvRight"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:orientation="vertical"
+                android:paddingHorizontal="4dp"
+                android:paddingTop="4dp"
+                tools:listitem="@layout/item_dual_list_card" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

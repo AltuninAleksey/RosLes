@@ -35,7 +35,7 @@
             android:name="com.example.rosles.utils.services.GpsForegroundService"/>
 
         <activity
-            android:name=".Screens.Authorization"
+            android:name=".Screens.DualListActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -59,7 +59,7 @@
         <activity android:name="com.example.rosles.Screens.AddSample"/>
         <activity android:name="com.example.rosles.Screens.AddVedomost"/>
         <activity android:name="com.example.rosles.Screens.Dashboard"/>
-        <activity android:name="com.example.rosles.Screens.gps_activity"/>
+        <activity android:name="com.example.rosles.Screens.gps_activity"  />
         <activity android:name="com.example.rosles.Screens.SelectPhoto"/>
         <activity android:name="com.example.rosles.Screens.lisq_square"/>
         <activity android:name="com.example.rosles.Screens.create_user"/>
@@ -67,8 +67,14 @@
         <activity android:name="com.example.rosles.Screens.ChangeListregion"/>
         <activity android:name="com.example.rosles.Screens.ChangeSample"/>
         <activity android:name="com.example.rosles.Screens.GpxTrack"/>
-        <activity android:name="com.example.rosles.Screens.change_user"/>
+                <activity android:name="com.example.rosles.Screens.change_user"/>
         <activity android:name="com.example.rosles.TestActivity"/>
+
+
+
+
+
+
 
 
         <provider
