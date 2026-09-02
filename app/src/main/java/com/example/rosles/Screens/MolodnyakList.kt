@@ -70,6 +70,7 @@ class MolodnyakList : BaseActivity("Учёт молодняка") {
     private fun tableInit() {
         val colWidth = resources.getDimensionPixelSize(R.dimen.table_col_width)
         val numWidth = resources.getDimensionPixelSize(R.dimen.table_col_num_width)
+        val cellPad = (5 * resources.displayMetrics.density).toInt()
 
         for (i in rows.indices) {
             val row = rows[i]
@@ -92,7 +93,7 @@ class MolodnyakList : BaseActivity("Учёт молодняка") {
                 cell.textAlignment = View.TEXT_ALIGNMENT_CENTER
                 cell.gravity = android.view.Gravity.CENTER
                 cell.setTextColor(-0x1000000)
-                cell.setPadding(8, 8, 8, 8)
+                cell.setPadding(cellPad, cellPad, cellPad, cellPad)
                 val cellParams = TableRow.LayoutParams(
                     if (col == 0) numWidth else colWidth,
                     TableRow.LayoutParams.WRAP_CONTENT
