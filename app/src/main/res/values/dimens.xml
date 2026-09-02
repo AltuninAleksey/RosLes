@@ -12,4 +12,7 @@
 
     <dimen name="custom_size_dialog">300dp</dimen>
 
+    <dimen name="table_col_width">120dp</dimen>
+    <dimen name="table_col_num_width">48dp</dimen>
+
 </resources>
