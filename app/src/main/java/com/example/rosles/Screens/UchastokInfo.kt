@@ -2,6 +2,7 @@ package com.example.rosles.Screens
 
 import android.annotation.SuppressLint
 import android.app.Dialog
+import android.content.Intent
 import android.os.Bundle
 import android.view.Gravity
 import android.view.View
@@ -190,7 +191,7 @@ class UchastokInfo : BaseActivity("Информация об участке") {
             Toast.makeText(this, "В разработке", Toast.LENGTH_SHORT).show()
         }
         binding.toolbar.open.setOnClickListener {
-            Toast.makeText(this, "В разработке", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, ProbaInfo::class.java))
         }
         binding.toolbar.save.setOnClickListener {
             Toast.makeText(this, "В разработке", Toast.LENGTH_SHORT).show()

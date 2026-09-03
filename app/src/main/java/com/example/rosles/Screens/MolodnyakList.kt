@@ -2,6 +2,7 @@ package com.example.rosles.Screens
 
 import android.annotation.SuppressLint
 import android.app.Dialog
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -121,7 +122,7 @@ class MolodnyakList : BaseActivity("Учёт молодняка") {
             Toast.makeText(this, "В разработке", Toast.LENGTH_SHORT).show()
         }
         binding.toolbar.open.setOnClickListener {
-            Toast.makeText(this, "В разработке", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this,UchastokInfo::class.java))
         }
         binding.toolbar.save.setOnClickListener {
             Toast.makeText(this, "В разработке", Toast.LENGTH_SHORT).show()

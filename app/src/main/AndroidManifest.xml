@@ -35,7 +35,7 @@
             android:name="com.example.rosles.utils.services.GpsForegroundService"/>
 
         <activity
-            android:name="com.example.rosles.Screens.ProbaInfo"
+            android:name="com.example.rosles.Screens.StartScreen"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -44,15 +44,12 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name="com.example.rosles.Screens.UchastokInfo"
-            android:exported="false" />
-
-        <activity
-            android:name="com.example.rosles.Screens.MolodnyakList"
-            android:exported="false" />
 
         <activity android:name=".Screens.DualListActivity"/>
+        <activity android:name=".Screens.MolodnyakList"/>
+
+        <activity android:name=".Screens.UchastokInfo"/>
+        <activity android:name=".Screens.ProbaInfo"/>
         <activity android:name="com.example.rosles.Screens.Wood" android:windowSoftInputMode="adjustPan"/>
         <activity android:name="com.example.rosles.Screens.ChoiceSubject"/>
         <activity android:name="com.example.rosles.Screens.MainActivity"/>

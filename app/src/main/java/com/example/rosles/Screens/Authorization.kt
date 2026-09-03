@@ -67,7 +67,7 @@ class Authorization: AppCompatActivity() {
                     }
 
                     Toast.makeText(this@Authorization, "Вы авторизовались", Toast.LENGTH_SHORT).show()
-                    startActivity(Intent(this@Authorization, Dashboard::class.java))
+                    startActivity(Intent(this@Authorization, StartScreen::class.java))
                 }
 
                 override fun ifConnectionException() {
