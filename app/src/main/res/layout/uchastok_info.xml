@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TableLayout
+        android:id="@+id/tbl_info"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:stretchColumns="*"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/background_table">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="5dip"
+                android:text="Лесничество"
+                android:textColor="#ffff"
+                android:textSize="@dimen/custom_size_table" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="5dip"
+                android:text="Участковое &#10;лесничество"
+                android:textColor="#ffff"
+                android:textSize="@dimen/custom_size_table" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="0.8"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="5dip"
+                android:text="Урочище"
+                android:textColor="#ffff"
+                android:textSize="@dimen/custom_size_table" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="0.7"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="5dip"
+                android:text="Квартал"
+                android:textColor="#ffff"
+                android:textSize="@dimen/custom_size_table" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="0.6"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="5dip"
+                android:text="Выдел"
+                android:textColor="#ffff"
+                android:textSize="@dimen/custom_size_table" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="0.7"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="5dip"
+                android:text="Дата"
+                android:textColor="#ffff"
+                android:textSize="@dimen/custom_size_table" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/lesnich"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="5dip"
+                android:text="Брянское"
+                android:textColor="#000"
+                android:textSize="@dimen/custom_size_table" />
+
+            <TextView
+                android:id="@+id/district"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="5dip"
+                android:text="Мичуринское"
+                android:textColor="#000"
+                android:textSize="@dimen/custom_size_table" />
+
+            <TextView
+                android:id="@+id/tract"
+                android:layout_width="0dp"
+                android:layout_weight="0.8"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="5dip"
+                android:text="Соловьи"
+                android:textColor="#000"
+                android:textSize="@dimen/custom_size_table" />
+
+            <TextView
+                android:id="@+id/quarter"
+                android:layout_width="0dp"
+                android:layout_weight="0.7"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="5dip"
+                android:text="3"
+                android:textColor="#000"
+                android:textSize="@dimen/custom_size_table" />
+
+            <TextView
+                android:id="@+id/allotment"
+                android:layout_width="0dp"
+                android:layout_weight="0.6"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="5dip"
+                android:text="25-4"
+                android:textColor="#000"
+                android:textSize="@dimen/custom_size_table" />
+
+            <TextView
+                android:id="@+id/date"
+                android:layout_width="0dp"
+                android:layout_weight="0.7"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="5dip"
+                android:text="01.01.2023"
+                android:textColor="#000"
+                android:textSize="@dimen/custom_size_table" />
+        </TableRow>
+    </TableLayout>
+
+    <LinearLayout
+        android:id="@+id/switch_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tbl_info">
+
+        <TextView
+            android:id="@+id/btn_proba"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:background="@color/selected_Green"
+            android:gravity="center"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:padding="10dp"
+            android:text="Пробная площадь"
+            android:textColor="@color/white"
+            android:textSize="@dimen/custom_size_table" />
+
+        <TextView
+            android:id="@+id/btn_otrezok"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:background="@color/unselected_Gray"
+            android:gravity="center"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:padding="10dp"
+            android:text="Учётный отрезок"
+            android:textColor="@color/gray"
+            android:textSize="@dimen/custom_size_table" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/table_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@color/background_table"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/switch_toolbar" />
+
+    <ScrollView
+        android:id="@+id/scroll"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/toolbar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/table_header"
+        app:layout_constraintVertical_bias="0.0">
+
+        <TableLayout
+            android:id="@+id/tbl_rows"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:stretchColumns="*" />
+    </ScrollView>
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/menu"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="0dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
