@@ -75,6 +75,16 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:padding="5dip"
+                android:text="Площадь"
+                android:textColor="#ffff"
+                android:textSize="@dimen/custom_size_table" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="0.7"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="5dip"
                 android:text="Дата"
                 android:textColor="#ffff"
                 android:textSize="@dimen/custom_size_table" />
@@ -136,6 +146,17 @@
                 android:gravity="center"
                 android:padding="5dip"
                 android:text="25-4"
+                android:textColor="#000"
+                android:textSize="@dimen/custom_size_table" />
+
+            <TextView
+                android:id="@+id/area"
+                android:layout_width="0dp"
+                android:layout_weight="0.7"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="5dip"
+                android:text="1.2"
                 android:textColor="#000"
                 android:textSize="@dimen/custom_size_table" />
 

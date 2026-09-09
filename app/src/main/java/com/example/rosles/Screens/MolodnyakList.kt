@@ -84,8 +84,8 @@ class MolodnyakList : BaseActivity("Учёт молодняка") {
                 row.tract,
                 row.quarter,
                 row.allotment,
-                row.date,
-                row.square
+                row.square,
+                row.date
             )
 
             for (col in values.indices) {
@@ -119,7 +119,7 @@ class MolodnyakList : BaseActivity("Учёт молодняка") {
 
     private fun toolbarInit() {
         binding.toolbar.addbutton.setOnClickListener {
-            Toast.makeText(this, "В разработке", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, PerechetVedomostList::class.java))
         }
         binding.toolbar.open.setOnClickListener {
             startActivity(Intent(this,UchastokInfo::class.java))

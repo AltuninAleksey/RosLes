@@ -87,7 +87,7 @@
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:padding="5dip"
-                    android:text="Дата"
+                    android:text="Площадь"
                     android:textColor="#ffff"
                     android:textSize="@dimen/custom_size_table" />
 
@@ -96,7 +96,7 @@
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:padding="5dip"
-                    android:text="Площадь"
+                    android:text="Дата"
                     android:textColor="#ffff"
                     android:textSize="@dimen/custom_size_table" />
             </LinearLayout>

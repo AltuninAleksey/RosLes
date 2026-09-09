@@ -47,6 +47,7 @@
 
         <activity android:name=".Screens.DualListActivity"/>
         <activity android:name=".Screens.MolodnyakList"/>
+        <activity android:name=".Screens.PerechetVedomostList"/>
 
         <activity android:name=".Screens.UchastokInfo"/>
         <activity android:name=".Screens.ProbaInfo"/>

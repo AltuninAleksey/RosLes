@@ -27,6 +27,7 @@ class ProbaInfo : BaseActivity("Информация о пробной площ�
         val tract: String,
         val quarter: String,
         val allotment: String,
+        val area: String,
         val date: String
     )
 
@@ -40,7 +41,7 @@ class ProbaInfo : BaseActivity("Информация о пробной площ�
         val maxHeight: String
     )
 
-    private val info = Uchastok("Брянское", "Мичуринское", "Соловьи", "3", "25-4", "01.01.2023")
+    private val info = Uchastok("Брянское", "Мичуринское", "Соловьи", "3", "25-4", "1.2", "01.01.2023")
 
     private val cultureRows: MutableList<CultureRow> = mutableListOf(
         CultureRow("Сосна", "1200", "150"),
@@ -98,6 +99,7 @@ class ProbaInfo : BaseActivity("Информация о пробной площ�
         binding.tract.text = info.tract
         binding.quarter.text = info.quarter
         binding.allotment.text = info.allotment
+        binding.area.text = info.area
         binding.date.text = info.date
     }
 

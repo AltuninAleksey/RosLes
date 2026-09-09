@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/color_transporent"
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginTop="16dp"
+    android:layout_marginBottom="8dp"
+    android:padding="8dp">
+
+    <TextView
+        android:id="@+id/vedomost_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Брянское · Мичуринское · Соловьи"
+        android:textColor="@color/black"
+        android:textSize="@dimen/custom_size_text_medium"
+        tools:ignore="HardcodedText" />
+
+    <TextView
+        android:id="@+id/vedomost_subtitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="кв. 3 · выдел 25-4 · 1.2 га · 01.01.2023"
+        android:textColor="@color/gray"
+        android:textSize="15sp"
+        tools:ignore="HardcodedText" />
+
+</LinearLayout>

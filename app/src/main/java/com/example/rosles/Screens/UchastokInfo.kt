@@ -28,13 +28,14 @@ class UchastokInfo : BaseActivity("Информация об участке") {
         val tract: String,
         val quarter: String,
         val allotment: String,
+        val area: String,
         val date: String
     )
 
     data class ProbaRow(val length: String, val width: String, val area: String)
     data class OtrezokRow(val length: String)
 
-    private val info = Uchastok("Брянское", "Мичуринское", "Соловьи", "3", "25-4", "01.01.2023")
+    private val info = Uchastok("Брянское", "Мичуринское", "Соловьи", "3", "25-4", "1.2", "01.01.2023")
 
     private val probaRows: MutableList<ProbaRow> = mutableListOf(
         ProbaRow("50", "20", "0.10"),
@@ -81,6 +82,7 @@ class UchastokInfo : BaseActivity("Информация об участке") {
         binding.tract.text = info.tract
         binding.quarter.text = info.quarter
         binding.allotment.text = info.allotment
+        binding.area.text = info.area
         binding.date.text = info.date
     }
 
