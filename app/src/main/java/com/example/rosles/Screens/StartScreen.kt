@@ -18,10 +18,10 @@ class StartScreen: BaseActivity() {
         setContentView(binding.root)
 
         binding.les.setOnClickListener {
-            startActivity(Intent(this, Dashboard::class.java))
+            startActivity(Intent(this, MolodnyakList::class.java))
         }
         binding.molodnyak.setOnClickListener {
-            startActivity(Intent(this, MolodnyakList::class.java))
+            startActivity(Intent(this, Dashboard::class.java))
         }
     }
 }

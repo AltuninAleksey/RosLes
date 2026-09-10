@@ -24,7 +24,9 @@
                 android:layout_weight="1"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:padding="5dip"
+                android:padding="1dip"
+                android:maxLines="1"
+                app:autoSizeTextType="uniform"
                 android:text="Лесничество"
                 android:textColor="#ffff"
                 android:textSize="@dimen/custom_size_table" />
@@ -34,8 +36,10 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:padding="5dip"
-                android:text="Участковое &#10;лесничество"
+                android:padding="2dip"
+                app:autoSizeTextType="uniform"
+                android:maxLines="2"
+                android:text="Участковое лесничество"
                 android:textColor="#ffff"
                 android:textSize="@dimen/custom_size_table" />
 
@@ -44,18 +48,30 @@
                 android:layout_weight="0.8"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:padding="5dip"
+                android:padding="2dip"
                 android:text="Урочище"
+                android:maxLines="1"
+                app:autoSizeTextType="uniform"
                 android:textColor="#ffff"
                 android:textSize="@dimen/custom_size_table" />
 
             <TextView
                 android:layout_width="0dp"
-                android:layout_weight="0.7"
+                android:layout_weight="0.4"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:padding="5dip"
-                android:text="Квартал"
+                android:padding="4dip"
+                android:text="Кв"
+                android:textColor="#ffff"
+                android:textSize="@dimen/custom_size_table" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="2dip"
+                android:text="Выд"
                 android:textColor="#ffff"
                 android:textSize="@dimen/custom_size_table" />
 
@@ -64,18 +80,10 @@
                 android:layout_weight="0.6"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:padding="5dip"
-                android:text="Выдел"
-                android:textColor="#ffff"
-                android:textSize="@dimen/custom_size_table" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_weight="0.7"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:padding="5dip"
+                android:padding="4dip"
                 android:text="Площадь"
+                android:maxLines="1"
+                app:autoSizeTextType="uniform"
                 android:textColor="#ffff"
                 android:textSize="@dimen/custom_size_table" />
 
@@ -84,7 +92,7 @@
                 android:layout_weight="0.7"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:padding="5dip"
+                android:padding="4dip"
                 android:text="Дата"
                 android:textColor="#ffff"
                 android:textSize="@dimen/custom_size_table" />
@@ -100,7 +108,7 @@
                 android:layout_weight="1"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:padding="5dip"
+                android:padding="4dip"
                 android:text="Брянское"
                 android:textColor="#000"
                 android:textSize="@dimen/custom_size_table" />
@@ -111,7 +119,7 @@
                 android:layout_weight="1"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:padding="5dip"
+                android:padding="4dip"
                 android:text="Мичуринское"
                 android:textColor="#000"
                 android:textSize="@dimen/custom_size_table" />
@@ -122,7 +130,8 @@
                 android:layout_weight="0.8"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:padding="5dip"
+                android:padding="4dip"
+                android:maxLines="1"
                 android:text="Соловьи"
                 android:textColor="#000"
                 android:textSize="@dimen/custom_size_table" />
@@ -130,10 +139,10 @@
             <TextView
                 android:id="@+id/quarter"
                 android:layout_width="0dp"
-                android:layout_weight="0.7"
+                android:layout_weight="0.4"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:padding="5dip"
+                android:padding="4dip"
                 android:text="3"
                 android:textColor="#000"
                 android:textSize="@dimen/custom_size_table" />
@@ -141,7 +150,7 @@
             <TextView
                 android:id="@+id/allotment"
                 android:layout_width="0dp"
-                android:layout_weight="0.6"
+                android:layout_weight="0.5"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:padding="5dip"
@@ -152,10 +161,10 @@
             <TextView
                 android:id="@+id/area"
                 android:layout_width="0dp"
-                android:layout_weight="0.7"
+                android:layout_weight="0.6"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:padding="5dip"
+                android:padding="4dip"
                 android:text="1.2"
                 android:textColor="#000"
                 android:textSize="@dimen/custom_size_table" />
@@ -166,7 +175,7 @@
                 android:layout_weight="0.7"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:padding="5dip"
+                android:padding="4dip"
                 android:text="01.01.2023"
                 android:textColor="#000"
                 android:textSize="@dimen/custom_size_table" />
