@@ -254,6 +254,8 @@ class AppFcListRegion(models.Model):
     number = models.CharField(max_length=10, default=' ')
     date_examination = models.DateField(default=timezone.now)
     id_dacha = models.ForeignKey("Dacha", on_delete=models.CASCADE, null=True, default=None)
+    uuid = models.UUIDField(null=True, blank=True, unique=True)
+
     class Meta:
         db_table = "djangoForest_app_fc_list_region"
 
@@ -263,6 +265,8 @@ class AppFcSample(models.Model):
     id_listregion = models.ForeignKey("AppFcListRegion", on_delete=models.CASCADE)
     length = models.FloatField()
     width = models.FloatField()
+    uuid = models.UUIDField(null=True, blank=True, unique=True)
+    parent_uuid = models.UUIDField(null=True, blank=True)
 
     class Meta:
         db_table = "djangoForest_app_fc_sample"
@@ -276,6 +280,8 @@ class AppFcForestCropsMolod(models.Model):
     from1_5 = models.IntegerField()
     max_height = models.FloatField()
     id_breed = models.ForeignKey('Breed', on_delete=models.CASCADE)
+    uuid = models.UUIDField(null=True, blank=True, unique=True)
+    parent_uuid = models.UUIDField(null=True, blank=True)
 
     class Meta:
         db_table = "djangoForest_app_fc_forest_crops_molod"
@@ -287,6 +293,8 @@ class AppFcForestCropsRows(models.Model):
     count_living = models.IntegerField()
     count_dead = models.IntegerField()
     id_breed = models.ForeignKey('Breed', on_delete=models.CASCADE)
+    uuid = models.UUIDField(null=True, blank=True, unique=True)
+    parent_uuid = models.UUIDField(null=True, blank=True)
 
     class Meta:
         db_table = "djangoForest_app_fc_forest_crops_rows"
@@ -298,6 +306,8 @@ class AppFcForestCropsPlants(models.Model):
     diameter = models.FloatField()
     height = models.FloatField()
     id_breed = models.ForeignKey('Breed', on_delete=models.CASCADE)
+    uuid = models.UUIDField(null=True, blank=True, unique=True)
+    parent_uuid = models.UUIDField(null=True, blank=True)
 
     class Meta:
         db_table = "djangoForest_app_fc_forest_crops_plants"
@@ -471,6 +481,7 @@ class Breed(models.Model):
     economy = models.ForeignKey('Economy', on_delete=models.CASCADE,
                                 verbose_name='Хозяйство', null=True)
     evergreen = models.IntegerField(verbose_name= 'Вечнозеленость', null=True)
+
     def __str__(self):
         return self.name_breed
 
