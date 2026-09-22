@@ -43,8 +43,8 @@ public class ListRegionService {
 
     public ListRegionList getListRegion(
             Integer idSubjectFilet, Integer idDistrictForestlyFilet,
-            Integer idForestlyFilet, String soilLotFilter, String nameQuarterFilter,
-            Integer offset, Integer size, String token) {
+            Integer idForestlyFilet, Integer idDacha, String soilLotFilter, String nameQuarterFilter,
+            Integer offset, Integer size, Integer sortByDate, String token) {
 
         if (token == null || token.isEmpty()) {
             return new ListRegionList();
@@ -74,8 +74,8 @@ public class ListRegionService {
         if (!checkCZL.getSubject().isEmpty()) {
             ListRegionList listRegionList = listRegionRepository.getListRegion(
                     idSubjectFilet, idDistrictForestlyFilet,
-                    idForestlyFilet, soilLotFilter, nameQuarterFilter,
-                    checkCZL.getSubject().get(0).getId(), offset, size);
+                    idForestlyFilet, idDacha, soilLotFilter, nameQuarterFilter,
+                    checkCZL.getSubject().get(0).getId(), sortByDate, offset, size);
 
             return listRegionList;
         } else {

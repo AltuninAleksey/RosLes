@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 @Repository
 @Slf4j
@@ -29,8 +30,8 @@ public class ListRegionRepository {
 
     public ListRegionList getListRegion(
             Integer idSubjectFilet, Integer idDistrictForestlyFilet,
-            Integer idForestlyFilet, String soilLotFilter, String nameQuarterFilter,
-            Integer idSubjectRf, Integer offset, Integer size) {
+            Integer idForestlyFilet, Integer idDacha, String soilLotFilter, String nameQuarterFilter,
+            Integer idSubjectRf, Integer sortByDate, Integer offset, Integer size) {
         try {
 
             ListRegionList listRegionList = new ListRegionList();
@@ -89,7 +90,7 @@ public class ListRegionRepository {
                     "        on forestly.id = districtforestly.id_forestly_id\n";
 
                     if(idSubjectFilet != null || idForestlyFilet != null || idDistrictForestlyFilet != null
-                        || soilLotFilter != null || nameQuarterFilter != null) {
+                        || soilLotFilter != null || nameQuarterFilter != null || idDacha != null) {
                         sql += "    where \n";
                     }
 
@@ -118,6 +119,15 @@ public class ListRegionRepository {
                         countParam++;
                     }
 
+                    if(idDacha != null) {
+                        if(countParam > 0) {
+                            sql += "        and ";
+                        }
+
+                        sql += " id_dacha_id = " + idDacha + " \n";
+                        countParam++;
+                    }
+
                     if(soilLotFilter != null) {
                         if(countParam > 0) {
                             sql += "        and ";
@@ -143,7 +153,15 @@ public class ListRegionRepository {
                     Integer count = template.queryForObject(sqlCount, params, Integer.class);
 
                     sql +=
-                    "order by list_region.id desc limit :limit offset :offset";
+                    "order by date_examination ";
+
+                    if(sortByDate == 1) {
+                        sql += " desc ";
+                    } else {
+                        sql += " asc ";
+                    }
+
+                    sql += " limit :limit offset :offset";
 
             List<ListRegionItem> listRegionItems = template.query(sql, params, new ListRegionItemRowMapper());
 
@@ -198,14 +216,29 @@ public class ListRegionRepository {
     public ListRegionItem createListRegion(SaveListRegionRequest saveListRegionRequest, Integer IdProfile) throws ServiceException {
         try {
 
+            UUID uuid = UUID.randomUUID();
+
             HashMap<String, Object> params = new HashMap<>();
-            params.put("dacha", saveListRegionRequest.getDacha());
             params.put("date_examination", saveListRegionRequest.getDate());
             params.put("id_district_forestly_id", saveListRegionRequest.getIdDistrictForestly());
             params.put("id_profile_id", IdProfile);
             params.put("name_quarter", saveListRegionRequest.getNameQuarter());
             params.put("sample_region", saveListRegionRequest.getSampleRegion());
             params.put("soil_lot", saveListRegionRequest.getSoilLot());
+            params.put("uuid", uuid);
+
+
+            if(saveListRegionRequest.getDacha() == null) {
+                params.put("dacha", "");
+            } else {
+                params.put("dacha", saveListRegionRequest.getDacha());
+            }
+
+            if(saveListRegionRequest.getIdDacha() == null) {
+                params.put("id_dacha_id", 8823);
+            } else {
+                params.put("id_dacha_id", saveListRegionRequest.getIdDacha());
+            }
 
             String sql = "\n" +
                     "insert into \"djangoForest_app_fc_list_region\" (\n" +
@@ -217,7 +250,9 @@ public class ListRegionRepository {
                     "    id_profile_id,\n" +
                     "    name_quarter,\n" +
                     "    sample_region,\n" +
-                    "    soil_lot)\n" +
+                    "    id_dacha_id,\n" +
+                    "    soil_lot, \n" +
+                    "    uuid)\n" +
                     "values (\n" +
                     "    '1',\n" +
                     "    :dacha,\n" +
@@ -227,7 +262,9 @@ public class ListRegionRepository {
                     "    :id_profile_id,\n" +
                     "    :name_quarter,\n" +
                     "    :sample_region,\n" +
-                    "    :soil_lot) returning id";
+                    "    :id_dacha_id,\n" +
+                    "    :soil_lot, \n" +
+                    "    :uuid) returning id";
 
             Integer id = template.queryForObject(sql, params, Integer.class);
 
@@ -270,12 +307,24 @@ public class ListRegionRepository {
         try {
 
             HashMap<String, Object> params = new HashMap<>();
-            params.put("dacha", saveListRegionRequest.getDacha());
             params.put("date", saveListRegionRequest.getDate());
             params.put("id_district_forestly_id", saveListRegionRequest.getIdDistrictForestly());
             params.put("name_quarter", saveListRegionRequest.getNameQuarter());
             params.put("sample_region", saveListRegionRequest.getSampleRegion());
             params.put("soil_lot", saveListRegionRequest.getSoilLot());
+
+            if(saveListRegionRequest.getDacha() == null) {
+                params.put("dacha", "");
+            } else {
+                params.put("dacha", saveListRegionRequest.getDacha());
+            }
+
+            if(saveListRegionRequest.getIdDacha() == null) {
+                params.put("id_dacha_id", 8823);
+            } else {
+                params.put("id_dacha_id", saveListRegionRequest.getIdDacha());
+            }
+
             params.put("id", saveListRegionRequest.getId());
 
             String sql = "\n" +
@@ -285,6 +334,7 @@ public class ListRegionRepository {
                     "    id_district_forestly_id = :id_district_forestly_id,\n" +
                     "    name_quarter = :name_quarter,\n" +
                     "    sample_region = :sample_region,\n" +
+                    "    id_dacha_id = :id_dacha_id,\n" +
                     "    soil_lot = :soil_lot\n" +
                     "where id = :id";
 

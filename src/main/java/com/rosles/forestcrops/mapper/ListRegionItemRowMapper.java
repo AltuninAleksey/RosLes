@@ -18,6 +18,7 @@ public class ListRegionItemRowMapper implements RowMapper<ListRegionItem> {
         listRegionItem.setNumber(ResultSetHelper.getNullableObject(rs, "id", Long.class, 0l).toString());
         listRegionItem.setDate(ResultSetHelper.getNullableObject(rs, "date_examination", LocalDate.class, null));
         listRegionItem.setDacha(ResultSetHelper.getNullableObject(rs, "dacha", String.class, ""));
+        listRegionItem.setIdDacha(ResultSetHelper.getNullableObject(rs, "id_dacha_id", Long.class, 0l));
         listRegionItem.setNameQuarter(ResultSetHelper.getNullableObject(rs, "name_quarter", String.class, ""));
         listRegionItem.setSampleRegion(ResultSetHelper.getNullableObject(rs, "sample_region", Double.class, null));
         listRegionItem.setSoilLot(ResultSetHelper.getNullableObject(rs, "soil_lot", String.class, ""));

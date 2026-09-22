@@ -19,7 +19,7 @@ public class SampleItemResponseRowMapper implements RowMapper<SampleItemResponse
         sampleItemResponse.setLength(ResultSetHelper.getNullableObject(rs, "length", Double.class, 0.0));
         sampleItemResponse.setWidth(ResultSetHelper.getNullableObject(rs, "width", Double.class, 0.0));
 
-        sampleItemResponse.setSquare(sampleItemResponse.getLength()*sampleItemResponse.getWidth());
+        sampleItemResponse.setSquare(sampleItemResponse.getLength()*sampleItemResponse.getWidth()/10000);
 
         return sampleItemResponse;
     }

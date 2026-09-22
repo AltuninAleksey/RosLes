@@ -29,10 +29,12 @@ public class ListRegionController {
             @RequestParam(value = "idSubject", required = false) Integer idSubjectFilet,
             @RequestParam(value = "idDistrictForestly", required = false) Integer idDistrictForestlyFilet,
             @RequestParam(value = "idForestly", required = false) Integer idForestlyFilet,
+            @RequestParam(value = "idDacha", required = false) Integer idDacha,
             @RequestParam(value = "soilLot", required = false) String soilLotFilter,
             @RequestParam(value = "nameQuarter", required = false) String nameQuarterFilter,
             @RequestParam(value = "offset", required = false) Integer offset,
             @RequestParam(value = "limit", required = false) Integer size,
+            @RequestParam(value = "sortByDate", required = false) Integer sortByDate,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader
     ) {
         String token = authorizationHeader.substring(7);
@@ -45,10 +47,14 @@ public class ListRegionController {
             size = 10;
         }
 
+        if(sortByDate == null) {
+            sortByDate = 1;
+        }
+
         ListRegionList listRegionList = listRegionService.getListRegion(
                 idSubjectFilet, idDistrictForestlyFilet,
-                idForestlyFilet, soilLotFilter, nameQuarterFilter,
-                offset, size, token);
+                idForestlyFilet, idDacha, soilLotFilter, nameQuarterFilter,
+                offset, size, sortByDate, token);
 
         return new ResponseEntity<>(listRegionList, HttpStatus.OK);
     }

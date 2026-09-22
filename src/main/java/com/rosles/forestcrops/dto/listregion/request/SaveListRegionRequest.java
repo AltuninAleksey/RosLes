@@ -17,4 +17,5 @@ public class SaveListRegionRequest {
     private Double sampleRegion;
     private String soilLot;
     private Long idDistrictForestly;
+    private Long idDacha;
 }

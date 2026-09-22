@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 @Repository
 @Slf4j
@@ -147,6 +148,7 @@ public class SampleRepository {
             params.put("idListRegion", saveSampleRequest.getIdListRegion());
             params.put("length", saveSampleRequest.getLength());
             params.put("width", saveSampleRequest.getWidth());
+            params.put("uuid", UUID.randomUUID());
 
 
             String sql = "\n" +
@@ -154,7 +156,9 @@ public class SampleRepository {
                     "    id_listregion_id,\n" +
                     "    \"length\",\n" +
                     "    \"number\",\n" +
-                    "    \"width\")\n" +
+                    "    \"width\", \n" +
+                    "    uuid, \n" +
+                    "    parent_uuid)\n" +
                     "values (\n" +
                     "    :idListRegion,\n" +
                     "    :length,\n" +
@@ -162,7 +166,10 @@ public class SampleRepository {
                     "        (SELECT MAX(number) FROM \"public\".\"djangoForest_app_fc_sample\" WHERE id_listregion_id = :idListRegion)::integer,\n" +
                     "        0\n" +
                     "    ) + 1,\n" +
-                    "    :width) returning id";
+                    "    :width, \n" +
+                    "    :uuid, \n" +
+                    "    (select uuid from \"public\".\"djangoForest_app_fc_list_region\" where id = :idListRegion) \n" +
+                    ") returning id";
 
 
             Integer id = template.queryForObject(sql, params, Integer.class);
@@ -359,13 +366,18 @@ public class SampleRepository {
                     "    count_living,\n" +
                     "    id_breed_id,\n" +
                     "    id_sample_id,\n" +
-                    "    \"number\")\n" +
+                    "    \"number\", \n" +
+                    "    uuid, \n" +
+                    "    parent_uuid)\n" +
                     "values (\n" +
                     "    :count_dead,\n" +
                     "    :count_living,\n" +
                     "    :id_breed_id,\n" +
                     "    :id_sample_id,\n" +
-                    "    1)";
+                    "    1, \n" +
+                    "    :uuid, \n" +
+                    "    (select uuid from \"public\".\"djangoForest_app_fc_sample\" where id = :id_sample_id)" +
+                    ")";
 
             for (ForestCropsItem item : saveForestCropsItem.getValues()) {
 
@@ -374,6 +386,7 @@ public class SampleRepository {
                 params.put("count_living", item.getCountLiving());
                 params.put("id_breed_id", item.getIdBreed());
                 params.put("id_sample_id", saveForestCropsItem.getIdSample());
+                params.put("uuid", UUID.randomUUID());
 
                 template.update(sql, params);
             }
@@ -492,13 +505,18 @@ public class SampleRepository {
                     "    \"height\",\n" +
                     "    id_breed_id,\n" +
                     "    id_sample_id,\n" +
-                    "    \"number\")\n" +
+                    "    \"number\", \n" +
+                    "    uuid, \n" +
+                    "    parent_uuid)\n" +
                     "values (\n" +
                     "    :diameter,\n" +
                     "    :height,\n" +
                     "    :id_breed_id,\n" +
                     "    :id_sample_id,\n" +
-                    "    1)";
+                    "    1, \n" +
+                    "    :uuid, \n" +
+                    "    (select uuid from \"public\".\"djangoForest_app_fc_sample\" where id = :id_sample_id)" +
+                    ")";
 
             for (PlantsForestCropsItem item : savePlantsForestCropsItem.getValues()) {
 
@@ -507,6 +525,7 @@ public class SampleRepository {
                 params.put("height", item.getHeight());
                 params.put("id_breed_id", item.getIdBreed());
                 params.put("id_sample_id", savePlantsForestCropsItem.getIdSample());
+                params.put("uuid", UUID.randomUUID());
 
                 template.update(sql, params);
             }
@@ -627,15 +646,20 @@ public class SampleRepository {
                     "    id_sample_id,\n" +
                     "    max_height,\n" +
                     "    \"number\",\n" +
-                    "    to0_5)\n" +
+                    "    to0_5, \n" +
+                    "    uuid, \n" +
+                    "    parent_uuid)\n" +
                     "values (\n" +
                     "    :from0_6To1_5,\n" +
                     "    :from1_5,\n" +
+                    "    :id_breed_id,\n" +
+                    "    :id_sample_id,\n" +
+                    "    :max_height,\n" +
                     "    1,\n" +
-                    "    4,\n" +
-                    "    1,\n" +
-                    "    1,\n" +
-                    "    :to0_5)";
+                    "    :to0_5, \n" +
+                    "    :uuid, \n" +
+                    "    (select uuid from \"public\".\"djangoForest_app_fc_sample\" where id = :id_sample_id)" +
+                    ")";
 
             for (MolodForestCropsItem item : saveMolodForestCropsItem.getValues()) {
 
@@ -644,7 +668,9 @@ public class SampleRepository {
                 params.put("from1_5", item.getFrom1_5());
                 params.put("to0_5", item.getTo0_5());
                 params.put("id_breed_id", item.getIdBreed());
+                params.put("max_height", item.getMaxHeight());
                 params.put("id_sample_id", saveMolodForestCropsItem.getIdSample());
+                params.put("uuid", UUID.randomUUID());
 
                 template.update(sql, params);
             }
@@ -669,6 +695,7 @@ public class SampleRepository {
                     "    \"from0_6To1_5\" = :from0_6To1_5,\n" +
                     "    from1_5 = :from1_5,\n" +
                     "    to0_5 = :to0_5,\n" +
+                    "    max_height = :max_height,\n" +
                     "    id_breed_id = :id_breed_id\n" +
                     "where id = :id";
 
@@ -679,6 +706,7 @@ public class SampleRepository {
                 params.put("from0_6To1_5", item.getFrom0_6To1_5());
                 params.put("from1_5", item.getFrom1_5());
                 params.put("to0_5", item.getTo0_5());
+                params.put("max_height", item.getMaxHeight());
                 params.put("id_breed_id", item.getIdBreed());
 
                 template.update(sql, params);

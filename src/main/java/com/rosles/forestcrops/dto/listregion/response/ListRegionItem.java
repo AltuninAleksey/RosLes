@@ -14,6 +14,7 @@ public class ListRegionItem {
     private LocalDate date;
     private String number;
     private String dacha;
+    private Long idDacha;
     private String nameQuarter;
     private Double sampleRegion;
     private String soilLot;

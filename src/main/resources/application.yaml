@@ -15,7 +15,7 @@ spring:
 
 service-url:
   molodnial: http://92.50.227.100:58493/
-  #molodnial: http://localhost:8000/
+  #molodnial: http://localhost:8094/
 
 logging:
   file:

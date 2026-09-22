@@ -12,5 +12,6 @@ public class MolodForestCropsItem {
     private Integer to0_5;
     private Integer from0_6To1_5;
     private Integer from1_5;
+    private Double maxHeight;
     private Long idBreed;
 }

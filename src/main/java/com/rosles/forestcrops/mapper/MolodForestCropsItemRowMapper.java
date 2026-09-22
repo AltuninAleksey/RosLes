@@ -17,6 +17,7 @@ public class MolodForestCropsItemRowMapper implements RowMapper<MolodForestCrops
         molodForestCropsItem.setTo0_5(ResultSetHelper.getNullableObject(rs, "to0_5", Integer.class, 0));
         molodForestCropsItem.setFrom0_6To1_5(ResultSetHelper.getNullableObject(rs, "from0_6To1_5", Integer.class, 0));
         molodForestCropsItem.setFrom1_5(ResultSetHelper.getNullableObject(rs, "from1_5", Integer.class, 0));
+        molodForestCropsItem.setMaxHeight(ResultSetHelper.getNullableObject(rs, "max_height", Double.class, 0.0));
         molodForestCropsItem.setIdBreed(ResultSetHelper.getNullableObject(rs, "id_breed_id", Long.class, 0l));
 
         return molodForestCropsItem;
