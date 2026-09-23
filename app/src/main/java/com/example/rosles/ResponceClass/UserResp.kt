@@ -5,6 +5,8 @@ import java.io.Serializable
 
 data class temp_data_userresp(val get:UserResp) : BaseResponceInterface {}
 
+
+data class  userRespData(var data: UserResp?)
 data  class UserResp (
     var id: Int,
     var FIO: String,
@@ -14,5 +16,7 @@ data  class UserResp (
     var id_working_breeds: Int?,
     var id_role: Int?,
     var id_branches: Int?,
-    var id_subject_rf:Int?=0
+    var id_subject_rf:Int?=0,
+    var name_subject_rf: String?=null,
+
 ): Serializable, BaseResponceInterface

@@ -5,12 +5,8 @@ import com.example.rosles.RequestClass.PerechetRequest
 import com.example.rosles.RequestClass.RegistrationReqest
 import com.example.rosles.RequestClass.UpdateRequest
 import com.example.rosles.ResponceClass.*
-import com.squareup.moshi.Moshi
 import okhttp3.ResponseBody
-import retrofit2.Call
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.http.GET
 
 
 interface AccountsSource {
@@ -26,6 +22,8 @@ interface AccountsSource {
     suspend fun getSAMPLE():SAMPLE_RESP
     suspend fun getLIST():LIST_RESP
 
+
+    suspend fun getUserInfo(accesToken: String): userRespData
     suspend fun sendgps(body: GPS_Data_Send):BaseResp
 
     suspend fun reproduction(): ReproductionResp
@@ -40,7 +38,7 @@ interface AccountsSource {
     suspend fun getprofileid(id:Int):temp_data_userresp
     suspend fun getbreed():BreedResp
     suspend fun getbd():BaseResp
-    suspend fun get_user(body:AuthRequest):AuthReSponce
+    suspend fun getToken(body:AuthRequest):AuthReSponce
     suspend fun upload(body: UpdateRequest): BaseResp
 
     suspend fun putprofile(id: Int,body: UserResp): ResponseBody
@@ -68,12 +66,10 @@ class AccountsRepository( private val accountsSource: AccountsSource) {
 
 
     suspend fun getUNDER():UNDER_RESP=accountsSource.getUNDER()
+    suspend fun getUserInfo(accesToken: String)=accountsSource.getUserInfo(accesToken)
     suspend fun getBREED():BREED_RESP=accountsSource.getBREED()
-    suspend fun getQUATER():QUATER_RESP=accountsSource.getQUATER()
-    suspend fun getDISTRICTFORESTLY():DISTRICTFORESTLY_RESP=accountsSource.getDISTRICTFORESTLY()
-    suspend fun getFORESTLY():FORESTLY_RESP=accountsSource.getFORESTLY()
-    suspend fun getSUBJECTRF(value: Int):SUBJECTRF_RESP=accountsSource.getSUBJECTRF(value)
-    suspend fun getLISTREGION(pk_profile:Int):LISTREGION_RESP=accountsSource.getLISTREGION(pk_profile)
+    suspend fun getSUBJECT(value: Int):SUBJECTRF_RESP=accountsSource.getSUBJECTRF(value)
+    suspend fun getListRegion(pk_profile:Int):LISTREGION_RESP=accountsSource.getLISTREGION(pk_profile)
     suspend fun getSAMPLE():SAMPLE_RESP=accountsSource.getSAMPLE()
     suspend fun getLIST():LIST_RESP=accountsSource.getLIST()
 
@@ -114,7 +110,7 @@ class AccountsRepository( private val accountsSource: AccountsSource) {
 
     suspend fun getbreed():BreedResp=accountsSource.getbreed()
 
-    suspend fun get_user(body: AuthRequest):AuthReSponce=accountsSource.get_user(body)
+    suspend fun getToken(body: AuthRequest):AuthReSponce=accountsSource.getToken(body)
 
     suspend fun upload(body: UpdateRequest):BaseResp=accountsSource.upload(body)
 

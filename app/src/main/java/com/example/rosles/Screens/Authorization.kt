@@ -12,11 +12,14 @@ import android.view.Window
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.example.rosles.Network.*
 import com.example.rosles.RequestClass.AuthRequest
 import com.example.rosles.ResponceClass.AuthReSponce
 import com.example.rosles.ResponceClass.BaseResponceInterface
 import com.example.rosles.databinding.AuthorizationActivityBinding
+import kotlinx.coroutines.launch
+import androidx.core.content.edit
 
 
 class Authorization: AppCompatActivity() {
@@ -28,6 +31,21 @@ class Authorization: AppCompatActivity() {
         val viewModel by viewModels<ViewModels>() // Q
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
 
+
+        fun getuserinfo(access: String){
+            lifecycleScope.launch {
+                // Корутина приостановится (suspend) и будет ждать реального ответа от репозитория
+                val user = viewModel.getUserInfo(access)
+
+                // Данные гарантированно пришли, проверяем их
+                if (user != null) {
+                    saveText(user.data?.id, user.data?.FIO, access)
+                    startActivity(Intent(this@Authorization, StartScreen::class.java))
+                    finish()
+                }
+            }
+
+        }
 
 
         CheckUser()
@@ -52,7 +70,7 @@ class Authorization: AppCompatActivity() {
             SafeRequest(viewModel).request(object : SafeRequest.Protection{
 
                 override suspend fun makeRequest(): BaseResponceInterface {
-                    val user = SourceProviderHolder.sourcesProvider.getAccountsSource().get_user(
+                    val user = SourceProviderHolder.sourcesProvider.getAccountsSource().getToken(
                         AuthRequest(
                             binding.login.editUser.text.toString(),
                             binding.pass.editUser.text.toString()
@@ -62,12 +80,10 @@ class Authorization: AppCompatActivity() {
 
                 override fun ifSuccess(responce: BaseResponceInterface?) {
                     if (responce != null && responce is AuthReSponce){
-
-                        saveText(responce.id, responce.FIO)
+                        getuserinfo(responce.access)
                     }
 
                     Toast.makeText(this@Authorization, "Вы авторизовались", Toast.LENGTH_SHORT).show()
-                    startActivity(Intent(this@Authorization, StartScreen::class.java))
                 }
 
                 override fun ifConnectionException() {
@@ -98,16 +114,17 @@ class Authorization: AppCompatActivity() {
         val savedLogin = sPref.getString("id", "")
         val savedPassword = sPref.getString("FIO", "")
         if (savedLogin != "" && savedPassword!=""){
-            startActivity(Intent(this, Dashboard::class.java))
+            startActivity(Intent(this, StartScreen::class.java))
             finish()
         }
     }
-    fun saveText(id:Int,FIO:String) {
+    fun saveText(id:Int?,FIO:String?,token: String?) {
         val sPref = getSharedPreferences("PreferencesName", MODE_PRIVATE)
-        val ed = sPref.edit()
-        ed.putString("id", id.toString())
-        ed.putString("FIO", FIO)
-        ed.apply()
+        sPref.edit {
+            putString("id", id.toString())
+            putString("FIO", FIO)
+            putString("access_token", token)
+        }
         finish()
         startActivity(Intent(this, Dashboard::class.java))
     }

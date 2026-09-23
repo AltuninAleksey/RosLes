@@ -35,7 +35,7 @@
             android:name="com.example.rosles.utils.services.GpsForegroundService"/>
 
         <activity
-            android:name="com.example.rosles.Screens.StartScreen"
+            android:name="com.example.rosles.Screens.Authorization"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -48,7 +48,7 @@
         <activity android:name=".Screens.DualListActivity"/>
         <activity android:name=".Screens.MolodnyakList"/>
         <activity android:name=".Screens.PerechetVedomostList"/>
-
+        <activity android:name=".Screens.StartScreen"/>
         <activity android:name=".Screens.UchastokInfo"/>
         <activity android:name=".Screens.ProbaInfo"/>
         <activity android:name="com.example.rosles.Screens.Wood" android:windowSoftInputMode="adjustPan"/>

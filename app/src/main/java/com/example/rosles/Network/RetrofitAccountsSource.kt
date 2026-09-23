@@ -103,6 +103,8 @@ class RetrofitAccountsSource(
         accountsApi.getbd()
     }
 
+
+
     override suspend fun getrequestsubjectRF(): SubjectResp = wrapRetrofitExceptions {
         delay(1000)
         accountsApi.getrequestsubjectRF()
@@ -136,11 +138,15 @@ class RetrofitAccountsSource(
         delay(1000)
         accountsApi.sendgps(body)
     }
-
-
-    override suspend fun get_user(body:AuthRequest): AuthReSponce =wrapRetrofitExceptions{
+    override suspend fun getUserInfo(accesToken: String): userRespData =wrapRetrofitExceptions{
         delay(1000)
-        accountsApi.get_user(body)
+        accountsApi.getUserInfo("Bearer $accesToken")
+    }
+
+
+    override suspend fun getToken(body:AuthRequest): AuthReSponce =wrapRetrofitExceptions{
+        delay(1000)
+        accountsApi.get_token(body)
     }
 
     override suspend fun getbreed(): BreedResp =wrapRetrofitExceptions{

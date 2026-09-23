@@ -52,7 +52,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.465"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ALLDOWNLOAD" />
+        app:layout_constraintTop_toBottomOf="@+id/all_download" />
 
     <Button
         android:id="@+id/gps"
@@ -89,7 +89,7 @@
         app:layout_constraintTop_toBottomOf="@+id/gps" />
 
     <Button
-        android:id="@+id/ALLDOWNLOAD"
+        android:id="@+id/all_download"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"

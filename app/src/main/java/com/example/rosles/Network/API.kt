@@ -11,11 +11,6 @@ import retrofit2.http.*
 
 
 interface API {
-    // Интерфейс для передкачи данных, здесь содержатся адреса добавленные в апи, адрес сервера добавляется автоматически
-    // конечный запрос будет выглядеть так : http://90.156.208.88:8093/subjectRF
-//    @POST("subjectRF")
-//    suspend fun requestsubjectRF(@Body body: SubjectRF): responceSubject
-
     @GET("reproduction")
     suspend fun reproduction(): ReproductionResp
 
@@ -25,6 +20,8 @@ interface API {
     @GET("responsesqlite")
     suspend fun getbd():BaseResp
 
+    @GET("aboutuser")
+    suspend fun getUserInfo( @Header("Authorization") bearerToken: String): userRespData
 
     @GET("undergrowth")
     suspend fun getUNDER():UNDER_RESP
@@ -74,17 +71,9 @@ interface API {
 
     @POST("list")
     suspend fun perechet(@Body body: PerechetRequest): BaseResp
-//    @GET("role")
-//    suspend fun roleRequest(): responceRole
 
-    @GET("post")
-    suspend fun getpost():BaseResp
-
-    @POST("auth")
-    suspend fun get_user(@Body body: AuthRequest): AuthReSponce
-
-    @GET("categorygroundlfinnoneaccordance")
-    suspend fun getcategorygroundlfinnoneaccordance():BaseResp
+    @POST("v2/login")
+    suspend fun get_token(@Body body: AuthRequest): AuthReSponce
 
     @GET("profile")
     suspend fun  getprofile(): getUserResp

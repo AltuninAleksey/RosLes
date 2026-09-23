@@ -45,9 +45,6 @@ class sync() {
             viewModels.getSUBJECTRF(db, value)
 
 
-//            if(!db.djangoForest_forestly())
-//                viewModels.getFORESTLY(db,id_subject)
-
         if (!db.djangoForest_listregion())
             viewModels.getLISTREGION(db, value)
 
