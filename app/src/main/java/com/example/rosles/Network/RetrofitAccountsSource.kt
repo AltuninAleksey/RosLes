@@ -75,13 +75,6 @@ class RetrofitAccountsSource(
         accountsApi.updateprofileid(id,body)
     }
 
-
-
-    override suspend fun reproduction(): ReproductionResp = wrapRetrofitExceptions {
-        delay(1000)
-        accountsApi.reproduction()
-    }
-
     override suspend fun upload(body: UpdateRequest): BaseResp =wrapRetrofitExceptions {
         delay(1000)
         accountsApi.upload( body.file,body.id_sample,body.latitude,body.longitude,body.date)
