@@ -59,7 +59,6 @@ class RetrofitSourcesProvider(
     override fun getAccountsSource(): AccountsSource {
         return RetrofitAccountsSource(config)
     }
-
 }
 
 object SourceProviderHolder {

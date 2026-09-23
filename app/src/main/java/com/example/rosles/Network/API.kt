@@ -11,8 +11,6 @@ import retrofit2.http.*
 
 
 interface API {
-    @GET("reproduction")
-    suspend fun reproduction(): ReproductionResp
 
     @POST("registration")
     suspend fun registration(@Body body: RegistrationReqest): Response<RegistrationReqest>
