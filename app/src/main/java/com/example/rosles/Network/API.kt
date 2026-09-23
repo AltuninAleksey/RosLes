@@ -23,6 +23,9 @@ interface API {
     @GET("aboutuser")
     suspend fun getUserInfo( @Header("Authorization") bearerToken: String): userRespData
 
+    @GET("forestcrops/api/shared/get-all-dacha")
+    suspend fun getDacha(@Header("Authorization") bearerToken: String): DachaResp
+
     @GET("undergrowth")
     suspend fun getUNDER():UNDER_RESP
     @GET("breed")

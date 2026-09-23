@@ -24,6 +24,7 @@ interface AccountsSource {
 
 
     suspend fun getUserInfo(accesToken: String): userRespData
+    suspend fun getDacha(accesToken: String): DachaResp
     suspend fun sendgps(body: GPS_Data_Send):BaseResp
 
     suspend fun reproduction(): ReproductionResp
@@ -67,6 +68,7 @@ class AccountsRepository( private val accountsSource: AccountsSource) {
 
     suspend fun getUNDER():UNDER_RESP=accountsSource.getUNDER()
     suspend fun getUserInfo(accesToken: String)=accountsSource.getUserInfo(accesToken)
+    suspend fun getDacha(accesToken: String)=accountsSource.getDacha(accesToken)
     suspend fun getBREED():BREED_RESP=accountsSource.getBREED()
     suspend fun getSUBJECT(value: Int):SUBJECTRF_RESP=accountsSource.getSUBJECTRF(value)
     suspend fun getListRegion(pk_profile:Int):LISTREGION_RESP=accountsSource.getLISTREGION(pk_profile)

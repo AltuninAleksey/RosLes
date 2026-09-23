@@ -143,6 +143,11 @@ class RetrofitAccountsSource(
         accountsApi.getUserInfo("Bearer $accesToken")
     }
 
+    override suspend fun getDacha(accesToken: String): DachaResp =wrapRetrofitExceptions{
+        delay(1000)
+        accountsApi.getDacha("Bearer $accesToken")
+    }
+
 
     override suspend fun getToken(body:AuthRequest): AuthReSponce =wrapRetrofitExceptions{
         delay(1000)

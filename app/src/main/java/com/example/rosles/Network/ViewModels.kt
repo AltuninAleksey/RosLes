@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.rosles.DBCountWood
 import com.example.rosles.RequestClass.RegistrationReqest
 import com.example.rosles.RequestClass.UpdateRequest
+import com.example.rosles.ResponceClass.DachaResp
 import com.example.rosles.ResponceClass.GPS_Data_Send
 import com.example.rosles.ResponceClass.LISTREGION_REQUEST
 import com.example.rosles.ResponceClass.LIST_REQEST
@@ -24,6 +25,7 @@ class ViewModels() : BaseViewModel(
     private val _state = MutableLiveData(State())
     var profile = MutableLiveData<getUserResp>()
     var userDataInfo = MutableLiveData<userRespData>()
+    var dachaList = MutableLiveData<DachaResp>()
 
 
     data class State(
@@ -36,6 +38,12 @@ class ViewModels() : BaseViewModel(
     suspend fun getUserInfo(aceesToken: String): userRespData {
         val result = accountsRepository.getUserInfo(aceesToken)
         userDataInfo.postValue(result)
+        return result
+    }
+
+    suspend fun getDacha(accessToken: String): DachaResp {
+        val result = accountsRepository.getDacha(accessToken)
+        dachaList.postValue(result)
         return result
     }
 
