@@ -1,15 +1,15 @@
 package com.example.rosles.Adapters
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.rosles.R
-import com.example.rosles.Screens.PerechetVedomostList
+import com.example.rosles.ResponceClass.DachaData
 import com.example.rosles.databinding.ItemVedomostBinding
 
 class VedomostListAdapter(
-    private val rows: List<PerechetVedomostList.VedomostRow>,
+    private val rows: List<DachaData>,
     private val onClick: (Int) -> Unit
 ) : RecyclerView.Adapter<VedomostListAdapter.ViewHolder>() {
 
@@ -22,13 +22,11 @@ class VedomostListAdapter(
         return ViewHolder(ItemVedomostBinding.inflate(inflater, parent, false))
     }
 
-    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val row = rows[position]
         with(holder.binding) {
-            vedomostTitle.text = "${row.forestry} · ${row.district} · ${row.tract}"
-            vedomostSubtitle.text =
-                "кв. ${row.quarter} · выдел ${row.allotment} · ${row.square} га · ${row.date}"
+            vedomostTitle.text = row.name
+            vedomostSubtitle.visibility = View.GONE
             root.setBackgroundResource(
                 if (position == selectedPosition) R.color.activecolumn else R.color.color_transporent
             )

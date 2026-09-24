@@ -56,6 +56,11 @@ class RetrofitAccountsSource(
         accountsApi.getLIST()
     }
 
+    override suspend fun getListRegionList(accesToken: String): LISTREGION_LIST_RESP = wrapRetrofitExceptions {
+        delay(1000)
+        accountsApi.getListRegionList("Bearer $accesToken")
+    }
+
     override suspend fun putLISTREGION(body:LISTREGION_REQUEST): ResponseBody = wrapRetrofitExceptions  {
         delay(1000)
         accountsApi.putLISTREGION(body)

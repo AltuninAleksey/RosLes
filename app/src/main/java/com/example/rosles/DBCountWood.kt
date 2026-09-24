@@ -1,7 +1,6 @@
 package com.example.rosles
 
 import android.annotation.SuppressLint
-import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
@@ -60,32 +59,70 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_track_id_profile_id_07b234ed" ON "djangoForest_track" ("id_profile_id");""")
         db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_undergrowthbydefault_id_profile_id_23b572fe" ON "djangoForest_undergrowthbydefault" ("id_profile_id");""")
         db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_undergrowthbydefault_id_undergrowth_id_b789efb4" ON "djangoForest_undergrowthbydefault" ("id_undergrowth_id");""")
-
-
-
         db.execSQL("""CREATE TABLE IF NOT EXISTS "delte_value" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name_table" varchar(350) NOT NULL, "id_value" integer NULL );""")
+
+
+
+        db.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_dacha" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,	"name" varchar(500) NOT NULL);""")
+
+        db.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_fc_list_region" (
+	"uuid" TEXT NOT NULL PRIMARY KEY ,
+	"date" date NOT NULL, 
+	"number"  varchar(30),
+	"dacha" varchar, 
+	"id_dacha" bigint NULL REFERENCES "djangoForest_dacha" ("id") DEFERRABLE INITIALLY DEFERRED,
+	"name_quarter" varchar,
+	"sample_region" real NOT NULL, 
+	"soil_lot" varchar(300) NOT NULL, 
+	"id_district_forestly" bigint NULL REFERENCES "djangoForest_districtforestly" ("id") DEFERRABLE INITIALLY DEFERRED,
+	"mark_del" integer NULL, 
+	"mark_update" integer NULL, 
+	"id_subject" bigint NULL REFERENCES "djangoForest_subjectrf" ("id") DEFERRABLE INITIALLY DEFERRED
+);""")
+
+
+        db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_fc_list_region_id_dacha_9b3e4d1a" ON "djangoForest_fc_list_region" ("id_dacha");""")
+        db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_fc_list_region_id_district_forestly_71afc36f" ON "djangoForest_fc_list_region" ("id_district_forestly");""")
+        db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_fc_list_region_id_subject_f8c2a7e3" ON "djangoForest_fc_list_region" ("id_subject");""")
+
+
+
+
+
+
+
+
+
     }
 
     override fun onUpgrade(p0: SQLiteDatabase?, p1: Int, p2: Int) {
-
+        if (p0 == null) return
+        p0.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_dacha" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name" varchar(500) NOT NULL);""")
+        p0.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_fc_list_region" (
+	"uuid" TEXT NOT NULL PRIMARY KEY ,
+	"date" date NOT NULL, 
+	"number"  varchar(30),
+	"dacha" varchar, 
+	"id_dacha" bigint NULL REFERENCES "djangoForest_dacha" ("id") DEFERRABLE INITIALLY DEFERRED,
+	"name_quarter" varchar,
+	"sample_region" real NOT NULL, 
+	"soil_lot" varchar(300) NOT NULL, 
+	"id_district_forestly" bigint NULL REFERENCES "djangoForest_districtforestly" ("id") DEFERRABLE INITIALLY DEFERRED,
+	"mark_del" integer NULL, 
+	"mark_update" integer NULL, 
+	"id_subject" bigint NULL REFERENCES "djangoForest_subjectrf" ("id") DEFERRABLE INITIALLY DEFERRED
+);""")
+        p0.execSQL("""CREATE TABLE IF NOT EXISTS "delte_value" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name_table" varchar(350) NOT NULL, "id_value" integer NULL );""")
+        p0.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_fc_list_region_id_dacha_9b3e4d1a" ON "djangoForest_fc_list_region" ("id_dacha");""")
+        p0.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_fc_list_region_id_district_forestly_71afc36f" ON "djangoForest_fc_list_region" ("id_district_forestly");""")
+        p0.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_fc_list_region_id_subject_f8c2a7e3" ON "djangoForest_fc_list_region" ("id_subject");""")
     }
+
 
 
     fun djangoForest_breed(): Boolean {
         val database: SQLiteDatabase = this.readableDatabase
         val cursor: Cursor = database.rawQuery("select * from djangoForest_breed", null)
-        return cursor.count > 0
-    }
-
-    fun djangoForest_districtforestly(): Boolean {
-        val database: SQLiteDatabase = this.readableDatabase
-        val cursor: Cursor = database.rawQuery("select * from djangoForest_districtforestly", null)
-        return cursor.count > 0
-    }
-
-    fun djangoForest_forestly(): Boolean {
-        val database: SQLiteDatabase = this.readableDatabase
-        val cursor: Cursor = database.rawQuery("select * from djangoForest_forestly", null)
         return cursor.count > 0
     }
 
@@ -246,6 +283,51 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
             "INSERT INTO djangoForest_undergrowth (id,name) VALUES('$id','$name')"
         )
 
+    }
+
+    fun djangoForest_dacha(): Boolean {
+        val database: SQLiteDatabase = this.readableDatabase
+        val cursor: Cursor = database.rawQuery("select * from djangoForest_dacha", null)
+        val has = cursor.count > 0
+        cursor.close()
+        return has
+    }
+
+    fun writeDACHA(id: Int, name: String) {
+        val database: SQLiteDatabase = this.writableDatabase
+        val safeName = name.replace("'", "''")
+        database.execSQL(
+            "INSERT OR REPLACE INTO djangoForest_dacha (id, name) VALUES('$id','$safeName')"
+        )
+    }
+
+    fun clearDACHA() {
+        val database: SQLiteDatabase = this.writableDatabase
+        database.execSQL("DELETE FROM djangoForest_dacha")
+    }
+
+    fun deleteDACHA(id: Int) {
+        val database: SQLiteDatabase = this.writableDatabase
+        database.execSQL("DELETE FROM djangoForest_dacha WHERE id = '$id'")
+    }
+
+    @SuppressLint("Range")
+    fun getDACHA(): List<DachaData> {
+        val database: SQLiteDatabase = this.readableDatabase
+        val cursor: Cursor = database.rawQuery("select id, name from djangoForest_dacha", null)
+        val result = mutableListOf<DachaData>()
+        if (cursor.moveToFirst()) {
+            do {
+                result.add(
+                    DachaData(
+                        cursor.getInt(cursor.getColumnIndex("id")),
+                        cursor.getString(cursor.getColumnIndex("name")) ?: ""
+                    )
+                )
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        return result
     }
 
     @SuppressLint("Range")
@@ -434,7 +516,7 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         val database: SQLiteDatabase = this.writableDatabase
         val cursor: Cursor = database.rawQuery(
             """select listregion.id,listregion.number_region,listregion.mark_update,listregion.dacha,listregion.sample_region, s3.name_forestly, s3.name_district_forestly, s3.name_quarter, s3.dacha, s3.soil_lot, s3.sample_region, s3.date
-from ((djangoForest_listregion as listregion INNER join djangoForest_districtforestly as district on listregion.id_district_forestly = district.id) as s2
+from ((djangoForest_listregion as listregion inner join djangoForest_districtforestly as district on listregion.id_district_forestly = district.id) as s2
 inner join djangoForest_forestly as forestly on s2.id_forestly_id = forestly.id) as s3""",
             null
         )
@@ -1195,7 +1277,7 @@ inner join djangoForest_forestly as forestly on s2.id_forestly_id = forestly.id)
 
 
         // below is the variable for database version
-        private val DATABASE_VERSION = 1
+        private val DATABASE_VERSION = 2
 
         // below is the variable for table name
         val TABLE_NAME = "Woods"

@@ -8,32 +8,18 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.rosles.Adapters.VedomostListAdapter
 import com.example.rosles.BaseActivity
+import com.example.rosles.DBCountWood
 import com.example.rosles.R
+import com.example.rosles.ResponceClass.DachaData
 import com.example.rosles.databinding.PerechetVedomostListBinding
 import com.example.rosles.setSizeRelativeCurrentWindow
 
 class PerechetVedomostList : BaseActivity("Перечётная ведомость") {
 
     private lateinit var binding: PerechetVedomostListBinding
+    private val db by lazy { DBCountWood(this, null) }
 
-    // Мок-данные. Позже заменим на выборку из БД.
-    data class VedomostRow(
-        val forestry: String,
-        val district: String,
-        val tract: String,
-        val quarter: String,
-        val allotment: String,
-        val square: String,
-        val date: String
-    )
-
-    private val rows: MutableList<VedomostRow> = mutableListOf(
-        VedomostRow("Брянское", "Мичуринское", "Соловьи", "3", "25-4", "1.2", "01.01.2023"),
-        VedomostRow("Брянское", "Выгоничское", "Лопушь", "14", "5-2", "2.5", "05.04.2023"),
-        VedomostRow("Клетнянское", "Мужиновское", "Задубравье", "48", "12-1", "3.7", "18.05.2023"),
-        VedomostRow("Навлинское", "Алтуховское", "Бяково", "102", "7-2", "2.0", "03.07.2023"),
-        VedomostRow("Трубчевское", "Белоберёзковское", "Кветунь", "55", "9-3", "4.2", "09.09.2023")
-    )
+    private val rows: MutableList<DachaData> = mutableListOf()
 
     private var selectedIndex: Int? = null
 
@@ -52,6 +38,8 @@ class PerechetVedomostList : BaseActivity("Перечётная ведомост
     }
 
     private fun listInit() {
+        rows.clear()
+        rows.addAll(db.getDACHA())
         binding.vedomostRecycler.GuideRecycler.layoutManager = LinearLayoutManager(this)
         binding.vedomostRecycler.GuideRecycler.adapter =
             VedomostListAdapter(rows) { selectedIndex = it }
@@ -82,9 +70,11 @@ class PerechetVedomostList : BaseActivity("Перечётная ведомост
 
             close.setOnClickListener { dialog.dismiss() }
             delete.setOnClickListener {
+                db.deleteDACHA(rows[index].id)
                 rows.removeAt(index)
+                selectedIndex = null
                 dialog.dismiss()
-                onRestart()
+                listInit()
             }
         }
     }

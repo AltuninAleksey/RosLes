@@ -9,6 +9,7 @@ import com.example.rosles.RequestClass.RegistrationReqest
 import com.example.rosles.RequestClass.UpdateRequest
 import com.example.rosles.ResponceClass.DachaResp
 import com.example.rosles.ResponceClass.GPS_Data_Send
+import com.example.rosles.ResponceClass.LISTREGION_LIST_RESP
 import com.example.rosles.ResponceClass.LISTREGION_REQUEST
 import com.example.rosles.ResponceClass.LIST_REQEST
 import com.example.rosles.ResponceClass.SAMPLE_REQEST
@@ -41,10 +42,17 @@ class ViewModels() : BaseViewModel(
         return result
     }
 
-    suspend fun getDacha(accessToken: String): DachaResp {
+    suspend fun getDacha(dbCountWood: DBCountWood, accessToken: String): DachaResp {
         val result = accountsRepository.getDacha(accessToken)
         dachaList.postValue(result)
+        result.data.forEach {
+            dbCountWood.writeDACHA(it.id, it.name)
+        }
         return result
+    }
+
+    suspend fun getListRegionList(accessToken: String): LISTREGION_LIST_RESP {
+        return accountsRepository.getListRegionList(accessToken)
     }
 
 
