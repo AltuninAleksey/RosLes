@@ -42,16 +42,7 @@
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:padding="5dip"
-                    android:text="Лесничество"
-                    android:textColor="#ffff"
-                    android:textSize="@dimen/custom_size_table" />
-
-                <TextView
-                    android:layout_width="@dimen/table_col_width"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:padding="5dip"
-                    android:text="Участковое&#10;лесничество"
+                    android:text="Номер"
                     android:textColor="#ffff"
                     android:textSize="@dimen/custom_size_table" />
 

@@ -11,42 +11,18 @@ import android.widget.TableRow
 import android.widget.TextView
 import android.widget.Toast
 import com.example.rosles.BaseActivity
+import com.example.rosles.DBCountWood
 import com.example.rosles.R
+import com.example.rosles.ResponceClass.LISTREGION_LIST_DATA
 import com.example.rosles.databinding.MolodnyakListBinding
 import com.example.rosles.setSizeRelativeCurrentWindow
 
 class MolodnyakList : BaseActivity("Учёт молодняка") {
 
     private lateinit var binding: MolodnyakListBinding
+    private val db by lazy { DBCountWood(this, null) }
 
-    // Мок-данные. Позже заменим на выборку из БД.
-    data class MolodnyakRow(
-        val forestry: String,
-        val district: String,
-        val tract: String,
-        val quarter: String,
-        val allotment: String,
-        val date: String,
-        val square: String
-    )
-
-    private val rows: MutableList<MolodnyakRow> = mutableListOf(
-        MolodnyakRow("Брянское", "Мичуринское", "Соловьи", "3", "25-4", "01.01.2023", "1.2"),
-        MolodnyakRow("Брянское", "Мичуринское", "Соловьи", "3", "26-1", "12.03.2023", "0.8"),
-        MolodnyakRow("Брянское", "Выгоничское", "Лопушь", "14", "5-2", "05.04.2023", "2.5"),
-        MolodnyakRow("Брянское", "Выгоничское", "Лопушь", "14", "5-3", "05.04.2023", "1.1"),
-        MolodnyakRow("Клетнянское", "Мужиновское", "Задубравье", "48", "12-1", "18.05.2023", "3.7"),
-        MolodnyakRow("Клетнянское", "Мужиновское", "Задубравье", "48", "12-4", "18.05.2023", "0.9"),
-        MolodnyakRow("Клетнянское", "Строительная Слобода", "Лутна", "71", "3-6", "22.06.2023", "1.6"),
-        MolodnyakRow("Навлинское", "Алтуховское", "Бяково", "102", "7-2", "03.07.2023", "2.0"),
-        MolodnyakRow("Навлинское", "Алтуховское", "Бяково", "102", "7-5", "03.07.2023", "1.4"),
-        MolodnyakRow("Навлинское", "Пролысовское", "Гладь", "88", "19-1", "14.08.2023", "0.6"),
-        MolodnyakRow("Трубчевское", "Белоберёзковское", "Кветунь", "55", "9-3", "09.09.2023", "4.2"),
-        MolodnyakRow("Трубчевское", "Белоберёзковское", "Кветунь", "55", "9-7", "09.09.2023", "1.8"),
-        MolodnyakRow("Трубчевское", "Городецкое", "Рёвны", "63", "11-2", "27.09.2023", "2.9"),
-        MolodnyakRow("Суземское", "Кокоревское", "Смелиж", "120", "4-1", "10.10.2023", "1.0"),
-        MolodnyakRow("Суземское", "Кокоревское", "Смелиж", "120", "4-2", "10.10.2023", "0.7")
-    )
+    private val rows: MutableList<LISTREGION_LIST_DATA> = mutableListOf()
 
     private var activeRow: TableRow? = null
     private var selectedIndex: Int? = null
@@ -69,6 +45,9 @@ class MolodnyakList : BaseActivity("Учёт молодняка") {
 
     @SuppressLint("SetTextI18n")
     private fun tableInit() {
+        rows.clear()
+        rows.addAll(db.getFCListRegion())
+
         val colWidth = resources.getDimensionPixelSize(R.dimen.table_col_width)
         val numWidth = resources.getDimensionPixelSize(R.dimen.table_col_num_width)
         val cellPad = (5 * resources.displayMetrics.density).toInt()
@@ -79,12 +58,11 @@ class MolodnyakList : BaseActivity("Учёт молодняка") {
 
             val values = listOf(
                 (i + 1).toString(),
-                row.forestry,
-                row.district,
-                row.tract,
-                row.quarter,
-                row.allotment,
-                row.square,
+                row.number,
+                row.dacha ?: "—",
+                row.nameQuarter ?: "—",
+                row.soilLot ?: "—",
+                row.sampleRegion?.toString() ?: "—",
                 row.date
             )
 
@@ -140,7 +118,7 @@ class MolodnyakList : BaseActivity("Учёт молодняка") {
 
             close.setOnClickListener { dialog.dismiss() }
             delete.setOnClickListener {
-                rows.removeAt(index)
+                rows[index].uuid?.let { db.deleteFCListRegion(it) }
                 dialog.dismiss()
                 onRestart()
             }

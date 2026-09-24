@@ -51,8 +51,23 @@ class ViewModels() : BaseViewModel(
         return result
     }
 
-    suspend fun getListRegionList(accessToken: String): LISTREGION_LIST_RESP {
-        return accountsRepository.getListRegionList(accessToken)
+    suspend fun getListRegionList(dbCountWood: DBCountWood, accessToken: String): LISTREGION_LIST_RESP {
+        val result = accountsRepository.getListRegionList(accessToken)
+        result.data.forEach {
+            dbCountWood.writeFCListRegion(
+                uuid = it.uuid ?: it.id.toString(),
+                date = it.date,
+                number = it.number,
+                dacha = it.dacha,
+                idDacha = it.idDacha,
+                nameQuarter = it.nameQuarter,
+                sampleRegion = it.sampleRegion,
+                soilLot = it.soilLot,
+                idDistrictForestly = it.idDistrictForestly,
+                idSubject = it.idSubject
+            )
+        }
+        return result
     }
 
 

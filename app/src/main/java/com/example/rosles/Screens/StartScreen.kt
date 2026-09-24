@@ -43,7 +43,9 @@ class StartScreen: BaseActivity() {
 
         binding.download.setOnClickListener {
             lifecycleScope.launch {
-                viewModel.getDacha(DBCountWood(this@StartScreen, null), this@StartScreen.getToken())
+                val db = DBCountWood(this@StartScreen, null)
+                viewModel.getDacha(db, this@StartScreen.getToken())
+                viewModel.getListRegionList(db, this@StartScreen.getToken())
             }
         }
 

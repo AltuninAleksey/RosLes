@@ -311,6 +311,76 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         database.execSQL("DELETE FROM djangoForest_dacha WHERE id = '$id'")
     }
 
+    fun djangoForest_fc_list_region(): Boolean {
+        val database: SQLiteDatabase = this.readableDatabase
+        val cursor: Cursor = database.rawQuery("select * from djangoForest_fc_list_region", null)
+        val has = cursor.count > 0
+        cursor.close()
+        return has
+    }
+
+    fun writeFCListRegion(
+        uuid: String,
+        date: String,
+        number: String?,
+        dacha: String?,
+        idDacha: Int?,
+        nameQuarter: String?,
+        sampleRegion: Double?,
+        soilLot: String?,
+        idDistrictForestly: Int?,
+        idSubject: Int?
+    ) {
+        val database: SQLiteDatabase = this.writableDatabase
+        fun q(v: String?): String = if (v == null) "NULL" else "'${v.replace("'", "''")}'"
+        database.execSQL(
+            "INSERT OR REPLACE INTO djangoForest_fc_list_region " +
+                    "(uuid, date, number, dacha, id_dacha, name_quarter, sample_region, soil_lot, id_district_forestly, id_subject) VALUES (" +
+                    "${q(uuid)}, ${q(date)}, ${q(number)}, ${q(dacha)}, ${idDacha ?: "NULL"}, " +
+                    "${q(nameQuarter)}, ${sampleRegion ?: 0}, ${q(soilLot ?: "")}, " +
+                    "${idDistrictForestly ?: "NULL"}, ${idSubject ?: "NULL"})"
+        )
+    }
+
+    fun clearFCListRegion() {
+        val database: SQLiteDatabase = this.writableDatabase
+        database.execSQL("DELETE FROM djangoForest_fc_list_region")
+    }
+
+    fun deleteFCListRegion(uuid: String) {
+        val database: SQLiteDatabase = this.writableDatabase
+        database.execSQL("DELETE FROM djangoForest_fc_list_region WHERE uuid = '${uuid.replace("'", "''")}'")
+    }
+
+    @SuppressLint("Range")
+    fun getFCListRegion(): List<LISTREGION_LIST_DATA> {
+        val database: SQLiteDatabase = this.readableDatabase
+        val cursor: Cursor = database.rawQuery("select uuid, date, number, dacha, id_dacha, name_quarter, sample_region, soil_lot, id_district_forestly, id_subject from djangoForest_fc_list_region", null)
+        val result = mutableListOf<LISTREGION_LIST_DATA>()
+        if (cursor.moveToFirst()) {
+            do {
+                result.add(
+                    LISTREGION_LIST_DATA(
+                        id = 0,
+                        date = cursor.getString(cursor.getColumnIndex("date")) ?: "",
+                        number = cursor.getString(cursor.getColumnIndex("number")) ?: "",
+                        dacha = cursor.getString(cursor.getColumnIndex("dacha")),
+                        idDacha = if (cursor.isNull(cursor.getColumnIndex("id_dacha"))) null else cursor.getInt(cursor.getColumnIndex("id_dacha")),
+                        nameQuarter = cursor.getString(cursor.getColumnIndex("name_quarter")),
+                        sampleRegion = if (cursor.isNull(cursor.getColumnIndex("sample_region"))) null else cursor.getDouble(cursor.getColumnIndex("sample_region")),
+                        soilLot = cursor.getString(cursor.getColumnIndex("soil_lot")),
+                        idDistrictForestly = if (cursor.isNull(cursor.getColumnIndex("id_district_forestly"))) null else cursor.getInt(cursor.getColumnIndex("id_district_forestly")),
+                        idForestly = null,
+                        idSubject = if (cursor.isNull(cursor.getColumnIndex("id_subject"))) null else cursor.getInt(cursor.getColumnIndex("id_subject")),
+                        uuid = cursor.getString(cursor.getColumnIndex("uuid"))
+                    )
+                )
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        return result
+    }
+
     @SuppressLint("Range")
     fun getDACHA(): List<DachaData> {
         val database: SQLiteDatabase = this.readableDatabase
