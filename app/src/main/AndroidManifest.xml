@@ -58,6 +58,7 @@
         <activity android:name="com.example.rosles.Screens.settings"/>
         <activity android:name="com.example.rosles.Screens.choice.ChoiceLes"/>
         <activity android:name="com.example.rosles.Screens.choice.ChoiceDistrict"/>
+        <activity android:name="com.example.rosles.Screens.choice.ChoiceDacha"/>
         <activity android:name="com.example.rosles.Screens.choice.ChoiceCvartal"/>
         <activity android:name="com.example.rosles.Screens.add.AddSample"/>
         <activity android:name="com.example.rosles.Screens.add.AddVedomost"/>

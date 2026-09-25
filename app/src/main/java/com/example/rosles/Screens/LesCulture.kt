@@ -54,6 +54,9 @@ class LesCulture : BaseActivity("Лесные культуры") {
         // Имена лесничеств/участковых одним запросом по всем idDistrictForestly,
         // чтобы не делать N+1 поштучных запросов в цикле.
         val chains = db.getForestryChains(rows.mapNotNull { it.idDistrictForestly }.toSet())
+        // Имена урочищ из справочника getdacha: у серверных строк dacha может
+        // быть пустым, а idDacha — заполнен.
+        val dachaNames = db.getDACHA().associate { it.id to it.name }
 
         val colWidth = resources.getDimensionPixelSize(R.dimen.table_col_width)
         val numWidth = resources.getDimensionPixelSize(R.dimen.table_col_num_width)
@@ -69,7 +72,7 @@ class LesCulture : BaseActivity("Лесные культуры") {
                 row.number,
                 chain?.forestlyName ?: "—",
                 chain?.districtName ?: "—",
-                row.dacha ?: "—",
+                row.idDacha?.let { dachaNames[it] } ?: row.dacha ?: "—",
                 row.nameQuarter ?: "—",
                 row.soilLot ?: "—",
                 row.sampleRegion?.toString() ?: "—",

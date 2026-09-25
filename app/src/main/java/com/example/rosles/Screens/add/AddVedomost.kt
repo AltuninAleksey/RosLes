@@ -90,6 +90,16 @@ class AddVedomost: AppCompatActivity() {
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         binding.date.text = LocalDateTime.now().format(formatter).toString()
 
+        // fc_mode: урочище уже выбрано на ChoiceDacha (справочник getdacha) —
+        // подставляем и блокируем поле, чтобы не разойтись с id_dacha.
+        val selectedDachaId = intent.getStringExtra("id_dacha")?.toIntOrNull()
+        val selectedDachaName = intent.getStringExtra("dacha_name")
+        if (fcMode && selectedDachaName != null) {
+            binding.dacha.setText(selectedDachaName)
+            binding.dacha.isEnabled = false
+            binding.dacha.isFocusable = false
+        }
+
 
 
         var sPref = getSharedPreferences("PreferencesName", MODE_PRIVATE);
@@ -106,12 +116,14 @@ class AddVedomost: AppCompatActivity() {
                 db.insertFCListRegionLocal(
                     date = binding.date.text.toString(),
                     number = "",
-                    dacha = binding.dacha.text.toString().ifEmpty { null },
+                    dacha = selectedDachaName
+                        ?: binding.dacha.text.toString().ifEmpty { null },
                     nameQuarter = binding.idCvartal.text.toString(),
                     sampleRegion = binding.samplearea.text.toString(),
                     soilLot = binding.vudel.text.toString(),
                     idDistrictForestly = buf!!,
-                    idSubject = idSubject
+                    idSubject = idSubject,
+                    idDacha = selectedDachaId
                 )
 
                 Toast.makeText(this,"Данные добавлены",Toast.LENGTH_LONG).show()

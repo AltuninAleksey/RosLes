@@ -72,6 +72,17 @@ class ChoiceDistrict : AppCompatActivity() {
     }
 
     fun start(itemView: Int) {
+        // fc_mode (лесные культуры): после участкового идём выбирать
+        // урочище (ChoiceDacha, справочник getdacha), а не сразу в AddVedomost.
+        if (intent.getBooleanExtra("fc_mode", false)) {
+            val intent1 = Intent(this, ChoiceDacha::class.java)
+            intent1.putExtra("id_district", itemView.toString())
+            intent1.putExtra("id_Vedomost", intent.getStringExtra("id_Vedomost"))
+            intent1.putExtra("id_subject", intent.getStringExtra("id_subject"))
+            intent1.putExtra("fc_mode", true)
+            startActivity(intent1)
+            return
+        }
         val intent1 = Intent(this, AddVedomost::class.java)
         intent1.putExtra("id", itemView.toString())
         intent1.putExtra("id_Vedomost", intent.getStringExtra("id_Vedomost"))

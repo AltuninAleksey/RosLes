@@ -557,7 +557,8 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     /**
      * Локальное создание карточки участка (молодняк): пишет в
      * djangoForest_fc_list_region, а не в старый djangoForest_listregion.
-     * idDacha = NULL — урочище введено текстом с формы; mark_update = 2
+     * idDacha — выбор из справочника getdacha (ChoiceDacha); dacha — его имя
+     * (дублируем текстом, как присылает сервер). mark_update = 2
      * (создано локально, к отправке — та же конвенция, что у createvedom).
      * Возвращает uuid созданной записи.
      */
@@ -569,7 +570,8 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         sampleRegion: String,
         soilLot: String?,
         idDistrictForestly: Int,
-        idSubject: Int?
+        idSubject: Int?,
+        idDacha: Int? = null
     ): String {
         val uuid = UUID.randomUUID().toString()
         val database: SQLiteDatabase = this.writableDatabase
@@ -577,7 +579,7 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         database.execSQL(
             "INSERT INTO djangoForest_fc_list_region " +
                     "(uuid, date, number, dacha, id_dacha, name_quarter, sample_region, soil_lot, id_district_forestly, id_subject, mark_update) VALUES (" +
-                    "${q(uuid)}, ${q(date)}, ${q(number)}, ${q(dacha)}, NULL, " +
+                    "${q(uuid)}, ${q(date)}, ${q(number)}, ${q(dacha)}, ${idDacha ?: "NULL"}, " +
                     "${q(nameQuarter)}, $sampleRegion, ${q(soilLot ?: "")}, " +
                     "$idDistrictForestly, ${idSubject ?: "NULL"}, 2)"
         )
