@@ -1,4 +1,4 @@
-package com.example.rosles.Screens
+package com.example.rosles.Screens.changes
 
 import android.annotation.SuppressLint
 import android.app.Dialog
@@ -13,12 +13,15 @@ import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import com.example.rosles.DBCountWood
 import com.example.rosles.R
+import com.example.rosles.Screens.Dashboard
+import com.example.rosles.Screens.Molodnyak
+import com.example.rosles.Screens.gps.gps_activity
+import com.example.rosles.Screens.profile
 import com.example.rosles.databinding.AddProbBinding
 import com.example.rosles.setSizeRelativeCurrentWindow
-import java.time.format.DateTimeFormatter
 import java.util.*
 
-class ChangeSample:AppCompatActivity() {
+class ChangeSample: AppCompatActivity() {
 
     private lateinit var binding: AddProbBinding
     private val db = DBCountWood(this, null)
@@ -60,7 +63,7 @@ class ChangeSample:AppCompatActivity() {
                     startActivity(Intent(this, Dashboard::class.java))
                 }
                 R.id.itemperechet -> {
-                    startActivity(Intent(this, MainActivity::class.java))
+                    startActivity(Intent(this, Molodnyak::class.java))
                 }
                 R.id.itemgps -> {
                     startActivity(Intent(this, gps_activity::class.java))

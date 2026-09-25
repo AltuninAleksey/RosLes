@@ -1,32 +1,21 @@
-package com.example.rosles.Screens
+package com.example.rosles.Screens.add
 
 import android.annotation.SuppressLint
 import android.app.Dialog
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.Menu
-import android.view.MenuItem
-import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.Recycler
-import com.example.rosles.Adapters.BaseInterface
-import com.example.rosles.Adapters.ChoiceSubjectAdapter
 import com.example.rosles.BaseActivity
 import com.example.rosles.DBCountWood
 import com.example.rosles.R
-import com.example.rosles.ResponceClass.BaseRespObject
-import com.example.rosles.databinding.AddPorodBinding
 import com.example.rosles.databinding.AddPorodScreenBinding
 import com.example.rosles.setSizeRelativeCurrentWindow
 import com.example.roslesdef.Adapters.ForestAdapter
 import com.example.roslesdef.Models.SpinerItem
-import java.util.*
 import kotlin.collections.HashMap
 
 

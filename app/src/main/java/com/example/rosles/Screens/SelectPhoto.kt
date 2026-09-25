@@ -1,24 +1,19 @@
 package com.example.rosles.Screens
 
-import android.Manifest
 import android.app.Dialog
 import android.content.ActivityNotFoundException
-import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.location.LocationManager
 import android.os.Bundle
 import android.os.Looper
 import android.provider.MediaStore
 import android.view.View
 import android.widget.*
-import androidx.core.app.ActivityCompat
 import androidx.core.view.get
-import androidx.core.view.size
 import com.example.rosles.BaseActivity
 import com.example.rosles.DBCountWood
 import com.example.rosles.R
+import com.example.rosles.Screens.gps.GPStracker
 import com.example.rosles.databinding.ScreenPhotoBinding
 import com.example.rosles.utils.gps.GpsManager
 import java.time.LocalDateTime
@@ -36,7 +31,6 @@ class SelectPhoto:BaseActivity() {
     var id_vdomost: String?=null
     private val REQUEST_TAKE_PHOTO = 1
     private lateinit var binding: ScreenPhotoBinding
-    private lateinit var locationManager: LocationManager
     private val gpsManager = GpsManager(this, Looper.getMainLooper())
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -81,10 +75,7 @@ class SelectPhoto:BaseActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
-            // Фотка сделана, извлекаем миниатюру картинки
-            val thumbnailBitmap = data?.extras?.get("data") as Bitmap
-        }
+
 
         if (requestCode === 1 && resultCode === RESULT_OK) {
             // Проверяем, содержит ли результат маленькую картинку
@@ -93,7 +84,7 @@ class SelectPhoto:BaseActivity() {
                     val thumbnailBitmap: Bitmap? = data.getParcelableExtra("data")
                     // Какие-то действия с миниатюрой
 
-                    val temp=GPStracker(this)
+                    val temp= GPStracker(this)
 
                     db.writephoto(temp.bitmap_to_base(thumbnailBitmap), id_sample!!,gpsManager.latitude,gpsManager.longitude,LocalDateTime.now().format(formatter).toString())
                     db.Mark_Update_Sample(id_sample!!)
@@ -139,8 +130,7 @@ class SelectPhoto:BaseActivity() {
                 it.setTextColor(-0x1000000)
                 tableRow.addView(it)
             }
-            tableRow.setOnClickListener{itView->
-
+            tableRow.setOnClickListener{ _->
                 photobuf=photo
                 activetableRow?.setBackgroundResource(R.color.color_transporent)
                 tableRow.setBackgroundResource(R.color.color_transporent)

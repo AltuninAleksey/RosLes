@@ -13,6 +13,7 @@ import com.example.rosles.DBCountWood
 import com.example.rosles.Models.Subject
 import com.example.rosles.R
 import com.example.rosles.ResponceClass.BaseRespObject
+import com.example.rosles.Screens.gps.gps_activity
 import com.example.rosles.databinding.ChoicesubjectBinding
 
 class ChoiceSubject : AppCompatActivity() {
@@ -34,14 +35,14 @@ class ChoiceSubject : AppCompatActivity() {
     @SuppressLint("Range", "SuspiciousIndentation")
     fun initcorutine() {
 
-        var subjectList: List<Subject> = db.getsubject()
-        var a: MutableList<BaseRespObject> = mutableListOf()
+        val subjectList: List<Subject> = db.getsubject()
+        val a: MutableList<BaseRespObject> = mutableListOf()
 
         for (i in 0..subjectList.size-1) {
             a.add(subjectList[i].toBaseRespObject())
         }
 
-        var adapter = ChoiceSubjectAdapter(a, object : BaseInterface {
+        val adapter = ChoiceSubjectAdapter(a, object : BaseInterface {
 
             override fun onClick(itemView: Any) {
                 start(itemView as Int)
@@ -62,6 +63,10 @@ class ChoiceSubject : AppCompatActivity() {
         val intent1 = Intent(this, ChoiceLes::class.java)
         intent1.putExtra("id", itemView.toString())
         intent1.putExtra("id_Vedomost", intent.getStringExtra("id_Vedomost"))
+        // Выбранный субъект несём дальше отдельным extra: ниже по цепочке
+        // "id" перезаписывается id лесничества/участкового.
+        intent1.putExtra("id_subject", itemView.toString())
+        intent1.putExtra("fc_mode", intent.getBooleanExtra("fc_mode", false))
 
         startActivity(intent1)
     }
@@ -78,7 +83,7 @@ class ChoiceSubject : AppCompatActivity() {
                 startActivity(Intent(this, Dashboard::class.java))
             }
             R.id.itemperechet -> {
-                startActivity(Intent(this, MainActivity::class.java))
+                startActivity(Intent(this, Molodnyak::class.java))
             }
             R.id.itemgps -> {
                 startActivity(Intent(this, gps_activity::class.java))

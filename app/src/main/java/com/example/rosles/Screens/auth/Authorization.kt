@@ -1,4 +1,4 @@
-package com.example.rosles.Screens
+package com.example.rosles.Screens.auth
 
 import android.content.Intent
 import android.graphics.Color
@@ -12,15 +12,19 @@ import android.view.Window
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.edit
 import androidx.lifecycle.lifecycleScope
-import com.example.rosles.Network.*
+import com.example.rosles.Network.SafeRequest
+import com.example.rosles.Network.SourceProviderHolder
+import com.example.rosles.Network.ViewModels
 import com.example.rosles.RequestClass.AuthRequest
 import com.example.rosles.ResponceClass.AuthReSponce
 import com.example.rosles.ResponceClass.BaseResponceInterface
+import com.example.rosles.Screens.Dashboard
+import com.example.rosles.Screens.StartScreen
+import com.example.rosles.Screens.create_user
 import com.example.rosles.databinding.AuthorizationActivityBinding
 import kotlinx.coroutines.launch
-import androidx.core.content.edit
-
 
 class Authorization: AppCompatActivity() {
     private lateinit var binding: AuthorizationActivityBinding
@@ -57,14 +61,14 @@ class Authorization: AppCompatActivity() {
 
         binding.buttonLogin.setOnClickListener {
             if (binding.login.editUser.text.isEmpty()){
-                binding.emaileror.visibility=View.VISIBLE
+                binding.emaileror.visibility= View.VISIBLE
             }else{
-                binding.emaileror.visibility=View.GONE
+                binding.emaileror.visibility= View.GONE
             }
             if (binding.pass.editUser.text.isEmpty()){
-                binding.passeror.visibility=View.VISIBLE
+                binding.passeror.visibility= View.VISIBLE
             }else{
-                binding.passeror.visibility=View.GONE
+                binding.passeror.visibility= View.GONE
             }
 
             SafeRequest(viewModel).request(object : SafeRequest.Protection{
@@ -74,7 +78,8 @@ class Authorization: AppCompatActivity() {
                         AuthRequest(
                             binding.login.editUser.text.toString(),
                             binding.pass.editUser.text.toString()
-                        ))
+                        )
+                    )
                     return user
                 }
 
@@ -100,8 +105,10 @@ class Authorization: AppCompatActivity() {
 
 
 
-        val wordtwo=SpannableString("Зарегистрируйтесь")
-        wordtwo.setSpan(ForegroundColorSpan(Color.parseColor("#177164")),0,wordtwo.length,Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        val wordtwo= SpannableString("Зарегистрируйтесь")
+        wordtwo.setSpan(
+            ForegroundColorSpan(Color.parseColor("#177164")),0,wordtwo.length,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         binding.createuser.append(wordtwo)
 
         binding.createuser.setOnClickListener{

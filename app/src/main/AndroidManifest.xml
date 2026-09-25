@@ -35,7 +35,7 @@
             android:name="com.example.rosles.utils.services.GpsForegroundService"/>
 
         <activity
-            android:name="com.example.rosles.Screens.Authorization"
+            android:name="com.example.rosles.Screens.auth.Authorization"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -46,32 +46,32 @@
 
 
         <activity android:name=".Screens.DualListActivity"/>
-        <activity android:name=".Screens.MolodnyakList"/>
+        <activity android:name=".Screens.LesCulture"/>
         <activity android:name=".Screens.PerechetVedomostList"/>
         <activity android:name=".Screens.StartScreen"/>
         <activity android:name=".Screens.UchastokInfo"/>
         <activity android:name=".Screens.ProbaInfo"/>
         <activity android:name="com.example.rosles.Screens.Wood" android:windowSoftInputMode="adjustPan"/>
         <activity android:name="com.example.rosles.Screens.ChoiceSubject"/>
-        <activity android:name="com.example.rosles.Screens.MainActivity"/>
+        <activity android:name="com.example.rosles.Screens.Molodnyak"/>
         <activity android:name="com.example.rosles.Screens.profile"/>
-        <activity android:name="com.example.rosles.Screens.AddPorod"/>
+        <activity android:name="com.example.rosles.Screens.add.AddPorod"/>
         <activity android:name="com.example.rosles.Screens.settings"/>
         <activity android:name="com.example.rosles.Screens.ChoiceLes"/>
         <activity android:name="com.example.rosles.Screens.ChoiceDistrict"/>
         <activity android:name="com.example.rosles.Screens.ChoiceCvartal"/>
-        <activity android:name="com.example.rosles.Screens.AddSample"/>
-        <activity android:name="com.example.rosles.Screens.AddVedomost"/>
+        <activity android:name="com.example.rosles.Screens.add.AddSample"/>
+        <activity android:name="com.example.rosles.Screens.add.AddVedomost"/>
         <activity android:name="com.example.rosles.Screens.Dashboard"/>
-        <activity android:name="com.example.rosles.Screens.gps_activity"  />
+        <activity android:name="com.example.rosles.Screens.gps.gps_activity"  />
         <activity android:name="com.example.rosles.Screens.SelectPhoto"/>
         <activity android:name="com.example.rosles.Screens.lisq_square"/>
         <activity android:name="com.example.rosles.Screens.create_user"/>
         <activity android:name="com.example.rosles.Screens.MapTrack"/>
-        <activity android:name="com.example.rosles.Screens.ChangeListregion"/>
-        <activity android:name="com.example.rosles.Screens.ChangeSample"/>
-        <activity android:name="com.example.rosles.Screens.GpxTrack"/>
-                <activity android:name="com.example.rosles.Screens.change_user"/>
+        <activity android:name="com.example.rosles.Screens.changes.ChangeListregion"/>
+        <activity android:name="com.example.rosles.Screens.changes.ChangeSample"/>
+        <activity android:name="com.example.rosles.Screens.gps.GpxTrack"/>
+                <activity android:name="com.example.rosles.Screens.changes.change_user"/>
         <activity android:name="com.example.rosles.TestActivity"/>
 
 

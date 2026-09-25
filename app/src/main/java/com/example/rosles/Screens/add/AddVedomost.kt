@@ -1,11 +1,9 @@
-package com.example.rosles.Screens
+package com.example.rosles.Screens.add
 
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.MenuItem
 import android.view.View
 import android.widget.*
@@ -13,45 +11,46 @@ import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import com.example.rosles.DBCountWood
 import com.example.rosles.R
-import com.example.rosles.databinding.AddProbBinding
+import com.example.rosles.Screens.Dashboard
+import com.example.rosles.Screens.LesCulture
+import com.example.rosles.Screens.Molodnyak
+import com.example.rosles.Screens.gps.gps_activity
+import com.example.rosles.Screens.profile
+import com.example.rosles.databinding.AddVedomostBinding
 import com.example.rosles.setSizeRelativeCurrentWindow
-
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 
-class AddSample : AppCompatActivity() {
-    private lateinit var binding: AddProbBinding
+class AddVedomost: AppCompatActivity() {
+
+    private lateinit var binding: AddVedomostBinding
     private val db = DBCountWood(this, null)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = AddProbBinding.inflate(layoutInflater)
+        binding = AddVedomostBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        InitClick()
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-        binding.date.text = LocalDateTime.now().format(formatter).toString()
-
-        binding.quaterName.setText("Длина")
-        binding.vudelName.setText("Ширина")
-
         //инциализация навигации
         supportActionBar!!.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
         supportActionBar!!.setDisplayShowCustomEnabled(true)
         supportActionBar!!.setCustomView(R.layout.custom_action_bar)
 
+        binding.linearDacha.visibility=View.VISIBLE
+
         val view: View = supportActionBar!!.customView
         val title=view.findViewById<TextView>(R.id.text)
         val back=view.findViewById<ImageView>(R.id.back)
         val menu=view.findViewById<ImageView>(R.id.burger)
-        title.setText("Добавление")
+        title.setText("Добавление перечетной ведомости")
         back.setOnClickListener{
             finish()
         }
         menu.setOnClickListener{
             showpopupmenu(it)
         }
+        RecyclerviewInit()
+
     }
     fun showpopupmenu (view: View) {
         val popup = PopupMenu(this, view)
@@ -64,7 +63,7 @@ class AddSample : AppCompatActivity() {
                     startActivity(Intent(this, Dashboard::class.java))
                 }
                 R.id.itemperechet -> {
-                    startActivity(Intent(this, MainActivity::class.java))
+                    startActivity(Intent(this, Molodnyak::class.java))
                 }
                 R.id.itemgps -> {
                     startActivity(Intent(this, gps_activity::class.java))
@@ -76,70 +75,75 @@ class AddSample : AppCompatActivity() {
             true
         })
         popup.show()
+
     }
-    fun InitClick() {
+
+    @SuppressLint("Range")
+    fun RecyclerviewInit() {
+        val buf:Int?=intent.getStringExtra("id")?.toInt()
+        // fc_mode: цепочку запустили из MolodnyakList — создаём карточку
+        // в fc_list_region и возвращаемся в молодняк, а не в MainActivity.
+        val fcMode = intent.getBooleanExtra("fc_mode", false)
+       // val quater = db.getQuaterbyID(buf)
+
+        binding.idCvartal.text
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        binding.date.text = LocalDateTime.now().format(formatter).toString()
+
+
+
+        var sPref = getSharedPreferences("PreferencesName", MODE_PRIVATE);
+        var id = sPref.getString("id", "0")!!.toInt()
         binding.buttonAuto.setOnClickListener {
-            val sPref = getSharedPreferences("PreferencesName", MODE_PRIVATE)
-            val id_user = sPref.getString("id", "")!!.toInt()
-            val id_region = intent.getStringExtra("id")
 
-            if ( binding.samplearea.text.isEmpty()){
-                binding.samplearea.setText("0")
-            }
-            if ( binding.vudel.text.isEmpty()){
-                binding.vudel.setText("0")
-            }
-            if ( binding.idCvartal.text.isEmpty()){
-                binding.idCvartal.setText("0")
-            }
-            if ( binding.samplearea.text.toString().isNotEmpty()&&
+            if (  binding.samplearea.text.toString().isNotEmpty()&&
                 binding.vudel.text.toString().isNotEmpty()&&
-                binding.idCvartal.text.toString().isNotEmpty()&&
-                binding.samplearea.text.toString().isNotEmpty()&&
-                binding.vudel.text.toString().isNotEmpty()
-                ){
+                binding.idCvartal.text.toString().isNotEmpty()){
 
+            if (fcMode) {
+                val idSubject = intent.getStringExtra("id_subject")?.toIntOrNull()
+                    ?: buf?.let { db.getSubjectIdByDistrict(it) }
+                db.insertFCListRegionLocal(
+                    date = binding.date.text.toString(),
+                    number = "",
+                    dacha = binding.dacha.text.toString().ifEmpty { null },
+                    nameQuarter = binding.idCvartal.text.toString(),
+                    sampleRegion = binding.samplearea.text.toString(),
+                    soilLot = binding.vudel.text.toString(),
+                    idDistrictForestly = buf!!,
+                    idSubject = idSubject
+                )
 
-            db.insertintolistsquare(
+                Toast.makeText(this,"Данные добавлены",Toast.LENGTH_LONG).show()
+                startActivity(Intent(this, LesCulture::class.java))
+                finish()
+            } else {
+            db.createvedom(
                 binding.date.text.toString(),
                 binding.samplearea.text.toString(),
-                id_region,
-                id_user,
-                intent.getIntExtra("id_quater",0),
                 binding.vudel.text.toString(),
-                binding.idCvartal.text.toString(),
-                binding.samplearea.text.toString(),
-                binding.vudel.text.toString(),
-                2
-            )
-            db.Mark_Update_Listregion(id_region!!)
-            Toast.makeText(this, "Данные добавлены", Toast.LENGTH_LONG).show()
-            finish()
-            }else{
-                Toast.makeText(this, "Заполните поля", Toast.LENGTH_LONG).show()
+                buf!!.toInt(),
+                id,
+                "0",
+                binding.idCvartal.text.toString().toInt(),
+                2,
+                binding.dacha.text.toString())
 
+            Toast.makeText(this,"Данные добавлены",Toast.LENGTH_LONG).show()
+            startActivity(Intent(this, Molodnyak::class.java))
+            }
+            }else{
+                Toast.makeText(this,"Заполните поля",Toast.LENGTH_LONG).show()
             }
 
         }
         binding.date.setOnClickListener {
             initDatePicker()
         }
-        val summlistener = object: TextWatcher {
-            override fun afterTextChanged(p0: Editable?) {}
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
-                val a = if (binding.vudel.text.toString().trim().length == 0) 0 else binding.vudel.text.toString().toInt()
-                val b = if (binding.idCvartal.text.toString().trim().length == 0) 0 else binding.idCvartal.text.toString().toInt()
-                binding.samplearea.setText((a*b).toString())
-            }
-        }
-        binding.vudel.addTextChangedListener(summlistener)
-        binding.idCvartal.addTextChangedListener(summlistener)
     }
 
     @SuppressLint("SetTextI18n")
-    fun initDatePicker() {
+    fun initDatePicker(){
         val dialog = Dialog(this)
         dialog.setContentView(R.layout.dialog_datepicker)
         dialog.setSizeRelativeCurrentWindow(0.85, 0.6)
@@ -147,8 +151,11 @@ class AddSample : AppCompatActivity() {
         val mInfoTextView = dialog.findViewById<TextView>(R.id.textView)
         val mDatePicker = dialog.findViewById<DatePicker>(R.id.datePicker)
 
+
+
         val today = Calendar.getInstance()
         mDatePicker.maxDate=today.timeInMillis
+
         mDatePicker!!.init(
             today[Calendar.YEAR], today[Calendar.MONTH],
             today[Calendar.DAY_OF_MONTH]
@@ -157,7 +164,7 @@ class AddSample : AppCompatActivity() {
         }
         val changingDateButton = dialog.findViewById<View>(R.id.button)
         changingDateButton.setOnClickListener {
-            binding.date.text = mInfoTextView!!.text
+            binding.date.text=mInfoTextView!!.text
             dialog.dismiss()
         }
         dialog.show()

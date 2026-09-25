@@ -14,12 +14,14 @@ import com.example.rosles.BaseActivity
 import com.example.rosles.DBCountWood
 import com.example.rosles.R
 import com.example.rosles.ResponceClass.LISTREGION_LIST_DATA
-import com.example.rosles.databinding.MolodnyakListBinding
+import com.example.rosles.databinding.LesCultureListBinding
 import com.example.rosles.setSizeRelativeCurrentWindow
 
-class MolodnyakList : BaseActivity("Учёт молодняка") {
+class LesCulture : BaseActivity("Лесные культуры") {
 
-    private lateinit var binding: MolodnyakListBinding
+    private lateinit var binding: LesCultureListBinding
+
+
             private val db by lazy { DBCountWood(applicationContext, null) }
 
     private val rows: MutableList<LISTREGION_LIST_DATA> = mutableListOf()
@@ -29,7 +31,7 @@ class MolodnyakList : BaseActivity("Учёт молодняка") {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = MolodnyakListBinding.inflate(layoutInflater)
+        binding = LesCultureListBinding.inflate(layoutInflater)
         setContentView(binding.root)
         tableInit()
         toolbarInit()
@@ -104,7 +106,19 @@ class MolodnyakList : BaseActivity("Учёт молодняка") {
 
     private fun toolbarInit() {
         binding.toolbar.addbutton.setOnClickListener {
-            startActivity(Intent(this, PerechetVedomostList::class.java))
+            // Создание ведомости — как в MainActivity: идём в цепочку
+            // ChoiceSubject → ChoiceLes → ChoiceDistrict → ...,
+            // id_Vedomost null = создание новой (выбор существующей — через open).
+            val idSubject = getSharedPreferences("PreferencesName", MODE_PRIVATE)
+                .getInt("id_subject", 0)
+            val intent1 = Intent(this, ChoiceSubject::class.java)
+            intent1.putExtra("id", idSubject.toString())
+            intent1.putExtra("id_Vedomost", intent.getStringExtra("id_Vedomost"))
+            // fc_mode: цепочка создаёт запись в fc_list_region (молодняк),
+            // а не в старом listregion (MainActivity).
+            intent1.putExtra("fc_mode", true)
+
+            startActivity(intent1)
         }
         binding.toolbar.open.setOnClickListener {
             // Открываем карточку именно выбранной строки — без uuid

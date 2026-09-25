@@ -19,7 +19,8 @@ import com.example.rosles.R
 import com.example.rosles.ResponceClass.PerechetWood
 import com.example.rosles.ResponceClass.PodlesokWood
 import com.example.rosles.ResponceClass.ProbaWoodSimple
-import com.example.rosles.ResponceClass.id
+import com.example.rosles.Screens.add.AddPorod
+import com.example.rosles.Screens.gps.gps_activity
 import com.example.rosles.databinding.WoodBinding
 import com.example.rosles.setSizeRelativeCurrentWindow
 import com.example.roslesdef.Adapters.WoodAdapter

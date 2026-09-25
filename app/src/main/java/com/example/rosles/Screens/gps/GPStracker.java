@@ -1,4 +1,4 @@
-package com.example.rosles.Screens;
+package com.example.rosles.Screens.gps;
 
 import android.Manifest;
 import android.content.Context;

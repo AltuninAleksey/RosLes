@@ -1,5 +1,6 @@
 package com.example.rosles.utils.services
 
+import android.annotation.SuppressLint
 import android.app.Notification
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -8,7 +9,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.IBinder
 import com.example.rosles.R
-import com.example.rosles.Screens.Authorization
+import com.example.rosles.Screens.auth.Authorization
 import com.example.rosles.Screens.SaveState
 import com.example.rosles.Screens.SaveState.saveGpsManager
 import com.example.rosles.utils.gps.simpleframework.ParseGps
@@ -72,6 +73,7 @@ class GpsForegroundService: Service() {
         return notification
     }
 
+    @SuppressLint("ForegroundServiceType")
     private fun sendNotificationForStartForeground() {
         startForeground(
             NOTIFICATION_ID,

@@ -4,16 +4,14 @@ import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
-import android.view.MenuItem
 import android.view.View
 import android.widget.*
-import androidx.appcompat.app.ActionBar
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.get
-import androidx.core.view.isGone
 import com.example.rosles.BaseActivity
 import com.example.rosles.DBCountWood
 import com.example.rosles.R
+import com.example.rosles.Screens.add.AddSample
+import com.example.rosles.Screens.changes.ChangeSample
 import com.example.rosles.databinding.ListSquareBinding
 import com.example.rosles.setSizeRelativeCurrentWindow
 

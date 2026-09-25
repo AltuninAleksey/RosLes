@@ -1,4 +1,4 @@
-package com.example.rosles.Screens
+package com.example.rosles.Screens.add
 
 import android.annotation.SuppressLint
 import android.app.Dialog
@@ -11,6 +11,11 @@ import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import com.example.rosles.DBCountWood
 import com.example.rosles.R
+import com.example.rosles.Screens.Dashboard
+import com.example.rosles.Screens.Molodnyak
+import com.example.rosles.Screens.gps.gps_activity
+import com.example.rosles.Screens.lisq_square
+import com.example.rosles.Screens.profile
 import com.example.rosles.databinding.AddProbBinding
 import com.example.rosles.setSizeRelativeCurrentWindow
 
@@ -59,7 +64,7 @@ class AddProb : AppCompatActivity() {
                     startActivity(Intent(this, Dashboard::class.java))
                 }
                 R.id.itemperechet -> {
-                    startActivity(Intent(this, MainActivity::class.java))
+                    startActivity(Intent(this, Molodnyak::class.java))
                 }
                 R.id.itemgps -> {
                     startActivity(Intent(this, gps_activity::class.java))

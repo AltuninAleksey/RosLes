@@ -13,6 +13,9 @@ import com.example.rosles.Adapters.ChoiceSubjectAdapter
 import com.example.rosles.DBCountWood
 import com.example.rosles.R
 import com.example.rosles.ResponceClass.BaseRespObject
+import com.example.rosles.Screens.add.AddVedomost
+import com.example.rosles.Screens.changes.ChangeListregion
+import com.example.rosles.Screens.gps.gps_activity
 import com.example.rosles.databinding.ChoicesubjectBinding
 
 class ChoiceCvartal:AppCompatActivity() {
@@ -91,7 +94,7 @@ class ChoiceCvartal:AppCompatActivity() {
                 startActivity(Intent(this, Dashboard::class.java))
             }
             R.id.itemperechet -> {
-                startActivity(Intent(this, MainActivity::class.java))
+                startActivity(Intent(this, Molodnyak::class.java))
             }
             R.id.itemgps -> {
                 startActivity(Intent(this, gps_activity::class.java))

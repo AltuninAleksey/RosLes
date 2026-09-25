@@ -9,7 +9,7 @@ import android.util.Log
 import androidx.core.database.getIntOrNull
 import com.example.rosles.Models.*
 import com.example.rosles.ResponceClass.*
-import com.example.rosles.Screens.GPStracker
+import com.example.rosles.Screens.gps.GPStracker
 import com.example.roslesdef.Models.SpinerItem
 import java.util.*
 
@@ -549,6 +549,58 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
                     subjectName = cursor.getString(cursor.getColumnIndex("subject"))
                 )
             } while (cursor.moveToNext())
+        }
+        cursor.close()
+        return result
+    }
+
+    /**
+     * Локальное создание карточки участка (молодняк): пишет в
+     * djangoForest_fc_list_region, а не в старый djangoForest_listregion.
+     * idDacha = NULL — урочище введено текстом с формы; mark_update = 2
+     * (создано локально, к отправке — та же конвенция, что у createvedom).
+     * Возвращает uuid созданной записи.
+     */
+    fun insertFCListRegionLocal(
+        date: String,
+        number: String,
+        dacha: String?,
+        nameQuarter: String?,
+        sampleRegion: String,
+        soilLot: String?,
+        idDistrictForestly: Int,
+        idSubject: Int?
+    ): String {
+        val uuid = UUID.randomUUID().toString()
+        val database: SQLiteDatabase = this.writableDatabase
+        fun q(v: String?): String = if (v == null) "NULL" else "'${v.replace("'", "''")}'"
+        database.execSQL(
+            "INSERT INTO djangoForest_fc_list_region " +
+                    "(uuid, date, number, dacha, id_dacha, name_quarter, sample_region, soil_lot, id_district_forestly, id_subject, mark_update) VALUES (" +
+                    "${q(uuid)}, ${q(date)}, ${q(number)}, ${q(dacha)}, NULL, " +
+                    "${q(nameQuarter)}, $sampleRegion, ${q(soilLot ?: "")}, " +
+                    "$idDistrictForestly, ${idSubject ?: "NULL"}, 2)"
+        )
+        return uuid
+    }
+
+    /**
+     * id субъекта через цепочку district -> forestly -> subject.
+     * Fallback, если id_subject не пробросили через интент цепочки создания.
+     */
+    @SuppressLint("Range")
+    fun getSubjectIdByDistrict(idDistrictForestly: Int): Int? {
+        val database: SQLiteDatabase = this.readableDatabase
+        val cursor: Cursor = database.rawQuery(
+            "select s.id as id from djangoForest_districtforestly as d " +
+                    "join djangoForest_forestly as f on d.id_forestly_id = f.id " +
+                    "join djangoForest_subjectrf as s on f.id_subject_rf_id = s.id " +
+                    "where d.id = $idDistrictForestly",
+            null
+        )
+        var result: Int? = null
+        if (cursor.moveToFirst()) {
+            result = cursor.getInt(cursor.getColumnIndex("id"))
         }
         cursor.close()
         return result

@@ -1,4 +1,4 @@
-package com.example.rosles.Screens
+package com.example.rosles.Screens.gps
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -18,6 +18,9 @@ import com.example.rosles.DBCountWood
 import com.example.rosles.Network.ViewModels
 import com.example.rosles.R
 import com.example.rosles.ResponceClass.GPS_Data
+import com.example.rosles.Screens.Dashboard
+import com.example.rosles.Screens.Molodnyak
+import com.example.rosles.Screens.profile
 import com.example.rosles.databinding.GpsBinding
 import com.example.rosles.utils.gps.GpsManager
 
@@ -197,7 +200,7 @@ class gps_activity : AppCompatActivity() {
             }
 
             R.id.itemperechet -> {
-                startActivity(Intent(this, MainActivity::class.java))
+                startActivity(Intent(this, Molodnyak::class.java))
             }
 
             R.id.itemgps -> {

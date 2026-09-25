@@ -1,4 +1,4 @@
-package com.example.rosles.Screens
+package com.example.rosles.Screens.gps
 
 import android.animation.ObjectAnimator
 import android.app.Dialog
@@ -17,6 +17,8 @@ import androidx.core.content.FileProvider
 import com.example.rosles.BaseActivity
 import com.example.rosles.Network.ViewModels
 import com.example.rosles.R
+import com.example.rosles.Screens.MapTrack
+import com.example.rosles.Screens.SaveState
 import com.example.rosles.databinding.DialogAddFileGpxBinding
 import com.example.rosles.databinding.GpsTrackerBinding
 import com.example.rosles.setSizeRelativeCurrentWindow

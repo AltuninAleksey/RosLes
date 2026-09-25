@@ -1,44 +1,26 @@
-package com.example.rosles.Screens
+package com.example.rosles.Screens.changes
 
-import android.content.Intent
-import android.graphics.Color
-import android.graphics.ColorFilter
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffColorFilter
+import android.R
 import android.os.Bundle
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.style.ForegroundColorSpan
-import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.view.Window
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.example.rosles.Network.SafeRequest
 import com.example.rosles.Network.SourceProviderHolder
 import com.example.rosles.Network.ViewModels
-import com.example.rosles.R
-import com.example.rosles.RequestClass.AuthRequest
-import com.example.rosles.RequestClass.RegistrationReqest
-import com.example.rosles.ResponceClass.AuthReSponce
-import com.example.rosles.ResponceClass.BaseResp
 import com.example.rosles.ResponceClass.BaseResponceInterface
 import com.example.rosles.ResponceClass.UserResp
 import com.example.rosles.ResponceClass.temp_data_userresp
 import com.example.rosles.databinding.CreateUserBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.json.JSONObject
 
-class change_user:AppCompatActivity() {
+class change_user: AppCompatActivity() {
 
 
     private lateinit var binding: CreateUserBinding
@@ -64,7 +46,7 @@ class change_user:AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            android.R.id.home -> finish()
+            R.id.home -> finish()
         }
         return true
     }
@@ -72,12 +54,12 @@ class change_user:AppCompatActivity() {
     fun  initview() {
 
 
-        binding.name.imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.person))
-        binding.filial.imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.home))
+        binding.name.imageView.setImageDrawable(ContextCompat.getDrawable(this, com.example.rosles.R.drawable.person))
+        binding.filial.imageView.setImageDrawable(ContextCompat.getDrawable(this, com.example.rosles.R.drawable.home))
 
-        binding.email.root.visibility=View.GONE
-        binding.password.root.visibility=View.GONE
-        binding.passwordapply.root.visibility=View.GONE
+        binding.email.root.visibility= View.GONE
+        binding.password.root.visibility= View.GONE
+        binding.passwordapply.root.visibility= View.GONE
 
         binding.name.editUser.setHint("ФИО")
         binding.filial.editUser.setHint("Телефон")
@@ -123,7 +105,7 @@ class change_user:AppCompatActivity() {
 
         fun changeuser(){
             lifecycleScope.launch {
-                var body:UserResp= UserResp(
+                var body: UserResp = UserResp(
                     id_Profile!!,
                     binding.name.editUser.text.toString(),
                     binding.filial.editUser.text.toString(),
@@ -148,6 +130,3 @@ class change_user:AppCompatActivity() {
 
 
     }
-
-
-

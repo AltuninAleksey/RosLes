@@ -1,9 +1,8 @@
-package com.example.rosles.Screens
+package com.example.rosles.Screens.changes
 
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
-import android.database.Cursor
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -16,6 +15,10 @@ import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import com.example.rosles.DBCountWood
 import com.example.rosles.R
+import com.example.rosles.Screens.Dashboard
+import com.example.rosles.Screens.Molodnyak
+import com.example.rosles.Screens.gps.gps_activity
+import com.example.rosles.Screens.profile
 import com.example.rosles.databinding.AddVedomostBinding
 import com.example.rosles.setSizeRelativeCurrentWindow
 import java.util.*
@@ -62,7 +65,7 @@ class ChangeListregion: AppCompatActivity() {
                     startActivity(Intent(this, Dashboard::class.java))
                 }
                 R.id.itemperechet -> {
-                    startActivity(Intent(this, MainActivity::class.java))
+                    startActivity(Intent(this, Molodnyak::class.java))
                 }
                 R.id.itemgps -> {
                     startActivity(Intent(this, gps_activity::class.java))
@@ -106,7 +109,7 @@ class ChangeListregion: AppCompatActivity() {
                     binding.dacha.text.toString()
                 )
                 db.Mark_Update_Listregion(id_Vedomost)
-                startActivity(Intent(this, MainActivity::class.java))
+                startActivity(Intent(this, Molodnyak::class.java))
             }else{
                 Toast.makeText(this,"Заполните поля",Toast.LENGTH_LONG).show()
             }

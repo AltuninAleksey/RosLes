@@ -9,9 +9,9 @@ import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
-import com.example.rosles.Screens.MainActivity
+import com.example.rosles.Screens.Molodnyak
 import com.example.rosles.Screens.StartScreen
-import com.example.rosles.Screens.gps_activity
+import com.example.rosles.Screens.gps.gps_activity
 import com.example.rosles.Screens.profile
 
 
@@ -50,7 +50,7 @@ open class BaseActivity(var tile: String ="Рослес"): AppCompatActivity() {
                 }
 
                 R.id.itemperechet -> {
-                    startActivity(Intent(this, MainActivity::class.java))
+                    startActivity(Intent(this, Molodnyak::class.java))
                 }
 
                 R.id.itemgps -> {

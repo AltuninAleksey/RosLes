@@ -1,8 +1,6 @@
 package com.example.rosles.Network
 
 import android.content.Context
-import com.example.rosles.Screens.Authorization
-import com.example.rosles.Screens.MainActivity
 import com.google.gson.GsonBuilder
 import com.squareup.moshi.Moshi
 import okhttp3.Interceptor
@@ -10,7 +8,6 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
 
 

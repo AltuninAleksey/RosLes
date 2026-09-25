@@ -13,11 +13,12 @@ import com.example.rosles.DBCountWood
 import com.example.rosles.Network.Singletons
 import com.example.rosles.Network.ViewModels
 import com.example.rosles.R
+import com.example.rosles.Screens.changes.ChangeListregion
 import com.example.rosles.databinding.ActivityMainBinding
 import com.example.rosles.setSizeRelativeCurrentWindow
 
 
-class MainActivity : BaseActivity("Перечетные ведомости") {
+class Molodnyak : BaseActivity("Перечетные ведомости Молодняка") {
 
 
     val viewModel by viewModels<ViewModels>()
@@ -33,7 +34,7 @@ class MainActivity : BaseActivity("Перечетные ведомости") {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        Singletons.init(MainActivity())
+        Singletons.init(Molodnyak())
         //инциализация навигации
         RecyclerviewInit()
         binding.toolbar.addbutton.setOnClickListener {

@@ -12,6 +12,7 @@ import com.example.rosles.Adapters.ChoiceSubjectAdapter
 import com.example.rosles.DBCountWood
 import com.example.rosles.R
 import com.example.rosles.ResponceClass.BaseRespObject
+import com.example.rosles.Screens.gps.gps_activity
 import com.example.rosles.databinding.ChoicesubjectBinding
 
 class ChoiceLes : AppCompatActivity() {
@@ -27,40 +28,40 @@ class ChoiceLes : AppCompatActivity() {
         setContentView(view)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = ""
-        binding.textView4.text="Выберите лесничество"
+        binding.textView4.text = "Выберите лесничество"
 
-        var id = intent.getStringExtra("id")
+        val id = intent.getStringExtra("id")
         initcorutine(id!!.toInt())
     }
-    @SuppressLint("Range", "SuspiciousIndentation")
-    fun initcorutine(id:Int){
-        var a : MutableList<BaseRespObject>  = mutableListOf()
-        var lesnichList = db.getLesnich(id)
 
-        for (i in 0..lesnichList.size-1) {
+    @SuppressLint("Range", "SuspiciousIndentation")
+    fun initcorutine(id: Int) {
+        val a: MutableList<BaseRespObject> = mutableListOf()
+        val lesnichList = db.getLesnich(id)
+
+        for (i in 0..lesnichList.size - 1) {
             a.add(lesnichList[i].toBaseRespObject())
         }
-
-        var adapter = ChoiceSubjectAdapter(a,object : BaseInterface {
-
+        val adapter = ChoiceSubjectAdapter(a, object : BaseInterface {
             override fun onClick(itemView: Any) {
                 start(itemView as Int)
             }
-
             override fun onClickButton(itemView: Any) {
             }
-
         })
 
-        if (a.isEmpty()){
-            binding.GuideRecycler.emptytext.isVisible=true
+        if (a.isEmpty()) {
+            binding.GuideRecycler.emptytext.isVisible = true
         }
-        binding.GuideRecycler.GuideRecycler.adapter=adapter
+        binding.GuideRecycler.GuideRecycler.adapter = adapter
     }
+
     fun start(itemView: Int) {
         val intent1 = Intent(this, ChoiceDistrict::class.java)
-        intent1.putExtra("id",itemView.toString())
-        intent1.putExtra("id_Vedomost",intent.getStringExtra("id_Vedomost"))
+        intent1.putExtra("id", itemView.toString())
+        intent1.putExtra("id_Vedomost", intent.getStringExtra("id_Vedomost"))
+        intent1.putExtra("id_subject", intent.getStringExtra("id_subject"))
+        intent1.putExtra("fc_mode", intent.getBooleanExtra("fc_mode", false))
 
         startActivity(intent1)
     }
@@ -77,7 +78,7 @@ class ChoiceLes : AppCompatActivity() {
                 startActivity(Intent(this, Dashboard::class.java))
             }
             R.id.itemperechet -> {
-                startActivity(Intent(this, MainActivity::class.java))
+                startActivity(Intent(this, Molodnyak::class.java))
             }
             R.id.itemgps -> {
                 startActivity(Intent(this, gps_activity::class.java))

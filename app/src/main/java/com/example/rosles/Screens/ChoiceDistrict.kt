@@ -13,6 +13,8 @@ import com.example.rosles.Adapters.ChoiceSubjectAdapter
 import com.example.rosles.DBCountWood
 import com.example.rosles.R
 import com.example.rosles.ResponceClass.BaseRespObject
+import com.example.rosles.Screens.add.AddVedomost
+import com.example.rosles.Screens.gps.gps_activity
 import com.example.rosles.databinding.ChoicesubjectBinding
 
 class ChoiceDistrict : AppCompatActivity() {
@@ -39,9 +41,9 @@ class ChoiceDistrict : AppCompatActivity() {
 
     @SuppressLint("Range")
     fun initcorutine(id: Int) {
-        var a: MutableList<BaseRespObject> = mutableListOf()
+        val a: MutableList<BaseRespObject> = mutableListOf()
 
-        var districtList = db.getDistrict(id)
+        val districtList = db.getDistrict(id)
 
 
         for (i in 0..districtList.size-1) {
@@ -70,6 +72,8 @@ class ChoiceDistrict : AppCompatActivity() {
         val intent1 = Intent(this, AddVedomost::class.java)
         intent1.putExtra("id", itemView.toString())
         intent1.putExtra("id_Vedomost", intent.getStringExtra("id_Vedomost"))
+        intent1.putExtra("id_subject", intent.getStringExtra("id_subject"))
+        intent1.putExtra("fc_mode", intent.getBooleanExtra("fc_mode", false))
         var a = intent.getStringExtra("id_Vedomost")
         startActivity(intent1)
     }
@@ -86,7 +90,7 @@ class ChoiceDistrict : AppCompatActivity() {
                 startActivity(Intent(this, Dashboard::class.java))
             }
             R.id.itemperechet -> {
-                startActivity(Intent(this, MainActivity::class.java))
+                startActivity(Intent(this, Molodnyak::class.java))
             }
             R.id.itemgps -> {
                 startActivity(Intent(this, gps_activity::class.java))
