@@ -1,4 +1,4 @@
-package com.example.rosles.Screens
+package com.example.rosles.Screens.choice
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -13,7 +13,10 @@ import com.example.rosles.DBCountWood
 import com.example.rosles.Models.Subject
 import com.example.rosles.R
 import com.example.rosles.ResponceClass.BaseRespObject
+import com.example.rosles.Screens.Dashboard
+import com.example.rosles.Screens.Molodnyak
 import com.example.rosles.Screens.gps.gps_activity
+import com.example.rosles.Screens.profile
 import com.example.rosles.databinding.ChoicesubjectBinding
 
 class ChoiceSubject : AppCompatActivity() {
@@ -72,7 +75,7 @@ class ChoiceSubject : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(com.example.rosles.R.menu.menu, menu)
+        menuInflater.inflate(R.menu.menu, menu)
         return true
     }
 

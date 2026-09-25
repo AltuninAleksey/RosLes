@@ -45,21 +45,20 @@
         </activity>
 
 
-        <activity android:name=".Screens.DualListActivity"/>
         <activity android:name=".Screens.LesCulture"/>
         <activity android:name=".Screens.PerechetVedomostList"/>
         <activity android:name=".Screens.StartScreen"/>
         <activity android:name=".Screens.UchastokInfo"/>
         <activity android:name=".Screens.ProbaInfo"/>
         <activity android:name="com.example.rosles.Screens.Wood" android:windowSoftInputMode="adjustPan"/>
-        <activity android:name="com.example.rosles.Screens.ChoiceSubject"/>
+        <activity android:name="com.example.rosles.Screens.choice.ChoiceSubject"/>
         <activity android:name="com.example.rosles.Screens.Molodnyak"/>
         <activity android:name="com.example.rosles.Screens.profile"/>
         <activity android:name="com.example.rosles.Screens.add.AddPorod"/>
         <activity android:name="com.example.rosles.Screens.settings"/>
-        <activity android:name="com.example.rosles.Screens.ChoiceLes"/>
-        <activity android:name="com.example.rosles.Screens.ChoiceDistrict"/>
-        <activity android:name="com.example.rosles.Screens.ChoiceCvartal"/>
+        <activity android:name="com.example.rosles.Screens.choice.ChoiceLes"/>
+        <activity android:name="com.example.rosles.Screens.choice.ChoiceDistrict"/>
+        <activity android:name="com.example.rosles.Screens.choice.ChoiceCvartal"/>
         <activity android:name="com.example.rosles.Screens.add.AddSample"/>
         <activity android:name="com.example.rosles.Screens.add.AddVedomost"/>
         <activity android:name="com.example.rosles.Screens.Dashboard"/>

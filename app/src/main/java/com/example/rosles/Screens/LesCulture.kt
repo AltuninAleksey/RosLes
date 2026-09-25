@@ -14,6 +14,7 @@ import com.example.rosles.BaseActivity
 import com.example.rosles.DBCountWood
 import com.example.rosles.R
 import com.example.rosles.ResponceClass.LISTREGION_LIST_DATA
+import com.example.rosles.Screens.choice.ChoiceSubject
 import com.example.rosles.databinding.LesCultureListBinding
 import com.example.rosles.setSizeRelativeCurrentWindow
 

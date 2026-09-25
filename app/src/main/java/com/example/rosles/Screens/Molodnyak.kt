@@ -14,6 +14,7 @@ import com.example.rosles.Network.Singletons
 import com.example.rosles.Network.ViewModels
 import com.example.rosles.R
 import com.example.rosles.Screens.changes.ChangeListregion
+import com.example.rosles.Screens.choice.ChoiceSubject
 import com.example.rosles.databinding.ActivityMainBinding
 import com.example.rosles.setSizeRelativeCurrentWindow
 

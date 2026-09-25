@@ -1,4 +1,4 @@
-package com.example.rosles.Screens
+package com.example.rosles.Screens.choice
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -13,12 +13,15 @@ import com.example.rosles.Adapters.ChoiceSubjectAdapter
 import com.example.rosles.DBCountWood
 import com.example.rosles.R
 import com.example.rosles.ResponceClass.BaseRespObject
+import com.example.rosles.Screens.Dashboard
+import com.example.rosles.Screens.Molodnyak
 import com.example.rosles.Screens.add.AddVedomost
 import com.example.rosles.Screens.changes.ChangeListregion
 import com.example.rosles.Screens.gps.gps_activity
+import com.example.rosles.Screens.profile
 import com.example.rosles.databinding.ChoicesubjectBinding
 
-class ChoiceCvartal:AppCompatActivity() {
+class ChoiceCvartal: AppCompatActivity() {
 
 
     private val db = DBCountWood(this, null)
@@ -83,7 +86,7 @@ class ChoiceCvartal:AppCompatActivity() {
 
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(com.example.rosles.R.menu.menu, menu)
+        menuInflater.inflate(R.menu.menu, menu)
         return true
     }
 
