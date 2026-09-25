@@ -20,7 +20,7 @@ import com.example.rosles.setSizeRelativeCurrentWindow
 class MolodnyakList : BaseActivity("Учёт молодняка") {
 
     private lateinit var binding: MolodnyakListBinding
-    private val db by lazy { DBCountWood(this, null) }
+            private val db by lazy { DBCountWood(applicationContext, null) }
 
     private val rows: MutableList<LISTREGION_LIST_DATA> = mutableListOf()
 
@@ -48,6 +48,10 @@ class MolodnyakList : BaseActivity("Учёт молодняка") {
         rows.clear()
         rows.addAll(db.getFCListRegion())
 
+        // Имена лесничеств/участковых одним запросом по всем idDistrictForestly,
+        // чтобы не делать N+1 поштучных запросов в цикле.
+        val chains = db.getForestryChains(rows.mapNotNull { it.idDistrictForestly }.toSet())
+
         val colWidth = resources.getDimensionPixelSize(R.dimen.table_col_width)
         val numWidth = resources.getDimensionPixelSize(R.dimen.table_col_num_width)
         val cellPad = (5 * resources.displayMetrics.density).toInt()
@@ -56,9 +60,12 @@ class MolodnyakList : BaseActivity("Учёт молодняка") {
             val row = rows[i]
             val tableRow = TableRow(this)
 
+            val chain = row.idDistrictForestly?.let { chains[it] }
             val values = listOf(
                 (i + 1).toString(),
                 row.number,
+                chain?.forestlyName ?: "—",
+                chain?.districtName ?: "—",
                 row.dacha ?: "—",
                 row.nameQuarter ?: "—",
                 row.soilLot ?: "—",
@@ -100,7 +107,19 @@ class MolodnyakList : BaseActivity("Учёт молодняка") {
             startActivity(Intent(this, PerechetVedomostList::class.java))
         }
         binding.toolbar.open.setOnClickListener {
-            startActivity(Intent(this,UchastokInfo::class.java))
+            // Открываем карточку именно выбранной строки — без uuid
+            // UchastokInfo не знает, чьи idDacha/idDistrictForestly резолвить.
+            val index = selectedIndex
+            if (index == null) {
+                Toast.makeText(this, "Выберите участок", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            val uuid = rows[index].uuid
+            if (uuid == null) {
+                Toast.makeText(this, "У участка нет идентификатора", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            startActivity(Intent(this, UchastokInfo::class.java).putExtra("uuid", uuid))
         }
         binding.toolbar.save.setOnClickListener {
             Toast.makeText(this, "В разработке", Toast.LENGTH_SHORT).show()

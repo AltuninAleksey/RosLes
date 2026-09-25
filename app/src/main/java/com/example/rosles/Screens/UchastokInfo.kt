@@ -13,6 +13,7 @@ import android.widget.TableRow
 import android.widget.TextView
 import android.widget.Toast
 import com.example.rosles.BaseActivity
+import com.example.rosles.DBCountWood
 import com.example.rosles.R
 import com.example.rosles.databinding.UchastokInfoBinding
 import com.example.rosles.setSizeRelativeCurrentWindow
@@ -20,22 +21,10 @@ import com.example.rosles.setSizeRelativeCurrentWindow
 class UchastokInfo : BaseActivity("Информация об участке") {
 
     private lateinit var binding: UchastokInfoBinding
-
-    // Мок-данные. Позже заменим на выборку из БД.
-    data class Uchastok(
-        val forestry: String,
-        val district: String,
-        val tract: String,
-        val quarter: String,
-        val allotment: String,
-        val area: String,
-        val date: String
-    )
+    private val db by lazy { DBCountWood(applicationContext, null) }
 
     data class ProbaRow(val length: String, val width: String, val area: String)
     data class OtrezokRow(val length: String)
-
-    private val info = Uchastok("Брянское", "Мичуринское", "Соловьи", "3", "25-4", "1.2", "01.01.2023")
 
     private val probaRows: MutableList<ProbaRow> = mutableListOf(
         ProbaRow("50", "20", "0.10"),
@@ -70,20 +59,45 @@ class UchastokInfo : BaseActivity("Информация об участке") {
         super.onCreate(savedInstanceState)
         binding = UchastokInfoBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        bindInfo()
+        if (!bindInfo()) {
+            Toast.makeText(this, "Участок не найден", Toast.LENGTH_SHORT).show()
+            finish()
+            return
+        }
         renderTable()
         switchInit()
         toolbarInit()
     }
 
-    private fun bindInfo() {
-        binding.lesnich.text = info.forestry
-        binding.district.text = info.district
-        binding.tract.text = info.tract
-        binding.quarter.text = info.quarter
-        binding.allotment.text = info.allotment
-        binding.area.text = info.area
-        binding.date.text = info.date
+    override fun onDestroy() {
+        db.close()
+        super.onDestroy()
+    }
+
+    /**
+     * Заполняет шапку по записи из djangoForest_fc_list_region:
+     * - урочище: имя из справочника djangoForest_dacha по idDacha
+     *   (fallback — строка dacha, присланная сервером);
+     * - участковое лесничество + лесничество + субъект: цепочка
+     *   по idDistrictForestly (см. DBCountWood.getForestryChain).
+     * Возвращает false, если запись не найдена.
+     */
+    private fun bindInfo(): Boolean {
+        val uuid = intent.getStringExtra("uuid") ?: return false
+        val row = db.getFCListRegionByUuid(uuid) ?: return false
+
+        val tract = row.idDacha?.let { db.getDachaNameById(it) } ?: row.dacha ?: "—"
+        val chain = row.idDistrictForestly?.let { db.getForestryChain(it) }
+
+        binding.lesnich.text = chain?.forestlyName ?: "—"
+        binding.district.text = chain?.districtName ?: "—"
+        binding.subject.text = chain?.subjectName ?: "—"
+        binding.tract.text = tract
+        binding.quarter.text = row.nameQuarter ?: "—"
+        binding.allotment.text = "—"
+        binding.area.text = row.sampleRegion?.toString() ?: "—"
+        binding.date.text = row.date
+        return true
     }
 
     private fun switchInit() {

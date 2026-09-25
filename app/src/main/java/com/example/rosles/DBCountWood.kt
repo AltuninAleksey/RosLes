@@ -449,6 +449,112 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     }
 
     @SuppressLint("Range")
+    fun getFCListRegionByUuid(uuid: String): LISTREGION_LIST_DATA? {
+        val database: SQLiteDatabase = this.readableDatabase
+        val cursor: Cursor = database.rawQuery(
+            "select uuid, date, number, dacha, id_dacha, name_quarter, sample_region, soil_lot, id_district_forestly, id_subject " +
+                    "from djangoForest_fc_list_region where uuid = '${uuid.replace("'", "''")}'",
+            null
+        )
+        var result: LISTREGION_LIST_DATA? = null
+        if (cursor.moveToFirst()) {
+            result = LISTREGION_LIST_DATA(
+                id = 0,
+                date = cursor.getString(cursor.getColumnIndex("date")) ?: "",
+                number = cursor.getString(cursor.getColumnIndex("number")) ?: "",
+                dacha = cursor.getString(cursor.getColumnIndex("dacha")),
+                idDacha = if (cursor.isNull(cursor.getColumnIndex("id_dacha"))) null else cursor.getInt(cursor.getColumnIndex("id_dacha")),
+                nameQuarter = cursor.getString(cursor.getColumnIndex("name_quarter")),
+                sampleRegion = if (cursor.isNull(cursor.getColumnIndex("sample_region"))) null else cursor.getDouble(cursor.getColumnIndex("sample_region")),
+                soilLot = cursor.getString(cursor.getColumnIndex("soil_lot")),
+                idDistrictForestly = if (cursor.isNull(cursor.getColumnIndex("id_district_forestly"))) null else cursor.getInt(cursor.getColumnIndex("id_district_forestly")),
+                idForestly = null,
+                idSubject = if (cursor.isNull(cursor.getColumnIndex("id_subject"))) null else cursor.getInt(cursor.getColumnIndex("id_subject")),
+                uuid = cursor.getString(cursor.getColumnIndex("uuid"))
+            )
+        }
+        cursor.close()
+        return result
+    }
+
+    /**
+     * Имя урочища по idDacha из присылаемых сервером данных.
+     * null — такого урочища нет в локальном справочнике (не докачался).
+     */
+    @SuppressLint("Range")
+    fun getDachaNameById(idDacha: Int): String? {
+        val database: SQLiteDatabase = this.readableDatabase
+        val cursor: Cursor = database.rawQuery(
+            "select name from djangoForest_dacha where id = $idDacha", null
+        )
+        var result: String? = null
+        if (cursor.moveToFirst()) {
+            result = cursor.getString(cursor.getColumnIndex("name"))
+        }
+        cursor.close()
+        return result
+    }
+
+    /**
+     * Имена по idDistrictForestly одним запросом:
+     * участковое лесничество -> лесничество -> субъект РФ.
+     * LEFT JOIN: имя участкового вернётся, даже если справочники
+     * лесничеств/субъектов локально не заполнены. null — нет такого участкового.
+     */
+    @SuppressLint("Range")
+    fun getForestryChain(idDistrictForestly: Int): ForestryChain? {
+        val database: SQLiteDatabase = this.readableDatabase
+        val cursor: Cursor = database.rawQuery(
+            "select d.name_district_forestly as district, f.name_forestly as forestly, s.name_subject_RF as subject " +
+                    "from djangoForest_districtforestly as d " +
+                    "left join djangoForest_forestly as f on d.id_forestly_id = f.id " +
+                    "left join djangoForest_subjectrf as s on f.id_subject_rf_id = s.id " +
+                    "where d.id = $idDistrictForestly",
+            null
+        )
+        var result: ForestryChain? = null
+        if (cursor.moveToFirst()) {
+            result = ForestryChain(
+                districtName = cursor.getString(cursor.getColumnIndex("district")),
+                forestlyName = cursor.getString(cursor.getColumnIndex("forestly")),
+                subjectName = cursor.getString(cursor.getColumnIndex("subject"))
+            )
+        }
+        cursor.close()
+        return result
+    }
+
+    /**
+     * То же, что [getForestryChain], но сразу для списка id одним запросом.
+     * Для таблиц: один IN-запрос вместо N+1 поштучных.
+     */
+    @SuppressLint("Range")
+    fun getForestryChains(ids: Collection<Int>): Map<Int, ForestryChain> {
+        if (ids.isEmpty()) return emptyMap()
+        val database: SQLiteDatabase = this.readableDatabase
+        val cursor: Cursor = database.rawQuery(
+            "select d.id as id, d.name_district_forestly as district, f.name_forestly as forestly, s.name_subject_RF as subject " +
+                    "from djangoForest_districtforestly as d " +
+                    "left join djangoForest_forestly as f on d.id_forestly_id = f.id " +
+                    "left join djangoForest_subjectrf as s on f.id_subject_rf_id = s.id " +
+                    "where d.id in (${ids.joinToString(",")})",
+            null
+        )
+        val result = mutableMapOf<Int, ForestryChain>()
+        if (cursor.moveToFirst()) {
+            do {
+                result[cursor.getInt(cursor.getColumnIndex("id"))] = ForestryChain(
+                    districtName = cursor.getString(cursor.getColumnIndex("district")),
+                    forestlyName = cursor.getString(cursor.getColumnIndex("forestly")),
+                    subjectName = cursor.getString(cursor.getColumnIndex("subject"))
+                )
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        return result
+    }
+
+    @SuppressLint("Range")
     fun getLISTREGION(): List<LISTREGION_DATA> {
         val database: SQLiteDatabase = this.writableDatabase
 

@@ -70,12 +70,8 @@ class ViewModels() : BaseViewModel(
     }
 
     suspend fun loadData(db: DBCountWood, aceesToken: String) {
-        // Защита от повторных нажатий: параллельные загрузки умножают
-        // потребление сети/памяти/БД и роняют приложение.
         if (_stateScreen.value.isLoading) return
-        // ВАЖНО: присваиваем НОВЫЙ объект через copy — только так StateFlow
-        // эмитит значение. Мутация state.value.isLoading = true молча меняла
-        // поле того же объекта и подписчики ничего не получали.
+
         _stateScreen.value = _stateScreen.value.copy(isLoading = true)
         try {
             getDacha(db, aceesToken)

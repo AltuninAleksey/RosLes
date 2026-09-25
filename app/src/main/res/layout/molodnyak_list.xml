@@ -51,6 +51,24 @@
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:padding="5dip"
+                    android:text="Лесничество"
+                    android:textColor="#ffff"
+                    android:textSize="@dimen/custom_size_table" />
+
+                <TextView
+                    android:layout_width="@dimen/table_col_width"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:padding="5dip"
+                    android:text="Участковое лесничество"
+                    android:textColor="#ffff"
+                    android:textSize="@dimen/custom_size_table" />
+
+                <TextView
+                    android:layout_width="@dimen/table_col_width"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:padding="5dip"
                     android:text="Урочище"
                     android:textColor="#ffff"
                     android:textSize="@dimen/custom_size_table" />
