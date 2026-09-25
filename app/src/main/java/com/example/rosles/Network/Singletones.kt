@@ -11,6 +11,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
+import java.util.concurrent.TimeUnit
 
 
 object Const {
@@ -94,8 +95,13 @@ object SourceProviderHolder {
     private fun createOkHttpClient(): OkHttpClient {
         return OkHttpClient.Builder()
             //.addInterceptor(createAuthorizationInterceptor(Singletons.appSettings))
-           // .addInterceptor(ChuckerInterceptor())
+            // .addInterceptor(ChuckerInterceptor())
             .addInterceptor(createLoggingInterceptor())
+            // Таймауты: зависшие соединения больше не держат буферы/потоки вечно.
+            .connectTimeout(15, TimeUnit.SECONDS)
+            .readTimeout(60, TimeUnit.SECONDS)
+            .writeTimeout(60, TimeUnit.SECONDS)
+            .retryOnConnectionFailure(true)
             .build()
     }
 
@@ -109,7 +115,10 @@ object SourceProviderHolder {
      */
     private fun createLoggingInterceptor(): Interceptor {
         return HttpLoggingInterceptor()
-            .setLevel(HttpLoggingInterceptor.Level.BODY)
+            // Было BODY: весь JSON большого списка (десятки МБ) дублировался
+            // в память логгера + LogCat и ронял приложение с нехваткой ресурсов.
+            // BASIC логирует только метод/URL/код — достаточно для диагностики.
+            .setLevel(HttpLoggingInterceptor.Level.BASIC)
     }
 
 }

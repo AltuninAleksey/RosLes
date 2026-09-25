@@ -301,6 +301,28 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         )
     }
 
+    /**
+     * Пакетная вставка дач одной транзакцией.
+     * Без транзакции каждый execSQL — отдельная транзакция + fsync:
+     * на тысячах строк это минуты, блокировка БД и риск вылета по ресурсам.
+     */
+    fun writeDachaList(items: List<DachaData>) {
+        if (items.isEmpty()) return
+        val database: SQLiteDatabase = this.writableDatabase
+        database.beginTransaction()
+        try {
+            items.forEach {
+                val safeName = it.name.replace("'", "''")
+                database.execSQL(
+                    "INSERT OR REPLACE INTO djangoForest_dacha (id, name) VALUES('${it.id}','$safeName')"
+                )
+            }
+            database.setTransactionSuccessful()
+        } finally {
+            database.endTransaction()
+        }
+    }
+
     fun clearDACHA() {
         val database: SQLiteDatabase = this.writableDatabase
         database.execSQL("DELETE FROM djangoForest_dacha")
@@ -345,6 +367,32 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     fun clearFCListRegion() {
         val database: SQLiteDatabase = this.writableDatabase
         database.execSQL("DELETE FROM djangoForest_fc_list_region")
+    }
+
+    /**
+     * Пакетная вставка регионов одной транзакцией (вызывать чанками по ~500).
+     * См. [writeDachaList]: без транзакции большой список роняет приложение.
+     */
+    fun writeFCListRegionList(items: List<LISTREGION_LIST_DATA>) {
+        if (items.isEmpty()) return
+        val database: SQLiteDatabase = this.writableDatabase
+        fun q(v: String?): String = if (v == null) "NULL" else "'${v.replace("'", "''")}'"
+        database.beginTransaction()
+        try {
+            items.forEach {
+                val uuid = it.uuid ?: it.id.toString()
+                database.execSQL(
+                    "INSERT OR REPLACE INTO djangoForest_fc_list_region " +
+                            "(uuid, date, number, dacha, id_dacha, name_quarter, sample_region, soil_lot, id_district_forestly, id_subject) VALUES (" +
+                            "${q(uuid)}, ${q(it.date)}, ${q(it.number)}, ${q(it.dacha)}, ${it.idDacha ?: "NULL"}, " +
+                            "${q(it.nameQuarter)}, ${it.sampleRegion ?: 0}, ${q(it.soilLot ?: "")}, " +
+                            "${it.idDistrictForestly ?: "NULL"}, ${it.idSubject ?: "NULL"})"
+                )
+            }
+            database.setTransactionSuccessful()
+        } finally {
+            database.endTransaction()
+        }
     }
 
     fun deleteFCListRegion(uuid: String) {

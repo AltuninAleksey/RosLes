@@ -16,6 +16,13 @@ import com.example.rosles.ResponceClass.SAMPLE_REQEST
 import com.example.rosles.ResponceClass.UserResp
 import com.example.rosles.ResponceClass.getUserResp
 import com.example.rosles.ResponceClass.userRespData
+import com.example.rosles.Screens.StartScreen
+import com.example.rosles.utils.getToken
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.withContext
 import retrofit2.Response
 
 
@@ -29,12 +36,21 @@ class ViewModels() : BaseViewModel(
     var dachaList = MutableLiveData<DachaResp>()
 
 
+    private val _stateScreen = MutableStateFlow(startScreenState())
+    val state: StateFlow<startScreenState> = _stateScreen.asStateFlow()
+
+
     data class State(
         val emptyEmailError: Boolean = false,
         val emptyPasswordError: Boolean = false,
         val signInInProgress: Boolean = false
     ) {
     }
+
+
+
+
+
 
     suspend fun getUserInfo(aceesToken: String): userRespData {
         val result = accountsRepository.getUserInfo(aceesToken)
@@ -45,27 +61,40 @@ class ViewModels() : BaseViewModel(
     suspend fun getDacha(dbCountWood: DBCountWood, accessToken: String): DachaResp {
         val result = accountsRepository.getDacha(accessToken)
         dachaList.postValue(result)
-        result.data.forEach {
-            dbCountWood.writeDACHA(it.id, it.name)
+        // Тяжёлая запись в БД — на IO и одной транзакцией (см. DBCountWood.writeDachaList),
+        // иначе по одному execSQL на главном потоке = ANR + жор ресурсов.
+        withContext(Dispatchers.IO) {
+            dbCountWood.writeDachaList(result.data)
         }
         return result
     }
 
+    suspend fun loadData(db: DBCountWood, aceesToken: String) {
+        // Защита от повторных нажатий: параллельные загрузки умножают
+        // потребление сети/памяти/БД и роняют приложение.
+        if (_stateScreen.value.isLoading) return
+        // ВАЖНО: присваиваем НОВЫЙ объект через copy — только так StateFlow
+        // эмитит значение. Мутация state.value.isLoading = true молча меняла
+        // поле того же объекта и подписчики ничего не получали.
+        _stateScreen.value = _stateScreen.value.copy(isLoading = true)
+        try {
+            getDacha(db, aceesToken)
+            getListRegionList(db, aceesToken)
+        } catch (e: Exception) {
+            logError(e)
+            throw e
+        } finally {
+            _stateScreen.value = _stateScreen.value.copy(isLoading = false)
+        }
+    }
     suspend fun getListRegionList(dbCountWood: DBCountWood, accessToken: String): LISTREGION_LIST_RESP {
         val result = accountsRepository.getListRegionList(accessToken)
-        result.data.forEach {
-            dbCountWood.writeFCListRegion(
-                uuid = it.uuid ?: it.id.toString(),
-                date = it.date,
-                number = it.number,
-                dacha = it.dacha,
-                idDacha = it.idDacha,
-                nameQuarter = it.nameQuarter,
-                sampleRegion = it.sampleRegion,
-                soilLot = it.soilLot,
-                idDistrictForestly = it.idDistrictForestly,
-                idSubject = it.idSubject
-            )
+        // Запись чанками в транзакциях на IO-потоке: один большой ответ
+        // иначе вставляется по одному запросу на главном потоке и вешает/роняет приложение.
+        withContext(Dispatchers.IO) {
+            result.data.chunked(500).forEach { chunk ->
+                dbCountWood.writeFCListRegionList(chunk)
+            }
         }
         return result
     }
