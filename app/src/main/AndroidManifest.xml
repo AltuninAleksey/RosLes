@@ -62,8 +62,8 @@
         <activity android:name="com.example.rosles.Screens.choice.ChoiceCvartal"/>
         <activity android:name="com.example.rosles.Screens.add.AddSample"/>
         <activity android:name="com.example.rosles.Screens.add.AddVedomost"/>
-        <activity android:name="com.example.rosles.Screens.Dashboard"/>
-        <activity android:name="com.example.rosles.Screens.DashboardLesCult"/>
+        <activity android:name="com.example.rosles.Screens.Dashboards.Dashboard"/>
+        <activity android:name="com.example.rosles.Screens.Dashboards.DashboardLesCult"/>
         <activity android:name="com.example.rosles.Screens.gps.gps_activity"  />
         <activity android:name="com.example.rosles.Screens.SelectPhoto"/>
         <activity android:name="com.example.rosles.Screens.lisq_square"/>

@@ -5,6 +5,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.example.rosles.R
+import com.example.rosles.Screens.Dashboards.Dashboard
 import com.example.rosles.Screens.gps.gps_activity
 
 open class BaseAppClass:AppCompatActivity() {

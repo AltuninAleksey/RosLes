@@ -1,4 +1,4 @@
-package com.example.rosles.Screens
+package com.example.rosles.Screens.Dashboards
 
 import android.content.Intent
 import android.os.Bundle
@@ -18,13 +18,14 @@ import com.example.rosles.Network.ViewModels
 import com.example.rosles.Network.startScreenState
 import com.example.rosles.ResponceClass.BaseResponceInterface
 import com.example.rosles.ResponceClass.temp_data_userresp
+import com.example.rosles.Screens.LesCulture
 import com.example.rosles.databinding.DashboardLesCultBinding
 import com.example.rosles.utils.getToken
 import kotlinx.coroutines.launch
 
 /**
  * Дашборд раздела "Лесные культуры" — аналог [Dashboard] для молодняка.
- * Три кнопки: Перечетная ведомость (список [LesCulture]),
+ * Три кнопки: Перечетная ведомость (список [com.example.rosles.Screens.LesCulture]),
  * Обновить и Загрузить данные (обе тянут FC-данные с сервера
  * через [ViewModels.loadData]: справочник дач + fc_list_region).
  */

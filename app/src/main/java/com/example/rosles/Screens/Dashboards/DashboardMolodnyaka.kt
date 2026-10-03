@@ -1,4 +1,4 @@
-package com.example.rosles.Screens
+package com.example.rosles.Screens.Dashboards
 
 
 import android.Manifest
@@ -25,7 +25,9 @@ import com.example.rosles.R
 import com.example.rosles.RequestClass.AuthRequest
 import com.example.rosles.ResponceClass.BaseResponceInterface
 import com.example.rosles.ResponceClass.temp_data_userresp
+import com.example.rosles.Screens.Molodnyak
 import com.example.rosles.Screens.gps.GpxTrack
+import com.example.rosles.Screens.profile
 import com.example.rosles.TestActivity
 import com.example.rosles.databinding.DashboardBinding
 import com.example.rosles.sync

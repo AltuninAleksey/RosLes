@@ -20,7 +20,7 @@ import com.example.rosles.Network.ViewModels
 import com.example.rosles.RequestClass.AuthRequest
 import com.example.rosles.ResponceClass.AuthReSponce
 import com.example.rosles.ResponceClass.BaseResponceInterface
-import com.example.rosles.Screens.Dashboard
+import com.example.rosles.Screens.Dashboards.Dashboard
 import com.example.rosles.Screens.StartScreen
 import com.example.rosles.Screens.create_user
 import com.example.rosles.databinding.AuthorizationActivityBinding

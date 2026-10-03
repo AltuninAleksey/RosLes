@@ -13,7 +13,7 @@ import com.example.rosles.Adapters.ChoiceSubjectAdapter
 import com.example.rosles.DBCountWood
 import com.example.rosles.R
 import com.example.rosles.ResponceClass.BaseRespObject
-import com.example.rosles.Screens.Dashboard
+import com.example.rosles.Screens.Dashboards.Dashboard
 import com.example.rosles.Screens.Molodnyak
 import com.example.rosles.Screens.add.AddVedomost
 import com.example.rosles.Screens.changes.ChangeListregion
