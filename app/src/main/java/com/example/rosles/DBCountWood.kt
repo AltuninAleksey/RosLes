@@ -426,6 +426,66 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         database.execSQL("DELETE FROM djangoForest_fc_list_region WHERE uuid = '${uuid.replace("'", "''")}'")
     }
 
+    /**
+     * Строки к отправке в PUT .../listregion/save: новые (mark_update = 2)
+     * и изменённые (mark_update = 1). Скачанные с сервера строки без флага
+     * сюда не попадают и повторно не отправляются.
+     */
+    @SuppressLint("Range")
+    fun getFCListRegionDirty(): List<LISTREGION_LIST_DATA> {
+        val database: SQLiteDatabase = this.readableDatabase
+        val cursor: Cursor = database.rawQuery(
+            "select uuid, date, number, dacha, id_dacha, name_quarter, sample_region, soil_lot, id_district_forestly, id_subject " +
+                    "from djangoForest_fc_list_region where mark_update = 1 OR mark_update = 2",
+            null
+        )
+        val result = mutableListOf<LISTREGION_LIST_DATA>()
+        if (cursor.moveToFirst()) {
+            do {
+                result.add(
+                    LISTREGION_LIST_DATA(
+                        id = 0,
+                        date = cursor.getString(cursor.getColumnIndex("date")) ?: "",
+                        number = cursor.getString(cursor.getColumnIndex("number")) ?: "",
+                        dacha = cursor.getString(cursor.getColumnIndex("dacha")),
+                        idDacha = if (cursor.isNull(cursor.getColumnIndex("id_dacha"))) null else cursor.getInt(cursor.getColumnIndex("id_dacha")),
+                        nameQuarter = cursor.getString(cursor.getColumnIndex("name_quarter")),
+                        sampleRegion = if (cursor.isNull(cursor.getColumnIndex("sample_region"))) null else cursor.getDouble(cursor.getColumnIndex("sample_region")),
+                        soilLot = cursor.getString(cursor.getColumnIndex("soil_lot")),
+                        idDistrictForestly = if (cursor.isNull(cursor.getColumnIndex("id_district_forestly"))) null else cursor.getInt(cursor.getColumnIndex("id_district_forestly")),
+                        idForestly = null,
+                        idSubject = if (cursor.isNull(cursor.getColumnIndex("id_subject"))) null else cursor.getInt(cursor.getColumnIndex("id_subject")),
+                        uuid = cursor.getString(cursor.getColumnIndex("uuid"))
+                    )
+                )
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        return result
+    }
+
+    /**
+     * Помечает отправленные строки как синхронизированные (mark_update = 0),
+     * чтобы повторный тап «Обновить» их не переотправлял. Вызывать только
+     * после успешного PUT. Одна транзакция, uuid чанкуем (лимит переменных SQLite).
+     */
+    fun markFCListRegionSynced(uuids: List<String>) {
+        if (uuids.isEmpty()) return
+        val database: SQLiteDatabase = this.writableDatabase
+        database.beginTransaction()
+        try {
+            uuids.chunked(400).forEach { chunk ->
+                val list = chunk.joinToString(",") { "'${it.replace("'", "''")}'" }
+                database.execSQL(
+                    "UPDATE djangoForest_fc_list_region SET mark_update = 0 WHERE uuid IN ($list)"
+                )
+            }
+            database.setTransactionSuccessful()
+        } finally {
+            database.endTransaction()
+        }
+    }
+
     @SuppressLint("Range")
     fun getFCListRegion(): List<LISTREGION_LIST_DATA> {
         val database: SQLiteDatabase = this.readableDatabase

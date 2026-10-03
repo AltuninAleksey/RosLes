@@ -6,6 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.rosles.DBCountWood
 import com.example.rosles.RequestClass.RegistrationReqest
+import com.example.rosles.RequestClass.SaveListRegionItem
+import com.example.rosles.RequestClass.SaveListRegionRequest
 import com.example.rosles.RequestClass.UpdateRequest
 import com.example.rosles.ResponceClass.DachaResp
 import com.example.rosles.ResponceClass.GPS_Data_Send
@@ -105,6 +107,60 @@ class ViewModels() : BaseViewModel(
             Log.d("ListRegion", "rows in db after write=${dbCountWood.fcListRegionCount()}")
         }
         return result
+    }
+
+    /**
+     * PUT forestcrops/api/mobile/listregion/save: отправляет новые и изменённые
+     * (mark_update = 1/2) строки fc_list_region чанками по 500.
+     * Чтение БД и пометка отправленных — на Dispatchers.IO.
+     * После успешного PUT чанк помечается synced (mark_update = 0), чтобы
+     * повторный тап не переотправлял те же строки.
+     * @return сколько строк отправлено (0 — нечего отправлять).
+     */
+    suspend fun saveListRegionList(dbCountWood: DBCountWood, accessToken: String, idProfile: Int): Int {
+        if (_stateScreen.value.isLoading) return 0
+
+        _stateScreen.value = _stateScreen.value.copy(isLoading = true)
+        try {
+            val dirty = withContext(Dispatchers.IO) {
+                dbCountWood.getFCListRegionDirty()
+            }
+            val items = dirty.mapNotNull { row ->
+                val uuid = row.uuid ?: return@mapNotNull null
+                SaveListRegionItem(
+                    date = row.date,
+                    dacha = row.dacha,
+                    idDacha = row.idDacha,
+                    nameQuarter = row.nameQuarter,
+                    sampleRegion = row.sampleRegion,
+                    soilLot = row.soilLot,
+                    idDistrictForestly = row.idDistrictForestly,
+                    uuid = uuid
+                )
+            }
+            if (items.isEmpty()) return 0
+            Log.d("ListRegion", "saveListRegion idProfile=$idProfile dirty=${dirty.size} toSend=${items.size}")
+
+            items.chunked(500).forEach { chunk ->
+                accountsRepository.saveListRegionList(
+                    accesToken = accessToken,
+                    body = SaveListRegionRequest(
+                        idProfile = idProfile,
+                        saveListRegionRequest = chunk
+                    )
+                )
+            }
+            withContext(Dispatchers.IO) {
+                dbCountWood.markFCListRegionSynced(items.map { it.uuid })
+            }
+            Log.d("ListRegion", "saveListRegion sent=${items.size}")
+            return items.size
+        } catch (e: Exception) {
+            logError(e)
+            throw e
+        } finally {
+            _stateScreen.value = _stateScreen.value.copy(isLoading = false)
+        }
     }
 
 

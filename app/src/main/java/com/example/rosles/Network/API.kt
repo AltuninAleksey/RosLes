@@ -3,6 +3,7 @@ package com.example.rosles.Network
 import com.example.rosles.RequestClass.AuthRequest
 import com.example.rosles.RequestClass.PerechetRequest
 import com.example.rosles.RequestClass.RegistrationReqest
+import com.example.rosles.RequestClass.SaveListRegionRequest
 import com.example.rosles.ResponceClass.*
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody
@@ -48,6 +49,12 @@ interface API {
         @Header("Authorization") bearerToken: String,
         @Query("idProfile") idProfile: Int
     ): LISTREGION_LIST_RESP
+
+    @PUT("forestcrops/api/mobile/listregion/save")
+    suspend fun saveListRegionList(
+        @Header("Authorization") bearerToken: String,
+        @Body body: SaveListRegionRequest
+    ): ResponseBody
 
     @PUT("listregion")
     suspend fun putLISTREGION(@Body body:LISTREGION_REQUEST):ResponseBody

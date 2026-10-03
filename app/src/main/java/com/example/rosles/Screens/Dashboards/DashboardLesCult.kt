@@ -21,16 +21,18 @@ import com.example.rosles.ResponceClass.temp_data_userresp
 import com.example.rosles.Screens.LesCulture
 import com.example.rosles.databinding.DashboardLesCultBinding
 import com.example.rosles.utils.getToken
+import com.example.rosles.utils.getUserId
 import kotlinx.coroutines.launch
 
 /**
  * Дашборд раздела "Лесные культуры" — аналог [Dashboard] для молодняка.
- * Три кнопки: Перечетная ведомость (список [com.example.rosles.Screens.LesCulture]),
+ * Три кнопки: Перечетная ведомость (список [LesCulture]),
  * Обновить и Загрузить данные (обе тянут FC-данные с сервера
  * через [ViewModels.loadData]: справочник дач + fc_list_region).
  */
 class DashboardLesCult : BaseActivity("Лесные культуры") {
 
+    private val db by lazy { DBCountWood(applicationContext, null) }
     private lateinit var binding: DashboardLesCultBinding
     val viewModel by viewModels<ViewModels>()
 
@@ -69,7 +71,11 @@ class DashboardLesCult : BaseActivity("Лесные культуры") {
         // (INSERT OR REPLACE — повторная загрузка идемпотентна).
         // Отдельного upload-API для FC пока нет, поэтому поведение одинаковое.
         binding.reload.setOnClickListener {
-            lifecycleScope.launch { downloadData(fromCacheMessage = "Данные обновлены") }
+            lifecycleScope.launch { viewModel.saveListRegionList(
+                dbCountWood = db,
+                accessToken = this@DashboardLesCult.getToken(),
+                idProfile = this@DashboardLesCult.getUserId().toInt()
+            ) }
         }
         binding.allDownload.setOnClickListener {
             lifecycleScope.launch { downloadData(fromCacheMessage = "Данные загружены") }
@@ -103,6 +109,11 @@ class DashboardLesCult : BaseActivity("Лесные культуры") {
         } finally {
             db.close()
         }
+    }
+
+    override fun onDestroy() {
+        db.close()
+        super.onDestroy()
     }
 
     private fun checkSubjectNumber(id: Int) {

@@ -11,3 +11,12 @@ fun Context.getToken(): String = try {
     Log.e("TOKEN_ERROR", "Сбой при получении токена: ${e.message}")
     ""
 }
+
+fun Context.getUserId(): String = try {
+    val token = getSharedPreferences("PreferencesName", Context.MODE_PRIVATE).getString("id", "") ?: ""
+    if (token.isEmpty()) Log.e("TOKEN_ERROR", "Ошибка: пустой токен")
+    token
+} catch (e: Exception) {
+    Log.e("TOKEN_ERROR", "Сбой при получении токена: ${e.message}")
+    ""
+}
