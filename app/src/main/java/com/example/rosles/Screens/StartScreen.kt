@@ -75,7 +75,16 @@ class StartScreen: BaseActivity() {
                 // Helper закрываем после загрузки, чтобы не держать дескрипторы БД.
                 val db = DBCountWood(applicationContext, null)
                 try {
-                    viewModel.loadData(db = db, getToken())
+                    val idProfile = sPref.getString("id", "")?.toIntOrNull()
+                    if (idProfile == null) {
+                        Toast.makeText(
+                            this@StartScreen,
+                            "Нет id профиля, перелогиньтесь",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } else {
+                        viewModel.loadData(db = db, aceesToken = getToken(), idProfile = idProfile)
+                    }
                 } catch (e: Exception) {
                     Log.e("StartScreen", "loadData failed", e)
                     Toast.makeText(

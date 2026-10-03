@@ -25,7 +25,7 @@ import java.util.*
 
 class AddProb : AppCompatActivity() {
     private lateinit var binding: AddProbBinding
-    private val db = DBCountWood(this, null)
+    private val db by lazy { DBCountWood(applicationContext, null) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,6 +52,10 @@ class AddProb : AppCompatActivity() {
         menu.setOnClickListener{
             showpopupmenu(it)
         }
+    }
+    override fun onDestroy() {
+        db.close()
+        super.onDestroy()
     }
     fun showpopupmenu (view: View) {
         val popup = PopupMenu(this, view)

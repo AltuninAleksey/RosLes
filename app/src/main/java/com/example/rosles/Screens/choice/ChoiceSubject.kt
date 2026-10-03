@@ -22,7 +22,7 @@ import com.example.rosles.databinding.ChoicesubjectBinding
 class ChoiceSubject : AppCompatActivity() {
 
 
-    private val db = DBCountWood(this, null)
+    private val db by lazy { DBCountWood(applicationContext, null) }
     private lateinit var binding: ChoicesubjectBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,6 +33,11 @@ class ChoiceSubject : AppCompatActivity() {
         supportActionBar?.title = ""
         initcorutine()
         binding.textView4.text = "Выберите субьект"
+    }
+
+    override fun onDestroy() {
+        db.close()
+        super.onDestroy()
     }
 
     @SuppressLint("Range", "SuspiciousIndentation")

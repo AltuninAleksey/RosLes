@@ -22,13 +22,18 @@ import kotlin.collections.HashMap
 class AddPorod : BaseActivity("Добавление") {
 
     private lateinit var binding: AddPorodScreenBinding
-    private val db = DBCountWood(this, null)
+    private val db by lazy { DBCountWood(applicationContext, null) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = AddPorodScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initActivity()
+    }
+
+    override fun onDestroy() {
+        db.close()
+        super.onDestroy()
     }
 
     @SuppressLint("SuspiciousIndentation")
@@ -211,22 +216,37 @@ class AddPorod : BaseActivity("Добавление") {
     }
 
 
-    @SuppressLint("Range")
-    fun getidbreed(value: String?, dbCountWood: DBCountWood): Int? {
-        val cursor = dbCountWood.getallporod() // swap to getallporodArray()
-        cursor.moveToFirst()
-        val hash = HashMap<String, Int>()
-        for (i in 1..cursor.getCount()) {
-            hash.put(
-                cursor.getString(cursor.getColumnIndex("name_breed")),
-                cursor.getInt(cursor.getColumnIndex("id")) ?: 0
-            )
-            cursor.moveToNext()
+    companion object {
+        @JvmStatic
+        fun getidbreed(value: String?, dbCountWood: DBCountWood): Int? {
+            if (value == null) return null
 
+            val cursor = dbCountWood.getallporod() ?: return null
+            val hash = HashMap<String, Int>()
+
+            try {
+                // Получаем индексы колонок один раз ДО цикла
+                val nameIndex = cursor.getColumnIndex("name_breed")
+                val idIndex = cursor.getColumnIndex("id")
+
+                // Проверяем, что колонки вообще существуют
+                if (nameIndex != -1 && idIndex != -1) {
+                    while (cursor.moveToNext()) {
+                        val name = cursor.getString(nameIndex)
+                        val id = cursor.getInt(idIndex)
+                        if (name != null) {
+                            hash[name] = id
+                        }
+                    }
+                }
+            } finally {
+                cursor.close() // Гарантированное закрытие в блоке finally
+            }
+
+            return hash[value]
         }
-        cursor.close()
-        return hash.get(value) // Q3?
     }
+
 
 }
 

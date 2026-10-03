@@ -23,7 +23,7 @@ import com.example.rosles.databinding.ChoicesubjectBinding
 class ChoiceDistrict : AppCompatActivity() {
 
 
-    private val db = DBCountWood(this, null)
+    private val db by lazy { DBCountWood(applicationContext, null) }
 
     private lateinit var binding: ChoicesubjectBinding
 
@@ -40,6 +40,11 @@ class ChoiceDistrict : AppCompatActivity() {
 
         initcorutine(id!!.toInt())
 
+    }
+
+    override fun onDestroy() {
+        db.close()
+        super.onDestroy()
     }
 
     @SuppressLint("Range")

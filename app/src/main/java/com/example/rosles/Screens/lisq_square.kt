@@ -19,7 +19,7 @@ class lisq_square : BaseActivity("Список пробных площадей")
 
     private lateinit var binding: ListSquareBinding
 
-    private val db = DBCountWood(this, null)
+    private val db by lazy { DBCountWood(applicationContext, null) }
     var id_vdomost: String?=null
     var id_sample: String? = null
     var numberOfSelectPoroda: String = ""
@@ -29,6 +29,11 @@ class lisq_square : BaseActivity("Список пробных площадей")
         binding = ListSquareBinding.inflate(layoutInflater)
         setContentView(binding.root)
         RecyclerviewInit()
+    }
+
+    override fun onDestroy() {
+        db.close()
+        super.onDestroy()
     }
 
     companion object{

@@ -69,13 +69,13 @@ class ViewModels() : BaseViewModel(
         return result
     }
 
-    suspend fun loadData(db: DBCountWood, aceesToken: String) {
+    suspend fun loadData(db: DBCountWood, aceesToken: String, idProfile: Int) {
         if (_stateScreen.value.isLoading) return
 
         _stateScreen.value = _stateScreen.value.copy(isLoading = true)
         try {
             getDacha(db, aceesToken)
-            getListRegionList(db, aceesToken)
+            getListRegionList(db, aceesToken, idProfile)
         } catch (e: Exception) {
             logError(e)
             throw e
@@ -83,14 +83,19 @@ class ViewModels() : BaseViewModel(
             _stateScreen.value = _stateScreen.value.copy(isLoading = false)
         }
     }
-    suspend fun getListRegionList(dbCountWood: DBCountWood, accessToken: String): LISTREGION_LIST_RESP {
-        val result = accountsRepository.getListRegionList(accessToken)
+    suspend fun getListRegionList(dbCountWood: DBCountWood, accessToken: String, idProfile: Int): LISTREGION_LIST_RESP {
+        val result = accountsRepository.getListRegionList(accessToken, idProfile)
+        // Пустой/null data — валидный ответ «у профиля нет ведомостей»:
+        // писать нечего, и это не ошибка.
+        val items = result.data ?: emptyList()
+        Log.d("ListRegion", "idProfile=$idProfile count=${result.count} data.size=${items.size}")
         // Запись чанками в транзакциях на IO-потоке: один большой ответ
         // иначе вставляется по одному запросу на главном потоке и вешает/роняет приложение.
         withContext(Dispatchers.IO) {
-            result.data.chunked(500).forEach { chunk ->
+            items.chunked(500).forEach { chunk ->
                 dbCountWood.writeFCListRegionList(chunk)
             }
+            Log.d("ListRegion", "rows in db after write=${dbCountWood.fcListRegionCount()}")
         }
         return result
     }

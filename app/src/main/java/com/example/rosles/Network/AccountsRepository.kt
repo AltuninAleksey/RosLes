@@ -19,7 +19,7 @@ interface AccountsSource {
     suspend fun getLISTREGION(pk_profile:Int):LISTREGION_RESP
     suspend fun getSAMPLE():SAMPLE_RESP
     suspend fun getLIST():LIST_RESP
-    suspend fun getListRegionList(accesToken: String): LISTREGION_LIST_RESP
+    suspend fun getListRegionList(accesToken: String, idProfile: Int): LISTREGION_LIST_RESP
     suspend fun getUserInfo(accesToken: String): userRespData
     suspend fun getDacha(accesToken: String): DachaResp
     suspend fun sendgps(body: GPS_Data_Send):BaseResp
@@ -55,7 +55,7 @@ class AccountsRepository( private val accountsSource: AccountsSource) {
     suspend fun getListRegion(pk_profile:Int):LISTREGION_RESP=accountsSource.getLISTREGION(pk_profile)
     suspend fun getSAMPLE():SAMPLE_RESP=accountsSource.getSAMPLE()
     suspend fun getLIST():LIST_RESP=accountsSource.getLIST()
-    suspend fun getListRegionList(accesToken: String): LISTREGION_LIST_RESP = accountsSource.getListRegionList(accesToken)
+    suspend fun getListRegionList(accesToken: String, idProfile: Int): LISTREGION_LIST_RESP = accountsSource.getListRegionList(accesToken, idProfile)
     suspend fun putLISTREGION(body: LISTREGION_REQUEST):ResponseBody = accountsSource.putLISTREGION(body)
     suspend fun putSAMPLE(body: SAMPLE_REQEST): BaseResponceInterface = accountsSource.putSAMPLE(body)
     suspend fun putLIST(body: LIST_REQEST):ResponseBody = accountsSource.putLIST(body)
@@ -67,6 +67,8 @@ class AccountsRepository( private val accountsSource: AccountsSource) {
     suspend fun forestlubyid(id:Int):ForestlyResp=accountsSource.forestlubyid(id)
 
     suspend fun districtbyID(id:Int):DISTRICTFORESTLY_RESP=accountsSource.districtbyID(id)
+
+    suspend fun quaterdistrictbyID(id:Int):CvartalResp=accountsSource.quaterdistrictbyID(id)
 
     suspend fun upload(body: UpdateRequest):BaseResp=accountsSource.upload(body)
 

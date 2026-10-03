@@ -28,7 +28,7 @@ class profile:BaseActivity("Профиль") {
 //    val viewModel by viewModels<ViewModels>()
     val viewModel by viewModels<ViewModels>()
     private lateinit var binding: ProfileBinding
-    private val db = DBCountWood(this, null)
+    private val db by lazy { DBCountWood(applicationContext, null) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +36,11 @@ class profile:BaseActivity("Профиль") {
         setContentView(binding.root)
         intiToolbar()
         initscreen()
+    }
+
+    override fun onDestroy() {
+        db.close()
+        super.onDestroy()
     }
 
     fun intiToolbar() {

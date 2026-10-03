@@ -39,13 +39,12 @@ class Wood : BaseActivity("Пробная площадь") {
     private var vidWoodpodles: String = ""
     private var hashbufWood = HashMap<String, ProbaWoodSimple?>()
     private var podlesokhash = HashMap<String, PodlesokWood?>()
-    private var Get_Id_breed_Class: AddPorod? = AddPorod()
 
     var CountMainPorod = ""
     var activeCountPorod = ""
 
 
-    private val db = DBCountWood(this, null)
+    private val db by lazy { DBCountWood(applicationContext, null) }
 
     @SuppressLint("Range", "SuspiciousIndentation")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -254,7 +253,7 @@ class Wood : BaseActivity("Пробная площадь") {
         leslist.forEach {
             val hashMap = HashMap<String, PerechetWood>()
             val poroda = it.name
-            val poroda_id = Get_Id_breed_Class?.getidbreed(it.name, db)!!
+            val poroda_id = AddPorod.getidbreed(it.name, db)!!
 
             vidvos.forEach {
 
@@ -288,7 +287,7 @@ class Wood : BaseActivity("Пробная площадь") {
                 value?.iskus?.o11 = iskus11.text.toString().toInt()
                 value?.iskus?.o15 = iskus15.text.toString().toInt()
                 value?.iskus?.type = 1
-                value?.iskus?.id_breed = Get_Id_breed_Class?.getidbreed(value_param, db)!!
+                value?.iskus?.id_breed = AddPorod.getidbreed(value_param, db)!!
                 value?.iskus?.maxHeight = maksHeightIskus.text.toString().toFloatOrNull() ?: 0.0f
                 value?.iskus?.AVGHEight = AvgHeightIskus.text.toString().toFloatOrNull() ?: 0.0f
                 value?.iskus?.AVGdiametr = AvgDiametrIskus.text.toString().toFloatOrNull() ?: 0.0f
@@ -299,7 +298,7 @@ class Wood : BaseActivity("Пробная площадь") {
                 value?.estes?.o11 = estes11.text.toString().toInt()
                 value?.estes?.o15 = estes15.text.toString().toInt()
                 value?.estes?.type = 2
-                value?.estes?.id_breed = Get_Id_breed_Class?.getidbreed(value_param, db)!!
+                value?.estes?.id_breed = AddPorod.getidbreed(value_param, db)!!
                 value?.estes?.maxHeight = maksHeightestes.text.toString().toFloatOrNull() ?: 0.0f
                 value?.estes?.AVGHEight = AvgHeightestes.text.toString().toFloatOrNull() ?: 0.0f
                 value?.estes?.AVGdiametr = AvgDiametrestes.text.toString().toFloatOrNull() ?: 0.0f
@@ -310,7 +309,7 @@ class Wood : BaseActivity("Пробная площадь") {
                 value?.estestvenn?.o11 = estestvennoe11.text.toString().toInt()
                 value?.estestvenn?.o15 = estestvennoe15.text.toString().toInt()
                 value?.estestvenn?.type = 3
-                value?.estestvenn?.id_breed = Get_Id_breed_Class?.getidbreed(value_param, db)!!
+                value?.estestvenn?.id_breed = AddPorod.getidbreed(value_param, db)!!
                 value?.estestvenn?.maxHeight =
                     maksHeightestestvennoe.text.toString().toFloatOrNull() ?: 0.0f
                 value?.estestvenn?.AVGHEight =
@@ -656,6 +655,11 @@ class Wood : BaseActivity("Пробная площадь") {
     fun visibleplus() {
         binding.buttonPlus.isVisible = true
         binding.buttonMinus.isVisible = true
+    }
+
+    override fun onDestroy() {
+        db.close()
+        super.onDestroy()
     }
 
 

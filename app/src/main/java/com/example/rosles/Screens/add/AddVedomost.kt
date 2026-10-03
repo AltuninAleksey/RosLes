@@ -25,7 +25,7 @@ import java.util.*
 class AddVedomost: AppCompatActivity() {
 
     private lateinit var binding: AddVedomostBinding
-    private val db = DBCountWood(this, null)
+    private val db by lazy { DBCountWood(applicationContext, null) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +51,10 @@ class AddVedomost: AppCompatActivity() {
         }
         RecyclerviewInit()
 
+    }
+    override fun onDestroy() {
+        db.close()
+        super.onDestroy()
     }
     fun showpopupmenu (view: View) {
         val popup = PopupMenu(this, view)

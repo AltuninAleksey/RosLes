@@ -38,6 +38,11 @@ class LesCulture : BaseActivity("Лесные культуры") {
         toolbarInit()
     }
 
+    override fun onDestroy() {
+        db.close()
+        super.onDestroy()
+    }
+
     override fun onRestart() {
         binding.tblLayout3.removeAllViews()
         activeRow = null

@@ -13,7 +13,7 @@ import java.io.File
 class TestActivity : BaseActivity("Добавление") {
 
     private lateinit var binding: TestLayoutBinding
-    private val db = DBCountWood(this, null)
+    private val db by lazy { DBCountWood(applicationContext, null) }
 
 
     val viewModel by viewModels<ViewModels>() // Q
@@ -29,8 +29,6 @@ class TestActivity : BaseActivity("Добавление") {
 
         binding.test1.setOnClickListener {
 
-            var database = DBCountWood(this, null)
-            database.writableDatabase
             lifecycleScope.launch{
 
 
@@ -61,6 +59,11 @@ class TestActivity : BaseActivity("Добавление") {
         }
 
 
+    }
+
+    override fun onDestroy() {
+        db.close()
+        super.onDestroy()
     }
 
 

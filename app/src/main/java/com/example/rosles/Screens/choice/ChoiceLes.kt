@@ -22,7 +22,7 @@ class ChoiceLes : AppCompatActivity() {
 
     private lateinit var binding: ChoicesubjectBinding
 
-    private val db = DBCountWood(this, null)
+    private val db by lazy { DBCountWood(applicationContext, null) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +35,11 @@ class ChoiceLes : AppCompatActivity() {
 
         val id = intent.getStringExtra("id")
         initcorutine(id!!.toInt())
+    }
+
+    override fun onDestroy() {
+        db.close()
+        super.onDestroy()
     }
 
     @SuppressLint("Range", "SuspiciousIndentation")

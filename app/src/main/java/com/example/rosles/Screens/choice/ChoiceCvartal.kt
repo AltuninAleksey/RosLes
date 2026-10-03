@@ -24,7 +24,7 @@ import com.example.rosles.databinding.ChoicesubjectBinding
 class ChoiceCvartal: AppCompatActivity() {
 
 
-    private val db = DBCountWood(this, null)
+    private val db by lazy { DBCountWood(applicationContext, null) }
 
     private lateinit var binding: ChoicesubjectBinding
 
@@ -41,6 +41,11 @@ class ChoiceCvartal: AppCompatActivity() {
         var id = intent.getStringExtra("id")
         initcorutine(id!!)
         binding.textView4.text="Выберите квартал"
+    }
+
+    override fun onDestroy() {
+        db.close()
+        super.onDestroy()
     }
 
     @SuppressLint("Range")

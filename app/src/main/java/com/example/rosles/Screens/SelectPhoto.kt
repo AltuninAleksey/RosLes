@@ -21,7 +21,7 @@ import java.time.format.DateTimeFormatter
 
 
 class SelectPhoto:BaseActivity() {
-    private val db = DBCountWood(this, null)
+    private val db by lazy { DBCountWood(applicationContext, null) }
 
     var activeIdBuffer: String=""
 
@@ -70,6 +70,11 @@ class SelectPhoto:BaseActivity() {
             }
         }
         binding.toolbar.delete.visibility=View.GONE
+    }
+
+    override fun onDestroy() {
+        db.close()
+        super.onDestroy()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

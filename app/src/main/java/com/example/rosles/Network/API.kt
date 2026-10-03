@@ -44,7 +44,10 @@ interface API {
     suspend fun getLIST():LIST_RESP
 
     @GET("forestcrops/api/mobile/listregion/list")
-    suspend fun getListRegionList(@Header("Authorization") bearerToken: String): LISTREGION_LIST_RESP
+    suspend fun getListRegionList(
+        @Header("Authorization") bearerToken: String,
+        @Query("idProfile") idProfile: Int
+    ): LISTREGION_LIST_RESP
 
     @PUT("listregion")
     suspend fun putLISTREGION(@Body body:LISTREGION_REQUEST):ResponseBody

@@ -4,7 +4,8 @@ import com.google.gson.annotations.SerializedName
 
 data class LISTREGION_LIST_RESP(
     @SerializedName("count") val count: Int,
-    @SerializedName("data") val data: List<LISTREGION_LIST_DATA>
+    // data может прийти null (профиль без ведомостей) — обрабатываем в ViewModels.
+    @SerializedName("data") val data: List<LISTREGION_LIST_DATA>?
 ) : BaseResponceInterface
 
 data class LISTREGION_LIST_DATA(

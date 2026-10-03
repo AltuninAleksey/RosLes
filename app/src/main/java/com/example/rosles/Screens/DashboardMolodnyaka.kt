@@ -38,7 +38,7 @@ class Dashboard : BaseActivity() {
 
     private lateinit var binding: DashboardBinding
     val viewModel by viewModels<ViewModels>()
-    private var db = DBCountWood(this, null)
+    private val db by lazy { DBCountWood(applicationContext, null) }
 
     private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
 
@@ -109,7 +109,7 @@ class Dashboard : BaseActivity() {
 
         binding.allDownload.setOnClickListener {
             visibleScrool()
-            val database = DBCountWood(this, null)
+            val database = DBCountWood(applicationContext, null)
             database.writableDatabase
 
 
@@ -117,13 +117,12 @@ class Dashboard : BaseActivity() {
 
                 sync().main1(viewModel, database, this@Dashboard, id_user) {
                     invisibleScrool()
+                    database.close()
                 }
             }
         }
 
         binding.reload.setOnClickListener {
-            var database = DBCountWood(this, null)
-            database.writableDatabase
             visibleScrool()
             SafeRequest(viewModel).request(object : SafeRequest.Protection {
                 override suspend fun makeRequest(): BaseResponceInterface {
@@ -161,6 +160,11 @@ class Dashboard : BaseActivity() {
         binding.gps.setOnClickListener {
             startActivity(Intent(this, GpxTrack::class.java))
         }
+    }
+
+    override fun onDestroy() {
+        db.close()
+        super.onDestroy()
     }
 
 

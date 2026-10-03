@@ -29,7 +29,7 @@ class gps_activity : AppCompatActivity() {
 
     val viewModel by viewModels<ViewModels>()
     private lateinit var binding: GpsBinding
-    private val db = DBCountWood(this, null)
+    private val db by lazy { DBCountWood(applicationContext, null) }
 
 
 
@@ -186,6 +186,11 @@ class gps_activity : AppCompatActivity() {
 
     }
 
+
+    override fun onDestroy() {
+        db.close()
+        super.onDestroy()
+    }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu, menu)

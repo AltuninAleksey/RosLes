@@ -17,7 +17,7 @@ import com.example.rosles.setSizeRelativeCurrentWindow
 class PerechetVedomostList : BaseActivity("Перечётная ведомость") {
 
     private lateinit var binding: PerechetVedomostListBinding
-    private val db by lazy { DBCountWood(this, null) }
+    private val db by lazy { DBCountWood(applicationContext, null) }
 
     private val rows: MutableList<DachaData> = mutableListOf()
 
@@ -29,6 +29,11 @@ class PerechetVedomostList : BaseActivity("Перечётная ведомост
         setContentView(binding.root)
         listInit()
         toolbarInit()
+    }
+
+    override fun onDestroy() {
+        db.close()
+        super.onDestroy()
     }
 
     override fun onRestart() {

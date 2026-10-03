@@ -23,7 +23,7 @@ class Molodnyak : BaseActivity("Перечетные ведомости Моло
 
 
     val viewModel by viewModels<ViewModels>()
-    private val db = DBCountWood(this, null)
+    private val db by lazy { DBCountWood(applicationContext, null) }
     private lateinit var binding: ActivityMainBinding
     private lateinit var adapter: ChoiceVudelAdapter
 
@@ -49,6 +49,10 @@ class Molodnyak : BaseActivity("Перечетные ведомости Моло
             RecyclerviewInit()
         }
 
+    }
+    override fun onDestroy() {
+        db.close()
+        super.onDestroy()
     }
     override fun onRestart() {
         RecyclerviewInit()

@@ -17,6 +17,9 @@ import java.util.*
 class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     SQLiteOpenHelper(context, DATABASE_NAME, factory, DATABASE_VERSION) {
     val context = context
+
+    /** Ручное экранирование для execSQL-интерполяции (конвенция проекта). */
+    private fun esc(v: String?): String = (v ?: "").replace("'", "''")
     override fun onCreate(db: SQLiteDatabase) {
 
         db.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_breed" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name_breed" varchar(350) NOT NULL, "is_foliar" bool NULL, "is_pine" bool NULL, "ShortName" varchar(10) NULL);""")
@@ -33,8 +36,6 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         db.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_role" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name_role" varchar(300) NOT NULL);""")
         db.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_sample" ("id" TEXT NOT NULL PRIMARY KEY, "date" date NULL, "sample_area" real NOT NULL, "id_list_region_id" TEXT NULL REFERENCES "djangoForest_listregion" ("id") ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED, "id_profile_id" bigint NULL REFERENCES "djangoForest_profile" ("id") DEFERRABLE INITIALLY DEFERRED, "id_quarter_id" bigint NULL REFERENCES "djangoForest_quarter" ("id") DEFERRABLE INITIALLY DEFERRED, "soil_lot" varchar(300), "lenght" real NULL, "square" real NULL, "width" real NULL,mark_update INTEGER NULL);""")
         db.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_subjectrf" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name_subject_RF" varchar(255) NOT NULL);""")
-        db.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_table" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name" varchar(300) NOT NULL, "age" integer NOT NULL);""")
-        db.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_track" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "data" date NOT NULL, "map" varchar(1) NOT NULL, "id_profile_id" bigint NOT NULL REFERENCES "djangoForest_profile" ("id") DEFERRABLE INITIALLY DEFERRED);""")
         db.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_undergrowth" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name" varchar(350) NOT NULL);""")
         db.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_undergrowthbydefault" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "id_profile_id" bigint NOT NULL REFERENCES "djangoForest_profile" ("id") DEFERRABLE INITIALLY DEFERRED, "id_undergrowth_id" bigint NOT NULL REFERENCES "djangoForest_undergrowth" ("id") DEFERRABLE INITIALLY DEFERRED);""")
         db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_districtforestly_id_forestly_id_8d57b4f6" ON "djangoForest_districtforestly" ("id_forestly_id");""")
@@ -46,7 +47,6 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_list_id_sample_id_a446b4c9" ON "djangoForest_list" ("id_sample_id");""")
         db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_list_id_type_of_reproduction_id_3f515d72" ON "djangoForest_list" ("id_type_of_reproduction_id");""")
         db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_list_id_undergrowth_id_02d0f36b" ON "djangoForest_list" ("id_undergrowth_id");""")
-        db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_listregion_id_quarter_id_cd3b2ab8" ON "djangoForest_listregion" ("id_quarter_id");""")
         db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_photopoint_id_sample_id_9a160505" ON "djangoForest_photopoint" ("id_sample_id");""")
         db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_profile_id_branches_id_ecc09e8c" ON "djangoForest_profile" ("id_branches_id");""")
         db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_profile_id_post_id_3ebc259a" ON "djangoForest_profile" ("id_post_id");""")
@@ -56,10 +56,8 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_sample_id_list_region_id_d4ea853d" ON "djangoForest_sample" ("id_list_region_id");""")
         db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_sample_id_profile_id_326ca965" ON "djangoForest_sample" ("id_profile_id");""")
         db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_sample_id_quarter_id_eb7f4fa2" ON "djangoForest_sample" ("id_quarter_id");""")
-        db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_track_id_profile_id_07b234ed" ON "djangoForest_track" ("id_profile_id");""")
         db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_undergrowthbydefault_id_profile_id_23b572fe" ON "djangoForest_undergrowthbydefault" ("id_profile_id");""")
         db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_undergrowthbydefault_id_undergrowth_id_b789efb4" ON "djangoForest_undergrowthbydefault" ("id_undergrowth_id");""")
-        db.execSQL("""CREATE TABLE IF NOT EXISTS "delte_value" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name_table" varchar(350) NOT NULL, "id_value" integer NULL );""")
 
 
 
@@ -97,6 +95,7 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
 
     override fun onUpgrade(p0: SQLiteDatabase?, p1: Int, p2: Int) {
         if (p0 == null) return
+        // v2: таблицы лесных культур (для баз, созданных на v1).
         p0.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_dacha" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name" varchar(500) NOT NULL);""")
         p0.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_fc_list_region" (
 	"uuid" TEXT NOT NULL PRIMARY KEY ,
@@ -112,10 +111,17 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
 	"mark_update" integer NULL, 
 	"id_subject" bigint NULL REFERENCES "djangoForest_subjectrf" ("id") DEFERRABLE INITIALLY DEFERRED
 );""")
-        p0.execSQL("""CREATE TABLE IF NOT EXISTS "delte_value" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name_table" varchar(350) NOT NULL, "id_value" integer NULL );""")
         p0.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_fc_list_region_id_dacha_9b3e4d1a" ON "djangoForest_fc_list_region" ("id_dacha");""")
         p0.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_fc_list_region_id_district_forestly_71afc36f" ON "djangoForest_fc_list_region" ("id_district_forestly");""")
         p0.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_fc_list_region_id_subject_f8c2a7e3" ON "djangoForest_fc_list_region" ("id_subject");""")
+        // v3: убираем мёртвое и битое. delte_value ничто не читает (очередь
+        // удалений), djangoForest_track/djangoForest_table код не использует,
+        // а индекс listregion_id_quarter ссылался на несуществующую колонку
+        // и ронял onCreate на свежих установках.
+        p0.execSQL("""DROP INDEX IF EXISTS "djangoForest_listregion_id_quarter_id_cd3b2ab8"""")
+        p0.execSQL("""DROP TABLE IF EXISTS "delte_value"""")
+        p0.execSQL("""DROP TABLE IF EXISTS "djangoForest_table"""")
+        p0.execSQL("""DROP TABLE IF EXISTS "djangoForest_track"""")
     }
 
 
@@ -181,7 +187,7 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         db.execSQL(
             "Insert into djangoForest_listregion\n" +
                     "(id, number,date, sample_region, name_quarter, soil_lot, mark_update,id_profile,number_region,id_district_forestly,dacha)  \n" +
-                    "values ('$id','$number','$date', '$sample_region', '$name_quarter', '$soil_lot','$mark_update','$id_profile','$number_region',$id_district_forestly,'$dacha')"
+                    "values ('${esc(id)}','${esc(number)}','${esc(date)}', '$sample_region', '${esc(name_quarter)}', '${esc(soil_lot)}','$mark_update','$id_profile','${esc(number_region)}',$id_district_forestly,'${esc(dacha)}')"
         )
     }
 
@@ -207,7 +213,7 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         val database: SQLiteDatabase = this.writableDatabase
         database.execSQL(
             "INSERT INTO djangoForest_list (id,to0_2, from0_21To0_5, from0_6To1_0, from1_1to1_5, from1_5, max_height, id_breed_id, id_sample_id, id_type_of_reproduction_id, avg_diameter, avg_height, count_of_plants, id_undergrowth_id, main, avg_height_undergrowth)" +
-                    " VALUES ('$id',$to0_2, $from0_21To0_5, $from0_6To1_0, $from1_1to1_5, $from1_5, $max_height, $id_breed_id, '$id_sample_id', $id_type_of_reproduction_id, $avg_diameter, $avg_height, $count_of_plants, $id_undergrowth_id, '$main', $avg_height_undergrowth)"
+                    " VALUES ('${esc(id)}',$to0_2, $from0_21To0_5, $from0_6To1_0, $from1_1to1_5, $from1_5, $max_height, $id_breed_id, '${esc(id_sample_id)}', $id_type_of_reproduction_id, $avg_diameter, $avg_height, $count_of_plants, $id_undergrowth_id, '$main', $avg_height_undergrowth)"
         )
 
     }
@@ -221,7 +227,7 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     ) {
         val database: SQLiteDatabase = this.writableDatabase
         database.execSQL(
-            "INSERT INTO djangoForest_breed (id,name_breed, is_foliar, is_pine, ShortName) VALUES ('$id','$name_breed', '$is_foliar', '$is_pine', '$ShortName')"
+            "INSERT INTO djangoForest_breed (id,name_breed, is_foliar, is_pine, ShortName) VALUES ('$id','${esc(name_breed)}', '$is_foliar', '$is_pine', '${esc(ShortName)}')"
         )
 
     }
@@ -245,7 +251,7 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         }
         database.execSQL(
             "INSERT INTO djangoForest_sample (id,date, sample_area, id_list_region_id, id_profile_id, id_quarter_id, soil_lot, lenght, square, width) " +
-                    "VALUES ('${id}','$date', '$buf', '$id_list_region_id', $id_profile_id, $id_quarter_id, '$soil_lot', $lenght, $square, $width)"
+                    "VALUES ('${esc(id)}','${esc(date)}', '$buf', '${esc(id_list_region_id)}', $id_profile_id, $id_quarter_id, '${esc(soil_lot)}', $lenght, $square, $width)"
         )
 
     }
@@ -254,7 +260,7 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         val database: SQLiteDatabase = this.writableDatabase
         if (name_subject_RF != null)
             database.execSQL(
-                "INSERT INTO djangoForest_subjectrf (id,name_subject_RF) VALUES ('$id','$name_subject_RF')"
+                "INSERT INTO djangoForest_subjectrf (id,name_subject_RF) VALUES ('$id','${esc(name_subject_RF)}')"
             )
         else
             Log.e("ERROR_DATABASE", name_subject_RF.toString())
@@ -264,7 +270,7 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     fun writeFORESTLY(id: Int, name_forestly: String, id_subject_rf_id: Int) {
         val database: SQLiteDatabase = this.writableDatabase
         database.execSQL(
-            "INSERT INTO djangoForest_forestly (id,name_forestly, id_subject_rf_id) VALUES('$id','$name_forestly',$id_subject_rf_id)"
+            "INSERT INTO djangoForest_forestly (id,name_forestly, id_subject_rf_id) VALUES('$id','${esc(name_forestly)}',$id_subject_rf_id)"
         )
 
     }
@@ -272,7 +278,7 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     fun writeDISTRICT(id: Int, name_district_forestly: String, id_forestly_id: Int) {
         val database: SQLiteDatabase = this.writableDatabase
         database.execSQL(
-            "INSERT INTO djangoForest_districtforestly (id,name_district_forestly, id_forestly_id) VALUES ('$id','$name_district_forestly',$id_forestly_id)"
+            "INSERT INTO djangoForest_districtforestly (id,name_district_forestly, id_forestly_id) VALUES ('$id','${esc(name_district_forestly)}',$id_forestly_id)"
         )
         database.close()
     }
@@ -280,7 +286,7 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     fun writeundergrowth(id: Int, name: String) {
         val database: SQLiteDatabase = this.writableDatabase
         database.execSQL(
-            "INSERT INTO djangoForest_undergrowth (id,name) VALUES('$id','$name')"
+            "INSERT INTO djangoForest_undergrowth (id,name) VALUES('$id','${esc(name)}')"
         )
 
     }
@@ -367,6 +373,18 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     fun clearFCListRegion() {
         val database: SQLiteDatabase = this.writableDatabase
         database.execSQL("DELETE FROM djangoForest_fc_list_region")
+    }
+
+    /** Сколько строк сейчас в djangoForest_fc_list_region (для диагностики загрузки). */
+    fun fcListRegionCount(): Int {
+        val database: SQLiteDatabase = this.readableDatabase
+        val cursor: Cursor = database.rawQuery("select count(*) from djangoForest_fc_list_region", null)
+        var result = 0
+        if (cursor.moveToFirst()) {
+            result = cursor.getInt(0)
+        }
+        cursor.close()
+        return result
     }
 
     /**
@@ -750,42 +768,41 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     fun Mark_Update_Listregion(id: String) {
         val database: SQLiteDatabase = this.writableDatabase
         val cursor: Cursor =
-            database.rawQuery("select * from djangoForest_listregion where id='$id'", null)
-        cursor.moveToFirst()
-        if (cursor.getInt(cursor.getColumnIndex("mark_update")) <= 1) {
+            database.rawQuery("select * from djangoForest_listregion where id='${id.replace("'", "''")}'", null)
+        if (cursor.moveToFirst() && cursor.getInt(cursor.getColumnIndex("mark_update")) <= 1) {
             database.execSQL(
-                "update djangoForest_listregion set mark_update = 1 where id = '$id'"
+                "update djangoForest_listregion set mark_update = 1 where id = '${id.replace("'", "''")}'"
             )
         }
-
+        cursor.close()
     }
 
     @SuppressLint("Range")
     fun Mark_Update_Sample(id: String) {
         val database: SQLiteDatabase = this.writableDatabase
         val cursor: Cursor =
-            database.rawQuery("select * from djangoForest_sample where id='$id'", null)
-        cursor.moveToFirst()
-        if (cursor.getInt(cursor.getColumnIndex("mark_update")) <= 1) {
+            database.rawQuery("select * from djangoForest_sample where id='${id.replace("'", "''")}'", null)
+        if (cursor.moveToFirst() && cursor.getInt(cursor.getColumnIndex("mark_update")) <= 1) {
             database.execSQL(
-                "update djangoForest_sample set mark_update = 1 where id = '$id'"
+                "update djangoForest_sample set mark_update = 1 where id = '${id.replace("'", "''")}'"
             )
         }
-
+        cursor.close()
     }
 
 
     @SuppressLint("Range")
     fun Mark_Update_List(id: String?) {
         val database: SQLiteDatabase = this.writableDatabase
+        val safeId = (id ?: "").replace("'", "''")
         val cursor: Cursor =
-            database.rawQuery("select * from djangoForest_list where id='$id'", null)
-        cursor.moveToFirst()
-        if (cursor.getInt(cursor.getColumnIndex("mark_update")) <= 1) {
+            database.rawQuery("select * from djangoForest_list where id='$safeId'", null)
+        if (cursor.moveToFirst() && cursor.getInt(cursor.getColumnIndex("mark_update")) <= 1) {
             database.execSQL(
-                "update djangoForest_list set mark_update = 1 where id = '$id'"
+                "update djangoForest_list set mark_update = 1 where id = '$safeId'"
             )
         }
+        cursor.close()
     }
 
 
@@ -922,13 +939,18 @@ inner join djangoForest_forestly as forestly on s2.id_forestly_id = forestly.id)
     @SuppressLint("Range")
     fun getVedombyID(id: String?): Vedom? {
         val database: SQLiteDatabase = this.writableDatabase
+        val safeId = (id ?: "").replace("'", "''")
         val cursor: Cursor = database.rawQuery(
             "select listregion.id, listregion.sample_region, listregion.soil_lot, forestly.name_forestly, district.name_district_forestly, listregion.name_quarter, listregion.date,listregion.dacha from djangoForest_listregion as listregion\n" +
                     "join djangoForest_districtforestly as district on listregion.id_district_forestly = district.id\n" +
-                    "join djangoForest_forestly as forestly on district.id_forestly_id = forestly.id WHERE listregion.id = '$id'",
+                    "join djangoForest_forestly as forestly on district.id_forestly_id = forestly.id WHERE listregion.id = '$safeId'",
             null
         )
-        cursor.moveToFirst()
+        if (!cursor.moveToFirst()) {
+            cursor.close()
+            database.close()
+            return null
+        }
         val vadom = Vedom(
             cursor.getString(cursor.getColumnIndex("name_forestly")),
             cursor.getString(cursor.getColumnIndex("name_district_forestly")),
@@ -982,8 +1004,8 @@ inner join djangoForest_forestly as forestly on s2.id_forestly_id = forestly.id)
     ) {
         val db = this.writableDatabase
         db.execSQL(
-            "update djangoForest_sample set date = '$date', square = '$sample_area', \n" +
-                    "lenght = '$lenght', width = $width where id = '$id'"
+            "update djangoForest_sample set date = '${esc(date)}', square = '$sample_area', \n" +
+                    "lenght = '$lenght', width = $width where id = '${esc(id)}'"
         )
     }
 
@@ -1003,7 +1025,7 @@ inner join djangoForest_forestly as forestly on s2.id_forestly_id = forestly.id)
         val db = this.writableDatabase
         db.execSQL(
             "insert into djangoForest_sample (id,date, sample_area, id_list_region_id, id_profile_id, id_quarter_id, soil_lot,lenght,square,width,mark_update) " +
-                    "values ('${UUID.randomUUID()}','$date', '$sample_area', '$id_list_region_id', '$id_profile_id', '$id_quarter_id', '$soil_lot','$lenght','$square','$width','$mark_update')"
+                    "values ('${UUID.randomUUID()}','${esc(date)}', '$sample_area', '${esc(id_list_region_id)}', '$id_profile_id', '$id_quarter_id', '${esc(soil_lot)}','$lenght','$square','$width','$mark_update')"
         )
     }
 
@@ -1023,8 +1045,8 @@ inner join djangoForest_forestly as forestly on s2.id_forestly_id = forestly.id)
             )
             cursor.moveToNext()
         }
+        cursor.close()
         return hash
-        database.close()
     }
 
     @SuppressLint("Range")
@@ -1043,8 +1065,8 @@ inner join djangoForest_forestly as forestly on s2.id_forestly_id = forestly.id)
             )
             cursor.moveToNext()
         }
+        cursor.close()
         return hash
-        close()
     }
 
     @SuppressLint("Range")
@@ -1074,16 +1096,15 @@ inner join djangoForest_forestly as forestly on s2.id_forestly_id = forestly.id)
     @SuppressLint("Range")
     fun updatevalue(id: String) {
         val database: SQLiteDatabase = this.writableDatabase
+        val safeId = id.replace("'", "''")
         val cursor: Cursor =
-            database.rawQuery("select * from djangoForest_listregion where id='$id'", null)
-        cursor.moveToFirst()
-        if (cursor.getInt(cursor.getColumnIndex("mark_update")) <= 1) {
+            database.rawQuery("select * from djangoForest_listregion where id='$safeId'", null)
+        if (cursor.moveToFirst() && cursor.getInt(cursor.getColumnIndex("mark_update")) <= 1) {
             database.execSQL(
-                "update djangoForest_listregion set mark_update = 1 where id = '$id'"
+                "update djangoForest_listregion set mark_update = 1 where id = '$safeId'"
             )
         }
-
-
+        cursor.close()
     }
 
     @SuppressLint("Range")
@@ -1121,7 +1142,7 @@ inner join djangoForest_forestly as forestly on s2.id_forestly_id = forestly.id)
     ) {
         val db = this.writableDatabase
         //Log.v(date,"")
-        db.execSQL("Update djangoForest_listregion set date = '$date', sample_region = '$sample_region', name_quarter = $id_quarter_id, soil_lot = '$soil_lot', dacha = '$dacha'  where id = '$id'")
+        db.execSQL("Update djangoForest_listregion set date = '${esc(date)}', sample_region = '$sample_region', name_quarter = $id_quarter_id, soil_lot = '${esc(soil_lot)}', dacha = '${esc(dacha)}'  where id = '${esc(id)}'")
         db.close()
     }
 
@@ -1147,18 +1168,18 @@ inner join djangoForest_forestly as forestly on s2.id_forestly_id = forestly.id)
         }
         cursor.close()
         return countries1
-        db.close()
     }
 
     fun getallporod(): Cursor {
         val db = this.writableDatabase
         //Log.v(date,"")
+        // Курсор живой: закрывает его вызывающий (см. AddPorod.getidbreed).
+        // db.close() здесь нельзя — убьёт курсор.
         val cursor: Cursor = db.rawQuery(
             "SELECT s1.id, s1.name_breed, s1.is_foliar, s1.is_pine, s1.ShortName from djangoForest_breed as s1",
             null
         )
         return cursor
-        db.close()
     }
 
     @SuppressLint("Range")
@@ -1179,8 +1200,8 @@ inner join djangoForest_forestly as forestly on s2.id_forestly_id = forestly.id)
             countries.add(SpinerItem(name, id))
             cursor.moveToNext()
         }
+        cursor.close()
         return countries
-        db.close()
     }
 
 
@@ -1432,7 +1453,7 @@ inner join djangoForest_forestly as forestly on s2.id_forestly_id = forestly.id)
         db.execSQL(
             "Insert into djangoForest_listregion\n" +
                     "(id,date, sample_region ,soil_lot,id_district_forestly,id_profile,number_region, name_quarter, mark_update,dacha) \n" +
-                    "values ('${UUID.randomUUID()}','$date', $sample_region ,$soil_lot,$id_district_forestly,$id_profile,$number_region, $name_quarter, $mark_update,'$dacha')"
+                    "values ('${UUID.randomUUID()}','${esc(date)}', $sample_region ,'${esc(soil_lot)}',$id_district_forestly,$id_profile,'${esc(number_region)}', $name_quarter, $mark_update,'${esc(dacha)}')"
         )
         db.close()
     }
@@ -1518,12 +1539,7 @@ inner join djangoForest_forestly as forestly on s2.id_forestly_id = forestly.id)
         //Log.v(date,"")
         db.execSQL(
             "DELETE FROM djangoForest_listregion \n" +
-                    "WHERE id = '$value';"
-        )
-        db.execSQL(
-            " Insert into delte_value \n" +
-                    "(name_table,id_value) \n" +
-                    "values ('listregion','$value')"
+                    "WHERE id = '${value.replace("'", "''")}';"
         )
         db.close()
     }
@@ -1534,12 +1550,7 @@ inner join djangoForest_forestly as forestly on s2.id_forestly_id = forestly.id)
         //Log.v(date,"")
         db.execSQL(
             "DELETE FROM djangoForest_sample \n" +
-                    "WHERE id = '$value';"
-        )
-        db.execSQL(
-            " Insert into delte_value \n" +
-                    "(name_table,id_value) \n" +
-                    "values ('sample','$value')"
+                    "WHERE id = '${value.replace("'", "''")}';"
         )
         db.close()
     }
@@ -1547,40 +1558,10 @@ inner join djangoForest_forestly as forestly on s2.id_forestly_id = forestly.id)
 
     companion object {
 
-        // here we have defined variables for our database
-        // below is variable for database name
-
-        private val PATH = "app/src/main/res/raw/userdb.db"
         private val DATABASE_NAME = "userdb.db"
 
-
         // below is the variable for database version
-        private val DATABASE_VERSION = 2
-
-        // below is the variable for table name
-        val TABLE_NAME = "Woods"
-
-        // below is the variable for id column
-        val ID_COL = "id"
-        // below is the variable for name column
-
-        // below is the variable for age column
-        val IdSampleProba = "poroda"
-
-        val PROBA = "proba"
-
-        val VIEWWOOD = "viewwood"
-
-        val VALUE02 = "value02"
-
-        val VALUE05 = "value05"
-
-        val VALUE06 = "value06"
-
-        val VALUE11 = "value11"
-
-        val VALUE15 = "value15"
-
+        private val DATABASE_VERSION = 3
     }
 }
 
