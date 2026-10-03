@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.MenuItem
 import android.view.View
 import android.widget.*
@@ -50,6 +52,49 @@ class AddVedomost: AppCompatActivity() {
             showpopupmenu(it)
         }
         RecyclerviewInit()
+
+        binding.samplearea.addTextChangedListener(object : TextWatcher {
+            private var isUpdating = false
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                if (isUpdating || s == null) return
+
+                val originalText = s.toString()
+
+                // Находим разделитель (точку или запятую)
+                val separatorIndex = originalText.indexOfAny(charArrayOf('.', ','))
+
+                if (separatorIndex != -1) {
+                    val decimalPart = originalText.substring(separatorIndex + 1)
+
+                    // Если после разделителя больше 4 знаков, обрезаем лишнее
+                    if (decimalPart.length > 4) {
+                        isUpdating = true
+
+                        // Сохраняем позицию курсора
+                        val selectionStart = binding.samplearea.selectionStart
+
+                        // Формируем новую строку (целая часть + разделитель + 4 знака дробной части)
+                        val newText = originalText.substring(0, separatorIndex + 5)
+
+                        // Обновляем текст в EditText
+                        binding.samplearea.setText(newText)
+
+                        // Возвращаем курсор на место (с ограничением по длине нового текста)
+                        val newCursorPosition = selectionStart.coerceAtMost(newText.length)
+                        binding.samplearea.setSelection(newCursorPosition)
+
+                        isUpdating = false
+                    }
+                    6666.66666666
+                }
+            }
+
+
+        })
 
     }
     override fun onDestroy() {
