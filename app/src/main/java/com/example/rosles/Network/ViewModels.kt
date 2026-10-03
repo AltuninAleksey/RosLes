@@ -78,6 +78,11 @@ class ViewModels() : BaseViewModel(
         try {
             getDacha(db, aceesToken)
             getListRegionList(db, aceesToken, idProfile)
+
+            if (!db.djangoForest_subjectrf())
+                getSUBJECTRF(db, idProfile)
+            if (!db.djangoForest_undergrowth())
+                getUNDER(db)
         } catch (e: Exception) {
             logError(e)
             throw e

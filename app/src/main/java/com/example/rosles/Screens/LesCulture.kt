@@ -64,7 +64,6 @@ class LesCulture : BaseActivity("Лесные культуры") {
         val dachaNames = db.getDACHA().associate { it.id to it.name }
 
         val colWidth = resources.getDimensionPixelSize(R.dimen.table_col_width)
-        val numWidth = resources.getDimensionPixelSize(R.dimen.table_col_num_width)
         val cellPad = (5 * resources.displayMetrics.density).toInt()
 
         for (i in rows.indices) {
@@ -73,7 +72,6 @@ class LesCulture : BaseActivity("Лесные культуры") {
 
             val chain = row.idDistrictForestly?.let { chains[it] }
             val values = listOf(
-                (i + 1).toString(),
                 row.number,
                 chain?.forestlyName ?: "—",
                 chain?.districtName ?: "—",
@@ -92,7 +90,7 @@ class LesCulture : BaseActivity("Лесные культуры") {
                 cell.setTextColor(-0x1000000)
                 cell.setPadding(cellPad, cellPad, cellPad, cellPad)
                 val cellParams = TableRow.LayoutParams(
-                    if (col == 0) numWidth else colWidth,
+                    colWidth,
                     TableRow.LayoutParams.WRAP_CONTENT
                 )
                 tableRow.addView(cell, col, cellParams)

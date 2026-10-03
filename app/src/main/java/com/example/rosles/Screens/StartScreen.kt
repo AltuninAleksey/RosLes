@@ -115,7 +115,7 @@ class StartScreen: BaseActivity() {
 
 
         binding.les.setOnClickListener {
-            startActivity(Intent(this, LesCulture::class.java))
+            startActivity(Intent(this, DashboardLesCult::class.java))
         }
         binding.molodnyak.setOnClickListener {
             startActivity(Intent(this, Dashboard::class.java))
