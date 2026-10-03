@@ -61,10 +61,12 @@ class ViewModels() : BaseViewModel(
     suspend fun getDacha(dbCountWood: DBCountWood, accessToken: String): DachaResp {
         val result = accountsRepository.getDacha(accessToken)
         dachaList.postValue(result)
+        val items = result.data ?: emptyList()
+        Log.d("Dacha", "count=${result.count} data.size=${items.size}")
         // Тяжёлая запись в БД — на IO и одной транзакцией (см. DBCountWood.writeDachaList),
         // иначе по одному execSQL на главном потоке = ANR + жор ресурсов.
         withContext(Dispatchers.IO) {
-            dbCountWood.writeDachaList(result.data)
+            dbCountWood.writeDachaList(items)
         }
         return result
     }

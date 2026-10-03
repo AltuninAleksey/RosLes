@@ -61,7 +61,8 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
 
 
 
-        db.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_dacha" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,	"name" varchar(500) NOT NULL);""")
+        db.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_dacha" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,	"name" varchar(500) NOT NULL, "id_district_forestly" bigint NULL REFERENCES "djangoForest_districtforestly" ("id") DEFERRABLE INITIALLY DEFERRED);""")
+        db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_dacha_id_district_forestly_71afc36f" ON "djangoForest_dacha" ("id_district_forestly");""")
 
         db.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_fc_list_region" (
 	"uuid" TEXT NOT NULL PRIMARY KEY ,
@@ -122,6 +123,11 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         p0.execSQL("""DROP TABLE IF EXISTS "delte_value"""")
         p0.execSQL("""DROP TABLE IF EXISTS "djangoForest_table"""")
         p0.execSQL("""DROP TABLE IF EXISTS "djangoForest_track"""")
+        // v4: урочище привязано к участковому лесничеству (get-all-dacha).
+        // IF NOT EXISTS нет у ADD COLUMN — колонки нет ни в одной прошлой версии,
+        // повторный прогон onUpgrade невозможен (версия уже поднята).
+        p0.execSQL("""ALTER TABLE "djangoForest_dacha" ADD COLUMN "id_district_forestly" bigint NULL REFERENCES "djangoForest_districtforestly" ("id") DEFERRABLE INITIALLY DEFERRED""")
+        p0.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_dacha_id_district_forestly_71afc36f" ON "djangoForest_dacha" ("id_district_forestly");""")
     }
 
 
@@ -299,11 +305,12 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         return has
     }
 
-    fun writeDACHA(id: Int, name: String) {
+    fun writeDACHA(id: Int, name: String, idDistrictForestly: Int? = null) {
         val database: SQLiteDatabase = this.writableDatabase
         val safeName = name.replace("'", "''")
         database.execSQL(
-            "INSERT OR REPLACE INTO djangoForest_dacha (id, name) VALUES('$id','$safeName')"
+            "INSERT OR REPLACE INTO djangoForest_dacha (id, name, id_district_forestly) " +
+                    "VALUES('$id','$safeName', ${idDistrictForestly ?: "NULL"})"
         )
     }
 
@@ -320,7 +327,8 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
             items.forEach {
                 val safeName = it.name.replace("'", "''")
                 database.execSQL(
-                    "INSERT OR REPLACE INTO djangoForest_dacha (id, name) VALUES('${it.id}','$safeName')"
+                    "INSERT OR REPLACE INTO djangoForest_dacha (id, name, id_district_forestly) " +
+                            "VALUES('${it.id}','$safeName', ${it.idDistrictForestly ?: "NULL"})"
                 )
             }
             database.setTransactionSuccessful()
@@ -450,14 +458,16 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     @SuppressLint("Range")
     fun getDACHA(): List<DachaData> {
         val database: SQLiteDatabase = this.readableDatabase
-        val cursor: Cursor = database.rawQuery("select id, name from djangoForest_dacha", null)
+        val cursor: Cursor = database.rawQuery("select id, name, id_district_forestly from djangoForest_dacha", null)
         val result = mutableListOf<DachaData>()
         if (cursor.moveToFirst()) {
             do {
                 result.add(
                     DachaData(
                         cursor.getInt(cursor.getColumnIndex("id")),
-                        cursor.getString(cursor.getColumnIndex("name")) ?: ""
+                        cursor.getString(cursor.getColumnIndex("name")) ?: "",
+                        if (cursor.isNull(cursor.getColumnIndex("id_district_forestly"))) null
+                        else cursor.getInt(cursor.getColumnIndex("id_district_forestly"))
                     )
                 )
             } while (cursor.moveToNext())
@@ -1561,7 +1571,7 @@ inner join djangoForest_forestly as forestly on s2.id_forestly_id = forestly.id)
         private val DATABASE_NAME = "userdb.db"
 
         // below is the variable for database version
-        private val DATABASE_VERSION = 3
+        private val DATABASE_VERSION = 4
     }
 }
 
