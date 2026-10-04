@@ -129,7 +129,7 @@ class ViewModels() : BaseViewModel(
                 val uuid = row.uuid ?: return@mapNotNull null
                 SaveListRegionItem(
                     date = row.date,
-                    dacha = row.dacha,
+                    dacha = null,
                     idDacha = row.idDacha,
                     nameQuarter = row.nameQuarter,
                     sampleRegion = row.sampleRegion,
