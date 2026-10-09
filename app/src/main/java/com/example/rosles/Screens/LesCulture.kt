@@ -72,7 +72,6 @@ class LesCulture : BaseActivity("Лесные культуры") {
 
             val chain = row.idDistrictForestly?.let { chains[it] }
             val values = listOf(
-                row.number,
                 chain?.forestlyName ?: "—",
                 chain?.districtName ?: "—",
                 row.idDacha?.let { dachaNames[it] } ?: row.dacha ?: "—",
