@@ -139,6 +139,22 @@ class AddVedomost: AppCompatActivity() {
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         binding.date.text = LocalDateTime.now().format(formatter).toString()
 
+        // Субъект / Лесничество / Участковое — только просмотр, как урочище
+        // в fc_mode: берём имена одной выборкой по id участкового.
+        binding.subject.isEnabled = false
+        binding.subject.isFocusable = false
+        binding.forestly.isEnabled = false
+        binding.forestly.isFocusable = false
+        binding.uchLesnichestvo.isEnabled = false
+        binding.uchLesnichestvo.isFocusable = false
+        if (buf != null) {
+            db.getForestryChain(buf)?.let { chain ->
+                binding.subject.setText(chain.subjectName ?: "")
+                binding.forestly.setText(chain.forestlyName ?: "")
+                binding.uchLesnichestvo.setText(chain.districtName ?: "")
+            }
+        }
+
         // fc_mode: урочище уже выбрано на ChoiceDacha (справочник getdacha) —
         // подставляем и блокируем поле, чтобы не разойтись с id_dacha.
         val selectedDachaId = intent.getStringExtra("id_dacha")?.toIntOrNull()

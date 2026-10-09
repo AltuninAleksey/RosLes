@@ -101,6 +101,21 @@ class ChangeListregion: AppCompatActivity() {
         binding.date.text = vedom?.date
         binding.dacha.setText(vedom?.dacha)
 
+        // Тот же layout, что создание: показываем цепочку только для просмотра.
+        binding.subject.isEnabled = false
+        binding.subject.isFocusable = false
+        binding.forestly.isEnabled = false
+        binding.forestly.isFocusable = false
+        binding.uchLesnichestvo.isEnabled = false
+        binding.uchLesnichestvo.isFocusable = false
+        id_Vedomost?.let {
+            db.getForestryChainByListregion(it)?.let { chain ->
+                binding.subject.setText(chain.subjectName ?: "")
+                binding.forestly.setText(chain.forestlyName ?: "")
+                binding.uchLesnichestvo.setText(chain.districtName ?: "")
+            }
+        }
+
         binding.buttonAuto.setOnClickListener {
             if (binding.date.text.isNotEmpty()&&
                 binding.samplearea.text.isNotEmpty()&&

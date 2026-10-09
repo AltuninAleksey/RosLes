@@ -617,8 +617,7 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
      * Для таблиц: один IN-запрос вместо N+1 поштучных.
      */
     @SuppressLint("Range")
-    fun getForestryChains(ids: Collection<Int>): Map<Int, ForestryChain> {
-        if (ids.isEmpty()) return emptyMap()
+    fun getForestryChains(ids: Collection<Int>): Map<Int, ForestryChain> {        if (ids.isEmpty()) return emptyMap()
         val database: SQLiteDatabase = this.readableDatabase
         val cursor: Cursor = database.rawQuery(
             "select d.id as id, d.name_district_forestly as district, f.name_forestly as forestly, s.name_subject_RF as subject " +
@@ -637,6 +636,36 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
                     subjectName = cursor.getString(cursor.getColumnIndex("subject"))
                 )
             } while (cursor.moveToNext())
+        }
+        cursor.close()
+        return result
+    }
+
+    /**
+     * Цепочка имён (участковое -> лесничество -> субъект) по id ведомости
+     * из djangoForest_listregion. Для экрана редактирования, который переиспользует
+     * layout создания: новых Extra там нет, district id берём из самой строки.
+     */
+    @SuppressLint("Range")
+    fun getForestryChainByListregion(listregionId: String): ForestryChain? {
+        val database: SQLiteDatabase = this.readableDatabase
+        val safeId = listregionId.replace("'", "''")
+        val cursor: Cursor = database.rawQuery(
+            "select d.name_district_forestly as district, f.name_forestly as forestly, s.name_subject_RF as subject " +
+                    "from djangoForest_listregion as l " +
+                    "left join djangoForest_districtforestly as d on l.id_district_forestly = d.id " +
+                    "left join djangoForest_forestly as f on d.id_forestly_id = f.id " +
+                    "left join djangoForest_subjectrf as s on f.id_subject_rf_id = s.id " +
+                    "where l.id = '$safeId'",
+            null
+        )
+        var result: ForestryChain? = null
+        if (cursor.moveToFirst()) {
+            result = ForestryChain(
+                districtName = cursor.getString(cursor.getColumnIndex("district")),
+                forestlyName = cursor.getString(cursor.getColumnIndex("forestly")),
+                subjectName = cursor.getString(cursor.getColumnIndex("subject"))
+            )
         }
         cursor.close()
         return result
