@@ -536,6 +536,37 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         return result
     }
 
+    /**
+     * Урочища выбранного участкового лесничества (для ChoiceDacha в fc_mode).
+     * Строгий фильтр `= id`: дачи без привязки (NULL) сюда не попадают —
+     * такое поведение выбрано пользователем. Индекс
+     * djangoForest_dacha_id_district_forestly уже есть в схеме v4.
+     */
+    @SuppressLint("Range")
+    fun getDACHAByDistrict(idDistrictForestly: Int): List<DachaData> {
+        val database: SQLiteDatabase = this.readableDatabase
+        val cursor: Cursor = database.rawQuery(
+            "select id, name, id_district_forestly from djangoForest_dacha " +
+                    "where id_district_forestly = $idDistrictForestly",
+            null
+        )
+        val result = mutableListOf<DachaData>()
+        if (cursor.moveToFirst()) {
+            do {
+                result.add(
+                    DachaData(
+                        cursor.getInt(cursor.getColumnIndex("id")),
+                        cursor.getString(cursor.getColumnIndex("name")) ?: "",
+                        if (cursor.isNull(cursor.getColumnIndex("id_district_forestly"))) null
+                        else cursor.getInt(cursor.getColumnIndex("id_district_forestly"))
+                    )
+                )
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        return result
+    }
+
     @SuppressLint("Range")
     fun getFCListRegionByUuid(uuid: String): LISTREGION_LIST_DATA? {
         val database: SQLiteDatabase = this.readableDatabase

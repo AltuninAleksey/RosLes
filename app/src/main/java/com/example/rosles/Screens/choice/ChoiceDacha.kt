@@ -19,7 +19,9 @@ import com.example.rosles.databinding.ChoicesubjectBinding
  * Используется только в fc_mode (создание ведомости из Лесных культур):
  * ChoiceSubject → ChoiceLes → ChoiceDistrict → ChoiceDacha → AddVedomost.
  * Список — локальный справочник djangoForest_dacha (качается через
- * getDacha на StartScreen). Обычный молодняк идёт мимо этого экрана.
+ * getDacha на StartScreen), отфильтрованный по id_district выбранного
+ * участкового (getDACHAByDistrict). Дачи без привязки скрыты.
+ * Обычный молодняк идёт мимо этого экрана.
  */
 class ChoiceDacha : BaseActivity("Выберите урочище") {
 
@@ -42,7 +44,12 @@ class ChoiceDacha : BaseActivity("Выберите урочище") {
     }
 
     private fun initList() {
-        dachaList = db.getDACHA()
+        // Показываем только урочища выбранного участкового лесничества.
+        // id_district сюда всегда кладёт ChoiceDistrict; fallback на весь
+        // справочник — только на случай прямого запуска без extra.
+        val idDistrict = intent.getStringExtra("id_district")?.toIntOrNull()
+        dachaList = if (idDistrict != null) db.getDACHAByDistrict(idDistrict)
+        else db.getDACHA()
         val items: MutableList<BaseRespObject> = dachaList
             .map { BaseRespObject(it.id, it.name) }
             .toMutableList()
@@ -59,7 +66,8 @@ class ChoiceDacha : BaseActivity("Выберите урочище") {
             binding.GuideRecycler.emptytext.isVisible = true
             Toast.makeText(
                 this,
-                "Список урочищ пуст — загрузите данные на главном экране",
+                if (idDistrict != null) "Для этого участкового лесничества нет урочищ — загрузите данные на главном экране"
+                else "Список урочищ пуст — загрузите данные на главном экране",
                 Toast.LENGTH_LONG
             ).show()
         }
