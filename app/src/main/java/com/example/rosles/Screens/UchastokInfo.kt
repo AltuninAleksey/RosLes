@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.Gravity
 import android.view.View
 import android.widget.Button
+import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TableLayout
 import android.widget.TableRow
@@ -49,6 +50,7 @@ class UchastokInfo : BaseActivity("Информация об участке") {
 
     private var activeRow: TableRow? = null
     private var selectedIndex: Int? = null
+    private var vedomostUuid: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,6 +81,7 @@ class UchastokInfo : BaseActivity("Информация об участке") {
      */
     private fun bindInfo(): Boolean {
         val uuid = intent.getStringExtra("uuid") ?: return false
+        vedomostUuid = uuid
         val row = db.getFCListRegionByUuid(uuid) ?: return false
 
         val tract = row.idDacha?.let { db.getDachaNameById(it) } ?: row.dacha ?: "—"
@@ -214,9 +217,68 @@ class UchastokInfo : BaseActivity("Информация об участке") {
         return cell
     }
 
+    /** Перечитывает перечеты ведомости из БД и перерисовывает таблицу. */
+    private fun refreshSamples() {
+        val uuid = vedomostUuid ?: return
+        probaRows = db.getFCSamplesByListRegion(uuid).map {
+            ProbaRow(fmtDim(it.length), fmtDim(it.width), fmtArea(it.length, it.width))
+        }.toMutableList()
+        activeRow = null
+        selectedIndex = null
+        renderTable()
+    }
+
+    /**
+     * Диалог создания перечета: номер — авто (max + 1 внутри ведомости),
+     * вводятся только длина и ширина. Сохранение — локально с mark_update = 2,
+     * на сервер уйдёт кнопкой «Обновить» (ViewModels.saveFCSampleList).
+     */
+    private fun showAddSampleDialog(uuidListRegion: String) {
+        val dialog = Dialog(this)
+        dialog.setContentView(R.layout.dialog_add_fcsample)
+        dialog.setSizeRelativeCurrentWindow(0.85, 0.6)
+
+        val numberView = dialog.findViewById<TextView>(R.id.sample_number)
+        val lengthView = dialog.findViewById<EditText>(R.id.sample_length)
+        val widthView = dialog.findViewById<EditText>(R.id.sample_width)
+        val save = dialog.findViewById<Button>(R.id.sample_save)
+        val cancel = dialog.findViewById<Button>(R.id.sample_cancel)
+
+        numberView.text = db.nextFCSampleNumber(uuidListRegion)
+
+        cancel.setOnClickListener { dialog.dismiss() }
+        save.setOnClickListener {
+            val length = lengthView.text.toString().replace(',', '.').toDoubleOrNull()
+            val width = widthView.text.toString().replace(',', '.').toDoubleOrNull()
+            if (length == null || width == null) {
+                Toast.makeText(this, "Заполните длину и ширину", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            if (length <= 0 || width <= 0) {
+                Toast.makeText(this, "Длина и ширина должны быть больше нуля", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            db.insertFCSampleLocal(
+                number = numberView.text.toString(),
+                length = length,
+                width = width,
+                uuidListRegion = uuidListRegion
+            )
+            dialog.dismiss()
+            Toast.makeText(this, "Перечет добавлен", Toast.LENGTH_SHORT).show()
+            refreshSamples()
+        }
+        dialog.show()
+    }
+
     private fun toolbarInit() {
         binding.toolbar.addbutton.setOnClickListener {
-            Toast.makeText(this, "В разработке", Toast.LENGTH_SHORT).show()
+            if (mode != Mode.PROBA) {
+                Toast.makeText(this, "Перечеты добавляются на вкладке «Пробная площадь»", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            val uuid = vedomostUuid ?: return@setOnClickListener
+            showAddSampleDialog(uuid)
         }
         binding.toolbar.open.setOnClickListener {
             startActivity(Intent(this, ProbaInfo::class.java))

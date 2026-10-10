@@ -4,6 +4,7 @@ import com.example.rosles.RequestClass.AuthRequest
 import com.example.rosles.RequestClass.PerechetRequest
 import com.example.rosles.RequestClass.RegistrationReqest
 import com.example.rosles.RequestClass.SaveListRegionRequest
+import com.example.rosles.RequestClass.SaveSampleRequest
 import com.example.rosles.ResponceClass.*
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody
@@ -60,6 +61,12 @@ interface API {
     suspend fun saveListRegionList(
         @Header("Authorization") bearerToken: String,
         @Body body: SaveListRegionRequest
+    ): ResponseBody
+
+    @PUT("forestcrops/api/mobile/sample/save")
+    suspend fun saveFCSampleList(
+        @Header("Authorization") bearerToken: String,
+        @Body body: SaveSampleRequest
     ): ResponseBody
 
     @PUT("listregion")

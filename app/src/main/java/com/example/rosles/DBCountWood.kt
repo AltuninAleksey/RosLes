@@ -490,6 +490,104 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     }
 
     /**
+     * Следующий номер перечета внутри ведомости (max + 1 по числовым number;
+     * нечисловые игнорируются; если перечетов нет — "1"). Номер — авто.
+     */
+    @SuppressLint("Range")
+    fun nextFCSampleNumber(uuidListRegion: String): String {
+        val database: SQLiteDatabase = this.readableDatabase
+        val safe = uuidListRegion.replace("'", "''")
+        val cursor: Cursor = database.rawQuery(
+            "select number from djangoForest_fc_sample where uuid_list_region = '$safe'",
+            null
+        )
+        var max = 0
+        if (cursor.moveToFirst()) {
+            do {
+                val n = cursor.getString(cursor.getColumnIndex("number"))?.toIntOrNull()
+                if (n != null && n > max) max = n
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        return (max + 1).toString()
+    }
+
+    /**
+     * Локальное создание перечета: uuid генерируем, mark_update = 2
+     * (к отправке — та же конвенция, что у insertFCListRegionLocal).
+     * Возвращает uuid созданной записи.
+     */
+    fun insertFCSampleLocal(
+        number: String,
+        length: Double,
+        width: Double,
+        uuidListRegion: String
+    ): String {
+        val uuid = UUID.randomUUID().toString()
+        val database: SQLiteDatabase = this.writableDatabase
+        fun q(v: String?): String = if (v == null) "NULL" else "'${v.replace("'", "''")}'"
+        database.execSQL(
+            "INSERT INTO djangoForest_fc_sample " +
+                    "(uuid, number, length, width, uuid_list_region, mark_update) VALUES (" +
+                    "${q(uuid)}, ${q(number)}, $length, $width, ${q(uuidListRegion)}, 2)"
+        )
+        return uuid
+    }
+
+    /**
+     * Строки к отправке в PUT .../sample/save: новые (mark_update = 2)
+     * и изменённые (mark_update = 1). Скачанные без флага сюда не попадают.
+     */
+    @SuppressLint("Range")
+    fun getFCSampleDirty(): List<FCSAMPLE_LIST_DATA> {
+        val database: SQLiteDatabase = this.readableDatabase
+        val cursor: Cursor = database.rawQuery(
+            "select uuid, number, length, width, uuid_list_region " +
+                    "from djangoForest_fc_sample where mark_update = 1 OR mark_update = 2",
+            null
+        )
+        val result = mutableListOf<FCSAMPLE_LIST_DATA>()
+        if (cursor.moveToFirst()) {
+            do {
+                result.add(
+                    FCSAMPLE_LIST_DATA(
+                        number = cursor.getString(cursor.getColumnIndex("number")),
+                        length = if (cursor.isNull(cursor.getColumnIndex("length"))) null
+                        else cursor.getDouble(cursor.getColumnIndex("length")),
+                        width = if (cursor.isNull(cursor.getColumnIndex("width"))) null
+                        else cursor.getDouble(cursor.getColumnIndex("width")),
+                        uuid = cursor.getString(cursor.getColumnIndex("uuid")),
+                        uuidListRegion = cursor.getString(cursor.getColumnIndex("uuid_list_region"))
+                    )
+                )
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        return result
+    }
+
+    /**
+     * Помечает отправленные перечеты как synced (mark_update = 0).
+     * Только после успешного PUT. Одна транзакция, чанки по 400.
+     */
+    fun markFCSampleSynced(uuids: List<String>) {
+        if (uuids.isEmpty()) return
+        val database: SQLiteDatabase = this.writableDatabase
+        database.beginTransaction()
+        try {
+            uuids.chunked(400).forEach { chunk ->
+                val list = chunk.joinToString(",") { "'${it.replace("'", "''")}'" }
+                database.execSQL(
+                    "UPDATE djangoForest_fc_sample SET mark_update = 0 WHERE uuid IN ($list)"
+                )
+            }
+            database.setTransactionSuccessful()
+        } finally {
+            database.endTransaction()
+        }
+    }
+
+    /**
      * Пакетная вставка регионов одной транзакцией (вызывать чанками по ~500).
      * См. [writeDachaList]: без транзакции большой список роняет приложение.
      */

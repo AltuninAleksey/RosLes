@@ -8,6 +8,8 @@ import com.example.rosles.DBCountWood
 import com.example.rosles.RequestClass.RegistrationReqest
 import com.example.rosles.RequestClass.SaveListRegionItem
 import com.example.rosles.RequestClass.SaveListRegionRequest
+import com.example.rosles.RequestClass.SaveSampleItem
+import com.example.rosles.RequestClass.SaveSampleRequest
 import com.example.rosles.RequestClass.UpdateRequest
 import com.example.rosles.ResponceClass.DachaResp
 import com.example.rosles.ResponceClass.FCSAMPLE_LIST_RESP
@@ -176,6 +178,55 @@ class ViewModels() : BaseViewModel(
                 dbCountWood.markFCListRegionSynced(items.map { it.uuid })
             }
             Log.d("ListRegion", "saveListRegion sent=${items.size}")
+            return items.size
+        } catch (e: Exception) {
+            logError(e)
+            throw e
+        } finally {
+            _stateScreen.value = _stateScreen.value.copy(isLoading = false)
+        }
+    }
+
+    /**
+     * PUT forestcrops/api/mobile/sample/save: отправляет новые и изменённые
+     * (mark_update = 1/2) перечеты чанками по 500. После успешного PUT чанк
+     * помечается synced (mark_update = 0), чтобы повторный тап не переотправлял.
+     * @return сколько строк отправлено (0 — нечего отправлять).
+     */
+    suspend fun saveFCSampleList(dbCountWood: DBCountWood, accessToken: String, idProfile: Int): Int {
+        if (_stateScreen.value.isLoading) return 0
+
+        _stateScreen.value = _stateScreen.value.copy(isLoading = true)
+        try {
+            val dirty = withContext(Dispatchers.IO) {
+                dbCountWood.getFCSampleDirty()
+            }
+            val items = dirty.mapNotNull { row ->
+                val uuid = row.uuid ?: return@mapNotNull null
+                SaveSampleItem(
+                    number = row.number,
+                    length = row.length,
+                    width = row.width,
+                    uuid = uuid,
+                    uuidListRegion = row.uuidListRegion
+                )
+            }
+            if (items.isEmpty()) return 0
+            Log.d("FCSample", "saveSample idProfile=$idProfile dirty=${dirty.size} toSend=${items.size}")
+
+            items.chunked(500).forEach { chunk ->
+                accountsRepository.saveFCSampleList(
+                    accesToken = accessToken,
+                    body = SaveSampleRequest(
+                        idProfile = idProfile,
+                        saveSampleItemMobile = chunk
+                    )
+                )
+            }
+            withContext(Dispatchers.IO) {
+                dbCountWood.markFCSampleSynced(items.map { it.uuid })
+            }
+            Log.d("FCSample", "saveSample sent=${items.size}")
             return items.size
         } catch (e: Exception) {
             logError(e)

@@ -67,15 +67,22 @@ class DashboardLesCult : BaseActivity("Лесные культуры") {
             startActivity(Intent(this, LesCulture::class.java))
         }
 
-        // Обновить и Загрузить данные: обе операции идут через loadData
-        // (INSERT OR REPLACE — повторная загрузка идемпотентна).
-        // Отдельного upload-API для FC пока нет, поэтому поведение одинаковое.
+        // Обновить: отправка локальных изменений — сначала ведомости,
+        // затем перечеты (каждый метод сам ставит/снимает isLoading).
         binding.reload.setOnClickListener {
-            lifecycleScope.launch { viewModel.saveListRegionList(
-                dbCountWood = db,
-                accessToken = this@DashboardLesCult.getToken(),
-                idProfile = this@DashboardLesCult.getUserId().toInt()
-            ) }
+            lifecycleScope.launch {
+                val profileId = this@DashboardLesCult.getUserId().toInt()
+                viewModel.saveListRegionList(
+                    dbCountWood = db,
+                    accessToken = this@DashboardLesCult.getToken(),
+                    idProfile = profileId
+                )
+                viewModel.saveFCSampleList(
+                    dbCountWood = db,
+                    accessToken = this@DashboardLesCult.getToken(),
+                    idProfile = profileId
+                )
+            }
         }
         binding.allDownload.setOnClickListener {
             lifecycleScope.launch { downloadData(fromCacheMessage = "Данные загружены") }

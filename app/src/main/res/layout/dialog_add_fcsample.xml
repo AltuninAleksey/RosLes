@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="16dp"
+        android:text="Новый перечет"
+        android:textColor="@color/black"
+        android:textSize="@dimen/custom_size_text" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Номер (авто)"
+        android:textColor="#80000000"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/sample_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:text="1"
+        android:textColor="@color/black"
+        android:textSize="@dimen/custom_size_text" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Длина, м"
+        android:textColor="#80000000"
+        android:textSize="15sp" />
+
+    <EditText
+        android:id="@+id/sample_length"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:hint="0"
+        android:inputType="numberDecimal"
+        android:textColor="@color/black"
+        android:textSize="@dimen/custom_size_text" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ширина, м"
+        android:textColor="#80000000"
+        android:textSize="15sp" />
+
+    <EditText
+        android:id="@+id/sample_width"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:hint="0"
+        android:inputType="numberDecimal"
+        android:textColor="@color/black"
+        android:textSize="@dimen/custom_size_text" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/sample_cancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:text="Отмена" />
+
+        <Button
+            android:id="@+id/sample_save"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:text="Записать" />
+    </LinearLayout>
+
+</LinearLayout>
