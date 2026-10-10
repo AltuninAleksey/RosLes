@@ -17,6 +17,7 @@ import com.example.rosles.DBCountWood
 import com.example.rosles.R
 import com.example.rosles.databinding.UchastokInfoBinding
 import com.example.rosles.setSizeRelativeCurrentWindow
+import java.util.Locale
 
 class UchastokInfo : BaseActivity("Информация об участке") {
 
@@ -26,16 +27,10 @@ class UchastokInfo : BaseActivity("Информация об участке") {
     data class ProbaRow(val length: String, val width: String, val area: String)
     data class OtrezokRow(val length: String)
 
-    private val probaRows: MutableList<ProbaRow> = mutableListOf(
-        ProbaRow("50", "20", "0.10"),
-        ProbaRow("50", "20", "0.10"),
-        ProbaRow("40", "25", "0.10"),
-        ProbaRow("60", "15", "0.09"),
-        ProbaRow("55", "20", "0.11"),
-        ProbaRow("45", "22", "0.10"),
-        ProbaRow("50", "18", "0.09"),
-        ProbaRow("52", "20", "0.10")
-    )
+    // Перечеты ведомости из djangoForest_fc_sample (загрузка —
+    // ViewModels.getFCSampleList). Заполняется в bindInfo() по uuid участка.
+    // Удаление из тулбара убирает строку только с экрана, в БД не лезет.
+    private var probaRows: MutableList<ProbaRow> = mutableListOf()
 
     private val otrezokRows: MutableList<OtrezokRow> = mutableListOf(
         OtrezokRow("10"),
@@ -97,6 +92,10 @@ class UchastokInfo : BaseActivity("Информация об участке") {
         binding.allotment.text = "—"
         binding.area.text = row.sampleRegion?.toString() ?: "—"
         binding.date.text = row.date
+        // Перечеты этой ведомости для вкладки «Пробная площадь».
+        probaRows = db.getFCSamplesByListRegion(uuid).map {
+            ProbaRow(fmtDim(it.length), fmtDim(it.width), fmtArea(it.length, it.width))
+        }.toMutableList()
         return true
     }
 
@@ -128,13 +127,26 @@ class UchastokInfo : BaseActivity("Информация об участке") {
         renderTable()
     }
 
+    /** Размер в метрах: целое — без дробной части, иначе до 2 знаков. */
+    private fun fmtDim(v: Double?): String {
+        if (v == null) return "—"
+        return if (v % 1.0 == 0.0) v.toLong().toString()
+        else "%.2f".format(Locale.US, v).trimEnd('0').trimEnd('.')
+    }
+
+    /** Площадь пробы в га: длина × ширина / 10000, до 4 знаков. */
+    private fun fmtArea(length: Double?, width: Double?): String {
+        if (length == null || width == null) return "—"
+        return "%.4f".format(Locale.US, length * width / 10000.0).trimEnd('0').trimEnd('.')
+    }
+
     @SuppressLint("SetTextI18n")
     private fun renderTable() {
         binding.tableHeader.removeAllViews()
         binding.tblRows.removeAllViews()
 
         val headers = when (mode) {
-            Mode.PROBA -> listOf("№", "Длина, м", "Ширина, м", "Площадь, га")
+            Mode.PROBA -> listOf("Длина, м", "Ширина, м", "Площадь, га")
             Mode.OTREZOK -> listOf("Номер", "Длина, м")
         }
         for (title in headers) {
@@ -153,7 +165,7 @@ class UchastokInfo : BaseActivity("Информация об участке") {
             val values = when (mode) {
                 Mode.PROBA -> {
                     val row = probaRows[i]
-                    listOf((i + 1).toString(), row.length, row.width, row.area)
+                    listOf(row.length, row.width, row.area)
                 }
                 Mode.OTREZOK -> {
                     val row = otrezokRows[i]

@@ -92,6 +92,16 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
 
 
 
+        db.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_fc_sample" (
+	"uuid" TEXT NOT NULL PRIMARY KEY ,
+	"number" varchar(30),
+	"length" real NULL,
+	"width" real NULL,
+	"uuid_list_region" TEXT NULL REFERENCES "djangoForest_fc_list_region" ("uuid") DEFERRABLE INITIALLY DEFERRED,
+	"mark_update" integer NULL
+);""")
+        db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_fc_sample_uuid_list_region" ON "djangoForest_fc_sample" ("uuid_list_region");""")
+
     }
 
     override fun onUpgrade(p0: SQLiteDatabase?, p1: Int, p2: Int) {
@@ -128,6 +138,18 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         // повторный прогон onUpgrade невозможен (версия уже поднята).
         p0.execSQL("""ALTER TABLE "djangoForest_dacha" ADD COLUMN "id_district_forestly" bigint NULL REFERENCES "djangoForest_districtforestly" ("id") DEFERRABLE INITIALLY DEFERRED""")
         p0.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_dacha_id_district_forestly_71afc36f" ON "djangoForest_dacha" ("id_district_forestly");""")
+        // v5: перечеты лесных культур (GET forestcrops/api/mobile/sample/list).
+        // CREATE IF NOT EXISTS — безопасно и для свежих onCreate, и для
+        // апгрейдов с любой прошлой версии.
+        p0.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_fc_sample" (
+	"uuid" TEXT NOT NULL PRIMARY KEY ,
+	"number" varchar(30),
+	"length" real NULL,
+	"width" real NULL,
+	"uuid_list_region" TEXT NULL REFERENCES "djangoForest_fc_list_region" ("uuid") DEFERRABLE INITIALLY DEFERRED,
+	"mark_update" integer NULL
+);""")
+        p0.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_fc_sample_uuid_list_region" ON "djangoForest_fc_sample" ("uuid_list_region");""")
     }
 
 
@@ -390,6 +412,78 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         var result = 0
         if (cursor.moveToFirst()) {
             result = cursor.getInt(0)
+        }
+        cursor.close()
+        return result
+    }
+
+    /**
+     * Пакетная вставка перечетов лесных культур одной транзакцией
+     * (вызывать чанками по ~500 — см. writeFCListRegionList).
+     * INSERT OR REPLACE по uuid: повторная загрузка идемпотентна.
+     * mark_update не ставим (NULL): скачанное — не «грязное», как у регионов.
+     */
+    fun writeFCSampleList(items: List<FCSAMPLE_LIST_DATA>) {
+        if (items.isEmpty()) return
+        val database: SQLiteDatabase = this.writableDatabase
+        fun q(v: String?): String = if (v == null) "NULL" else "'${v.replace("'", "''")}'"
+        database.beginTransaction()
+        try {
+            items.forEach {
+                database.execSQL(
+                    "INSERT OR REPLACE INTO djangoForest_fc_sample " +
+                            "(uuid, number, length, width, uuid_list_region) VALUES (" +
+                            "${q(it.uuid)}, ${q(it.number)}, ${it.length ?: 0}, ${it.width ?: 0}, " +
+                            "${q(it.uuidListRegion)})"
+                )
+            }
+            database.setTransactionSuccessful()
+        } finally {
+            database.endTransaction()
+        }
+    }
+
+    /** Сколько строк сейчас в djangoForest_fc_sample (для диагностики загрузки). */
+    fun fcSampleCount(): Int {
+        val database: SQLiteDatabase = this.readableDatabase
+        val cursor: Cursor = database.rawQuery("select count(*) from djangoForest_fc_sample", null)
+        var result = 0
+        if (cursor.moveToFirst()) {
+            result = cursor.getInt(0)
+        }
+        cursor.close()
+        return result
+    }
+
+    /**
+     * Перечеты одной ведомости для карточки участка (UchastokInfo,
+     * вкладка «Пробная площадь»). Связь — uuid_list_region → uuid
+     * djangoForest_fc_list_region. Порядок — вставка (rowid).
+     */
+    @SuppressLint("Range")
+    fun getFCSamplesByListRegion(uuidListRegion: String): List<FCSAMPLE_LIST_DATA> {
+        val database: SQLiteDatabase = this.readableDatabase
+        val safe = uuidListRegion.replace("'", "''")
+        val cursor: Cursor = database.rawQuery(
+            "select number, length, width, uuid, uuid_list_region from djangoForest_fc_sample " +
+                    "where uuid_list_region = '$safe' order by rowid",
+            null
+        )
+        val result = mutableListOf<FCSAMPLE_LIST_DATA>()
+        if (cursor.moveToFirst()) {
+            do {
+                result.add(
+                    FCSAMPLE_LIST_DATA(
+                        number = cursor.getString(cursor.getColumnIndex("number")),
+                        length = if (cursor.isNull(cursor.getColumnIndex("length"))) null
+                        else cursor.getDouble(cursor.getColumnIndex("length")),
+                        width = if (cursor.isNull(cursor.getColumnIndex("width"))) null
+                        else cursor.getDouble(cursor.getColumnIndex("width")),
+                        uuid = cursor.getString(cursor.getColumnIndex("uuid")),
+                        uuidListRegion = cursor.getString(cursor.getColumnIndex("uuid_list_region"))
+                    )
+                )
+            } while (cursor.moveToNext())
         }
         cursor.close()
         return result
@@ -1691,7 +1785,7 @@ inner join djangoForest_forestly as forestly on s2.id_forestly_id = forestly.id)
         private val DATABASE_NAME = "userdb.db"
 
         // below is the variable for database version
-        private val DATABASE_VERSION = 4
+        private val DATABASE_VERSION = 5
     }
 }
 

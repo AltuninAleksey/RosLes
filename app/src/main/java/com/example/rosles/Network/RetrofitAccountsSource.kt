@@ -61,6 +61,11 @@ class RetrofitAccountsSource(
         accountsApi.getListRegionList("Bearer $accesToken", idProfile)
     }
 
+    override suspend fun getFCSampleList(accesToken: String, idProfile: Int): FCSAMPLE_LIST_RESP = wrapRetrofitExceptions {
+        delay(1000)
+        accountsApi.getFCSampleList("Bearer $accesToken", idProfile)
+    }
+
     override suspend fun saveListRegionList(accesToken: String, body: SaveListRegionRequest): ResponseBody = wrapRetrofitExceptions {
         delay(1000)
         accountsApi.saveListRegionList("Bearer $accesToken", body)

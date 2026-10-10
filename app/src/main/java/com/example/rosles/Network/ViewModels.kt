@@ -10,6 +10,7 @@ import com.example.rosles.RequestClass.SaveListRegionItem
 import com.example.rosles.RequestClass.SaveListRegionRequest
 import com.example.rosles.RequestClass.UpdateRequest
 import com.example.rosles.ResponceClass.DachaResp
+import com.example.rosles.ResponceClass.FCSAMPLE_LIST_RESP
 import com.example.rosles.ResponceClass.GPS_Data_Send
 import com.example.rosles.ResponceClass.LISTREGION_LIST_RESP
 import com.example.rosles.ResponceClass.LISTREGION_REQUEST
@@ -80,6 +81,7 @@ class ViewModels() : BaseViewModel(
         try {
             getDacha(db, aceesToken)
             getListRegionList(db, aceesToken, idProfile)
+            getFCSampleList(db, aceesToken, idProfile)
 
             if (!db.djangoForest_subjectrf())
                 getSUBJECTRF(db, idProfile)
@@ -105,6 +107,26 @@ class ViewModels() : BaseViewModel(
                 dbCountWood.writeFCListRegionList(chunk)
             }
             Log.d("ListRegion", "rows in db after write=${dbCountWood.fcListRegionCount()}")
+        }
+        return result
+    }
+
+    /**
+     * GET forestcrops/api/mobile/sample/list: перечеты (пробы) профиля
+     * в djangoForest_fc_sample. Паттерн как у getListRegionList:
+     * пустой data — не ошибка, запись чанками в транзакциях на IO.
+     * Строки без uuid пропускаем (их нечем key-ить) и логируем.
+     */
+    suspend fun getFCSampleList(dbCountWood: DBCountWood, accessToken: String, idProfile: Int): FCSAMPLE_LIST_RESP {
+        val result = accountsRepository.getFCSampleList(accessToken, idProfile)
+        val items = result.data ?: emptyList()
+        val valid = items.filter { it.uuid != null }
+        Log.d("FCSample", "idProfile=$idProfile count=${result.count} data.size=${items.size} valid=${valid.size}")
+        withContext(Dispatchers.IO) {
+            valid.chunked(500).forEach { chunk ->
+                dbCountWood.writeFCSampleList(chunk)
+            }
+            Log.d("FCSample", "rows in db after write=${dbCountWood.fcSampleCount()}")
         }
         return result
     }

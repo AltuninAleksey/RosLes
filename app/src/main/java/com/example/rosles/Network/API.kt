@@ -50,6 +50,12 @@ interface API {
         @Query("idProfile") idProfile: Int
     ): LISTREGION_LIST_RESP
 
+    @GET("forestcrops/api/mobile/sample/list")
+    suspend fun getFCSampleList(
+        @Header("Authorization") bearerToken: String,
+        @Query("idProfile") idProfile: Int
+    ): FCSAMPLE_LIST_RESP
+
     @PUT("forestcrops/api/mobile/listregion/save")
     suspend fun saveListRegionList(
         @Header("Authorization") bearerToken: String,
