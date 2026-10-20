@@ -157,7 +157,9 @@ class AddVedomost: AppCompatActivity() {
 
         // fc_mode: урочище уже выбрано на ChoiceDacha (справочник getdacha) —
         // подставляем и блокируем поле, чтобы не разойтись с id_dacha.
-        val selectedDachaId = intent.getStringExtra("id_dacha")?.toIntOrNull()
+        val rawDachaId = intent.getStringExtra("id_dacha")?.toIntOrNull()
+        val dachaNotSpecified = rawDachaId != null && rawDachaId < 0
+        val selectedDachaId = rawDachaId?.takeIf { it >= 0 }
         val selectedDachaName = intent.getStringExtra("dacha_name")
         if (fcMode && selectedDachaName != null) {
             binding.dacha.setText(selectedDachaName)
@@ -181,7 +183,8 @@ class AddVedomost: AppCompatActivity() {
                 db.insertFCListRegionLocal(
                     date = binding.date.text.toString(),
                     number = "",
-                    dacha = selectedDachaName
+                    dacha = if (dachaNotSpecified) null
+                    else selectedDachaName
                         ?: binding.dacha.text.toString().ifEmpty { null },
                     nameQuarter = binding.idCvartal.text.toString(),
                     sampleRegion = binding.samplearea.text.toString(),

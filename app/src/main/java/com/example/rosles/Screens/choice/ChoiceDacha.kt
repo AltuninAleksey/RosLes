@@ -3,7 +3,6 @@ package com.example.rosles.Screens.choice
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
-import androidx.core.view.isVisible
 import com.example.rosles.Adapters.BaseInterface
 import com.example.rosles.Adapters.ChoiceSubjectAdapter
 import com.example.rosles.BaseActivity
@@ -29,6 +28,7 @@ class ChoiceDacha : BaseActivity("Выберите урочище") {
 
     private lateinit var binding: ChoicesubjectBinding
     private var dachaList: List<DachaData> = emptyList()
+    private val notSpecifiedId = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,9 +50,10 @@ class ChoiceDacha : BaseActivity("Выберите урочище") {
         val idDistrict = intent.getStringExtra("id_district")?.toIntOrNull()
         dachaList = if (idDistrict != null) db.getDACHAByDistrict(idDistrict)
         else db.getDACHA()
-        val items: MutableList<BaseRespObject> = dachaList
-            .map { BaseRespObject(it.id, it.name) }
-            .toMutableList()
+        val items: MutableList<BaseRespObject> = mutableListOf(
+            BaseRespObject(notSpecifiedId, "Не указано")
+        )
+        items += dachaList.map { BaseRespObject(it.id, it.name) }
 
         val adapter = ChoiceSubjectAdapter(items, object : BaseInterface {
             override fun onClick(itemView: Any) {
@@ -62,8 +63,7 @@ class ChoiceDacha : BaseActivity("Выберите урочище") {
             override fun onClickButton(itemView: Any) {
             }
         })
-        if (items.isEmpty()) {
-            binding.GuideRecycler.emptytext.isVisible = true
+        if (dachaList.isEmpty()) {
             Toast.makeText(
                 this,
                 if (idDistrict != null) "Для этого участкового лесничества нет урочищ — загрузите данные на главном экране"
@@ -75,7 +75,8 @@ class ChoiceDacha : BaseActivity("Выберите урочище") {
     }
 
     fun start(dachaId: Int) {
-        val name = dachaList.firstOrNull { it.id == dachaId }?.name
+        val name = if (dachaId == notSpecifiedId) "Не указано"
+        else dachaList.firstOrNull { it.id == dachaId }?.name
         val intent1 = Intent(this, AddVedomost::class.java)
         // "id" — id участкового лесничества: AddVedomost ждёт его там.
         intent1.putExtra("id", intent.getStringExtra("id_district"))
