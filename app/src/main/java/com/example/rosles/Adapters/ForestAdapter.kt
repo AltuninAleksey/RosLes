@@ -10,7 +10,10 @@ import com.example.rosles.databinding.ItemForestBinding
 import com.example.roslesdef.Models.SpinerItem
 
 
-class ForestAdapter(private var names: List<SpinerItem>) : RecyclerView.Adapter<ForestAdapter.ViewHolder>() {
+class ForestAdapter(
+    private var names: List<SpinerItem>,
+    private val onChecked: ((SpinerItem) -> Unit)? = null
+) : RecyclerView.Adapter<ForestAdapter.ViewHolder>() {
 
     class ViewHolder(
         val binding: ItemForestBinding
@@ -36,6 +39,7 @@ class ForestAdapter(private var names: List<SpinerItem>) : RecyclerView.Adapter<
                 }else{
                     names[position].check=false
                 }
+                onChecked?.invoke(names[position])
             }
 
         }

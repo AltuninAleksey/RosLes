@@ -109,7 +109,8 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
 	"count_living" integer NULL,
 	"count_dead" integer NULL,
 	"id_breed" bigint NULL REFERENCES "djangoForest_breed" ("id") DEFERRABLE INITIALLY DEFERRED,
-	"uuid_sample" TEXT NULL REFERENCES "djangoForest_fc_sample" ("uuid") DEFERRABLE INITIALLY DEFERRED
+	"uuid_sample" TEXT NULL REFERENCES "djangoForest_fc_sample" ("uuid") DEFERRABLE INITIALLY DEFERRED,
+	"mark_update" integer NULL
 );""")
         db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_fc_row_uuid_sample" ON "djangoForest_fc_row" ("uuid_sample");""")
         db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_fc_row_id_breed" ON "djangoForest_fc_row" ("id_breed");""")
@@ -176,6 +177,10 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
 );""")
         p0.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_fc_row_uuid_sample" ON "djangoForest_fc_row" ("uuid_sample");""")
         p0.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_fc_row_id_breed" ON "djangoForest_fc_row" ("id_breed");""")
+        // v7: пометка локальных изменений строк культур (новые = 2, правки = 1).
+        // В v6-блоке колонки нет намеренно: ALTER ниже добавит её и при
+        // апгрейде с v5 (таблица создаётся v6-блоком), и с v6.
+        p0.execSQL("""ALTER TABLE "djangoForest_fc_row" ADD COLUMN "mark_update" integer NULL""")
     }
 
 
@@ -701,7 +706,7 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         val database: SQLiteDatabase = this.readableDatabase
         val safe = uuidSample.replace("'", "''")
         val cursor: Cursor = database.rawQuery(
-            "select r.number, r.count_living, r.count_dead, b.name_breed " +
+            "select r.uuid, r.number, r.id_breed, r.count_living, r.count_dead, b.name_breed " +
                     "from djangoForest_fc_row as r " +
                     "left join djangoForest_breed as b on r.id_breed = b.id " +
                     "where r.uuid_sample = '$safe' " +
@@ -713,8 +718,11 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
             do {
                 result.add(
                     ForestCropRow(
+                        uuid = cursor.getString(cursor.getColumnIndex("uuid")),
                         number = if (cursor.isNull(cursor.getColumnIndex("number"))) null
                         else cursor.getInt(cursor.getColumnIndex("number")),
+                        idBreed = if (cursor.isNull(cursor.getColumnIndex("id_breed"))) null
+                        else cursor.getInt(cursor.getColumnIndex("id_breed")),
                         breedName = cursor.getString(cursor.getColumnIndex("name_breed")),
                         countLiving = if (cursor.isNull(cursor.getColumnIndex("count_living"))) null
                         else cursor.getInt(cursor.getColumnIndex("count_living")),
@@ -726,6 +734,69 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         }
         cursor.close()
         return result
+    }
+
+    /** Следующий number внутри перечета: max(number) + 1 (1, если строк ещё нет). */
+    fun nextFCRowNumber(uuidSample: String): Int {
+        val database: SQLiteDatabase = this.readableDatabase
+        val safe = uuidSample.replace("'", "''")
+        val cursor: Cursor = database.rawQuery(
+            "select max(number) from djangoForest_fc_row where uuid_sample = '$safe'",
+            null
+        )
+        var max = 0
+        if (cursor.moveToFirst() && !cursor.isNull(0)) {
+            max = cursor.getInt(0)
+        }
+        cursor.close()
+        return max + 1
+    }
+
+    /**
+     * Локально созданная строка культур (mark_update = 2 — новая, ещё не
+     * отправлена на сервер). Возвращает uuid созданной строки.
+     */
+    fun insertFCRowLocal(
+        uuidSample: String,
+        number: Int?,
+        idBreed: Int?,
+        countLiving: Int?,
+        countDead: Int?
+    ): String {
+        val database: SQLiteDatabase = this.writableDatabase
+        val uuid = UUID.randomUUID().toString()
+        database.execSQL(
+            "insert into djangoForest_fc_row " +
+                    "(uuid, id, number, count_living, count_dead, id_breed, uuid_sample, mark_update) " +
+                    "values ('${esc(uuid)}', NULL, ${number ?: "NULL"}, " +
+                    "${countLiving ?: "NULL"}, ${countDead ?: "NULL"}, " +
+                    "${idBreed ?: "NULL"}, '${esc(uuidSample)}', 2)"
+        )
+        return uuid
+    }
+
+    fun updateFCRowBreed(uuid: String, idBreed: Int?) {
+        val database: SQLiteDatabase = this.writableDatabase
+        database.execSQL(
+            "update djangoForest_fc_row set id_breed = ${idBreed ?: "NULL"}, " +
+                    "mark_update = case when mark_update = 2 then 2 else 1 end " +
+                    "where uuid = '${esc(uuid)}'"
+        )
+    }
+
+    fun updateFCRowCounts(uuid: String, countLiving: Int?, countDead: Int?) {
+        val database: SQLiteDatabase = this.writableDatabase
+        database.execSQL(
+            "update djangoForest_fc_row set count_living = ${countLiving ?: "NULL"}, " +
+                    "count_dead = ${countDead ?: "NULL"}, " +
+                    "mark_update = case when mark_update = 2 then 2 else 1 end " +
+                    "where uuid = '${esc(uuid)}'"
+        )
+    }
+
+    fun deleteFCRow(uuid: String) {
+        val database: SQLiteDatabase = this.writableDatabase
+        database.execSQL("delete from djangoForest_fc_row where uuid = '${esc(uuid)}'")
     }
 
     /**
@@ -2024,7 +2095,7 @@ inner join djangoForest_forestly as forestly on s2.id_forestly_id = forestly.id)
         private val DATABASE_NAME = "userdb.db"
 
         // below is the variable for database version
-        private val DATABASE_VERSION = 6
+        private val DATABASE_VERSION = 7
     }
 }
 

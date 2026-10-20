@@ -3,19 +3,27 @@ package com.example.rosles.Screens
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.os.Bundle
+import android.text.Editable
+import android.text.InputType
+import android.text.TextWatcher
 import android.view.Gravity
 import android.view.View
 import android.widget.Button
+import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TableLayout
 import android.widget.TableRow
 import android.widget.TextView
 import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.rosles.BaseActivity
 import com.example.rosles.DBCountWood
 import com.example.rosles.R
 import com.example.rosles.databinding.ProbaInfoBinding
 import com.example.rosles.setSizeRelativeCurrentWindow
+import com.example.roslesdef.Adapters.ForestAdapter
+import com.example.roslesdef.Models.SpinerItem
 
 class ProbaInfo : BaseActivity("Информация о пробной площади") {
 
@@ -36,7 +44,14 @@ class ProbaInfo : BaseActivity("Информация о пробной площ�
         val date: String
     )
 
-    data class CultureRow(val number: String, val breed: String, val alive: String, val dead: String)
+    data class CultureRow(
+        val uuid: String?,
+        var idBreed: Int?,
+        val number: String,
+        var breed: String,
+        var alive: String,
+        var dead: String
+    )
     data class DiameterRow(val diameter: String, val height: String)
     data class UndergrowthRow(
         val breed: String,
@@ -50,6 +65,9 @@ class ProbaInfo : BaseActivity("Информация о пробной площ�
 
     // Лесные культуры выбранного перечета (djangoForest_fc_row).
     private val cultureRows: MutableList<CultureRow> = mutableListOf()
+
+    // Последняя выбранная на экране порода — подставляется в новые строки.
+    private var lastBreedId: Int? = null
 
     private val diameterRows: MutableList<DiameterRow> = mutableListOf(
         DiameterRow("0.8", "12"),
@@ -126,15 +144,21 @@ class ProbaInfo : BaseActivity("Информация о пробной площ�
         binding.date.text = info.date
 
         // Строки лесных культур именно этого перечета.
+        loadCultureRows()
+    }
+
+    private fun loadCultureRows() {
         cultureRows.clear()
         uuidSample?.let { sample ->
             cultureRows.addAll(
                 db.getFCRowsForDisplay(sample).map {
                     CultureRow(
+                        uuid = it.uuid,
+                        idBreed = it.idBreed,
                         number = it.number?.toString() ?: "—",
-                        breed = it.breedName ?: "—",
-                        alive = it.countLiving?.toString() ?: "—",
-                        dead = it.countDead?.toString() ?: "—"
+                        breed = it.breedName ?: "Выберите породу",
+                        alive = it.countLiving?.toString() ?: "",
+                        dead = it.countDead?.toString() ?: ""
                     )
                 }
             )
@@ -183,9 +207,13 @@ class ProbaInfo : BaseActivity("Информация о пробной площ�
             binding.tableHeader.addView(headerCell(title))
         }
 
-        val cellPad = (5 * resources.displayMetrics.density).toInt()
+        if (mode == Mode.CULTURES) {
+            cultureRows.forEachIndexed { i, row -> addCultureRow(i, row) }
+            return
+        }
+
         val rows: List<List<String>> = when (mode) {
-            Mode.CULTURES -> cultureRows.map { listOf(it.number, it.breed, it.alive, it.dead) }
+            Mode.CULTURES -> emptyList()
             Mode.DIAMETER -> diameterRows.map { listOf(it.diameter, it.height) }
             Mode.UNDERGROWTH -> undergrowthRows.map {
                 listOf(it.breed, it.h05, it.h15, it.hMore, it.maxHeight)
@@ -196,29 +224,161 @@ class ProbaInfo : BaseActivity("Информация о пробной площ�
             val tableRow = TableRow(this)
 
             for (value in rows[i]) {
-                val cell = TextView(this)
-                cell.text = value
-                cell.textAlignment = View.TEXT_ALIGNMENT_CENTER
-                cell.gravity = Gravity.CENTER
-                cell.setTextColor(-0x1000000)
-                cell.setPadding(cellPad, cellPad, cellPad, cellPad)
-                tableRow.addView(cell)
+                tableRow.addView(textCell(value))
             }
 
-            val index = i
-            tableRow.setOnClickListener {
-                activeRow?.setBackgroundResource(R.color.color_transporent)
-                activeRow = tableRow
-                selectedIndex = index
-                tableRow.setBackgroundResource(R.color.activecolumn)
-            }
-
+            attachSelection(tableRow, i)
             binding.tblRows.addView(tableRow, i)
 
             val layoutParams = tableRow.layoutParams as TableLayout.LayoutParams
             layoutParams.setMargins(0, 10, 0, 10)
             tableRow.layoutParams = layoutParams
         }
+    }
+
+    private fun addCultureRow(index: Int, row: CultureRow) {
+        val tableRow = TableRow(this)
+
+        tableRow.addView(textCell(row.number))
+
+        val breedCell = textCell(row.breed)
+        breedCell.setOnClickListener {
+            showBreedPicker(row.idBreed) { picked ->
+                row.idBreed = picked.id
+                row.breed = picked.name
+                row.uuid?.let { db.updateFCRowBreed(it, picked.id) }
+                renderTable()
+            }
+        }
+        tableRow.addView(breedCell)
+
+        tableRow.addView(countCell(row, true))
+        tableRow.addView(countCell(row, false))
+
+        attachSelection(tableRow, index)
+        binding.tblRows.addView(tableRow, index)
+
+        val layoutParams = tableRow.layoutParams as TableLayout.LayoutParams
+        layoutParams.setMargins(0, 10, 0, 10)
+        tableRow.layoutParams = layoutParams
+    }
+
+    private fun textCell(value: String): TextView {
+        val cell = TextView(this)
+        cell.text = value
+        cell.textAlignment = View.TEXT_ALIGNMENT_CENTER
+        cell.gravity = Gravity.CENTER
+        cell.setTextColor(-0x1000000)
+        val pad = (5 * resources.displayMetrics.density).toInt()
+        cell.setPadding(pad, pad, pad, pad)
+        return cell
+    }
+
+    private fun countCell(row: CultureRow, isLiving: Boolean): EditText {
+        val pad = (5 * resources.displayMetrics.density).toInt()
+        val cell = EditText(this)
+        cell.inputType = InputType.TYPE_CLASS_NUMBER
+        cell.gravity = Gravity.CENTER
+        cell.setTextColor(-0x1000000)
+        cell.textSize = 14f
+        cell.minWidth = 0
+        cell.setPadding(pad, 0, pad, 0)
+        cell.setText(if (isLiving) row.alive else row.dead)
+        cell.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) cell.selectAll()
+        }
+        cell.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: Editable?) {
+                val value = s?.toString() ?: ""
+                if (isLiving) row.alive = value else row.dead = value
+                row.uuid?.let {
+                    db.updateFCRowCounts(
+                        it,
+                        row.alive.toIntOrNull() ?: 0,
+                        row.dead.toIntOrNull() ?: 0
+                    )
+                }
+            }
+        })
+        return cell
+    }
+
+    private fun attachSelection(tableRow: TableRow, index: Int) {
+        tableRow.setOnClickListener {
+            activeRow?.setBackgroundResource(R.color.color_transporent)
+            activeRow = tableRow
+            selectedIndex = index
+            tableRow.setBackgroundResource(R.color.activecolumn)
+        }
+    }
+
+    private fun addCultureRow() {
+        if (mode != Mode.CULTURES) {
+            Toast.makeText(this, "Добавление доступно на вкладке «Лесные культуры»", Toast.LENGTH_SHORT).show()
+            return
+        }
+        val sample = uuidSample
+        if (sample == null) {
+            Toast.makeText(this, "Перечет не выбран", Toast.LENGTH_SHORT).show()
+            return
+        }
+        val number = db.nextFCRowNumber(sample)
+        db.insertFCRowLocal(sample, number, lastBreedId, null, null)
+        loadCultureRows()
+        activeRow = null
+        selectedIndex = null
+        renderTable()
+    }
+
+    private fun showBreedPicker(currentId: Int?, onPick: (SpinerItem) -> Unit) {
+        val breeds = db.getallporodArray().filter { it.id != 0 }
+        if (breeds.isEmpty()) {
+            Toast.makeText(this, "Справочник пород пуст, загрузите данные", Toast.LENGTH_SHORT).show()
+            return
+        }
+        breeds.forEach { it.check = it.id == currentId }
+
+        val dialog = Dialog(this)
+        dialog.setContentView(R.layout.dialog_add_forest)
+        dialog.setSizeRelativeCurrentWindow(0.9, 0.85)
+
+        val recycler = dialog.findViewById<RecyclerView>(R.id.ForestRecycler)
+        val search = dialog.findViewById<EditText>(R.id.textSearch)
+        val pick = dialog.findViewById<Button>(R.id.button_add)
+        pick.text = "Выбрать"
+
+        fun bind(query: String) {
+            val filtered = breeds.filter { it.name.contains(query, ignoreCase = true) }
+            recycler.layoutManager = LinearLayoutManager(this)
+            recycler.adapter = ForestAdapter(filtered) { checked ->
+                breeds.forEach { it.check = it.id == checked.id && checked.check }
+                recycler.adapter?.notifyDataSetChanged()
+            }
+        }
+
+        bind("")
+        search.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: Editable?) {
+                bind(s?.toString() ?: "")
+            }
+        })
+
+        pick.setOnClickListener {
+            val picked = breeds.lastOrNull { it.check }
+            if (picked == null) {
+                Toast.makeText(this, "Выберите породу", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            lastBreedId = picked.id
+            onPick(picked)
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
 
     private fun headerCell(title: String): TextView {
@@ -240,7 +400,7 @@ class ProbaInfo : BaseActivity("Информация о пробной площ�
         binding.toolbar.open.visibility = View.GONE
 
         binding.toolbar.addbutton.setOnClickListener {
-            Toast.makeText(this, "В разработке", Toast.LENGTH_SHORT).show()
+            addCultureRow()
         }
         binding.toolbar.save.setOnClickListener {
             Toast.makeText(this, "В разработке", Toast.LENGTH_SHORT).show()
@@ -262,7 +422,10 @@ class ProbaInfo : BaseActivity("Информация о пробной площ�
             close.setOnClickListener { dialog.dismiss() }
             delete.setOnClickListener {
                 when (mode) {
-                    Mode.CULTURES -> cultureRows.removeAt(index)
+                    Mode.CULTURES -> {
+                        cultureRows.getOrNull(index)?.uuid?.let { db.deleteFCRow(it) }
+                        loadCultureRows()
+                    }
                     Mode.DIAMETER -> diameterRows.removeAt(index)
                     Mode.UNDERGROWTH -> undergrowthRows.removeAt(index)
                 }
