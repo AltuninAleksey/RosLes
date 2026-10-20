@@ -12,6 +12,7 @@ import android.widget.TableRow
 import android.widget.TextView
 import android.widget.Toast
 import com.example.rosles.BaseActivity
+import com.example.rosles.DBCountWood
 import com.example.rosles.R
 import com.example.rosles.databinding.ProbaInfoBinding
 import com.example.rosles.setSizeRelativeCurrentWindow
@@ -19,8 +20,12 @@ import com.example.rosles.setSizeRelativeCurrentWindow
 class ProbaInfo : BaseActivity("Информация о пробной площади") {
 
     private lateinit var binding: ProbaInfoBinding
+    private val db by lazy { DBCountWood(applicationContext, null) }
 
-    // Мок-данные. Позже заменим на выборку из БД.
+    // Перечет, для которого открыт экран, и его ведомость.
+    private var uuidSample: String? = null
+    private var vedomostUuid: String? = null
+
     data class Uchastok(
         val forestry: String,
         val district: String,
@@ -31,7 +36,7 @@ class ProbaInfo : BaseActivity("Информация о пробной площ�
         val date: String
     )
 
-    data class CultureRow(val breed: String, val alive: String, val dead: String)
+    data class CultureRow(val number: String, val breed: String, val alive: String, val dead: String)
     data class DiameterRow(val diameter: String, val height: String)
     data class UndergrowthRow(
         val breed: String,
@@ -41,18 +46,10 @@ class ProbaInfo : BaseActivity("Информация о пробной площ�
         val maxHeight: String
     )
 
-    private val info = Uchastok("Брянское", "Мичуринское", "Соловьи", "3", "25-4", "1.2", "01.01.2023")
+    private var info = Uchastok("—", "—", "—", "—", "—", "—", "—")
 
-    private val cultureRows: MutableList<CultureRow> = mutableListOf(
-        CultureRow("Сосна", "1200", "150"),
-        CultureRow("Ель", "900", "80"),
-        CultureRow("Дуб", "400", "60"),
-        CultureRow("Берёза", "300", "20"),
-        CultureRow("Сосна", "1100", "130"),
-        CultureRow("Ель", "850", "70"),
-        CultureRow("Лиственница", "500", "40"),
-        CultureRow("Дуб", "350", "55")
-    )
+    // Лесные культуры выбранного перечета (djangoForest_fc_row).
+    private val cultureRows: MutableList<CultureRow> = mutableListOf()
 
     private val diameterRows: MutableList<DiameterRow> = mutableListOf(
         DiameterRow("0.8", "12"),
@@ -87,13 +84,39 @@ class ProbaInfo : BaseActivity("Информация о пробной площ�
         super.onCreate(savedInstanceState)
         binding = ProbaInfoBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        uuidSample = intent.getStringExtra("uuidSample")
+        vedomostUuid = intent.getStringExtra("uuid")
         bindInfo()
         renderTable()
         switchInit()
         toolbarInit()
     }
 
+    override fun onDestroy() {
+        db.close()
+        super.onDestroy()
+    }
+
+    /**
+     * Шапка — из ведомости (djangoForest_fc_list_region) перечета,
+     * вкладка «Лесные культуры» — строки djangoForest_fc_row по uuidSample.
+     */
     private fun bindInfo() {
+        val region = vedomostUuid?.let { db.getFCListRegionByUuid(it) }
+        if (region != null) {
+            val chain = region.idDistrictForestly?.let { db.getForestryChain(it) }
+            val tract = region.idDacha?.let { db.getDachaNameById(it) } ?: region.dacha ?: "—"
+            info = Uchastok(
+                forestry = chain?.forestlyName ?: "—",
+                district = chain?.districtName ?: "—",
+                tract = tract,
+                quarter = region.nameQuarter ?: "—",
+                allotment = "—",
+                area = region.sampleRegion?.toString() ?: "—",
+                date = region.date
+            )
+        }
+
         binding.lesnich.text = info.forestry
         binding.district.text = info.district
         binding.tract.text = info.tract
@@ -101,6 +124,21 @@ class ProbaInfo : BaseActivity("Информация о пробной площ�
         binding.allotment.text = info.allotment
         binding.area.text = info.area
         binding.date.text = info.date
+
+        // Строки лесных культур именно этого перечета.
+        cultureRows.clear()
+        uuidSample?.let { sample ->
+            cultureRows.addAll(
+                db.getFCRowsForDisplay(sample).map {
+                    CultureRow(
+                        number = it.number?.toString() ?: "—",
+                        breed = it.breedName ?: "—",
+                        alive = it.countLiving?.toString() ?: "—",
+                        dead = it.countDead?.toString() ?: "—"
+                    )
+                }
+            )
+        }
     }
 
     private fun switchInit() {
@@ -135,7 +173,7 @@ class ProbaInfo : BaseActivity("Информация о пробной площ�
         binding.tblRows.removeAllViews()
 
         val headers = when (mode) {
-            Mode.CULTURES -> listOf("Порода", "Живые, шт", "Погибшие, шт")
+            Mode.CULTURES -> listOf("№", "Порода", "Живые, шт", "Погибшие, шт")
             Mode.DIAMETER -> listOf("Диаметр корневой шейки", "Высота корневой шейки")
             Mode.UNDERGROWTH -> listOf(
                 "Порода", "До 0.5, шт", "от 0.51 до 1.5, шт", "Более 1.5, шт", "Макс. высота"
@@ -147,7 +185,7 @@ class ProbaInfo : BaseActivity("Информация о пробной площ�
 
         val cellPad = (5 * resources.displayMetrics.density).toInt()
         val rows: List<List<String>> = when (mode) {
-            Mode.CULTURES -> cultureRows.map { listOf(it.breed, it.alive, it.dead) }
+            Mode.CULTURES -> cultureRows.map { listOf(it.number, it.breed, it.alive, it.dead) }
             Mode.DIAMETER -> diameterRows.map { listOf(it.diameter, it.height) }
             Mode.UNDERGROWTH -> undergrowthRows.map {
                 listOf(it.breed, it.h05, it.h15, it.hMore, it.maxHeight)

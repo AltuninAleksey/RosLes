@@ -23,6 +23,7 @@ interface AccountsSource {
     suspend fun getLIST():LIST_RESP
     suspend fun getListRegionList(accesToken: String, idProfile: Int): LISTREGION_LIST_RESP
     suspend fun getFCSampleList(accesToken: String, idProfile: Int): FCSAMPLE_LIST_RESP
+    suspend fun getFCRowList(accesToken: String, idProfile: Int): FCROW_LIST_RESP
     suspend fun saveListRegionList(accesToken: String, body: SaveListRegionRequest): ResponseBody
     suspend fun saveFCSampleList(accesToken: String, body: SaveSampleRequest): ResponseBody
     suspend fun getUserInfo(accesToken: String): userRespData
@@ -62,6 +63,7 @@ class AccountsRepository( private val accountsSource: AccountsSource) {
     suspend fun getLIST():LIST_RESP=accountsSource.getLIST()
     suspend fun getListRegionList(accesToken: String, idProfile: Int): LISTREGION_LIST_RESP = accountsSource.getListRegionList(accesToken, idProfile)
     suspend fun getFCSampleList(accesToken: String, idProfile: Int): FCSAMPLE_LIST_RESP = accountsSource.getFCSampleList(accesToken, idProfile)
+    suspend fun getFCRowList(accesToken: String, idProfile: Int): FCROW_LIST_RESP = accountsSource.getFCRowList(accesToken, idProfile)
     suspend fun saveListRegionList(accesToken: String, body: SaveListRegionRequest): ResponseBody = accountsSource.saveListRegionList(accesToken, body)
     suspend fun saveFCSampleList(accesToken: String, body: SaveSampleRequest): ResponseBody = accountsSource.saveFCSampleList(accesToken, body)
     suspend fun putLISTREGION(body: LISTREGION_REQUEST):ResponseBody = accountsSource.putLISTREGION(body)

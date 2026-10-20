@@ -102,6 +102,18 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
 );""")
         db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_fc_sample_uuid_list_region" ON "djangoForest_fc_sample" ("uuid_list_region");""")
 
+        db.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_fc_row" (
+	"uuid" TEXT NOT NULL PRIMARY KEY ,
+	"id" integer NULL,
+	"number" integer NULL,
+	"count_living" integer NULL,
+	"count_dead" integer NULL,
+	"id_breed" bigint NULL REFERENCES "djangoForest_breed" ("id") DEFERRABLE INITIALLY DEFERRED,
+	"uuid_sample" TEXT NULL REFERENCES "djangoForest_fc_sample" ("uuid") DEFERRABLE INITIALLY DEFERRED
+);""")
+        db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_fc_row_uuid_sample" ON "djangoForest_fc_row" ("uuid_sample");""")
+        db.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_fc_row_id_breed" ON "djangoForest_fc_row" ("id_breed");""")
+
     }
 
     override fun onUpgrade(p0: SQLiteDatabase?, p1: Int, p2: Int) {
@@ -150,6 +162,20 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
 	"mark_update" integer NULL
 );""")
         p0.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_fc_sample_uuid_list_region" ON "djangoForest_fc_sample" ("uuid_list_region");""")
+        // v6: строки лесных культур (GET forestcrops/api/mobile/forest-crops-row/list).
+        // uuid_sample — связь с перечетом djangoForest_fc_sample (вкладка
+        // «Пробная площадь» на UchastokInfo), id_breed — с породой.
+        p0.execSQL("""CREATE TABLE IF NOT EXISTS "djangoForest_fc_row" (
+	"uuid" TEXT NOT NULL PRIMARY KEY ,
+	"id" integer NULL,
+	"number" integer NULL,
+	"count_living" integer NULL,
+	"count_dead" integer NULL,
+	"id_breed" bigint NULL REFERENCES "djangoForest_breed" ("id") DEFERRABLE INITIALLY DEFERRED,
+	"uuid_sample" TEXT NULL REFERENCES "djangoForest_fc_sample" ("uuid") DEFERRABLE INITIALLY DEFERRED
+);""")
+        p0.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_fc_row_uuid_sample" ON "djangoForest_fc_row" ("uuid_sample");""")
+        p0.execSQL("""CREATE INDEX IF NOT EXISTS "djangoForest_fc_row_id_breed" ON "djangoForest_fc_row" ("id_breed");""")
     }
 
 
@@ -585,6 +611,121 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         } finally {
             database.endTransaction()
         }
+    }
+
+    /**
+     * Пакетная вставка строк лесных культур одной транзакцией
+     * (вызывать чанками по ~500 — см. writeFCListRegionList).
+     * INSERT OR REPLACE по uuid: повторная загрузка идемпотентна.
+     * mark_update не ставим: скачанное — не локальное изменение.
+     */
+    fun writeFCRowList(items: List<FCROW_LIST_DATA>) {
+        if (items.isEmpty()) return
+        val database: SQLiteDatabase = this.writableDatabase
+        fun q(v: String?): String = if (v == null) "NULL" else "'${v.replace("'", "''")}'"
+        database.beginTransaction()
+        try {
+            items.forEach {
+                database.execSQL(
+                    "INSERT OR REPLACE INTO djangoForest_fc_row " +
+                            "(uuid, id, number, count_living, count_dead, id_breed, uuid_sample) VALUES (" +
+                            "${q(it.uuid)}, ${it.id ?: "NULL"}, ${it.number ?: "NULL"}, " +
+                            "${it.countLiving ?: "NULL"}, ${it.countDead ?: "NULL"}, " +
+                            "${it.idBreed ?: "NULL"}, ${q(it.uuidSample)})"
+                )
+            }
+            database.setTransactionSuccessful()
+        } finally {
+            database.endTransaction()
+        }
+    }
+
+    /** Сколько строк сейчас в djangoForest_fc_row (для диагностики загрузки). */
+    fun fcRowCount(): Int {
+        val database: SQLiteDatabase = this.readableDatabase
+        val cursor: Cursor = database.rawQuery("select count(*) from djangoForest_fc_row", null)
+        var result = 0
+        if (cursor.moveToFirst()) {
+            result = cursor.getInt(0)
+        }
+        cursor.close()
+        return result
+    }
+
+    /**
+     * Строки культур одного перечета (uuid_sample → djangoForest_fc_sample.uuid).
+     * Порядок — по number, затем по вставке (rowid).
+     */
+    @SuppressLint("Range")
+    fun getFCRowsBySample(uuidSample: String): List<FCROW_LIST_DATA> {
+        val database: SQLiteDatabase = this.readableDatabase
+        val safe = uuidSample.replace("'", "''")
+        val cursor: Cursor = database.rawQuery(
+            "select id, number, count_living, count_dead, id_breed, uuid, uuid_sample " +
+                    "from djangoForest_fc_row where uuid_sample = '$safe' " +
+                    "order by number, rowid",
+            null
+        )
+        val result = mutableListOf<FCROW_LIST_DATA>()
+        if (cursor.moveToFirst()) {
+            do {
+                result.add(
+                    FCROW_LIST_DATA(
+                        id = if (cursor.isNull(cursor.getColumnIndex("id"))) null
+                        else cursor.getInt(cursor.getColumnIndex("id")),
+                        number = if (cursor.isNull(cursor.getColumnIndex("number"))) null
+                        else cursor.getInt(cursor.getColumnIndex("number")),
+                        countLiving = if (cursor.isNull(cursor.getColumnIndex("count_living"))) null
+                        else cursor.getInt(cursor.getColumnIndex("count_living")),
+                        countDead = if (cursor.isNull(cursor.getColumnIndex("count_dead"))) null
+                        else cursor.getInt(cursor.getColumnIndex("count_dead")),
+                        idBreed = if (cursor.isNull(cursor.getColumnIndex("id_breed"))) null
+                        else cursor.getInt(cursor.getColumnIndex("id_breed")),
+                        uuid = cursor.getString(cursor.getColumnIndex("uuid")),
+                        uuidSample = cursor.getString(cursor.getColumnIndex("uuid_sample"))
+                    )
+                )
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        return result
+    }
+
+    /**
+     * Строки культур одного перечета для экрана: к данным djangoForest_fc_row
+     * подтягиваем имя породы LEFT JOIN'ом (если порода не докачана — null).
+     * Порядок — по number, затем по вставке (rowid).
+     */
+    @SuppressLint("Range")
+    fun getFCRowsForDisplay(uuidSample: String): List<ForestCropRow> {
+        val database: SQLiteDatabase = this.readableDatabase
+        val safe = uuidSample.replace("'", "''")
+        val cursor: Cursor = database.rawQuery(
+            "select r.number, r.count_living, r.count_dead, b.name_breed " +
+                    "from djangoForest_fc_row as r " +
+                    "left join djangoForest_breed as b on r.id_breed = b.id " +
+                    "where r.uuid_sample = '$safe' " +
+                    "order by r.number, r.rowid",
+            null
+        )
+        val result = mutableListOf<ForestCropRow>()
+        if (cursor.moveToFirst()) {
+            do {
+                result.add(
+                    ForestCropRow(
+                        number = if (cursor.isNull(cursor.getColumnIndex("number"))) null
+                        else cursor.getInt(cursor.getColumnIndex("number")),
+                        breedName = cursor.getString(cursor.getColumnIndex("name_breed")),
+                        countLiving = if (cursor.isNull(cursor.getColumnIndex("count_living"))) null
+                        else cursor.getInt(cursor.getColumnIndex("count_living")),
+                        countDead = if (cursor.isNull(cursor.getColumnIndex("count_dead"))) null
+                        else cursor.getInt(cursor.getColumnIndex("count_dead"))
+                    )
+                )
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        return result
     }
 
     /**
@@ -1883,7 +2024,7 @@ inner join djangoForest_forestly as forestly on s2.id_forestly_id = forestly.id)
         private val DATABASE_NAME = "userdb.db"
 
         // below is the variable for database version
-        private val DATABASE_VERSION = 5
+        private val DATABASE_VERSION = 6
     }
 }
 

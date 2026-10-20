@@ -25,7 +25,7 @@ class UchastokInfo : BaseActivity("Информация об участке") {
     private lateinit var binding: UchastokInfoBinding
     private val db by lazy { DBCountWood(applicationContext, null) }
 
-    data class ProbaRow(val length: String, val width: String, val area: String)
+    data class ProbaRow(val uuid: String?, val length: String, val width: String, val area: String)
     data class OtrezokRow(val length: String)
 
 
@@ -87,7 +87,7 @@ class UchastokInfo : BaseActivity("Информация об участке") {
         binding.date.text = row.date
         // Перечеты этой ведомости для вкладки «Пробная площадь».
         probaRows = db.getFCSamplesByListRegion(uuid).map {
-            ProbaRow(fmtDim(it.length), fmtDim(it.width), fmtArea(it.length, it.width))
+            ProbaRow(it.uuid, fmtDim(it.length), fmtDim(it.width), fmtArea(it.length, it.width))
         }.toMutableList()
         return true
     }
@@ -208,7 +208,7 @@ class UchastokInfo : BaseActivity("Информация об участке") {
     private fun refreshSamples() {
         val uuid = vedomostUuid ?: return
         probaRows = db.getFCSamplesByListRegion(uuid).map {
-            ProbaRow(fmtDim(it.length), fmtDim(it.width), fmtArea(it.length, it.width))
+            ProbaRow(it.uuid, fmtDim(it.length), fmtDim(it.width), fmtArea(it.length, it.width))
         }.toMutableList()
         activeRow = null
         selectedIndex = null
@@ -264,7 +264,27 @@ class UchastokInfo : BaseActivity("Информация об участке") {
             showAddSampleDialog(uuid)
         }
         binding.toolbar.open.setOnClickListener {
-            startActivity(Intent(this, ProbaInfo::class.java))
+            // Карточка перечета: культуры в ProbaInfo показываются
+            // для выбранной строки вкладки «Пробная площадь».
+            if (mode != Mode.PROBA) {
+                Toast.makeText(this, "Откройте перечет на вкладке «Пробная площадь»", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            val index = selectedIndex
+            if (index == null) {
+                Toast.makeText(this, "Выберите перечет", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            val uuidSample = probaRows.getOrNull(index)?.uuid
+            if (uuidSample == null) {
+                Toast.makeText(this, "У перечета нет идентификатора", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            startActivity(
+                Intent(this, ProbaInfo::class.java)
+                    .putExtra("uuidSample", uuidSample)
+                    .putExtra("uuid", vedomostUuid)
+            )
         }
         binding.toolbar.save.setOnClickListener {
             Toast.makeText(this, "В разработке", Toast.LENGTH_SHORT).show()

@@ -12,6 +12,7 @@ import com.example.rosles.RequestClass.SaveSampleItem
 import com.example.rosles.RequestClass.SaveSampleRequest
 import com.example.rosles.RequestClass.UpdateRequest
 import com.example.rosles.ResponceClass.DachaResp
+import com.example.rosles.ResponceClass.FCROW_LIST_RESP
 import com.example.rosles.ResponceClass.FCSAMPLE_LIST_RESP
 import com.example.rosles.ResponceClass.GPS_Data_Send
 import com.example.rosles.ResponceClass.LISTREGION_LIST_RESP
@@ -21,8 +22,6 @@ import com.example.rosles.ResponceClass.SAMPLE_REQEST
 import com.example.rosles.ResponceClass.UserResp
 import com.example.rosles.ResponceClass.getUserResp
 import com.example.rosles.ResponceClass.userRespData
-import com.example.rosles.Screens.StartScreen
-import com.example.rosles.utils.getToken
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -84,11 +83,18 @@ class ViewModels() : BaseViewModel(
             getDacha(db, aceesToken)
             getListRegionList(db, aceesToken, idProfile)
             getFCSampleList(db, aceesToken, idProfile)
+            // Строки культур — после ведомостей и перечетов: uuidSample
+            // ссылается на уже сохранённый djangoForest_fc_sample.
+            getFCRowList(db, aceesToken, idProfile)
 
             if (!db.djangoForest_subjectrf())
                 getSUBJECTRF(db, idProfile)
             if (!db.djangoForest_undergrowth())
                 getUNDER(db)
+            // Справочник пород (breed) — нужен для отображения лесных культур.
+            // Грузим только если локально пусто: writeBREED — обычный INSERT.
+            if (!db.djangoForest_breed())
+                getBREED(db)
         } catch (e: Exception) {
             logError(e)
             throw e
@@ -129,6 +135,26 @@ class ViewModels() : BaseViewModel(
                 dbCountWood.writeFCSampleList(chunk)
             }
             Log.d("FCSample", "rows in db after write=${dbCountWood.fcSampleCount()}")
+        }
+        return result
+    }
+
+    /**
+     * GET forestcrops/api/mobile/forest-crops-row/list: строки лесных культур
+     * профиля в djangoForest_fc_row. Паттерн как у getFCSampleList:
+     * пустой data — не ошибка, запись чанками в транзакциях на IO,
+     * строки без uuid пропускаем (нечем key-ить).
+     */
+    suspend fun getFCRowList(dbCountWood: DBCountWood, accessToken: String, idProfile: Int): FCROW_LIST_RESP {
+        val result = accountsRepository.getFCRowList(accessToken, idProfile)
+        val items = result.data ?: emptyList()
+        val valid = items.filter { it.uuid != null }
+        Log.d("FCRow", "idProfile=$idProfile count=${result.count} data.size=${items.size} valid=${valid.size}")
+        withContext(Dispatchers.IO) {
+            valid.chunked(500).forEach { chunk ->
+                dbCountWood.writeFCRowList(chunk)
+            }
+            Log.d("FCRow", "rows in db after write=${dbCountWood.fcRowCount()}")
         }
         return result
     }
