@@ -72,7 +72,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:padding="4dip"
-                android:text="Кв"
+                android:text="Кв."
                 android:textColor="#ffff"
                 android:textSize="@dimen/custom_size_table" />
 
@@ -82,7 +82,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:padding="2dip"
-                android:text="Выд"
+                android:text="Выд."
                 android:textColor="#ffff"
                 android:textSize="@dimen/custom_size_table" />
 
