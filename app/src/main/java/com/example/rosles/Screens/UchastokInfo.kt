@@ -28,9 +28,7 @@ class UchastokInfo : BaseActivity("Информация об участке") {
     data class ProbaRow(val length: String, val width: String, val area: String)
     data class OtrezokRow(val length: String)
 
-    // Перечеты ведомости из djangoForest_fc_sample (загрузка —
-    // ViewModels.getFCSampleList). Заполняется в bindInfo() по uuid участка.
-    // Удаление из тулбара убирает строку только с экрана, в БД не лезет.
+
     private var probaRows: MutableList<ProbaRow> = mutableListOf()
 
     private val otrezokRows: MutableList<OtrezokRow> = mutableListOf(
@@ -71,14 +69,6 @@ class UchastokInfo : BaseActivity("Информация об участке") {
         super.onDestroy()
     }
 
-    /**
-     * Заполняет шапку по записи из djangoForest_fc_list_region:
-     * - урочище: имя из справочника djangoForest_dacha по idDacha
-     *   (fallback — строка dacha, присланная сервером);
-     * - участковое лесничество + лесничество + субъект: цепочка
-     *   по idDistrictForestly (см. DBCountWood.getForestryChain).
-     * Возвращает false, если запись не найдена.
-     */
     private fun bindInfo(): Boolean {
         val uuid = intent.getStringExtra("uuid") ?: return false
         vedomostUuid = uuid
@@ -130,14 +120,12 @@ class UchastokInfo : BaseActivity("Информация об участке") {
         renderTable()
     }
 
-    /** Размер в метрах: целое — без дробной части, иначе до 2 знаков. */
     private fun fmtDim(v: Double?): String {
         if (v == null) return "—"
-        return if (v % 1.0 == 0.0) v.toLong().toString()
-        else "%.2f".format(Locale.US, v).trimEnd('0').trimEnd('.')
+        return "%.1f".format(Locale.US, v)
     }
 
-    /** Площадь пробы в га: длина × ширина / 10000, до 4 знаков. */
+
     private fun fmtArea(length: Double?, width: Double?): String {
         if (length == null || width == null) return "—"
         return "%.4f".format(Locale.US, length * width / 10000.0).trimEnd('0').trimEnd('.')
@@ -217,7 +205,6 @@ class UchastokInfo : BaseActivity("Информация об участке") {
         return cell
     }
 
-    /** Перечитывает перечеты ведомости из БД и перерисовывает таблицу. */
     private fun refreshSamples() {
         val uuid = vedomostUuid ?: return
         probaRows = db.getFCSamplesByListRegion(uuid).map {
@@ -228,11 +215,7 @@ class UchastokInfo : BaseActivity("Информация об участке") {
         renderTable()
     }
 
-    /**
-     * Диалог создания перечета: номер — авто (max + 1 внутри ведомости),
-     * вводятся только длина и ширина. Сохранение — локально с mark_update = 2,
-     * на сервер уйдёт кнопкой «Обновить» (ViewModels.saveFCSampleList).
-     */
+
     private fun showAddSampleDialog(uuidListRegion: String) {
         val dialog = Dialog(this)
         dialog.setContentView(R.layout.dialog_add_fcsample)
