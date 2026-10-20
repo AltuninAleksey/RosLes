@@ -6,6 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.rosles.DBCountWood
 import com.example.rosles.RequestClass.RegistrationReqest
+import com.example.rosles.RequestClass.SaveFCRowItem
+import com.example.rosles.RequestClass.SaveFCRowRequest
 import com.example.rosles.RequestClass.SaveListRegionItem
 import com.example.rosles.RequestClass.SaveListRegionRequest
 import com.example.rosles.RequestClass.SaveSampleItem
@@ -253,6 +255,53 @@ class ViewModels() : BaseViewModel(
                 dbCountWood.markFCSampleSynced(items.map { it.uuid })
             }
             Log.d("FCSample", "saveSample sent=${items.size}")
+            return items.size
+        } catch (e: Exception) {
+            logError(e)
+            throw e
+        } finally {
+            _stateScreen.value = _stateScreen.value.copy(isLoading = false)
+        }
+    }
+
+
+
+
+    suspend fun saveFCRowList(dbCountWood: DBCountWood, accessToken: String, idProfile: Int): Int {
+        if (_stateScreen.value.isLoading) return 0
+
+        _stateScreen.value = _stateScreen.value.copy(isLoading = true)
+        try {
+            val dirty = withContext(Dispatchers.IO) {
+                dbCountWood.getFCRowDirty()
+            }
+            val items = dirty.mapNotNull { row ->
+                val uuid = row.uuid ?: return@mapNotNull null
+                SaveFCRowItem(
+                    number = row.number,
+                    countLiving = row.countLiving,
+                    countDead = row.countDead,
+                    idBreed = row.idBreed,
+                    uuid = uuid,
+                    uuidSample = row.uuidSample
+                )
+            }
+            if (items.isEmpty()) return 0
+            Log.d("FCRow", "saveFCRow idProfile=$idProfile dirty=${dirty.size} toSend=${items.size}")
+
+            items.chunked(500).forEach { chunk ->
+                accountsRepository.saveFCRowList(
+                    accesToken = accessToken,
+                    body = SaveFCRowRequest(
+                        idProfile = idProfile,
+                        saveForestCropsRowItem = chunk
+                    )
+                )
+            }
+            withContext(Dispatchers.IO) {
+                dbCountWood.markFCRowSynced(items.map { it.uuid })
+            }
+            Log.d("FCRow", "saveFCRow sent=${items.size}")
             return items.size
         } catch (e: Exception) {
             logError(e)

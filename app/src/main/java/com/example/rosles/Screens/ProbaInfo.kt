@@ -296,8 +296,8 @@ class ProbaInfo : BaseActivity("Информация о пробной площ�
                 row.uuid?.let {
                     db.updateFCRowCounts(
                         it,
-                        row.alive.toIntOrNull() ?: 0,
-                        row.dead.toIntOrNull() ?: 0
+                        row.alive.toIntOrNull(),
+                        row.dead.toIntOrNull()
                     )
                 }
             }

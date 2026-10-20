@@ -800,6 +800,65 @@ class DBCountWood(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     }
 
     /**
+     * Новые (mark_update = 2) и изменённые (mark_update = 1) строки культур
+     * для PUT forest-crops-row/save. Скачанные с сервера строки (mark_update
+     * NULL/0) сюда не попадают.
+     */
+    @SuppressLint("Range")
+    fun getFCRowDirty(): List<FCROW_LIST_DATA> {
+        val database: SQLiteDatabase = this.readableDatabase
+        val cursor: Cursor = database.rawQuery(
+            "select id, number, count_living, count_dead, id_breed, uuid, uuid_sample " +
+                    "from djangoForest_fc_row where mark_update = 1 OR mark_update = 2",
+            null
+        )
+        val result = mutableListOf<FCROW_LIST_DATA>()
+        if (cursor.moveToFirst()) {
+            do {
+                result.add(
+                    FCROW_LIST_DATA(
+                        id = if (cursor.isNull(cursor.getColumnIndex("id"))) null
+                        else cursor.getInt(cursor.getColumnIndex("id")),
+                        number = if (cursor.isNull(cursor.getColumnIndex("number"))) null
+                        else cursor.getInt(cursor.getColumnIndex("number")),
+                        countLiving = if (cursor.isNull(cursor.getColumnIndex("count_living"))) null
+                        else cursor.getInt(cursor.getColumnIndex("count_living")),
+                        countDead = if (cursor.isNull(cursor.getColumnIndex("count_dead"))) null
+                        else cursor.getInt(cursor.getColumnIndex("count_dead")),
+                        idBreed = if (cursor.isNull(cursor.getColumnIndex("id_breed"))) null
+                        else cursor.getInt(cursor.getColumnIndex("id_breed")),
+                        uuid = cursor.getString(cursor.getColumnIndex("uuid")),
+                        uuidSample = cursor.getString(cursor.getColumnIndex("uuid_sample"))
+                    )
+                )
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        return result
+    }
+
+    /**
+     * Помечает отправленные строки культур как синхронизированные
+     * (mark_update = 0). Вызывать только после успешного PUT.
+     */
+    fun markFCRowSynced(uuids: List<String>) {
+        if (uuids.isEmpty()) return
+        val database: SQLiteDatabase = this.writableDatabase
+        database.beginTransaction()
+        try {
+            uuids.chunked(400).forEach { chunk ->
+                val list = chunk.joinToString(",") { "'${it.replace("'", "''")}'" }
+                database.execSQL(
+                    "UPDATE djangoForest_fc_row SET mark_update = 0 WHERE uuid IN ($list)"
+                )
+            }
+            database.setTransactionSuccessful()
+        } finally {
+            database.endTransaction()
+        }
+    }
+
+    /**
      * Пакетная вставка регионов одной транзакцией (вызывать чанками по ~500).
      * См. [writeDachaList]: без транзакции большой список роняет приложение.
      */

@@ -67,8 +67,8 @@ class DashboardLesCult : BaseActivity("Лесные культуры") {
             startActivity(Intent(this, LesCulture::class.java))
         }
 
-        // Обновить: отправка локальных изменений — сначала ведомости,
-        // затем перечеты (каждый метод сам ставит/снимает isLoading).
+        // Обновить: отправка локальных изменений — ведомости, перечеты,
+        // затем строки культур (каждый метод сам ставит/снимает isLoading).
         binding.reload.setOnClickListener {
             lifecycleScope.launch {
                 val profileId = this@DashboardLesCult.getUserId().toInt()
@@ -78,6 +78,11 @@ class DashboardLesCult : BaseActivity("Лесные культуры") {
                     idProfile = profileId
                 )
                 viewModel.saveFCSampleList(
+                    dbCountWood = db,
+                    accessToken = this@DashboardLesCult.getToken(),
+                    idProfile = profileId
+                )
+                viewModel.saveFCRowList(
                     dbCountWood = db,
                     accessToken = this@DashboardLesCult.getToken(),
                     idProfile = profileId

@@ -3,6 +3,7 @@ package com.example.rosles.Network
 import com.example.rosles.RequestClass.AuthRequest
 import com.example.rosles.RequestClass.PerechetRequest
 import com.example.rosles.RequestClass.RegistrationReqest
+import com.example.rosles.RequestClass.SaveFCRowRequest
 import com.example.rosles.RequestClass.SaveListRegionRequest
 import com.example.rosles.RequestClass.SaveSampleRequest
 import com.example.rosles.ResponceClass.*
@@ -73,6 +74,12 @@ interface API {
     suspend fun saveFCSampleList(
         @Header("Authorization") bearerToken: String,
         @Body body: SaveSampleRequest
+    ): ResponseBody
+
+    @PUT("forestcrops/api/mobile/forest-crops-row/save")
+    suspend fun saveFCRowList(
+        @Header("Authorization") bearerToken: String,
+        @Body body: SaveFCRowRequest
     ): ResponseBody
 
     @PUT("listregion")
