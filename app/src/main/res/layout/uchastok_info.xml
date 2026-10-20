@@ -63,7 +63,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:padding="2dip"
-                android:text="Урочище"
+                android:text="Урочище (дача)"
                 android:maxLines="1"
                 app:autoSizeTextType="uniform"
                 android:textColor="#ffff"

@@ -272,7 +272,7 @@
                 android:layout_gravity="start"
                 android:layout_marginStart="20dp"
                 android:layout_weight="2"
-                android:text="Урочище"
+                android:text="Урочище (дача)"
                 android:textColor="#80000000"
                 android:textSize="15sp"
                 app:layout_constraintStart_toStartOf="parent"

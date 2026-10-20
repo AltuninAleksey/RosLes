@@ -60,8 +60,8 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:padding="2dip"
-                android:text="Урочище"
-                android:maxLines="1"
+                android:text="Урочище (дача)"
+                android:maxLines="2"
                 app:autoSizeTextType="uniform"
                 android:textColor="#ffff"
                 android:textSize="@dimen/custom_size_table" />
