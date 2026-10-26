@@ -1,6 +1,6 @@
 package com.rosles.forestcrops.mapper;
 
-import com.rosles.forestcrops.dto.sample.response.MolodForestCropsItem;
+import com.rosles.forestcrops.dto.web.sample.response.MolodForestCropsItem;
 import com.rosles.forestcrops.utils.ResultSetHelper;
 import org.springframework.jdbc.core.RowMapper;
 

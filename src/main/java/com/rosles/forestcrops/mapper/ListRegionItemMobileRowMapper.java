@@ -1,0 +1,34 @@
+package com.rosles.forestcrops.mapper;
+
+import com.rosles.forestcrops.dto.mobile.listregion.response.ListRegionItemMobile;
+import com.rosles.forestcrops.dto.web.listregion.response.ListRegionItem;
+import com.rosles.forestcrops.utils.ResultSetHelper;
+import org.springframework.jdbc.core.RowMapper;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.UUID;
+
+public class ListRegionItemMobileRowMapper implements RowMapper<ListRegionItemMobile> {
+    @Override
+    public ListRegionItemMobile mapRow(ResultSet rs, int rowNum) throws SQLException {
+
+        ListRegionItemMobile listRegionItem = new ListRegionItemMobile();
+
+        listRegionItem.setId(ResultSetHelper.getNullableObject(rs, "id", Long.class, 0l));
+        listRegionItem.setNumber(ResultSetHelper.getNullableObject(rs, "id", Long.class, 0l).toString());
+        listRegionItem.setDate(ResultSetHelper.getNullableObject(rs, "date_examination", LocalDate.class, null));
+        listRegionItem.setDacha(ResultSetHelper.getNullableObject(rs, "dacha", String.class, ""));
+        listRegionItem.setIdDacha(ResultSetHelper.getNullableObject(rs, "id_dacha_id", Long.class, 0l));
+        listRegionItem.setNameQuarter(ResultSetHelper.getNullableObject(rs, "name_quarter", String.class, ""));
+        listRegionItem.setSampleRegion(ResultSetHelper.getNullableObject(rs, "sample_region", Double.class, null));
+        listRegionItem.setSoilLot(ResultSetHelper.getNullableObject(rs, "soil_lot", String.class, ""));
+        listRegionItem.setIdDistrictForestly(ResultSetHelper.getNullableObject(rs, "id_district_forestly_id", Long.class, 0l));
+        listRegionItem.setIdForestly(ResultSetHelper.getNullableObject(rs, "id_forestly", Long.class, 0l));
+        listRegionItem.setIdSubject(ResultSetHelper.getNullableObject(rs, "id_subject_rf", Long.class, 0l));
+        listRegionItem.setUuid(ResultSetHelper.getNullableObject(rs, "uuid", UUID.class, null));
+
+        return listRegionItem;
+    }
+}

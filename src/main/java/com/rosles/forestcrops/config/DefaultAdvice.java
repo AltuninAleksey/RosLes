@@ -1,7 +1,7 @@
 package com.rosles.forestcrops.config;
 
 import com.rosles.forestcrops.config.exception.ServiceException;
-import com.rosles.forestcrops.dto.response.StatusResponse;
+import com.rosles.forestcrops.dto.web.response.StatusResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;

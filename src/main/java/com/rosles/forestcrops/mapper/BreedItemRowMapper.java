@@ -1,6 +1,6 @@
 package com.rosles.forestcrops.mapper;
 
-import com.rosles.forestcrops.dto.shared.response.BreedItem;
+import com.rosles.forestcrops.dto.web.response.BreedItem;
 import com.rosles.forestcrops.utils.ResultSetHelper;
 import org.springframework.jdbc.core.RowMapper;
 

@@ -1,6 +1,6 @@
 package com.rosles.forestcrops.mapper;
 
-import com.rosles.forestcrops.dto.listregion.response.ListRegionItem;
+import com.rosles.forestcrops.dto.web.listregion.response.ListRegionItem;
 import com.rosles.forestcrops.utils.ResultSetHelper;
 import org.springframework.jdbc.core.RowMapper;
 
